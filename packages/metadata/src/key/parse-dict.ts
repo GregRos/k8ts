@@ -1,10 +1,10 @@
-import type { Dictx } from "./types"
-import { ValueKey, SectionKey, SomeKey } from "./repr"
-import { parseOuterKey, parseInnerKey } from "./parse-key"
 import { Map } from "immutable"
+import { parseInnerKey, parseOuterKey } from "./parse-key"
+import { SectionKey, ValueKey } from "./repr"
+import type { Dictx } from "./types"
 
 export function parsePlainObject(input: Dictx.Full) {
-    const map = Map<ValueKey, string>()
+    let map = Map<ValueKey, string>()
     for (const [key, value] of Object.entries(input)) {
         const outer = parseOuterKey(key)
         if (outer instanceof SectionKey) {
@@ -16,13 +16,13 @@ export function parsePlainObject(input: Dictx.Full) {
                 if (typeof vv !== "string") {
                     throw new Error(`Expected string value for inner key ${kk}`)
                 }
-                map.set(outer.toFullKey(inner), vv as string)
+                map = map.set(outer.toFullKey(inner), vv as string)
             }
         } else {
             if (typeof value !== "string") {
                 throw new Error(`Expected string value for key ${key}`)
             }
-            map.set(outer, value as string)
+            map = map.set(outer, value as string)
         }
     }
     return map

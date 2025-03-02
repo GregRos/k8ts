@@ -2,15 +2,14 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Metadata tests",
-      "runtimeArgs": ["--async-stack-traces", "--stack-trace-limit=1000", "--enable-source-maps"],
       "type": "node",
+      "name": "vscode-jest-tests.v2.metadata",
       "request": "launch",
-      "program": "${workspaceFolder}/ucd/experiments/src/${input:EXPERIMENT}.ts",
-      "env": {
-        "ROARR_LOG": "true",
-        "NODE_OPTIONS": "--loader ts-node/esm"
-      }
+      "args": ["test", "--runInBand", "--watchAll=false", "--testNamePattern"],
+      "cwd": "c:\\codegr\\k8ts\\packages\\metadata",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "runtimeExecutable": "yarn"
     }
   ]
 }

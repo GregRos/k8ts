@@ -6,13 +6,13 @@ import type { Dictx, Key } from "./key/types"
 const DICT = Symbol("dict")
 export class Meta {
     private [DICT] = true
-    constructor(private readonly _raw: Map<ValueKey, string>) {}
+    constructor(private readonly _dict: Map<ValueKey, string>) {}
 
     protected _create(raw: Map<ValueKey, string>) {
         return new Meta(raw)
     }
     private _createWith(f: (raw: Map<ValueKey, string>) => Map<ValueKey, string>) {
-        return this._create(f(this._raw))
+        return this._create(f(this._dict))
     }
     add(key: Key.Value, value: string): Meta
     add(key: Key.Section, value: Dictx.Nested): Meta
@@ -32,7 +32,7 @@ export class Meta {
     private _pairToObject(pair: [string, string | object] | [object]) {
         const [key, value] = pair
         if (key instanceof Meta) {
-            return key._raw
+            return key._dict
         }
         if (typeof key === "string") {
             return {
@@ -56,10 +56,10 @@ export class Meta {
         })
     }
 
-    has(key: Key.Value) {
+    has<X extends Key.Value>(key: X) {
         const parsed = parseKey(key)
         if (parsed instanceof ValueKey) {
-            return this._raw.has(parsed)
+            return this._dict.has(parsed)
         } else {
             return this._matchSectionKeys(parsed).size > 0
         }
@@ -67,7 +67,7 @@ export class Meta {
 
     get(key: Key.Value) {
         const parsed = parseKey(key)
-        const v = this._raw.get(parsed as ValueKey)
+        const v = this._dict.get(parsed as ValueKey)
         if (v === undefined) {
             throw new MetadataError("Key not found!", { key })
         }
@@ -79,11 +79,11 @@ export class Meta {
         if (!(parsed instanceof ValueKey)) {
             throw new MetadataError("Unexpected section key!", { key })
         }
-        return this._raw.get(parsed)
+        return this._dict.get(parsed)
     }
 
     private _matchSectionKeys(key: SectionKey) {
-        return this._raw.filter((_, k) => k.parent?.equals(key))
+        return this._dict.filter((_, k) => k.parent?.equals(key))
     }
 
     pick(...keySpecs: Key.Any[]) {
@@ -103,7 +103,7 @@ export class Meta {
     }
 
     private _prefixed(prefix: string) {
-        return this._raw
+        return this._dict
             .filter((_, k) => k._prefix === prefix)
             .mapKeys(k => k.suffix)
             .toObject()
@@ -137,4 +137,8 @@ export class Meta {
     static from(input: Dictx.Full) {
         return new Meta(parsePlainObject(input))
     }
+}
+
+export function meta(input: Dictx.Full) {
+    return Meta.from(input)
 }

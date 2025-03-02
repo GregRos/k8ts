@@ -1,1 +1,1 @@
-export { Meta } from "./meta"
+export { Meta, meta } from "./meta"
