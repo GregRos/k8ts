@@ -10,6 +10,7 @@
     "declarationMap": false,
     "noEmit": true,
     "baseUrl": ".",
+    "tsBuildInfoFile": "../dist/test.tsbuildinfo",
     "types": ["jest", "node"],
     "paths": {
       "@lib": ["../src"],

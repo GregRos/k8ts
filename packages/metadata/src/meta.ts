@@ -4,19 +4,19 @@ import { parseKey, parsePlainObject } from "./key"
 import { ValueKey, type SectionKey } from "./key/repr"
 import type { Dictx, Key } from "./key/types"
 const DICT = Symbol("dict")
-export class Dict {
+export class Meta {
     private [DICT] = true
     constructor(private readonly _raw: Map<ValueKey, string>) {}
 
     protected _create(raw: Map<ValueKey, string>) {
-        return new Dict(raw)
+        return new Meta(raw)
     }
     private _createWith(f: (raw: Map<ValueKey, string>) => Map<ValueKey, string>) {
         return this._create(f(this._raw))
     }
-    add(key: Key.Value, value: string): Dict
-    add(key: Key.Section, value: Dictx.Nested): Dict
-    add(input: Dictx.Full): Dict
+    add(key: Key.Value, value: string): Meta
+    add(key: Key.Section, value: Dictx.Nested): Meta
+    add(input: Dictx.Full): Meta
     add(a: any, b?: any) {
         return this._createWith(raw => {
             const parsed = this._pairToMap([a, b])
@@ -31,7 +31,7 @@ export class Dict {
 
     private _pairToObject(pair: [string, string | object] | [object]) {
         const [key, value] = pair
-        if (key instanceof Dict) {
+        if (key instanceof Meta) {
             return key._raw
         }
         if (typeof key === "string") {
@@ -46,9 +46,9 @@ export class Dict {
         return parsePlainObject(this._pairToObject(pair))
     }
 
-    overwrite(key: Key.Value, value: string): Dict
-    overwrite(key: Key.Section, value: Dictx.Nested): Dict
-    overwrite(input: Dictx.Full): Dict
+    overwrite(key: Key.Value, value: string): Meta
+    overwrite(key: Key.Section, value: Dictx.Nested): Meta
+    overwrite(input: Dictx.Full): Meta
     overwrite(a: any, b?: any) {
         return this._createWith(raw => {
             const fromPair = this._pairToMap([a, b])
@@ -135,6 +135,6 @@ export class Dict {
     }
 
     static from(input: Dictx.Full) {
-        return new Dict(parsePlainObject(input))
+        return new Meta(parsePlainObject(input))
     }
 }

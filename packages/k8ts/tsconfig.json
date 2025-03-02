@@ -4,10 +4,7 @@
       "path": "./src/tsconfig.json"
     },
     {
-      "path": "./spec/tsconfig.json"
-    },
-    {
-      "path": "./examples/tsconfig.json"
+      "path": "./test/tsconfig.json"
     }
   ],
   "compilerOptions": {

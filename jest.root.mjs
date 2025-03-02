@@ -8,11 +8,11 @@ const common = {
         "^.+\\.tsx?$": ["@swc/jest"]
     },
     testEnvironment: "node",
-    testMatch: ["<rootDir>/spec/**/*.spec.ts"],
+    testMatch: ["<rootDir>/test/**/*.test.ts"],
     collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
     coverageDirectory: "./coverage",
     collectCoverage: false,
     testPathIgnorePatterns: ["node_modules", "dist"]
-};
+}
 
-export default common;
+export default common

@@ -8,6 +8,7 @@
   "scripts": {
     "build": "yarn workspaces foreach -Apt run build",
     "build:clean": "run-s clean build",
+    "test": "yarn workspaces foreach -Apt run test",
     "watch": "tsc -b . -w",
     "clean": "yarn workspaces foreach -Apt run clean",
     "prettier:check": "prettier --check .",
