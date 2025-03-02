@@ -11,10 +11,6 @@
         {
             "path": "./packages/metadata",
             "name": "metadata"
-        },
-        {
-            "path": "./packages/ports",
-            "name": "ports"
         }
     ],
     "settings": {

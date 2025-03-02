@@ -1,7 +1,7 @@
 import { anyStringOf, int, string } from "parjs"
 import { map, maybe, must, qthen, then } from "parjs/combinators"
-import type { PortSpecObj, Protocol } from "../../../../ports/src/types"
 import { PortError } from "../error"
+import type { InputPortSetEntry, Protocol } from "../types"
 
 function validatePort(port: number) {
     if (port < 0 || port > 65535) {
@@ -24,8 +24,8 @@ const pPortSpec = pPort.pipe(
         const [port, protocol] = arr
         return {
             port,
-            protocol
-        } as PortSpecObj
+            protocol: protocol?.toUpperCase() ?? "TCP"
+        } as InputPortSetEntry
     })
 )
 

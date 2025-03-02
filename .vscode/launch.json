@@ -3,10 +3,20 @@
   "configurations": [
     {
       "type": "node",
-      "name": "vscode-jest-tests.v2.metadata",
+      "name": "TEST: metadata",
       "request": "launch",
       "args": ["test", "--runInBand", "--watchAll=false", "--testNamePattern"],
       "cwd": "c:\\codegr\\k8ts\\packages\\metadata",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "runtimeExecutable": "yarn"
+    },
+    {
+      "type": "node",
+      "name": "TEST: k8ts",
+      "request": "launch",
+      "args": ["test", "--runInBand", "--watchAll=false", "--testNamePattern"],
+      "cwd": "c:\\codegr\\k8ts\\packages\\k8ts",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "runtimeExecutable": "yarn"
