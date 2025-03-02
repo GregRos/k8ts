@@ -1,0 +1,63 @@
+{
+    "folders": [
+        {
+            "path": ".",
+            "name": "root"
+        },
+        {
+            "path": "./packages/k8ts",
+            "name": "k8ts"
+        },
+        {
+            "path": "./packages/metadata",
+            "name": "metadata"
+        }
+    ],
+    "settings": {
+        "jest.disabledWorkspaceFolders": ["root"],
+        "files.exclude": {
+            "packages/k8ts": true,
+            "packages/metadata": true,
+            "**/.git": true,
+            "**/.svn": true,
+            "**/.hg": true,
+            "**/.nyc_output": true,
+            "**/coverage": true,
+            "**/dist-spec": true,
+            "**/CVS": true,
+            "**/.DS_Store": true,
+            "**/Thumbs.db": true,
+            "**/*.aux": true,
+            "**/*.bbl": true,
+            "**/*.fdb_latexmk": true,
+            "**/*.fls": true,
+            "**/*.out": true,
+            "**/*.synctex.gz": true,
+            "**/.idea": true,
+            "**/.mypy_cache": true,
+            "**/__pycache__": true,
+            "**/dist": true,
+            "**/dist_aux": true,
+            ".nyc_output": true,
+            "coverage": true,
+            "docs": true,
+            "**/node_modules": true
+        },
+        "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+        // GregRos @ 2024
+        // For this to work, you need the 'APC Customize UI++' extension.
+        // It will color the rows in the explorer view based on the workspace folder.
+        // Even if you don't use the extension, please don't remove it, unless you don't know who I am.
+        "apc.stylesheet": {
+            ".explorer-folders-view.explorer-folders-view .monaco-list-row:has(.monaco-icon-label[aria-label*='packages\\\\parjs'])": {
+                "background-image": "linear-gradient(to right, #0E5DE610, transparent)",
+                "border-left": "2px solid #7DADFF7D"
+            },
+            ".explorer-folders-view.explorer-folders-view .monaco-list-row:has(.monaco-icon-label[aria-label*='packages\\\\char-info'])": {
+                "background-image": "linear-gradient(to right, #6EED1314, transparent)",
+                "border-left": "2px solid #6EED137C"
+            }
+        },
+        "typescript.tsdk": "root\\node_modules\\typescript\\lib"
+    }
+}
