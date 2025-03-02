@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "../dist",
+    "tsBuildInfoFile": "../dist/.src.tsbuildinfo",
+    "rootDir": ".",
+    "noEmit": false,
+    "experimentalDecorators": true
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["**/node_modules"]
+}
