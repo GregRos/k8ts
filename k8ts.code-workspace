@@ -11,12 +11,17 @@
         {
             "path": "./packages/metadata",
             "name": "metadata"
+        },
+        {
+            "path": "./packages/ports",
+            "name": "ports"
         }
     ],
     "settings": {
         "jest.disabledWorkspaceFolders": ["root"],
         "files.exclude": {
             "packages/k8ts": true,
+            "packages/ports": true,
             "packages/metadata": true,
             "**/.git": true,
             "**/.svn": true,
