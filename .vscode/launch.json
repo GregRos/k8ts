@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Run UCD Loader",
+      "name": "Metadata tests",
       "runtimeArgs": ["--async-stack-traces", "--stack-trace-limit=1000", "--enable-source-maps"],
       "type": "node",
       "request": "launch",
