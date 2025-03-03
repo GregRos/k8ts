@@ -12,6 +12,7 @@ export class PortMap<Names extends string> {
     pick<InNames extends Names>(...name: InNames[]): PortMap<InNames> {
         return this._apply(map => map.filter((_, key) => name.includes(key as InNames)))
     }
+    
 
     map(mapping: Record<Names, number>): PortMap<Names> {
         return new PortMap(

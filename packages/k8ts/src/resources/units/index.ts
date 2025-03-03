@@ -1,3 +1,2 @@
-export { Unit, UnitValue } from "./types"
-export { createDimValueParser } from "./unit-parser"
+export { DimValue } from "./dim-value"
 export * from "./units"

@@ -1,45 +1,47 @@
-import type { Unit } from "./types"
+import { unitParser } from "./values"
 
-export function T(n: number) {
-    return `${n}T` as Unit.Storage
+export type G = `${number}G`
+export const G = (n: number) => `${n}G` as G
+
+export type M = `${number}M`
+export const M = (n: number) => `${n}M` as M
+
+export type K = `${number}K`
+export const K = (n: number) => `${n}K` as K
+
+export type T = `${number}T`
+export const T = (n: number) => `${n}T` as T
+
+export type Gi = `${number}Gi`
+export const Gi = (n: number) => `${n}Gi` as Gi
+
+export type Mi = `${number}Mi`
+export const Mi = (n: number) => `${n}Mi` as Mi
+
+export type Ki = `${number}Ki`
+export const Ki = (n: number) => `${n}Ki` as Ki
+
+export type m = `${number}m`
+export const m = (n: number) => `${n}m` as m
+
+export type h = `${number}h`
+export const h = (n: number) => `${n}h` as h
+
+export type d = `${number}d`
+export const d = (n: number) => `${n * 24}h` as d
+
+export type s = `${number}s`
+export const s = (n: number) => `${n}s` as s
+
+export type ms = `${number}ms`
+export const ms = (n: number) => `${n}ms` as ms
+
+export namespace Dim {
+    export type Data = M | G | T | K | Mi | Gi | Ki
+    export type CPU = m
+    export type Time = m | h | d | s | ms
 }
 
-export function G(n: number) {
-    return `${n}G` as Unit.Storage & Unit.Memory
-}
-
-export function M(n: number) {
-    return `${n}M` as Unit.Storage & Unit.Memory
-}
-
-export function K(n: number) {
-    return `${n}K` as Unit.Storage & Unit.Memory
-}
-
-export function m(n: number) {
-    return `${n}m` as Unit.CPU
-}
-
-export function Gi(n: number) {
-    return `${n}Gi` as Unit.Storage & Unit.Memory
-}
-
-export function Mi(n: number) {
-    return `${n}Mi` as Unit.Storage & Unit.Memory
-}
-
-export function d(n: number) {
-    return `${n * 24}h` as Unit.Time
-}
-
-export function h(n: number) {
-    return `${n}h` as Unit.Time
-}
-
-export function s(n: number) {
-    return `${n}s` as Unit.Time
-}
-
-export function ms(n: number) {
-    return `${n}ms` as Unit.Time
-}
+export const parseCpuUnit = unitParser.createParseFunctionFor<Dim.CPU>("cpu")
+export const parseDataUnit = unitParser.createParseFunctionFor<Dim.Data>("data")
+export const parseTimeUnit = unitParser.createParseFunctionFor<Dim.Time>("time")
