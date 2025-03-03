@@ -14,7 +14,7 @@ import {
     parseDataUnit,
     parseTimeUnit,
     s
-} from "@lib/resources/units"
+} from "@lib"
 it("creates different units and stuff", () => {
     expect(Ki(1)).toBe("1Ki")
     expect(G(1)).toBe("1G")

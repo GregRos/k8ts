@@ -2,7 +2,14 @@ import { Map } from "immutable"
 import { PortError } from "./error"
 import { PortMap } from "./map"
 import { parsePortInput, portRecordInput } from "./tools/entry"
-import type { InputPortMapping, InputPortSetEntry, InputPortSetRecord, PortSetEntry } from "./types"
+import type {
+    InputPort,
+    InputPortMapping,
+    InputPortSetEntry,
+    InputPortSetRecord,
+    InputProtocol,
+    PortSetEntry
+} from "./types"
 
 declare const __NAMES__: unique symbol
 export class PortSet<Names extends string = never> {
@@ -13,14 +20,14 @@ export class PortSet<Names extends string = never> {
     }
     add<Name extends string>(
         name: Name,
-        port: number,
-        protocol: "TCP" | "UDP"
+        port: InputPort,
+        protocol: InputProtocol
     ): PortSet<Names | Name>
     add<Name extends string>(name: Name, entry: InputPortSetEntry): PortSet<Names | Name>
     add<InNames extends string>(input: InputPortSetRecord<InNames>): PortSet<Names | InNames>
     add(a: any, b?: any, c?: any): any {
         if (c) {
-            return this._apply(map => map.set(a, { name: a, port: b, protocol: c }))
+            return this._apply(map => map.set(a, { name: a, port: +b, protocol: c.toUpperCase() }))
         }
         if (b) {
             return this._apply(map => map.set(a, parsePortInput(a, b)))
@@ -39,7 +46,7 @@ export class PortSet<Names extends string = never> {
         if (!this._map.has(name)) {
             throw new PortError(`Port ${name} not found`)
         }
-        return this._map.get(name)
+        return this._map.get(name)!
     }
 
     toMap() {
@@ -56,7 +63,7 @@ export class PortSet<Names extends string = never> {
                     name: entry.name,
                     protocol: entry.protocol,
                     source: entry.port,
-                    target: mapping[entry.name]
+                    target: mapping[entry.name as keyof typeof mapping]
                 }
             })
         )

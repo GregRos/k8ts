@@ -12,7 +12,6 @@ export class PortMap<Names extends string> {
     pick<InNames extends Names>(...name: InNames[]): PortMap<InNames> {
         return this._apply(map => map.filter((_, key) => name.includes(key as InNames)))
     }
-    
 
     map(mapping: Record<Names, number>): PortMap<Names> {
         return new PortMap(
@@ -20,7 +19,7 @@ export class PortMap<Names extends string> {
                 return {
                     ...entry,
                     source: entry.target,
-                    target: mapping[entry.name]
+                    target: mapping[entry.name as keyof typeof mapping]
                 }
             })
         )
@@ -30,7 +29,7 @@ export class PortMap<Names extends string> {
         if (!this._map.has(name)) {
             throw new PortError(`Port ${name} not found`)
         }
-        return this._map.get(name)
+        return this._map.get(name) as PortMapEntry
     }
 
     toMap() {

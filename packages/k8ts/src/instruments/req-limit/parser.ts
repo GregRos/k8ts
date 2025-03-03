@@ -1,6 +1,6 @@
 import type { Parjser } from "parjs/."
 import { manySepBy, map, must } from "parjs/combinators"
-import { UnitError } from "../error"
+import { MakeError } from "../../error"
 import type { UnitValue } from "../units/unit-parser"
 import { unitParser } from "../units/values"
 
@@ -29,11 +29,11 @@ export function createReqLimitParser(pUnitValue: Parjser<UnitValue>) {
     )
 }
 
-function createReqLimitParseFunction(p: Parjser<ReqLimit>) {
+function createReqLimitParseFunction(unit: string, p: Parjser<ReqLimit>) {
     return (input: string) => {
         const result = p.parse(input)
         if (result.kind !== "OK") {
-            throw new UnitError(`Failed to parse ${unit} request limit`, {
+            throw new MakeError(`Failed to parse ${unit} request limit`, {
                 trace: result.trace.toString()
             })
         }
@@ -43,5 +43,5 @@ function createReqLimitParseFunction(p: Parjser<ReqLimit>) {
 export const pCpuReqLimit = createReqLimitParser(unitParser.createParser("cpu"))
 export const pDataReqLimit = createReqLimitParser(unitParser.createParser("data"))
 
-export const parseCpuReqLimit = createReqLimitParseFunction(pCpuReqLimit)
-export const parseDataReqLimit = createReqLimitParseFunction(pDataReqLimit)
+export const parseCpuReqLimit = createReqLimitParseFunction("cpu", pCpuReqLimit)
+export const parseDataReqLimit = createReqLimitParseFunction("data", pDataReqLimit)

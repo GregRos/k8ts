@@ -1,7 +1,7 @@
 import { Map, Set } from "immutable"
 import { int, letter } from "parjs"
 import { many1, map, stringify, then } from "parjs/combinators"
-import { UnitError } from "../error"
+import { MakeError } from "../../error"
 const pUnit = letter().pipe(many1(2), stringify())
 
 const pValueUnit = int().pipe(
@@ -50,10 +50,10 @@ export class UnitParser {
             map(({ value, unit }) => {
                 const gotType = this._unitToType.get(unit)
                 if (!gotType) {
-                    throw new UnitError(`Unit ${unit} is not recognized`)
+                    throw new MakeError(`Unit ${unit} is not recognized`)
                 }
                 if (!gotType.has(expectedType)) {
-                    throw new UnitError(
+                    throw new MakeError(
                         `Unit ${unit} is of type ${gotType.join(", ")} not of type ${expectedType}`
                     )
                 }
@@ -66,7 +66,7 @@ export class UnitParser {
         return (input: string) => {
             const result = pUnitValue.parse(input)
             if (result.kind !== "OK") {
-                throw new UnitError(`Expression ${input} did not match the unit pattern`, {
+                throw new MakeError(`Expression ${input} did not match the unit pattern`, {
                     more: result.trace.toString()
                 })
             }
