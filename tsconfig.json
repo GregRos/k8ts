@@ -4,7 +4,10 @@
       "path": "./packages/metadata/tsconfig.json"
     },
     {
-      "path": "./packages/metadata/src/tsconfig.json"
+      "path": "./packages/k8ts/tsconfig.json"
+    },
+    {
+      "path": "./packages/instruments/tsconfig.json"
     }
   ],
   "compilerOptions": {
