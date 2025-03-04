@@ -1,6 +1,6 @@
 import { CDK } from "@imports"
-import { BaseNode } from "../../base"
-import type { Container } from "../container/container"
+import { BaseNode } from "../../graph/base"
+import type { Container } from "./container/container"
 import { PodScope } from "./scope"
 export type PodTemplateProps<Ports extends string> = Omit<
     CDK.PodSpec,

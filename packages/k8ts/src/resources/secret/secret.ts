@@ -1,4 +1,4 @@
-import { BaseNode } from "../../base"
+import { BaseNode } from "../../graph/base"
 
 export interface SecretProps {
     data: Record<string, string>

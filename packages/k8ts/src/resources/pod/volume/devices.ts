@@ -1,5 +1,5 @@
 import type { CDK } from "@imports"
-import type { Pvc } from "../../resources/persistent/pvc"
+import type { Pvc } from "../../persistent/pvc"
 
 interface PvcBackend {
     backend: Pvc<"Block">

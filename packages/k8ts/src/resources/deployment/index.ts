@@ -1,5 +1,5 @@
 import { CDK } from "@imports"
-import { BaseNode } from "../../base"
+import { BaseNode } from "../../graph/base"
 import type { PodTemplate } from "../pod/template"
 
 export type DeploymentProps<Ports extends string> = Omit<
@@ -21,7 +21,7 @@ export class Deployment<Ports extends string> extends BaseNode<DeploymentProps<P
                         app: this.name
                     }
                 },
-                template: this.props.template.manifest()
+                template: this.props.template.setMeta(m => m.add("%app", this.name)).manifest()
             }
         }
     }

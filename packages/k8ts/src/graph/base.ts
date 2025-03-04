@@ -12,7 +12,7 @@ export abstract class BaseNode<Props extends object> {
         return this.meta.get("name")
     }
 
-    setMeta(f: (m: Meta) => Meta) {
+    setMeta(f: (m: Meta) => Meta): this {
         const myClone = clone(this) as any
         myClone["meta"] = f(this.meta)
         return myClone

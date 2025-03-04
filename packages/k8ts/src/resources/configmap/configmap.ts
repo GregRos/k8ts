@@ -1,5 +1,5 @@
 import type { CDK } from "@imports"
-import { BaseNode } from "../../base"
+import { BaseNode } from "../../graph/base"
 export interface ConfigMapProps {
     data: Record<string, string>
     name: string

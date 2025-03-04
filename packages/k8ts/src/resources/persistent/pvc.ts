@@ -1,6 +1,6 @@
 import type { CDK } from "@imports"
 import { ResourcesSpec, Unit } from "@k8ts/instruments"
-import { BaseNode } from "../../base"
+import { BaseNode } from "../../graph/base"
 import { parseAccessModes, type InputAccessModes, type VolumeMode } from "./enums"
 
 const pvc_ResourcesSpec = ResourcesSpec.make({

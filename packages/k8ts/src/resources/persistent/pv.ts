@@ -1,6 +1,6 @@
 import { CDK } from "@imports"
 import type { Unit } from "@k8ts/instruments"
-import { BaseNode } from "../../base"
+import { BaseNode } from "../../graph/base"
 import {
     parseAccessModes,
     type InputAccessModes,

@@ -1,6 +1,6 @@
-import { Container, ContainerProps } from "../container/container"
-import { AnyDeviceBackend, Device } from "../volume/devices"
-import { AnyVolumeBackend, Volume } from "../volume/volumes"
+import { Container, ContainerProps } from "./container/container"
+import { AnyDeviceBackend, Device } from "./volume/devices"
+import { AnyVolumeBackend, Volume } from "./volume/volumes"
 
 export class PodScope {
     Container<Ports extends string>(
