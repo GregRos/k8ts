@@ -49,7 +49,7 @@ export class PortSet<Names extends string = never> {
         return this._map.get(name)!
     }
 
-    toMap() {
+    get values() {
         return this._map
     }
 

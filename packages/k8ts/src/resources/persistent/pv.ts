@@ -1,25 +1,31 @@
-import { KubePersistentVolumeClaimProps, Quantity, type PersistentVolumeSpec } from "@imports"
+import { Quantity, type KubePersistentVolumeProps, type PersistentVolumeSpec } from "@imports"
 import type { Unit } from "@k8ts/instruments"
 import type { Meta } from "@k8ts/metadata"
-import { parseAccessModes, type InputAccessModes, type VolumeReclaimPolicy } from "../enums"
+import {
+    parseAccessModes,
+    type InputAccessModes,
+    type VolumeMode,
+    type VolumeReclaimPolicy
+} from "./enums"
 import { parseBackend, PV_Backend_HostPath, PV_Backend_Local } from "./pv-backends"
-export interface PV_Props {
+
+export interface PV_Props<Mode extends VolumeMode = "Filesystem"> {
     accessModes: InputAccessModes
     storageClassName?: string
-    isBlock?: boolean
+    mode?: Mode
     reclaimPolicy?: VolumeReclaimPolicy
     capacity: Unit.Data
     backend: PV_Backend_HostPath | PV_Backend_Local
 }
 
-export class PV {
+export class PV<Mode extends VolumeMode = "Filesystem"> {
     readonly kind = "PersistentVolume" as const
     constructor(
         readonly meta: Meta,
-        readonly props: PV_Props
+        readonly props: PV_Props<Mode>
     ) {}
 
-    manifest(): KubePersistentVolumeClaimProps {
+    manifest(): KubePersistentVolumeProps {
         const pvProps = this.props
         const accessModes = parseAccessModes(pvProps.accessModes)
         let base: PersistentVolumeSpec = {
@@ -28,7 +34,7 @@ export class PV {
             capacity: {
                 storage: Quantity.fromString(pvProps.capacity)
             },
-            volumeMode: pvProps.isBlock ? "Block" : "Filesystem",
+            volumeMode: pvProps.mode ?? "Filesystem",
             persistentVolumeReclaimPolicy: pvProps.reclaimPolicy ?? "Retain"
         }
         base = {

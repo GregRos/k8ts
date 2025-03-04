@@ -10,7 +10,7 @@ it("should do ports", () => {
 
     expect(ps.get("extra").protocol).toBe("UDP")
     expect(ps.get("also").port).toBe(8081)
-    expect(ps.pick("http", "https").toMap().size).toBe(2)
+    expect(ps.pick("http", "https").values.size).toBe(2)
     const picked = ps.pick("http", "https")
     // @ts-expect-error
     expect(() => picked.get("extra")).toThrow()

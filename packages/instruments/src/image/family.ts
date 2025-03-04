@@ -19,7 +19,7 @@ export class ImageHost<Text extends string = string> {
     }
 }
 
-export class BaseImage<Text extends string> {
+export class BaseImage<Text extends string = string> {
     constructor(
         private readonly _source: ImageHost,
         private readonly _name: string
@@ -39,7 +39,7 @@ export class BaseImage<Text extends string> {
     }
 }
 
-export class TaggedImage<Text extends string> {
+export class TaggedImage<Text extends string = string> {
     constructor(
         private readonly _family: BaseImage<string>,
         private readonly _tag: string

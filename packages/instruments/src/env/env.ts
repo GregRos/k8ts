@@ -1,6 +1,6 @@
 import { Map, type MapOf } from "immutable"
 import { InstrumentsError } from "../error"
-import type { InputEnvMapping } from "./types"
+import type { InputEnv, InputEnvMapping } from "./types"
 import { isValidEnvVarName } from "./validate-name"
 
 type _EnvBuilderMap = MapOf<InputEnvMapping>
@@ -13,6 +13,10 @@ export class EnvBuilder {
                 })
             }
         }
+    }
+
+    get values() {
+        return this._env
     }
 
     private _withEnv(f: (env: _EnvBuilderMap) => _EnvBuilderMap) {
@@ -54,7 +58,13 @@ export class EnvBuilder {
             .toObject()
     }
 
-    static make(env?: InputEnvMapping) {
+    static make(env?: InputEnv) {
+        if (!env) {
+            return new EnvBuilder(Map({}))
+        }
+        if (env instanceof EnvBuilder) {
+            return env
+        }
         return new EnvBuilder(Map(env ?? {}).filter(v => v != null) as _EnvBuilderMap)
     }
 }

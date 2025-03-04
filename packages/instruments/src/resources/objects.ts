@@ -57,6 +57,7 @@ export class ResourcesSpec<const RM extends mt_Resource_Unit_Map<RM>> {
         }
         return pReqLimit.parse(input).value
     }
+    __INPUT__!: mt_Resource_Input_Map<RM>
 
     parse<const R extends mt_Resource_Input_Map<RM>>(input: R): ResourcesMap<RM> {
         const allKeys = Set([...Object.keys(input), ...this._unitParsers.keys()]).toMap()
