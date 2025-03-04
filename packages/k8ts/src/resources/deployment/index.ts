@@ -1,16 +1,10 @@
 import { CDK } from "@imports"
-import { BaseNode } from "../../graph/base"
+import { Depends } from "../../graph/base"
 import type { PodTemplate } from "../pod/template"
 
-export type DeploymentProps<Ports extends string> = Omit<
-    CDK.DeploymentSpec,
-    "selector" | "template"
-> & {
-    template: PodTemplate<Ports>
-}
-export class Deployment<Ports extends string> extends BaseNode<DeploymentProps<Ports>> {
+export type DeploymentProps = Omit<CDK.DeploymentSpec, "selector" | "template">
+export class Deployment<Ports extends string> extends Depends<DeploymentProps, PodTemplate<Ports>> {
     kind = "Deployment" as const
-
     manifest(): CDK.KubeDeploymentProps {
         return {
             metadata: this.meta.expand(),
@@ -21,7 +15,7 @@ export class Deployment<Ports extends string> extends BaseNode<DeploymentProps<P
                         app: this.name
                     }
                 },
-                template: this.props.template.setMeta(m => m.add("%app", this.name)).manifest()
+                template: this.dependency.setMeta(m => m.add("%app", this.name)).manifest()
             }
         }
     }

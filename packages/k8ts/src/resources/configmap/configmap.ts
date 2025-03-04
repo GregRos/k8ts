@@ -1,10 +1,10 @@
 import type { CDK } from "@imports"
-import { BaseNode } from "../../graph/base"
+import { Base } from "../../graph/base"
 export interface ConfigMapProps {
     data: Record<string, string>
     name: string
 }
-export class ConfigMap extends BaseNode<ConfigMapProps> {
+export class ConfigMap extends Base<ConfigMapProps> {
     override kind = "ConfigMap" as const
 
     override manifest(): CDK.KubeConfigMapProps {

@@ -24,6 +24,8 @@
             "packages/k8ts": true,
             "packages/instruments": true,
             "packages/metadata": true,
+            "**/imports-dist": true,
+            "**/dist-imports": true,
             "**/.git": true,
             "**/.svn": true,
             "**/.hg": true,

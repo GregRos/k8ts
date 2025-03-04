@@ -1,6 +1,6 @@
 import { CDK } from "@imports"
 import type { Unit } from "@k8ts/instruments"
-import { BaseNode } from "../../graph/base"
+import { Base } from "../../graph/base"
 import {
     parseAccessModes,
     type InputAccessModes,
@@ -18,7 +18,7 @@ export interface PvProps<Mode extends VolumeMode = "Filesystem"> {
     backend: PV_Backend_HostPath | PV_Backend_Local
 }
 
-export class Pv<Mode extends VolumeMode = "Filesystem"> extends BaseNode<PvProps<Mode>> {
+export class Pv<Mode extends VolumeMode = "Filesystem"> extends Base<PvProps<Mode>> {
     readonly kind = "PersistentVolume" as const
 
     manifest(): CDK.KubePersistentVolumeProps {

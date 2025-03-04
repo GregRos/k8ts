@@ -1,7 +1,7 @@
 import type { Meta } from "@k8ts/metadata"
 import { clone } from "lodash"
 
-export abstract class BaseNode<Props extends object> {
+export abstract class Base<Props extends object = object> {
     abstract readonly kind: string
     constructor(
         readonly meta: Meta,
@@ -19,4 +19,17 @@ export abstract class BaseNode<Props extends object> {
     }
 
     abstract manifest(): object
+}
+
+export abstract class Depends<
+    Props extends object = object,
+    Parent extends Base = Base
+> extends Base<Props> {
+    constructor(
+        meta: Meta,
+        props: Props,
+        readonly dependency: Parent
+    ) {
+        super(meta, props)
+    }
 }

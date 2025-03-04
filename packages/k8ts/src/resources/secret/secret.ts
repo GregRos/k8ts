@@ -1,11 +1,11 @@
-import { BaseNode } from "../../graph/base"
+import { Base } from "../../graph/base"
 
 export interface SecretProps {
     data: Record<string, string>
     stringData: Record<string, string>
 }
 
-export class Secret extends BaseNode<SecretProps> {
+export class Secret extends Base<SecretProps> {
     kind = "Secret" as const
 
     manifest() {

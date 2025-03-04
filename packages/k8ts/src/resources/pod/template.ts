@@ -1,5 +1,5 @@
 import { CDK } from "@imports"
-import { BaseNode } from "../../graph/base"
+import { Base } from "../../graph/base"
 import type { Container } from "./container/container"
 import { PodScope } from "./scope"
 export type PodTemplateProps<Ports extends string> = Omit<
@@ -9,7 +9,7 @@ export type PodTemplateProps<Ports extends string> = Omit<
     containers(scope: PodScope): Iterable<Container<Ports>>
 }
 
-export class PodTemplate<Ports extends string> extends BaseNode<PodTemplateProps<Ports>> {
+export class PodTemplate<Ports extends string> extends Base<PodTemplateProps<Ports>> {
     kind = "Pod" as const
 
     manifest(): CDK.PodTemplateSpec {
