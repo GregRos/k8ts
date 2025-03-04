@@ -61,7 +61,13 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
+    "@datreeio/datree-cdk8s": "^1.3.5",
+    "@k8ts/instruments": "workspace:^",
+    "@k8ts/metadata": "workspace:^",
     "@types/lodash": "^4.17.16",
+    "cdk8s": "^2.69.48",
+    "cdk8s-cli": "^2.200.7",
+    "constructs": "^10.4.2",
     "declare-it": "^2.1.0",
     "doddle": "^5.0.0-beta.5",
     "immutable": "^5.0.3",

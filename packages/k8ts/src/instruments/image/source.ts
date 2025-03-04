@@ -1,1 +1,0 @@
-import { BaseImage } from "./family"

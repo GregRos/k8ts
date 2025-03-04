@@ -36,14 +36,7 @@
     }
   },
   "main": "dist/index.js",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/index.d.ts"
-      ]
-    }
-  },
-  "typings": "dist/index",
+  "types": "dist/index.d.ts",
   "files": [
     "src",
     "dist",

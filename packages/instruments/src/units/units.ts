@@ -36,12 +36,22 @@ export const s = (n: number) => `${n}s` as s
 export type ms = `${number}ms`
 export const ms = (n: number) => `${n}ms` as ms
 
-export namespace Dim {
+export namespace Unit {
     export type Data = M | G | T | K | Mi | Gi | Ki
-    export type CPU = m
+    export type Cpu = m
     export type Time = m | h | d | s | ms
-}
+    const _parseCpu = unitParser.createParseFunctionFor<Cpu>("cpu")
+    export function parseCpu(input: string) {
+        return _parseCpu(input)
+    }
 
-export const parseCpuUnit = unitParser.createParseFunctionFor<Dim.CPU>("cpu")
-export const parseDataUnit = unitParser.createParseFunctionFor<Dim.Data>("data")
-export const parseTimeUnit = unitParser.createParseFunctionFor<Dim.Time>("time")
+    const _parseData = unitParser.createParseFunctionFor<Data>("data")
+    export function parseData(input: string) {
+        return _parseData(input)
+    }
+
+    const _parseTime = unitParser.createParseFunctionFor<Time>("time")
+    export function parseTime(input: string) {
+        return _parseTime(input)
+    }
+}

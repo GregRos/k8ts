@@ -19,6 +19,15 @@
     "lint:fix": "run-s eslint:fix prettier:fix",
     "test:coverage": "yarn workspaces foreach -Rpt --from '{char-info,parjs}' run test:coverage"
   },
+  "resolutions": {
+    "@k8ts/instruments": "portal:packages/instruments",
+    "@k8ts/metadata": "portal:packages/metadata"
+  },
+  "dependencies": {
+    "declare-it": "^2.1.0",
+    "doddle": "^5.0.0-beta.5",
+    "immutable": "^5.0.3"
+  },
   "devDependencies": {
     "@types/node": "20.9.1",
     "@types/unicode-trie": "^2",
@@ -43,10 +52,5 @@
     "typescript": "^5.5.2"
   },
   "packageManager": "yarn@4.7.0",
-  "sourcesRoot": "src",
-  "dependencies": {
-    "declare-it": "^2.1.0",
-    "doddle": "^5.0.0-beta.5",
-    "immutable": "^5.0.3"
-  }
+  "sourcesRoot": "src"
 }

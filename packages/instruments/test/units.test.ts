@@ -1,20 +1,4 @@
-import {
-    G,
-    Gi,
-    K,
-    Ki,
-    M,
-    Mi,
-    T,
-    d,
-    h,
-    m,
-    ms,
-    parseCpuUnit,
-    parseDataUnit,
-    parseTimeUnit,
-    s
-} from "@lib"
+import { G, Gi, K, Ki, M, Mi, T, Unit, d, h, m, ms, s } from "@lib"
 it("creates different units and stuff", () => {
     expect(Ki(1)).toBe("1Ki")
     expect(G(1)).toBe("1G")
@@ -32,15 +16,15 @@ it("creates different units and stuff", () => {
 
 describe("parses specific types", () => {
     it("parses cpu", () => {
-        expect(() => parseCpuUnit("1Ki").type).toThrow()
-        expect(parseCpuUnit("1m").type).toBe("cpu")
+        expect(() => Unit.parseCpu("1Ki").type).toThrow()
+        expect(Unit.parseCpu("1m").type).toBe("cpu")
     })
     it("parses data", () => {
-        expect(parseDataUnit("1Ki").type).toBe("data")
-        expect(() => parseDataUnit("1m").type).toThrow()
+        expect(Unit.parseData("1Ki").type).toBe("data")
+        expect(() => Unit.parseData("1m").type).toThrow()
     })
     it("parses time", () => {
-        expect(() => parseTimeUnit("1Ki").type).toThrow()
-        expect(parseTimeUnit("1h").type).toBe("time")
+        expect(() => Unit.parseTime("1Ki").type).toThrow()
+        expect(Unit.parseTime("1h").type).toBe("time")
     })
 })

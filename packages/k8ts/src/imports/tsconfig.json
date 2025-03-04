@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "../dist/.imports.tsbuildinfo",
+    "rootDir": ".",
+    "noEmit": false,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "../dist/imports",
+    "baseUrl": ".",
+    "strict": false
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["**/node_modules"]
+}
