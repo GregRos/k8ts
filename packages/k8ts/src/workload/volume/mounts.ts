@@ -1,4 +1,4 @@
-import type { VolumeDevice as CDK_VolumeDevice, VolumeMount as CDK_VolumeMount } from "@imports"
+import type { CDK } from "@imports"
 import type { Device } from "./devices"
 import type { Volume } from "./volumes"
 export interface MountOptions {
@@ -12,7 +12,7 @@ export class VolumeMount {
         readonly props: MountOptions
     ) {}
 
-    manifest(mountPath: string): CDK_VolumeMount {
+    manifest(mountPath: string): CDK.VolumeMount {
         return {
             name: this.parent.name,
             mountPath: mountPath,
@@ -26,7 +26,7 @@ export class DeviceMount {
     kind = "DeviceMount" as const
     constructor(readonly parent: Device) {}
 
-    manifest(devicePath: string): CDK_VolumeDevice {
+    manifest(devicePath: string): CDK.VolumeDevice {
         return {
             devicePath: devicePath,
             name: this.parent.name

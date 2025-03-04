@@ -1,8 +1,8 @@
-import type { ContainerPort, EnvVar } from "@imports"
+import type { CDK } from "@imports"
 import type { EnvBuilder, PortSet } from "@k8ts/instruments"
 import type { PortSetEntry } from "@k8ts/instruments/dist/ports/types"
 
-export function toContainerPort(entry: PortSetEntry): ContainerPort {
+export function toContainerPort(entry: PortSetEntry): CDK.ContainerPort {
     return {
         containerPort: entry.port,
         name: entry.name,
@@ -19,6 +19,6 @@ export function toEnvVars(env: EnvBuilder) {
         return {
             name: key,
             value: x
-        } as EnvVar
+        } as CDK.EnvVar
     })
 }

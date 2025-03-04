@@ -1,9 +1,9 @@
-import { PodSpec as CDK_PodSpec, PodTemplateSpec as CDK_PodTemplateSpec } from "@imports"
+import { CDK } from "@imports"
 import type { Meta } from "@k8ts/metadata"
 import type { Container } from "../container/container"
 import { PodScope } from "./scope"
 export type PodTemplateProps<Ports extends string> = Omit<
-    CDK_PodSpec,
+    CDK.PodSpec,
     "containers" | "initContainers" | "volumes"
 > & {
     containers(scope: PodScope): Iterable<Container<Ports>>
@@ -15,7 +15,7 @@ export class PodTemplate<Ports extends string> {
         readonly props: PodTemplateProps<Ports>
     ) {}
 
-    manifest(): CDK_PodTemplateSpec {
+    manifest(): CDK.PodTemplateSpec {
         const { meta, props } = this
         const containers = [...props.containers(new PodScope())]
         const initContainers = containers.filter(c => c.subtype === "init").map(x => x.manifest())

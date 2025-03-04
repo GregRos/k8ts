@@ -1,4 +1,4 @@
-import { Quantity, type KubePersistentVolumeProps, type PersistentVolumeSpec } from "@imports"
+import { CDK } from "@imports"
 import type { Unit } from "@k8ts/instruments"
 import type { Meta } from "@k8ts/metadata"
 import {
@@ -25,14 +25,14 @@ export class PV<Mode extends VolumeMode = "Filesystem"> {
         readonly props: PV_Props<Mode>
     ) {}
 
-    manifest(): KubePersistentVolumeProps {
+    manifest(): CDK.KubePersistentVolumeProps {
         const pvProps = this.props
         const accessModes = parseAccessModes(pvProps.accessModes)
-        let base: PersistentVolumeSpec = {
+        let base: CDK.PersistentVolumeSpec = {
             accessModes,
             storageClassName: pvProps.storageClassName,
             capacity: {
-                storage: Quantity.fromString(pvProps.capacity)
+                storage: CDK.Quantity.fromString(pvProps.capacity)
             },
             volumeMode: pvProps.mode ?? "Filesystem",
             persistentVolumeReclaimPolicy: pvProps.reclaimPolicy ?? "Retain"

@@ -1,4 +1,4 @@
-import type { Container as CDK_Container, SecurityContext } from "@imports"
+import type { CDK } from "@imports"
 import {
     Env,
     ResourcesSpec,
@@ -25,7 +25,7 @@ export interface ContainerProps<Ports extends string> {
     command?: CmdBuilder
     mounts?: Record<MountPath, DeviceMount | VolumeMount>
     env: InputEnvMapping
-    securityContext?: SecurityContext
+    securityContext?: CDK.SecurityContext
     resources: ContainerResources
 }
 export class Container<Ports extends string> {
@@ -49,7 +49,7 @@ export class Container<Ports extends string> {
         const x = {
             volumeMounts: [],
             volumeDevices: []
-        } as Pick<CDK_Container, "volumeMounts" | "volumeDevices">
+        } as Pick<CDK.Container, "volumeMounts" | "volumeDevices">
         for (const [path, mount] of Object.entries(this.props.mounts ?? {})) {
             if (mount.kind === "DeviceMount") {
                 x.volumeDevices!.push(mount.manifest(path))
@@ -67,9 +67,9 @@ export class Container<Ports extends string> {
         })
     }
 
-    manifest(): CDK_Container {
+    manifest(): CDK.Container {
         const { image, ports, command, env, securityContext } = this.props
-        const container: CDK_Container = {
+        const container: CDK.Container = {
             name: this.name,
             image: image.text,
             ports: toContainerPorts(ports).valueSeq().toArray(),

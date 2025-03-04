@@ -1,4 +1,4 @@
-import type { KubePersistentVolumeClaimProps } from "@imports"
+import type { CDK } from "@imports"
 import { ResourcesSpec, Unit } from "@k8ts/instruments"
 import type { Meta } from "@k8ts/metadata"
 import { parseAccessModes, type InputAccessModes, type VolumeMode } from "./enums"
@@ -24,7 +24,7 @@ export class Pvc<Mode extends VolumeMode = "Filesystem"> {
     get name() {
         return this.meta.get("name")
     }
-    manifest(): KubePersistentVolumeClaimProps {
+    manifest(): CDK.KubePersistentVolumeClaimProps {
         const { storage, accessModes, mode } = this.props
         const name = this.name
         const nAccessModes = parseAccessModes(accessModes)

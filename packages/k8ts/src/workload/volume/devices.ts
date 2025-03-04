@@ -1,4 +1,4 @@
-import type { Volume as CDK_Volume } from "@imports"
+import type { CDK } from "@imports"
 import type { Pvc } from "../../resources/persistent/pvc"
 
 interface PvcBackend {
@@ -13,7 +13,7 @@ export class Device {
         readonly backend: PvcBackend
     ) {}
 
-    manifest(): CDK_Volume {
+    manifest(): CDK.Volume {
         return {
             name: this.name,
             persistentVolumeClaim: {

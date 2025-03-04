@@ -1,4 +1,4 @@
-import type { KubeConfigMapProps } from "@imports"
+import type { CDK } from "@imports"
 import type { Meta } from "@k8ts/metadata/."
 export interface ConfigMapProps {
     data: Record<string, string>
@@ -14,7 +14,7 @@ export class ConfigMap {
     get name() {
         return this.meta.get("name")
     }
-    manifest(): KubeConfigMapProps {
+    manifest(): CDK.KubeConfigMapProps {
         return {
             metadata: this.meta.expand(),
             data: this.props.data

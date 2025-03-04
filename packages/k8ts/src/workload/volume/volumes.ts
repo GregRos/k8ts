@@ -1,4 +1,4 @@
-import type { Volume as Cdk8s_Volume } from "@imports"
+import type { CDK } from "@imports"
 import type { ConfigMap } from "../../resources/configmap/configmap"
 import type { Pvc } from "../../resources/persistent/pvc"
 import type { Secret } from "../../resources/secret/secret"
@@ -21,7 +21,7 @@ export abstract class Volume<Props extends object = object> {
         readonly props: Props
     ) {}
 
-    abstract manifest(): Cdk8s_Volume
+    abstract manifest(): CDK.Volume
 
     mount(options: MountOptions) {
         return new VolumeMount(this as any, options)
@@ -40,7 +40,7 @@ export abstract class Volume<Props extends object = object> {
     }
 }
 class PvcVolume extends Volume<PvcBackend> {
-    override manifest(): Cdk8s_Volume {
+    override manifest(): CDK.Volume {
         return {
             name: this.name,
             persistentVolumeClaim: {
@@ -52,7 +52,7 @@ class PvcVolume extends Volume<PvcBackend> {
 }
 
 class ConfigMapVolume extends Volume<ConfigMapBackend> {
-    override manifest(): Cdk8s_Volume {
+    override manifest(): CDK.Volume {
         return {
             name: this.name,
             configMap: {
@@ -63,7 +63,7 @@ class ConfigMapVolume extends Volume<ConfigMapBackend> {
 }
 
 class SecretVolume extends Volume<SecretBackend> {
-    override manifest(): Cdk8s_Volume {
+    override manifest(): CDK.Volume {
         return {
             name: this.name,
             secret: {
