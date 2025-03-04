@@ -1,10 +1,18 @@
 {
   "extends": "../../../tsconfig.base.json",
+  "references": [
+    {
+      "path": "../imports/tsconfig.json"
+    }
+  ],
   "compilerOptions": {
     "rootDir": ".",
     "noEmit": false,
     "outDir": "../dist",
-    "tsBuildInfoFile": "../dist/src.tsbuildinfo"
+    "tsBuildInfoFile": "../dist/src.tsbuildinfo",
+    "paths": {
+      "@imports": ["../imports"]
+    }
   },
   "include": ["**/*.ts"]
 }

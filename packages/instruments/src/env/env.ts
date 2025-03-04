@@ -1,5 +1,5 @@
 import { Map, type MapOf } from "immutable"
-import { MakeError } from "../error"
+import { InstrumentsError } from "../error"
 import type { InputEnvMapping } from "./types"
 import { isValidEnvVarName } from "./validate-name"
 
@@ -8,7 +8,7 @@ export class EnvBuilder {
     constructor(private readonly _env: _EnvBuilderMap) {
         for (const key of _env.keys()) {
             if (!isValidEnvVarName(key)) {
-                throw new MakeError("Invalid environment variable name", {
+                throw new InstrumentsError("Invalid environment variable name", {
                     key: key
                 })
             }
@@ -29,7 +29,7 @@ export class EnvBuilder {
             .filter(k => this._env.has(k))
             .toList()
         if (existingKeys.size > 0) {
-            throw new MakeError("Cannot overwrite existing keys using add", {
+            throw new InstrumentsError("Cannot overwrite existing keys using add", {
                 keys: existingKeys.toArray()
             })
         }

@@ -18,6 +18,7 @@
         }
     ],
     "settings": {
+        "python.analysis.ignore": ["**/node_modules/**", "**/.git/**"],
         "jest.disabledWorkspaceFolders": ["root"],
         "files.exclude": {
             "packages/k8ts": true,

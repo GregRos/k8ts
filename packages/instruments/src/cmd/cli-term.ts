@@ -1,4 +1,4 @@
-import { MakeError } from "../error"
+import { InstrumentsError } from "../error"
 import type { CliValue } from "./types"
 
 export class CliFlag {
@@ -38,7 +38,7 @@ export class CliOptionValue {
 
     str(joiner: string) {
         if (this.value === undefined) {
-            throw new MakeError("CliOptionValue cannot be undefined, use null instead")
+            throw new InstrumentsError("CliOptionValue cannot be undefined, use null instead")
         }
 
         return [this.key, this._valueStr()].join(this.overrideTermJoiner ?? joiner)

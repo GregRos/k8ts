@@ -1,6 +1,9 @@
 {
   "references": [
     {
+      "path": "./imports/tsconfig.json"
+    },
+    {
       "path": "./src/tsconfig.json"
     },
     {

@@ -1,2 +1,1 @@
-export { ReqLimitInput } from "./input"
-export { ReqLimit } from "./parser"
+export { ReqLimit } from "./namespaces"

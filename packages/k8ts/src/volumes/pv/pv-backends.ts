@@ -1,3 +1,5 @@
+import { MakeError } from "../../error"
+
 export interface PV_Backend_Local {
     type: "Local"
     path: string
@@ -9,7 +11,7 @@ export interface PV_Backend_HostPath {
 }
 
 export function parseBackend(backend: PV_Backend_Local | PV_Backend_HostPath) {
-        switch (backend.type) {
+    switch (backend.type) {
         case "HostPath":
             return {
                 hostPath: {
@@ -27,4 +29,5 @@ export function parseBackend(backend: PV_Backend_Local | PV_Backend_HostPath) {
             throw new MakeError(`Unknown backend kind!`, {
                 backend
             })
+    }
 }

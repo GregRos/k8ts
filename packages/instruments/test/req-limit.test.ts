@@ -22,7 +22,7 @@ it("invalid inputs - CPU", () => {
 })
 
 it("valid inputs - Data", () => {
-    const reqLimit = ReqLimit.Data.parse("1Mi--->2Gi")
+    const reqLimit = ReqLimit.Memory.parse("1Mi--->2Gi")
     expect(reqLimit).toMatchObject({
         request: {
             value: 1,
@@ -36,8 +36,8 @@ it("valid inputs - Data", () => {
 })
 
 it("invalid inputs - Data", () => {
-    expect(() => ReqLimit.Data.parse("1Mi--->2m")).toThrow()
-    expect(() => ReqLimit.Data.parse("1Mi--->2")).toThrow()
-    expect(() => ReqLimit.Data.parse("1Mi")).toThrow()
-    expect(() => ReqLimit.Data.parse("1Mi--->2Mi--->3Mi")).toThrow()
+    expect(() => ReqLimit.Memory.parse("1Mi--->2m")).toThrow()
+    expect(() => ReqLimit.Memory.parse("1Mi--->2")).toThrow()
+    expect(() => ReqLimit.Memory.parse("1Mi")).toThrow()
+    expect(() => ReqLimit.Memory.parse("1Mi--->2Mi--->3Mi")).toThrow()
 })

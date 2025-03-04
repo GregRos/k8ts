@@ -1,10 +1,11 @@
 import type { Parjser } from "parjs/."
 import { manySepBy, map, must } from "parjs/combinators"
-import { MakeError } from "../error"
+import { InstrumentsError } from "../error"
 import type { UnitValue } from "../units/unit-parser"
 import { unitParser } from "../units/values"
+import type { ReqLimit } from "./namespaces"
 
-export function createReqLimitParser(pUnitValue: Parjser<UnitValue>) {
+export function createReqLimitParser(resource: string, pUnitValue: Parjser<UnitValue>) {
     return pUnitValue.pipe(
         manySepBy("--->", 2),
         must(x => {
@@ -18,6 +19,7 @@ export function createReqLimitParser(pUnitValue: Parjser<UnitValue>) {
         }),
         map(([a, b]) => {
             return {
+                resource: resource,
                 request: a,
                 limit: b
             } as ReqLimit
@@ -25,34 +27,17 @@ export function createReqLimitParser(pUnitValue: Parjser<UnitValue>) {
     )
 }
 
-function createReqLimitParseFunction(unit: string, p: Parjser<ReqLimit>) {
+export function createReqLimitParseFunction(unit: string, p: Parjser<ReqLimit>) {
     return (input: string) => {
         const result = p.parse(input)
         if (result.kind !== "OK") {
-            throw new MakeError(`Failed to parse ${unit} request limit`, {
+            throw new InstrumentsError(`Failed to parse ${unit} request limit`, {
                 trace: result.trace.toString()
             })
         }
         return result.value
     }
 }
-export const pCpuReqLimit = createReqLimitParser(unitParser.createParser("cpu"))
-export const pDataReqLimit = createReqLimitParser(unitParser.createParser("data"))
-export interface ReqLimit {
-    readonly request: UnitValue
-    readonly limit: UnitValue
-}
-export namespace ReqLimit {
-    export namespace Cpu {
-        const _parseCpu = createReqLimitParseFunction("cpu", pCpuReqLimit)
-        export function parse(input: string) {
-            return _parseCpu(input)
-        }
-    }
-    export namespace Data {
-        const _parseData = createReqLimitParseFunction("data", pDataReqLimit)
-        export function parse(input: string) {
-            return _parseData(input)
-        }
-    }
-}
+export const pCpuReqLimit = createReqLimitParser("cpu", unitParser.createParser("cpu"))
+export const pStorageReqLimit = createReqLimitParser("storage", unitParser.createParser("data"))
+export const pMemoryReqLimit = createReqLimitParser("memory", unitParser.createParser("data"))
