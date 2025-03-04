@@ -1,5 +1,5 @@
-import { Map, Set } from "immutable"
-import { int, letter } from "parjs"
+import { Set } from "immutable"
+import { int, letter, type Parjser } from "parjs"
 import { many1, map, stringify, then } from "parjs/combinators"
 import { InstrumentsError } from "../error"
 const pUnit = letter().pipe(many1(2), stringify())
@@ -27,50 +27,37 @@ export class UnitValue<Unit extends string = string> {
     }
 }
 
-export class UnitParser {
-    private _unitToType: Map<string, Set<string>>
-    constructor(unitTypes: Record<string, string[]>) {
-        this._unitToType = Map(unitTypes)
-            .entrySeq()
-            .flatMap(([type, units]) => {
-                return units.map(unit => [unit, type] as const)
-            })
-            .groupBy(([unit, _]) => unit)
-            .map(x => {
-                return x.map(x => x[1])
-            })
-
-            .map(types => {
-                return Set(types)
-            })
-    }
-
-    createParser<Unit extends string>(expectedType: string) {
-        return pValueUnit.pipe(
+export class UnitParser<const Unit extends string = string> {
+    readonly parser: Parjser<UnitValue<Unit>>
+    constructor(
+        private readonly unitType: string,
+        private readonly _units: Set<Unit>
+    ) {
+        this.parser = pValueUnit.pipe(
             map(({ value, unit }) => {
-                const gotType = this._unitToType.get(unit)
+                const gotType = this._units.has(unit as any)
                 if (!gotType) {
-                    throw new InstrumentsError(`Unit ${unit} is not recognized`)
-                }
-                if (!gotType.has(expectedType)) {
                     throw new InstrumentsError(
-                        `Unit ${unit} is of type ${gotType.join(", ")} not of type ${expectedType}`
+                        `Unit ${unit} is not a valid unit of type ${this.unitType}`
                     )
                 }
-                return new UnitValue<Unit>(unit as any, value, expectedType)
+                return new UnitValue<Unit>(unit as any, value, this.unitType)
             })
         )
     }
-    createParseFunctionFor<Unit extends string>(expectedType: string) {
-        const pUnitValue = this.createParser<Unit>(expectedType)
-        return (input: string) => {
-            const result = pUnitValue.parse(input)
-            if (result.kind !== "OK") {
-                throw new InstrumentsError(`Expression ${input} did not match the unit pattern`, {
-                    more: result.trace.toString()
-                })
-            }
-            return result.value
+
+    parse = (input: `${number}${Unit}`) => {
+        const pUnitValue = this.parser
+        const result = pUnitValue.parse(input)
+        if (result.kind !== "OK") {
+            throw new InstrumentsError(`Failed to parse ${this.unitType}`, {
+                more: result.trace.toString()
+            })
         }
+        return result.value
+    }
+
+    static make<const Unit extends string>(unitType: string, units: Set<Unit>) {
+        return new UnitParser<Unit>(unitType, units)
     }
 }

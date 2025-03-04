@@ -1,5 +1,4 @@
 import type { KubePersistentVolumeClaimProps } from "@imports"
-import type { ReqLimit } from "@k8ts/instruments"
 import type { Meta } from "@k8ts/metadata"
 import { parseAccessModes, type InputAccessModes } from "../enums"
 
@@ -29,11 +28,9 @@ export class LK_PersistentVolumeClaim<IsBlock extends boolean = false> {
             metadata: this.meta.expand(),
             spec: {
                 accessModes: nAccessModes,
-                resources: {
-                    requests: 
-                },
                 volumeName: name,
-                volumeMode: isBlock ? "Block" : "Filesystem"
+                volumeMode: isBlock ? "Block" : "Filesystem",
+                resources: ReqLimit.Storage.parse(storage)
             }
         }
     }

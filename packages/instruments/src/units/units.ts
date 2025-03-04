@@ -1,4 +1,5 @@
-import { unitParser } from "./values"
+import { Set } from "immutable"
+import { UnitParser } from "./unit-parser"
 
 export type G = `${number}G`
 export const G = (n: number) => `${n}G` as G
@@ -36,22 +37,17 @@ export const s = (n: number) => `${n}s` as s
 export type ms = `${number}ms`
 export const ms = (n: number) => `${n}ms` as ms
 
+export interface UnitDefinition<Unit extends string> {}
+
 export namespace Unit {
     export type Data = M | G | T | K | Mi | Gi | Ki
     export type Cpu = m
     export type Time = m | h | d | s | ms
-    const _parseCpu = unitParser.createParseFunctionFor<Cpu>("cpu")
-    export function parseCpu(input: string) {
-        return _parseCpu(input)
-    }
+    export type Any = Data | Cpu | Time
 
-    const _parseData = unitParser.createParseFunctionFor<Data>("data")
-    export function parseData(input: string) {
-        return _parseData(input)
-    }
+    export const Cpu = UnitParser.make("cpu", Set(["m"]))
 
-    const _parseTime = unitParser.createParseFunctionFor<Time>("time")
-    export function parseTime(input: string) {
-        return _parseTime(input)
-    }
+    export const Data = UnitParser.make("data", Set(["M", "G", "T", "K", "Mi", "Gi", "Ki"]))
+
+    export const Time = UnitParser.make("time", Set(["m", "h", "d", "s", "ms"]))
 }

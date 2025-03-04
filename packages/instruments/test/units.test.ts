@@ -16,15 +16,18 @@ it("creates different units and stuff", () => {
 
 describe("parses specific types", () => {
     it("parses cpu", () => {
-        expect(() => Unit.parseCpu("1Ki").type).toThrow()
-        expect(Unit.parseCpu("1m").type).toBe("cpu")
+        // @ts-expect-error
+        expect(() => Unit.Cpu.parse("1Ki").type).toThrow()
+        expect(Unit.Cpu.parse("1m").type).toBe("cpu")
     })
     it("parses data", () => {
-        expect(Unit.parseData("1Ki").type).toBe("data")
-        expect(() => Unit.parseData("1m").type).toThrow()
+        expect(Unit.Data.parse("1Ki").type).toBe("data")
+        // @ts-expect-error
+        expect(() => Unit.Data.parse("1m").type).toThrow()
     })
     it("parses time", () => {
-        expect(() => Unit.parseTime("1Ki").type).toThrow()
-        expect(Unit.parseTime("1h").type).toBe("time")
+        // @ts-expect-error
+        expect(() => Unit.Time.parse("1Ki").type).toThrow()
+        expect(Unit.Time.parse("1h").type).toBe("time")
     })
 })
