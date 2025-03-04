@@ -1,5 +1,5 @@
 import { CDK } from "@imports"
-import type { Meta } from "@k8ts/metadata"
+import { BaseNode } from "../../base"
 import type { Container } from "../container/container"
 import { PodScope } from "./scope"
 export type PodTemplateProps<Ports extends string> = Omit<
@@ -9,11 +9,8 @@ export type PodTemplateProps<Ports extends string> = Omit<
     containers(scope: PodScope): Iterable<Container<Ports>>
 }
 
-export class PodTemplate<Ports extends string> {
-    constructor(
-        readonly meta: Meta,
-        readonly props: PodTemplateProps<Ports>
-    ) {}
+export class PodTemplate<Ports extends string> extends BaseNode<PodTemplateProps<Ports>> {
+    kind = "Pod" as const
 
     manifest(): CDK.PodTemplateSpec {
         const { meta, props } = this

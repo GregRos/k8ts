@@ -1,20 +1,13 @@
 import type { CDK } from "@imports"
-import type { Meta } from "@k8ts/metadata/."
+import { BaseNode } from "../../base"
 export interface ConfigMapProps {
     data: Record<string, string>
     name: string
 }
-export class ConfigMap {
-    kind = "ConfigMap" as const
-    constructor(
-        readonly meta: Meta,
-        readonly props: ConfigMapProps
-    ) {}
+export class ConfigMap extends BaseNode<ConfigMapProps> {
+    override kind = "ConfigMap" as const
 
-    get name() {
-        return this.meta.get("name")
-    }
-    manifest(): CDK.KubeConfigMapProps {
+    override manifest(): CDK.KubeConfigMapProps {
         return {
             metadata: this.meta.expand(),
             data: this.props.data

@@ -1,6 +1,6 @@
 import type { CDK } from "@imports"
 import { ResourcesSpec, Unit } from "@k8ts/instruments"
-import type { Meta } from "@k8ts/metadata"
+import { BaseNode } from "../../base"
 import { parseAccessModes, type InputAccessModes, type VolumeMode } from "./enums"
 
 const pvc_ResourcesSpec = ResourcesSpec.make({
@@ -13,17 +13,9 @@ export interface PvcProps<Mode extends VolumeMode = "Filesystem"> extends PvcRes
     name: string
 }
 
-export class Pvc<Mode extends VolumeMode = "Filesystem"> {
+export class Pvc<Mode extends VolumeMode = "Filesystem"> extends BaseNode<PvcProps<Mode>> {
     kind = "PersistentVolumeClaim" as const
 
-    constructor(
-        readonly meta: Meta,
-        readonly props: PvcProps<Mode>
-    ) {}
-
-    get name() {
-        return this.meta.get("name")
-    }
     manifest(): CDK.KubePersistentVolumeClaimProps {
         const { storage, accessModes, mode } = this.props
         const name = this.name

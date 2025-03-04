@@ -1,6 +1,6 @@
 import { CDK } from "@imports"
 import type { Unit } from "@k8ts/instruments"
-import type { Meta } from "@k8ts/metadata"
+import { BaseNode } from "../../base"
 import {
     parseAccessModes,
     type InputAccessModes,
@@ -9,7 +9,7 @@ import {
 } from "./enums"
 import { parseBackend, PV_Backend_HostPath, PV_Backend_Local } from "./pv-backends"
 
-export interface PV_Props<Mode extends VolumeMode = "Filesystem"> {
+export interface PvProps<Mode extends VolumeMode = "Filesystem"> {
     accessModes: InputAccessModes
     storageClassName?: string
     mode?: Mode
@@ -18,12 +18,8 @@ export interface PV_Props<Mode extends VolumeMode = "Filesystem"> {
     backend: PV_Backend_HostPath | PV_Backend_Local
 }
 
-export class PV<Mode extends VolumeMode = "Filesystem"> {
+export class Pv<Mode extends VolumeMode = "Filesystem"> extends BaseNode<PvProps<Mode>> {
     readonly kind = "PersistentVolume" as const
-    constructor(
-        readonly meta: Meta,
-        readonly props: PV_Props<Mode>
-    ) {}
 
     manifest(): CDK.KubePersistentVolumeProps {
         const pvProps = this.props
