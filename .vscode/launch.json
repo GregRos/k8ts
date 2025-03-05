@@ -20,6 +20,17 @@
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "runtimeExecutable": "yarn"
+    },
+    {
+      "type": "node",
+      "name": "run test k8ts",
+      "request": "launch",
+
+      "program": "",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "runtimeExecutable": "tsx",
+      "runtimeArgs": ["--enable-source-maps", "--stack-trace-limit=1000"]
     }
   ]
 }

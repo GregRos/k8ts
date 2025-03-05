@@ -7,7 +7,7 @@ export class BaseScopeFactory {
         readonly extra: Meta
     ) {}
 
-    _metaWithName(name: string) {
+    protected _metaWithName(name: string) {
         return this.origin.meta.add({
             name
         })

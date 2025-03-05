@@ -1,4 +1,4 @@
-import type { InputMeta, Meta } from "@k8ts/metadata/."
+import type { InputMeta, Meta } from "@k8ts/metadata"
 import type { KindMap } from "../kind-map"
 import { Traced } from "../tracing"
 import { ChildOrigin } from "./child-origin"

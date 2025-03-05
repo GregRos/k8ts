@@ -1,5 +1,5 @@
 import { ChildOrigin, Exports, type Origin } from "@k8ts/instruments"
-import { Meta } from "@k8ts/metadata/."
+import { Meta } from "@k8ts/metadata"
 import { seq, type Seq } from "doddle"
 import { ClusterScopeFactory } from "../graph/cluster-scope"
 import type { Base } from "../node/base"

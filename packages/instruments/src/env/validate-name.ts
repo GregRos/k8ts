@@ -1,4 +1,4 @@
-import { anyCharOf, digit, letter } from "parjs/."
+import { anyCharOf, digit, letter } from "parjs"
 import { many, or, stringify, then } from "parjs/combinators"
 
 const pEnvVarStartChar = letter().pipe(or(anyCharOf("_")))

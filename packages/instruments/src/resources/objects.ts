@@ -1,6 +1,6 @@
 import { Map, Set } from "immutable"
 import { isEmpty, merge } from "lodash"
-import { string, type Parjser } from "parjs/."
+import { string, type Parjser } from "parjs"
 import { mapConst, or } from "parjs/combinators"
 import { InstrumentsError } from "../error"
 import type { UnitParser, UnitValue } from "../units"

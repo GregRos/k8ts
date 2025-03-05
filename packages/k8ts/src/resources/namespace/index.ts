@@ -1,5 +1,5 @@
 import type { CDK } from "@imports"
-import { Meta } from "@k8ts/metadata/."
+import { Meta } from "@k8ts/metadata"
 import { Base } from "../../node/base"
 import { K8tsResources } from "../kind-map"
 

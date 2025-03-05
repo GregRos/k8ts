@@ -1,6 +1,8 @@
 import { RootOrigin } from "@k8ts/instruments"
-import { Meta } from "@k8ts/metadata/."
-import type { K8tsFile } from "./file"
+import { Meta } from "@k8ts/metadata"
+import { File, type K8tsFile } from "./file"
+import type { ClusterScopeFactory } from "./graph"
+import type { Base } from "./node"
 import { K8tsResources } from "./resources/kind-map"
 
 export class K8ts extends RootOrigin {
@@ -15,6 +17,13 @@ export class K8ts extends RootOrigin {
             }),
             K8tsResources
         )
+    }
+
+    File<T extends Base>(
+        name: string,
+        producer: (factory: ClusterScopeFactory) => Iterable<T>
+    ): K8tsFile<T> {
+        return File(this, name, producer)
     }
 
     emit(...files: K8tsFile[]) {
