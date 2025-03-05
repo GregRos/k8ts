@@ -2,6 +2,7 @@ import { InstrumentsError } from "../error"
 import { Reference } from "./reference"
 import type { InputReference } from "./types"
 
+export type InputReferenceKey = ReferenceKey | ReferenceKey["string"]
 export class ReferenceKey<Kind extends string = string, Name extends string = string> {
     constructor(
         readonly kind: Kind,

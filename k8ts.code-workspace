@@ -45,6 +45,7 @@
             "**/.mypy_cache": true,
             "**/__pycache__": true,
             "**/dist": true,
+            "**/dist/**/*": true,
             "**/dist_aux": true,
             ".nyc_output": true,
             "coverage": true,

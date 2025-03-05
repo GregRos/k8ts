@@ -1,6 +1,6 @@
 import type { CDK } from "@imports"
 import { Meta } from "@k8ts/metadata/."
-import { NamespacedScope } from "../../graph/scope"
+import { NamespacedScope } from "../../graph/namespace-scope"
 import { Base } from "../../node/base"
 import { K8tsResources } from "../kind-map"
 
