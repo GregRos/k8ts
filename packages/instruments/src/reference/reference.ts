@@ -1,11 +1,16 @@
 import { InstrumentsError } from "../error"
 import { ReferenceInfo } from "./info-object"
-import type { InputReference, Referenced } from "./types"
+import { ReferenceKey } from "./specifier"
+import type { InputReference } from "./types"
+export type Reference<T extends object> = T & ReferenceInfo<T>
 
-export function createReference<Target extends object>(
-    refInput: InputReference<Target>
-): Referenced<Target> {
-    const reference = new ReferenceInfo(refInput)
+export namespace Reference {
+    export function specifier(kind: string, name: string) {
+        return new ReferenceKey(kind, name)
+    }
+}
+export function createReference<T extends object>(input: InputReference<T>): Reference<T> {
+    const reference = new ReferenceInfo(input)
 
     function raiseIllegal(action: string): () => never {
         return (...args: any[]) => {

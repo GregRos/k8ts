@@ -1,5 +1,5 @@
 import { CDK } from "@imports"
-import { Base } from "../../graph/base"
+import { Base } from "../../node/base"
 import { K8tsResources } from "../kind-map"
 import type { Container } from "./container/container"
 import { PodScope } from "./scope"

@@ -1,2 +1,3 @@
-export { createReference } from "./proxy"
-export { InputReference, Referenced } from "./types"
+export { ReferenceInfo } from "./info-object"
+export { Reference } from "./reference"
+export { InputReference } from "./types"

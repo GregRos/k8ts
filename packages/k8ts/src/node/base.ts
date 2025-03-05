@@ -2,8 +2,8 @@ import type { Meta } from "@k8ts/metadata"
 import { clone } from "lodash"
 import StackTracey from "stacktracey"
 import { MakeError } from "../error"
+import { KEY, RefSpecifier, type RefSpec } from "../graph/referencing"
 import { K8tsResources } from "../resources/kind-map"
-import { KEY, RefSpecifier, type RefSpec } from "./referencing"
 
 export abstract class Base<Props extends object = object> {
     abstract readonly kind: string

@@ -8,7 +8,7 @@ import {
     type PortSet,
     type TaggedImage
 } from "@k8ts/instruments"
-import { toContainerPorts, toEnvVars } from "../../../utils/adapters"
+import { toContainerPorts, toEnvVars } from "../../utils/adapters"
 import type { DeviceMount, VolumeMount } from "../volume/mounts"
 import type { MountPath } from "../volume/types"
 

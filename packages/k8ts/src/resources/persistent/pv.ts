@@ -1,6 +1,6 @@
 import { CDK } from "@imports"
 import type { Unit } from "@k8ts/instruments"
-import { Base } from "../../graph/base"
+import { Base } from "../../node/base"
 import { K8tsResources } from "../kind-map"
 import {
     parseAccessModes,

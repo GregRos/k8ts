@@ -1,5 +1,5 @@
 import type { CDK } from "@imports"
-import { Base } from "../../graph/base"
+import { Base } from "../../node/base"
 import { K8tsResources } from "../kind-map"
 export interface ConfigMapProps {
     data: Record<string, string>

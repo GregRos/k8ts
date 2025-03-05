@@ -1,10 +1,9 @@
-import { createReference } from "@k8ts/instruments"
 import { seq, type Seq } from "doddle"
 import { MakeError } from "../error"
+import { Base } from "../node/base"
 import { K8tsResources } from "../resources/kind-map"
-import { Base } from "./base"
 import type { ParentScope } from "./parent-scope"
-import { KEY, RefSpecifier, type RefSpec } from "./referencing"
+import { KEY, type RefSpec } from "./referencing"
 export type _K8tsExportsRecord<Exports extends Base = Base> = {
     [Export in Exports as Export[KEY]]: Export
 }
