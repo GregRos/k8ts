@@ -1,5 +1,6 @@
 import { CDK } from "@imports"
 import { Base } from "../../node/base"
+import { apps_v1 } from "../api-version"
 import { K8tsResources } from "../kind-map"
 import type { Container } from "./container"
 import { PodScope } from "./scope"
@@ -11,7 +12,7 @@ export type PodTemplateProps<Ports extends string> = Omit<
 }
 @K8tsResources.register("PodTemplate")
 export class PodTemplate<Ports extends string = string> extends Base<PodTemplateProps<Ports>> {
-    kind = "PodTemplate" as const
+    api = apps_v1.kind("PodTemplate")
 
     manifest(): CDK.PodTemplateSpec {
         const { meta, props } = this

@@ -1,4 +1,5 @@
 import { Base } from "../../node/base"
+import { v1 } from "../api-version"
 import { K8tsResources } from "../kind-map"
 
 export interface SecretProps {
@@ -8,7 +9,7 @@ export interface SecretProps {
 
 @K8tsResources.register("Secret")
 export class Secret extends Base<SecretProps> {
-    kind = "Secret" as const
+    api = v1.kind("Secret")
 
     manifest() {
         return {

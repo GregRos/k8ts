@@ -1,5 +1,6 @@
 import type { CDK } from "@imports"
 import { Base } from "../../node/base"
+import { v1 } from "../api-version"
 import { K8tsResources } from "../kind-map"
 export interface ConfigMapProps {
     data: Record<string, string>
@@ -7,7 +8,7 @@ export interface ConfigMapProps {
 }
 @K8tsResources.register("ConfigMap")
 export class ConfigMap extends Base<ConfigMapProps> {
-    override kind = "ConfigMap" as const
+    override api = v1.kind("ConfigMap")
 
     override manifest(): CDK.KubeConfigMapProps {
         return {

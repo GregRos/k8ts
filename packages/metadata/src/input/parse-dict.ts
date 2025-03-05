@@ -4,9 +4,9 @@ import { SectionKey, ValueKey } from "../key/repr"
 import { Meta } from "../meta"
 import type { InputMeta } from "./dict-input"
 
-export function parseMetaInput(input: InputMeta) {
+export function parseMetaInput(input: InputMeta): Map<ValueKey, string> {
     if (Map.isMap(input)) {
-        return input
+        return input as Map<ValueKey, string>
     }
     if (input instanceof Meta) {
         return input["_dict"]

@@ -1,3 +1,4 @@
+export * from "./api-kind"
 export * from "./cmd"
 export * from "./env"
 export * from "./exports"

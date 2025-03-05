@@ -30,7 +30,7 @@ export abstract class Volume<Props extends object = object> {
 
     static make(name: string, input: AnyVolumeBackend): Volume {
         const { backend } = input
-        switch (backend.kind) {
+        switch (backend.api.kind) {
             case "PersistentVolumeClaim":
                 return new PvcVolume(name, input as PvcBackend)
             case "ConfigMap":

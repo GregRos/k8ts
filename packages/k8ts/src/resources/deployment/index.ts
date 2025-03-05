@@ -1,5 +1,6 @@
 import { CDK } from "@imports"
 import { Base } from "../../node/base"
+import { apps_v1 } from "../api-version"
 import { K8tsResources } from "../kind-map"
 import type { PodTemplate } from "../pod/template"
 
@@ -11,7 +12,7 @@ export type DeploymentProps<Ports extends string> = Omit<
 }
 @K8tsResources.register("Deployment")
 export class Deployment<Ports extends string = string> extends Base<DeploymentProps<Ports>> {
-    kind = "Deployment" as const
+    api = apps_v1.kind("Deployment")
     manifest(): CDK.KubeDeploymentProps {
         return {
             metadata: this.meta.expand(),

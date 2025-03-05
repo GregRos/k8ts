@@ -1,12 +1,12 @@
-import { ReferenceKey, type InputReferenceKey } from "@k8ts/instruments"
+import { Api, ReferenceKey, type InputReferenceKey } from "@k8ts/instruments"
 import type { Meta } from "@k8ts/metadata"
 import { clone } from "lodash"
 import { K8tsResources } from "../resources/kind-map"
 
 export abstract class Base<Props extends object = object> {
-    abstract readonly kind: string
+    abstract readonly api: Api.Kind
     get key() {
-        return new ReferenceKey(this.kind, this.name)
+        return new ReferenceKey(this.api.kind, this.name)
     }
     constructor(
         readonly meta: Meta,
@@ -15,8 +15,8 @@ export abstract class Base<Props extends object = object> {
         const self = this
         ;(async () => {
             await new Promise(resolve => setTimeout(resolve, 0))
-            if (!K8tsResources.has(self.kind)) {
-                throw new Error(`No kind registered for ${self.kind}`)
+            if (!K8tsResources.has(self.api.kind)) {
+                throw new Error(`No kind registered for ${self.api.kind}`)
             }
         })()
     }
