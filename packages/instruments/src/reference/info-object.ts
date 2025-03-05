@@ -1,5 +1,5 @@
 import type { Doddle } from "doddle"
-import type { ReferenceKey } from "./specifier"
+import type { ReferenceKey } from "./key"
 import type { InputReference } from "./types"
 
 export class ReferenceInfo<T extends object> {

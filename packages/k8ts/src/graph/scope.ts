@@ -5,10 +5,8 @@ import { Pv, PvProps } from "../resources/persistent/pv"
 import { Pvc, type PvcProps } from "../resources/persistent/pvc"
 import { PodTemplate, type PodTemplateProps } from "../resources/pod/template"
 import { Secret, type SecretProps } from "../resources/secret/secret"
-import { ParentScope } from "./parent-scope"
-import type { RefableOf } from "./referencing"
 
-export class NamespacedScope extends ParentScope {
+export class NamespacedScope extends TypedScope {
     Claim<Mode extends PvMode, Name extends string>(name: Name, mode: PvcProps<Mode>) {
         return new Pvc(this._prepareMeta(name), mode) as RefableOf<Pvc<Mode>, Name>
     }

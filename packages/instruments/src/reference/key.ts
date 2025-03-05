@@ -2,11 +2,20 @@ import { InstrumentsError } from "../error"
 import { Reference } from "./reference"
 import type { InputReference } from "./types"
 
-export class ReferenceKey {
+export class ReferenceKey<Kind extends string = string, Name extends string = string> {
     constructor(
-        readonly kind: string,
-        readonly name: string
+        readonly kind: Kind,
+        readonly name: Name
     ) {}
+
+    get string(): `${Kind}:${Name}` {
+        return `${this.kind}:${this.name}`
+    }
+
+    equals(other: ReferenceKey | string): boolean {
+        other = typeof other === "string" ? ReferenceKey.parse(other) : other
+        return this.kind === other.kind && this.name === other.name
+    }
     toString() {
         return `${this.kind}:${this.name}`
     }
@@ -19,11 +28,10 @@ export class ReferenceKey {
         return new ReferenceKey(kind, name)
     }
 
-    create<T extends object>(input: Omit<InputReference<T>, "kind" | "name">) {
+    create<T extends object>(input: Omit<InputReference<T>, "key">) {
         return Reference.create({
             ...input,
-            kind: this.kind,
-            name: this.name
+            key: this
         })
     }
 }
