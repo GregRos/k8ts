@@ -4,22 +4,22 @@ import { PvMode } from "../resources/persistent/enums"
 import { Pvc, PvcProps } from "../resources/persistent/pvc"
 import { PodTemplate, PodTemplateProps } from "../resources/pod/template"
 import { Secret, SecretProps } from "../resources/secret/secret"
-import { K8tsScope } from "./k8ts-scope"
+import { K8tsScopeFactory } from "./k8ts-scope"
 
-export class NamespacedScope extends K8tsScope {
+export class NamespaceScopeFactory extends K8tsScopeFactory {
     Claim<Mode extends PvMode, Name extends string>(name: Name, mode: PvcProps<Mode>) {
-        return new Pvc(this._prepareMeta(name), mode) as Refable<Pvc<Mode>, Name>
+        return new Pvc(this._metaWithName(name), mode) as Refable<Pvc<Mode>, Name>
     }
     ConfigMap<Name extends string>(name: Name, props: ConfigMapProps) {
-        return new ConfigMap(this._prepareMeta(name), props) as Refable<ConfigMap, Name>
+        return new ConfigMap(this._metaWithName(name), props) as Refable<ConfigMap, Name>
     }
     Secret<Name extends string>(name: Name, props: SecretProps) {
-        return new Secret(this._prepareMeta(name), props) as Refable<Secret, Name>
+        return new Secret(this._metaWithName(name), props) as Refable<Secret, Name>
     }
     PodTemplate<Name extends string, Ports extends string>(
         name: Name,
         ports: PodTemplateProps<Ports>
     ) {
-        return new PodTemplate(this._prepareMeta(name), ports) as Refable<PodTemplate<Ports>, Name>
+        return new PodTemplate(this._metaWithName(name), ports) as Refable<PodTemplate<Ports>, Name>
     }
 }

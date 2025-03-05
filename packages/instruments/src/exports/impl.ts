@@ -3,17 +3,27 @@ import { InstrumentsError } from "../error"
 import { Reference } from "../reference"
 import { ReferenceKey } from "../reference/key"
 import type { Refable } from "../reference/refable"
-import type { TypedScope } from "../scope"
-import type { UntypedBaseScope } from "../scope/base-scope"
-export type { Exports } from "./types"
 
-import type { Exports as Exp } from "./types"
+import type { Origin } from "../origin"
+type _K8tsExportsRecord<Exports extends Refable = Refable> = {
+    [Export in Exports as Export["key"]["string"]]: Export
+}
+
+interface Exports_Ref<R extends _K8tsExportsRecord> {
+    ref<Spec extends keyof R>(spec: Spec): R[Spec]
+}
+
+export interface Exports<Manifests extends Refable>
+    extends Exports_Ref<_K8tsExportsRecord<Manifests>>,
+        Origin {
+    [Symbol.iterator](): Iterator<Manifests>
+}
 
 export namespace Exports {
     export function make<Manifests extends Refable>(
-        origin: TypedScope<Manifests>,
+        origin: Origin,
         iterable: Iterable<Manifests>
-    ): Exp<Manifests> {
+    ): Exports<Manifests> {
         return new Exports_Impl(origin, iterable) as any
     }
 }
@@ -21,7 +31,7 @@ export namespace Exports {
 class Exports_Impl {
     private _exports: Seq<Refable>
     constructor(
-        readonly origin: UntypedBaseScope,
+        readonly origin: Origin,
         _iterable: Iterable<Refable>
     ) {
         this._exports = seq(_iterable).cache()
