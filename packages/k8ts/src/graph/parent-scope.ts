@@ -1,9 +1,9 @@
 import type { InputMeta, Meta } from "@k8ts/metadata/."
 import { clone } from "lodash"
 import type { Base } from "./base"
-import { Manifests } from "./delayed"
+import { Exports } from "./delayed"
 
-export class ParentScope {
+export abstract class ParentScope {
     constructor(private readonly _meta: Meta) {}
 
     protected _prepareMeta(name: string) {
@@ -16,7 +16,7 @@ export class ParentScope {
         return mut
     }
 
-    scope<T extends Base>(generator: (scope: this) => Iterable<T | Manifests<T>>) {
-        return Manifests.make(() => generator(this))
+    scope<T extends Base>(generator: (scope: this) => Iterable<T>) {
+        return Exports.make(this, generator(this))
     }
 }

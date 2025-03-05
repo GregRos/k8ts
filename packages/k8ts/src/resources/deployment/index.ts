@@ -1,5 +1,6 @@
 import { CDK } from "@imports"
 import { Base } from "../../graph/base"
+import { K8tsResources } from "../kind-map"
 import type { PodTemplate } from "../pod/template"
 
 export type DeploymentProps<Ports extends string> = Omit<
@@ -8,6 +9,7 @@ export type DeploymentProps<Ports extends string> = Omit<
 > & {
     template: PodTemplate
 }
+@K8tsResources.register("Deployment")
 export class Deployment<Ports extends string = string> extends Base<DeploymentProps<Ports>> {
     kind = "Deployment" as const
     manifest(): CDK.KubeDeploymentProps {

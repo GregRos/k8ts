@@ -5,8 +5,8 @@ import { Pv, PvProps } from "../resources/persistent/pv"
 import { Pvc, type PvcProps } from "../resources/persistent/pvc"
 import { PodTemplate, type PodTemplateProps } from "../resources/pod/template"
 import { Secret, type SecretProps } from "../resources/secret/secret"
-import type { RefableOf } from "./base"
 import { ParentScope } from "./parent-scope"
+import type { RefableOf } from "./referencing"
 
 export class NamespacedScope extends ParentScope {
     Claim<Mode extends PvMode, Name extends string>(name: Name, mode: PvcProps<Mode>) {

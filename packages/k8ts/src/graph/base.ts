@@ -1,12 +1,32 @@
 import type { Meta } from "@k8ts/metadata"
 import { clone } from "lodash"
+import StackTracey from "stacktracey"
+import { MakeError } from "../error"
+import { K8tsResources } from "../resources/kind-map"
+import { KEY, RefSpecifier, type RefSpec } from "./referencing"
 
 export abstract class Base<Props extends object = object> {
     abstract readonly kind: string
+    readonly trace: StackTracey
+    get [KEY]() {
+        return `${this.kind}:${this.name}` as const
+    }
     constructor(
         readonly meta: Meta,
         readonly props: Props
-    ) {}
+    ) {
+        this.trace = new StackTracey()
+        ;(async () => {
+            if (!K8tsResources.has(this.kind)) {
+                throw new MakeError(`Resource of kind ${this.kind} is not registered!`)
+            }
+        })()
+    }
+
+    isMatch(spec: RefSpec) {
+        const { kind, name } = RefSpecifier.parse(spec)
+        return this.kind === kind && this.name === name
+    }
 
     get name() {
         return this.meta.get("name")
@@ -20,14 +40,3 @@ export abstract class Base<Props extends object = object> {
 
     abstract manifest(): object
 }
-
-export const KEY = Symbol("KEY")
-export type KEY = typeof KEY
-export type RefSpec<Kind extends string = string, Name extends string = string> = `${Kind}:${Name}`
-
-export interface Refable<Key extends RefSpec = RefSpec> {
-    [KEY]: Key
-}
-
-export type RefableOf<Thing extends Base, Name extends string> = Thing &
-    RefSpec<Thing["kind"], Name>

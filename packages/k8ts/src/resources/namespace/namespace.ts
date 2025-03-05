@@ -1,10 +1,11 @@
 import type { CDK } from "@imports"
 import { Meta } from "@k8ts/metadata/."
 import { Base } from "../../graph/base"
-import { Manifests } from "../../graph/delayed"
 import { NamespacedScope } from "../../graph/scope"
+import { K8tsResources } from "../kind-map"
 
 export interface NamespaceProps {}
+@K8tsResources.register("Namespace")
 export class Namespace extends Base<NamespaceProps> {
     override kind = "Namespace" as const
     constructor(meta: Meta, props?: NamespaceProps) {
@@ -17,7 +18,11 @@ export class Namespace extends Base<NamespaceProps> {
         }
     }
 
-    Define<R extends Base>(factory: (scope: NamespacedScope) => Iterable<R>) {
-        return Manifests.make(() => factory(new NamespacedScope(Meta.make())))
+    scope<R extends Base>(factory: (scope: NamespacedScope) => Iterable<R>) {
+        return new NamespacedScope(
+            Meta.make({
+                namespace: this.name
+            })
+        ).scope(factory)
     }
 }

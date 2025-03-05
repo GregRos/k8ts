@@ -1,5 +1,6 @@
 import { CDK } from "@imports"
 import { Base } from "../../graph/base"
+import { K8tsResources } from "../kind-map"
 import type { Container } from "./container/container"
 import { PodScope } from "./scope"
 export type PodTemplateProps<Ports extends string> = Omit<
@@ -8,9 +9,9 @@ export type PodTemplateProps<Ports extends string> = Omit<
 > & {
     scope(scope: PodScope): Iterable<Container<Ports>>
 }
-
+@K8tsResources.register("PodTemplate")
 export class PodTemplate<Ports extends string = string> extends Base<PodTemplateProps<Ports>> {
-    kind = "Pod" as const
+    kind = "PodTemplate" as const
 
     manifest(): CDK.PodTemplateSpec {
         const { meta, props } = this

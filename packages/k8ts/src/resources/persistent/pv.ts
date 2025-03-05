@@ -1,6 +1,7 @@
 import { CDK } from "@imports"
 import type { Unit } from "@k8ts/instruments"
 import { Base } from "../../graph/base"
+import { K8tsResources } from "../kind-map"
 import {
     parseAccessModes,
     type InputAccessModes,
@@ -18,6 +19,7 @@ export interface PvProps<Mode extends PvMode = "Filesystem"> {
     backend: PV_Backend_HostPath | PV_Backend_Local
 }
 
+@K8tsResources.register("PersistentVolume")
 export class Pv<Mode extends PvMode = "Filesystem"> extends Base<PvProps<Mode>> {
     readonly kind = "PersistentVolume" as const
 

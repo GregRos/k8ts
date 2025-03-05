@@ -1,7 +1,7 @@
 import type { CDK } from "@imports"
 import { ResourcesSpec, Unit } from "@k8ts/instruments"
 import { Base } from "../../graph/base"
-import type { MaybePullable } from "../../graph/delayed"
+import { K8tsResources } from "../kind-map"
 import { parseAccessModes, type InputAccessModes, type PvMode } from "./enums"
 
 const pvc_ResourcesSpec = ResourcesSpec.make({
@@ -12,9 +12,10 @@ export interface PvcProps<Mode extends PvMode = "Filesystem"> extends PvcResourc
     accessModes: InputAccessModes
     mode?: PvMode
     name: string
-    bind: MaybePullable<Pvc<Mode>>
+    bind: Pvc<Mode>
 }
 
+@K8tsResources.register("PersistentVolumeClaim")
 export class Pvc<Mode extends PvMode = "Filesystem"> extends Base<PvcProps<Mode>> {
     kind = "PersistentVolumeClaim" as const
 
