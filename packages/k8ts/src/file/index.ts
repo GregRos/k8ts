@@ -4,7 +4,7 @@ import { seq, type Seq } from "doddle"
 import { ClusterScopeFactory } from "../graph/cluster-scope"
 import type { Base } from "../node/base"
 
-export interface K8tsFile<T extends Base> extends Exports<T> {
+export interface K8tsFile<T extends Base = Base> extends Exports<T> {
     readonly filename: string
 }
 

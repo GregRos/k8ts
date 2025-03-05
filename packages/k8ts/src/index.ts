@@ -1,2 +1,2 @@
-export * from "./file/file"
-export * from 
+export * from "./file"
+export * from "./resources"
