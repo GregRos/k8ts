@@ -2,7 +2,8 @@ export namespace Char {
     export namespace Prefix {
         export type Label = "%"
         export type Annotation = "^"
-        export type Custom = `${Label | Annotation}`
+        export type Comment = "#"
+        export type Custom = `${Label | Annotation | Comment}`
     }
 
     export type Section = "/"
@@ -24,12 +25,4 @@ export namespace Key {
     export type Value = `${Char.Prefix.Custom}${Nested}` | Special
 
     export type Any = Section | Value
-}
-
-export namespace Dictx {
-    type Of<T extends string, V> = Partial<Record<T, V>>
-    export type Full = Of<Key.Value, string> & Of<Key.Section, Nested>
-    export type Nested = Of<Key.Nested, string> & Of<Key.Value, never>
-    export type Heading = Of<Key.Section, Nested>
-    export type Input = Full & Heading
 }

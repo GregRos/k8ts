@@ -1,8 +1,9 @@
 import { Map, Set } from "immutable"
 import { MetadataError } from "./error"
+import type { InputMeta, MetaInputParts } from "./input/dict-input"
 import { parseKey, parsePlainObject } from "./key"
 import { ValueKey, type SectionKey } from "./key/repr"
-import type { Dictx, Key } from "./key/types"
+import type { Key } from "./key/types"
 const DICT = Symbol("dict")
 export class Meta {
     private [DICT] = true
@@ -15,8 +16,8 @@ export class Meta {
         return this._create(f(this._dict))
     }
     add(key: Key.Value, value: string): Meta
-    add(key: Key.Section, value: Dictx.Nested): Meta
-    add(input: Dictx.Full): Meta
+    add(key: Key.Section, value: MetaInputParts.Nested): Meta
+    add(input: MetaInputParts.Input): Meta
     add(a: any, b?: any) {
         return this._createWith(raw => {
             const parsed = this._pairToMap([a, b])
@@ -47,8 +48,8 @@ export class Meta {
     }
 
     overwrite(key: Key.Value, value: string): Meta
-    overwrite(key: Key.Section, value: Dictx.Nested): Meta
-    overwrite(input: Dictx.Full): Meta
+    overwrite(key: Key.Section, value: MetaInputParts.Nested): Meta
+    overwrite(input: MetaInputParts.Input): Meta
     overwrite(a: any, b?: any) {
         return this._createWith(raw => {
             const fromPair = this._pairToMap([a, b])
@@ -117,6 +118,10 @@ export class Meta {
         return this._prefixed("^")
     }
 
+    get comments() {
+        return this._prefixed("#")
+    }
+
     get core() {
         return this._prefixed("") as {
             [key in Key.Special]?: string
@@ -134,11 +139,7 @@ export class Meta {
         }
     }
 
-    static from(input: Dictx.Full) {
+    static make(input: InputMeta = {}) {
         return new Meta(parsePlainObject(input))
     }
-}
-
-export function meta(input: Dictx.Full) {
-    return Meta.from(input)
 }

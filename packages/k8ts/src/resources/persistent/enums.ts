@@ -5,7 +5,7 @@ export type InputAccessModes = InputAccessMode | InputAccessMode[]
 
 export type VolumeReclaimPolicy = "Retain" | "Delete" | "Recycle"
 
-export type VolumeMode = "Block" | "Filesystem"
+export type PvMode = "Block" | "Filesystem"
 
 function _parseAccessMode(mode: InputAccessMode): AccessMode {
     switch (mode) {

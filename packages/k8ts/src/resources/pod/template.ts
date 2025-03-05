@@ -6,15 +6,15 @@ export type PodTemplateProps<Ports extends string> = Omit<
     CDK.PodSpec,
     "containers" | "initContainers" | "volumes"
 > & {
-    containers(scope: PodScope): Iterable<Container<Ports>>
+    scope(scope: PodScope): Iterable<Container<Ports>>
 }
 
-export class PodTemplate<Ports extends string> extends Base<PodTemplateProps<Ports>> {
+export class PodTemplate<Ports extends string = string> extends Base<PodTemplateProps<Ports>> {
     kind = "Pod" as const
 
     manifest(): CDK.PodTemplateSpec {
         const { meta, props } = this
-        const containers = [...props.containers(new PodScope())]
+        const containers = [...props.scope(new PodScope())]
         const initContainers = containers.filter(c => c.subtype === "init").map(x => x.manifest())
         const mainContainers = containers.filter(c => c.subtype === "main").map(x => x.manifest())
         const volumes = containers

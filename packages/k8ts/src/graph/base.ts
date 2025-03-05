@@ -21,15 +21,13 @@ export abstract class Base<Props extends object = object> {
     abstract manifest(): object
 }
 
-export abstract class Depends<
-    Props extends object = object,
-    Parent extends Base = Base
-> extends Base<Props> {
-    constructor(
-        meta: Meta,
-        props: Props,
-        readonly dependency: Parent
-    ) {
-        super(meta, props)
-    }
+export const KEY = Symbol("KEY")
+export type KEY = typeof KEY
+export type RefSpec<Kind extends string = string, Name extends string = string> = `${Kind}:${Name}`
+
+export interface Refable<Key extends RefSpec = RefSpec> {
+    [KEY]: Key
 }
+
+export type RefableOf<Thing extends Base, Name extends string> = Thing &
+    RefSpec<Thing["kind"], Name>

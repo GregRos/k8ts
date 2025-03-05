@@ -1,20 +1,21 @@
 import type { CDK } from "@imports"
 import { ResourcesSpec, Unit } from "@k8ts/instruments"
-import { Depends } from "../../graph/base"
-import { parseAccessModes, type InputAccessModes, type VolumeMode } from "./enums"
-import type { Pv } from "./pv"
+import { Base } from "../../graph/base"
+import type { MaybePullable } from "../../graph/delayed"
+import { parseAccessModes, type InputAccessModes, type PvMode } from "./enums"
 
 const pvc_ResourcesSpec = ResourcesSpec.make({
     storage: Unit.Data
 })
 type PvcResources = (typeof pvc_ResourcesSpec)["__INPUT__"]
-export interface PvcProps<Mode extends VolumeMode = "Filesystem"> extends PvcResources {
+export interface PvcProps<Mode extends PvMode = "Filesystem"> extends PvcResources {
     accessModes: InputAccessModes
-    mode?: VolumeMode
+    mode?: PvMode
     name: string
+    bind: MaybePullable<Pvc<Mode>>
 }
 
-export class Pvc<Mode extends VolumeMode = "Filesystem"> extends Depends<PvcProps<Mode>, Pv<Mode>> {
+export class Pvc<Mode extends PvMode = "Filesystem"> extends Base<PvcProps<Mode>> {
     kind = "PersistentVolumeClaim" as const
 
     manifest(): CDK.KubePersistentVolumeClaimProps {

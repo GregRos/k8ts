@@ -1,4 +1,4 @@
-export { ValueKey, SectionKey } from "./repr"
+export { SectionKey, ValueKey } from "./repr"
 
-export { parsePlainObject } from "./parse-dict"
+export { parsePlainObject } from "../input/parse-dict"
 export { parseOuterKey as parseKey } from "./parse-key"

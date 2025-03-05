@@ -1,9 +1,9 @@
 import { Map } from "immutable"
-import { parseInnerKey, parseOuterKey } from "./parse-key"
-import { SectionKey, ValueKey } from "./repr"
-import type { Dictx } from "./types"
+import { parseInnerKey, parseOuterKey } from "../key/parse-key"
+import { SectionKey, ValueKey } from "../key/repr"
+import type { InputMeta } from "./dict-input"
 
-export function parsePlainObject(input: Dictx.Full) {
+export function parsePlainObject(input: InputMeta) {
     let map = Map<ValueKey, string>()
     for (const [key, value] of Object.entries(input)) {
         const outer = parseOuterKey(key)

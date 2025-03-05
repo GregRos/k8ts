@@ -1,13 +1,20 @@
+import { seq, type Seq } from "doddle"
 import type { Base } from "./base"
 
-export class DelayedResources<T extends Base> implements Iterable<T> {
-    constructor(readonly nodes: () => Iterable<T>) {}
+export class Manifests<T extends Base> implements Iterable<T> {
+    constructor(readonly nodes: Seq<T>) {}
 
     [Symbol.iterator]() {
-        return this.nodes()[Symbol.iterator]()
+        return this.nodes[Symbol.iterator]()
     }
 
-    static of<T extends Base>(nodes: () => Iterable<T>) {
-        return new DelayedResources(nodes)
+    static make<T extends Base>(nodes: Seq.Input<T>) {
+        return new Manifests(seq(nodes))
     }
 }
+
+export interface Pullable<T> {
+    pull(): T
+}
+
+export type MaybePullable<T> = T | Pullable<T>

@@ -1,7 +1,7 @@
-import { meta, Meta } from "@lib"
+import { Meta } from "@lib"
 
 it("accepts all valid value keys", () => {
-    const m = Meta.from({
+    const m = Meta.make({
         "%label": "Hello",
         "%label2": "World",
         "^annotation": "goodbye",
@@ -16,7 +16,7 @@ it("accepts all valid value keys", () => {
 })
 
 it("accepts mix of value and section keys", () => {
-    const m = Meta.from({
+    const m = Meta.make({
         "%label": "Hello",
         "%label2": "World",
         "^annotation": "goodbye",
@@ -40,19 +40,19 @@ it("accepts mix of value and section keys", () => {
 describe("fails for different types of invalid keys", () => {
     it("invalid prefix", () => {
         expect(() =>
-            meta({
+            Meta.make({
                 // @ts-expect-error
                 "@label": "Hello"
             })
         ).toThrow()
         expect(() =>
-            meta({
+            Meta.make({
                 // @ts-expect-error
-                "#label": "Hello"
+                "(label": "Hello"
             })
         ).toThrow()
         expect(() =>
-            meta({
+            Meta.make({
                 // @ts-expect-error
                 label: "Hello"
             })
@@ -61,14 +61,14 @@ describe("fails for different types of invalid keys", () => {
 
     it("no prefix for non-special key", () => {
         expect(() =>
-            meta({
+            Meta.make({
                 // @ts-expect-error
                 label: "Hello"
             })
         ).toThrow()
 
         expect(() =>
-            meta({
+            Meta.make({
                 // @ts-expect-error
                 "label/": "Hello"
             })
@@ -77,21 +77,21 @@ describe("fails for different types of invalid keys", () => {
 })
 it("section keys when appropriate", () => {
     expect(
-        meta({
+        Meta.make({
             "%f/": {
                 x: "A"
             }
         }).get("%f/x")
     ).toBe("A")
     expect(
-        meta({
+        Meta.make({
             "^label/": {
                 a: "A"
             }
         }).get("^label/a")
     ).toBe("A")
     expect(() =>
-        meta({
+        Meta.make({
             // @ts-expect-error
             "label/": {
                 a: "A"
@@ -99,7 +99,7 @@ it("section keys when appropriate", () => {
         })
     ).toThrow()
     expect(() =>
-        meta({
+        Meta.make({
             // @ts-expect-error
             "%label/": "hello"
         })

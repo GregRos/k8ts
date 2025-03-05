@@ -4,12 +4,12 @@ import { Base } from "../../graph/base"
 import {
     parseAccessModes,
     type InputAccessModes,
-    type VolumeMode,
+    type PvMode,
     type VolumeReclaimPolicy
 } from "./enums"
 import { parseBackend, PV_Backend_HostPath, PV_Backend_Local } from "./pv-backends"
 
-export interface PvProps<Mode extends VolumeMode = "Filesystem"> {
+export interface PvProps<Mode extends PvMode = "Filesystem"> {
     accessModes: InputAccessModes
     storageClassName?: string
     mode?: Mode
@@ -18,7 +18,7 @@ export interface PvProps<Mode extends VolumeMode = "Filesystem"> {
     backend: PV_Backend_HostPath | PV_Backend_Local
 }
 
-export class Pv<Mode extends VolumeMode = "Filesystem"> extends Base<PvProps<Mode>> {
+export class Pv<Mode extends PvMode = "Filesystem"> extends Base<PvProps<Mode>> {
     readonly kind = "PersistentVolume" as const
 
     manifest(): CDK.KubePersistentVolumeProps {

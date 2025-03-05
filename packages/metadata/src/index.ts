@@ -1,1 +1,2 @@
-export { Meta, meta } from "./meta"
+export { InputMeta } from "./input/dict-input"
+export { Meta } from "./meta"
