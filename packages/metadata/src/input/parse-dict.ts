@@ -1,9 +1,16 @@
 import { Map } from "immutable"
 import { parseInnerKey, parseOuterKey } from "../key/parse-key"
 import { SectionKey, ValueKey } from "../key/repr"
+import { Meta } from "../meta"
 import type { InputMeta } from "./dict-input"
 
-export function parsePlainObject(input: InputMeta) {
+export function parseMetaInput(input: InputMeta) {
+    if (Map.isMap(input)) {
+        return input
+    }
+    if (input instanceof Meta) {
+        return input["_dict"]
+    }
     let map = Map<ValueKey, string>()
     for (const [key, value] of Object.entries(input)) {
         const outer = parseOuterKey(key)

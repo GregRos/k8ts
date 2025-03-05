@@ -1,7 +1,7 @@
 import { Map, Set } from "immutable"
 import { MetadataError } from "./error"
 import type { InputMeta, MetaInputParts } from "./input/dict-input"
-import { parseKey, parsePlainObject } from "./key"
+import { parseKey, parseMetaInput } from "./key"
 import { ValueKey, type SectionKey } from "./key/repr"
 import type { Key } from "./key/types"
 const DICT = Symbol("dict")
@@ -44,7 +44,7 @@ export class Meta {
     }
 
     private _pairToMap(pair: [string, string | object] | [object]) {
-        return parsePlainObject(this._pairToObject(pair))
+        return parseMetaInput(this._pairToObject(pair))
     }
 
     overwrite(key: Key.Value, value: string): Meta
@@ -140,6 +140,6 @@ export class Meta {
     }
 
     static make(input: InputMeta = {}) {
-        return new Meta(parsePlainObject(input))
+        return new Meta(parseMetaInput(input))
     }
 }

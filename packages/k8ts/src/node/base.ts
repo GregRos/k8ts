@@ -1,7 +1,6 @@
 import { ReferenceKey, type InputReferenceKey } from "@k8ts/instruments"
 import type { Meta } from "@k8ts/metadata"
 import { clone } from "lodash"
-import { MakeError } from "../error"
 import { K8tsResources } from "../resources/kind-map"
 
 export abstract class Base<Props extends object = object> {
@@ -13,9 +12,11 @@ export abstract class Base<Props extends object = object> {
         readonly meta: Meta,
         readonly props: Props
     ) {
+        const self = this
         ;(async () => {
-            if (!K8tsResources.has(this.kind)) {
-                throw new MakeError(`Resource of kind ${this.kind} is not registered!`)
+            await new Promise(resolve => setTimeout(resolve, 0))
+            if (!K8tsResources.has(self.kind)) {
+                throw new Error(`No kind registered for ${self.kind}`)
             }
         })()
     }

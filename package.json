@@ -45,7 +45,7 @@
     "prettier-plugin-organize-imports": "3.2.4",
     "prettier-plugin-packagejson": "2.5.0",
     "shelljs": "0.8.5",
-    "shx": "0.3.4",
+    "shx": "^0.3.4",
     "ts-node": "^10.9.2",
     "typedoc": "0.25.13",
     "typedoc-plugin-internal-external": "2.2.0",

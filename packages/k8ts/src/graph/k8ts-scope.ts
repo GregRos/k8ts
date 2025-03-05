@@ -8,7 +8,7 @@ export class BaseScopeFactory {
     ) {}
 
     protected _metaWithName(name: string) {
-        return this.origin.meta.add({
+        return this.origin.meta.add(this.extra).add({
             name
         })
     }

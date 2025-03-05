@@ -1,7 +1,7 @@
 import type { InputMeta, Meta } from "@k8ts/metadata"
+import { seq } from "doddle"
 import type { KindMap } from "../kind-map"
 import { Traced } from "../tracing"
-import { ChildOrigin } from "./child-origin"
 
 export abstract class Origin extends Traced {
     constructor(
@@ -19,4 +19,46 @@ export abstract class Origin extends Traced {
     abstract get registered(): KindMap
     abstract override toString(): string
     abstract get parents(): Iterable<Origin>
+}
+export class ChildOrigin extends Origin {
+    constructor(
+        name: string,
+        meta: Meta,
+        readonly parent: Origin
+    ) {
+        super(name, meta)
+    }
+
+    override get registered() {
+        return this.parent.registered
+    }
+    override get parents() {
+        const self = this
+        return seq(function* () {
+            const cur = self
+            while (cur.parent) {
+                yield cur.parent
+            }
+        })
+    }
+
+    override toString() {
+        return this.parents.join(" -> ").pull()
+    }
+}
+export class RootOrigin extends Origin {
+    constructor(
+        name: string,
+        universal: Meta,
+        readonly registered: KindMap
+    ) {
+        super(name, universal)
+    }
+    override get parents() {
+        return []
+    }
+
+    override toString() {
+        return `>> ${this.name}`
+    }
 }

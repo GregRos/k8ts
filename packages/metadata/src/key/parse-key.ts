@@ -4,7 +4,7 @@ import { many, map, maybe, or, qthen, stringify, then } from "parjs/combinators"
 import { MetadataError } from "../error"
 import { SectionKey, ValueKey } from "./repr"
 
-const pPrefix = anyCharOf("%^")
+const pPrefix = anyCharOf("%^#")
 const pSection = string("/")
 
 const pExtra = anyCharOf("-_.")
@@ -38,7 +38,7 @@ export function parseOuterKey(key: string) {
     if (result.kind === "OK") {
         return result.value
     }
-    throw new MetadataError(`Failed to parse key: ${result.toString()}`, {
+    throw new MetadataError(`Failed to parse key ${key}: ${result.toString()}`, {
         key,
         error: result.toString()
     })

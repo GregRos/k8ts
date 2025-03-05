@@ -30,7 +30,7 @@ export class K8ts extends RootOrigin {
         files.forEach(file => {
             console.log(file.filename)
             for (const node of file) {
-                console.log(node)
+                console.log(node.manifest())
             }
         })
     }

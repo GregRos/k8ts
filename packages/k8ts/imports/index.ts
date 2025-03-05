@@ -1,2 +1,2 @@
-import * as CDK from "./_mix"
-export import CDK = CDK
+import * as CDK_ from "./_mix"
+export import CDK = CDK_

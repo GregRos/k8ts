@@ -14,7 +14,8 @@
     "types": ["jest", "node"],
     "paths": {
       "@lib": ["../src"],
-      "@lib/*": ["../src/*"]
+      "@lib/*": ["../src/*"],
+      "@imports": ["../imports"]
     }
   },
   "include": ["**/*.ts"]
