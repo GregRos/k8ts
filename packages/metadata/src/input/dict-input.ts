@@ -1,4 +1,5 @@
 import type { Key } from "../key/types"
+import type { Meta } from "../meta"
 
 export namespace MetaInputParts {
     type Of<T extends string, V> = Partial<Record<T, V>>
@@ -8,4 +9,4 @@ export namespace MetaInputParts {
     export type Input = Full & Heading
 }
 
-export type InputMeta = MetaInputParts.Input
+export type InputMeta = MetaInputParts.Input | Meta

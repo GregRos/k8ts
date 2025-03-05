@@ -5,25 +5,14 @@ import { ReferenceKey } from "../reference/key"
 import type { Refable } from "../reference/refable"
 
 import type { Origin } from "../origin"
-type _K8tsExportsRecord<Exports extends Refable = Refable> = {
-    [Export in Exports as Export["key"]["string"]]: Export
-}
+import { Exports as Exp } from "./types"
 
-interface Exports_Ref<R extends _K8tsExportsRecord> {
-    ref<Spec extends keyof R>(spec: Spec): R[Spec]
-}
-
-export interface Exports<Manifests extends Refable>
-    extends Exports_Ref<_K8tsExportsRecord<Manifests>>,
-        Origin {
-    [Symbol.iterator](): Iterator<Manifests>
-}
-
+export type Exports<T extends Refable> = Exp<T>
 export namespace Exports {
     export function make<Manifests extends Refable>(
         origin: Origin,
         iterable: Iterable<Manifests>
-    ): Exports<Manifests> {
+    ): Exp<Manifests> {
         return new Exports_Impl(origin, iterable) as any
     }
 }

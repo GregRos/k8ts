@@ -1,7 +1,7 @@
 import { Origin } from "@k8ts/instruments"
-import type { InputMeta, Meta } from "@k8ts/metadata/."
+import type { InputMeta, Meta } from "@k8ts/metadata"
 
-export class K8tsScopeFactory {
+export class BaseScopeFactory {
     constructor(
         readonly origin: Origin,
         readonly extra: Meta

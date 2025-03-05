@@ -1,4 +1,4 @@
-import { Container, ContainerProps } from "./container/container"
+import { Container, ContainerProps } from "./container"
 import { AnyDeviceBackend, Device } from "./volume/devices"
 import { AnyVolumeBackend, Volume } from "./volume/volumes"
 

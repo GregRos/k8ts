@@ -1,11 +1,11 @@
 import { type Refable } from "@k8ts/instruments"
-import { Namespace, NamespaceProps } from "../resources/namespace/namespace"
+import { Namespace, NamespaceProps } from "../resources/namespace"
 import type { PvMode } from "../resources/persistent/enums"
 import { Pv, PvProps } from "../resources/persistent/pv"
-import { K8tsScopeFactory } from "./k8ts-scope"
+import { BaseScopeFactory } from "./k8ts-scope"
 import { NamespaceScopeFactory } from "./namespace-scope"
 
-export class ClusterScopeFactory extends K8tsScopeFactory {
+export class ClusterScopeFactory extends BaseScopeFactory {
     PersistentVolume<Mode extends PvMode, Name extends string>(name: Name, props: PvProps<Mode>) {
         return new Pv(this._metaWithName(name), props) as Refable<Pv<Mode>, Name>
     }

@@ -2,7 +2,7 @@ import type { CDK } from "@imports"
 
 import type { ConfigMap } from "../../configmap/configmap"
 import type { Pvc } from "../../persistent/pvc"
-import type { Secret } from "../../secret/secret"
+import type { Secret } from "../../secret"
 import { VolumeMount, type MountOptions } from "./mounts"
 interface PvcBackend {
     backend: Pvc

@@ -1,7 +1,7 @@
 import { CDK } from "@imports"
 import { Base } from "../../node/base"
 import { K8tsResources } from "../kind-map"
-import type { Container } from "./container/container"
+import type { Container } from "./container"
 import { PodScope } from "./scope"
 export type PodTemplateProps<Ports extends string> = Omit<
     CDK.PodSpec,

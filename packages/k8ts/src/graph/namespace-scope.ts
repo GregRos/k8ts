@@ -3,10 +3,10 @@ import { ConfigMap, ConfigMapProps } from "../resources/configmap/configmap"
 import { PvMode } from "../resources/persistent/enums"
 import { Pvc, PvcProps } from "../resources/persistent/pvc"
 import { PodTemplate, PodTemplateProps } from "../resources/pod/template"
-import { Secret, SecretProps } from "../resources/secret/secret"
-import { K8tsScopeFactory } from "./k8ts-scope"
+import { Secret, SecretProps } from "../resources/secret"
+import { BaseScopeFactory } from "./k8ts-scope"
 
-export class NamespaceScopeFactory extends K8tsScopeFactory {
+export class NamespaceScopeFactory extends BaseScopeFactory {
     Claim<Mode extends PvMode, Name extends string>(name: Name, mode: PvcProps<Mode>) {
         return new Pvc(this._metaWithName(name), mode) as Refable<Pvc<Mode>, Name>
     }

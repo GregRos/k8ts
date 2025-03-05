@@ -17,7 +17,7 @@ export class Meta {
     }
     add(key: Key.Value, value: string): Meta
     add(key: Key.Section, value: MetaInputParts.Nested): Meta
-    add(input: MetaInputParts.Input): Meta
+    add(input: InputMeta): Meta
     add(a: any, b?: any) {
         return this._createWith(raw => {
             const parsed = this._pairToMap([a, b])
@@ -49,7 +49,7 @@ export class Meta {
 
     overwrite(key: Key.Value, value: string): Meta
     overwrite(key: Key.Section, value: MetaInputParts.Nested): Meta
-    overwrite(input: MetaInputParts.Input): Meta
+    overwrite(input: InputMeta): Meta
     overwrite(a: any, b?: any) {
         return this._createWith(raw => {
             const fromPair = this._pairToMap([a, b])
