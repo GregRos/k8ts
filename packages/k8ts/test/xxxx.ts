@@ -1,79 +1,87 @@
 import { Image } from "@k8ts/instruments"
-import { K8ts } from "@lib"
-const nsFile = K8ts.File("globals", function* (factory) {
-    yield factory.Namespace("namespace")
-    yield factory.PersistentVolume("pv-cool", {
-        capacity: "1Gi",
-        accessModes: ["ReadWriteOnce"],
-        backend: {
-            type: "Local",
-            path: "/mnt/data"
-        }
-    })
-    yield factory.PersistentVolume("dev-sda", {
-        capacity: "1Gi",
-        accessModes: ["ReadWriteOnce"],
-        backend: {
-            type: "Local",
-            path: "/dev/sda"
-        },
-        mode: "Block"
-    })
+import { K8TS } from "@lib"
+const k8tsFile = K8TS.ClusterFile({
+    filename: "namespace.yaml",
+    *def(FILE) {
+        yield FILE.Namespace("namespace")
+        yield FILE.PersistentVolume("pv-cool", {
+            capacity: "1Gi",
+            accessModes: ["ReadWriteOnce"],
+            backend: {
+                type: "Local",
+                path: "/mnt/data"
+            }
+        })
+        yield FILE.PersistentVolume("dev-sda", {
+            capacity: "1Gi",
+            accessModes: ["ReadWriteOnce"],
+            backend: {
+                type: "Local",
+                path: "/dev/sda"
+            },
+            mode: "Block"
+        })
+    }
 })
-const NS = nsFile.ref("Namespace:namespace")
-const PV = nsFile.ref("PersistentVolume:pv-cool")
-const file1 = K8ts.File("hahaha", function* (factory_base) {
-    const factory = factory_base.namespace(NS)
-    const claim = factory.Claim("claim", {
-        accessModes: ["ReadWriteOnce"],
-        bind: PV,
-        storage: "1Gi--->5Gi"
-    })
-    yield claim
-    const devClaim = factory.Claim("dev-claim", {
-        accessModes: ["ReadWriteOnce"],
-        bind: nsFile.ref("PersistentVolume:dev-sda"),
-        storage: "1Gi--->5Gi"
-    })
-    const pods = factory.PodTemplate("xyz", {
-        *scope(factory) {
-            const v = factory.Volume("data", {
-                backend: claim
-            })
+k8tsFile.ref("Namespace/namespace")
+const k8sNamespace = k8tsFile.ref("Namespace/namespace")
+const k8sPv = k8tsFile.ref("PersistentVolume/pv-cool")
 
-            const d = factory.Device("dev", {
-                backend: devClaim
-            })
+const k8tsFile2 = K8TS.NamespacedFile(k8sNamespace, {
+    filename: "deployment.yaml",
+    *def(FILE) {
+        const claim = FILE.Claim("claim", {
+            bind: k8sPv,
+            accessModes: ["ReadWriteOnce"],
+            storage: "1Gi--->5Gi"
+        })
+        yield claim
+        const devClaim = FILE.Claim("dev-claim", {
+            accessModes: ["ReadWriteOnce"],
+            bind: k8tsFile.ref("PersistentVolume/dev-sda"),
+            storage: "1Gi--->5Gi"
+        })
+        const pods = FILE.PodTemplate("xyz", {
+            *scope(POD) {
+                const v = POD.Volume("data", {
+                    backend: claim
+                })
 
-            yield factory.Container("main", {
-                image: Image.name("nginx").tag("latest"),
-                ports: {
-                    http: 80
-                },
-                mounts: {
-                    "/xyz": v.mount(),
-                    "/etc": v.mount(),
-                    "/dev": d.mount()
-                }
-            })
-        }
-    })
+                const d = POD.Device("dev", {
+                    backend: devClaim
+                })
 
-    const svc2 = factory.Service("xyz", {
-        impl: {
-            type: "ClusterIp"
-        },
-        ports: {
-            http: 80
-        },
-        backend: pods
-    })
-    const svc = factory.DomainRoute("my-route", {
-        hostname: "example.com",
-        parent: K8ts.External("Gateway", "gateway"),
-        backend: svc2.getBackendRef("http")
-    })
+                yield POD.Container("main", {
+                    image: Image.name("nginx").tag("latest"),
+                    ports: {
+                        http: 80
+                    },
+                    mounts: {
+                        "/xyz": v.mount(),
+                        "/etc": v.mount(),
+                        "/dev": d.mount()
+                    }
+                })
+            }
+        })
 
-    yield svc
+        const svc2 = FILE.Service("xyz", {
+            impl: {
+                type: "ClusterIp"
+            },
+            ports: {
+                http: 80
+            },
+            backend: pods
+        })
+        yield svc2
+        const route = FILE.DomainRoute("my-route", {
+            hostname: "example.com",
+            parent: K8TS.External("Gateway", "gateway"),
+            backend: svc2.getBackendRef("http")
+        })
+
+        yield route
+    }
 })
-K8ts.emit(nsFile, file1)
+K8TS.emit(k8tsFile, k8tsFile2)

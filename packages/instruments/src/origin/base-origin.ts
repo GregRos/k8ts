@@ -13,7 +13,7 @@ export abstract class Origin extends Traced {
     }
 
     child(name: string, meta: InputMeta) {
-        return new ChildOrigin(name, this.meta.add(meta), this)
+        return new ChildOrigin(name, this.meta.overwrite(meta), this)
     }
 
     abstract get registered(): KindMap
