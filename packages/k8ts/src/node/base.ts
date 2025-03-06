@@ -1,4 +1,4 @@
-import { Api, ReferenceKey, type InputReferenceKey } from "@k8ts/instruments"
+import { Api, ReferenceKey, type Origin } from "@k8ts/instruments"
 import type { Meta } from "@k8ts/metadata"
 import { clone } from "lodash"
 import { K8tsResources } from "../resources/kind-map"
@@ -9,10 +9,12 @@ export abstract class Base<Props extends object = object> {
         return new ReferenceKey(this.api.kind, this.name)
     }
     constructor(
+        readonly origin: Origin,
         readonly meta: Meta,
         readonly props: Props
     ) {
         const self = this
+        this.__post_init__()
         ;(async () => {
             await new Promise(resolve => setTimeout(resolve, 0))
             if (!K8tsResources.has(self.api.kind)) {
@@ -20,10 +22,7 @@ export abstract class Base<Props extends object = object> {
             }
         })()
     }
-
-    isMatch(spec: InputReferenceKey) {
-        return this.key.equals(spec)
-    }
+    protected __post_init__() {}
 
     get name() {
         return this.meta.get("name")

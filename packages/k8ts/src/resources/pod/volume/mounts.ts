@@ -2,7 +2,7 @@ import type { CDK } from "@imports"
 import type { Device } from "./devices"
 import type { Volume } from "./volumes"
 export interface MountOptions {
-    readOnly: boolean
+    readOnly?: boolean
     subPath?: string
 }
 export class VolumeMount {

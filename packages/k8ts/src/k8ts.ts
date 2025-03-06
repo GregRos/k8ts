@@ -1,5 +1,6 @@
 import { RootOrigin } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
+import { External } from "./external"
 import { File, type K8tsFile } from "./file"
 import type { ClusterScopeFactory } from "./graph"
 import type { Base } from "./node"
@@ -17,6 +18,10 @@ export class K8ts extends RootOrigin {
             }),
             K8tsResources
         )
+    }
+
+    External<Kind extends string>(kind: Kind, name: string, namespace?: string) {
+        return new External(kind, name, namespace)
     }
 
     File<T extends Base>(

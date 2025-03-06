@@ -10,14 +10,14 @@ const pvc_ResourcesSpec = ResourcesSpec.make({
     storage: Unit.Data
 })
 type PvcResources = (typeof pvc_ResourcesSpec)["__INPUT__"]
-export interface PvcProps<Mode extends PvMode = "Filesystem"> extends PvcResources {
+export interface PvcProps<Mode extends PvMode> extends PvcResources {
     accessModes: InputAccessModes
     mode?: PvMode
     bind: Pv<Mode>
 }
 
 @K8tsResources.register("PersistentVolumeClaim")
-export class Pvc<Mode extends PvMode = "Filesystem"> extends Base<PvcProps<Mode>> {
+export class Pvc<Mode extends PvMode = PvMode> extends Base<PvcProps<Mode>> {
     api = v1.kind("PersistentVolumeClaim")
 
     manifest(): CDK.KubePersistentVolumeClaimProps {
@@ -28,7 +28,7 @@ export class Pvc<Mode extends PvMode = "Filesystem"> extends Base<PvcProps<Mode>
             spec: {
                 accessModes: nAccessModes,
                 volumeName: this.props.bind!.name,
-                volumeMode: mode ? "Block" : "Filesystem",
+                volumeMode: mode,
                 resources: pvc_ResourcesSpec
                     .parse({
                         storage

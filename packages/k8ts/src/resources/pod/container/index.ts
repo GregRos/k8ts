@@ -1,16 +1,17 @@
 import type { CDK } from "@imports"
 import {
     Env,
+    PortSet,
     ResourcesSpec,
     Unit,
     type CmdBuilder,
     type InputEnvMapping,
-    type PortSet,
+    type InputPortSetRecord,
     type TaggedImage
 } from "@k8ts/instruments"
+import { Map } from "immutable"
 import { toContainerPorts, toEnvVars } from "../../utils/adapters"
 import type { DeviceMount, VolumeMount } from "../volume/mounts"
-import type { MountPath } from "../volume/types"
 
 const container_ResourcesSpec = ResourcesSpec.make({
     cpu: Unit.Cpu,
@@ -18,19 +19,41 @@ const container_ResourcesSpec = ResourcesSpec.make({
 })
 
 type ContainerResources = (typeof container_ResourcesSpec)["__INPUT__"]
-
+export type InputContainerMounts = {
+    [key: string]: DeviceMount | VolumeMount
+}
 export interface ContainerProps<Ports extends string> {
     image: TaggedImage
-    ports: PortSet<Ports>
+    ports: InputPortSetRecord<Ports>
     command?: CmdBuilder
-    mounts?: Record<MountPath, DeviceMount | VolumeMount>
-    env: InputEnvMapping
+    mounts?: InputContainerMounts
+    env?: InputEnvMapping
     securityContext?: CDK.SecurityContext
-    resources: ContainerResources
+    resources?: ContainerResources
 }
+
 export class Container<Ports extends string> {
     kind = "Container" as const
+    get mounts() {
+        return Map(this.props.mounts ?? {})
+            .mapEntries(([path, mount]) => {
+                return [
+                    mount,
+                    {
+                        mount,
+                        path
+                    }
+                ]
+            })
+            .toList()
+    }
 
+    get volumes() {
+        return this.mounts.map(x => x.mount.parent)
+    }
+    get ports() {
+        return PortSet.make(this.props.ports)
+    }
     constructor(
         readonly name: string,
         readonly subtype: "init" | "main",
@@ -60,6 +83,9 @@ export class Container<Ports extends string> {
         return x
     }
     private _resources() {
+        if (!this.props.resources) {
+            return undefined
+        }
         const { cpu, memory } = this.props.resources
         return container_ResourcesSpec.parse({
             cpu: cpu,
@@ -72,8 +98,8 @@ export class Container<Ports extends string> {
         const container: CDK.Container = {
             name: this.name,
             image: image.text,
-            ports: toContainerPorts(ports).valueSeq().toArray(),
-            resources: this._resources().toObject(),
+            ports: toContainerPorts(PortSet.make(ports)).valueSeq().toArray(),
+            resources: this._resources()?.toObject(),
             command: command?.toArray(),
             env: toEnvVars(Env(env)).valueSeq().toArray(),
             securityContext,

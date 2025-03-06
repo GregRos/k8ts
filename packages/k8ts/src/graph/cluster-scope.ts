@@ -6,11 +6,17 @@ import { BaseScopeFactory } from "./k8ts-scope"
 import { NamespaceScopeFactory } from "./namespace-scope"
 
 export class ClusterScopeFactory extends BaseScopeFactory {
-    PersistentVolume<Mode extends PvMode, Name extends string>(name: Name, props: PvProps<Mode>) {
-        return new Pv(this._metaWithName(name), props) as Refable<Pv<Mode>, Name>
+    PersistentVolume<Name extends string, Mode extends PvMode = "Filesystem">(
+        name: Name,
+        props: PvProps<Mode>
+    ) {
+        return new Pv(this.origin, this._metaWithName(name), props) as Refable<Pv<Mode>, Name>
     }
     Namespace<Name extends string>(name: Name, props?: NamespaceProps) {
-        return new Namespace(this._metaWithName(name), props) as Refable<Namespace, Name>
+        return new Namespace(this.origin, this._metaWithName(name), props) as Refable<
+            Namespace,
+            Name
+        >
     }
     namespace(ns: Namespace) {
         return new NamespaceScopeFactory(

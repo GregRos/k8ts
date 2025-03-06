@@ -6,7 +6,7 @@ import type { Secret } from "../../secret"
 import { VolumeMount, type MountOptions } from "./mounts"
 interface PvcBackend {
     backend: Pvc
-    readOnly: boolean
+    readOnly?: boolean
 }
 
 interface ConfigMapBackend {
@@ -24,8 +24,8 @@ export abstract class Volume<Props extends object = object> {
 
     abstract manifest(): CDK.Volume
 
-    mount(options: MountOptions) {
-        return new VolumeMount(this as any, options)
+    mount(options?: MountOptions) {
+        return new VolumeMount(this as any, options ?? {})
     }
 
     static make(name: string, input: AnyVolumeBackend): Volume {

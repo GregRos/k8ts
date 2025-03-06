@@ -1,8 +1,9 @@
 import { CDK } from "@imports"
-import type { PortMap } from "@k8ts/instruments"
-import type { Meta } from "@k8ts/metadata/."
+import { type InputPortMapping } from "@k8ts/instruments"
 import { Base } from "../../node"
 import { v1 } from "../api-version"
+import { ServiceBackendRef } from "../http-route/backend-ref"
+import { K8tsResources } from "../kind-map"
 import type { PodTemplate } from "../pod"
 import { toServicePorts } from "../utils/adapters"
 
@@ -19,26 +20,32 @@ export interface ServiceBackend_LoadBalancer {
 export type ServiceBackend = ServiceBackend_ClusterIp | ServiceBackend_LoadBalancer
 
 export interface ServiceProps<Ports extends string> {
-    ports: PortMap<Ports>
-    backend: ServiceBackend
+    ports: InputPortMapping<Ports>
+    backend: PodTemplate
+    impl: ServiceBackend
 }
-export class Service<Ports extends string> extends Base<ServiceProps<Ports>> {
+@K8tsResources.register("Service")
+export class Service<Ports extends string = string> extends Base<ServiceProps<Ports>> {
     api = v1.kind("Service")
-    constructor(
-        meta: Meta,
-        props: ServiceProps<Ports>,
-        readonly target: PodTemplate
-    ) {
-        super(meta, props)
+
+    get ports() {
+        const srcPorts = this.props.backend.ports.pull()
+        const svcPorts = srcPorts.map(this.props.ports)
+        return svcPorts
+    }
+
+    getBackendRef<P extends Ports>(port: P): ServiceBackendRef<P> {
+        return new ServiceBackendRef(this, port)
     }
 
     override manifest(): CDK.KubeServiceProps {
+        const svcPorts = this.ports
         return {
             metadata: this.meta.expand(),
             spec: {
-                ports: toServicePorts(this.props.ports).toArray(),
-                selector: this.target.meta.pick("%app").labels,
-                ...this.props.backend
+                ports: toServicePorts(svcPorts).toArray(),
+                selector: this.props.backend.meta.pick("%app").labels,
+                ...this.props.impl
             }
         }
     }

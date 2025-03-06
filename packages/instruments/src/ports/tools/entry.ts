@@ -1,4 +1,5 @@
 import { Map } from "immutable"
+import { PortSet } from "../set"
 import type {
     InputPortSetEntry,
     InputPortSetRecord,
@@ -29,7 +30,12 @@ export function parsePortInput(name: string, input: InputPortSetSpec): PortSetEn
     return portSetEntry(name, input)
 }
 
-export function portRecordInput(record: InputPortSetRecord<string>): Map<string, PortSetEntry> {
+export function portRecordInput(
+    record: InputPortSetRecord<string> | PortSet<string>
+): Map<string, PortSetEntry> {
+    if (record instanceof PortSet) {
+        return record.values
+    }
     const inputMap = Map(record)
     return inputMap
         .map((v, k) => parsePortInput(k, v))

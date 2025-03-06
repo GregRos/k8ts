@@ -18,6 +18,10 @@ export class PortSet<Names extends string = never> {
     private _apply(f: (map: Map<string, PortSetEntry>) => Map<string, PortSetEntry>) {
         return new PortSet(f(this._map))
     }
+
+    union<InNames extends string>(other: PortSet<InNames>): PortSet<Names | InNames> {
+        return new PortSet(this._map.merge(other._map))
+    }
     add<Name extends string>(
         name: Name,
         port: InputPort,

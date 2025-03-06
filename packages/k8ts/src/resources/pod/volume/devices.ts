@@ -1,5 +1,6 @@
 import type { CDK } from "@imports"
 import type { Pvc } from "../../persistent/pvc"
+import { DeviceMount } from "./mounts"
 
 interface PvcBackend {
     backend: Pvc<"Block">
@@ -21,6 +22,10 @@ export class Device {
                 readOnly: this.backend.readOnly
             }
         }
+    }
+
+    mount() {
+        return new DeviceMount(this)
     }
 
     static make(name: string, input: AnyDeviceBackend) {

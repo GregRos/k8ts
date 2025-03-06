@@ -1,6 +1,8 @@
 export { ConfigMap, ConfigMapProps } from "./configmap"
 export { Deployment, DeploymentProps } from "./deployment"
+export * from "./http-route"
 export * from "./namespace"
 export * from "./persistent"
 export * from "./pod"
 export * from "./secret"
+export * from "./service"
