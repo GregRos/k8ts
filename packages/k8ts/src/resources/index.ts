@@ -1,6 +1,6 @@
 export * from "./configmap"
 export * from "./deployment"
-export * from "./http-route"
+export * from "./http-route/http-route"
 export * from "./namespace"
 export * from "./persistent"
 export * from "./pod"

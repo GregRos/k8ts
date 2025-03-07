@@ -1,1 +1,1 @@
-export * as Claim from "./pvc"
+export * from "./pvc"

@@ -36,7 +36,7 @@ class _K8tsFile<T extends Base> extends ChildOrigin {
 
 export function File<T extends Base>(parent: Origin, props: K8tsInnerFileProps<T>): K8tsFile<T> {
     const file = new _K8tsFile(parent, props)
-    const exports = Exports.make(file, file.nodes)
+    const exports = Exports.make(file, file)
 
     return exports as any
 }

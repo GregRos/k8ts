@@ -1,6 +1,6 @@
-export type AccessMode = AccessMode.Inputs
+export type Access = Access.Inputs
 
-export namespace AccessMode {
+export namespace Access {
     export type Mode = "ReadWriteOnce" | "ReadOnlyMany" | "ReadWriteMany"
     export type Input = Mode | "RWX" | "ROX" | "RWO"
     export type Inputs = Input | Input[]

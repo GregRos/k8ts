@@ -1,6 +1,6 @@
 import { type LiveRefable } from "@k8ts/instruments"
 import { ConfigMap, Deployment, HttpRoute, Persistent, Secret, Service } from "../resources"
-import { PodTemplate, PodTemplateProps } from "../resources/pod/template"
+import { PodTemplate } from "../resources/pod/pod-template"
 import { BaseFactory } from "./k8ts-scope"
 
 export class Namespaced<Name extends string = string> extends BaseFactory {
@@ -55,12 +55,13 @@ export class Namespaced<Name extends string = string> extends BaseFactory {
     }
     PodTemplate<Name extends string, Ports extends string>(
         name: Name,
-        props: PodTemplateProps<Ports> | PodTemplateProps<Ports>["POD"]
+        props: PodTemplate.Props<Ports> | PodTemplate.Props<Ports>["POD"]
     ) {
         const props_ = typeof props === "function" ? { POD: props } : props
-        return new PodTemplate(this.origin, this._metaWithName(name), props_) as LiveRefable<
-            PodTemplate<Ports>,
-            Name
-        >
+        return new PodTemplate.PodTemplate(
+            this.origin,
+            this._metaWithName(name),
+            props_
+        ) as LiveRefable<PodTemplate<Ports>, Name>
     }
 }

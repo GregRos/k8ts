@@ -2,6 +2,7 @@ import { Image } from "@k8ts/instruments"
 import { K8TS } from "@lib"
 
 import { declare, type, type_of } from "declare-it"
+declare.setup("console")
 const k8tsFile = K8TS.File({
     scope: "cluster",
     filename: "namespace.yaml",

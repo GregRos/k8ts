@@ -1,3 +1,3 @@
 export * from "./container"
-export * from "./template"
+export * from "./pod-template"
 export * from "./volume"

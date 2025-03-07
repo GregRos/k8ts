@@ -25,8 +25,10 @@ export class K8ts extends RootOrigin {
     }
 
     File<T extends Base>(props: K8tsFileProps<T, Cluster> & { scope: "cluster" }): K8tsFile<T>
-    File<T extends Base>(props: K8tsFileProps<T, Namespaced> & { scope: Namespace }): K8tsFile<T>
-    File(props: K8tsFileProps<any, any> & { scope: "cluster" | Namespace }) {
+    File<T extends Base>(
+        props: K8tsFileProps<T, Namespaced> & { scope: Namespace.Namespace }
+    ): K8tsFile<T>
+    File(props: K8tsFileProps<any, any> & { scope: "cluster" | Namespace.Namespace }) {
         if (props.scope === "cluster") {
             return this._clusterFile(props)
         } else {
@@ -44,7 +46,10 @@ export class K8ts extends RootOrigin {
         })
     }
 
-    private _namespacedFile<T extends Base>(ns: Namespace, props: K8tsFileProps<T, Namespaced>) {
+    private _namespacedFile<T extends Base>(
+        ns: Namespace.Namespace,
+        props: K8tsFileProps<T, Namespaced>
+    ) {
         const nsMeta = this.meta.add({ namespace: ns.name })
         return File(this.child(ns.name, nsMeta), {
             ...props,

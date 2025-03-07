@@ -1,6 +1,6 @@
 import { MakeError } from "../../../error"
-import { HostPath, Local } from "./backend"
-export function parseBackend(backend: HostPath | Local) {
+import { Backend } from "./backend"
+export function parseBackend(backend: Backend) {
     switch (backend.type) {
         case "HostPath":
             return {
