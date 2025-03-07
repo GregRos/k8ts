@@ -19,7 +19,9 @@ export interface PvcProps<Mode extends PvMode> extends PvcResources {
 @K8tsResources.register("PersistentVolumeClaim")
 export class Pvc<Mode extends PvMode = PvMode> extends Base<PvcProps<Mode>> {
     api = v1.kind("PersistentVolumeClaim")
-
+    override get dependsOn() {
+        return [this.props.bind]
+    }
     manifest(): CDK.KubePersistentVolumeClaimProps {
         const { storage, accessModes, mode } = this.props
         const nAccessModes = parseAccessModes(accessModes)

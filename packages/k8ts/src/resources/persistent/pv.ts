@@ -11,7 +11,7 @@ import {
 } from "./enums"
 import { parseBackend, PV_Backend_HostPath, PV_Backend_Local } from "./pv-backends"
 
-export interface PvProps<Mode extends PvMode = "Filesystem"> {
+export interface PvProps<Mode extends PvMode = PvMode> {
     accessModes: InputAccessModes
     storageClassName?: string
     mode?: Mode
@@ -21,7 +21,7 @@ export interface PvProps<Mode extends PvMode = "Filesystem"> {
 }
 
 @K8tsResources.register("PersistentVolume")
-export class Pv<Mode extends PvMode = "Filesystem"> extends Base<PvProps<Mode>> {
+export class Pv<Mode extends PvMode = PvMode> extends Base<PvProps<Mode>> {
     readonly api = v1.kind("PersistentVolume")
 
     manifest(): CDK.KubePersistentVolumeProps {

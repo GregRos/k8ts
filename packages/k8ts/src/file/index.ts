@@ -5,11 +5,12 @@ import type { Base } from "../node/base"
 
 export interface K8tsFileProps<T extends Base = Base, Factory = any> {
     readonly filename: string
-    def(factory: Factory): Iterable<T>
+    FILE(factory: Factory): Iterable<T>
 }
-export interface K8tsFile<T extends Base = Base> extends Exports<T>, Iterable<T> {
-    props: K8tsFileProps<T>
-}
+export type K8tsFile<T extends Base = Base> = Exports<T> &
+    Iterable<T> & {
+        props: K8tsFileProps<T>
+    }
 
 export type K8tsInnerFileProps<T extends Base> = K8tsFileProps<T, Meta>
 class _K8tsFile<T extends Base> extends ChildOrigin {
@@ -20,8 +21,12 @@ class _K8tsFile<T extends Base> extends ChildOrigin {
     ) {
         super(props.filename, Meta.make(), parent)
         this.nodes = seq(() => {
-            return props.def(this.meta)
+            return props.FILE(this.meta)
         }).cache()
+    }
+
+    [Symbol.iterator]() {
+        return this.nodes[Symbol.iterator]()
     }
 
     get origin() {
@@ -32,7 +37,6 @@ class _K8tsFile<T extends Base> extends ChildOrigin {
 export function File<T extends Base>(parent: Origin, props: K8tsInnerFileProps<T>): K8tsFile<T> {
     const file = new _K8tsFile(parent, props)
     const exports = Exports.make(file, file.nodes)
-    return Object.assign(exports, {
-        props
-    })
+
+    return exports as any
 }

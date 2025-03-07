@@ -24,27 +24,44 @@ export class K8ts extends RootOrigin {
         return new External(kind, name, namespace)
     }
 
-    ClusterFile<T extends Base>(props: K8tsFileProps<T, Cluster_Factory>): K8tsFile<T> {
+    File<T extends Base>(
+        props: K8tsFileProps<T, Cluster_Factory> & { scope: "cluster" }
+    ): K8tsFile<T>
+    File<T extends Base>(
+        props: K8tsFileProps<T, Namespaced_Factory> & { scope: Namespace }
+    ): K8tsFile<T>
+    File(props: K8tsFileProps<any, any> & { scope: "cluster" | Namespace }) {
+        if (props.scope === "cluster") {
+            return this._clusterFile(props)
+        } else {
+            return this._namespacedFile(props.scope, props)
+        }
+    }
+
+    private _clusterFile<T extends Base>(props: K8tsFileProps<T, Cluster_Factory>): K8tsFile<T> {
         return File(this, {
             ...props,
-            def: meta => {
+            FILE: meta => {
                 const factory = new Cluster_Factory(this, meta)
-                return props.def(factory)
+                return props.FILE(factory)
             }
         })
     }
 
-    NamespacedFile<T extends Base>(ns: Namespace, props: K8tsFileProps<T, Namespaced_Factory>) {
+    private _namespacedFile<T extends Base>(
+        ns: Namespace,
+        props: K8tsFileProps<T, Namespaced_Factory>
+    ) {
         const nsMeta = this.meta.add({ namespace: ns.name })
         return File(this.child(ns.name, nsMeta), {
             ...props,
-            def: meta => {
+            FILE: meta => {
                 const factory = new Namespaced_Factory(this, meta)
-                return props.def(factory)
+                return props.FILE(factory)
             }
         })
     }
-    emit(...files: K8tsFile[]) {
+    emit(...files: Iterable<Base>[]) {
         files.forEach(file => {
             console.log("HERE", file)
             for (const node of file) {

@@ -9,12 +9,12 @@ export type PodTemplateProps<Ports extends string> = Omit<
     CDK.PodSpec,
     "containers" | "initContainers" | "volumes"
 > & {
-    scope(scope: PodScope): Iterable<Container<Ports>>
+    POD(scope: PodScope): Iterable<Container<Ports>>
 }
 @K8tsResources.register("PodTemplate")
 export class PodTemplate<Ports extends string = string> extends Base<PodTemplateProps<Ports>> {
     api = apps_v1.kind("PodTemplate")
-    readonly containers = seq(() => this.props.scope(new PodScope())).cache()
+    readonly containers = seq(() => this.props.POD(new PodScope())).cache()
     readonly mounts = seq(() => this.containers.map(x => x.mounts)).cache()
     readonly ports = seq(() => this.containers.map(x => x.ports)).reduce((a, b) => a.union(b))
 

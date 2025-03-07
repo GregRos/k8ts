@@ -14,6 +14,9 @@ export interface HttpRouteProps<Ports extends string> {
 export class HttpRoute<Ports extends string> extends Base<HttpRouteProps<Ports>> {
     api = Api.group("networking.k8s.io").version("v1").kind("HttpRoute")
 
+    override get dependsOn() {
+        return [this.props.backend.service]
+    }
     manifest(): CDK.HttpRouteProps {
         return {
             metadata: this.meta.expand(),

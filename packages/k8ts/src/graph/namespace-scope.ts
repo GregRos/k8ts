@@ -49,9 +49,9 @@ export class Namespaced_Factory<Name extends string = string> extends BaseScopeF
     }
     PodTemplate<Name extends string, Ports extends string>(
         name: Name,
-        props: PodTemplateProps<Ports> | PodTemplateProps<Ports>["scope"]
+        props: PodTemplateProps<Ports> | PodTemplateProps<Ports>["POD"]
     ) {
-        const props_ = typeof props === "function" ? { scope: props } : props
+        const props_ = typeof props === "function" ? { POD: props } : props
         return new PodTemplate(this.origin, this._metaWithName(name), props_) as LiveRefable<
             PodTemplate<Ports>,
             Name

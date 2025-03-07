@@ -1,4 +1,4 @@
-import { Map } from "immutable"
+import { Map, type Set } from "immutable"
 import { InstrumentsError } from "../error"
 
 export class KindMap {
@@ -10,6 +10,13 @@ export class KindMap {
             this._kindOrClassMap = this._kindOrClassMap.set(kind, target).set(target, kind)
             return target as T & { kind: string }
         }
+    }
+
+    get kinds(): Set<string> {
+        return this._kindOrClassMap
+            .keySeq()
+            .filter(k => typeof k === "string")
+            .toSet()
     }
 
     private _missingClassError(kind: string) {

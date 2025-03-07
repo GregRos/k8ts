@@ -28,6 +28,10 @@ export abstract class Base<Props extends object = object> {
         return this.meta.get("name")
     }
 
+    get dependsOn(): Base[] {
+        return []
+    }
+
     setMeta(f: (m: Meta) => Meta): this {
         const myClone = clone(this) as any
         myClone["meta"] = f(this.meta)

@@ -3,15 +3,15 @@ import type { Service } from "../service"
 
 export class ServiceBackendRef<P extends string> {
     constructor(
-        readonly backend: Service<P>,
+        readonly service: Service<P>,
         readonly port: P
     ) {}
 
     manifest(): CDK.HttpRouteSpecRulesBackendRefs {
         return {
-            kind: this.backend.api.kind,
-            name: this.backend.name,
-            port: this.backend.ports.get(this.port).target
+            kind: this.service.api.kind,
+            name: this.service.name,
+            port: this.service.ports.get(this.port).target
         }
     }
 }

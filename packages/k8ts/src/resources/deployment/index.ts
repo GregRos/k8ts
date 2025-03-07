@@ -13,6 +13,9 @@ export type DeploymentProps<Ports extends string> = Omit<
 @K8tsResources.register("Deployment")
 export class Deployment<Ports extends string = string> extends Base<DeploymentProps<Ports>> {
     api = apps_v1.kind("Deployment")
+    get ports() {
+        return this.props.template.ports
+    }
     manifest(): CDK.KubeDeploymentProps {
         return {
             metadata: this.meta.expand(),
