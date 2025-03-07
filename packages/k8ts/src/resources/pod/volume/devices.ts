@@ -1,9 +1,9 @@
 import type { CDK } from "@imports"
-import type { Pvc } from "../../persistent/pvc"
+import { Persistent } from "../../persistent"
 import { DeviceMount } from "./mounts"
 
 interface PvcBackend {
-    backend: Pvc<"Block">
+    backend: Persistent.Claim<"Block">
     readOnly?: boolean
 }
 

@@ -1,5 +1,6 @@
 import { Image } from "@k8ts/instruments"
 import { K8TS } from "@lib"
+
 import { declare, type, type_of } from "declare-it"
 const k8tsFile = K8TS.File({
     scope: "cluster",
@@ -28,6 +29,7 @@ const k8tsFile = K8TS.File({
 
 const k8sNamespace = k8tsFile["Namespace/namespace"]
 const k8sPv = k8tsFile["PersistentVolume/dev-sda"]
+const cool = k8tsFile["PersistentVolume/pv-cool"]
 declare.it("has the right type", expect => {
     expect(type_of(k8sPv.props.mode)).to_equal(type<"Block" | undefined>)
 })
@@ -36,7 +38,7 @@ const k8tsFile2 = K8TS.File({
     filename: "deployment.yaml",
     *FILE(k) {
         const claim = k.Claim("claim", {
-            bind: k8tsFile["PersistentVolume/pv-cool"],
+            bind: cool,
             accessModes: ["ReadWriteOnce"],
             storage: "1Gi--->5Gi"
         })
@@ -93,7 +95,7 @@ const k8tsFile2 = K8TS.File({
         const route = k.DomainRoute("my-route", {
             hostname: "example.com",
             parent: K8TS.External("Gateway", "gateway"),
-            backend: svc2.getBackendRef("http")
+            backend: svc2.getPortRef("http")
         })
 
         k.Deployment("name", {

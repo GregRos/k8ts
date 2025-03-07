@@ -1,30 +1,32 @@
 import type { CDK } from "@imports"
 import { ResourcesSpec, Unit } from "@k8ts/instruments"
-import { Base } from "../../node/base"
-import { v1 } from "../api-version"
-import { K8tsResources } from "../kind-map"
-import { parseAccessModes, type InputAccessModes, type PvMode } from "./enums"
-import type { Pv } from "./pv"
+import { Base } from "../../../node"
+import { v1 } from "../../api-version"
+import { K8tsResources } from "../../kind-map"
+import { AccessMode } from "../access-mode"
+import type { DataMode } from "../block-mode"
+import type { Volume } from "../volume"
 
 const pvc_ResourcesSpec = ResourcesSpec.make({
     storage: Unit.Data
 })
-type PvcResources = (typeof pvc_ResourcesSpec)["__INPUT__"]
-export interface PvcProps<Mode extends PvMode> extends PvcResources {
-    accessModes: InputAccessModes
-    mode?: PvMode
-    bind: Pv<Mode>
+type PvcResourceSpec = typeof pvc_ResourcesSpec
+type PvcResources = PvcResourceSpec["__INPUT__"]
+export interface Props<Mode extends DataMode> extends PvcResources {
+    accessModes: AccessMode
+    mode?: Mode
+    bind: Volume.Volume<Mode>
 }
 
 @K8tsResources.register("PersistentVolumeClaim")
-export class Pvc<Mode extends PvMode = PvMode> extends Base<PvcProps<Mode>> {
+export class Claim<Mode extends DataMode = DataMode> extends Base<Props<Mode>> {
     api = v1.kind("PersistentVolumeClaim")
     override get dependsOn() {
         return [this.props.bind]
     }
     manifest(): CDK.KubePersistentVolumeClaimProps {
         const { storage, accessModes, mode } = this.props
-        const nAccessModes = parseAccessModes(accessModes)
+        const nAccessModes = AccessMode.parse(accessModes)
         return {
             metadata: this.meta.expand(),
             spec: {

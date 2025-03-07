@@ -1,16 +1,6 @@
-import { MakeError } from "../../error"
-
-export interface PV_Backend_Local {
-    type: "Local"
-    path: string
-}
-
-export interface PV_Backend_HostPath {
-    type: "HostPath"
-    path: string
-}
-
-export function parseBackend(backend: PV_Backend_Local | PV_Backend_HostPath) {
+import { MakeError } from "../../../error"
+import { HostPath, Local } from "./backend"
+export function parseBackend(backend: HostPath | Local) {
     switch (backend.type) {
         case "HostPath":
             return {

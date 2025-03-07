@@ -1,11 +1,11 @@
 import type { CDK } from "@imports"
 
-import type { ConfigMap } from "../../configmap/configmap"
-import type { Pvc } from "../../persistent/pvc"
+import type { ConfigMap } from "../../configmap"
+import type { Persistent } from "../../persistent"
 import type { Secret } from "../../secret"
 import { VolumeMount, type MountOptions } from "./mounts"
 interface PvcBackend {
-    backend: Pvc
+    backend: Persistent.Claim<"Filesystem">
     readOnly?: boolean
 }
 

@@ -1,20 +1,21 @@
-import type { CDK } from "@imports"
 import { Base } from "../../node/base"
 import { v1 } from "../api-version"
 import { K8tsResources } from "../kind-map"
+
 export interface Props {
     data: Record<string, string>
-    name: string
+    stringData: Record<string, string>
 }
 
-@K8tsResources.register("ConfigMap")
-export class ConfigMap extends Base<Props> {
-    override api = v1.kind("ConfigMap")
+@K8tsResources.register("Secret")
+export class Secret extends Base<Props> {
+    api = v1.kind("Secret")
 
-    override manifest(): CDK.KubeConfigMapProps {
+    manifest() {
         return {
             metadata: this.meta.expand(),
-            data: this.props.data
+            data: this.props.data,
+            stringData: this.props.stringData
         }
     }
 }

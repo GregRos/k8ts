@@ -2,10 +2,10 @@ import { RootOrigin } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { External } from "./external"
 import { File, K8tsFile, type K8tsFileProps } from "./file"
-import { Cluster_Factory, Namespaced_Factory } from "./graph"
 import type { Base } from "./node"
 import type { Namespace } from "./resources"
 import { K8tsResources } from "./resources/kind-map"
+import { Cluster, Namespaced } from "./scoped-factory"
 export class K8ts extends RootOrigin {
     constructor() {
         super(
@@ -24,12 +24,8 @@ export class K8ts extends RootOrigin {
         return new External(kind, name, namespace)
     }
 
-    File<T extends Base>(
-        props: K8tsFileProps<T, Cluster_Factory> & { scope: "cluster" }
-    ): K8tsFile<T>
-    File<T extends Base>(
-        props: K8tsFileProps<T, Namespaced_Factory> & { scope: Namespace }
-    ): K8tsFile<T>
+    File<T extends Base>(props: K8tsFileProps<T, Cluster> & { scope: "cluster" }): K8tsFile<T>
+    File<T extends Base>(props: K8tsFileProps<T, Namespaced> & { scope: Namespace }): K8tsFile<T>
     File(props: K8tsFileProps<any, any> & { scope: "cluster" | Namespace }) {
         if (props.scope === "cluster") {
             return this._clusterFile(props)
@@ -38,25 +34,22 @@ export class K8ts extends RootOrigin {
         }
     }
 
-    private _clusterFile<T extends Base>(props: K8tsFileProps<T, Cluster_Factory>): K8tsFile<T> {
+    private _clusterFile<T extends Base>(props: K8tsFileProps<T, Cluster>): K8tsFile<T> {
         return File(this, {
             ...props,
             FILE: meta => {
-                const factory = new Cluster_Factory(this, meta)
+                const factory = new Cluster(this, meta)
                 return props.FILE(factory)
             }
         })
     }
 
-    private _namespacedFile<T extends Base>(
-        ns: Namespace,
-        props: K8tsFileProps<T, Namespaced_Factory>
-    ) {
+    private _namespacedFile<T extends Base>(ns: Namespace, props: K8tsFileProps<T, Namespaced>) {
         const nsMeta = this.meta.add({ namespace: ns.name })
         return File(this.child(ns.name, nsMeta), {
             ...props,
             FILE: meta => {
-                const factory = new Namespaced_Factory(this, meta)
+                const factory = new Namespaced(this, meta)
                 return props.FILE(factory)
             }
         })

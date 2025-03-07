@@ -1,1 +1,3 @@
-export { ConfigMap, ConfigMapProps } from "./configmap"
+import * as ConfigMap from "./configmap"
+type ConfigMap = ConfigMap.ConfigMap
+export { ConfigMap }

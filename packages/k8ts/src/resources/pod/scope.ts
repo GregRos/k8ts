@@ -13,7 +13,7 @@ export class PodScope {
     InitContainer(name: string, options: ContainerProps<never>): Container<never> {
         return Container.make(name, "init", options)
     }
-    Volume(name: string, options: AnyVolumeBackend | AnyVolumeBackend["backend"]) {
+    Volume(name: string, options: AnyVolumeBackend) {
         return Volume.make(
             name,
             options instanceof Base
