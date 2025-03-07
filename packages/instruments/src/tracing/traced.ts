@@ -1,9 +1,10 @@
+import { List } from "immutable"
 import StackTracey from "stacktracey"
 
 export class Traced {
-    readonly trace: StackTracey
+    readonly trace?: List<StackTracey.Entry>
 
     constructor() {
-        this.trace = new StackTracey()
+        this.trace = List(new StackTracey().items)
     }
 }

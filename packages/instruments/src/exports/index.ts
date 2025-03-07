@@ -59,9 +59,9 @@ class Exports_Impl {
                 return new Proxy(this.$actual, {
                     get: (target, prop) => {
                         if (prop in $actual || typeof prop === "symbol") {
-                            const result = Reflect.get(target, prop)
+                            const result = Reflect.get($actual, prop)
                             if (typeof result === "function") {
-                                return result.bind(target)
+                                return result.bind($actual)
                             }
                             return result
                         }

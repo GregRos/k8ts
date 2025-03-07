@@ -1,11 +1,10 @@
 import { RootOrigin } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { External } from "./external"
-import { File, K8tsFile, type K8tsFileProps } from "./file"
+import { File } from "./file"
 import type { Base } from "./node"
 import type { Namespace } from "./resources"
 import { K8tsResources } from "./resources/kind-map"
-import { Cluster, Namespaced } from "./scoped-factory"
 export class K8ts extends RootOrigin {
     constructor() {
         super(
@@ -24,23 +23,21 @@ export class K8ts extends RootOrigin {
         return new External(kind, name, namespace)
     }
 
-    File<T extends Base>(props: K8tsFileProps<T, Cluster> & { scope: "cluster" }): K8tsFile<T>
-    File<T extends Base>(
-        props: K8tsFileProps<T, Namespaced> & { scope: Namespace.Namespace }
-    ): K8tsFile<T>
-    File(props: K8tsFileProps<any, any> & { scope: "cluster" | Namespace.Namespace }) {
+    File<T extends Base>(props: File.Props.Cluster<T>): File<T>
+    File<T extends Base>(props: File.Props.Namespaced<T>): File<T>
+    File(props: File.Props<any, any> & { scope: "cluster" | Namespace }) {
         if (props.scope === "cluster") {
-            return this._clusterFile(props)
+            return this._clusterFile(props as any)
         } else {
-            return this._namespacedFile(props.scope, props)
+            return this._namespacedFile(props.scope, props as any)
         }
     }
 
-    private _clusterFile<T extends Base>(props: K8tsFileProps<T, Cluster>): K8tsFile<T> {
-        return File(this, {
+    private _clusterFile<T extends Base>(props: File.Props.Cluster<T>): File<T> {
+        return File.make(this, {
             ...props,
             FILE: meta => {
-                const factory = new Cluster(this, meta)
+                const factory = new File.Factory.Cluster(this, meta)
                 return props.FILE(factory)
             }
         })
@@ -48,13 +45,13 @@ export class K8ts extends RootOrigin {
 
     private _namespacedFile<T extends Base>(
         ns: Namespace.Namespace,
-        props: K8tsFileProps<T, Namespaced>
+        props: File.Props.Namespaced<T>
     ) {
         const nsMeta = this.meta.add({ namespace: ns.name })
-        return File(this.child(ns.name, nsMeta), {
+        return File.make(this.child(ns.name, nsMeta), {
             ...props,
             FILE: meta => {
-                const factory = new Namespaced(this, meta)
+                const factory = new File.Factory.Namespaced(this, meta)
                 return props.FILE(factory)
             }
         })
@@ -62,6 +59,7 @@ export class K8ts extends RootOrigin {
     emit(...files: Iterable<Base>[]) {
         files.forEach(file => {
             console.log("HERE", file)
+            const iterator = file[Symbol.iterator]
             for (const node of file) {
                 console.log(node.manifest())
             }
