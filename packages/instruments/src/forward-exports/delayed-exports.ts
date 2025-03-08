@@ -2,13 +2,13 @@ import { seq } from "doddle"
 import { ProxyOperationError } from "../error"
 import type { Origin } from "../origin"
 import type { LiveRefable } from "../reference"
-import { Reference, ReferenceKey } from "../reference"
+import { ForwardRef, RefKey } from "../reference"
 
-export type DynamicExports<Exps extends LiveRefable> = DynamicExports.DynamicExports<Exps>
-export namespace DynamicExports {
-    export type DynamicExports<Exps extends LiveRefable> = _ExportsByKey<Exps> & Iterable<Exps>
-    export type _ExportsByKey<Exports extends LiveRefable = LiveRefable> = {
-        [E in Exports as `${E["api"]["kind"]}/${E["key"]["name"]}`]: Reference<E>
+export type DelayedExports<Exps extends LiveRefable> = DelayedExports.DelayedExports<Exps>
+export namespace DelayedExports {
+    export type DelayedExports<Exps extends LiveRefable> = _ExportsByKey<Exps> & Iterable<Exps>
+    type _ExportsByKey<Exports extends LiveRefable = LiveRefable> = {
+        [E in Exports as `${E["api"]["kind"]}/${E["key"]["name"]}`]: ForwardRef<E>
     }
     export interface Props<
         Actual extends object = object,
@@ -21,11 +21,11 @@ export namespace DynamicExports {
 
     export function make<T extends LiveRefable, Actual extends Origin>(
         props: Props<Actual, T>
-    ): T & DynamicExports<LiveRefable> {
+    ): T & DelayedExports<LiveRefable> {
         const handler = new Handler(props)
         return new Proxy(props.actual, handler) as any
     }
-    export class Handler implements ProxyHandler<object> {
+    class Handler implements ProxyHandler<object> {
         constructor(private readonly _props: Props) {}
 
         #createImmutableError(action: string) {
@@ -51,7 +51,7 @@ export namespace DynamicExports {
         }
 
         #isValidReferant(prop: PropertyKey) {
-            return ReferenceKey.tryParse(prop as any)
+            return RefKey.tryParse(prop as any)
         }
 
         get _target() {
@@ -63,12 +63,12 @@ export namespace DynamicExports {
             if (Reflect.has(this._target, key)) {
                 return Reflect.get(target, property)
             }
-            const refKey = ReferenceKey.tryParse(property)
+            const refKey = RefKey.tryParse(property)
             if (!refKey) {
                 return undefined
             }
             const cls = this._props.origin.registered.get(refKey.kind)
-            return Reference.make({
+            return ForwardRef.make({
                 class: cls,
                 key: refKey,
                 origin: this._props.origin,

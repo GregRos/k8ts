@@ -1,15 +1,15 @@
 import type { Doddle } from "doddle"
 import { ProxyOperationError } from "../error"
-import { ReferenceKey } from "./key"
+import { RefKey } from "./key"
 
-export type Reference<T extends object> = Reference.Core<T> & T
-export namespace Reference {
-    export function make<T extends object>(props: Props<T>): Reference<T> {
+export type ForwardRef<T extends object> = ForwardRef.Core<T> & T
+export namespace ForwardRef {
+    export function make<T extends object>(props: Props<T>): ForwardRef<T> {
         const core = new Core(props)
-        return new Proxy(core, new Handler(core)) as Reference<T>
+        return new Proxy(core, new Handler(core)) as ForwardRef<T>
     }
     export interface Props<Referenced extends object> {
-        readonly key: ReferenceKey
+        readonly key: RefKey
         readonly namespace?: string
         readonly origin: object
         readonly resolver: Doddle<Referenced>
