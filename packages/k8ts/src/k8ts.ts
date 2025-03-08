@@ -5,8 +5,8 @@ import { File } from "./file"
 import type { Base } from "./node"
 import type { Namespace } from "./resources"
 import { K8tsResources } from "./resources/kind-map"
-export class K8ts extends RootOrigin {
-    constructor() {
+export class K8tsWorld extends RootOrigin {
+    constructor(extra?: Meta.InputMeta) {
         super(
             "k8ts",
             Meta.make({
