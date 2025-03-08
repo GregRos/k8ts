@@ -1,4 +1,4 @@
-import { ChildOrigin, Exports, type Origin } from "@k8ts/instruments"
+import { ChildOrigin, DynamicKeyedExports, type Origin } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { seq, type Seq } from "doddle"
 import type { Base } from "../node"
@@ -19,7 +19,7 @@ export namespace File {
             scope: Namespace
         }
     }
-    export type File<T extends Base = Base> = Exports<T> &
+    export type File<T extends Base = Base> = DynamicKeyedExports<T> &
         Iterable<T> & {
             props: Props<T>
         }

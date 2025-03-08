@@ -4,33 +4,73 @@ import type { Origin } from "../origin"
 import type { LiveRefable } from "../reference"
 import { Reference } from "../reference"
 import { ReferenceKey } from "../reference/key"
+import type { Traced } from "../tracing"
 
-export type _K8ts_Thing2<Exports extends LiveRefable = LiveRefable> = {
-    [E in Exports as `${E["api"]["kind"]}/${E["key"]["name"]}`]: Reference<E>
-}
+export type DynamicExports<Exps extends LiveRefable> = DynamicExports.DynamicExports<Exps>
+export namespace DynamicExports {
+    export type DynamicExports<Exps extends LiveRefable> = _ExportsByKey<Exps> & Iterable<Exps>
+    export type _ExportsByKey<Exports extends LiveRefable = LiveRefable> = {
+        [E in Exports as `${E["api"]["kind"]}/${E["key"]["name"]}`]: Reference<E>
+    }
 
-export type _K8tsByKind<Exports extends LiveRefable = LiveRefable> = {
-    [Kind in Exports["api"]["kind"]]: _K8tsByName<Kind, Exports>
-}
-export type _K8tsByName<Kind extends string, Exports extends LiveRefable = LiveRefable> = {
-    [Name in Exports["key"]["name"]]: _K8ts_Thing2<Exports>[`${Kind}/${Name}`]
-}
-export type _K8tsRefRecord2<Exports extends LiveRefable = LiveRefable> = _K8ts_Thing2<Exports> &
-    Iterable<Exports>
+    class ProxyBackend implements ProxyHandler<Iterable<LiveRefable> & Traced> {
+        readonly _cached: Seq<LiveRefable>
+        constructor(
+            readonly $origin: Origin,
+            readonly $actual: Iterable<LiveRefable>
+        ) {
+            this._cached = seq($actual).cache()
+        }
 
-export type _K8tsReferenceRecord<Exports extends LiveRefable = LiveRefable> =
-    _K8tsRefRecord2<Exports> & Iterable<Exports>
+        get(target: Iterable<LiveRefable>, prop: string | symbol) {
+            if (prop in this.$actual || typeof prop === "symbol") {
+                const result = Reflect.get(this.$actual, prop)
+                if (typeof result === "function") {
+                    return result.bind(this.$actual)
+                }
+                return result
+            }
+            const refKey = ReferenceKey.tryParse(prop)
+            if (refKey) {
+                return Reference.create({
+                    key: refKey,
+                    class: this.$origin.registered.get(refKey.kind),
+                    origin: this.$origin,
+                    resolver: this._cached
+                        .find(e => e.key.equals(refKey))
+                        .map(x => {
+                            if (!x) {
+                                throw new InstrumentsError(
+                                    `Forward reference ${refKey} failed as ${this.$origin} did not produce it.`
+                                )
+                            }
+                            return x
+                        })
+                })
+            }
+            return undefined
+        }
 
-export type Exports_Ref = {
-    readonly origin: Origin
-}
-
-export type Exports<Exps extends LiveRefable> = Exports_Ref & _K8tsReferenceRecord<Exps>
-export namespace Exports {
+        get proxy() {
+            return new Proxy(this.$actual, {
+                get: (target, prop) => {
+                    return new Proxy(this.$actual, {
+                        get: (target, prop) => {},
+                        has: () => {},
+                        ownKeys: () =>
+                            this._cached
+                                .map(e => e.key.toString())
+                                .toArray()
+                                .pull()
+                    }) as any
+                }
+            })
+        }
+    }
     export function make<X extends Iterable<Manifests>, Manifests extends LiveRefable>(
         origin: Origin,
         iterable: X
-    ): Exports<Manifests> & X {
+    ): DynamicExports<Manifests> & X {
         const impl = new Exports_Impl(origin, iterable)
         return impl.getKindedProxy() as any
     }
@@ -54,7 +94,7 @@ class Exports_Impl {
 
     getKindedProxy() {
         const { $actual, $origin } = this
-        return new Proxy(this, {
+        return new Proxy(this.$actual, {
             get: (target, prop) => {
                 return new Proxy(this.$actual, {
                     get: (target, prop) => {

@@ -1,12 +1,12 @@
-import { Api, ReferenceKey, type Origin } from "@k8ts/instruments"
+import { Kind, ReferenceKey, type Origin } from "@k8ts/instruments"
 import type { Meta } from "@k8ts/metadata"
 import { clone } from "lodash"
 import { K8tsResources } from "../resources/kind-map"
 
 export abstract class Base<Props extends object = object> {
-    abstract readonly api: Api.Kind
+    abstract readonly api: Kind.Kind
     get key() {
-        return new ReferenceKey(this.api.kind, this.name)
+        return ReferenceKey.make(this.api.kind, this.name)
     }
     constructor(
         readonly origin: Origin,

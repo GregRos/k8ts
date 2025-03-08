@@ -1,5 +1,3 @@
-export { ReferenceInfo } from "./info-object"
-export { InputReferenceKey, ReferenceKey } from "./key"
+export { ReferenceKey } from "./key"
 export { Kinded, LiveRefable } from "./refable"
 export { Reference } from "./reference"
-export { InputReference } from "./types"

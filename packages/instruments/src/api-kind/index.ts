@@ -1,59 +1,55 @@
-class _ApiGroup<const ApiGroup extends string = string> {
-    constructor(readonly apiGroup: ApiGroup) {}
+export namespace Kind {
+    export type InputVersion = `v${string}`
+    export class _Version<
+        const Group extends string = string,
+        const Name extends InputVersion = InputVersion
+    > {
+        constructor(
+            readonly group: _Group<Group>,
+            readonly version: Name
+        ) {}
 
-    version<ApiVersion extends string>(apiVersion: ApiVersion) {
-        return new _ApiVersion(this, apiVersion)
-    }
-
-    get text() {
-        return this.apiGroup
-    }
-
-    toString() {
-        return this.text
-    }
-}
-
-class _ApiVersion<
-    const ApiGroup extends string = string,
-    const ApiVersion extends string = string
-> {
-    constructor(
-        readonly apiGroup: _ApiGroup<ApiGroup>,
-        readonly apiVersion: ApiVersion
-    ) {}
-
-    kind<Kind extends string>(kind: Kind) {
-        return new Api.Kind(this, kind)
-    }
-
-    get text() {
-        const arr = []
-        if (this.apiGroup.text) {
-            arr.push(this.apiGroup.text)
+        kind<Kind extends string>(kind: Kind) {
+            return new Kind(this, kind)
         }
-        arr.push(this.apiVersion)
-        return arr.join("/")
-    }
 
-    toString() {
-        return this.text
-    }
-}
+        get text() {
+            const arr = []
+            if (this.group.text) {
+                arr.push(this.group.text)
+            }
+            arr.push(this.version)
+            return arr.join("/")
+        }
 
-export namespace Api {
-    export function group<ApiGroup extends string>(apiGroup: ApiGroup) {
-        return new _ApiGroup(apiGroup)
+        toString() {
+            return this.text
+        }
+    }
+    class _Group<const Name extends string = string> {
+        constructor(readonly apiGroup: Name) {}
+
+        version<Version extends InputVersion>(apiVersion: Version) {
+            return new _Version(this, apiVersion)
+        }
+
+        get text() {
+            return this.apiGroup
+        }
+
+        toString() {
+            return this.text
+        }
     }
 
     export class Kind<
-        const ApiGroup extends string = string,
-        const ApiVersion extends string = string,
-        const Kind extends string = string
+        const Group extends string = string,
+        const V extends InputVersion = InputVersion,
+        const Name extends string = string
     > {
         constructor(
-            readonly apiVersion: _ApiVersion<ApiGroup, ApiVersion>,
-            readonly kind: Kind
+            readonly apiVersion: _Version<Group, V>,
+            readonly kind: Name
         ) {}
 
         get version() {
@@ -67,5 +63,13 @@ export namespace Api {
         toString() {
             return this.text
         }
+    }
+
+    export function group<ApiGroup extends string>(apiGroup: ApiGroup) {
+        return new _Group(apiGroup)
+    }
+
+    export function version<ApiVersion extends InputVersion>(apiVersion: ApiVersion) {
+        return new _Version(group(""), apiVersion)
     }
 }
