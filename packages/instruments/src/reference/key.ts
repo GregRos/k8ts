@@ -18,7 +18,7 @@ export namespace ReferenceKey {
             return `${this.kind}${separator}${this.name}`
         }
 
-        equals(other_: ReferenceKey | string): boolean {
+        equals(other_: ReferenceKey | PropertyKey): boolean {
             const other = tryParse(other_)
             if (other == null) {
                 return false

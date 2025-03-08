@@ -59,14 +59,7 @@ export namespace PodTemplate {
             return Container.make(name, "init", options)
         }
         Volume(name: string, options: Volume.Backend) {
-            return Volume.make(
-                name,
-                options instanceof Base
-                    ? ({
-                          backend: options
-                      } as Volume.Backend)
-                    : options
-            )
+            return Volume.make(name, options)
         }
         Device(name: string, options: Device.Backend): Device {
             return Device.make(name, options)

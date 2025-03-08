@@ -70,17 +70,17 @@ export class Meta {
         const parsed = parseKey(key)
         const v = this._dict.get(parsed as ValueKey)
         if (v === undefined) {
-            throw new MetadataError("Key not found!", { key })
+            throw new MetadataError(`Key ${key} not found!`, { key })
         }
         return v
     }
 
-    tryGet(key: Key.Value) {
+    tryGet(key: Key.Value, fallback?: string) {
         const parsed = parseKey(key)
         if (!(parsed instanceof ValueKey)) {
             throw new MetadataError("Unexpected section key!", { key })
         }
-        return this._dict.get(parsed)
+        return this._dict.get(parsed) ?? fallback
     }
 
     private _matchSectionKeys(key: SectionKey) {

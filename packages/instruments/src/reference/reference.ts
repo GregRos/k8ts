@@ -1,9 +1,13 @@
 import type { Doddle } from "doddle"
-import { InstrumentsError } from "../error"
+import { ProxyOperationError } from "../error"
 import { ReferenceKey } from "./key"
 
-export type Reference<T extends object> = Reference.Reference<T>
+export type Reference<T extends object> = Reference.Core<T> & T
 export namespace Reference {
+    export function make<T extends object>(props: Props<T>): Reference<T> {
+        const core = new Core(props)
+        return new Proxy(core, new Handler(core)) as Reference<T>
+    }
     export interface Props<Referenced extends object> {
         readonly key: ReferenceKey
         readonly namespace?: string
@@ -12,50 +16,29 @@ export namespace Reference {
         readonly class: Function
     }
 
-    export function create<T extends object>(input: Props<T>): Reference<T> {
-        const ref = new ReferenceDef(input)
-        return new Proxy(ref, new Handler(ref))
-    }
-    export class ReferenceDef<T extends object> {
-        readonly __key: ReferenceKey
-        readonly namespace?: string
-        readonly __origin: object
-        readonly __resolver: Doddle<T>
-        readonly __class: Function
-        constructor(input: Props<T>) {
-            this.__key = input.key
-            this.namespace = input.namespace
-            this.__origin = input.origin
-            this.__resolver = input.resolver
-            this.__class = input.class
+    export class Core<T extends object> {
+        #props: Props<T>
+        constructor(props: Props<T>) {
+            this.#props = props
         }
 
-        pull(): T {
-            return this.__resolver.pull() as T
-        }
-
-        get __referant() {
-            return this.__key.toString()
-        }
-
-        get isResolved() {
-            return this.__resolver.info.isReady
+        get __reference_props__() {
+            return this.#props
         }
     }
-
-    export type Reference<T extends object> = ReferenceDef<T> & T
 
     class Handler<T extends object> implements ProxyHandler<T> {
-        constructor(private readonly reference: ReferenceDef<T>) {}
-        _isValidReferenceKey(prop: PropertyKey): boolean {
-            return ReferenceKey.tryParse(prop as any) !== undefined
+        get _props() {
+            return this._core.__reference_props__
         }
+        constructor(private readonly _core: Core<T>) {}
+
         get(target: T, prop: PropertyKey) {
-            const { reference } = this
-            if (Reflect.has(reference, prop)) {
-                return Reflect.get(reference, prop)
+            const { _props, _core } = this
+            if (Reflect.has(_core, prop)) {
+                return Reflect.get(_core, prop)
             }
-            const resource = reference.__resolver.pull() as any
+            const resource = _props.resolver.pull() as any
             const result = Reflect.get(resource, prop)
             if (typeof result === "function") {
                 return result.bind(resource)
@@ -63,54 +46,57 @@ export namespace Reference {
             return result
         }
         getPrototypeOf(target: T) {
-            const { reference } = this
-            return reference.__class.prototype
+            const { _props } = this
+            return _props.class.prototype
         }
         has(target: T, prop: PropertyKey) {
-            const { reference } = this
-            if (Reflect.has(reference, prop)) {
+            const { _props, _core } = this
+            if (Reflect.has(_core, prop)) {
                 return true
             }
-            const resource = reference.__resolver.pull() as any
+            const resource = _props.resolver.pull() as any
             return Reflect.has(resource, prop)
         }
-        getOwnPropertyDescriptor(target: T, p: string | symbol): PropertyDescriptor | undefined {
-            const { reference } = this
-            const desc = Object.getOwnPropertyDescriptor(reference, p)
+        getOwnPropertyDescriptor(_: T, p: string | symbol): PropertyDescriptor | undefined {
+            const { _core, _props } = this
+            const desc = Object.getOwnPropertyDescriptor(_core, p)
             if (desc) {
                 desc.configurable = false
                 return desc
             }
-            const resource = reference.__resolver.pull() as any
+            const resource = _props.resolver.pull() as any
             const resourceDesc = Object.getOwnPropertyDescriptor(resource, p)
             return resourceDesc
         }
+        get referant() {
+            return this._core.__reference_props__.key.string
+        }
         #createImmutableError(action: string) {
-            return new InstrumentsError(
-                `Tried to ${action} a forward reference to ${this.reference.__referant}, but it cannot be modified.`
+            return new ProxyOperationError(
+                `Tried to ${action} a forward reference to ${this.referant}, but it cannot be modified.`
             )
         }
 
         defineProperty(_: any, property: string | symbol, desc: PropertyDescriptor): boolean {
             throw this.#createImmutableError(`define property ${String(property)} on`)
         }
-        deleteProperty(target: T, p: string | symbol): boolean {
+        deleteProperty(_: T, p: string | symbol): boolean {
             throw this.#createImmutableError(`delete property ${String(p)} from`)
         }
-        preventExtensions(target: T): boolean {
+        preventExtensions(): boolean {
             return true
         }
-        isExtensible(target: T): boolean {
+        isExtensible(): boolean {
             return false
         }
-        set(target: T, p: string | symbol, newValue: any, receiver: any): boolean {
+        set(_: T, p: string | symbol): boolean {
             throw this.#createImmutableError(`set property ${String(p)} on`)
         }
-        ownKeys(target: T): ArrayLike<string | symbol> {
-            const pulled = this.reference.__resolver.pull() as any
-            return [...Reflect.ownKeys(target), ...Reflect.ownKeys(pulled)]
+        ownKeys(): ArrayLike<string | symbol> {
+            const pulled = this._props.resolver.pull() as any
+            return [...Reflect.ownKeys(this._core), ...Reflect.ownKeys(pulled)]
         }
-        setPrototypeOf(target: T, v: object | null): boolean {
+        setPrototypeOf(): boolean {
             throw this.#createImmutableError(`set the prototype of`)
         }
     }
