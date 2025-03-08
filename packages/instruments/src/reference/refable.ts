@@ -1,5 +1,5 @@
 import type { Kind } from "../api-kind"
-import type { RefKey } from "./key"
+import type { RefKey } from "../ref-key"
 
 export type Kinded = { api: Kind.Kind }
 export type Refable<Kind extends string, Name extends string> = {

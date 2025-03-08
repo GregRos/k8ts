@@ -4,9 +4,9 @@ import type { Origin } from "../origin"
 import type { LiveRefable } from "../reference"
 import { ForwardRef, RefKey } from "../reference"
 
-export type DelayedExports<Exps extends LiveRefable> = DelayedExports.DelayedExports<Exps>
-export namespace DelayedExports {
-    export type DelayedExports<Exps extends LiveRefable> = _ExportsByKey<Exps> & Iterable<Exps>
+export type FutureExports<Exps extends LiveRefable> = FutureExports.FutureExports<Exps>
+export namespace FutureExports {
+    export type FutureExports<Exps extends LiveRefable> = _ExportsByKey<Exps> & Iterable<Exps>
     type _ExportsByKey<Exports extends LiveRefable = LiveRefable> = {
         [E in Exports as `${E["api"]["kind"]}/${E["key"]["name"]}`]: ForwardRef<E>
     }
@@ -21,7 +21,7 @@ export namespace DelayedExports {
 
     export function make<T extends LiveRefable, Actual extends Origin>(
         props: Props<Actual, T>
-    ): T & DelayedExports<LiveRefable> {
+    ): T & FutureExports<LiveRefable> {
         const handler = new Handler(props)
         return new Proxy(props.actual, handler) as any
     }
@@ -105,7 +105,9 @@ export namespace DelayedExports {
         }
 
         ownKeys(target: Iterable<LiveRefable>): ArrayLike<string | symbol> {
-            throw new ProxyOperationError("Cannot list all keys of a dynamic exports object.")
+            throw new ProxyOperationError(
+                `Cannot list all keys of a dynamic exports construct for ${this._props.origin}.`
+            )
         }
 
         set(

@@ -1,4 +1,4 @@
-import { ChildOrigin, DelayedExports, type Origin } from "@k8ts/instruments"
+import { ChildOrigin, FutureExports, type Origin } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { seq, type Seq } from "doddle"
 import type { Base } from "../node"
@@ -19,7 +19,7 @@ export namespace File {
             scope: Namespace
         }
     }
-    export type File<T extends Base = Base> = DelayedExports<T> &
+    export type File<T extends Base = Base> = FutureExports<T> &
         Iterable<T> & {
             props: Props<T>
         }
@@ -48,7 +48,7 @@ export namespace File {
 
     export function make<T extends Base>(parent: Origin, props: InnerProps<T>): File<T> {
         const file = new _K8tsFile(parent, props)
-        const exports = DelayedExports.make({
+        const exports = FutureExports.make({
             actual: file,
             origin: file,
             exports: file.nodes

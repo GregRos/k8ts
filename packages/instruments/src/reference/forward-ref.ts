@@ -1,6 +1,6 @@
 import type { Doddle } from "doddle"
 import { ProxyOperationError } from "../error"
-import { RefKey } from "./key"
+import { RefKey } from "../ref-key/ref-key"
 
 export type ForwardRef<T extends object> = ForwardRef.Core<T> & T
 export namespace ForwardRef {
