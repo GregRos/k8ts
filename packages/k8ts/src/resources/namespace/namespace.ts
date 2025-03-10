@@ -2,7 +2,7 @@ import type { CDK } from "@imports"
 import type { Origin } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { v1 } from "../../api-versions"
-import { ManifestResource } from "../../node/base"
+import { ManifestResource } from "../../node/manifest-resource"
 import { K8tsResources } from "../kind-map"
 export type Namespace = Namespace.Namespace
 export namespace Namespace {

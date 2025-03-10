@@ -1,7 +1,7 @@
 import { CDK } from "@imports"
 import { seq } from "doddle"
 import { apps_v1 } from "../../api-versions"
-import { ManifestResource } from "../../node/base"
+import { ManifestResource } from "../../node/manifest-resource"
 import type { SubResource } from "../../node/sub-resource"
 import { K8tsResources } from "../kind-map"
 import { Container } from "./container"

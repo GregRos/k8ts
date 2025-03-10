@@ -6,7 +6,7 @@ import type { Deployment } from "../deployment/deployment"
 import { K8tsResources } from "../kind-map"
 import { toServicePorts } from "../utils/adapters"
 
-import { dependencies } from "../../node/base"
+import { dependencies } from "../../node/dependencies"
 import { Frontend as Frontend_ } from "./frontend"
 import { Port as Port_ } from "./service-port"
 export type Service<Ports extends string> = Service.Service<Ports>

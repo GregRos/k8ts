@@ -1,3 +1,5 @@
+import { seq } from "doddle"
+import { Map } from "immutable"
 import { dump } from "js-yaml"
 import { cloneDeep, cloneDeepWith } from "lodash"
 import { MakeError } from "../error"
@@ -5,7 +7,6 @@ import type { File } from "../file"
 import type { ManifestResource } from "../node"
 export namespace Emitter {
     export interface Props {
-        outdir: string
         extension: string
     }
 
@@ -45,6 +46,13 @@ export namespace Emitter {
                 noArrayIndent: true
             })
         }
-        private _emitFile(file: File) {}
+
+        private _emitFile(file: File) {
+            const all = seq(file).cache()
+            const allKeyed = Map(all.map(r => [r.key, r]))
+            const dependencies = all.concatMap(r => {
+                const deps = r.dependsOn
+            })
+        }
     }
 }

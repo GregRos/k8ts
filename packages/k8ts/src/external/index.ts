@@ -1,5 +1,5 @@
 import type { Kind, Origin } from "@k8ts/instruments"
-import { AbsResource } from "../node/node"
+import { AbsResource } from "../node/abs-resource"
 
 export class External<K extends Kind> extends AbsResource {
     constructor(

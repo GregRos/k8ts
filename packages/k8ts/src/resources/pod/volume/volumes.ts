@@ -1,7 +1,7 @@
 import type { CDK } from "@imports"
 
 import type { ManifestResource } from "../../../node"
-import { dependencies } from "../../../node/base"
+import { dependencies } from "../../../node/dependencies"
 import { SubResource } from "../../../node/sub-resource"
 import type { ConfigMap } from "../../configmap"
 import type { Persistent } from "../../persistent"

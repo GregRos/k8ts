@@ -1,7 +1,7 @@
 import { RefKey, Traced, type Kind, type Origin } from "@k8ts/instruments"
 import type { SubResource } from "./sub-resource"
 export interface DependsOn {
-    dependsOn: AbsResource
+    resource: AbsResource
     text: string
 }
 

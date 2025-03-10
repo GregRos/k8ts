@@ -13,7 +13,7 @@ import { Map } from "immutable"
 import { toContainerPorts, toEnvVars } from "../../utils/adapters"
 
 import type { ManifestResource } from "../../../node"
-import type { DependsOn } from "../../../node/node"
+import type { DependsOn } from "../../../node/abs-resource"
 import { SubResource } from "../../../node/sub-resource"
 import { Mount as Mount_ } from "./mounts"
 export type Container<Ports extends string> = Container.Container<Ports>
@@ -59,7 +59,7 @@ export namespace Container {
             return this.mounts
                 .map(x => {
                     return {
-                        dependsOn: x.mount.parent,
+                        resource: x.mount.parent,
                         text: x.path
                     } satisfies DependsOn
                 })

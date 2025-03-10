@@ -1,6 +1,6 @@
 import { CDK } from "@imports"
 import { apps_v1 } from "../../api-versions"
-import { ManifestResource } from "../../node/base"
+import { ManifestResource } from "../../node/manifest-resource"
 import { K8tsResources } from "../kind-map"
 import type { PodTemplate } from "../pod/pod-template"
 

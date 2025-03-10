@@ -2,11 +2,7 @@ import { Kind, type Origin } from "@k8ts/instruments"
 import type { Meta } from "@k8ts/metadata"
 import { clone } from "lodash"
 import { K8tsResources } from "../resources/kind-map"
-import { AbsResource } from "./node"
-
-export function dependencies(record: Record<string, AbsResource>) {
-    return Object.entries(record).map(([text, dependsOn]) => ({ dependsOn, text }))
-}
+import { AbsResource } from "./abs-resource"
 
 export abstract class ManifestResource<Props extends object = object> extends AbsResource {
     abstract override readonly api: Kind.Kind

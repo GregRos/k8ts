@@ -1,5 +1,5 @@
 import { v1 } from "../../api-versions"
-import { ManifestResource } from "../../node/base"
+import { ManifestResource } from "../../node/manifest-resource"
 import { K8tsResources } from "../kind-map"
 
 export interface Props {

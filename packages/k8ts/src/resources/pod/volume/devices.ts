@@ -1,6 +1,6 @@
 import type { CDK } from "@imports"
 import type { ManifestResource } from "../../../node"
-import { dependencies } from "../../../node/base"
+import { dependencies } from "../../../node/dependencies"
 import { SubResource } from "../../../node/sub-resource"
 import { Persistent } from "../../persistent"
 import { Mount } from "../container/mounts"

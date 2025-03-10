@@ -1,1 +1,1 @@
-export { ManifestResource } from "./base"
+export { ManifestResource } from "./manifest-resource"

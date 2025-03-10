@@ -1,5 +1,5 @@
-import type { ManifestResource } from "./base"
-import { AbsResource } from "./node"
+import { AbsResource } from "./abs-resource"
+import type { ManifestResource } from "./manifest-resource"
 
 export abstract class SubResource<Props extends object = object> extends AbsResource<Props> {
     constructor(
