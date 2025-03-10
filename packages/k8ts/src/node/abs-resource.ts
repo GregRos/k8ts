@@ -29,7 +29,7 @@ export abstract class AbsResource<Props extends object = object> extends Traced 
         return RefKey.make(this.api.name, this.name)
     }
 
-    get dependsOn(): DependsOn[] {
+    get dependencies(): DependsOn[] {
         return []
     }
 

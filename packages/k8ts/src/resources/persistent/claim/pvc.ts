@@ -24,7 +24,7 @@ export namespace Claim {
     @K8tsResources.register("PersistentVolumeClaim")
     export class Claim<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
         api = v1.kind("PersistentVolumeClaim")
-        override get dependsOn() {
+        override get dependencies() {
             if (this.props.bind) {
                 return dependencies({
                     bind: this.props.bind

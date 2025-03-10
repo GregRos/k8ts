@@ -29,7 +29,7 @@ export namespace Service {
             return svcPorts
         }
 
-        override get dependsOn() {
+        override get dependencies() {
             return dependencies({
                 backend: this.props.backend
             })

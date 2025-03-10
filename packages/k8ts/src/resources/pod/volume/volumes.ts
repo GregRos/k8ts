@@ -32,7 +32,7 @@ export namespace Volume {
             return new Mount.Volume(this as any, options ?? {})
         }
 
-        override get dependsOn() {
+        override get dependencies() {
             return dependencies({
                 backend: this.props.backend
             })

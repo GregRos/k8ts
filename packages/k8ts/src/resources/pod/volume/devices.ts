@@ -24,7 +24,7 @@ export namespace Device {
             super(parent, name, backend)
         }
 
-        override get dependsOn() {
+        override get dependencies() {
             return dependencies({
                 backend: this.backend.backend
             })

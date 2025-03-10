@@ -20,7 +20,7 @@ export namespace HttpRoute {
     export class HttpRoute<Ports extends string> extends ManifestResource<Props<Ports>> {
         api = gateway_v1.kind("HttpRoute")
 
-        override get dependsOn() {
+        override get dependencies() {
             return dependencies({
                 gateway: this.props.parent,
                 service: this.props.backend.service

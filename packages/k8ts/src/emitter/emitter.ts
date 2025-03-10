@@ -51,7 +51,7 @@ export namespace Emitter {
             const all = seq(file).cache()
             const allKeyed = Map(all.map(r => [r.key, r]))
             const dependencies = all.concatMap(r => {
-                const deps = r.dependsOn
+                const deps = r.dependencies.
             })
         }
     }

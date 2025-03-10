@@ -55,7 +55,7 @@ export namespace Container {
                 .toList()
         }
 
-        override get dependsOn() {
+        override get dependencies() {
             return this.mounts
                 .map(x => {
                     return {
