@@ -1,6 +1,7 @@
 import type { CDK } from "@imports"
 import { ResourcesSpec, Unit } from "@k8ts/instruments"
 import { Base } from "../../../node"
+import { dependsOn } from "../../../node/base"
 import { v1 } from "../../api-version"
 import { K8tsResources } from "../../kind-map"
 import { Access } from "../access-mode"
@@ -24,7 +25,12 @@ export namespace Claim {
     export class Claim<Mode extends DataMode = DataMode> extends Base<Props<Mode>> {
         api = v1.kind("PersistentVolumeClaim")
         override get dependsOn() {
-            return [this.props.bind]
+            if (this.props.bind) {
+                return dependsOn({
+                    bind: this.props.bind
+                })
+            }
+            return []
         }
         manifest(): CDK.KubePersistentVolumeClaimProps {
             const { storage, accessModes, mode } = this.props

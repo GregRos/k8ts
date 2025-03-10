@@ -2,6 +2,16 @@ import { Kind, RefKey, type Origin } from "@k8ts/instruments"
 import type { Meta } from "@k8ts/metadata"
 import { clone } from "lodash"
 import { K8tsResources } from "../resources/kind-map"
+import type { SubResource } from "./sub-resource"
+
+export interface DependsOn {
+    dependsOn: Base
+    text: string
+}
+
+export function dependsOn(record: Record<string, Base>) {
+    return Object.entries(record).map(([text, dependsOn]) => ({ dependsOn, text }))
+}
 
 export abstract class Base<Props extends object = object> {
     abstract readonly api: Kind.Kind
@@ -28,7 +38,11 @@ export abstract class Base<Props extends object = object> {
         return this.meta.get("name")
     }
 
-    get dependsOn(): Base[] {
+    get dependsOn(): DependsOn[] {
+        return []
+    }
+
+    get subResources(): SubResource[] {
         return []
     }
 

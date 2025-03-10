@@ -12,6 +12,8 @@ import {
 import { Map } from "immutable"
 import { toContainerPorts, toEnvVars } from "../../utils/adapters"
 
+import type { Base } from "../../../node"
+import { SubResource } from "../../../node/sub-resource"
 import { Mount as Mount_ } from "./mounts"
 export type Container<Ports extends string> = Container.Container<Ports>
 export namespace Container {
@@ -34,7 +36,7 @@ export namespace Container {
         securityContext?: CDK.SecurityContext
         resources?: Resources
     }
-    export class Container<Ports extends string> {
+    export class Container<Ports extends string> extends SubResource {
         kind = "Container" as const
         get mounts() {
             return Map(this.props.mounts ?? {})
@@ -50,6 +52,10 @@ export namespace Container {
                 .toList()
         }
 
+        override get dependsOn() {
+            return this.mounts.flatMap(x => x.mount.parent.dependsOn).toArray()
+        }
+
         get volumes() {
             return this.mounts.map(x => x.mount.parent)
         }
@@ -57,10 +63,13 @@ export namespace Container {
             return PortSet.make(this.props.ports)
         }
         constructor(
-            readonly name: string,
+            parent: Base,
+            name: string,
             readonly subtype: "init" | "main",
             readonly props: Props<Ports>
-        ) {}
+        ) {
+            super(parent, name)
+        }
 
         private _groupedMounts() {
             const x = {
@@ -104,10 +113,11 @@ export namespace Container {
     }
 
     export function make<Ports extends string>(
+        parent: Base,
         name: string,
         subtype: "init" | "main",
         props: Props<Ports>
     ) {
-        return new Container(name, subtype, props)
+        return new Container(parent, name, subtype, props)
     }
 }

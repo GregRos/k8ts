@@ -26,9 +26,11 @@
   "dependencies": {
     "declare-it": "^2.1.0",
     "doddle": "^5.0.0-beta.5",
-    "immutable": "^5.0.3"
+    "immutable": "^5.0.3",
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
+    "@types/js-yaml": "^4",
     "@types/node": "20.9.1",
     "@types/unicode-trie": "^2",
     "@typescript-eslint/eslint-plugin": "^7.12.0",

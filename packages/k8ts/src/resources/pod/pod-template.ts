@@ -1,6 +1,7 @@
 import { CDK } from "@imports"
 import { seq } from "doddle"
 import { Base } from "../../node/base"
+import type { SubResource } from "../../node/sub-resource"
 import { apps_v1 } from "../api-version"
 import { K8tsResources } from "../kind-map"
 import { Container } from "./container"
@@ -16,10 +17,13 @@ export namespace PodTemplate {
     @K8tsResources.register("PodTemplate")
     export class PodTemplate<Ports extends string = string> extends Base<Props<Ports>> {
         api = apps_v1.kind("PodTemplate")
-        readonly containers = seq(() => this.props.POD(new PodScope())).cache()
-        readonly mounts = seq(() => this.containers.map(x => x.mounts)).cache()
+        readonly containers = seq(() => this.props.POD(new PodScope(this))).cache()
+        readonly mounts = seq(() => this.containers.concatMap(x => x.mounts)).cache()
         readonly ports = seq(() => this.containers.map(x => x.ports)).reduce((a, b) => a.union(b))
 
+        override get subResources(): SubResource[] {
+            return [...this.containers, ...this.mounts.map(x => x.mount.parent)]
+        }
         manifest(): CDK.PodTemplateSpec {
             const { meta, props } = this
             const containers = this.containers
@@ -49,20 +53,21 @@ export namespace PodTemplate {
     }
 
     export class PodScope {
+        constructor(private readonly _parent: PodTemplate) {}
         Container<Ports extends string>(
             name: string,
             options: Container.Props<Ports>
         ): Container<Ports> {
-            return Container.make(name, "main", options)
+            return Container.make(this._parent, name, "main", options)
         }
         InitContainer(name: string, options: Container.Props<never>): Container<never> {
-            return Container.make(name, "init", options)
+            return Container.make(this._parent, name, "init", options)
         }
         Volume(name: string, options: Volume.Backend) {
-            return Volume.make(name, options)
+            return Volume.make(this._parent, name, options)
         }
         Device(name: string, options: Device.Backend): Device {
-            return Device.make(name, options)
+            return Device.make(this._parent, name, options)
         }
     }
 }

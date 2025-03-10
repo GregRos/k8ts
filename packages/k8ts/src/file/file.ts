@@ -3,7 +3,7 @@ import type { Base } from "../node"
 import { FileExports as Exports_ } from "./exports"
 import { Factory as Factory_ } from "./factory"
 import { FileOrigin } from "./origin"
-export type File<T extends Base> = File.File<T>
+export type File<T extends Base = Base> = File.File<T>
 export namespace File {
     export import Factory = Factory_
 

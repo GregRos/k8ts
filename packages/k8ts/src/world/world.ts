@@ -20,10 +20,10 @@ export namespace World {
                 Meta.splat(props.meta, {
                     "^k8ts.org/": {
                         "produced-by": `k8ts@${version}`,
-                        world: name
+                        world: props.name
                     }
                 }),
-                kindMap.merge(K8tsResources)
+                K8tsResources.merge(props.kinds)
             )
         }
     }
@@ -43,7 +43,7 @@ export namespace World {
     }
 
     export function make(props: Props) {
-        return new Builder(new Origin(name, meta, new KindMap()))
+        return new Builder(new Origin(props))
     }
 }
 

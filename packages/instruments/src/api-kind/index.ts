@@ -63,6 +63,19 @@ export namespace Kind {
         toString() {
             return this.text
         }
+
+        subkind<Subkind extends string>(namespace: string, name: string, subkind: Subkind) {
+            return new Kind(this.apiVersion, `${this.kind}.${subkind}`)
+        }
+    }
+
+    export class SubKind<K extends Kind> {
+        constructor(
+            readonly kind: K,
+            readonly namespace: string,
+            readonly parentName: string,
+            readonly name: string
+        ) {}
     }
 
     export function group<ApiGroup extends string>(apiGroup: ApiGroup) {

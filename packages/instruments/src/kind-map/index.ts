@@ -20,7 +20,10 @@ export class KindMap {
             .toSet()
     }
 
-    merge(other: KindMap) {
+    merge(other?: KindMap) {
+        if (!other) {
+            return this
+        }
         return new KindMap(this._kindOrClassMap.merge(other._kindOrClassMap) as any)
     }
 

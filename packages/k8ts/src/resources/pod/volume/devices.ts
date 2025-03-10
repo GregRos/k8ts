@@ -1,4 +1,7 @@
 import type { CDK } from "@imports"
+import type { Base } from "../../../node"
+import { dependsOn } from "../../../node/base"
+import { SubResource } from "../../../node/sub-resource"
 import { Persistent } from "../../persistent"
 import { Mount } from "../container/mounts"
 export type Device = Device.Device
@@ -9,11 +12,21 @@ export namespace Device {
     }
 
     export type Backend = PvcBackend
-    export class Device {
+    export class Device extends SubResource {
+        override kind = "Device" as const
         constructor(
-            readonly name: string,
+            parent: Base,
+            name: string,
             readonly backend: PvcBackend
-        ) {}
+        ) {
+            super(parent, name)
+        }
+
+        override get dependsOn() {
+            return dependsOn({
+                backend: this.backend.backend
+            })
+        }
 
         manifest(): CDK.Volume {
             return {
@@ -30,7 +43,7 @@ export namespace Device {
         }
     }
 
-    export function make(name: string, input: Backend) {
-        return new Device(name, input)
+    export function make(parent: Base, name: string, input: Backend) {
+        return new Device(parent, name, input)
     }
 }

@@ -6,6 +6,7 @@ import type { Deployment } from "../deployment/deployment"
 import { K8tsResources } from "../kind-map"
 import { toServicePorts } from "../utils/adapters"
 
+import { dependsOn } from "../../node/base"
 import { Frontend as Frontend_ } from "./frontend"
 import { Port as Port_ } from "./service-port"
 export type Service<Ports extends string> = Service.Service<Ports>
@@ -29,7 +30,9 @@ export namespace Service {
         }
 
         override get dependsOn() {
-            return [this.props.backend]
+            return dependsOn({
+                backend: this.props.backend
+            })
         }
 
         getPortRef(port: Ports) {

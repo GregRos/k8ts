@@ -1,10 +1,13 @@
 import type { CDK } from "@imports"
 
+import type { Base } from "../../../node"
+import { dependsOn } from "../../../node/base"
+import { SubResource } from "../../../node/sub-resource"
 import type { ConfigMap } from "../../configmap"
 import type { Persistent } from "../../persistent"
 import type { Secret } from "../../secret"
 import { Mount } from "../container/mounts"
-export type Volume<Props extends object = object> = Volume.Volume<Props>
+export type Volume<Props extends Volume.Backend = Volume.Backend> = Volume.Volume<Props>
 export namespace Volume {
     interface PvcBackend {
         backend: Persistent.Claim<"Filesystem">
@@ -18,16 +21,26 @@ export namespace Volume {
         backend: Secret
     }
     export type Backend = PvcBackend | ConfigMapBackend | SecretBackend
-    export abstract class Volume<Props extends object = object> {
+    export abstract class Volume<Props extends Backend = Backend> extends SubResource {
+        kind = "Volume" as const
         constructor(
-            readonly name: string,
+            parent: Base,
+            name: string,
             readonly props: Props
-        ) {}
+        ) {
+            super(parent, name)
+        }
 
         abstract manifest(): CDK.Volume
 
         mount(options?: Mount.Options) {
             return new Mount.Volume(this as any, options ?? {})
+        }
+
+        override get dependsOn() {
+            return dependsOn({
+                backend: this.props.backend
+            })
         }
     }
     class PvcVolume extends Volume<PvcBackend> {
@@ -64,15 +77,15 @@ export namespace Volume {
         }
     }
 
-    export function make(name: string, input: Backend): Volume {
+    export function make(parent: Base, name: string, input: Backend): Volume {
         const { backend } = input
         switch (backend.api.kind) {
             case "PersistentVolumeClaim":
-                return new PvcVolume(name, input as PvcBackend)
+                return new PvcVolume(parent, name, input as PvcBackend)
             case "ConfigMap":
-                return new ConfigMapVolume(name, input as ConfigMapBackend)
+                return new ConfigMapVolume(parent, name, input as ConfigMapBackend)
             case "Secret":
-                return new SecretVolume(name, input as SecretBackend)
+                return new SecretVolume(parent, name, input as SecretBackend)
         }
     }
 }
