@@ -21,7 +21,7 @@ export namespace Container {
         memory: Unit.Data
     })
 
-    type ContainerResources = (typeof container_ResourcesSpec)["__INPUT__"]
+    type Resources = (typeof container_ResourcesSpec)["__INPUT__"]
     export type Mounts = {
         [key: string]: Mount.Device | Mount.Volume
     }
@@ -32,9 +32,8 @@ export namespace Container {
         mounts?: Mounts
         env?: InputEnvMapping
         securityContext?: CDK.SecurityContext
-        resources?: ContainerResources
+        resources?: Resources
     }
-
     export class Container<Ports extends string> {
         kind = "Container" as const
         get mounts() {

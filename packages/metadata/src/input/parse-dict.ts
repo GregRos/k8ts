@@ -8,7 +8,7 @@ export function parseMetaInput(input: InputMeta): Map<ValueKey, string> {
     if (Map.isMap(input)) {
         return input as Map<ValueKey, string>
     }
-    if (input instanceof Meta) {
+    if (input instanceof Meta.Meta) {
         return input["_dict"]
     }
     let map = Map<ValueKey, string>()

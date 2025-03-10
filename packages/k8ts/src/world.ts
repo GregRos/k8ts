@@ -6,15 +6,15 @@ import type { Base } from "./node"
 import type { Namespace } from "./resources"
 import { K8tsResources } from "./resources/kind-map"
 export class K8tsWorld extends RootOrigin {
-    constructor(extra?: Meta.InputMeta) {
+    constructor(name: string, extra?: Meta.Input) {
         super(
-            "k8ts",
+            name,
             Meta.make({
                 "^k8ts.io/": {
                     "produced-by": "k8ts",
                     version: "0.0.1"
                 }
-            }),
+            }).overwrite(extra),
             K8tsResources
         )
     }
@@ -43,10 +43,7 @@ export class K8tsWorld extends RootOrigin {
         })
     }
 
-    private _namespacedFile<T extends Base>(
-        ns: Namespace.Namespace,
-        props: File.Props.Namespaced<T>
-    ) {
+    private _namespacedFile<T extends Base>(ns: Namespace, props: File.Props.Namespaced<T>) {
         const nsMeta = this.meta.add({ namespace: ns.name })
         return File.make(this.child(ns.name, nsMeta), {
             ...props,

@@ -2,5 +2,5 @@ export * from "./external"
 export * from "./file"
 export * as ScopedFactory from "./file/factory"
 export * from "./resources"
-import { K8tsWorld as K8tsClass } from "./k8ts"
-export const K8TS = new K8tsClass()
+import { K8tsWorld } from "./world"
+export const K8TS = new K8tsWorld("(world)")

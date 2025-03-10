@@ -4,7 +4,6 @@ import { InstrumentsError } from "../error"
 export class KindMap {
     private _kindOrClassMap: Map<string, Function> & Map<Function, string> = Map([]) as any
 
-    constructor(readonly name: string) {}
     register = (kind: string) => {
         return <T extends Function>(target: T) => {
             this._kindOrClassMap = this._kindOrClassMap.set(kind, target).set(target, kind)

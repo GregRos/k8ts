@@ -1,6 +1,6 @@
 import { K8TS } from "@lib"
 
-const k8tsFile = K8TS.File({
+export default K8TS.File({
     scope: "cluster",
     filename: "namespace.yaml",
     *FILE(FILE) {

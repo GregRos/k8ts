@@ -24,5 +24,6 @@ export namespace Key {
     export type Special = "name" | "namespace"
     export type Value = `${Char.Prefix.Custom}${Nested}` | Special
 
-    export type Any = Section | Value
+    export type Key = Section | Value
 }
+export type Key = Key.Key
