@@ -1,7 +1,7 @@
 import type { CDK } from "@imports"
 
-import type { Base } from "../../../node"
-import { dependsOn } from "../../../node/base"
+import type { ManifestResource } from "../../../node"
+import { dependencies } from "../../../node/base"
 import { SubResource } from "../../../node/sub-resource"
 import type { ConfigMap } from "../../configmap"
 import type { Persistent } from "../../persistent"
@@ -24,7 +24,7 @@ export namespace Volume {
     export abstract class Volume<Props extends Backend = Backend> extends SubResource {
         kind = "Volume" as const
         constructor(
-            parent: Base,
+            parent: ManifestResource,
             name: string,
             readonly props: Props
         ) {
@@ -38,7 +38,7 @@ export namespace Volume {
         }
 
         override get dependsOn() {
-            return dependsOn({
+            return dependencies({
                 backend: this.props.backend
             })
         }
@@ -77,9 +77,9 @@ export namespace Volume {
         }
     }
 
-    export function make(parent: Base, name: string, input: Backend): Volume {
+    export function make(parent: ManifestResource, name: string, input: Backend): Volume {
         const { backend } = input
-        switch (backend.api.kind) {
+        switch (backend.api.name) {
             case "PersistentVolumeClaim":
                 return new PvcVolume(parent, name, input as PvcBackend)
             case "ConfigMap":

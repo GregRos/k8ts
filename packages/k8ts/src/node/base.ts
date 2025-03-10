@@ -1,49 +1,29 @@
-import { Kind, RefKey, type Origin } from "@k8ts/instruments"
+import { Kind, type Origin } from "@k8ts/instruments"
 import type { Meta } from "@k8ts/metadata"
 import { clone } from "lodash"
 import { K8tsResources } from "../resources/kind-map"
-import type { SubResource } from "./sub-resource"
+import { BaseNode } from "./node"
 
-export interface DependsOn {
-    dependsOn: Base
-    text: string
-}
-
-export function dependsOn(record: Record<string, Base>) {
+export function dependencies(record: Record<string, ManifestResource>) {
     return Object.entries(record).map(([text, dependsOn]) => ({ dependsOn, text }))
 }
 
-export abstract class Base<Props extends object = object> {
+export abstract class ManifestResource<Props extends object = object> extends BaseNode {
     abstract readonly api: Kind.Kind
-    get key() {
-        return RefKey.make(this.api.kind, this.name)
-    }
+
     constructor(
-        readonly origin: Origin,
+        origin: Origin,
         readonly meta: Meta,
-        readonly props: Props
+        override readonly props: Props
     ) {
+        super(origin, meta.get("name"), props)
         const self = this
-        this.__post_init__()
         ;(async () => {
             await new Promise(resolve => setTimeout(resolve, 0))
-            if (!K8tsResources.has(self.api.kind)) {
-                throw new Error(`No kind registered for ${self.api.kind}`)
+            if (!K8tsResources.has(self.api.name)) {
+                throw new Error(`No kind registered for ${self.api.name}`)
             }
         })()
-    }
-    protected __post_init__() {}
-
-    get name() {
-        return this.meta.get("name")
-    }
-
-    get dependsOn(): DependsOn[] {
-        return []
-    }
-
-    get subResources(): SubResource[] {
-        return []
     }
 
     setMeta(f: (m: Meta) => Meta): this {

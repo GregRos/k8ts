@@ -1,6 +1,6 @@
 import { CDK } from "@imports"
 import type { Unit } from "@k8ts/instruments"
-import { Base } from "../../../node/base"
+import { ManifestResource } from "../../../node/base"
 import { v1 } from "../../api-version"
 import { K8tsResources } from "../../kind-map"
 import { Access } from "../access-mode"
@@ -22,7 +22,7 @@ export namespace Volume {
     export type Reclaim = "Retain" | "Delete" | "Recycle"
 
     @K8tsResources.register("PersistentVolume")
-    export class Volume<Mode extends DataMode = DataMode> extends Base<Props<Mode>> {
+    export class Volume<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
         readonly api = v1.kind("PersistentVolume")
 
         manifest(): CDK.KubePersistentVolumeProps {

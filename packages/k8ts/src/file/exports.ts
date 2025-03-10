@@ -1,6 +1,6 @@
 import { FutureExports, Producer } from "@k8ts/instruments"
 import { seq, type Seq } from "doddle"
-import type { Base } from "../node"
+import type { ManifestResource } from "../node"
 import { Factory } from "./factory"
 import type { FileOrigin } from "./origin"
 
@@ -11,7 +11,7 @@ export namespace FileExports {
     > = Producer.Producer<Factory.FromScope<Scope>, Produced>
     export interface Props<
         Scope extends FileOrigin.Scope = FileOrigin.Scope,
-        Produced extends Base = Base
+        Produced extends ManifestResource = ManifestResource
     > {
         origin: FileOrigin<Scope>
         FILE: Producer<Scope, Produced>
@@ -19,7 +19,7 @@ export namespace FileExports {
 
     export class Core {
         #props: Props
-        #produced: Seq<Base>
+        #produced: Seq<ManifestResource>
         constructor(props: Props) {
             this.#props = props
             const producer = Producer.map(props.FILE, () => {
@@ -41,7 +41,7 @@ export namespace FileExports {
         }
     }
 
-    export function make<Scope extends FileOrigin.Scope, Produced extends Base>(
+    export function make<Scope extends FileOrigin.Scope, Produced extends ManifestResource>(
         props: Props<Scope, Produced>
     ): Core & FutureExports<Produced> {
         const core = new Core(props)

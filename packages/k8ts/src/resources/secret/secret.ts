@@ -1,4 +1,4 @@
-import { Base } from "../../node/base"
+import { ManifestResource } from "../../node/base"
 import { v1 } from "../api-version"
 import { K8tsResources } from "../kind-map"
 
@@ -8,7 +8,7 @@ export interface Props {
 }
 
 @K8tsResources.register("Secret")
-export class Secret extends Base<Props> {
+export class Secret extends ManifestResource<Props> {
     api = v1.kind("Secret")
 
     manifest() {

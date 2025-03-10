@@ -1,44 +1,57 @@
+import { hash } from "immutable"
+
 export namespace Kind {
     export type InputVersion = `v${string}`
+
+    interface IdentParent {
+        text: string
+        name: string
+    }
+    export abstract class Identifier<
+        Name extends string = string,
+        Parent extends IdentParent | null = IdentParent | null
+    > implements IdentParent
+    {
+        constructor(
+            readonly name: Name,
+            readonly parent: Parent
+        ) {
+            this.toString = () => this.text
+        }
+        get text(): string {
+            return [this.parent?.text, this.name].filter(Boolean).join("/")
+        }
+
+        equals(other: any) {
+            if (typeof other !== "object" || !other) {
+                return false
+            }
+            if (!(other instanceof Identifier)) {
+                return false
+            }
+            return this.text === other.text
+        }
+
+        private hashCode() {
+            return hash(this.text)
+        }
+    }
+
+    class _Group<const Name extends string = string> extends Identifier<Name, null> {
+        constructor(override name: Name) {
+            super(name, null)
+        }
+        version<Version extends InputVersion>(apiVersion: Version) {
+            return new _Version(apiVersion, this)
+        }
+    }
+
     export class _Version<
         const Group extends string = string,
         const Name extends InputVersion = InputVersion
-    > {
-        constructor(
-            readonly group: _Group<Group>,
-            readonly version: Name
-        ) {}
-
+    > extends Identifier<Name, _Group<Group>> {
         kind<Kind extends string>(kind: Kind) {
-            return new Kind(this, kind)
-        }
-
-        get text() {
-            const arr = []
-            if (this.group.text) {
-                arr.push(this.group.text)
-            }
-            arr.push(this.version)
-            return arr.join("/")
-        }
-
-        toString() {
-            return this.text
-        }
-    }
-    class _Group<const Name extends string = string> {
-        constructor(readonly apiGroup: Name) {}
-
-        version<Version extends InputVersion>(apiVersion: Version) {
-            return new _Version(this, apiVersion)
-        }
-
-        get text() {
-            return this.apiGroup
-        }
-
-        toString() {
-            return this.text
+            return new Kind(kind, this)
         }
     }
 
@@ -46,43 +59,23 @@ export namespace Kind {
         const Group extends string = string,
         const V extends InputVersion = InputVersion,
         const Name extends string = string
-    > {
-        constructor(
-            readonly apiVersion: _Version<Group, V>,
-            readonly kind: Name
-        ) {}
-
+    > extends Identifier<Name, _Version<Group, V>> {
         get version() {
-            return this.apiVersion.text
+            return this.parent.text
         }
 
-        get text() {
-            return `${this.apiVersion}/${this.kind}`
-        }
-
-        toString() {
-            return this.text
-        }
-
-        subkind<Subkind extends string>(namespace: string, name: string, subkind: Subkind) {
-            return new Kind(this.apiVersion, `${this.kind}.${subkind}`)
+        subkind(subkind: string) {
+            return new SubKind(subkind, this)
         }
     }
 
-    export class SubKind<K extends Kind> {
-        constructor(
-            readonly kind: K,
-            readonly namespace: string,
-            readonly parentName: string,
-            readonly name: string
-        ) {}
-    }
+    export class SubKind extends Identifier<string, Kind> {}
 
     export function group<ApiGroup extends string>(apiGroup: ApiGroup) {
         return new _Group(apiGroup)
     }
 
     export function version<ApiVersion extends InputVersion>(apiVersion: ApiVersion) {
-        return new _Version(group(""), apiVersion)
+        return new _Version(apiVersion, group(""))
     }
 }

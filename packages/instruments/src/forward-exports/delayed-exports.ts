@@ -8,7 +8,7 @@ export type FutureExports<Exps extends LiveRefable> = FutureExports.FutureExport
 export namespace FutureExports {
     export type FutureExports<Exps extends LiveRefable> = _ExportsByKey<Exps>
     type _ExportsByKey<Exports extends LiveRefable = LiveRefable> = {
-        [E in Exports as `${E["api"]["kind"]}/${E["key"]["name"]}`]: ForwardRef<E>
+        [E in Exports as `${E["api"]["name"]}/${E["key"]["name"]}`]: ForwardRef<E>
     }
     export interface Props<
         Actual extends object = object,

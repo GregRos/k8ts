@@ -2,7 +2,7 @@ import { KindMap, RootOrigin } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { External } from "../external"
 import { File } from "../file"
-import type { Base } from "../node"
+import type { ManifestResource } from "../node"
 import type { Namespace } from "../resources"
 import { K8tsResources } from "../resources/kind-map"
 import { version } from "../version"
@@ -35,9 +35,9 @@ export namespace World {
             return new External(kind, name, namespace)
         }
 
-        File<T extends Base>(props: File.Props<Namespace, T>): File<T>
-        File<T extends Base>(props: File.Props<"cluster", T>): File<T>
-        File<T extends Base>(props: File.Props<any, T>): File<T> {
+        File<T extends ManifestResource>(props: File.Props<Namespace, T>): File<T>
+        File<T extends ManifestResource>(props: File.Props<"cluster", T>): File<T>
+        File<T extends ManifestResource>(props: File.Props<any, T>): File<T> {
             return File.make(props, this.origin)
         }
     }
@@ -48,7 +48,7 @@ export namespace World {
 }
 
 export class K8tsWorld {
-    emit(...files: Iterable<Base>[]) {
+    emit(...files: Iterable<ManifestResource>[]) {
         files.forEach(file => {
             console.log("HERE", file)
             const iterator = file[Symbol.iterator]

@@ -12,7 +12,7 @@ import {
 import { Map } from "immutable"
 import { toContainerPorts, toEnvVars } from "../../utils/adapters"
 
-import type { Base } from "../../../node"
+import type { ManifestResource } from "../../../node"
 import { SubResource } from "../../../node/sub-resource"
 import { Mount as Mount_ } from "./mounts"
 export type Container<Ports extends string> = Container.Container<Ports>
@@ -63,7 +63,7 @@ export namespace Container {
             return PortSet.make(this.props.ports)
         }
         constructor(
-            parent: Base,
+            parent: ManifestResource,
             name: string,
             readonly subtype: "init" | "main",
             readonly props: Props<Ports>
@@ -113,7 +113,7 @@ export namespace Container {
     }
 
     export function make<Ports extends string>(
-        parent: Base,
+        parent: ManifestResource,
         name: string,
         subtype: "init" | "main",
         props: Props<Ports>

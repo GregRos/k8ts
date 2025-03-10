@@ -1,7 +1,7 @@
 import type { CDK } from "@imports"
 import { ResourcesSpec, Unit } from "@k8ts/instruments"
-import { Base } from "../../../node"
-import { dependsOn } from "../../../node/base"
+import { ManifestResource } from "../../../node"
+import { dependencies } from "../../../node/base"
 import { v1 } from "../../api-version"
 import { K8tsResources } from "../../kind-map"
 import { Access } from "../access-mode"
@@ -22,11 +22,11 @@ export namespace Claim {
     }
 
     @K8tsResources.register("PersistentVolumeClaim")
-    export class Claim<Mode extends DataMode = DataMode> extends Base<Props<Mode>> {
+    export class Claim<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
         api = v1.kind("PersistentVolumeClaim")
         override get dependsOn() {
             if (this.props.bind) {
-                return dependsOn({
+                return dependencies({
                     bind: this.props.bind
                 })
             }

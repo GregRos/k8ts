@@ -1,5 +1,5 @@
 import { CDK } from "@imports"
-import { Base } from "../../node/base"
+import { ManifestResource } from "../../node/base"
 import { apps_v1 } from "../api-version"
 import { K8tsResources } from "../kind-map"
 import type { PodTemplate } from "../pod/pod-template"
@@ -11,7 +11,7 @@ export namespace Deployment {
     }
 
     @K8tsResources.register("Deployment")
-    export class Deployment<Ports extends string = string> extends Base<Props<Ports>> {
+    export class Deployment<Ports extends string = string> extends ManifestResource<Props<Ports>> {
         api = apps_v1.kind("Deployment")
         get ports() {
             return this.props.template.ports

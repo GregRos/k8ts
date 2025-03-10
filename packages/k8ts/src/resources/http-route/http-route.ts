@@ -1,7 +1,7 @@
 import type { CDK } from "@imports"
 import type { External } from "../../external"
-import { Base } from "../../node"
-import { dependsOn } from "../../node/base"
+import { ManifestResource } from "../../node"
+import { dependencies } from "../../node/base"
 import { gateway_v1 } from "../api-version"
 import { K8tsResources } from "../kind-map"
 import type { Service } from "../service"
@@ -16,11 +16,11 @@ export namespace HttpRoute {
     }
 
     @K8tsResources.register("HttpRoute")
-    export class HttpRoute<Ports extends string> extends Base<Props<Ports>> {
+    export class HttpRoute<Ports extends string> extends ManifestResource<Props<Ports>> {
         api = gateway_v1.kind("HttpRoute")
 
         override get dependsOn() {
-            return dependsOn({
+            return dependencies({
                 gateway: this.props.parent,
                 service: this.props.backend.service
             })

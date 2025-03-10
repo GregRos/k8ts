@@ -1,6 +1,6 @@
 import { CDK } from "@imports"
 import { seq } from "doddle"
-import { Base } from "../../node/base"
+import { ManifestResource } from "../../node/base"
 import type { SubResource } from "../../node/sub-resource"
 import { apps_v1 } from "../api-version"
 import { K8tsResources } from "../kind-map"
@@ -15,7 +15,7 @@ export namespace PodTemplate {
         POD(scope: PodScope): Iterable<Container.Container<Ports>>
     }
     @K8tsResources.register("PodTemplate")
-    export class PodTemplate<Ports extends string = string> extends Base<Props<Ports>> {
+    export class PodTemplate<Ports extends string = string> extends ManifestResource<Props<Ports>> {
         api = apps_v1.kind("PodTemplate")
         readonly containers = seq(() => this.props.POD(new PodScope(this))).cache()
         readonly mounts = seq(() => this.containers.concatMap(x => x.mounts)).cache()

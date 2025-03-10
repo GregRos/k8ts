@@ -2,7 +2,7 @@ import { dump } from "js-yaml"
 import { cloneDeep, cloneDeepWith } from "lodash"
 import { MakeError } from "../error"
 import type { File } from "../file"
-import type { Base } from "../node"
+import type { ManifestResource } from "../node"
 export namespace Emitter {
     export interface Props {
         outdir: string
@@ -31,12 +31,12 @@ export namespace Emitter {
             return cloneDeepWith(clone, _cleanKeys)
         }
 
-        private _toObject(resource: Base) {
+        private _toObject(resource: ManifestResource) {
             const manifest = resource.manifest()
             return this._cleanManifest(manifest)
         }
 
-        private _dumpManifest(resource: Base) {
+        private _dumpManifest(resource: ManifestResource) {
             const obj = this._toObject(resource)
             return dump(obj, {
                 noRefs: true,

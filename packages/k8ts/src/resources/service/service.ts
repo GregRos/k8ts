@@ -1,12 +1,12 @@
 import { CDK } from "@imports"
 import { type InputPortMapping } from "@k8ts/instruments"
-import { Base } from "../../node"
+import { ManifestResource } from "../../node"
 import { v1 } from "../api-version"
 import type { Deployment } from "../deployment/deployment"
 import { K8tsResources } from "../kind-map"
 import { toServicePorts } from "../utils/adapters"
 
-import { dependsOn } from "../../node/base"
+import { dependencies } from "../../node/base"
 import { Frontend as Frontend_ } from "./frontend"
 import { Port as Port_ } from "./service-port"
 export type Service<Ports extends string> = Service.Service<Ports>
@@ -20,7 +20,7 @@ export namespace Service {
     }
 
     @K8tsResources.register("Service")
-    export class Service<Ports extends string = string> extends Base<Props<Ports>> {
+    export class Service<Ports extends string = string> extends ManifestResource<Props<Ports>> {
         api = v1.kind("Service")
 
         get ports() {
@@ -30,7 +30,7 @@ export namespace Service {
         }
 
         override get dependsOn() {
-            return dependsOn({
+            return dependencies({
                 backend: this.props.backend
             })
         }
