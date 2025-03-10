@@ -13,6 +13,7 @@ import { Map } from "immutable"
 import { toContainerPorts, toEnvVars } from "../../utils/adapters"
 
 import type { ManifestResource } from "../../../node"
+import type { DependsOn } from "../../../node/node"
 import { SubResource } from "../../../node/sub-resource"
 import { Mount as Mount_ } from "./mounts"
 export type Container<Ports extends string> = Container.Container<Ports>
@@ -36,8 +37,10 @@ export namespace Container {
         securityContext?: CDK.SecurityContext
         resources?: Resources
     }
-    export class Container<Ports extends string> extends SubResource {
-        kind = "Container" as const
+    export class Container<Ports extends string> extends SubResource<Props<Ports>> {
+        get api() {
+            return this.parent.api.subkind("Container")
+        }
         get mounts() {
             return Map(this.props.mounts ?? {})
                 .mapEntries(([path, mount]) => {
@@ -45,7 +48,7 @@ export namespace Container {
                         mount,
                         {
                             mount,
-                            path
+                            path: path as string
                         }
                     ]
                 })
@@ -53,7 +56,14 @@ export namespace Container {
         }
 
         override get dependsOn() {
-            return this.mounts.flatMap(x => x.mount.parent.dependsOn).toArray()
+            return this.mounts
+                .map(x => {
+                    return {
+                        dependsOn: x.mount.parent,
+                        text: x.path
+                    } satisfies DependsOn
+                })
+                .toArray()
         }
 
         get volumes() {
@@ -66,9 +76,9 @@ export namespace Container {
             parent: ManifestResource,
             name: string,
             readonly subtype: "init" | "main",
-            readonly props: Props<Ports>
+            override readonly props: Props<Ports>
         ) {
-            super(parent, name)
+            super(parent, name, props)
         }
 
         private _groupedMounts() {

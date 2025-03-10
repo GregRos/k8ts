@@ -21,14 +21,9 @@ export namespace Volume {
         backend: Secret
     }
     export type Backend = PvcBackend | ConfigMapBackend | SecretBackend
-    export abstract class Volume<Props extends Backend = Backend> extends SubResource {
-        kind = "Volume" as const
-        constructor(
-            parent: ManifestResource,
-            name: string,
-            readonly props: Props
-        ) {
-            super(parent, name)
+    export abstract class Volume<Props extends Backend = Backend> extends SubResource<Props> {
+        get api() {
+            return this.parent.api.subkind("Volume")
         }
 
         abstract manifest(): CDK.Volume

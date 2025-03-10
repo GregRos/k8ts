@@ -1,17 +1,12 @@
-import { Traced } from "@k8ts/instruments"
 import type { ManifestResource } from "./base"
-import type { DependsOn } from "./node"
+import { AbsResource } from "./node"
 
-export abstract class SubResource extends Traced {
-    abstract readonly kind: string
+export abstract class SubResource<Props extends object = object> extends AbsResource<Props> {
     constructor(
         readonly parent: ManifestResource,
-        readonly name: string
+        name: string,
+        props: Props
     ) {
-        super()
-    }
-
-    get dependsOn(): DependsOn[] {
-        return []
+        super(parent.origin, name, props)
     }
 }

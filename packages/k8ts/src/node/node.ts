@@ -1,18 +1,19 @@
 import { RefKey, Traced, type Kind, type Origin } from "@k8ts/instruments"
-import type { ManifestResource } from "./base"
 import type { SubResource } from "./sub-resource"
 export interface DependsOn {
-    dependsOn: ManifestResource
+    dependsOn: AbsResource
     text: string
 }
 
-export abstract class BaseNode extends Traced {
+export abstract class AbsResource<Props extends object = object> extends Traced {
     abstract readonly api: Kind.Identifier
     constructor(
         readonly origin: Origin,
         readonly name: string,
-        readonly props: object
-    ) {}
+        readonly props: Props
+    ) {
+        super()
+    }
 
     get key() {
         return RefKey.make(this.api.name, this.name)

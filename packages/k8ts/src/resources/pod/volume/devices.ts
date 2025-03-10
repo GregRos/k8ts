@@ -12,14 +12,16 @@ export namespace Device {
     }
 
     export type Backend = PvcBackend
-    export class Device extends SubResource {
-        override kind = "Device" as const
+    export class Device extends SubResource<PvcBackend> {
+        get api() {
+            return this.parent.api.subkind("Device")
+        }
         constructor(
             parent: ManifestResource,
             name: string,
             readonly backend: PvcBackend
         ) {
-            super(parent, name)
+            super(parent, name, backend)
         }
 
         override get dependsOn() {
