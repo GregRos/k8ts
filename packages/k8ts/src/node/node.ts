@@ -15,6 +15,16 @@ export abstract class AbsResource<Props extends object = object> extends Traced 
         super()
     }
 
+    get shortName() {
+        return [this.api.name, this.name].filter(Boolean).join("/")
+    }
+
+    get href() {
+        return [this.api.text, this.namespace, this.name].filter(Boolean).join("/")
+    }
+
+    abstract get namespace(): string | undefined
+
     get key() {
         return RefKey.make(this.api.name, this.name)
     }

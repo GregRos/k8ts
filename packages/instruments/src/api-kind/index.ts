@@ -1,5 +1,10 @@
 import { hash } from "immutable"
 
+export type Kind<
+    Group extends string = string,
+    Version extends Kind.InputVersion = Kind.InputVersion,
+    Name extends string = string
+> = Kind.Kind<Group, Version, Name>
 export namespace Kind {
     export type InputVersion = `v${string}`
 

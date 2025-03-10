@@ -1,4 +1,4 @@
-import { KindMap, RootOrigin } from "@k8ts/instruments"
+import { KindMap, RootOrigin, type Kind } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { External } from "../external"
 import { File } from "../file"
@@ -31,8 +31,8 @@ export namespace World {
     export class Builder {
         constructor(readonly origin: Origin) {}
 
-        External<Kind extends string>(kind: Kind, name: string, namespace?: string) {
-            return new External(kind, name, namespace)
+        External<K extends Kind>(kind: K, name: string, namespace?: string) {
+            return new External(this.origin, kind, name, namespace)
         }
 
         File<T extends ManifestResource>(props: File.Props<Namespace, T>): File<T>

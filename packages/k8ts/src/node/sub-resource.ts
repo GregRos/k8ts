@@ -9,4 +9,8 @@ export abstract class SubResource<Props extends object = object> extends AbsReso
     ) {
         super(parent.origin, name, props)
     }
+
+    get namespace() {
+        return this.parent.namespace
+    }
 }

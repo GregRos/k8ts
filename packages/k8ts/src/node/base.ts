@@ -4,7 +4,7 @@ import { clone } from "lodash"
 import { K8tsResources } from "../resources/kind-map"
 import { AbsResource } from "./node"
 
-export function dependencies(record: Record<string, ManifestResource>) {
+export function dependencies(record: Record<string, AbsResource>) {
     return Object.entries(record).map(([text, dependsOn]) => ({ dependsOn, text }))
 }
 
@@ -31,6 +31,8 @@ export abstract class ManifestResource<Props extends object = object> extends Ab
         myClone["meta"] = f(this.meta)
         return myClone
     }
-
+    get namespace() {
+        return this.meta.get("namespace")
+    }
     abstract manifest(): object
 }

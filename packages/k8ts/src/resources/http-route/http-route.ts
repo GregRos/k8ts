@@ -9,8 +9,9 @@ import type { Service } from "../service"
 export type HttpRoute<Ports extends string> = HttpRoute.HttpRoute<Ports>
 
 export namespace HttpRoute {
+    const gwKind = gateway_v1.kind("Gateway")
     export interface Props<Ports extends string> {
-        parent: External<"Gateway">
+        parent: External<typeof gwKind>
         hostname: string
         backend: Service.Port<Ports>
     }

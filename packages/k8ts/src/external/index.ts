@@ -1,13 +1,19 @@
-export class External<Kind extends string> {
+import type { Kind, Origin } from "@k8ts/instruments"
+import { AbsResource } from "../node/node"
+
+export class External<K extends Kind> extends AbsResource {
     constructor(
-        readonly kind: Kind,
-        readonly name: string,
-        readonly namespace?: string
-    ) {}
+        origin: Origin,
+        readonly api: K,
+        name: string,
+        readonly namespace: string | undefined
+    ) {
+        super(origin, name, {})
+    }
 
     manifest() {
         return {
-            kind: this.kind,
+            kind: this.api.name,
             name: this.name,
             namespace: this.namespace
         }
