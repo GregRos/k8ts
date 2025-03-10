@@ -1,7 +1,7 @@
 import { CDK } from "@imports"
 import { type InputPortMapping } from "@k8ts/instruments"
+import { v1 } from "../../api-versions"
 import { ManifestResource } from "../../node"
-import { v1 } from "../api-version"
 import type { Deployment } from "../deployment/deployment"
 import { K8tsResources } from "../kind-map"
 import { toServicePorts } from "../utils/adapters"

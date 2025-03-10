@@ -1,8 +1,8 @@
 import type { CDK } from "@imports"
+import { gateway_v1 } from "../../api-versions"
 import type { External } from "../../external"
 import { ManifestResource } from "../../node"
 import { dependencies } from "../../node/base"
-import { gateway_v1 } from "../api-version"
 import { K8tsResources } from "../kind-map"
 import type { Service } from "../service"
 

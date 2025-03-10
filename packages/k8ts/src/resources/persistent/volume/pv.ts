@@ -1,7 +1,7 @@
 import { CDK } from "@imports"
 import type { Unit } from "@k8ts/instruments"
+import { v1 } from "../../../api-versions"
 import { ManifestResource } from "../../../node/base"
-import { v1 } from "../../api-version"
 import { K8tsResources } from "../../kind-map"
 import { Access } from "../access-mode"
 import type { DataMode } from "../block-mode"

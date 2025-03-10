@@ -33,6 +33,12 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./api-versions": {
+      "require": "./dist/api-versions.js",
+      "import": "./dist/api-versions.js",
+      "default": "./dist/api-versions.js",
+      "types": "./dist/api-versions.d.ts"
     }
   },
   "main": "dist/index.js",
