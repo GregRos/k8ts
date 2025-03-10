@@ -46,10 +46,5 @@ export namespace Emitter {
             })
         }
         private _emitFile(file: File) {}
-        emit(...files: File[]) {
-            const emitManifest = new EmitManifest()
-            for (const file of files) {
-            }
-        }
     }
 }
