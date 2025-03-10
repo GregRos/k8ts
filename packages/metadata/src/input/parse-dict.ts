@@ -5,6 +5,9 @@ import { Meta } from "../meta"
 import type { InputMeta } from "./dict-input"
 
 export function parseMetaInput(input: InputMeta): Map<ValueKey, string> {
+    if (input == null) {
+        return Map()
+    }
     if (Map.isMap(input)) {
         return input as Map<ValueKey, string>
     }

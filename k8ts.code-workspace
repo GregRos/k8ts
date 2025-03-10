@@ -9,12 +9,12 @@
             "name": "k8ts"
         },
         {
-            "path": "./packages/metadata",
-            "name": "metadata"
-        },
-        {
             "path": "./packages/instruments",
             "name": "instruments"
+        },
+        {
+            "path": "./packages/metadata",
+            "name": "metadata"
         }
     ],
     "settings": {

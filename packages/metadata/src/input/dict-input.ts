@@ -9,4 +9,4 @@ export namespace MetaInputParts {
     export type Input = Full & Heading
 }
 
-export type InputMeta = MetaInputParts.Input | Meta
+export type InputMeta = MetaInputParts.Input | Meta | undefined

@@ -1,6 +1,6 @@
-import { K8TS } from "@lib"
+import { W } from "./world"
 
-export default K8TS.File({
+export default W.File({
     scope: "cluster",
     filename: "namespace.yaml",
     *FILE(FILE) {

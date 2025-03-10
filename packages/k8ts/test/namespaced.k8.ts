@@ -1,11 +1,11 @@
 import { Image } from "@k8ts/instruments"
-import { K8TS } from "@lib"
 import k8tsFile from "./cluster-scoped.k8"
+import { W } from "./world"
 const k8sNamespace = k8tsFile["Namespace/namespace"]
 const k8sPv = k8tsFile["PersistentVolume/dev-sda"]
 const cool = k8tsFile["PersistentVolume/pv-cool"]
 
-export default K8TS.File({
+export default W.File({
     scope: k8sNamespace,
     filename: "deployment.yaml",
     *FILE(k) {
@@ -66,7 +66,7 @@ export default K8TS.File({
         yield svc2
         const route = k.DomainRoute("my-route", {
             hostname: "example.com",
-            parent: K8TS.External("Gateway", "gateway"),
+            parent: W.External("Gateway", "gateway"),
             backend: svc2.getPortRef("http")
         })
 

@@ -6,7 +6,7 @@ import { ForwardRef, RefKey } from "../reference"
 
 export type FutureExports<Exps extends LiveRefable> = FutureExports.FutureExports<Exps>
 export namespace FutureExports {
-    export type FutureExports<Exps extends LiveRefable> = _ExportsByKey<Exps> & Iterable<Exps>
+    export type FutureExports<Exps extends LiveRefable> = _ExportsByKey<Exps>
     type _ExportsByKey<Exports extends LiveRefable = LiveRefable> = {
         [E in Exports as `${E["api"]["kind"]}/${E["key"]["name"]}`]: ForwardRef<E>
     }
@@ -19,9 +19,9 @@ export namespace FutureExports {
         readonly exports: Iterable<Exports>
     }
 
-    export function make<T extends LiveRefable, Actual extends Origin>(
+    export function make<T extends LiveRefable, Actual extends object>(
         props: Props<Actual, T>
-    ): T & FutureExports<LiveRefable> {
+    ): Actual & FutureExports<LiveRefable> {
         const handler = new Handler(props)
         return new Proxy(props.actual, handler) as any
     }

@@ -149,6 +149,10 @@ export namespace Meta {
         return new Meta(parseMetaInput(input))
     }
 
+    export function splat(...input: InputMeta[]) {
+        return input.map(make).reduce((acc, meta) => acc.add(meta), make())
+    }
+
     export function is(value: any): value is Meta {
         return value instanceof Meta
     }

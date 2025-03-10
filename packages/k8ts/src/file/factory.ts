@@ -1,5 +1,5 @@
-import type { LiveRefable, Origin } from "@k8ts/instruments"
-import type { InputMeta, Meta } from "@k8ts/metadata/."
+import { ChildOrigin, type LiveRefable, type Origin } from "@k8ts/instruments"
+import { Meta } from "@k8ts/metadata/."
 import {
     ConfigMap,
     Deployment,
@@ -10,29 +10,31 @@ import {
     Secret,
     Service
 } from "../resources"
+import type { FileOrigin } from "./origin"
 
+export type Factory = Factory.Factory
 export namespace Factory {
-    export class BaseFactory {
-        constructor(
-            readonly origin: Origin,
-            readonly extra: Meta
-        ) {}
+    export type Factory = Cluster | Namespaced
+    export type FromScope<FScope extends FileOrigin.Scope> = FScope extends "cluster"
+        ? Cluster
+        : Namespaced
+
+    export class Base {
+        constructor(readonly origin: Origin) {}
 
         protected _metaWithName(name: string) {
-            return this.origin.meta.overwrite(this.extra).add({
+            return this.origin.meta.add({
                 name
             })
         }
 
-        child(name: string, meta?: InputMeta) {
-            return new (this.constructor as any)(
-                this.origin.child(name, this.extra),
-                this.extra.add(meta ?? {})
-            )
+        child(name: string, meta: Meta.Input) {
+            const childOrigin = new ChildOrigin(name, Meta.make(meta), this.origin)
+            return new (this.constructor as any)(childOrigin)
         }
     }
 
-    export class Cluster extends BaseFactory {
+    export class Cluster extends Base {
         PersistentVolume<Name extends string, Mode extends Persistent.DataMode = "Filesystem">(
             name: Name,
             props: Persistent.Volume.Props<Mode>
@@ -52,7 +54,7 @@ export namespace Factory {
         }
     }
 
-    export class Namespaced<Name extends string = string> extends BaseFactory {
+    export class Namespaced extends Base {
         Claim<Mode extends Persistent.DataMode, Name extends string>(
             name: Name,
             mode: Persistent.Claim.Props<Mode>

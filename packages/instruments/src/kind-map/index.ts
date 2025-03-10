@@ -2,7 +2,9 @@ import { Map, type Set } from "immutable"
 import { InstrumentsError } from "../error"
 
 export class KindMap {
-    private _kindOrClassMap: Map<string, Function> & Map<Function, string> = Map([]) as any
+    constructor(
+        private _kindOrClassMap: Map<string, Function> & Map<Function, string> = Map([]) as any
+    ) {}
 
     register = (kind: string) => {
         return <T extends Function>(target: T) => {
@@ -16,6 +18,10 @@ export class KindMap {
             .keySeq()
             .filter(k => typeof k === "string")
             .toSet()
+    }
+
+    merge(other: KindMap) {
+        return new KindMap(this._kindOrClassMap.merge(other._kindOrClassMap) as any)
     }
 
     private _missingClassError(kind: string) {
