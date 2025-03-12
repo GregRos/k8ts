@@ -27,7 +27,12 @@ export class ValueKey extends KeyType {
     }
 
     get suffix() {
-        return [this._section ?? "", this._name].join("")
+        const parts = []
+        if (this._section) {
+            parts.push(this._section, "/")
+        }
+        parts.push(this._name)
+        return parts.join("")
     }
 
     get str() {
@@ -38,25 +43,26 @@ export class ValueKey extends KeyType {
         if (this._section == null) {
             return null
         }
-        return new SectionKey(this._prefix, this._section)
+        return new SectionKey(this._section)
+    }
+
+    section(section: string | SectionKey) {
+        section = section instanceof SectionKey ? section.str : section
+        if (this._section) {
+            throw new Error("Already has a section")
+        }
+        return new ValueKey(this._prefix, section, this._name)
     }
 }
 
 export class SectionKey extends KeyType {
     type = "heading" as const
-    constructor(
-        readonly _prefix: string,
-        readonly _section: string
-    ) {
+    constructor(readonly _section: string) {
         super()
     }
 
     get str() {
-        return [this._prefix, this._section].join("")
-    }
-
-    toFullKey(name: string) {
-        return new ValueKey(this._prefix, this._section, name)
+        return [this._section].join("")
     }
 }
 

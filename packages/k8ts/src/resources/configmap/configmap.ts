@@ -15,7 +15,7 @@ export namespace ConfigMap {
 
         override manifest(): CDK.KubeConfigMapProps {
             return {
-                metadata: this.meta.expand(),
+                metadata: this.metadata(),
                 data: this.props.data
             }
         }

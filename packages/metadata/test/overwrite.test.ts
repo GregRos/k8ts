@@ -22,8 +22,8 @@ it("accepts mix of value and section keys", () => {
         "^annotation": "goodbye",
         name: "x",
         namespace: "y",
-        "%x/": {
-            label: "section label"
+        "x/": {
+            "%label": "section label"
         }
     })
 })

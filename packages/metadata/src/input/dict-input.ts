@@ -3,8 +3,8 @@ import type { Meta } from "../meta"
 
 export namespace MetaInputParts {
     type Of<T extends string, V> = Partial<Record<T, V>>
-    type Full = Of<Key.Value, string> & Of<Key.Section, Nested>
-    export type Nested = Of<Key.Nested, string> & Of<Key.Value, never>
+    type Full = Nested & Of<Key.Section, Nested>
+    export type Nested = Of<Key.Value, string>
     export type Heading = Of<Key.Section, Nested>
     export type Input = Full & Heading
 }

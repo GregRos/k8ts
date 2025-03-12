@@ -17,8 +17,9 @@ export namespace Deployment {
             return this.props.template.ports
         }
         manifest(): CDK.KubeDeploymentProps {
+            this.props.template.meta.add("%app", this.name)
             return {
-                metadata: this.meta.expand(),
+                metadata: this.metadata(),
                 spec: {
                     ...this.props,
                     selector: {
@@ -26,7 +27,7 @@ export namespace Deployment {
                             app: this.name
                         }
                     },
-                    template: this.props.template.setMeta(m => m.add("%app", this.name)).manifest()
+                    template: this.props.template.manifest()
                 }
             }
         }

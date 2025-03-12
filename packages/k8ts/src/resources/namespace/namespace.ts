@@ -11,11 +11,11 @@ export namespace Namespace {
     export class Namespace extends ManifestResource<Props> {
         override api = v1.kind("Namespace")
         constructor(origin: Origin, meta: Meta, props?: Props) {
-            super(origin, meta, props ?? {})
+            super(origin, meta.toMutable(), props ?? {})
         }
         override manifest(): CDK.KubeNamespaceProps {
             return {
-                metadata: this.meta.expand(),
+                metadata: this.metadata(),
                 spec: {}
             }
         }

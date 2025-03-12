@@ -13,6 +13,7 @@ export namespace FileOrigin {
     }
 
     export class FileOrigin<FScope extends Scope> extends ChildOrigin {
+        kind = "File" as const
         constructor(
             private _props: Props<FScope>,
             parent: Origin

@@ -42,7 +42,7 @@ export namespace Service {
         override manifest(): CDK.KubeServiceProps {
             const svcPorts = this.ports
             return {
-                metadata: this.meta.expand(),
+                metadata: this.metadata(),
                 spec: {
                     ports: toServicePorts(svcPorts).toArray(),
                     selector: this.props.backend.meta.pick("%app").labels,

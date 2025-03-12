@@ -18,11 +18,9 @@ export namespace Char {
 }
 
 export namespace Key {
-    export type Nested = `${string}${Char.Normal}`
-
-    export type Section = `${Char.Prefix.Custom}${string}${Char.Section}`
+    export type Section = `${Char.Normal}${string}${Char.Section}`
     export type Special = "name" | "namespace"
-    export type Value = `${Char.Prefix.Custom}${Nested}` | Special
+    export type Value = `${Char.Prefix.Custom}${string}${Char.Normal}` | Special
 
     export type Key = Section | Value
 }

@@ -13,7 +13,7 @@ export class Secret extends ManifestResource<Props> {
 
     manifest() {
         return {
-            metadata: this.meta.expand(),
+            metadata: this.metadata(),
             data: this.props.data,
             stringData: this.props.stringData
         }

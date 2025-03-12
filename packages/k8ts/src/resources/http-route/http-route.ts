@@ -28,7 +28,7 @@ export namespace HttpRoute {
         }
         manifest(): CDK.HttpRouteProps {
             return {
-                metadata: this.meta.expand(),
+                metadata: this.metadata(),
                 spec: {
                     parentRefs: [this.props.parent.manifest()],
                     hostnames: [this.props.hostname],

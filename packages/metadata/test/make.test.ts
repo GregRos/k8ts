@@ -22,8 +22,8 @@ it("accepts mix of value and section keys", () => {
         "^annotation": "goodbye",
         name: "x",
         namespace: "y",
-        "^label/": {
-            a: "A"
+        "label/": {
+            "^a": "A"
         }
     })
     expect(m.get("%label")).toBe("Hello")
@@ -78,22 +78,23 @@ describe("fails for different types of invalid keys", () => {
 it("section keys when appropriate", () => {
     expect(
         Meta.make({
-            "%f/": {
-                x: "A"
+            "f/": {
+                "%x": "A"
             }
         }).get("%f/x")
     ).toBe("A")
     expect(
         Meta.make({
-            "^label/": {
-                a: "A"
+            "label/": {
+                "^a": "A"
             }
         }).get("^label/a")
     ).toBe("A")
     expect(() =>
         Meta.make({
-            // @ts-expect-error
             "label/": {
+                // @ts-expect-error
+
                 a: "A"
             }
         })

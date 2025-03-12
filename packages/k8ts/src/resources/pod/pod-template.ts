@@ -41,7 +41,7 @@ export namespace PodTemplate {
                 .map(x => x.manifest())
                 .toArray()
             return {
-                metadata: meta.expand(),
+                metadata: this.metadata(),
                 spec: {
                     ...props,
                     containers: mainContainers.pull(),

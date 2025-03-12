@@ -36,7 +36,7 @@ export namespace Claim {
             const { storage, accessModes, mode } = this.props
             const nAccessModes = Access.parse(accessModes)
             return {
-                metadata: this.meta.expand(),
+                metadata: this.metadata(),
                 spec: {
                     accessModes: nAccessModes,
                     volumeName: this.props.bind!.name,

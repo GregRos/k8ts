@@ -5,12 +5,16 @@ import { parseKey, parseMetaInput } from "./key"
 import { ValueKey, type SectionKey } from "./key/repr"
 import { Key as Key_ } from "./key/types"
 export type Meta = Meta.Meta
+export type MutableMeta = Meta.MutableMeta
 export namespace Meta {
     export type Input = InputMeta
     export import Key = Key_
-    export class Meta {
+    export class Meta implements Iterable<[ValueKey, string]> {
         constructor(private readonly _dict: Map<ValueKey, string>) {}
 
+        [Symbol.iterator]() {
+            return this._dict.entries()[Symbol.iterator]()
+        }
         protected _create(raw: Map<ValueKey, string>) {
             return new Meta(raw)
         }
@@ -22,7 +26,7 @@ export namespace Meta {
         add(input: InputMeta): Meta
         add(a: any, b?: any) {
             return this._createWith(raw => {
-                const parsed = this._pairToMap([a, b])
+                const parsed = _pairToMap([a, b])
                 const newMap = raw.mergeWith((prev, cur, key) => {
                     throw new MetadataError(`Duplicate entry for ${key}, was ${prev} now ${cur}`, {
                         key: key.str
@@ -32,21 +36,10 @@ export namespace Meta {
             })
         }
 
-        private _pairToObject(pair: [string, string | object] | [object]) {
-            const [key, value] = pair
-            if (key instanceof Meta) {
-                return key._dict
-            }
-            if (typeof key === "string") {
-                return {
-                    [key]: value as string
-                }
-            }
-            return key
-        }
-
-        private _pairToMap(pair: [string, string | object] | [object]) {
-            return parseMetaInput(this._pairToObject(pair))
+        section(key: string) {
+            return this._createWith(raw => {
+                return raw.mapKeys(k => k.section(key))
+            })
         }
 
         overwrite(key: Key.Value, value: string): Meta
@@ -57,7 +50,7 @@ export namespace Meta {
                 return this
             }
             return this._createWith(raw => {
-                const fromPair = this._pairToMap([a, b])
+                const fromPair = _pairToMap([a, b])
                 return raw.merge(fromPair)
             })
         }
@@ -143,10 +136,35 @@ export namespace Meta {
                 annotations
             }
         }
+
+        toMutable() {
+            return new MutableMeta(this)
+        }
     }
 
-    export function make(input: InputMeta = {}) {
-        return new Meta(parseMetaInput(input))
+    export function make(key: Key.Value, value: string): Meta
+    export function make(key: Key.Section, value: MetaInputParts.Nested): Meta
+    export function make(input?: InputMeta): Meta
+    export function make(a?: any, b?: any) {
+        return new Meta(_pairToMap([a, b]))
+    }
+    function _pairToObject(pair: [string, string | object] | [object]) {
+        const [key, value] = pair
+        if (key instanceof Meta) {
+            return Map(key)
+        }
+        if (typeof key === "string") {
+            return {
+                [key]: value as string
+            }
+        }
+        return key
+    }
+    function _pairToMap(pair: [string, string | object] | [object]) {
+        return parseMetaInput(_pairToObject(pair))
+    }
+    export function makeMutable(input: InputMeta = {}) {
+        return make(input).toMutable()
     }
 
     export function splat(...input: InputMeta[]) {
@@ -155,5 +173,69 @@ export namespace Meta {
 
     export function is(value: any): value is Meta {
         return value instanceof Meta
+    }
+
+    export class MutableMeta {
+        constructor(private _meta: Meta) {}
+
+        add(key: Key.Value, value: string): this
+        add(key: Key.Section, value: MetaInputParts.Nested): this
+        add(input: InputMeta): this
+        add(a: any, b?: any) {
+            this._meta = this._meta.add(a, b)
+            return this
+        }
+
+        overwrite(key: Key.Value, value: string): this
+        overwrite(key: Key.Section, value: MetaInputParts.Nested): this
+        overwrite(input?: InputMeta): this
+        overwrite(a?: any, b?: any) {
+            this._meta = this._meta.overwrite(a, b)
+            return this
+        }
+
+        get(key: Key.Value) {
+            return this._meta.get(key)
+        }
+
+        tryGet(key: Key.Value, fallback?: string) {
+            return this._meta.tryGet(key, fallback)
+        }
+
+        has(key: Key.Value) {
+            return this._meta.has(key)
+        }
+
+        pick(...keySpecs: Key.Key[]) {
+            this._meta = this._meta.pick(...keySpecs)
+            return this
+        }
+
+        toMutable() {
+            return this
+        }
+
+        section(key: string) {
+            return new MutableMeta(this._meta.section(key))
+        }
+        get labels() {
+            return this._meta.labels
+        }
+
+        get annotations() {
+            return this._meta.annotations
+        }
+
+        get comments() {
+            return this._meta.comments
+        }
+
+        get core() {
+            return this._meta.core
+        }
+
+        toImmutable() {
+            return this._meta
+        }
     }
 }

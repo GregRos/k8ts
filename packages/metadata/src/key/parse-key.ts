@@ -1,27 +1,37 @@
 import { anyCharOf, anyStringOf, digit, lower, string, upper } from "parjs"
-import { many, map, maybe, or, qthen, stringify, then } from "parjs/combinators"
+import { many1, map, maybe, or, qthen, stringify, then, thenq } from "parjs/combinators"
 
 import { MetadataError } from "../error"
 import { SectionKey, ValueKey } from "./repr"
 
-const pPrefix = anyCharOf("%^#")
-const pSection = string("/")
+const cPrefix = anyCharOf("%^#")
+const cSection = string("/")
 
-const pExtra = anyCharOf("-_.")
-const pInterior = upper().pipe(or(lower(), digit(), pExtra))
+const cExtra = anyCharOf("-_.")
+const cInterior = upper().pipe(or(lower(), digit(), cExtra))
 
 const pSpecialKey = anyStringOf("namespace", "name").pipe(
     map(key => {
         return new ValueKey("", "", key)
     })
 )
-const pInteriorKey = pInterior.pipe(many(), stringify())
-const pKey = pPrefix.pipe(
-    then(pInteriorKey, pSection.pipe(qthen(pInteriorKey), stringify(), maybe())),
+const pCleanKey = cInterior.pipe(many1(), stringify())
+
+const pSectionKey = pCleanKey.pipe(
+    thenq(cSection),
+    map(x => new SectionKey(x))
+)
+
+const pInnerKey = cPrefix.pipe(
+    then(pCleanKey),
+    map(([prefix, name]) => {
+        return new ValueKey(prefix, "", name)
+    })
+)
+
+const pKey = cPrefix.pipe(
+    then(pCleanKey, cSection.pipe(qthen(pCleanKey), stringify(), maybe())),
     map(([prefix, nameOrSection, name]) => {
-        if (name === "") {
-            return new SectionKey(prefix, nameOrSection)
-        }
         if (name) {
             return new ValueKey(prefix, nameOrSection, name)
         }
@@ -29,12 +39,15 @@ const pKey = pPrefix.pipe(
     }),
     or(pSpecialKey)
 )
-
+const pOuterKey = pKey.pipe(or(pSectionKey))
+export function parseSectionKey(key: string) {
+    return pSectionKey.parse(key).value
+}
 export function parseInnerKey(key: string) {
-    return pInteriorKey.parse(key).value
+    return pInnerKey.parse(key).value
 }
 export function parseOuterKey(key: string) {
-    const result = pKey.parse(key)
+    const result = pOuterKey.parse(key)
     if (result.kind === "OK") {
         return result.value
     }

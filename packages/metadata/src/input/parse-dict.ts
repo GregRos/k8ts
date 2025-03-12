@@ -26,7 +26,7 @@ export function parseMetaInput(input: InputMeta): Map<ValueKey, string> {
                 if (typeof vv !== "string") {
                     throw new Error(`Expected string value for inner key ${kk}`)
                 }
-                map = map.set(outer.toFullKey(inner), vv as string)
+                map = map.set(inner.section(outer), vv as string)
             }
         } else {
             if (typeof value !== "string") {

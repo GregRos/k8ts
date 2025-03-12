@@ -1,5 +1,4 @@
-import { ChildOrigin, type LiveRefable, type Origin } from "@k8ts/instruments"
-import { Meta } from "@k8ts/metadata/."
+import { type LiveRefable, type Origin } from "@k8ts/instruments"
 import {
     ConfigMap,
     Deployment,
@@ -26,11 +25,6 @@ export namespace Factory {
             return this.origin.meta.add({
                 name
             })
-        }
-
-        child(name: string, meta: Meta.Input) {
-            const childOrigin = new ChildOrigin(name, Meta.make(meta), this.origin)
-            return new (this.constructor as any)(childOrigin)
         }
     }
 

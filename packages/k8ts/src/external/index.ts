@@ -1,14 +1,22 @@
 import type { Kind, Origin } from "@k8ts/instruments"
-import { AbsResource } from "../node/abs-resource"
+import { Meta } from "@k8ts/metadata/."
+import { ManifestResource } from "../node"
 
-export class External<K extends Kind> extends AbsResource {
+export class External<K extends Kind> extends ManifestResource {
     constructor(
         origin: Origin,
         readonly api: K,
         name: string,
-        readonly namespace: string | undefined
+        namespace: string | undefined
     ) {
-        super(origin, name, {})
+        super(
+            origin,
+            Meta.make({
+                name,
+                namespace
+            }),
+            {}
+        )
     }
 
     manifest() {

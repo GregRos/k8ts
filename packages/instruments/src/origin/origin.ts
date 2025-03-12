@@ -4,6 +4,7 @@ import type { KindMap } from "../kind-map"
 import { Traced } from "../tracing"
 
 export abstract class Origin extends Traced {
+    abstract readonly kind: string
     constructor(
         readonly name: string,
         readonly meta: Meta
@@ -12,15 +13,27 @@ export abstract class Origin extends Traced {
         this.meta = meta.overwrite("#origin", this.toString())
     }
 
-    child(name: string, meta: Meta.Input) {
-        return new ChildOrigin(name, this.meta.overwrite(meta), this)
+    isChildOf(other: Origin) {
+        return seq(this.parents).includes(other)
+    }
+
+    isParentOf(other: Origin) {
+        return other.isChildOf(this)
+    }
+
+    get shortFqn() {
+        return `${this.kind}/${this.name}`
+    }
+
+    get root(): Origin {
+        return [...this.parents].at(-1) ?? this
     }
 
     abstract get registered(): KindMap
     abstract override toString(): string
     abstract get parents(): Iterable<Origin>
 }
-export class ChildOrigin extends Origin {
+export abstract class ChildOrigin extends Origin {
     constructor(
         name: string,
         meta: Meta,
@@ -46,7 +59,7 @@ export class ChildOrigin extends Origin {
         return this.parents.join(" -> ").pull()
     }
 }
-export class RootOrigin extends Origin {
+export abstract class RootOrigin extends Origin {
     constructor(
         name: string,
         universal: Meta,

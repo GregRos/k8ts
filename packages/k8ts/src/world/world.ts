@@ -5,7 +5,6 @@ import { File } from "../file"
 import type { ManifestResource } from "../node"
 import type { Namespace } from "../resources"
 import { K8tsResources } from "../resources/kind-map"
-import { version } from "../version"
 export namespace World {
     export interface Props {
         name: string
@@ -14,17 +13,9 @@ export namespace World {
     }
 
     export class Origin extends RootOrigin {
+        kind = "World" as const
         constructor(props: Props) {
-            super(
-                props.name,
-                Meta.splat(props.meta, {
-                    "^k8ts.org/": {
-                        "produced-by": `k8ts@${version}`,
-                        world: props.name
-                    }
-                }),
-                K8tsResources.merge(props.kinds)
-            )
+            super(props.name, Meta.make(props.meta), K8tsResources.merge(props.kinds))
         }
     }
 

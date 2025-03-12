@@ -4,6 +4,9 @@ import { RefKey } from "../ref-key/ref-key"
 
 export type ForwardRef<T extends object> = ForwardRef.Core<T> & T
 export namespace ForwardRef {
+    export function is(x: any): boolean {
+        return "__reference_props__" in x
+    }
     export function make<T extends object>(props: Props<T>): ForwardRef<T> {
         const core = new Core(props)
         return new Proxy(core, new Handler(core)) as ForwardRef<T>

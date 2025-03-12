@@ -42,7 +42,7 @@ export namespace Volume {
                 ...parseBackend(pvProps.backend)
             }
             return {
-                metadata: this.meta.expand(),
+                metadata: this.metadata(),
                 spec: base
             }
         }
