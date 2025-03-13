@@ -21,11 +21,12 @@
   },
   "resolutions": {
     "@k8ts/instruments": "portal:packages/instruments",
-    "@k8ts/metadata": "portal:packages/metadata"
+    "@k8ts/metadata": "portal:packages/metadata",
+    "doddle": "portal:/C:/codegr/doddle"
   },
   "dependencies": {
     "declare-it": "^2.1.0",
-    "doddle": "^5.0.0-beta.5",
+    "doddle": "^5.0.0-beta.8",
     "immutable": "^5.0.3",
     "js-yaml": "^4.1.0",
     "ora": "^8.2.0"

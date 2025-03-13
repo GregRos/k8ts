@@ -13,7 +13,7 @@ export namespace Port {
             readonly port: Port
         ) {}
 
-        manifest() {
+        ref() {
             return {
                 kind: "Service",
                 namespace: this.service.meta.tryGet("namespace"),

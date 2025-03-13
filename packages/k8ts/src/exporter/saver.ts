@@ -1,8 +1,9 @@
+import type { Origin } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { mkdir, rm, writeFile } from "fs/promises"
 import { join } from "path"
 
-export class ManifestSaver extends Emittery<ManifestSaverEvents> {
+export class ManifestSaver extends Emittery<ManifestSaverEventsTable> {
     constructor(private readonly _options: ManifestSaverOptions) {
         super()
     }
@@ -11,8 +12,8 @@ export class ManifestSaver extends Emittery<ManifestSaverEvents> {
         return manifests.join("\n---\n")
     }
 
-    async clean() {
-        await this.emit("cleaning", {
+    async prepareOnce() {
+        await this.emit("purging", {
             outdir: this._options.outdir
         })
         await rm(this._options.outdir, {
@@ -24,9 +25,9 @@ export class ManifestSaver extends Emittery<ManifestSaverEvents> {
         await mkdir(this._options.outdir, { recursive: true })
     }
 
-    async save(name: string, manifests: string[]) {
+    async save(origin: Origin, manifests: string[]) {
         const content = this._splat(manifests)
-        const filename = `${name}.${this._options.extension}`
+        const filename = `${origin.name}.${this._options.extension}`
         await this.emit("saving", {
             filename,
             content: content
@@ -39,12 +40,12 @@ export interface SavingManifestEvent {
     filename: string
     content: string
 }
-export interface CleaningOutDirEvent {
+export interface PurgingDirEvent {
     outdir: string
 }
-export interface ManifestSaverEvents {
+export interface ManifestSaverEventsTable {
     saving: SavingManifestEvent
-    cleaning: CleaningOutDirEvent
+    purging: PurgingDirEvent
 }
 
 export interface ManifestSaverOptions {

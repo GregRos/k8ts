@@ -1,16 +1,17 @@
 import Emittery from "emittery"
 import { dump, type DumpOptions } from "js-yaml"
+import { BaseManifest } from "../manifest"
 
 export interface YamlSerializerOptions {
     jsYamlOptions: DumpOptions
 }
 export interface SerializingEvent {
-    manifest: object
+    manifest: BaseManifest
 }
-export interface YamlSerializerEvents {
+export interface YamlSerializerEventsTable {
     serializing: SerializingEvent
 }
-export class YamlSerializer extends Emittery<YamlSerializerEvents> {
+export class YamlSerializer extends Emittery<YamlSerializerEventsTable> {
     constructor(private readonly _options: Partial<YamlSerializerOptions>) {
         super()
     }

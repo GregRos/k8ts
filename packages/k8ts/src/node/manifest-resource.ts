@@ -1,5 +1,6 @@
 import { Kind, type Origin } from "@k8ts/instruments"
 import type { Meta, MutableMeta } from "@k8ts/metadata"
+import { PreManifest } from "../manifest"
 import { K8tsResources } from "../resources/kind-map"
 import { TopResource } from "./top-resource"
 
@@ -30,5 +31,5 @@ export abstract class ManifestResource<Props extends object = object> extends To
     get namespace() {
         return this.meta.get("namespace")
     }
-    abstract manifest(): Record<string, any>
+    abstract manifest(): PreManifest
 }

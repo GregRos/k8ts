@@ -5,7 +5,7 @@ import type { File } from "../file"
 import { ManifestResource } from "../node"
 import { k8ts_namespace } from "./meta"
 
-export class ResourceLoader extends Emittery<ResourceLoaderEvents> {
+export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
     constructor(private readonly _options: ResourceLoaderOptions) {
         super()
     }
@@ -88,7 +88,7 @@ export interface ResourceLoaded_FromReference {
 
 export type ResourceLoadedEvent = ResourceLoaded_FromDeclaration | ResourceLoaded_FromReference
 
-export interface ResourceLoaderEvents {
+export interface ResourceLoaderEventsTable {
     loaded: ResourceLoadedEvent
 }
 

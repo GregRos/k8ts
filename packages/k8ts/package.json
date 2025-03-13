@@ -76,7 +76,7 @@
     "consola": "^3.4.0",
     "constructs": "^10.4.2",
     "declare-it": "^2.1.0",
-    "doddle": "^5.0.0-beta.5",
+    "doddle": "portal:C:/codegr/doddle",
     "emittery": "^1.1.0",
     "immutable": "^5.0.3",
     "lodash": "^4.17.21",

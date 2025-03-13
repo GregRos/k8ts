@@ -30,11 +30,11 @@ export namespace HttpRoute {
             return {
                 metadata: this.metadata(),
                 spec: {
-                    parentRefs: [this.props.parent.manifest()],
+                    parentRefs: [this.props.parent.ref()],
                     hostnames: [this.props.hostname],
                     rules: [
                         {
-                            backendRefs: [this.props.backend.manifest()]
+                            backendRefs: [this.props.backend.ref()]
                         }
                     ]
                 }

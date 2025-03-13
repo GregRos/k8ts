@@ -53,10 +53,13 @@
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
+  "resolutions": {
+    "doddle": "portal:C:/codegr/doddle"
+  },
   "dependencies": {
     "@k8ts/metadata": "workspace:^",
     "declare-it": "^2.1.0",
-    "doddle": "^5.0.0-beta.5",
+    "doddle": "^5.0.0-beta.8",
     "immutable": "^5.0.3",
     "lodash": "^4.17.21",
     "parjs": "^1.3.9",

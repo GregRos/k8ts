@@ -2,10 +2,11 @@ import { Meta } from "@k8ts/metadata/."
 import Emittery from "emittery"
 import { cloneDeep, cloneDeepWith } from "lodash"
 import { MakeError } from "../error"
+import { BaseManifest } from "../manifest"
 import { ManifestResource } from "../node"
 import { version } from "../version"
 
-export class ManifestGenerator extends Emittery<ManifestGeneratorEvents> {
+export class ManifestGenerator extends Emittery<ManifestGeneratorEventsTable> {
     constructor(options: {}) {
         super()
     }
@@ -27,7 +28,7 @@ export class ManifestGenerator extends Emittery<ManifestGeneratorEvents> {
         const clone = cloneDeep(manifest)
         return cloneDeepWith(clone, _cleanKeys)
     }
-    private _generate(resource: ManifestResource): object {
+    private _generate(resource: ManifestResource): BaseManifest {
         const manifest = resource.manifest()
         return this._cleanManifest(manifest)
     }
@@ -51,6 +52,6 @@ export interface GeneratingManifestEvent {
     resource: ManifestResource
 }
 
-export interface ManifestGeneratorEvents {
+export interface ManifestGeneratorEventsTable {
     generating: GeneratingManifestEvent
 }

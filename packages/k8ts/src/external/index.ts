@@ -19,7 +19,11 @@ export class External<K extends Kind> extends ManifestResource {
         )
     }
 
-    manifest() {
+    manifest(): never {
+        throw new Error("External resources cannot be manifested")
+    }
+
+    ref() {
         return {
             kind: this.api.name,
             name: this.name,
