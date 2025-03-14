@@ -13,7 +13,7 @@ export namespace Namespace {
         constructor(origin: Origin, meta: Meta, props?: Props) {
             super(origin, meta.toMutable(), props ?? {})
         }
-        override manifest(): CDK.KubeNamespaceProps {
+        override manifestBody(): CDK.KubeNamespaceProps {
             return {
                 metadata: this.metadata(),
                 spec: {}

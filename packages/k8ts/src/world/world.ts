@@ -44,7 +44,7 @@ export class K8tsWorld {
             console.log("HERE", file)
             const iterator = file[Symbol.iterator]
             for (const node of file) {
-                console.log(node.manifest())
+                console.log(node.manifestBody())
             }
         })
     }

@@ -26,7 +26,7 @@ export namespace HttpRoute {
                 service: this.props.backend.service
             })
         }
-        manifest(): CDK.HttpRouteProps {
+        manifestBody(): CDK.HttpRouteProps {
             return {
                 metadata: this.metadata(),
                 spec: {

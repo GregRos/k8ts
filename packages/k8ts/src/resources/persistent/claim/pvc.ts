@@ -32,7 +32,7 @@ export namespace Claim {
             }
             return []
         }
-        manifest(): CDK.KubePersistentVolumeClaimProps {
+        manifestBody(): CDK.KubePersistentVolumeClaimProps {
             const { storage, accessModes, mode } = this.props
             const nAccessModes = Access.parse(accessModes)
             return {

@@ -1,19 +1,21 @@
-import Emittery from "emittery"
-import { List } from "immutable"
+import { List, Map } from "immutable"
 import { dump } from "js-yaml"
-import type { AbsResource } from "../node/abs-resource"
+import type { AbsResource, DependsOn } from "../node/abs-resource"
 
-export interface SummarizingEvent {
-    resource: AbsResource
-}
-export interface SummarizerEventsTable {
-    summarizing: SummarizingEvent
-}
 export interface SummarizerOptions {}
-export class Summarizer extends Emittery<SummarizerEventsTable> {
-    constructor(readonly options: SummarizerOptions) {
-        super()
+function _formatRefFromTo(node: AbsResource, edge: DependsOn) {
+    const target = edge.resource
+    let fqn = target.shortFqn
+    if (node.origin.isParentOf(target.origin)) {
+        fqn = `./${fqn}`
+    } else {
+        fqn = `${target.origin.name}:${fqn}`
     }
+
+    return `${edge.text} -> ${fqn}`
+}
+export class Summarizer {
+    constructor(readonly options: SummarizerOptions) {}
 
     private _resource(resource: AbsResource): any {
         const subs = resource.subResources.map(sub => {
@@ -21,7 +23,7 @@ export class Summarizer extends Emittery<SummarizerEventsTable> {
             const description = this._resource(sub)
             return { [heading]: description }
         })
-        const depends = resource.dependencies.map(dep => `${dep.text} --> ${dep.resource.shortFqn}`)
+        const depends = resource.dependencies.map(x => _formatRefFromTo(resource, x))
         if (depends.length === 0 && subs.length === 0) {
             return null
         }
@@ -35,7 +37,9 @@ export class Summarizer extends Emittery<SummarizerEventsTable> {
                     [resource.shortFqn]: this._resource(resource)
                 }
             })
-            .reduce(Object.assign)
+            .reduce((a, b) => {
+                return { ...a, ...b }
+            }, {})
 
         return resourceContainer
     }
@@ -48,8 +52,13 @@ export class Summarizer extends Emittery<SummarizerEventsTable> {
         })
         return result
     }
-    resources(resources: AbsResource[]) {
-        const obj = this._resources(resources)
-        return this._serialize(obj)
+
+    files(obj: { filename: string; resources: AbsResource[] }[]) {
+        const x = Map(
+            obj.map(({ filename, resources }) => {
+                return [filename, this._resources(resources)]
+            })
+        ).toJS()
+        return this._serialize(x)
     }
 }

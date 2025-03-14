@@ -1,10 +1,12 @@
 import type { Meta } from "@k8ts/metadata"
 import { seq } from "doddle"
+import { Set } from "immutable"
 import type { KindMap } from "../kind-map"
 import { Traced } from "../tracing"
 
 export abstract class Origin extends Traced {
     abstract readonly kind: string
+    private _objects = Set<object>()
     constructor(
         readonly name: string,
         readonly meta: Meta
@@ -13,8 +15,27 @@ export abstract class Origin extends Traced {
         this.meta = meta.overwrite("#origin", this.toString())
     }
 
+    attach(obj: object) {
+        this._objects = this._objects.add(obj)
+    }
+
+    getAttached() {
+        return this._objects
+    }
+
     isChildOf(other: Origin) {
-        return seq(this.parents).includes(other)
+        return seq([this, ...this.parents])
+            .some(x => x.equals(other))
+            .pull()
+    }
+
+    equals(other: Origin) {
+        return (
+            this.kind === other.kind &&
+            this.name === other.name &&
+            Object.getPrototypeOf(this) === Object.getPrototypeOf(other) &&
+            this.meta.equals(other.meta)
+        )
     }
 
     isParentOf(other: Origin) {

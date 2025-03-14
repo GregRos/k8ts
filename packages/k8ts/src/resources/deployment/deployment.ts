@@ -1,4 +1,5 @@
 import { CDK } from "@imports"
+import { omit } from "lodash"
 import { apps_v1 } from "../../api-versions"
 import { ManifestResource } from "../../node/manifest-resource"
 import { K8tsResources } from "../kind-map"
@@ -16,18 +17,21 @@ export namespace Deployment {
         get ports() {
             return this.props.template.ports
         }
-        manifest(): CDK.KubeDeploymentProps {
+        override get subResources() {
+            return [this.props.template]
+        }
+        manifestBody(): CDK.KubeDeploymentProps {
             this.props.template.meta.add("%app", this.name)
             return {
                 metadata: this.metadata(),
                 spec: {
-                    ...this.props,
+                    ...omit(this.props, "template"),
                     selector: {
                         matchLabels: {
                             app: this.name
                         }
                     },
-                    template: this.props.template.manifest()
+                    template: this.props.template.manifestBody()
                 }
             }
         }

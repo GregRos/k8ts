@@ -25,6 +25,17 @@ export namespace ForwardRef {
             this.#props = props
         }
 
+        equals(other: any) {
+            const resolved = this.#props.resolver.pull() as any
+            if (ForwardRef.is(other)) {
+                return other.equals(resolved)
+            }
+            if ("equals" in resolved) {
+                return resolved.equals(other)
+            }
+            return resolved === other
+        }
+
         get __reference_props__() {
             return this.#props
         }

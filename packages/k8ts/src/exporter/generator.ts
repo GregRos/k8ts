@@ -1,8 +1,7 @@
 import { Meta } from "@k8ts/metadata"
 import Emittery from "emittery"
-import { assign, cloneDeep, cloneDeepWith, get, isEmpty, unset } from "lodash"
-import { MakeError } from "../error"
-import { BaseManifest } from "../manifest"
+import { cloneDeep, cloneDeepWith, get, isEmpty, unset } from "lodash"
+import { BaseManifest, setK8tsResourceObject } from "../manifest"
 import { ManifestResource } from "../node"
 import { version } from "../version"
 
@@ -27,11 +26,8 @@ export class ManifestGenerator extends Emittery<ManifestGeneratorEventsTable> {
                 return obj
             }
             for (const [k, v] of Object.entries(obj)) {
-                if (v === undefined) {
-                    delete obj[k]
-                }
                 if (v == null) {
-                    throw new MakeError(`Null value found in manifest: ${k}`)
+                    delete obj[k]
                 }
             }
             return undefined
@@ -41,12 +37,7 @@ export class ManifestGenerator extends Emittery<ManifestGeneratorEventsTable> {
         return cloneDeepWith(clone, _cleanKeys)
     }
     private _generate(resource: ManifestResource): BaseManifest {
-        const resourceKindIdents = {
-            kind: resource.api.name,
-            apiVersion: resource.api.version
-        }
-        const manifest = assign(resource.manifest(), resourceKindIdents)
-        assign(manifest, resourceKindIdents)
+        const manifest = resource.manifest()
         const noNullish = this._cleanNullishValues(manifest)
         const noEmpty = this._cleanSpecificEmptyObjects(noNullish)
         return noEmpty
@@ -64,6 +55,7 @@ export class ManifestGenerator extends Emittery<ManifestGeneratorEventsTable> {
         this._attachProductionAnnotations(res)
         await this.emit("generating", { resource: res })
         const manifest = this._generate(res)
+        setK8tsResourceObject(manifest, res)
         return manifest
     }
 }

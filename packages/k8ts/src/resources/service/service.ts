@@ -39,7 +39,7 @@ export namespace Service {
             return new Port.Port(this, port)
         }
 
-        override manifest(): CDK.KubeServiceProps {
+        override manifestBody(): CDK.KubeServiceProps {
             const svcPorts = this.ports
             return {
                 metadata: this.metadata(),

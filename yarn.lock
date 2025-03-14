@@ -6822,7 +6822,7 @@ __metadata:
     rxjs: "npm:^7.8.2"
     shx: "npm:^0.3.4"
     stacktracey: "npm:^2.1.8"
-    typescript: "npm:^5.5.2"
+    typescript: "npm:^5.8.2"
     vfile: "npm:^6.0.3"
     yamprint: "npm:^0.8.4"
   languageName: unknown
@@ -9460,7 +9460,7 @@ __metadata:
     ts-node: "npm:^10.9.2"
     typedoc: "npm:0.25.13"
     typedoc-plugin-internal-external: "npm:2.2.0"
-    typescript: "npm:^5.5.2"
+    typescript: "npm:^5.8.2"
   languageName: unknown
   linkType: soft
 
@@ -10871,7 +10871,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.5.2, typescript@npm:^5.8.2":
+"typescript@npm:^5.8.2":
   version: 5.8.2
   resolution: "typescript@npm:5.8.2"
   bin:
@@ -10931,7 +10931,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.5.2#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.8.2#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A^5.8.2#optional!builtin<compat/typescript>":
   version: 5.8.2
   resolution: "typescript@patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"
   bin:

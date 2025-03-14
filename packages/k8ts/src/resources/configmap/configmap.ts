@@ -13,7 +13,7 @@ export namespace ConfigMap {
     export class ConfigMap extends ManifestResource<Props> {
         override api = v1.kind("ConfigMap")
 
-        override manifest(): CDK.KubeConfigMapProps {
+        override manifestBody(): CDK.KubeConfigMapProps {
             return {
                 metadata: this.metadata(),
                 data: this.props.data

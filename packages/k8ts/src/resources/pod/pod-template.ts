@@ -1,8 +1,9 @@
 import { CDK } from "@imports"
 import { seq } from "doddle"
+import { omit } from "lodash"
 import { apps_v1 } from "../../api-versions"
+import { AbsResource } from "../../node/abs-resource"
 import { ManifestResource } from "../../node/manifest-resource"
-import type { SubResource } from "../../node/sub-resource"
 import { K8tsResources } from "../kind-map"
 import { Container } from "./container"
 import { Device, Volume } from "./volume"
@@ -21,10 +22,10 @@ export namespace PodTemplate {
         readonly mounts = seq(() => this.containers.concatMap(x => x.mounts)).cache()
         readonly ports = seq(() => this.containers.map(x => x.ports)).reduce((a, b) => a.union(b))
 
-        override get subResources(): SubResource[] {
+        override get subResources(): AbsResource[] {
             return [...this.containers, ...this.mounts.map(x => x.mount.parent)]
         }
-        manifest(): CDK.PodTemplateSpec {
+        manifestBody(): CDK.PodTemplateSpec {
             const { meta, props } = this
             const containers = this.containers
             const initContainers = containers
@@ -43,7 +44,7 @@ export namespace PodTemplate {
             return {
                 metadata: this.metadata(),
                 spec: {
-                    ...props,
+                    ...omit(props, "POD"),
                     containers: mainContainers.pull(),
                     initContainers: initContainers.pull(),
                     volumes: volumes.pull()

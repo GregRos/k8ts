@@ -25,7 +25,7 @@ export namespace Volume {
     export class Volume<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
         readonly api = v1.kind("PersistentVolume")
 
-        manifest(): CDK.KubePersistentVolumeProps {
+        manifestBody(): CDK.KubePersistentVolumeProps {
             const pvProps = this.props
             const accessModes = Access.parse(pvProps.accessModes)
             let base: CDK.PersistentVolumeSpec = {

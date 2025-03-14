@@ -22,7 +22,7 @@ export class External<K extends Kind> extends ManifestResource {
         )
     }
 
-    manifest(): never {
+    manifestBody(): never {
         throw new Error("External resources cannot be manifested")
     }
 

@@ -4,6 +4,7 @@ import { mkdir, rm, writeFile } from "fs/promises"
 import { join } from "path"
 
 export class ManifestSaver extends Emittery<ManifestSaverEventsTable> {
+    private _encoder = new TextEncoder()
     constructor(private readonly _options: ManifestSaverOptions) {
         super()
     }
@@ -33,7 +34,13 @@ export class ManifestSaver extends Emittery<ManifestSaverEventsTable> {
             content: content
         })
         await mkdir(this._options.outdir, { recursive: true })
-        await writeFile(join(this._options.outdir, filename), content)
+        const encoded = this._encoder.encode(content)
+        await writeFile(join(this._options.outdir, filename), encoded)
+        return {
+            manifests,
+            filename,
+            bytes: encoded.byteLength
+        }
     }
 }
 export interface SavingManifestEvent {

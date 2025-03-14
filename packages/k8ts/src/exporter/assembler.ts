@@ -3,7 +3,6 @@ import Emittery from "emittery"
 import type { File } from "../file"
 import { ManifestGenerator, type ManifestGeneratorEventsTable } from "./generator"
 import { ResourceLoader, type ResourceLoaderEventsTable } from "./loader"
-import { Summarizer, SummarizerEventsTable } from "./reporter"
 import { ManifestSaver, type ManifestSaverEventsTable, type ManifestSaverOptions } from "./saver"
 import { YamlSerializer, type YamlSerializerEventsTable } from "./serializer"
 
@@ -27,8 +26,6 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
         serializer.onAny(_emit)
         const saver = new ManifestSaver(this._options.saver)
         saver.onAny(_emit)
-        const reporter = new Summarizer({})
-        reporter.onAny(_emit)
         const reports = aseq(inFiles)
             .before(async () => {
                 await _emit("stage", { stage: "gathering" })
@@ -44,7 +41,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
                 const loaded = await loader.load(file)
                 return {
                     file,
-                    resources: loaded
+                    resources: loaded.filter(x => !x.isExternal)
                 }
             })
             .after(async () => {
@@ -53,16 +50,17 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
             .collect()
             .map(async ({ file, resources }) => {
                 const manifests = await aseq(resources)
-                    .filter(x => !x.isExternal)
                     .map(async resource => {
-                        return generator.generate(resource)
+                        return {
+                            k8ts: resource,
+                            manifest: await generator.generate(resource)
+                        }
                     })
                     .toArray()
                     .pull()
 
                 return {
                     file,
-                    resources,
                     manifests
                 }
             })
@@ -70,17 +68,19 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
                 await _emit("stage", { stage: "serializing" })
             })
             .collect()
-            .map(async ({ file, manifests, resources }) => {
+            .map(async ({ file, manifests }) => {
                 const serialized = await aseq(manifests)
-                    .map(async res => {
-                        return serializer.serialize(res)
+                    .map(async obj => {
+                        return {
+                            ...obj,
+                            yaml: await serializer.serialize(obj.manifest)
+                        }
                     })
                     .toArray()
                     .pull()
 
                 return {
                     file,
-                    resources: resources,
                     serialized
                 }
             })
@@ -91,26 +91,21 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
                 await saver.prepareOnce()
             })
             .collect()
-            .each(async ({ file, serialized }) => {
-                await saver.prepareOnce()
-                await saver.save(file.__origin__, serialized)
-            })
-            .after(async () => {
-                await _emit("stage", { stage: "reporting" })
-            })
-            .collect()
-            .map(async ({ file, resources }) => {
+            .map(async ({ file, serialized }) => {
+                const { filename, bytes } = await saver.save(
+                    file.__origin__,
+                    serialized.map(x => x.yaml)
+                )
                 return {
-                    filename: file.__origin__.name,
-                    report: reporter.resources(resources)
+                    filename,
+                    bytes,
+                    serialized
                 }
-            })
-            .each(x => {
-                console.log(x.report)
             })
             .after(async () => {
                 await _emit("stage", { stage: "done" })
             })
+            .collect()
             .toArray()
         return reports.pull()
     }
@@ -130,8 +125,7 @@ export interface AssemblerEventsTable
     extends ManifestSaverEventsTable,
         YamlSerializerEventsTable,
         ManifestGeneratorEventsTable,
-        ResourceLoaderEventsTable,
-        SummarizerEventsTable {
+        ResourceLoaderEventsTable {
     ["received-file"]: { file: File.Input }
     ["stage"]: { stage: AssemblyStage }
 }

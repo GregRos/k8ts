@@ -11,7 +11,7 @@ export interface Props {
 export class Secret extends ManifestResource<Props> {
     api = v1.kind("Secret")
 
-    manifest() {
+    manifestBody() {
         return {
             metadata: this.metadata(),
             data: this.props.data,

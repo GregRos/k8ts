@@ -1,6 +1,7 @@
 import Emittery from "emittery"
 import { dump, type DumpOptions } from "js-yaml"
-import { BaseManifest } from "../manifest"
+import { MakeError } from "../error"
+import { BaseManifest, getK8tsResourceObject } from "../manifest"
 
 export interface YamlSerializerOptions {
     jsYamlOptions: DumpOptions
@@ -19,13 +20,20 @@ export class YamlSerializer extends Emittery<YamlSerializerEventsTable> {
     async serialize(input: BaseManifest) {
         await this.emit("serializing", { manifest: input })
 
-        const result = dump(input, {
-            lineWidth: 800,
-            noArrayIndent: true,
-            indent: 2,
-            ...this._options.jsYamlOptions,
-            noRefs: true
-        })
-        return result
+        try {
+            const result = dump(input, {
+                lineWidth: 800,
+                noArrayIndent: true,
+                indent: 2,
+                ...this._options.jsYamlOptions,
+                noRefs: true
+            })
+            return result
+        } catch (err) {
+            const resource = getK8tsResourceObject(input)
+            throw new MakeError(`Failed to serialize manifest ${resource?.shortFqn ?? "???"}`, {
+                cause: err
+            })
+        }
     }
 }

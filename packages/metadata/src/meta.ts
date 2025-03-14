@@ -36,6 +36,10 @@ export namespace Meta {
             })
         }
 
+        equals(other: Meta.Input) {
+            return this._dict.equals(make(other)._dict)
+        }
+
         section(key: string) {
             return this._createWith(raw => {
                 return raw.mapKeys(k => k.section(key))
@@ -193,7 +197,9 @@ export namespace Meta {
             this._meta = this._meta.overwrite(a, b)
             return this
         }
-
+        equals(other: Meta.Input) {
+            return this._meta.equals(other)
+        }
         get(key: Key.Value) {
             return this._meta.get(key)
         }

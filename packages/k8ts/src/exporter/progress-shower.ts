@@ -1,8 +1,10 @@
 import ora from "ora"
 import { setTimeout } from "timers/promises"
+import { getK8tsResourceObject } from "../manifest"
 import type { Assembler, AssemblerEventsTable } from "./assembler"
 export interface ProgressOptions {
     waitTransition: number
+    debug: boolean
 }
 
 function typedOnAny(
@@ -38,17 +40,16 @@ export class ProgressShower {
                     }
                     break
                 case "received-file":
-                    spinner.text = `Received file ${event.file}`
+                    spinner.text = `Received file ${event.file.__origin__.name}`
                     break
                 case "serializing":
-                    spinner.text = `Serializing ${event.manifest.shortFqn}`
+                    const rsc = getK8tsResourceObject(event.manifest)
+                    spinner.text = `Serializing ${rsc.shortFqn}`
                     break
                 case "saving":
                     spinner.text = `Saving ${event.content.length} bytes to ${event.filename}`
                     break
-                case "summarizing":
-                    spinner.text = `Summarizing ${event.resource.shortFqn}`
-                    break
+
                 case "generating":
                     spinner.text = `Generating ${event.resource.shortFqn}`
                     break
@@ -56,7 +57,12 @@ export class ProgressShower {
                     spinner.text = `Purging ${event.outdir}`
                     break
             }
-            await setTimeout(200)
+            if (this._options.waitTransition) {
+                await setTimeout(this._options.waitTransition)
+            }
+            if (this._options.debug) {
+                console.log()
+            }
             spinner.render()
         })
 

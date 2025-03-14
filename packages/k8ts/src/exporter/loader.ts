@@ -47,7 +47,8 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
         }
 
         for (const curRes of resources) {
-            for (const curDep of curRes.dependencies) {
+            const allDependencies = curRes.getAllRecursiveDependencies()
+            for (const curDep of allDependencies) {
                 if (resources.map(x => x.key).includes(curDep.resource.key)) {
                     continue
                 }

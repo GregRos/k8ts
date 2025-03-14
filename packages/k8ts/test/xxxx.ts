@@ -4,8 +4,10 @@ import namespaced from "./namespaced.k8"
 Error.stackTraceLimit = Infinity
 async function main() {
     const runner = new Runner({
+        summarizer: {},
         progress: {
-            waitTransition: 1
+            waitTransition: 1,
+            debug: true
         },
         saver: {
             extension: "yaml",

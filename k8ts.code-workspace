@@ -1,10 +1,6 @@
 {
     "folders": [
         {
-            "path": ".",
-            "name": "root"
-        },
-        {
             "path": "./packages/k8ts",
             "name": "k8ts"
         },
@@ -15,12 +11,15 @@
         {
             "path": "./packages/metadata",
             "name": "metadata"
+        },
+        {
+            "path": ".",
+            "name": "root"
         }
     ],
     "settings": {
         "python.analysis.ignore": ["**/node_modules/**", "**/.git/**"],
         "jest.disabledWorkspaceFolders": ["root"],
-
         "files.exclude": {
             "packages/k8ts": true,
             "packages/instruments": true,
@@ -53,7 +52,6 @@
             "docs": true,
             "**/node_modules": true
         },
-        "typescript.tsserver.experimental.enableProjectDiagnostics": true,
         // GregRos @ 2024
         // For this to work, you need the 'APC Customize UI++' extension.
         // It will color the rows in the explorer view based on the workspace folder.
@@ -67,7 +65,6 @@
                 "background-image": "linear-gradient(to right, #6EED1314, transparent)",
                 "border-left": "2px solid #6EED137C"
             }
-        },
-        "typescript.tsdk": "root\\node_modules\\typescript\\lib"
+        }
     }
 }

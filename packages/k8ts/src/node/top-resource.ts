@@ -6,5 +6,6 @@ export abstract class TopResource<Props extends object = object> extends AbsReso
     abstract readonly namespace: string | undefined
     constructor(origin: Origin, name: string, props: Props) {
         super(origin, name, props)
+        origin.attach(this)
     }
 }

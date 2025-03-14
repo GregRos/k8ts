@@ -1,8 +1,10 @@
 import { Assembler, AssemblerOptions, ProgressOptions, ProgressShower } from "../exporter"
 import { File } from "../file"
+import { Summarizer, SummarizerOptions } from "./summarizer"
 
 export interface RunnerOptions extends AssemblerOptions {
     progress: ProgressOptions
+    summarizer: SummarizerOptions
 }
 
 export class Runner {
@@ -11,13 +13,16 @@ export class Runner {
     async run(input: Iterable<File.Input>) {
         const progressShower = new ProgressShower(this._options.progress)
         const assembler = new Assembler(this._options)
+        const summarizer = new Summarizer(this._options.summarizer)
         const visualizer = progressShower.visualize(assembler)
-
         const result = await assembler.assemble(input)
-
-        for (const { report, filename } of result) {
-            console.log(`${filename}\n${report}`)
-        }
+        const viz = summarizer.files(
+            result.map(x => ({
+                filename: x.filename,
+                resources: x.serialized.map(x => x.k8ts)
+            }))
+        )
         await visualizer
+        console.log("\n", viz)
     }
 }

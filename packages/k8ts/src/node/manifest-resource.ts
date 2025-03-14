@@ -1,12 +1,20 @@
 import { Kind, type Origin } from "@k8ts/instruments"
 import type { Meta, MutableMeta } from "@k8ts/metadata"
-import { PreManifest } from "../manifest"
+import { Set } from "immutable"
+import { BaseManifest, PreManifest, SOURCE } from "../manifest"
 import { K8tsResources } from "../resources/kind-map"
 import { TopResource } from "./top-resource"
 
 export abstract class ManifestResource<Props extends object = object> extends TopResource<Props> {
     get isExternal() {
         return false
+    }
+    private static _constructed = Set<ManifestResource>()
+    private static _register(self: ManifestResource) {
+        this._constructed = this._constructed.add(self)
+    }
+    static getAllConstructed() {
+        return this._constructed
     }
     abstract override readonly api: Kind.Kind
     readonly meta: MutableMeta
@@ -34,5 +42,20 @@ export abstract class ManifestResource<Props extends object = object> extends To
     get namespace() {
         return this.meta.tryGet("namespace")
     }
-    abstract manifest(): PreManifest
+
+    manifestIdents() {
+        return {
+            kind: this.api.name,
+            apiVersion: this.api.version.text
+        }
+    }
+    abstract manifestBody(): PreManifest
+
+    manifest(): BaseManifest {
+        return {
+            ...(this.manifestBody() as any),
+            ...this.manifestIdents(),
+            [SOURCE]: this
+        }
+    }
 }
