@@ -5,6 +5,6 @@ export class Traced {
     readonly trace?: List<StackTracey.Entry>
 
     constructor() {
-        this.trace = List(new StackTracey().items)
+        this.trace = undefined
     }
 }

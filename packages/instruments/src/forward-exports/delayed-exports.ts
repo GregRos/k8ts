@@ -61,7 +61,11 @@ export namespace FutureExports {
         get(target: any, property: string | symbol): any {
             const key = property as string
             if (Reflect.has(this._target, key)) {
-                return Reflect.get(target, property)
+                const x = Reflect.get(this._target, property)
+                if (typeof x === "function") {
+                    return x.bind(this._target)
+                }
+                return x
             }
             const refKey = RefKey.tryParse(property)
             if (!refKey) {
@@ -135,7 +139,7 @@ export namespace FutureExports {
             if (desc) {
                 return desc
             }
-            const value = this.get(target, p)
+            const value = this.get(this._target, p)
             if (value == null) {
                 return undefined
             }

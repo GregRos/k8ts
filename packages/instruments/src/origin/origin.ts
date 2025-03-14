@@ -29,6 +29,8 @@ export abstract class Origin extends Traced {
         return [...this.parents].at(-1) ?? this
     }
 
+    abstract get parent(): Origin | undefined
+
     abstract get registered(): KindMap
     abstract override toString(): string
     abstract get parents(): Iterable<Origin>
@@ -48,9 +50,10 @@ export abstract class ChildOrigin extends Origin {
     override get parents() {
         const self = this
         return seq(function* () {
-            const cur = self
-            while (cur.parent) {
+            let cur = self as Origin
+            while (cur.parent && cur.parent !== cur) {
                 yield cur.parent
+                cur = cur.parent
             }
         })
     }
@@ -66,6 +69,9 @@ export abstract class RootOrigin extends Origin {
         readonly registered: KindMap
     ) {
         super(name, universal)
+    }
+    get parent() {
+        return undefined
     }
     override get parents() {
         return []

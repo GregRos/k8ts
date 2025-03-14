@@ -16,6 +16,7 @@ export namespace File {
         FILE: Exports.Producer<Scope, Produced>
     }
 
+    export type Input = Exports.Core & Iterable<ManifestResource>
     export type File<T extends ManifestResource> = Exports.Core & FutureExports<T>
 
     export function make<Scope extends FileOrigin.Scope, Produced extends ManifestResource>(

@@ -5,6 +5,9 @@ import { K8tsResources } from "../resources/kind-map"
 import { TopResource } from "./top-resource"
 
 export abstract class ManifestResource<Props extends object = object> extends TopResource<Props> {
+    get isExternal() {
+        return false
+    }
     abstract override readonly api: Kind.Kind
     readonly meta: MutableMeta
     constructor(origin: Origin, meta: Meta | MutableMeta, props: Props) {
@@ -13,7 +16,7 @@ export abstract class ManifestResource<Props extends object = object> extends To
         const self = this
         ;(async () => {
             await new Promise(resolve => setTimeout(resolve, 0))
-            if (!K8tsResources.has(self.api.name)) {
+            if (!K8tsResources.has(self.api.name) && !self.isExternal) {
                 throw new Error(`No kind registered for ${self.api.name}`)
             }
         })()
@@ -24,12 +27,12 @@ export abstract class ManifestResource<Props extends object = object> extends To
             labels: this.meta.labels,
             annotations: this.meta.annotations,
             name: this.meta.get("name"),
-            namespace: this.meta.get("namespace")
+            namespace: this.meta.tryGet("namespace")
         }
     }
 
     get namespace() {
-        return this.meta.get("namespace")
+        return this.meta.tryGet("namespace")
     }
     abstract manifest(): PreManifest
 }

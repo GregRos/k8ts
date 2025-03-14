@@ -16,7 +16,7 @@ export class YamlSerializer extends Emittery<YamlSerializerEventsTable> {
         super()
     }
 
-    async serialize(input: object) {
+    async serialize(input: BaseManifest) {
         await this.emit("serializing", { manifest: input })
 
         const result = dump(input, {

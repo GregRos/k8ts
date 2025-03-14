@@ -7,25 +7,29 @@ import { Summarizer, SummarizerEventsTable } from "./reporter"
 import { ManifestSaver, type ManifestSaverEventsTable, type ManifestSaverOptions } from "./saver"
 import { YamlSerializer, type YamlSerializerEventsTable } from "./serializer"
 
-export class Assembler {
-    constructor(private readonly _options: AssemblerOptions) {}
+export class Assembler extends Emittery<AssemblerEventsTable> {
+    constructor(private readonly _options: AssemblerOptions) {
+        super()
+    }
 
-    async assemble(inFiles: Iterable<File>) {
-        const emittery = new Emittery<AssemblerEventsTable>()
-        function _emit<Name extends keyof AssemblerEventsTable>(
+    assemble(inFiles: Iterable<File.Input>) {
+        const _emit = async <Name extends keyof AssemblerEventsTable>(
             event: Name,
             payload: AssemblerEventsTable[Name]
-        ) {
-            return emittery.emit(event, payload)
+        ) => {
+            return await this.emit(event, payload)
         }
         const loader = new ResourceLoader({})
-
+        loader.onAny(_emit)
         const generator = new ManifestGenerator({})
+        generator.onAny(_emit)
         const serializer = new YamlSerializer({})
+        serializer.onAny(_emit)
         const saver = new ManifestSaver(this._options.saver)
+        saver.onAny(_emit)
         const reporter = new Summarizer({})
-
-        const assemblyLine = aseq(inFiles)
+        reporter.onAny(_emit)
+        const reports = aseq(inFiles)
             .before(async () => {
                 await _emit("stage", { stage: "gathering" })
             })
@@ -48,9 +52,13 @@ export class Assembler {
             })
             .collect()
             .map(async ({ file, resources }) => {
-                const manifests = aseq(resources).map(async resource => {
-                    return generator.generate(resource)
-                })
+                const manifests = await aseq(resources)
+                    .filter(x => !x.isExternal)
+                    .map(async resource => {
+                        return generator.generate(resource)
+                    })
+                    .toArray()
+                    .pull()
 
                 return {
                     file,
@@ -63,7 +71,7 @@ export class Assembler {
             })
             .collect()
             .map(async ({ file, manifests, resources }) => {
-                const serialized = await aseq(resources)
+                const serialized = await aseq(manifests)
                     .map(async res => {
                         return serializer.serialize(res)
                     })
@@ -94,23 +102,17 @@ export class Assembler {
             .map(async ({ file, resources }) => {
                 return {
                     filename: file.__origin__.name,
-                    report: reporter.describeAll(resources)
+                    report: reporter.resources(resources)
                 }
+            })
+            .each(x => {
+                console.log(x.report)
             })
             .after(async () => {
                 await _emit("stage", { stage: "done" })
             })
             .toArray()
-
-        return {
-            assembly: assemblyLine,
-            events: aseq(emittery.anyEvent()).map(([type, payload]) => {
-                return {
-                    type,
-                    payload
-                }
-            })
-        }
+        return reports.pull()
     }
 }
 export interface AssemblerOptions {
@@ -127,10 +129,10 @@ export type AssemblyStage =
 export interface AssemblerEventsTable
     extends ManifestSaverEventsTable,
         YamlSerializerEventsTable,
-        ResourceLoaderEventsTable,
         ManifestGeneratorEventsTable,
+        ResourceLoaderEventsTable,
         SummarizerEventsTable {
-    ["received-file"]: { file: File }
+    ["received-file"]: { file: File.Input }
     ["stage"]: { stage: AssemblyStage }
 }
 export type AnyAssemblerEvent = {

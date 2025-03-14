@@ -17,6 +17,9 @@ export function parseMetaInput(input: InputMeta): Map<ValueKey, string> {
     let map = Map<ValueKey, string>()
     for (const [key, value] of Object.entries(input)) {
         const outer = parseOuterKey(key)
+        if (value == null) {
+            continue
+        }
         if (outer instanceof SectionKey) {
             if (typeof value !== "object") {
                 throw new Error(`Expected object for section key ${key}`)

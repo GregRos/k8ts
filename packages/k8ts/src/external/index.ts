@@ -1,8 +1,11 @@
 import type { Kind, Origin } from "@k8ts/instruments"
-import { Meta } from "@k8ts/metadata/."
+import { Meta } from "@k8ts/metadata"
 import { ManifestResource } from "../node"
 
 export class External<K extends Kind> extends ManifestResource {
+    override get isExternal() {
+        return true
+    }
     constructor(
         origin: Origin,
         readonly api: K,

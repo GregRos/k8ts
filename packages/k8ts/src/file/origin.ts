@@ -1,5 +1,5 @@
 import { ChildOrigin, type Origin } from "@k8ts/instruments"
-import { Meta } from "@k8ts/metadata/."
+import { Meta } from "@k8ts/metadata"
 import type { Namespace } from "../resources"
 export type FileOrigin<FScope extends FileOrigin.Scope = FileOrigin.Scope> =
     FileOrigin.FileOrigin<FScope>

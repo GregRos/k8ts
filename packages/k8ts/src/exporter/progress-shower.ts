@@ -1,41 +1,65 @@
-import { type ASeq } from "doddle"
 import ora from "ora"
-import type { AnyAssemblerEvent } from "./assembler"
-export interface VisualizerOptions {
+import { setTimeout } from "timers/promises"
+import type { Assembler, AssemblerEventsTable } from "./assembler"
+export interface ProgressOptions {
     waitTransition: number
 }
 
-export class ProgressShower {
-    spinner = ora("K8ts is getting ready...")
-    constructor() {}
+function typedOnAny(
+    target: Assembler,
+    handler: (
+        typedEvent: {
+            [K in keyof AssemblerEventsTable]: AssemblerEventsTable[K] & { type: K }
+        }[keyof AssemblerEventsTable]
+    ) => void | Promise<void>
+) {
+    return target.onAny((name, ev) => {
+        return handler({ ...ev, type: name } as any)
+    })
+}
 
-    async visualize(events: ASeq<AnyAssemblerEvent>) {
-        await events
-            .matchMap("type", {
-                stage: async ({ stage }) => {
-                    this.spinner.start(`STAGE: ${stage}`)
-                },
-                "received-file": ({ file }) => {
-                    this.spinner.start(`Got file: ${file.__origin__.name}`)
-                },
-                serializing: ({ manifest }) => {
-                    this.spinner.start(`Serializing ${manifest.kind}/${manifest.name}`)
-                },
-                saving: ({ filename, content }) => {
-                    this.spinner.start(`Saving ${content.length} bytes to ${filename}`)
-                },
-                summarizing: ({ resource }) => {
-                    this.spinner.start(`Summarizing ${resource.shortFqn}`)
-                },
-                generating: ({ resource }) => {
-                    this.spinner.start(`Generating ${resource.shortFqn}`)
-                },
-                purging: ({ outdir }) => {
-                    this.spinner.warn(`Purging ${outdir}`)
-                }
-            })
-            .delay(100)
-            .drain()
-            .pull()
+export class ProgressShower {
+    constructor(private readonly _options: ProgressOptions) {}
+    async visualize(events: Assembler) {
+        const spinner = ora({
+            spinner: "dots",
+            text: "K8ts is getting ready..."
+        })
+        spinner.text = "abc"
+        const unsub = typedOnAny(events, async event => {
+            switch (event.type) {
+                case "loading":
+                    spinner.text = `Loading ${event.resource.shortFqn} (${event.subtype})`
+                    break
+                case "stage":
+                    spinner.text = `Stage: ${event.stage}`
+                    if (event.stage === "done") {
+                        unsub()
+                    }
+                    break
+                case "received-file":
+                    spinner.text = `Received file ${event.file}`
+                    break
+                case "serializing":
+                    spinner.text = `Serializing ${event.manifest.shortFqn}`
+                    break
+                case "saving":
+                    spinner.text = `Saving ${event.content.length} bytes to ${event.filename}`
+                    break
+                case "summarizing":
+                    spinner.text = `Summarizing ${event.resource.shortFqn}`
+                    break
+                case "generating":
+                    spinner.text = `Generating ${event.resource.shortFqn}`
+                    break
+                case "purging":
+                    spinner.text = `Purging ${event.outdir}`
+                    break
+            }
+            await setTimeout(200)
+            spinner.render()
+        })
+
+        spinner.clear()
     }
 }

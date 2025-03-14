@@ -1,6 +1,6 @@
-import { Meta } from "@k8ts/metadata/."
+import { Meta } from "@k8ts/metadata"
 import Emittery from "emittery"
-import { cloneDeep, cloneDeepWith } from "lodash"
+import { assign, cloneDeep, cloneDeepWith, get, isEmpty, unset } from "lodash"
 import { MakeError } from "../error"
 import { BaseManifest } from "../manifest"
 import { ManifestResource } from "../node"
@@ -10,14 +10,25 @@ export class ManifestGenerator extends Emittery<ManifestGeneratorEventsTable> {
     constructor(options: {}) {
         super()
     }
-    private _cleanManifest(manifest: Record<string, any>) {
+    private _cleanSpecificEmptyObjects(manifest: BaseManifest) {
+        const clone = cloneDeep(manifest)
+        const metadataProps = ["labels", "annotations"].map(x => `metadata.${x}`)
+        for (const deletableEmpty of ["labels", "annotations"].map(x => `metadata.${x}`)) {
+            const value = get(clone, deletableEmpty)
+            if (isEmpty(value)) {
+                unset(clone, deletableEmpty)
+            }
+        }
+        return clone
+    }
+    private _cleanNullishValues(manifest: BaseManifest) {
         const _cleanKeys = (obj: any) => {
             if (typeof obj !== "object") {
                 return obj
             }
-            for (const [k, v] of Object.entries(manifest)) {
+            for (const [k, v] of Object.entries(obj)) {
                 if (v === undefined) {
-                    delete manifest[k]
+                    delete obj[k]
                 }
                 if (v == null) {
                     throw new MakeError(`Null value found in manifest: ${k}`)
@@ -26,11 +37,19 @@ export class ManifestGenerator extends Emittery<ManifestGeneratorEventsTable> {
             return undefined
         }
         const clone = cloneDeep(manifest)
+
         return cloneDeepWith(clone, _cleanKeys)
     }
     private _generate(resource: ManifestResource): BaseManifest {
-        const manifest = resource.manifest()
-        return this._cleanManifest(manifest)
+        const resourceKindIdents = {
+            kind: resource.api.name,
+            apiVersion: resource.api.version
+        }
+        const manifest = assign(resource.manifest(), resourceKindIdents)
+        assign(manifest, resourceKindIdents)
+        const noNullish = this._cleanNullishValues(manifest)
+        const noEmpty = this._cleanSpecificEmptyObjects(noNullish)
+        return noEmpty
     }
     private _attachProductionAnnotations(resource: ManifestResource) {
         const origin = resource.origin

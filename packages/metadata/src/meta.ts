@@ -207,12 +207,12 @@ export namespace Meta {
         }
 
         pick(...keySpecs: Key.Key[]) {
-            this._meta = this._meta.pick(...keySpecs)
-            return this
+            const newMeta = this._meta.pick(...keySpecs)
+            return new MutableMeta(newMeta)
         }
 
         toMutable() {
-            return this
+            return new MutableMeta(this._meta)
         }
 
         section(key: string) {

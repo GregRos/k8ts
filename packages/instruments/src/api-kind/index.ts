@@ -58,6 +58,10 @@ export namespace Kind {
         kind<Kind extends string>(kind: Kind) {
             return new Kind(kind, this)
         }
+
+        get group() {
+            return this.parent
+        }
     }
 
     export class Kind<
@@ -66,7 +70,11 @@ export namespace Kind {
         const Name extends string = string
     > extends Identifier<Name, _Version<Group, V>> {
         get version() {
-            return this.parent.text
+            return this.parent
+        }
+
+        get group() {
+            return this.parent?.parent
         }
 
         subkind(subkind: string) {
