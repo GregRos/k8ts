@@ -1,8 +1,10 @@
 import { Seq, seq } from "doddle/."
 import { Set } from "immutable"
 import { Kind } from "../api-kind"
+import { KindMap } from "../kind-map"
 import { RefKey } from "../ref-key"
 import { ForwardRef } from "../reference"
+import { Traced } from "../tracing"
 
 export type Formats = "short" | "fqn" | "shortFqn"
 
@@ -23,7 +25,7 @@ export class NeedsEdge<Node extends X_Node<Node>> {
 export abstract class X_Node<
     Node extends X_Node<Node, Entity>,
     Entity extends X_Entity<Node> = X_Entity<Node>
-> {
+> extends Traced {
     abstract hashCode(): number
     abstract readonly kind: Kind.Identifier
     abstract readonly kids: Seq<Node>
@@ -33,7 +35,9 @@ export abstract class X_Node<
     constructor(
         readonly parent: Node | null,
         protected readonly _entity: Entity
-    ) {}
+    ) {
+        super()
+    }
     get root() {
         return this.ancestors.at(-1)
     }
@@ -149,14 +153,38 @@ export abstract class R_Node extends X_Node<R_Node, R_Entity> {
 }
 
 export interface O_Entity extends X_Entity<O_Node> {}
-const ATTACH = Symbol.for("k8ts/node/origin/attach")
-export abstract class O_Node extends X_Node<O_Node, O_Entity> {
-    private _resources = seq.empty<R_Node>();
-    [ATTACH](resources: Iterable<R_Node>) {
-        this._resources = this._resources.concat(resources).cache()
+export abstract class O_Node extends X_Node<O_Node, O_Entity> implements Iterable<R_Node> {
+    private _kindMap = new KindMap()
+    private _attached = seq.empty<R_Node>();
+
+    [Symbol.iterator]() {
+        return this.resources[Symbol.iterator]()
+    }
+    readonly attachedTree: Seq<R_Node> = seq(() => {
+        const self = this
+        const desc = self.descendants.prepend(this).concatMap(function* (x) {
+            yield* self.resources
+            for (const kid of self.kids) {
+                yield* kid.resources
+            }
+        })
+        return desc
+    }).cache()
+
+    get resources() {
+        return this._attached
     }
 
-    get attached() {
-        return this._resources
+    __attach_kind__(kind: Kind.Identifier) {
+        return <F extends Function>(ctor: F) => {
+            this._kindMap.add(kind, ctor)
+            return ctor
+        }
+    }
+
+    __attach_instance__(resources: Iterable<R_Node>) {
+        this._attached = this._attached.concat(resources)
     }
 }
+
+let a: O_Node = null!

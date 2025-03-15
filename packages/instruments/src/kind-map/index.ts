@@ -26,6 +26,14 @@ export class KindMap {
         }
     }
 
+    add(kind: Kind.Identifier, klass: Function) {
+        this._bindEntry({
+            kind: kind.name,
+            class: klass,
+            ident: kind
+        })
+    }
+
     register = (kind: Kind.Identifier) => {
         return <T extends Function>(target: T) => {
             this._bindEntry({
