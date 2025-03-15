@@ -11,9 +11,10 @@ export namespace Deployment {
         template: PodTemplate<Ports>
     }
 
-    @K8tsResources.register("Deployment")
+    const ident = apps_v1.kind("Deployment")
+    @K8tsResources.register(ident)
     export class Deployment<Ports extends string = string> extends ManifestResource<Props<Ports>> {
-        api = apps_v1.kind("Deployment")
+        api = ident
         get ports() {
             return this.props.template.ports
         }

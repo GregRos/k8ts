@@ -44,15 +44,12 @@ export class Runner {
         const summarizer = new Summarizer(this._options.summarizer)
         const visualizer = progressShower.visualize(assembler)
         const result = await assembler.assemble(input)
-        const dangling = this._options.checkDanglingRefs
-            ? this._computeDanglingObjects(result)
-            : undefined
+
         const viz = summarizer.files(
             result.map(x => ({
                 filename: x.filename,
                 resources: x.artifacts.map(x => x.k8ts)
-            })),
-            dangling?.toArray()
+            }))
         )
 
         await visualizer

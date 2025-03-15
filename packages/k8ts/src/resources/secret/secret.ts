@@ -7,9 +7,10 @@ export interface Props {
     stringData: Record<string, string>
 }
 
-@K8tsResources.register("Secret")
+const ident = v1.kind("Secret")
+@K8tsResources.register(ident)
 export class Secret extends ManifestResource<Props> {
-    api = v1.kind("Secret")
+    api = ident
 
     manifestBody() {
         return {

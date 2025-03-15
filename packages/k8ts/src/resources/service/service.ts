@@ -19,9 +19,10 @@ export namespace Service {
         frontend: Frontend
     }
 
-    @K8tsResources.register("Service")
+    const ident = v1.kind("Service")
+    @K8tsResources.register(ident)
     export class Service<Ports extends string = string> extends ManifestResource<Props<Ports>> {
-        api = v1.kind("Service")
+        api = ident
 
         get ports() {
             const srcPorts = this.props.backend.ports.pull()

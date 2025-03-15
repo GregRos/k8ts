@@ -2,7 +2,7 @@ import { seq } from "doddle"
 import { ProxyOperationError } from "../error"
 import type { Origin } from "../origin"
 import type { LiveRefable } from "../reference"
-import { ForwardRef, RefKey } from "../reference"
+import { ForwardRef } from "../reference"
 
 export type FutureExports<Exps extends LiveRefable> = FutureExports.FutureExports<Exps>
 export namespace FutureExports {
@@ -51,7 +51,7 @@ export namespace FutureExports {
         }
 
         #isValidReferant(prop: PropertyKey) {
-            return RefKey.tryParse(prop as any)
+            return this._props.origin.registered.tryParse(prop as string) != null
         }
 
         get _target() {
@@ -67,11 +67,11 @@ export namespace FutureExports {
                 }
                 return x
             }
-            const refKey = RefKey.tryParse(property)
+            const refKey = this._props.origin.registered.tryParse(key)
             if (!refKey) {
                 return undefined
             }
-            const cls = this._props.origin.registered.get(refKey.kind)
+            const cls = this._props.origin.registered.getClass(key)
             return ForwardRef.make({
                 class: cls,
                 key: refKey,

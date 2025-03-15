@@ -24,7 +24,7 @@ export abstract class ManifestResource<Props extends object = object> extends To
         const self = this
         ;(async () => {
             await new Promise(resolve => setTimeout(resolve, 0))
-            if (!K8tsResources.has(self.api.name) && !self.isExternal) {
+            if (!K8tsResources.tryGetClass(self.api.name) && !self.isExternal) {
                 throw new Error(`No kind registered for ${self.api.name}`)
             }
         })()

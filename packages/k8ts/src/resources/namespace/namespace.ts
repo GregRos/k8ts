@@ -7,9 +7,10 @@ import { K8tsResources } from "../kind-map"
 export type Namespace = Namespace.Namespace
 export namespace Namespace {
     export interface Props {}
-    @K8tsResources.register("Namespace")
+    const ident = v1.kind("Namespace")
+    @K8tsResources.register(ident)
     export class Namespace extends ManifestResource<Props> {
-        override api = v1.kind("Namespace")
+        override api = ident
         constructor(origin: Origin, meta: Meta, props?: Props) {
             super(origin, meta.toMutable(), props ?? {})
         }

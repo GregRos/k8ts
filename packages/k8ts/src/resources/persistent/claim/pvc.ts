@@ -21,9 +21,10 @@ export namespace Claim {
         bind: Volume.Volume<Mode>
     }
 
-    @K8tsResources.register("PersistentVolumeClaim")
+    const ident = v1.kind("PersistentVolumeClaim")
+    @K8tsResources.register(ident)
     export class Claim<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
-        api = v1.kind("PersistentVolumeClaim")
+        api = ident
         override get dependencies() {
             if (this.props.bind) {
                 return dependencies({

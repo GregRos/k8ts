@@ -4,7 +4,6 @@ import { cloneDeep, cloneDeepWith, get, isEmpty, unset } from "lodash"
 import { BaseManifest, setK8tsResourceObject } from "../manifest"
 import { ManifestResource } from "../node"
 import { version } from "../version"
-
 export class ManifestGenerator extends Emittery<ManifestGeneratorEventsTable> {
     constructor(options: {}) {
         super()

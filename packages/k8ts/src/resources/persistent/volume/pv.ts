@@ -21,9 +21,10 @@ export namespace Volume {
     }
     export type Reclaim = "Retain" | "Delete" | "Recycle"
 
-    @K8tsResources.register("PersistentVolume")
+    const ident = v1.kind("PersistentVolume")
+    @K8tsResources.register(ident)
     export class Volume<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
-        readonly api = v1.kind("PersistentVolume")
+        readonly api = ident
 
         manifestBody(): CDK.KubePersistentVolumeProps {
             const pvProps = this.props

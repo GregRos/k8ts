@@ -1,7 +1,6 @@
 import { Map } from "immutable"
 import { PortError } from "./error"
 import type { PortMapEntry } from "./types"
-
 export class PortMap<Names extends string> {
     constructor(private readonly _map: Map<string, PortMapEntry>) {}
 

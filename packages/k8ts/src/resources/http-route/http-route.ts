@@ -16,7 +16,8 @@ export namespace HttpRoute {
         backend: Service.Port<Ports>
     }
 
-    @K8tsResources.register("HttpRoute")
+    const kind = gateway_v1.kind("HttpRoute")
+    @K8tsResources.register(kind)
     export class HttpRoute<Ports extends string> extends ManifestResource<Props<Ports>> {
         api = gateway_v1.kind("HttpRoute")
 
