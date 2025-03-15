@@ -7,7 +7,7 @@ export namespace FileOrigin {
     export type Scope = Namespace | "cluster"
 
     export interface Props<FScope extends Scope = Scope> {
-        filename: string
+        name: string
         meta?: Meta.Input
         scope: FScope
     }
@@ -18,7 +18,7 @@ export namespace FileOrigin {
             private _props: Props<FScope>,
             parent: Origin
         ) {
-            super(_props.filename, Meta.make(_props.meta), parent)
+            super(_props.name, Meta.make(_props.meta), parent)
         }
 
         get scope() {

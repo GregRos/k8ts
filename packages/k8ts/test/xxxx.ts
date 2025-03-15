@@ -12,7 +12,8 @@ async function main() {
         saver: {
             extension: "yaml",
             outdir: ".k8ts"
-        }
+        },
+        checkDanglingRefs: true
     })
 
     runner.run([cluster, namespaced]).catch(console.error)

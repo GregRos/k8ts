@@ -1,4 +1,5 @@
 import { RefKey, Traced, type Kind, type Origin } from "@k8ts/instruments"
+import { hash, List } from "immutable"
 export interface DependsOn {
     resource: AbsResource
     text: string
@@ -15,7 +16,7 @@ export abstract class AbsResource<Props extends object = object> extends Traced 
     }
 
     get shortFqn() {
-        return [this.api.name, this.name].filter(Boolean).join("/")
+        return [this.origin.name, [this.api.name, this.name].filter(Boolean).join("/")].join(":")
     }
 
     get key() {
@@ -26,9 +27,20 @@ export abstract class AbsResource<Props extends object = object> extends Traced 
         return []
     }
 
-    equals(other: AbsResource): boolean {
+    equals(other: any): boolean {
         // TODO: implement
-        return this === other
+        if (!(other instanceof AbsResource)) {
+            return false
+        }
+        return (
+            this.api.equals(other.api) &&
+            this.key.equals(other.key) &&
+            this.origin.equals(other.origin)
+        )
+    }
+
+    hashCode() {
+        return hash(List.of(this.api as any, this.key, this.origin))
     }
 
     getResourceSubtree(): AbsResource[] {

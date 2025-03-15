@@ -1,6 +1,9 @@
 import { aseq, type ASeq, type DoddleAsync } from "doddle"
 import Emittery from "emittery"
 import type { File } from "../file"
+import { FileOrigin } from "../file/origin"
+import { BaseManifest } from "../manifest"
+import { AbsResource } from "../node/abs-resource"
 import { ManifestGenerator, type ManifestGeneratorEventsTable } from "./generator"
 import { ResourceLoader, type ResourceLoaderEventsTable } from "./loader"
 import { ManifestSaver, type ManifestSaverEventsTable, type ManifestSaverOptions } from "./saver"
@@ -11,7 +14,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
         super()
     }
 
-    assemble(inFiles: Iterable<File.Input>) {
+    async assemble(inFiles: Iterable<File.Input>) {
         const _emit = async <Name extends keyof AssemblerEventsTable>(
             event: Name,
             payload: AssemblerEventsTable[Name]
@@ -40,7 +43,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
             .map(async file => {
                 const loaded = await loader.load(file)
                 return {
-                    file,
+                    file: file.__origin__,
                     resources: loaded.filter(x => !x.isExternal)
                 }
             })
@@ -69,7 +72,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
             })
             .collect()
             .map(async ({ file, manifests }) => {
-                const serialized = await aseq(manifests)
+                const artifacts = await aseq(manifests)
                     .map(async obj => {
                         return {
                             ...obj,
@@ -81,7 +84,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
 
                 return {
                     file,
-                    serialized
+                    artifacts
                 }
             })
             .after(async () => {
@@ -91,15 +94,16 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
                 await saver.prepareOnce()
             })
             .collect()
-            .map(async ({ file, serialized }) => {
+            .map(async ({ file, artifacts }) => {
                 const { filename, bytes } = await saver.save(
-                    file.__origin__,
-                    serialized.map(x => x.yaml)
+                    file,
+                    artifacts.map(x => x.yaml)
                 )
                 return {
+                    file,
                     filename,
                     bytes,
-                    serialized
+                    artifacts
                 }
             })
             .after(async () => {
@@ -107,8 +111,19 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
             })
             .collect()
             .toArray()
-        return reports.pull()
+        return (await reports.pull()) satisfies AssembledFile[]
     }
+}
+export interface Artifact {
+    k8ts: AbsResource
+    manifest: BaseManifest
+    yaml: string
+}
+export interface AssembledFile {
+    file: FileOrigin
+    filename: string
+    bytes: number
+    artifacts: Artifact[]
 }
 export interface AssemblerOptions {
     saver: ManifestSaverOptions

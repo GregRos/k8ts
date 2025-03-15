@@ -1,4 +1,5 @@
 import type { Doddle } from "doddle"
+import { hash, List } from "immutable"
 import { ProxyOperationError } from "../error"
 import { RefKey } from "../ref-key/ref-key"
 
@@ -34,6 +35,10 @@ export namespace ForwardRef {
                 return resolved.equals(other)
             }
             return resolved === other
+        }
+
+        hashCode() {
+            return hash(List.of(this.#props.key, this.#props.origin))
         }
 
         get __reference_props__() {

@@ -1,6 +1,8 @@
+import { Origin } from "@k8ts/instruments"
+import { seq } from "doddle"
 import { List, Map } from "immutable"
 import { dump } from "js-yaml"
-import type { AbsResource, DependsOn } from "../node/abs-resource"
+import { AbsResource, DependsOn } from "../node/abs-resource"
 
 export interface SummarizerOptions {}
 function _formatRefFromTo(node: AbsResource, edge: DependsOn) {
@@ -43,6 +45,13 @@ export class Summarizer {
 
         return resourceContainer
     }
+
+    private _origin(origin: Origin): object {
+        return {
+            [origin.shortFqn]: null
+        }
+    }
+
     private _serialize(input: object) {
         const result = dump(input, {
             lineWidth: 800,
@@ -53,12 +62,34 @@ export class Summarizer {
         return result
     }
 
-    files(obj: { filename: string; resources: AbsResource[] }[]) {
-        const x = Map(
-            obj.map(({ filename, resources }) => {
-                return [filename, this._resources(resources)]
-            })
-        ).toJS()
+    files(
+        obj: { filename: string; resources: AbsResource[] }[],
+        dangling?: (AbsResource | Origin)[]
+    ) {
+        let pairs = obj.map(({ filename, resources }) => {
+            return [filename, this._resources(resources)] as [string, object]
+        })
+        if (dangling) {
+            const resources = seq(dangling)
+                .filter(x => x instanceof AbsResource)
+                .toArray()
+                .pull()
+            const r = this._resources(resources)
+            const origins = seq(dangling)
+                .filter(x => x instanceof Origin)
+                .map(x => this._origin(x))
+                .reduce(
+                    (a, b) => ({
+                        ...a,
+                        ...b
+                    }),
+                    {}
+                )
+                .pull()
+            Object.assign(r, origins)
+            pairs = [...pairs, ["Dangling", r]]
+        }
+        const x = Map(pairs).toJS()
         return this._serialize(x)
     }
 }
