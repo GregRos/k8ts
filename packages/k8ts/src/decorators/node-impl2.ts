@@ -1,15 +1,15 @@
 import { NeedsEdge, ResourceNodeImplTypes } from "@k8ts/instruments"
+import { META_MixinImplInput, TraitDecorator } from "@k8ts/instruments/src/_traits/object-impl"
 import { seq } from "doddle"
 import { ManifestResource } from "../node"
 import { AbsResource } from "../node/abs-resource"
-import { InputDecoritized, ObjectMixinDecorator } from "./base"
 
 export type TypeInputs = {
-    parent: AbsResource | null
-    kids: AbsResource[]
-    needs: Record<string, ManifestResource>
+    parent?: AbsResource | null
+    kids?: AbsResource[]
+    needs?: Record<string, ManifestResource>
 }
-const manager = new ObjectMixinDecorator<AbsResource, TypeInputs, ResourceNodeImplTypes>(
+const manager = new TraitDecorator<AbsResource, TypeInputs, ResourceNodeImplTypes>(
     "nodeImplementation",
     {
         parent(x) {
@@ -24,7 +24,7 @@ const manager = new ObjectMixinDecorator<AbsResource, TypeInputs, ResourceNodeIm
     }
 )
 export function connections<F extends { new (...args: any[]): AbsResource }>(
-    thing: InputDecoritized<InstanceType<F>, TypeInputs>
+    thing: META_MixinImplInput<InstanceType<F>, TypeInputs>
 ) {
     return (ctor: F) => {
         manager.set(ctor.prototype, thing as any)

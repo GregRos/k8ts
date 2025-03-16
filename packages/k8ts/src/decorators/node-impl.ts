@@ -1,9 +1,9 @@
 import { ResourceNodeImpl } from "@k8ts/instruments"
+import { META_MixinImplInput } from "@k8ts/instruments/src/_traits/object-impl"
 import { MakeError } from "../error"
 import { ManifestResource } from "../node"
 import { AbsResource } from "../node/abs-resource"
 import { dependencies } from "../node/dependencies"
-import { InputDecoritized } from "./base"
 
 class ResourceNodeImplWrapper implements ResourceNodeImpl {
     constructor(
@@ -33,7 +33,7 @@ export namespace ResourceImplManager {
         kids: AbsResource[]
         needs: Record<string, ManifestResource>
     }
-    export type Input<S> = InputDecoritized<TypeInputs, S>
+    export type Input<S> = META_MixinImplInput<TypeInputs, S>
 
     export function get(self: AbsResource): ResourceNodeImpl {
         if (!has(self)) {
