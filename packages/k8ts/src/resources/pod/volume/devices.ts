@@ -13,8 +13,8 @@ export namespace Device {
 
     export type Backend = PvcBackend
     export class Device extends SubResource<PvcBackend> {
-        get api() {
-            return this.parent.api.subkind("Device")
+        get kind() {
+            return this.parent.kind.subkind("Device")
         }
         constructor(
             parent: ManifestResource,

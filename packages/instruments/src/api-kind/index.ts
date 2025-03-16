@@ -8,7 +8,7 @@ export type Kind<
 export namespace Kind {
     export type InputVersion = `v${string}`
 
-    interface IdentParent {
+    export interface IdentParent {
         text: string
         name: string
     }

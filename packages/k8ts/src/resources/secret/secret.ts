@@ -10,7 +10,7 @@ export interface Props {
 const ident = v1.kind("Secret")
 @K8tsResources.register(ident)
 export class Secret extends ManifestResource<Props> {
-    api = ident
+    kind = ident
 
     manifestBody() {
         return {

@@ -10,7 +10,7 @@ export namespace Namespace {
     const ident = v1.kind("Namespace")
     @K8tsResources.register(ident)
     export class Namespace extends ManifestResource<Props> {
-        override api = ident
+        override kind = ident
         constructor(origin: Origin, meta: Meta, props?: Props) {
             super(origin, meta.toMutable(), props ?? {})
         }

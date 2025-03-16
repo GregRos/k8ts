@@ -143,10 +143,11 @@ export class KindMap {
         return this._getEntry(kindOrClass).ident
     }
 
+    tryGetClass(refKey: RefKey.RefKey): Function | undefined
     tryGetClass<F extends Function>(klass: F): F
     tryGetClass(kind: string): Function | undefined
     tryGetClass(ident: Kind.Identifier): Function | undefined
-    tryGetClass(kindOrIdent: string | Kind.Identifier): Function | undefined {
+    tryGetClass(kindOrIdent: LookupKey | RefKey.RefKey): Function | undefined {
         return this._tryGetEntry(kindOrIdent)?.class
     }
 

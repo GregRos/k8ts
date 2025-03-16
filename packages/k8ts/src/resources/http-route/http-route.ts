@@ -1,5 +1,6 @@
 import type { CDK } from "@imports"
 import { gateway_v1 } from "../../api-versions"
+import { connections } from "../../decorators/node-impl"
 import type { External } from "../../external"
 import { ManifestResource } from "../../node"
 import { dependencies } from "../../node/dependencies"
@@ -18,8 +19,14 @@ export namespace HttpRoute {
 
     const kind = gateway_v1.kind("HttpRoute")
     @K8tsResources.register(kind)
+    @connections({
+        needs: self => ({
+            gateway: self.props.parent,
+            service: self.props.backend.service
+        })
+    })
     export class HttpRoute<Ports extends string> extends ManifestResource<Props<Ports>> {
-        api = gateway_v1.kind("HttpRoute")
+        kind = gateway_v1.kind("HttpRoute")
 
         override get dependencies() {
             return dependencies({

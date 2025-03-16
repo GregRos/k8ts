@@ -24,9 +24,9 @@ export namespace FileExports {
             this.#props = props
             const producer = Producer.map(props.FILE, () => {
                 if (props.origin.scope === "cluster") {
-                    return new Factory.Cluster(props.origin)
+                    return new Factory.Cluster(props.origin.node)
                 } else {
-                    return new Factory.Namespaced(props.origin)
+                    return new Factory.Namespaced(props.origin.node)
                 }
             })
             this.#produced = seq(() => producer(props.origin))
@@ -47,7 +47,7 @@ export namespace FileExports {
         const core = new Core(props)
         return FutureExports.make({
             actual: core,
-            origin: props.origin,
+            origin: props.origin.node,
             exports: core
         }) as any
     }

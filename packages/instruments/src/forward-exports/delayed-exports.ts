@@ -1,6 +1,6 @@
 import { seq } from "doddle"
 import { ProxyOperationError } from "../error"
-import type { Origin } from "../origin"
+import { Origin } from "../graph/node"
 import type { LiveRefable } from "../reference"
 import { ForwardRef } from "../reference"
 
@@ -8,7 +8,7 @@ export type FutureExports<Exps extends LiveRefable> = FutureExports.FutureExport
 export namespace FutureExports {
     export type FutureExports<Exps extends LiveRefable> = _ExportsByKey<Exps>
     type _ExportsByKey<Exports extends LiveRefable = LiveRefable> = {
-        [E in Exports as `${E["api"]["name"]}/${E["key"]["name"]}`]: ForwardRef<E>
+        [E in Exports as `${E["kind"]["name"]}/${E["node"]["key"]["name"]}`]: ForwardRef<E>
     }
     export interface Props<
         Actual extends object = object,
@@ -51,7 +51,7 @@ export namespace FutureExports {
         }
 
         #isValidReferant(prop: PropertyKey) {
-            return this._props.origin.registered.tryParse(prop as string) != null
+            return this._props.origin.resourceKinds.tryParse(prop as string) != null
         }
 
         get _target() {
@@ -67,18 +67,21 @@ export namespace FutureExports {
                 }
                 return x
             }
-            const refKey = this._props.origin.registered.tryParse(key)
-            if (!refKey) {
-                return undefined
+
+            const refKey = this._props.origin.resourceKinds.tryParse(key)
+            if (refKey == null) {
+                throw new ProxyOperationError(
+                    `Failed to resolve forward reference to ${key} in ${this._props.origin}.`
+                )
             }
-            const cls = this._props.origin.registered.getClass(key)
+            const cls = this._props.origin.resourceKinds.getClass(refKey)
             return ForwardRef.make({
                 class: cls,
                 key: refKey,
                 origin: this._props.origin,
                 namespace: this._props.origin.meta.tryGet("namespace"),
                 resolver: this.seq
-                    .find(exp => exp.key.equals(refKey))
+                    .find(exp => exp.node.key.equals(refKey))
                     .map(x => {
                         if (x == null) {
                             throw new ProxyOperationError(

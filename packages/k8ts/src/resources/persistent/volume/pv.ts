@@ -24,9 +24,10 @@ export namespace Volume {
     const ident = v1.kind("PersistentVolume")
     @K8tsResources.register(ident)
     export class Volume<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
-        readonly api = ident
+        readonly kind = ident
 
         manifestBody(): CDK.KubePersistentVolumeProps {
+            this.
             const pvProps = this.props
             const accessModes = Access.parse(pvProps.accessModes)
             let base: CDK.PersistentVolumeSpec = {

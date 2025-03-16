@@ -22,8 +22,8 @@ export namespace Volume {
     }
     export type Backend = PvcBackend | ConfigMapBackend | SecretBackend
     export abstract class Volume<Props extends Backend = Backend> extends SubResource<Props> {
-        get api() {
-            return this.parent.api.subkind("Volume")
+        get kind() {
+            return this.parent.kind.subkind("Volume")
         }
 
         abstract manifest(): CDK.Volume
@@ -74,7 +74,7 @@ export namespace Volume {
 
     export function make(parent: ManifestResource, name: string, input: Backend): Volume {
         const { backend } = input
-        switch (backend.api.name) {
+        switch (backend.kind.name) {
             case "PersistentVolumeClaim":
                 return new PvcVolume(parent, name, input as PvcBackend)
             case "ConfigMap":

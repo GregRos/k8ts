@@ -12,7 +12,7 @@ export namespace ConfigMap {
     const ident = v1.kind("ConfigMap")
     @K8tsResources.register(ident)
     export class ConfigMap extends ManifestResource<Props> {
-        override api = ident
+        override kind = ident
 
         override manifestBody(): CDK.KubeConfigMapProps {
             return {

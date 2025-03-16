@@ -26,8 +26,8 @@ export class Runner {
                 ...x.artifacts.flatMap(x => [x.k8ts, ...x.k8ts.getResourceSubtree()])
             ])
         )
-        const rootOrigins = Set(result.map(x => x.file.root))
-        const allConstructed = Set(rootOrigins.flatMap(x => x.getAttachedTree()))
+        const rootOrigins = Set(result.map(x => x.file.node.root))
+        const allConstructed = Set(rootOrigins.flatMap(x => x.attachedTree))
         const diff = allConstructed.subtract(allObjects).filter(x => {
             if (x instanceof ManifestResource) {
                 if (x.isExternal) {

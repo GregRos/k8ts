@@ -18,7 +18,7 @@ export namespace PodTemplate {
     const ident = apps_v1.kind("PodTemplate")
     @K8tsResources.register(ident)
     export class PodTemplate<Ports extends string = string> extends ManifestResource<Props<Ports>> {
-        api = ident
+        kind = ident
         readonly containers = seq(() => this.props.POD(new PodScope(this))).cache()
         readonly mounts = seq(() => this.containers.concatMap(x => x.mounts)).cache()
         readonly ports = seq(() => this.containers.map(x => x.ports)).reduce((a, b) => a.union(b))

@@ -38,8 +38,8 @@ export namespace Container {
         resources?: Resources
     }
     export class Container<Ports extends string> extends SubResource<Props<Ports>> {
-        get api() {
-            return this.parent.api.subkind("Container")
+        get kind() {
+            return this.parent.kind.subkind("Container")
         }
         get mounts() {
             return Map(this.props.mounts ?? {})

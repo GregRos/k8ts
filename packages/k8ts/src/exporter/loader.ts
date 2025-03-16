@@ -47,31 +47,31 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
         }
 
         for (const curRes of resources) {
-            const allDependencies = curRes.getAllRecursiveDependencies()
+            const allDependencies = curRes.node.needsGraph
             for (const curDep of allDependencies) {
-                if (resources.map(x => x.key).includes(curDep.resource.key)) {
+                const needed = curDep.needed
+                if (resources.map(x => x.node.key).includes(needed.key)) {
                     continue
                 }
-                if (ForwardRef.is(curDep.resource)) {
+                if (ForwardRef.is(needed)) {
                     continue
                 }
-                if (!(curDep.resource instanceof ManifestResource)) {
+                if (!(needed instanceof ManifestResource)) {
                     throw new MakeError(
-                        `Resource ${curRes} cannot depend on ${curDep.resource}, since it is not a manifest resource`
+                        `Resource ${curRes} cannot depend on ${needed}, since it is not a manifest resource`
                     )
                 }
 
                 const e = {
                     subtype: "referenced",
-                    resource: curDep.resource,
+                    resource: needed,
                     broughtBy: curRes
                 } as const
                 this._attachSourceAnnotations(e)
 
                 await this.emit("loading", e)
 
-                const depResource = curDep.resource
-                resources = resources.push(depResource)
+                resources = resources.push(needed.entity as ManifestResource)
             }
         }
         return resources.toArray()

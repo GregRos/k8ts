@@ -1,8 +1,9 @@
-import { ChildOrigin, type Origin } from "@k8ts/instruments"
+import { __impl, Origin, RefKey } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
+import { k8tsBuildKind } from "../k8ts-sys-kind"
 import type { Namespace } from "../resources"
 export type FileOrigin<FScope extends FileOrigin.Scope = FileOrigin.Scope> =
-    FileOrigin.FileOrigin<FScope>
+    FileOrigin.FileEntity<FScope>
 export namespace FileOrigin {
     export type Scope = Namespace | "cluster"
 
@@ -11,25 +12,32 @@ export namespace FileOrigin {
         meta?: Meta.Input
         scope: FScope
     }
+    export class FileEntity<FScope extends Scope> implements __impl {
+        kind = k8tsBuildKind.kind("File")
+        readonly node: Origin
+        get meta() {
+            return Meta.make(this.props.meta)
+        }
 
-    export class FileOrigin<FScope extends Scope> extends ChildOrigin {
-        kind = "File" as const
+        get name() {
+            return this.props.name
+        }
         constructor(
-            private _props: Props<FScope>,
+            readonly props: Props<FScope>,
             parent: Origin
         ) {
-            super(_props.name, Meta.make(_props.meta), parent)
+            this.node = new Origin(parent, this, RefKey.make(this.kind, props.name))
         }
 
         get scope() {
-            return this._props.scope
+            return this.props.scope
         }
     }
 
     export function make<FScope extends Scope>(
         props: Props<FScope>,
         parent: Origin
-    ): FileOrigin<FScope> {
-        return new FileOrigin(props, parent)
+    ): FileEntity<FScope> {
+        return new FileEntity(props, parent)
     }
 }

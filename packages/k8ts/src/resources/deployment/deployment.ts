@@ -14,12 +14,9 @@ export namespace Deployment {
     const ident = apps_v1.kind("Deployment")
     @K8tsResources.register(ident)
     export class Deployment<Ports extends string = string> extends ManifestResource<Props<Ports>> {
-        api = ident
+        kind = ident
         get ports() {
             return this.props.template.ports
-        }
-        override get subResources() {
-            return [this.props.template]
         }
         manifestBody(): CDK.KubeDeploymentProps {
             this.props.template.meta.add("%app", this.name)

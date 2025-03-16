@@ -5,6 +5,12 @@ export type RefKey<Kind extends string = string, Name extends string = string> =
     Name
 >
 export namespace RefKey {
+    export function make<K extends string, Name extends string>(
+        kind: Kind.Identifier<K>,
+        name: Name
+    ): RefKey<K, Name> {
+        return new RefKey(kind, name)
+    }
     export type Input = RefKey | RefKey["string"]
     export type Format<Kind extends string, Name extends string> = `${Kind}/${Name}`
     const separator = "/"

@@ -1,12 +1,12 @@
-import { Origin } from "@k8ts/instruments"
+import { NeedsEdge, Origin, ResourceNode } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { List, Map } from "immutable"
 import { dump } from "js-yaml"
-import { AbsResource, DependsOn } from "../node/abs-resource"
+import { AbsResource } from "../node/abs-resource"
 
 export interface SummarizerOptions {}
-function _formatRefFromTo(node: AbsResource, edge: DependsOn) {
-    const target = edge.resource
+function _formatRefFromTo(node: ResourceNode, edge: NeedsEdge<ResourceNode>) {
+    const target = edge.needed
     let fqn = target.shortFqn
     if (node.origin.isParentOf(target.origin)) {
         fqn = `./${fqn}`
@@ -14,25 +14,31 @@ function _formatRefFromTo(node: AbsResource, edge: DependsOn) {
         fqn = `${target.origin.name}:${fqn}`
     }
 
-    return `${edge.text} -> ${fqn}`
+    return `${edge.why} -> ${fqn}`
 }
 export class Summarizer {
     constructor(readonly options: SummarizerOptions) {}
 
-    private _resource(resource: AbsResource): any {
-        const subs = resource.subResources.map(sub => {
-            const heading = sub.shortFqn
-            const description = this._resource(sub)
-            return { [heading]: description }
-        })
-        const depends = resource.dependencies.map(x => _formatRefFromTo(resource, x))
+    private _resource(resource: ResourceNode): any {
+        const subs = resource.kids
+            .map(sub => {
+                const heading = sub.shortFqn
+                const description = this._resource(sub)
+                return { [heading]: description }
+            })
+            .toArray()
+            .pull()
+        const depends = resource.needs
+            .map(x => _formatRefFromTo(resource, x))
+            .toArray()
+            .pull()
         if (depends.length === 0 && subs.length === 0) {
             return null
         }
         return [...subs, ...depends]
     }
 
-    private _resources(resources: AbsResource[]): object {
+    private _resources(resources: ResourceNode[]): object {
         const resourceContainer = List(resources)
             .map(resource => {
                 return {
