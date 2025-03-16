@@ -8,7 +8,7 @@ export class BaseDecorator<Types extends DecoratorTypes> {
     private _symbol!: symbol
     constructor(
         readonly name: string,
-        protected readonly _mapper: (
+        readonly _MAPPER: (
             this: Types["__SUBJECT__"],
             self: Types["__SUBJECT__"],
             input: Types["__INPUT__"]
@@ -28,10 +28,11 @@ export class BaseDecorator<Types extends DecoratorTypes> {
             writable: true,
             configurable: true
         })
+        return this
     }
 
     resolveInput(target: Types["__SUBJECT__"], input: Types["__INPUT__"]) {
-        return this._mapper(target, input)
+        return this._MAPPER(target, input)
     }
 
     getOn(target: Types["__SUBJECT__"]): Types["__OUTPUT__"] {
@@ -43,14 +44,6 @@ export class BaseDecorator<Types extends DecoratorTypes> {
         }
         const outputDecoritized = this.resolveInput(target, input)
         return outputDecoritized
-    }
-
-    map<T2 extends DecoratorTypes>(
-        mapping: (self: Types["__SUBJECT__"], input: Types["__INPUT__"]) => T2["__INPUT__"]
-    ) {
-        return new BaseDecorator<T2>(this.name, (self, input) => {
-            return mapping(self, this._mapper(self, input))
-        })
     }
 }
 

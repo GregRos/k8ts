@@ -31,10 +31,9 @@ export namespace Func {
             __RETURN__: Return
         }
     }
-    export type Mapping<
-        T extends Def,
-        T2 extends Def & {
-            __THIS__: T["__THIS__"]
-        }
-    > = (self: T["__THIS__"], f: To<T>) => To<T2>
+    export type Mapping<Subject extends object, T extends Def, T2 extends Def> = (
+        this: Subject,
+        self: Subject,
+        f: To<T>
+    ) => To<T2>
 }
