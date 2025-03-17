@@ -54,9 +54,6 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
                 if (resources.map(x => x.node.key).includes(needed.key)) {
                     continue
                 }
-                if (ForwardRef.is(needed)) {
-                    continue
-                }
                 if (!(needed instanceof ManifestResource)) {
                     throw new MakeError(
                         `Resource ${curRes} cannot depend on ${needed}, since it is not a manifest resource`

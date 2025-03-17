@@ -2,8 +2,8 @@ import { CDK } from "@imports"
 import { connections, manifest } from "@k8ts/instruments"
 import { omit } from "lodash"
 import { apps_v1 } from "../../api-versions"
+import { k8ts } from "../../kind-map"
 import { ManifestResource } from "../../node/manifest-resource"
-import { k8ts } from "../kind-map"
 import type { PodTemplate } from "../pod/pod-template"
 
 export type Deployment<Ports extends string> = Deployment.Deployment<Ports>

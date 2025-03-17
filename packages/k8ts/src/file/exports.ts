@@ -32,8 +32,12 @@ export namespace FileExports {
             this.#produced = seq(() => producer(props.origin))
         }
 
-        get __origin__() {
+        get __entity__() {
             return this.#props.origin
+        }
+
+        get __node__() {
+            return this.#props.origin.node
         }
 
         [Symbol.iterator]() {

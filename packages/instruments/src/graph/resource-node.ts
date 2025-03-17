@@ -1,13 +1,28 @@
 import { MutableMeta } from "@k8ts/metadata"
 import { seq } from "doddle"
-import { __CONNECTIONS } from "../_decorators"
 import { RefKey } from "../ref-key"
 import { BaseEntity, BaseNode, Formats } from "./base-node"
+import { __CONNECTIONS } from "./connections"
 import { Origin } from "./origin-node"
 
 export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
     get needs() {
         return seq(this._connections.needs)
+    }
+
+    get isExternal() {
+        return this.origins.some(x => x.name === "EXTERNAL").pull()
+    }
+
+    get origins() {
+        const self = this
+        return seq(function* () {
+            let current: Origin | null = self.origin
+            while (current) {
+                yield current
+                current = current.parent
+            }
+        })
     }
 
     get kids() {
@@ -16,6 +31,10 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
 
     get parent() {
         return this._connections.parent()
+    }
+
+    override get shortFqn() {
+        return `${this.origin.name}:${this.key}`
     }
 
     format(format: Formats) {

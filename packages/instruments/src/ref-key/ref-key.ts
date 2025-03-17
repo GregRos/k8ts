@@ -53,7 +53,7 @@ export namespace RefKey {
             readonly name: Name
         ) {}
 
-        get string(): RefKey.Format<K, Name> {
+        get string(): Format<K, Name> {
             return [this.kind.name, this.name].join(separator) as Format<K, Name>
         }
 

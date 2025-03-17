@@ -42,19 +42,19 @@ export namespace Kind {
         }
     }
 
-    class _Group<const Name extends string = string> extends Identifier<Name, null> {
+    export class Group<const Name extends string = string> extends Identifier<Name, null> {
         constructor(override name: Name) {
             super(name, null)
         }
         version<Version extends InputVersion>(apiVersion: Version) {
-            return new _Version(apiVersion, this)
+            return new Version(apiVersion, this)
         }
     }
 
-    export class _Version<
-        const Group extends string = string,
+    export class Version<
+        const Grp extends string = string,
         const Name extends InputVersion = InputVersion
-    > extends Identifier<Name, _Group<Group>> {
+    > extends Identifier<Name, Group<Grp>> {
         kind<Kind extends string>(kind: Kind) {
             return new Kind(kind, this)
         }
@@ -68,7 +68,7 @@ export namespace Kind {
         const Group extends string = string,
         const V extends InputVersion = InputVersion,
         const Name extends string = string
-    > extends Identifier<Name, _Version<Group, V>> {
+    > extends Identifier<Name, Version<Group, V>> {
         get version() {
             return this.parent
         }
@@ -85,10 +85,10 @@ export namespace Kind {
     export class SubKind extends Identifier<string, Kind> {}
 
     export function group<ApiGroup extends string>(apiGroup: ApiGroup) {
-        return new _Group(apiGroup)
+        return new Group(apiGroup)
     }
 
     export function version<ApiVersion extends InputVersion>(apiVersion: ApiVersion) {
-        return new _Version(apiVersion, group(""))
+        return new Version(apiVersion, group(""))
     }
 }

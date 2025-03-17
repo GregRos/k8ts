@@ -1,8 +1,8 @@
 import { CDK } from "@imports"
 import { connections, manifest, type Unit } from "@k8ts/instruments"
 import { v1 } from "../../../api-versions"
+import { k8ts } from "../../../kind-map"
 import { ManifestResource } from "../../../node/manifest-resource"
-import { k8ts } from "../../kind-map"
 import { Access } from "../access-mode"
 import type { DataMode } from "../block-mode"
 import { Backend as Backend_ } from "./backend"
@@ -22,8 +22,7 @@ export namespace Volume {
     export type Reclaim = "Retain" | "Delete" | "Recycle"
 
     const ident = v1.kind("PersistentVolume")
-    @k8ts(ident)
-    @connections("none")
+
     @manifest({
         body(self) {
             const pvProps = self.props
@@ -46,7 +45,9 @@ export namespace Volume {
             }
         }
     })
+    @k8ts(ident)
+    @connections("none")
     export class Volume<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
-        readonly kind = ident
+        declare readonly kind: typeof ident
     }
 }

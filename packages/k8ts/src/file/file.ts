@@ -20,10 +20,11 @@ export namespace File {
     export type File<T extends ManifestResource> = Exports.Core & FutureExports<T>
 
     export function make<Scope extends FileOrigin.Scope, Produced extends ManifestResource>(
+        name: string,
         props: Props<Scope, Produced>,
         parent: Origin
     ) {
-        const origin = FileOrigin.make(props, parent)
+        const origin = FileOrigin.make(name, props, parent)
         const exports = Exports.make({
             origin,
             FILE: props.FILE

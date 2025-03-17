@@ -1,6 +1,9 @@
 import { Runner } from "@lib"
+import { start } from "pretty-error"
 import cluster from "./cluster-scoped.k8"
 import namespaced from "./namespaced.k8"
+start()
+
 Error.stackTraceLimit = Infinity
 async function main() {
     const runner = new Runner({
@@ -10,7 +13,6 @@ async function main() {
             debug: true
         },
         saver: {
-            extension: "yaml",
             outdir: ".k8ts"
         },
         checkDanglingRefs: true

@@ -2,8 +2,8 @@ import type { CDK } from "@imports"
 import { connections, manifest, type Origin } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { v1 } from "../../api-versions"
+import { k8ts } from "../../kind-map"
 import { ManifestResource } from "../../node/manifest-resource"
-import { k8ts } from "../kind-map"
 export type Namespace = Namespace.Namespace
 export namespace Namespace {
     export interface Props {}

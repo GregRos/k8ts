@@ -10,7 +10,10 @@ interface NodeEntry {
     ident: Kind.Identifier
 }
 export class KindMap {
-    constructor(private _entryMap: Map<LookupKey, NodeEntry> = Map([]) as any) {}
+    constructor(
+        private _entryMap: Map<LookupKey, NodeEntry> = Map([]) as any,
+        private _parent: KindMap | undefined = undefined
+    ) {}
 
     refKey<Kind extends string, Name extends string>(
         kind: Kind | Kind.Identifier<Kind>,
@@ -105,9 +108,9 @@ export class KindMap {
         }
         return entry!
     }
-    private _tryGetEntry(key: LookupKey | RefKey.RefKey) {
+    private _tryGetEntry(key: LookupKey | RefKey.RefKey): NodeEntry | undefined {
         const converted = this._convert(key)
-        return this._entryMap.get(converted)
+        return this._entryMap.get(converted) ?? this._parent?._tryGetEntry(converted) ?? undefined
     }
 
     tryGetKind<Name extends string>(refKey: RefKey.RefKey<Name>): Kind.Identifier<Name> | undefined

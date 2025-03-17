@@ -6,9 +6,8 @@ const k8sNamespace = k8tsFile["Namespace/namespace"]
 const k8sPv = k8tsFile["PersistentVolume/dev-sda"]
 const cool = k8tsFile["PersistentVolume/pv-cool"]
 const gwKind = gateway_v1.kind("Gateway")
-export default W.File({
+export default W.File("deployment.yaml", {
     scope: k8sNamespace,
-    name: "deployment",
     *FILE(k) {
         const claim = k.Claim("claim", {
             bind: cool,

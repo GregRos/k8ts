@@ -1,13 +1,12 @@
-import { MetadataEntity } from "../graph/resource-node"
 import {
     BaseManifest,
     ManifestIdentFields,
     ManifestMetadata,
     ManifestSourceEmbedder,
     PreManifest
-} from "../manifest"
-import { Embedder } from "./base"
-import { AttachedTarget } from "./type-tools"
+} from "."
+import { Embedder } from "../_embedder/base"
+import { MetadataEntity } from "../graph/resource-node"
 
 export namespace ManifestBuilder {
     export interface Out {
@@ -17,9 +16,9 @@ export namespace ManifestBuilder {
         manifest: () => BaseManifest
     }
 
-    export type In<Target extends MetadataEntity = MetadataEntity> = Partial<
-        AttachedTarget<Out, Target>
-    > & {
+    export type In<Target extends MetadataEntity = MetadataEntity> = Partial<{
+        [K in keyof Out]: (self: Target) => ReturnType<Out[K]>
+    }> & {
         body: (self: Target) => PreManifest
     } & {
         [key: string]: (self: Target, ...args: any[]) => any

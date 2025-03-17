@@ -1,6 +1,7 @@
 import { Seq, seq } from "doddle"
 import { hash, Set } from "immutable"
 import { Kind } from "../api-kind"
+import { displayers } from "../displayers"
 import { RefKey } from "../ref-key"
 import { ForwardRef } from "../reference"
 import { Traced } from "../tracing"
@@ -13,6 +14,9 @@ export interface BaseEntity<Node extends BaseNode<Node>> {
     readonly kind: Kind.Identifier
     readonly name: string
 }
+@displayers({
+    default: s => `[${s.shortFqn}]`
+})
 export abstract class BaseNode<
     Node extends BaseNode<Node, Entity>,
     Entity extends BaseEntity<Node> = BaseEntity<Node>
@@ -21,6 +25,7 @@ export abstract class BaseNode<
     get kind() {
         return this.key.kind
     }
+
     abstract readonly kids: Seq<Node>
     abstract readonly needs: Seq<NeedsEdge<Node>>
     abstract readonly parent: Node | null
@@ -95,7 +100,7 @@ export abstract class BaseNode<
         if (ForwardRef.is(other)) {
             return other.isParentOf(this._asNode)
         }
-        return Set(this.ancestors).has(other._asNode)
+        return this.equals(other) || Set(this.ancestors).has(other._asNode)
     }
 
     isNeeding(other: Node): boolean {

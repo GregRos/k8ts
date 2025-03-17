@@ -28,7 +28,7 @@ export class ManifestSaver extends Emittery<ManifestSaverEventsTable> {
 
     async save(origin: Origin, manifests: string[]) {
         const content = this._splat(manifests)
-        const filename = `${origin.name}.${this._options.extension}`
+        const filename = `${origin.name}`
         await this.emit("saving", {
             filename,
             content: content
@@ -57,5 +57,4 @@ export interface ManifestSaverEventsTable {
 
 export interface ManifestSaverOptions {
     outdir: string
-    extension: string
 }

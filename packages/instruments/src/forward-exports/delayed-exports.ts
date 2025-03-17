@@ -70,9 +70,7 @@ export namespace FutureExports {
 
             const refKey = this._props.origin.resourceKinds.tryParse(key)
             if (refKey == null) {
-                throw new ProxyOperationError(
-                    `Failed to resolve forward reference to ${key} in ${this._props.origin}.`
-                )
+                return undefined
             }
             const cls = this._props.origin.resourceKinds.getClass(refKey)
             return ForwardRef.make({

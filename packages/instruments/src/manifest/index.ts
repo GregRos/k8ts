@@ -1,4 +1,4 @@
-import { Embedder } from "../_decorators/base"
+import { Embedder } from "../_embedder/base"
 import { ResourceEntity } from "../graph/resource-node"
 export interface ManifestMetadata {
     labels: Record<string, string>
@@ -50,3 +50,4 @@ export interface SpecManifest<T extends JsonSerializable> extends BaseManifest {
 }
 
 export const ManifestSourceEmbedder = new Embedder<object, ResourceEntity>("ManifestSource")
+export * from "./manifest-builder"

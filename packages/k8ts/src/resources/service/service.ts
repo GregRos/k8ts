@@ -1,9 +1,9 @@
 import { CDK } from "@imports"
 import { connections, manifest, type InputPortMapping } from "@k8ts/instruments"
 import { v1 } from "../../api-versions"
+import { k8ts } from "../../kind-map"
 import { ManifestResource } from "../../node"
 import type { Deployment } from "../deployment/deployment"
-import { k8ts } from "../kind-map"
 import { toServicePorts } from "../utils/adapters"
 
 import { Frontend as Frontend_ } from "./frontend"

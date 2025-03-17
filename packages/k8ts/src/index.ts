@@ -1,3 +1,4 @@
+import "./pretty-error"
 export * from "./exporter"
 export * from "./external"
 export * from "./file"

@@ -1,7 +1,9 @@
 import { ManifestSourceEmbedder } from "@k8ts/instruments"
+import chalk from "chalk"
 import ora from "ora"
 import { setTimeout } from "timers/promises"
 import type { Assembler, AssemblerEventsTable } from "./assembler"
+import { attr, k8tsMessage, verb } from "./pretty-print"
 export interface ProgressOptions {
     waitTransition: number
     debug: boolean
@@ -31,7 +33,7 @@ export class ProgressShower {
         const unsub = typedOnAny(events, async event => {
             switch (event.type) {
                 case "loading":
-                    spinner.text = `Loading ${event.resource.shortFqn} (${event.subtype})`
+                    spinner.text = k8tsMessage`${verb("Loading")} ${attr(event.subtype)} ${event.resource} `
                     break
                 case "stage":
                     spinner.text = `Stage: ${event.stage}`
@@ -40,18 +42,18 @@ export class ProgressShower {
                     }
                     break
                 case "received-file":
-                    spinner.text = `Received file ${event.file.__origin__.name}`
+                    spinner.text = k8tsMessage`${chalk.italic("RECEIVED")} ${event.file}`
                     break
                 case "serializing":
                     const rsc = ManifestSourceEmbedder.get(event.manifest)
-                    spinner.text = `Serializing ${rsc.shortFqn}`
+                    spinner.text = k8tsMessage`${chalk.italic("SERIALIZING")} ${rsc}`
                     break
                 case "saving":
                     spinner.text = `Saving ${event.content.length} bytes to ${event.filename}`
                     break
 
                 case "generating":
-                    spinner.text = `Generating ${event.resource.shortFqn}`
+                    spinner.text = k8tsMessage`${chalk.italic("RENDERING")} ${event.resource}`
                     break
                 case "purging":
                     spinner.text = `Purging ${event.outdir}`
@@ -60,10 +62,11 @@ export class ProgressShower {
             if (this._options.waitTransition) {
                 await setTimeout(this._options.waitTransition)
             }
+            spinner.render()
+
             if (this._options.debug) {
                 console.log()
             }
-            spinner.render()
         })
 
         spinner.clear()

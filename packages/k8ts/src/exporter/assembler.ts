@@ -1,4 +1,4 @@
-import { BaseManifest } from "@k8ts/instruments"
+import { BaseManifest, Origin } from "@k8ts/instruments"
 import { aseq, type ASeq, type DoddleAsync } from "doddle"
 import Emittery from "emittery"
 import type { File } from "../file"
@@ -34,7 +34,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
                 await _emit("stage", { stage: "gathering" })
             })
             .each(async file => {
-                await _emit("received-file", { file })
+                await _emit("received-file", { file: file.__node__ })
             })
             .after(async () => {
                 await _emit("stage", { stage: "loading" })
@@ -43,8 +43,8 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
             .map(async file => {
                 const loaded = await loader.load(file)
                 return {
-                    file: file.__origin__,
-                    resources: loaded.filter(x => !x.isExternal)
+                    file: file.__entity__,
+                    resources: loaded.filter(x => !x.node.isExternal)
                 }
             })
             .after(async () => {
@@ -141,7 +141,7 @@ export interface AssemblerEventsTable
         YamlSerializerEventsTable,
         ManifestGeneratorEventsTable,
         ResourceLoaderEventsTable {
-    ["received-file"]: { file: File.Input }
+    ["received-file"]: { file: Origin }
     ["stage"]: { stage: AssemblyStage }
 }
 export type AnyAssemblerEvent = {

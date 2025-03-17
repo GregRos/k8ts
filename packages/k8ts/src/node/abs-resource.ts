@@ -1,27 +1,22 @@
-import { Origin, RefKey, ResourceNode, type Kind } from "@k8ts/instruments"
-import { Doddle, doddle } from "doddle"
+import { displayers, Origin, RefKey, ResourceNode, type Kind } from "@k8ts/instruments"
 export interface DependsOn {
     resource: AbsResource
     text: string
 }
-
+@displayers({
+    default: s => `[${s.shortFqn}]`
+})
 export abstract class AbsResource<Props extends object = object> {
     abstract readonly kind: Kind.Identifier
 
-    private _node: Doddle<ResourceNode>
-
-    get node() {
-        return this._node.pull()
-    }
+    readonly node: ResourceNode
 
     constructor(
         origin: Origin,
         readonly name: string,
         readonly props: Props
     ) {
-        this._node = doddle(() => {
-            return new ResourceNode(origin, this, RefKey.make(this["kind"], this.name))
-        })
+        this.node = new ResourceNode(origin, this, RefKey.make(this["kind"], this.name))
     }
 
     get shortFqn() {

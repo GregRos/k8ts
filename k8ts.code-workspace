@@ -52,6 +52,13 @@
             "docs": true,
             "**/node_modules": true
         },
+        "search.exclude": {
+            "**/node_modules": true,
+            "**/bower_components": true,
+            "**/*.code-search": true,
+            "**/.ruby-lsp": true,
+            "**/imports": true
+        },
         // GregRos @ 2024
         // For this to work, you need the 'APC Customize UI++' extension.
         // It will color the rows in the explorer view based on the workspace folder.

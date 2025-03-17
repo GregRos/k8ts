@@ -1,6 +1,6 @@
 import { Kind, MetadataEntity, Origin, OriginEntity, RefKey } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
-import { k8tsBuildKind } from "../k8ts-sys-kind"
+import { k8tsBuildKind } from "./k8ts-sys-kind"
 
 class K8tsRootOriginEntity implements OriginEntity {
     kind = k8tsBuildKind.kind("Root")
@@ -25,6 +25,7 @@ class K8tsRootOriginEntity implements OriginEntity {
         return <Target extends new (...args: any[]) => MetadataEntity>(kind: Kind.Identifier) => {
             return (ctor: Target) => {
                 this.node.resourceKinds.add(kind, ctor)
+                ctor.prototype.kind = kind
                 return ctor
             }
         }

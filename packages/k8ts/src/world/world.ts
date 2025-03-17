@@ -3,8 +3,10 @@ import { Meta } from "@k8ts/metadata"
 import { External } from "../external"
 import { File } from "../file"
 import { k8tsBuildKind } from "../k8ts-sys-kind"
+import { K8tsRootOrigin } from "../kind-map"
 import type { ManifestResource } from "../node"
 import type { Namespace } from "../resources"
+export type ManifestFileName = `${string}.yaml`
 export namespace World {
     export interface Props {
         name: string
@@ -26,17 +28,26 @@ export namespace World {
         }
         constructor(private readonly _props: Props) {
             const key = RefKey.make(this.kind, _props.name)
-            this.node = new Origin(null, this, key)
+            this.node = new Origin(K8tsRootOrigin.node, this, key)
         }
 
         External<K extends Kind>(kind: K, name: string, namespace?: string) {
             return new External(this.node, kind, name, namespace)
         }
 
-        File<T extends ManifestResource>(props: File.Props<Namespace, T>): File<T>
-        File<T extends ManifestResource>(props: File.Props<"cluster", T>): File<T>
-        File<T extends ManifestResource>(props: File.Props<any, T>): File<T> {
-            return File.make(props, this.node)
+        File<T extends ManifestResource>(
+            name: ManifestFileName,
+            props: File.Props<Namespace, T>
+        ): File<T>
+        File<T extends ManifestResource>(
+            name: ManifestFileName,
+            props: File.Props<"cluster", T>
+        ): File<T>
+        File<T extends ManifestResource>(
+            name: ManifestFileName,
+            props: File.Props<any, T>
+        ): File<T> {
+            return File.make(name, props, this.node)
         }
     }
 

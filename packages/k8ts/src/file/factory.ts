@@ -1,4 +1,4 @@
-import { type LiveRefable, type Origin } from "@k8ts/instruments"
+import { Origin, auto_register, type LiveRefable } from "@k8ts/instruments"
 import {
     ConfigMap,
     Deployment,
@@ -27,7 +27,7 @@ export namespace Factory {
             })
         }
     }
-
+    @auto_register
     export class Cluster extends Base {
         PersistentVolume<Name extends string, Mode extends Persistent.DataMode = "Filesystem">(
             name: Name,
@@ -48,6 +48,7 @@ export namespace Factory {
         }
     }
 
+    @auto_register
     export class Namespaced extends Base {
         Claim<Mode extends Persistent.DataMode, Name extends string>(
             name: Name,

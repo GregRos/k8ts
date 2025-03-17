@@ -1,4 +1,4 @@
-import { Origin, OriginEntity, RefKey } from "@k8ts/instruments"
+import { displayers, Origin, OriginEntity, RefKey } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { k8tsBuildKind } from "../k8ts-sys-kind"
 import type { Namespace } from "../resources"
@@ -8,10 +8,13 @@ export namespace FileOrigin {
     export type Scope = Namespace | "cluster"
 
     export interface Props<FScope extends Scope = Scope> {
-        name: string
         meta?: Meta.Input
         scope: FScope
     }
+    @displayers({
+        default: s => s.shortFqn,
+        pretty: s => s.node
+    })
     export class FileEntity<FScope extends Scope> implements OriginEntity {
         kind = k8tsBuildKind.kind("File")
         readonly node: Origin
@@ -22,14 +25,12 @@ export namespace FileOrigin {
             return Meta.make(this.props.meta)
         }
 
-        get name() {
-            return this.props.name
-        }
         constructor(
+            readonly name: string,
             readonly props: Props<FScope>,
             parent: Origin
         ) {
-            this.node = new Origin(parent, this, RefKey.make(this.kind, props.name))
+            this.node = new Origin(parent, this, RefKey.make(this.kind, name))
         }
 
         get scope() {
@@ -38,9 +39,10 @@ export namespace FileOrigin {
     }
 
     export function make<FScope extends Scope>(
+        name: string,
         props: Props<FScope>,
         parent: Origin
     ): FileEntity<FScope> {
-        return new FileEntity(props, parent)
+        return new FileEntity(name, props, parent)
     }
 }
