@@ -1,4 +1,4 @@
-import { ResourceEntity } from "../graph/node"
+import { ResourceEntity } from "../graph/resource-node"
 import { ManifestSourceEmbedder } from "../manifest"
 import { Embedder } from "./base"
 import { AttachedTarget } from "./type-tools"

@@ -11,6 +11,7 @@ class K8tsRootOriginEntity implements OriginEntity {
     constructor() {
         this.node = new Origin(null, this, RefKey.make(this.kind, "Root"))
     }
+
     get name() {
         return this.kind.name
     }

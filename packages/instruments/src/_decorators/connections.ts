@@ -1,5 +1,5 @@
-import { Dependencies, dependencies } from "../graph/dependencies"
-import { NeedsEdge, ResourceEntity, ResourceNode } from "../graph/node"
+import { Dependencies, dependencies, NeedsEdge } from "../graph/dependencies"
+import { ResourceEntity, ResourceNode } from "../graph/resource-node"
 import { Embedder } from "./base"
 
 export namespace Connections {

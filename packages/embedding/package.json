@@ -1,7 +1,7 @@
 {
-  "name": "@k8ts/instruments",
+  "name": "@k8ts/embedding",
   "version": "0.0.1",
-  "description": "Abstractions for common data types and expressions in Kubernetes manifests",
+  "description": "Tools for embedding data into objects.",
   "keywords": [
     "kubernetes",
     "typescript",
@@ -16,7 +16,7 @@
   "repository": {
     "type": "git",
     "url": "github:GregRos/k8ts",
-    "directory": "packages/instruments"
+    "directory": "packages/embedding"
   },
   "license": "MIT",
   "author": "GregRos <gregros@gregros.dev>",

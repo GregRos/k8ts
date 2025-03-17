@@ -1,4 +1,4 @@
-import { MetadataEntity } from "../graph/node"
+import { MetadataEntity } from "../graph/resource-node"
 import {
     BaseManifest,
     ManifestIdentFields,

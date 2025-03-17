@@ -1,4 +1,4 @@
-import { NeedsEdge, Origin, ResourceNode } from "@k8ts/instruments"
+import { NeedsEdge, Origin, ResourceEntity, ResourceNode } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { List, Map } from "immutable"
 import { dump } from "js-yaml"
@@ -38,11 +38,11 @@ export class Summarizer {
         return [...subs, ...depends]
     }
 
-    private _resources(resources: ResourceNode[]): object {
+    private _resources(resources: ResourceEntity[]): object {
         const resourceContainer = List(resources)
             .map(resource => {
                 return {
-                    [resource.shortFqn]: this._resource(resource)
+                    [resource.shortFqn]: this._resource(resource.node)
                 }
             })
             .reduce((a, b) => {

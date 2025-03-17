@@ -1,6 +1,6 @@
 import { seq } from "doddle"
 import { ProxyOperationError } from "../error"
-import { Origin } from "../graph/node"
+import { Origin } from "../graph/origin-node"
 import type { LiveRefable } from "../reference"
 import { ForwardRef } from "../reference"
 

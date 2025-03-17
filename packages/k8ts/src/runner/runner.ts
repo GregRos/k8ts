@@ -1,13 +1,5 @@
-import { Set } from "immutable"
-import {
-    AssembledFile,
-    Assembler,
-    AssemblerOptions,
-    ProgressOptions,
-    ProgressShower
-} from "../exporter"
+import { Assembler, AssemblerOptions, ProgressOptions, ProgressShower } from "../exporter"
 import { File } from "../file"
-import { ManifestResource } from "../node"
 import { Summarizer, SummarizerOptions } from "./summarizer"
 
 export interface RunnerOptions extends AssemblerOptions {
@@ -19,25 +11,6 @@ export interface RunnerOptions extends AssemblerOptions {
 export class Runner {
     constructor(private readonly _options: RunnerOptions) {}
 
-    private _computeDanglingObjects(result: AssembledFile[]) {
-        const allObjects = Set(
-            result.flatMap(x => [
-                x.file,
-                ...x.artifacts.flatMap(x => [x.k8ts, ...x.k8ts.getResourceSubtree()])
-            ])
-        )
-        const rootOrigins = Set(result.map(x => x.file.node.root))
-        const allConstructed = Set(rootOrigins.flatMap(x => x.attachedTree))
-        const diff = allConstructed.subtract(allObjects).filter(x => {
-            if (x instanceof ManifestResource) {
-                if (x.isExternal) {
-                    return false
-                }
-            }
-            return true
-        })
-        return diff
-    }
     async run(input: Iterable<File.Input>) {
         const progressShower = new ProgressShower(this._options.progress)
         const assembler = new Assembler(this._options)

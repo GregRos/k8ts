@@ -1,35 +1,21 @@
-import { Meta, MutableMeta } from "@k8ts/metadata"
-import { Seq, seq } from "doddle"
+import { Seq, seq } from "doddle/."
 import { hash, Set } from "immutable"
-import { __CONNECTIONS } from "../_decorators/connections"
 import { Kind } from "../api-kind"
-import { KindMap } from "../kind-map"
 import { RefKey } from "../ref-key"
 import { ForwardRef } from "../reference"
 import { Traced } from "../tracing"
-export type Formats = "short" | "fqn" | "shortFqn"
+import { NeedsEdge } from "./dependencies"
 
-export interface X_Entity<Node extends X_Node<Node>> {
+export interface BaseEntity<Node extends BaseNode<Node>> {
     readonly node: Node
 
     readonly shortFqn: string
     readonly kind: Kind.Identifier
     readonly name: string
 }
-export interface ResourceEntity extends X_Entity<ResourceNode> {}
-export interface MetadataEntity extends X_Entity<ResourceNode> {
-    meta: MutableMeta
-}
-export class NeedsEdge<Node extends X_Node<Node>> {
-    constructor(
-        readonly why: string,
-        readonly needed: Node
-    ) {}
-}
-
-export abstract class X_Node<
-    Node extends X_Node<Node, Entity>,
-    Entity extends X_Entity<Node> = X_Entity<Node>
+export abstract class BaseNode<
+    Node extends BaseNode<Node, Entity>,
+    Entity extends BaseEntity<Node> = BaseEntity<Node>
 > extends Traced {
     abstract readonly key: RefKey
     get kind() {
@@ -137,100 +123,4 @@ export abstract class X_Node<
             .cache()
     })
 }
-
-export class ResourceNode extends X_Node<ResourceNode, ResourceEntity> {
-    get needs() {
-        return seq(this._connections.needs)
-    }
-
-    get kids() {
-        return seq(this._connections.kids)
-    }
-
-    get parent() {
-        return this._connections.parent()
-    }
-
-    format(format: Formats) {
-        switch (format) {
-            case "short":
-                return this.name
-            case "fqn":
-                return this.key.string
-            case "shortFqn":
-                return this.key.name
-        }
-    }
-    private get _connections() {
-        return __CONNECTIONS.get(this._entity)
-    }
-    constructor(
-        readonly origin: Origin,
-        readonly entity: ResourceEntity,
-        readonly key: RefKey
-    ) {
-        super(entity)
-    }
-}
-
-export interface OriginEntity extends X_Entity<Origin> {
-    meta: Meta
-}
-export class Origin extends X_Node<Origin, OriginEntity> implements Iterable<ResourceNode> {
-    private _kids = [] as Origin[]
-    get kids() {
-        return seq(this._kids)
-    }
-    get meta() {
-        return this._entity.meta
-    }
-
-    constructor(
-        readonly parent: Origin | null,
-        entity: OriginEntity,
-        readonly key: RefKey
-    ) {
-        super(entity)
-    }
-    get resourceKinds() {
-        return this._kindMap
-    }
-    private _kindMap = new KindMap()
-    private _attached = seq.empty<ResourceNode>()
-
-    get needs() {
-        return seq.empty()
-    }
-    [Symbol.iterator]() {
-        return this.resources[Symbol.iterator]()
-    }
-    readonly attachedTree: Seq<ResourceNode> = seq(() => {
-        const self = this
-        const desc = self.descendants.prepend(this).concatMap(function* (x) {
-            yield* self.resources
-            for (const kid of self.kids) {
-                yield* kid.resources
-            }
-        })
-        return desc
-    }).cache()
-
-    get resources() {
-        return this._attached
-    }
-
-    __attach_resource_class__(kind: Kind.Identifier) {
-        return <F extends Function>(ctor: F) => {
-            this._kindMap.add(kind, ctor)
-            return ctor
-        }
-    }
-
-    __attach_child__(child: Origin) {
-        this._kids.push(child)
-    }
-
-    __attach_resource_instances__(resources: Iterable<ResourceNode>) {
-        this._attached = this._attached.concat(seq(resources).cache())
-    }
-}
+export type Formats = "short" | "fqn" | "shortFqn"

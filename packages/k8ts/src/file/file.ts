@@ -24,7 +24,6 @@ export namespace File {
         parent: Origin
     ) {
         const origin = FileOrigin.make(props, parent)
-        parent.__attach_child__(origin.node)
         const exports = Exports.make({
             origin,
             FILE: props.FILE

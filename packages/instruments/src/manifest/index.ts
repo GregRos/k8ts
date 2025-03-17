@@ -1,5 +1,5 @@
 import { Embedder } from "../_decorators/base"
-import { ResourceEntity } from "../graph/node"
+import { ResourceEntity } from "../graph/resource-node"
 export interface ManifestMetadata {
     labels: Record<string, string>
     annotations: Record<string, string>

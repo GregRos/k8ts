@@ -3,7 +3,7 @@ import { Kind } from "../api-kind"
 import { InstrumentsError } from "../error"
 import { RefKey } from "../ref-key"
 const separator = "/"
-type LookupKey = NodeEntry[keyof NodeEntry]
+export type LookupKey = NodeEntry[keyof NodeEntry]
 interface NodeEntry {
     kind: string
     class: Function
@@ -34,17 +34,6 @@ export class KindMap {
         })
     }
 
-    register = (kind: Kind.Identifier) => {
-        return <T extends Function>(target: T) => {
-            this._bindEntry({
-                kind: kind.name,
-                class: target,
-                ident: kind
-            })
-
-            return target as T & { kind: string }
-        }
-    }
     parse(ref: string | RefKey) {
         const result = this.tryParse(ref)
         if (!result) {
@@ -72,18 +61,12 @@ export class KindMap {
         }
         return this.refKey(kind, name)
     }
+
     get kinds(): Set<string> {
         return this._entryMap
             .keySeq()
             .filter(k => typeof k === "string")
             .toSet()
-    }
-
-    merge(other?: KindMap) {
-        if (!other) {
-            return this
-        }
-        return new KindMap(this._entryMap.merge(other._entryMap) as any)
     }
 
     private _unknownNameError(kind: string) {
@@ -108,7 +91,6 @@ export class KindMap {
         }
         throw new InstrumentsError(`Invalid argument ${something}`)
     }
-    _check(key: LookupKey | RefKey.RefKey, val?: any) {}
     private _getEntry(key: LookupKey | RefKey.RefKey) {
         const converted = this._convert(key)
         const entry = this._tryGetEntry(key)

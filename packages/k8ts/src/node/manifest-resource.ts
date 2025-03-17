@@ -1,6 +1,5 @@
 import { Builder, Kind, type Origin } from "@k8ts/instruments"
 import type { Meta, MutableMeta } from "@k8ts/metadata"
-import { K8tsResources } from "../resources/kind-map"
 import { TopResource } from "./top-resource"
 
 export abstract class ManifestResource<Props extends object = object> extends TopResource<Props> {
@@ -15,13 +14,6 @@ export abstract class ManifestResource<Props extends object = object> extends To
     constructor(origin: Origin, meta: Meta | MutableMeta, props: Props) {
         super(origin, meta.get("name"), props)
         this.meta = meta.toMutable()
-        const self = this
-        ;(async () => {
-            await new Promise(resolve => setTimeout(resolve, 0))
-            if (!K8tsResources.tryGetClass(self.kind.name) && !self.isExternal) {
-                throw new Error(`No kind registered for ${self.kind.name}`)
-            }
-        })()
     }
 
     get namespace() {
