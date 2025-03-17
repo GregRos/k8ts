@@ -1,8 +1,8 @@
 import { CDK } from "@imports"
-import type { Unit } from "@k8ts/instruments"
+import { connections, manifest, type Unit } from "@k8ts/instruments"
 import { v1 } from "../../../api-versions"
 import { ManifestResource } from "../../../node/manifest-resource"
-import { K8tsResources } from "../../kind-map"
+import { k8ts } from "../../kind-map"
 import { Access } from "../access-mode"
 import type { DataMode } from "../block-mode"
 import { Backend as Backend_ } from "./backend"
@@ -22,13 +22,11 @@ export namespace Volume {
     export type Reclaim = "Retain" | "Delete" | "Recycle"
 
     const ident = v1.kind("PersistentVolume")
-    @K8tsResources.register(ident)
-    export class Volume<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
-        readonly kind = ident
-
-        manifestBody(): CDK.KubePersistentVolumeProps {
-            this.
-            const pvProps = this.props
+    @k8ts(ident)
+    @connections("none")
+    @manifest({
+        body(self) {
+            const pvProps = self.props
             const accessModes = Access.parse(pvProps.accessModes)
             let base: CDK.PersistentVolumeSpec = {
                 accessModes,
@@ -44,9 +42,11 @@ export namespace Volume {
                 ...parseBackend(pvProps.backend)
             }
             return {
-                metadata: this.metadata(),
                 spec: base
             }
         }
+    })
+    export class Volume<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
+        readonly kind = ident
     }
 }

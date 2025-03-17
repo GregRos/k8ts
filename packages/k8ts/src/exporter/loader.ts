@@ -22,7 +22,7 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
             })
         } else {
             resource.meta.add(k8ts_namespace, {
-                "^declared-in": resource.origin.name
+                "^declared-in": resource.node.origin.name
             })
         }
     }
@@ -30,7 +30,8 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
     async load(input: File.Input) {
         let resources = List<ManifestResource>()
         for (let res of input) {
-            if (!res.origin.isChildOf(res.origin)) {
+            const origin = res.node.origin
+            if (!origin.isChildOf(origin)) {
                 throw new MakeError(`Resource ${res} is not a child of the input file ${input}`)
             }
             if (ForwardRef.is(res)) {

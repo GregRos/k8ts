@@ -1,10 +1,10 @@
 import { CDK } from "@imports"
+import { connections, manifest } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { omit } from "lodash"
 import { apps_v1 } from "../../api-versions"
-import { AbsResource } from "../../node/abs-resource"
 import { ManifestResource } from "../../node/manifest-resource"
-import { K8tsResources } from "../kind-map"
+import { k8ts } from "../kind-map"
 import { Container } from "./container"
 import { Device, Volume } from "./volume"
 export type PodTemplate<Ports extends string> = PodTemplate.PodTemplate<Ports>
@@ -16,34 +16,28 @@ export namespace PodTemplate {
         POD(scope: PodScope): Iterable<Container.Container<Ports>>
     }
     const ident = apps_v1.kind("PodTemplate")
-    @K8tsResources.register(ident)
-    export class PodTemplate<Ports extends string = string> extends ManifestResource<Props<Ports>> {
-        kind = ident
-        readonly containers = seq(() => this.props.POD(new PodScope(this))).cache()
-        readonly mounts = seq(() => this.containers.concatMap(x => x.mounts)).cache()
-        readonly ports = seq(() => this.containers.map(x => x.ports)).reduce((a, b) => a.union(b))
-
-        override get subResources(): AbsResource[] {
-            return [...this.containers, ...this.mounts.map(x => x.mount.parent)]
-        }
-        manifestBody(): CDK.PodTemplateSpec {
-            const { meta, props } = this
-            const containers = this.containers
+    @k8ts(ident)
+    @connections({
+        kids: s => [...s.containers, ...s.mounts.map(x => x.mount.parent)]
+    })
+    @manifest({
+        body(self): CDK.PodTemplateSpec {
+            const { meta, props } = self
+            const containers = self.containers
             const initContainers = containers
                 .filter(c => c.subtype === "init")
-                .map(x => x.manifest())
+                .map(x => x.submanifest())
                 .toArray()
             const mainContainers = containers
                 .filter(c => c.subtype === "main")
-                .map(x => x.manifest())
+                .map(x => x.submanifest())
                 .toArray()
 
             const volumes = containers
                 .concatMap(x => x.volumes)
-                .map(x => x.manifest())
+                .map(x => x.submanifest())
                 .toArray()
             return {
-                metadata: this.metadata(),
                 spec: {
                     ...omit(props, "POD"),
                     containers: mainContainers.pull(),
@@ -52,6 +46,12 @@ export namespace PodTemplate {
                 }
             }
         }
+    })
+    export class PodTemplate<Ports extends string = string> extends ManifestResource<Props<Ports>> {
+        kind = ident
+        readonly containers = seq(() => this.props.POD(new PodScope(this))).cache()
+        readonly mounts = seq(() => this.containers.concatMap(x => x.mounts)).cache()
+        readonly ports = seq(() => this.containers.map(x => x.ports)).reduce((a, b) => a.union(b))
     }
 
     export class PodScope {

@@ -1,4 +1,4 @@
-import { __impl, Origin, RefKey } from "@k8ts/instruments"
+import { Origin, OriginEntity, RefKey } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { k8tsBuildKind } from "../k8ts-sys-kind"
 import type { Namespace } from "../resources"
@@ -12,9 +12,12 @@ export namespace FileOrigin {
         meta?: Meta.Input
         scope: FScope
     }
-    export class FileEntity<FScope extends Scope> implements __impl {
+    export class FileEntity<FScope extends Scope> implements OriginEntity {
         kind = k8tsBuildKind.kind("File")
         readonly node: Origin
+        get shortFqn() {
+            return this.kind.name
+        }
         get meta() {
             return Meta.make(this.props.meta)
         }

@@ -1,6 +1,6 @@
+import { ManifestSourceEmbedder } from "@k8ts/instruments"
 import ora from "ora"
 import { setTimeout } from "timers/promises"
-import { getK8tsResourceObject } from "../manifest"
 import type { Assembler, AssemblerEventsTable } from "./assembler"
 export interface ProgressOptions {
     waitTransition: number
@@ -43,7 +43,7 @@ export class ProgressShower {
                     spinner.text = `Received file ${event.file.__origin__.name}`
                     break
                 case "serializing":
-                    const rsc = getK8tsResourceObject(event.manifest)
+                    const rsc = ManifestSourceEmbedder.get(event.manifest)
                     spinner.text = `Serializing ${rsc.shortFqn}`
                     break
                 case "saving":

@@ -1,5 +1,6 @@
 import type { CDK } from "@imports"
 import {
+    connections,
     Env,
     PortSet,
     ResourcesSpec,
@@ -12,8 +13,8 @@ import {
 import { Map } from "immutable"
 import { toContainerPorts, toEnvVars } from "../../utils/adapters"
 
+import { mapKeys, mapValues } from "lodash"
 import type { ManifestResource } from "../../../node"
-import type { DependsOn } from "../../../node/abs-resource"
 import { SubResource } from "../../../node/sub-resource"
 import { Mount as Mount_ } from "./mounts"
 export type Container<Ports extends string> = Container.Container<Ports>
@@ -37,6 +38,15 @@ export namespace Container {
         securityContext?: CDK.SecurityContext
         resources?: Resources
     }
+    @connections({
+        needs: self => {
+            const a = self.mounts
+            return mapValues(
+                mapKeys(a, x => x.path),
+                x => x.mount.parent
+            )
+        }
+    })
     export class Container<Ports extends string> extends SubResource<Props<Ports>> {
         get kind() {
             return this.parent.kind.subkind("Container")
@@ -52,17 +62,7 @@ export namespace Container {
                         }
                     ]
                 })
-                .toList()
-        }
-
-        override get dependencies() {
-            return this.mounts
-                .map(x => {
-                    return {
-                        resource: x.mount.parent,
-                        text: x.path
-                    } satisfies DependsOn
-                })
+                .valueSeq()
                 .toArray()
         }
 
@@ -71,6 +71,21 @@ export namespace Container {
         }
         get ports() {
             return PortSet.make(this.props.ports)
+        }
+        submanifest(): CDK.Container {
+            const self = this
+            const { image, ports, command, env, securityContext } = self.props
+            const container: CDK.Container = {
+                name: self.name,
+                image: image.text,
+                ports: toContainerPorts(PortSet.make(ports)).valueSeq().toArray(),
+                resources: self._resources()?.toObject(),
+                command: command?.toArray(),
+                env: toEnvVars(Env(env)).valueSeq().toArray(),
+                securityContext,
+                ...self._groupedMounts()
+            }
+            return container
         }
         constructor(
             parent: ManifestResource,
@@ -104,21 +119,6 @@ export namespace Container {
                 cpu: cpu,
                 memory: memory
             })
-        }
-
-        manifest(): CDK.Container {
-            const { image, ports, command, env, securityContext } = this.props
-            const container: CDK.Container = {
-                name: this.name,
-                image: image.text,
-                ports: toContainerPorts(PortSet.make(ports)).valueSeq().toArray(),
-                resources: this._resources()?.toObject(),
-                command: command?.toArray(),
-                env: toEnvVars(Env(env)).valueSeq().toArray(),
-                securityContext,
-                ...this._groupedMounts()
-            }
-            return container
         }
     }
 

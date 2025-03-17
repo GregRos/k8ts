@@ -1,7 +1,7 @@
 import type { CDK } from "@imports"
 
+import { connections } from "@k8ts/instruments"
 import type { ManifestResource } from "../../../node"
-import { dependencies } from "../../../node/dependencies"
 import { SubResource } from "../../../node/sub-resource"
 import type { ConfigMap } from "../../configmap"
 import type { Persistent } from "../../persistent"
@@ -21,25 +21,25 @@ export namespace Volume {
         backend: Secret
     }
     export type Backend = PvcBackend | ConfigMapBackend | SecretBackend
+    @connections({
+        needs: self => ({
+            backend: self.props.backend
+        })
+    })
     export abstract class Volume<Props extends Backend = Backend> extends SubResource<Props> {
         get kind() {
             return this.parent.kind.subkind("Volume")
         }
 
-        abstract manifest(): CDK.Volume
+        abstract submanifest(): CDK.Volume
 
         mount(options?: Mount.Options) {
             return new Mount.Volume(this as any, options ?? {})
         }
-
-        override get dependencies() {
-            return dependencies({
-                backend: this.props.backend
-            })
-        }
     }
+
     class PvcVolume extends Volume<PvcBackend> {
-        override manifest(): CDK.Volume {
+        override submanifest(): CDK.Volume {
             return {
                 name: this.name,
                 persistentVolumeClaim: {
@@ -51,7 +51,7 @@ export namespace Volume {
     }
 
     class ConfigMapVolume extends Volume<ConfigMapBackend> {
-        override manifest(): CDK.Volume {
+        override submanifest(): CDK.Volume {
             return {
                 name: this.name,
                 configMap: {
@@ -62,7 +62,7 @@ export namespace Volume {
     }
 
     class SecretVolume extends Volume<SecretBackend> {
-        override manifest(): CDK.Volume {
+        override submanifest(): CDK.Volume {
             return {
                 name: this.name,
                 secret: {

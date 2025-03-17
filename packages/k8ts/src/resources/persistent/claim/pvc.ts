@@ -1,9 +1,8 @@
 import type { CDK } from "@imports"
-import { ResourcesSpec, Unit } from "@k8ts/instruments"
+import { connections, manifest, ResourcesSpec, Unit } from "@k8ts/instruments"
 import { v1 } from "../../../api-versions"
 import { ManifestResource } from "../../../node"
-import { dependencies } from "../../../node/dependencies"
-import { K8tsResources } from "../../kind-map"
+import { k8ts } from "../../kind-map"
 import { Access } from "../access-mode"
 import type { DataMode } from "../block-mode"
 import type { Volume } from "../volume"
@@ -22,25 +21,20 @@ export namespace Claim {
     }
 
     const ident = v1.kind("PersistentVolumeClaim")
-    @K8tsResources.register(ident)
-    export class Claim<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
-        kind = ident
-        override get dependencies() {
-            if (this.props.bind) {
-                return dependencies({
-                    bind: this.props.bind
-                })
-            }
-            return []
-        }
-        manifestBody(): CDK.KubePersistentVolumeClaimProps {
-            const { storage, accessModes, mode } = this.props
+    @k8ts(ident)
+    @connections({
+        needs: self => ({
+            bind: self.props.bind
+        })
+    })
+    @manifest({
+        body(self): CDK.KubePersistentVolumeClaimProps {
+            const { storage, accessModes, mode } = self.props
             const nAccessModes = Access.parse(accessModes)
             return {
-                metadata: this.metadata(),
                 spec: {
                     accessModes: nAccessModes,
-                    volumeName: this.props.bind!.name,
+                    volumeName: self.props.bind!.name,
                     volumeMode: mode,
                     resources: pvc_ResourcesSpec
                         .parse({
@@ -51,5 +45,8 @@ export namespace Claim {
                 }
             }
         }
+    })
+    export class Claim<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
+        kind = ident
     }
 }

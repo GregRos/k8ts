@@ -1,6 +1,7 @@
-import { Meta } from "@k8ts/metadata/."
-import { Seq, seq } from "doddle/."
+import { Meta, MutableMeta } from "@k8ts/metadata"
+import { Seq, seq } from "doddle"
 import { hash, Set } from "immutable"
+import { __CONNECTIONS } from "../_decorators/connections"
 import { Kind } from "../api-kind"
 import { KindMap } from "../kind-map"
 import { RefKey } from "../ref-key"
@@ -11,10 +12,14 @@ export type Formats = "short" | "fqn" | "shortFqn"
 export interface X_Entity<Node extends X_Node<Node>> {
     readonly node: Node
 
+    readonly shortFqn: string
     readonly kind: Kind.Identifier
     readonly name: string
 }
 export interface ResourceEntity extends X_Entity<ResourceNode> {}
+export interface MetadataEntity extends X_Entity<ResourceNode> {
+    meta: MutableMeta
+}
 export class NeedsEdge<Node extends X_Node<Node>> {
     constructor(
         readonly why: string,
@@ -133,28 +138,17 @@ export abstract class X_Node<
     })
 }
 
-export interface ResourceNodeImplTypes {
-    parent: ResourceNode | null
-    kids: Iterable<ResourceNode>
-    needs: Iterable<NeedsEdge<ResourceNode>>
-}
-export interface ResourceNodeImpl {
-    kids(): Iterable<ResourceNode>
-    parent(): ResourceNode | null
-    needs(): Iterable<NeedsEdge<ResourceNode>>
-}
-
 export class ResourceNode extends X_Node<ResourceNode, ResourceEntity> {
     get needs() {
-        return seq(this._impl.needs)
+        return seq(this._connections.needs)
     }
 
     get kids() {
-        return seq(this._impl.kids)
+        return seq(this._connections.kids)
     }
 
     get parent() {
-        return this._impl.parent()
+        return this._connections.parent()
     }
 
     format(format: Formats) {
@@ -167,11 +161,13 @@ export class ResourceNode extends X_Node<ResourceNode, ResourceEntity> {
                 return this.key.name
         }
     }
+    private get _connections() {
+        return __CONNECTIONS.get(this._entity)
+    }
     constructor(
         readonly origin: Origin,
         readonly entity: ResourceEntity,
-        readonly key: RefKey,
-        private readonly _impl: ResourceNodeImpl
+        readonly key: RefKey
     ) {
         super(entity)
     }

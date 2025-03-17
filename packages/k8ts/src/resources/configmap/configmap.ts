@@ -1,7 +1,8 @@
 import type { CDK } from "@imports"
+import { connections, manifest } from "@k8ts/instruments"
 import { v1 } from "../../api-versions"
 import { ManifestResource } from "../../node/manifest-resource"
-import { K8tsResources } from "../kind-map"
+import { k8ts } from "../kind-map"
 export type ConfigMap = ConfigMap.ConfigMap
 export namespace ConfigMap {
     export interface Props {
@@ -10,15 +11,16 @@ export namespace ConfigMap {
     }
 
     const ident = v1.kind("ConfigMap")
-    @K8tsResources.register(ident)
-    export class ConfigMap extends ManifestResource<Props> {
-        override kind = ident
-
-        override manifestBody(): CDK.KubeConfigMapProps {
+    @k8ts(ident)
+    @connections("none")
+    @manifest({
+        body(self): CDK.KubeConfigMapProps {
             return {
-                metadata: this.metadata(),
-                data: this.props.data
+                data: self.props.data
             }
         }
+    })
+    export class ConfigMap extends ManifestResource<Props> {
+        override kind = ident
     }
 }

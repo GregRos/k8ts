@@ -1,12 +1,11 @@
 import { CDK } from "@imports"
-import { type InputPortMapping } from "@k8ts/instruments"
+import { connections, manifest, type InputPortMapping } from "@k8ts/instruments"
 import { v1 } from "../../api-versions"
 import { ManifestResource } from "../../node"
 import type { Deployment } from "../deployment/deployment"
-import { K8tsResources } from "../kind-map"
+import { k8ts } from "../kind-map"
 import { toServicePorts } from "../utils/adapters"
 
-import { dependencies } from "../../node/dependencies"
 import { Frontend as Frontend_ } from "./frontend"
 import { Port as Port_ } from "./service-port"
 export type Service<Ports extends string> = Service.Service<Ports>
@@ -20,7 +19,24 @@ export namespace Service {
     }
 
     const ident = v1.kind("Service")
-    @K8tsResources.register(ident)
+    @k8ts(ident)
+    @connections({
+        needs: self => ({
+            backend: self.props.backend
+        })
+    })
+    @manifest({
+        body(self): CDK.KubeServiceProps {
+            const svcPorts = self.ports
+            return {
+                spec: {
+                    ports: toServicePorts(svcPorts).toArray(),
+                    selector: self.props.backend.meta.pick("%app").labels,
+                    ...self.props.frontend
+                }
+            }
+        }
+    })
     export class Service<Ports extends string = string> extends ManifestResource<Props<Ports>> {
         kind = ident
 
@@ -30,26 +46,8 @@ export namespace Service {
             return svcPorts
         }
 
-        override get dependencies() {
-            return dependencies({
-                backend: this.props.backend
-            })
-        }
-
         getPortRef(port: Ports) {
             return new Port.Port(this, port)
-        }
-
-        override manifestBody(): CDK.KubeServiceProps {
-            const svcPorts = this.ports
-            return {
-                metadata: this.metadata(),
-                spec: {
-                    ports: toServicePorts(svcPorts).toArray(),
-                    selector: this.props.backend.meta.pick("%app").labels,
-                    ...this.props.frontend
-                }
-            }
         }
     }
 }

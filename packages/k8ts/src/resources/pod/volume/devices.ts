@@ -1,6 +1,6 @@
 import type { CDK } from "@imports"
+import { connections } from "@k8ts/instruments"
 import type { ManifestResource } from "../../../node"
-import { dependencies } from "../../../node/dependencies"
 import { SubResource } from "../../../node/sub-resource"
 import { Persistent } from "../../persistent"
 import { Mount } from "../container/mounts"
@@ -12,6 +12,11 @@ export namespace Device {
     }
 
     export type Backend = PvcBackend
+    @connections({
+        needs: self => ({
+            backend: self.backend.backend
+        })
+    })
     export class Device extends SubResource<PvcBackend> {
         get kind() {
             return this.parent.kind.subkind("Device")
@@ -24,13 +29,7 @@ export namespace Device {
             super(parent, name, backend)
         }
 
-        override get dependencies() {
-            return dependencies({
-                backend: this.backend.backend
-            })
-        }
-
-        manifest(): CDK.Volume {
+        submanifest(): CDK.Volume {
             return {
                 name: this.name,
                 persistentVolumeClaim: {

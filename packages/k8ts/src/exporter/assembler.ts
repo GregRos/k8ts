@@ -1,8 +1,8 @@
+import { BaseManifest } from "@k8ts/instruments"
 import { aseq, type ASeq, type DoddleAsync } from "doddle"
 import Emittery from "emittery"
 import type { File } from "../file"
 import { FileOrigin } from "../file/origin"
-import { BaseManifest } from "../manifest"
 import { AbsResource } from "../node/abs-resource"
 import { ManifestGenerator, type ManifestGeneratorEventsTable } from "./generator"
 import { ResourceLoader, type ResourceLoaderEventsTable } from "./loader"
@@ -96,7 +96,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
             .collect()
             .map(async ({ file, artifacts }) => {
                 const { filename, bytes } = await saver.save(
-                    file,
+                    file.node,
                     artifacts.map(x => x.yaml)
                 )
                 return {

@@ -1,9 +1,9 @@
 import type { CDK } from "@imports"
+import { connections, manifest } from "@k8ts/instruments"
 import { gateway_v1 } from "../../api-versions"
-import { connections } from "../../decorators/node-impl2"
 import type { External } from "../../external"
 import { ManifestResource } from "../../node"
-import { K8tsResources } from "../kind-map"
+import { k8ts } from "../kind-map"
 import type { Service } from "../service"
 
 export type HttpRoute<Ports extends string> = HttpRoute.HttpRoute<Ports>
@@ -17,29 +17,29 @@ export namespace HttpRoute {
     }
 
     const kind = gateway_v1.kind("HttpRoute")
-    @K8tsResources.register(kind)
+    @k8ts(kind)
     @connections({
         needs: self => ({
             gateway: self.props.parent,
             service: self.props.backend.service
         })
     })
-    export class HttpRoute<Ports extends string> extends ManifestResource<Props<Ports>> {
-        kind = gateway_v1.kind("HttpRoute")
-
-        manifestBody(): CDK.HttpRouteProps {
+    @manifest({
+        body(self): CDK.HttpRouteProps {
             return {
-                metadata: this.metadata(),
                 spec: {
-                    parentRefs: [this.props.parent.ref()],
-                    hostnames: [this.props.hostname],
+                    parentRefs: [self.props.parent.ref()],
+                    hostnames: [self.props.hostname],
                     rules: [
                         {
-                            backendRefs: [this.props.backend.ref()]
+                            backendRefs: [self.props.backend.ref()]
                         }
                     ]
                 }
             }
         }
+    })
+    export class HttpRoute<Ports extends string> extends ManifestResource<Props<Ports>> {
+        kind = gateway_v1.kind("HttpRoute")
     }
 }

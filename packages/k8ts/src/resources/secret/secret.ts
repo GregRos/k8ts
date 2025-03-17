@@ -1,6 +1,8 @@
+import { CDK } from "@imports"
+import { connections, manifest } from "@k8ts/instruments"
 import { v1 } from "../../api-versions"
 import { ManifestResource } from "../../node/manifest-resource"
-import { K8tsResources } from "../kind-map"
+import { k8ts } from "../kind-map"
 
 export interface Props {
     data: Record<string, string>
@@ -8,15 +10,16 @@ export interface Props {
 }
 
 const ident = v1.kind("Secret")
-@K8tsResources.register(ident)
-export class Secret extends ManifestResource<Props> {
-    kind = ident
-
-    manifestBody() {
+@k8ts(ident)
+@connections("none")
+@manifest({
+    body(self): CDK.KubeSecretProps {
         return {
-            metadata: this.metadata(),
-            data: this.props.data,
-            stringData: this.props.stringData
+            data: self.props.data,
+            stringData: self.props.stringData
         }
     }
+})
+export class Secret extends ManifestResource<Props> {
+    kind = ident
 }

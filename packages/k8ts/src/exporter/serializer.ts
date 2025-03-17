@@ -1,7 +1,7 @@
+import { BaseManifest, ManifestSourceEmbedder } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { dump, type DumpOptions } from "js-yaml"
 import { MakeError } from "../error"
-import { BaseManifest, getK8tsResourceObject } from "../manifest"
 
 export interface YamlSerializerOptions {
     jsYamlOptions: DumpOptions
@@ -30,7 +30,7 @@ export class YamlSerializer extends Emittery<YamlSerializerEventsTable> {
             })
             return result
         } catch (err) {
-            const resource = getK8tsResourceObject(input)
+            const resource = ManifestSourceEmbedder.get(input)
             throw new MakeError(`Failed to serialize manifest ${resource?.shortFqn ?? "???"}`, {
                 cause: err
             })

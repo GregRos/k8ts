@@ -7,7 +7,7 @@ export abstract class SubResource<Props extends object = object> extends AbsReso
         name: string,
         props: Props
     ) {
-        super(parent.origin, name, props)
+        super(parent.node.origin, name, props)
     }
 
     get namespace() {
