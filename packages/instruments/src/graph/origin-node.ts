@@ -1,11 +1,22 @@
 import { Meta } from "@k8ts/metadata"
+import chalk from "chalk"
 import { seq, Seq } from "doddle"
 import { Kind } from "../api-kind"
+import { displayers } from "../displayers"
 import { KindMap } from "../kind-map"
 import { RefKey } from "../ref-key"
 import { BaseEntity, BaseNode } from "./base-node"
 import { ResourceNode } from "./resource-node"
 
+@displayers({
+    default: s => `[${s.shortFqn}]`,
+    pretty(resource) {
+        const originPart = chalk.blueBright(resource.name)
+        const kindName = chalk.greenBright.bold(resource.kind.name)
+        const resourceName = chalk.cyan(resource.name)
+        return `〚${originPart}:${kindName}/${resourceName}〛`
+    }
+})
 export class Origin extends BaseNode<Origin, OriginEntity> implements Iterable<ResourceNode> {
     private _kids = [] as Origin[]
     get kids() {

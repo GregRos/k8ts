@@ -1,10 +1,21 @@
 import { MutableMeta } from "@k8ts/metadata"
+import chalk from "chalk"
 import { seq } from "doddle"
+import { displayers } from "../displayers"
 import { RefKey } from "../ref-key"
 import { BaseEntity, BaseNode, Formats } from "./base-node"
 import { __CONNECTIONS } from "./connections"
 import { Origin } from "./origin-node"
 
+@displayers({
+    default: s => `[${s.shortFqn}]`,
+    pretty(resource) {
+        const originPart = chalk.blueBright(resource.origin.name)
+        const kindName = chalk.greenBright.bold(resource.kind.name)
+        const resourceName = chalk.cyan(resource.name)
+        return `〚${originPart}:${kindName}/${resourceName}〛`
+    }
+})
 export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
     get needs() {
         return seq(this._connections.needs)

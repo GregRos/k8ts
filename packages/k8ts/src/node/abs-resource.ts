@@ -4,7 +4,8 @@ export interface DependsOn {
     text: string
 }
 @displayers({
-    default: s => `[${s.shortFqn}]`
+    default: s => s.node,
+    pretty: s => s.node
 })
 export abstract class AbsResource<Props extends object = object> {
     abstract readonly kind: Kind.Identifier

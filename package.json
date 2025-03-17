@@ -2,8 +2,9 @@
   "private": true,
   "license": "MIT",
   "workspaces": [
-    "packages/*",
-    "packages/*/examples"
+    "packages/metadata",
+    "packages/k8ts",
+    "packages/instruments"
   ],
   "scripts": {
     "build": "yarn workspaces foreach -Apt run build",
@@ -25,6 +26,7 @@
     "doddle": "portal:/C:/codegr/doddle"
   },
   "dependencies": {
+    "chalk": "4.1.2",
     "declare-it": "^2.1.0",
     "doddle": "^5.0.0-beta.8",
     "immutable": "^5.0.3",

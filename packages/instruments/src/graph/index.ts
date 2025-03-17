@@ -1,4 +1,5 @@
 export * from "./base-node"
+export * from "./base-origin-entity"
 export * from "./connections"
 export * from "./dependencies"
 export * from "./origin-node"

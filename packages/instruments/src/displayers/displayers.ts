@@ -32,12 +32,12 @@ export class DisplayerDecorator {
     get decorator() {
         return <
             Target extends abstract new (...args: any[]) => object,
-            Impl extends Partial<Displayers.In<InstanceType<Target>>> | "none"
+            Impl extends Displayers.In<InstanceType<Target>>
         >(
             input: Impl
         ) => {
             return (ctor: Target) => {
-                this.implement(ctor, input === "none" ? {} : (input as any))
+                this.implement(ctor, input as any)
                 return ctor
             }
         }

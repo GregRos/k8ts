@@ -1,9 +1,9 @@
-import { KindMap, Origin, OriginEntity, RefKey, type Kind } from "@k8ts/instruments"
+import { BaseOriginEntity, KindMap, type Kind } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { External } from "../external"
 import { File } from "../file"
 import { k8tsBuildKind } from "../k8ts-sys-kind"
-import { K8tsRootOrigin } from "../kind-map"
+import { K8tsRootOrigin, kinded } from "../kind-map"
 import type { ManifestResource } from "../node"
 import type { Namespace } from "../resources"
 export type ManifestFileName = `${string}.yaml`
@@ -14,21 +14,13 @@ export namespace World {
         kinds?: KindMap
     }
 
-    export class Builder implements OriginEntity {
-        readonly kind = k8tsBuildKind.kind("World")
-        node: Origin
-        get name() {
-            return this._props.name
-        }
-        get meta() {
-            return Meta.make(this._props.meta)
-        }
-        get shortFqn() {
-            return `${this.kind.name}/${this.name}`
-        }
-        constructor(private readonly _props: Props) {
-            const key = RefKey.make(this.kind, _props.name)
-            this.node = new Origin(K8tsRootOrigin.node, this, key)
+    const ident = k8tsBuildKind.kind("World")
+    @kinded(ident)
+    export class Builder extends BaseOriginEntity<Props> {
+        readonly kind = ident
+
+        constructor(props: Props) {
+            super("World", props, K8tsRootOrigin.node)
         }
 
         External<K extends Kind>(kind: K, name: string, namespace?: string) {

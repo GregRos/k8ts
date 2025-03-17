@@ -3,12 +3,7 @@ import chalk from "chalk"
 import { Map } from "immutable"
 import { Attr, Stage, Verb } from "./pretty-objects"
 
-function displayNode(resource: ResourceNode) {
-    const originPart = chalk.blueBright(resource.origin.name)
-    const kindName = chalk.greenBright.bold(resource.kind.name)
-    const resourceName = chalk.cyan(resource.name)
-    return `〚${originPart}:${kindName}/${resourceName}〛`
-}
+function displayNode(resource: ResourceNode) {}
 
 function displayOrigin(origin: Origin) {
     const kindPart = chalk.greenBright.bold(origin.kind.name)
@@ -16,17 +11,6 @@ function displayOrigin(origin: Origin) {
     return `〚${kindPart}/${originName}〛`
 }
 
-function displayVerb(verb: Verb) {
-    return chalk.magentaBright.bold.italic(verb.text)
-}
-
-function displayAttr(attr: Attr) {
-    return chalk.yellowBright(attr.text)
-}
-
-function displayStage(stage: Stage) {
-    return chalk.bold.bgCyanBright(stage.text)
-}
 type Shower<T> = (x: T) => string
 type TokenObject = Verb | Attr | Stage | ResourceNode | Origin
 type TokenClass = abstract new (...args: any[]) => TokenObject
