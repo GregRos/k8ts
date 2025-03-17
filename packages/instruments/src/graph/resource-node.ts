@@ -1,5 +1,5 @@
-import { MutableMeta } from "@k8ts/metadata/."
-import { seq } from "doddle/."
+import { MutableMeta } from "@k8ts/metadata"
+import { seq } from "doddle"
 import { __CONNECTIONS } from "../_decorators"
 import { RefKey } from "../ref-key"
 import { BaseEntity, BaseNode, Formats } from "./base-node"

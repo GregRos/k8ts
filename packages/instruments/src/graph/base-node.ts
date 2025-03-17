@@ -1,4 +1,4 @@
-import { Seq, seq } from "doddle/."
+import { Seq, seq } from "doddle"
 import { hash, Set } from "immutable"
 import { Kind } from "../api-kind"
 import { RefKey } from "../ref-key"

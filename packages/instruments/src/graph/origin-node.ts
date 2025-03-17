@@ -1,5 +1,5 @@
-import { Meta } from "@k8ts/metadata/."
-import { seq, Seq } from "doddle/."
+import { Meta } from "@k8ts/metadata"
+import { seq, Seq } from "doddle"
 import { Kind } from "../api-kind"
 import { KindMap } from "../kind-map"
 import { RefKey } from "../ref-key"
