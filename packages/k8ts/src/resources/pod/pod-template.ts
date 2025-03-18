@@ -18,7 +18,7 @@ export namespace PodTemplate {
     const ident = apps_v1.kind("PodTemplate")
     @k8ts(ident)
     @relations({
-        kids: s => [...s.containers, ...s.mounts.map(x => x.mount.parent)]
+        kids: s => [...s.containers, ...s.volumes]
     })
     @manifest({
         body(self): CDK.PodTemplateSpec {
@@ -33,10 +33,7 @@ export namespace PodTemplate {
                 .map(x => x.submanifest())
                 .toArray()
 
-            const volumes = containers
-                .concatMap(x => x.volumes)
-                .map(x => x.submanifest())
-                .toArray()
+            const volumes = self.volumes.map(x => x.submanifest()).toArray()
             return {
                 spec: {
                     ...omit(props, "POD"),
@@ -51,6 +48,7 @@ export namespace PodTemplate {
         kind = ident
         readonly containers = seq(() => this.props.POD(new PodScope(this))).cache()
         readonly mounts = seq(() => this.containers.concatMap(x => x.mounts)).cache()
+        readonly volumes = seq(() => this.containers.concatMap(x => x.volumes)).uniq()
         readonly ports = seq(() => this.containers.map(x => x.ports)).reduce((a, b) => a.union(b))
     }
 

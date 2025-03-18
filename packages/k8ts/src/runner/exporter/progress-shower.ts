@@ -1,12 +1,11 @@
-import { ManifestSourceEmbedder } from "@k8ts/instruments"
-import { attr, dest, quantity, stage, verb } from "@k8ts/instruments/src/_string/pretty-objects"
-import { pretty } from "@k8ts/instruments/src/_string/pretty-print"
+import { attr, dest, ManifestSourceEmbedder, pretty, quantity, verb } from "@k8ts/instruments"
 import ora from "ora"
 import { setTimeout } from "timers/promises"
 import type { Assembler, AssemblerEventsTable, AssemblyStage } from "./assembler"
+import { stage } from "./stage"
 export interface ProgressOptions {
-    waitTransition: number
-    debug: boolean
+    waitTransition?: number
+    debug?: boolean
 }
 
 function typedOnAny(
@@ -36,7 +35,7 @@ export class ProgressShower {
             switch (event.type) {
                 case "load":
                     spinner.text = pretty`${verb("Load")} ${attr(
-                        event.isExported ? "exported" : "internal"
+                        event.isExported ? "exported" : ""
                     )} ${event.resource} `
                     break
                 case "stage":

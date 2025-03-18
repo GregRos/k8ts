@@ -38,26 +38,25 @@ class BuilderDecorator {
     }
     private _metadata(self: MetadataEntity) {
         return {
-            labels: self.meta.labels,
-            annotations: self.meta.annotations,
             name: self.meta.get("name"),
-            namespace: self.meta.tryGet("namespace")
+            namespace: self.meta.tryGet("namespace"),
+            labels: self.meta.labels,
+            annotations: self.meta.annotations
         }
     }
 
     private _idents(self: MetadataEntity) {
         return {
-            kind: self.kind.name,
-            apiVersion: self.kind.parent!.text
+            apiVersion: self.kind.parent!.text,
+            kind: self.kind.name
         }
     }
 
     manifest(trait: ManifestBuilder.Out, self: MetadataEntity) {
         const mani = {
-            ...trait.body(),
+            ...trait.ident(),
             metadata: trait.metadata(),
-
-            ...trait.ident()
+            ...trait.body()
         }
         ManifestSourceEmbedder.set(mani, self)
         return mani

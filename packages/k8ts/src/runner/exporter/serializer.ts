@@ -1,3 +1,4 @@
+import { CDK } from "@imports"
 import { BaseManifest, ManifestSourceEmbedder } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { dump, type DumpOptions } from "js-yaml"
@@ -25,6 +26,15 @@ export class YamlSerializer extends Emittery<YamlSerializerEventsTable> {
                 lineWidth: 800,
                 noArrayIndent: true,
                 indent: 2,
+                replacer(key, value) {
+                    if (value instanceof CDK.IntOrString) {
+                        return value.value
+                    }
+                    if (value instanceof CDK.Quantity) {
+                        return value.value
+                    }
+                    return value
+                },
                 ...this._options.jsYamlOptions,
                 noRefs: true
             })

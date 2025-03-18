@@ -1,6 +1,6 @@
 export namespace Frontend {
     export interface ClusterIp {
-        type: "ClusterIp"
+        type: "ClusterIP"
     }
 
     export interface LoadBalancer {

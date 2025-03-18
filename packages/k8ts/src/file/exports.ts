@@ -33,7 +33,7 @@ export namespace FileExports {
             this.#produced = seq(() => producer(props.origin)).each(x => {
                 x.meta.add(
                     k8tsSectionMeta({
-                        "^is-exported": "true"
+                        "#is-exported": "true"
                     })
                 )
             })

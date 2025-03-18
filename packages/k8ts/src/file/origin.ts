@@ -18,6 +18,9 @@ export namespace FileOrigin {
 
         constructor(name: string, props: Props<FScope>, parent: Origin) {
             super(name, props, parent)
+            this.meta = this.meta.add({
+                namespace: props.scope === "cluster" ? undefined : props.scope.name
+            })
         }
 
         get scope() {

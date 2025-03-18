@@ -1,5 +1,5 @@
-import { displayers } from "@k8ts/instruments"
 import chalk from "chalk"
+import { displayers } from "../displayers"
 
 @displayers({
     simple: s => s.text,

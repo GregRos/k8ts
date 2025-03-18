@@ -13,6 +13,7 @@ import {
 import { Map } from "immutable"
 import { toContainerPorts, toEnvVars } from "../../utils/adapters"
 
+import { seq } from "doddle"
 import { mapKeys, mapValues } from "lodash"
 import type { ManifestResource } from "../../../node"
 import { SubResource } from "../../../node/sub-resource"
@@ -67,7 +68,10 @@ export namespace Container {
         }
 
         get volumes() {
-            return this.mounts.map(x => x.mount.parent)
+            return seq(this.mounts.map(x => x.mount.parent))
+                .uniq()
+                .toArray()
+                .pull()
         }
         get ports() {
             return PortSet.make(this.props.ports)

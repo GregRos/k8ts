@@ -1,10 +1,4 @@
-import { List } from "immutable"
-import StackTracey from "stacktracey"
+import { Embedder } from "../_embedder"
+import { Trace } from "./trace"
 
-export class Traced {
-    readonly trace?: List<StackTracey.Entry>
-
-    constructor() {
-        this.trace = undefined
-    }
-}
+export const TraceEmbedder = new Embedder<object, Trace>("TRACED")

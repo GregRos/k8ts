@@ -1,6 +1,6 @@
 import type { CDK } from "@imports"
 import { manifest, relations, type Origin } from "@k8ts/instruments"
-import { Meta } from "@k8ts/metadata"
+import { Meta, MutableMeta } from "@k8ts/metadata"
 import { v1 } from "../../api-versions"
 import { k8ts } from "../../kind-map"
 import { ManifestResource } from "../../node/manifest-resource"
@@ -19,7 +19,7 @@ export namespace Namespace {
     })
     export class Namespace extends ManifestResource<Props> {
         override kind = ident
-        constructor(origin: Origin, meta: Meta, props?: Props) {
+        constructor(origin: Origin, meta: Meta | MutableMeta, props?: Props) {
             super(origin, meta.toMutable(), props ?? {})
         }
     }

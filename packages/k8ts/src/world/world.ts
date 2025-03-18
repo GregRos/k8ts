@@ -54,9 +54,7 @@ export class ExternalOriginEntity extends BaseOriginEntity {
         super(
             "EXTERNAL",
             {
-                meta: {
-                    "^should not be manifested": (() => {}) as any
-                }
+                meta: {}
             },
             parent
         )

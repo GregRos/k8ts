@@ -1,6 +1,12 @@
-import { Displayers, NeedsEdge, Origin, ResourceNode, TextPostProcessor } from "@k8ts/instruments"
-import { attr, quantity } from "@k8ts/instruments/src/_string/pretty-objects"
-import { pretty } from "@k8ts/instruments/src/_string/pretty-print"
+import {
+    Displayers,
+    NeedsEdge,
+    Origin,
+    pretty,
+    ResourceNode,
+    TextPostProcessor
+} from "@k8ts/instruments"
+import { Meta } from "@k8ts/metadata"
 import { List, Map } from "immutable"
 import { dump } from "js-yaml"
 import { AssembledResult } from "./exporter"
@@ -64,7 +70,13 @@ export class Summarizer {
             lineWidth: 800,
             noArrayIndent: true,
             indent: 2,
-            noRefs: true
+            noRefs: true,
+            replacer(key, value) {
+                if (value instanceof Meta.Meta) {
+                    return value.values
+                }
+                return value
+            }
         })
         return result
     }
@@ -78,19 +90,13 @@ export class Summarizer {
     result(result: AssembledResult) {
         const obj = {
             options: result.options,
-            files: result.files.map(x => {
-                const o = Map([
-                    [attr("path"), x.path as any],
-                    [attr("name"), x.filename as any],
-                    [attr("saved"), quantity(x.bytes, "byte")],
-                    [attr("manifested"), quantity(x.artifacts.length, "resources")]
-                ])
-                    .mapEntries(([k, v]) => {
-                        return [this._token(k), this._token(v)]
-                    })
-                    .toJS()
-
-                return o
+            output: result.files.map(x => {
+                return {
+                    path: x.path,
+                    name: x.filename,
+                    saved: x.bytes,
+                    manifested: x.artifacts.length
+                }
             })
         }
         return [

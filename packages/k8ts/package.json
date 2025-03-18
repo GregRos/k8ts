@@ -90,6 +90,7 @@
     "roarr": "^7.21.1",
     "rxjs": "^7.8.2",
     "shx": "^0.3.4",
+    "simple-git": "^3.27.0",
     "stacktracey": "^2.1.8",
     "treeify": "^1.1.0",
     "tsconfig-paths": "^4.2.0",

@@ -1,22 +1,29 @@
-import { BaseManifest, ResourceNode } from "@k8ts/instruments"
-import { Meta } from "@k8ts/metadata"
+import { BaseManifest, ResourceNode, TraceEmbedder } from "@k8ts/instruments"
 import Emittery from "emittery"
-import { cloneDeep, cloneDeepWith, get, isEmpty, unset } from "lodash"
+import { cloneDeep, cloneDeepWith, isEmpty, unset } from "lodash"
 import { ManifestResource } from "../../node"
 import { version } from "../../version"
+import { k8ts_namespace } from "./meta"
+export interface ManifesterOptions {
+    cwd?: string
+}
 export class Manifester extends Emittery<ManifesterEventsTable> {
-    constructor(options: {}) {
+    constructor(private readonly _options: ManifesterOptions) {
         super()
     }
     private _cleanSpecificEmptyObjects(manifest: BaseManifest) {
-        const clone = cloneDeep(manifest)
-        const metadataProps = ["labels", "annotations"].map(x => `metadata.${x}`)
-        for (const deletableEmpty of ["labels", "annotations"].map(x => `metadata.${x}`)) {
-            const value = get(clone, deletableEmpty)
-            if (isEmpty(value)) {
-                unset(clone, deletableEmpty)
+        const clone = cloneDeepWith(manifest, (value, key) => {
+            if (key !== "metadata") {
+                return
             }
-        }
+            for (const k in value) {
+                if (["labels", "annotations"].includes(k)) {
+                    if (isEmpty(value[k])) {
+                        unset(value, k)
+                    }
+                }
+            }
+        })
         return clone
     }
     private _cleanNullishValues(manifest: BaseManifest) {
@@ -41,13 +48,18 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
         const noEmpty = this._cleanSpecificEmptyObjects(noNullish)
         return noEmpty
     }
+
     private _attachProductionAnnotations(resource: ResourceNode) {
         const origin = resource.origin
-        const common = Meta.make().add({
-            "^world": origin.root.name,
+        const entry = TraceEmbedder.get(resource)
+        const loc = resource.trace.format({
+            cwd: this._options.cwd
+        })
+        const exportedPart = resource.isExported ? "(EXP) " : ""
+        resource.meta!.add(k8ts_namespace, {
+            "^constructed-at": `${exportedPart}${loc}`,
             "^produced-by": `k8ts@${version}`
         })
-        resource.meta!.add(common)
     }
 
     async generate(res: ResourceNode) {

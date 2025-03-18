@@ -4,12 +4,14 @@ import namespaced from "./namespaced.k8"
 
 async function main() {
     const runner = new Runner({
+        cwd: ".",
+        outdir: ".k8ts",
+        meta: {
+            "^my-custom-annotation": "my-custom-value"
+        },
         summarizer: {},
         progress: {
             waitTransition: 77
-        },
-        saver: {
-            outdir: ".k8ts"
         }
     })
 

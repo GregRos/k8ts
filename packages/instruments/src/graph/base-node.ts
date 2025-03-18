@@ -3,7 +3,6 @@ import { hash, Set } from "immutable"
 import { Kind } from "../api-kind"
 import { RefKey } from "../ref-key"
 import { ForwardRef } from "../reference"
-import { Traced } from "../tracing"
 import { NeedsEdge } from "./dependencies"
 
 export interface BaseEntity<Node extends BaseNode<Node>> {
@@ -17,7 +16,7 @@ export interface BaseEntity<Node extends BaseNode<Node>> {
 export abstract class BaseNode<
     Node extends BaseNode<Node, Entity>,
     Entity extends BaseEntity<Node> = BaseEntity<Node>
-> extends Traced {
+> {
     abstract readonly key: RefKey
     get kind() {
         return this.key.kind
@@ -30,9 +29,7 @@ export abstract class BaseNode<
         return this as any as Node
     }
 
-    constructor(readonly _entity: Entity) {
-        super()
-    }
+    constructor(readonly _entity: Entity) {}
 
     get shortFqn() {
         return `${this.kind.name}/${this.name}`

@@ -12,11 +12,9 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
 
     private _attachSourceAnnotations(loadEvent: ResourceLoadedEvent) {
         const { resource } = loadEvent
+
         resource.meta!.add(k8ts_namespace, {
-            "^constructed-at": "xxx.ts:1:1"
-        })
-        resource.meta!.add(k8ts_namespace, {
-            "^declared-in": resource.origin.name
+            "^declared-in": `(${resource.origin.root.name}) ${resource.origin.name}`
         })
     }
 
@@ -32,7 +30,7 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
                 throw new MakeError(`Resource ${res} is a forward reference`)
             }
             const event = {
-                isExported: res.meta!.has(`^${k8ts_namespace}is-exported`),
+                isExported: res.meta!.has(`#${k8ts_namespace}is-exported`),
                 resource: res
             } as const
 

@@ -1,11 +1,13 @@
 import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
 import { doddle, seq, Seq } from "doddle"
+import StackTracey from "stacktracey"
 import { getMarkerForIndex, toSuperScript } from "../_string"
-import { Kind } from "../api-kind"
 import { displayers } from "../displayers"
 import { KindMap } from "../kind-map"
 import { RefKey } from "../ref-key"
+import { TraceEmbedder } from "../tracing"
+import { Trace } from "../tracing/trace"
 import { BaseEntity, BaseNode } from "./base-node"
 import { ResourceNode } from "./resource-node"
 @displayers({
@@ -80,23 +82,21 @@ export class Origin extends BaseNode<Origin, OriginEntity> implements Iterable<R
                 continue
             }
             const orig = prototype[key]
-            prototype[key] = function (this: any, ...args: any[]) {
-                const result = orig.apply(this, args) as object
-                if (
-                    typeof result === "object" &&
-                    "node" in result &&
-                    result.node instanceof ResourceNode
-                ) {
-                    result.node.origin.__attach_resource__([result.node])
+            prototype[key] = {
+                [key](this: any, ...args: any[]) {
+                    const result = orig.apply(this, args) as BaseEntity<any>
+                    if (
+                        typeof result === "object" &&
+                        "node" in result &&
+                        result.node instanceof ResourceNode
+                    ) {
+                        result.node.meta?.add(result.node.origin.meta)
+                        result.node.origin.__attach_resource__([result.node])
+                        TraceEmbedder.set(result.node, new Trace(new StackTracey().at(1)))
+                    }
+                    return result
                 }
-                return result
-            }
-        }
-    }
-    private __attach_resource_class__(kind: Kind.Identifier) {
-        return <F extends Function>(ctor: F) => {
-            this._kindMap.add(kind, ctor)
-            return ctor
+            }[key]
         }
     }
 

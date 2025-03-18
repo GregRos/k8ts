@@ -56,7 +56,7 @@ export default W.File("deployment.yaml", {
 
         const svc2 = k.Service("xyz", {
             frontend: {
-                type: "ClusterIp"
+                type: "ClusterIP"
             },
             ports: {
                 http: 80

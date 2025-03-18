@@ -1,6 +1,6 @@
 import { CDK } from "@imports"
 import { manifest, Origin, relations } from "@k8ts/instruments"
-import { Meta } from "@k8ts/metadata"
+import { Meta, MutableMeta } from "@k8ts/metadata"
 import { omit } from "lodash"
 import { apps_v1 } from "../../api-versions"
 import { k8ts } from "../../kind-map"
@@ -36,7 +36,7 @@ export namespace Deployment {
     export class Deployment<Ports extends string = string> extends ManifestResource<Props<Ports>> {
         kind = ident
         template: PodTemplate<Ports>
-        constructor(origin: Origin, meta: Meta, props: Props<Ports>) {
+        constructor(origin: Origin, meta: Meta | MutableMeta, props: Props<Ports>) {
             super(origin, meta, props)
             this.template = new PodTemplate.PodTemplate(
                 origin,

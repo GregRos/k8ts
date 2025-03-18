@@ -1,4 +1,4 @@
-import { Meta } from "@k8ts/metadata"
+import { Meta, MutableMeta } from "@k8ts/metadata"
 import chalk from "chalk"
 import { doddle, Doddle } from "doddle"
 import { Kind } from "../api-kind"
@@ -23,6 +23,7 @@ export abstract class BaseOriginEntity<Props extends OriginEntityProps = OriginE
     abstract readonly kind: Kind.Kind
     #node: Doddle<Origin>
 
+    meta: MutableMeta
     get alias() {
         return this.props.alias ?? undefined
     }
@@ -35,9 +36,7 @@ export abstract class BaseOriginEntity<Props extends OriginEntityProps = OriginE
         parent: Origin | null
     ) {
         this.#node = doddle(() => new Origin(parent, this, RefKey.make(this.kind, name)))
-    }
-    get meta() {
-        return Meta.make(this.props.meta)
+        this.meta = Meta.make(props.meta).toMutable()
     }
     get shortFqn() {
         return this.node.shortFqn

@@ -105,7 +105,7 @@ class DisplayerDecorator {
                     }
                     return "?!!?"
                 }
-                return result
+                return result as any
             },
             prefix: input.prefix && (() => input.prefix!.call(o, target)),
             pretty: format => {

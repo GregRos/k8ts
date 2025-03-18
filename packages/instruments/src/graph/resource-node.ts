@@ -3,6 +3,7 @@ import chalk from "chalk"
 import { seq } from "doddle"
 import { displayers } from "../displayers"
 import { RefKey } from "../ref-key"
+import { TraceEmbedder } from "../tracing"
 import { BaseEntity, BaseNode, Formats } from "./base-node"
 import { Origin } from "./origin-node"
 import { Relations } from "./relations"
@@ -12,7 +13,10 @@ import { Relations } from "./relations"
     pretty(resource, format) {
         format ??= "global"
 
-        const kindName = chalk.greenBright.bold(resource.kind.name)
+        let kindName = chalk.greenBright(resource.kind.name)
+        if (format !== "lowkey") {
+            kindName = chalk.bold(kindName)
+        }
         const resourceName = chalk.blueBright(resource.name)
         const mainPart = `${kindName}/${resourceName}`
         let originPart = ` (${displayers.get(resource.origin).prefix!()})`
@@ -28,6 +32,14 @@ import { Relations } from "./relations"
 export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
     get needs() {
         return seq(this._relations.needs)
+    }
+
+    get trace() {
+        return TraceEmbedder.get(this)
+    }
+
+    get isExported() {
+        return this.meta?.tryGet("#k8ts.org/is-exported") ?? false
     }
 
     get meta() {

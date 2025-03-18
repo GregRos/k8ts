@@ -1,11 +1,12 @@
 import { BaseManifest, Origin, ResourceNode } from "@k8ts/instruments"
+import { Meta } from "@k8ts/metadata"
 import { aseq } from "doddle"
 import Emittery from "emittery"
 import { cloneDeep } from "lodash"
 import type { File } from "../../file"
 import { ResourceLoader, type ResourceLoaderEventsTable } from "./loader"
 import { Manifester, type ManifesterEventsTable } from "./manifester"
-import { ManifestSaver, type ManifestSaverEventsTable, type ManifestSaverOptions } from "./saver"
+import { ManifestSaver, type ManifestSaverEventsTable } from "./saver"
 import { YamlSerializer, type YamlSerializerEventsTable } from "./serializer"
 
 export class Assembler extends Emittery<AssemblerEventsTable> {
@@ -22,11 +23,15 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
         }
         const loader = new ResourceLoader({})
         loader.onAny(_emit)
-        const generator = new Manifester({})
+        const generator = new Manifester({
+            cwd: this._options.cwd
+        })
         generator.onAny(_emit)
         const serializer = new YamlSerializer({})
         serializer.onAny(_emit)
-        const saver = new ManifestSaver(this._options.saver)
+        const saver = new ManifestSaver({
+            outdir: this._options.outdir
+        })
         saver.onAny(_emit)
         const reports = aseq(inFiles)
             .before(async () => {
@@ -41,6 +46,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
             .collect()
             .map(async file => {
                 const loaded = await loader.load(file)
+                loaded.forEach(r => r.meta!.add(this._options.meta))
                 return {
                     file: file.__entity__,
                     resources: loaded.filter(x => !x.isExternal)
@@ -135,7 +141,9 @@ export interface AssembledResult {
     options: AssemblerOptions
 }
 export interface AssemblerOptions {
-    saver: ManifestSaverOptions
+    cwd?: string
+    outdir: string
+    meta?: Omit<Meta.Input, "name" | "namespace"> | Meta
 }
 export type AssemblyStage =
     | "loading"

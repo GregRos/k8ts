@@ -14,6 +14,9 @@ export function parseMetaInput(input: InputMeta): Map<ValueKey, string> {
     if (input instanceof Meta.Meta) {
         return input["_dict"]
     }
+    if (input instanceof Meta.MutableMeta) {
+        return input["_meta"]["_dict"]
+    }
     let map = Map<ValueKey, string>()
     for (const [key, value] of Object.entries(input)) {
         const outer = parseOuterKey(key)

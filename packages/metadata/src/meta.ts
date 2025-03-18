@@ -10,7 +10,10 @@ export namespace Meta {
     export type Input = InputMeta
     export import Key = Key_
     export class Meta implements Iterable<[ValueKey, string]> {
-        constructor(private readonly _dict: Map<ValueKey, string>) {}
+        constructor(private readonly _dict: Map<ValueKey, string>) {
+            const a = _dict
+            const aaa = 1
+        }
 
         [Symbol.iterator]() {
             return this._dict.entries()[Symbol.iterator]()
@@ -124,10 +127,27 @@ export namespace Meta {
             return this._prefixed("#")
         }
 
+        get values() {
+            return this._dict.toJS()
+        }
+
         get core() {
             return this._prefixed("") as {
                 [key in Key.Special]?: string
             }
+        }
+        remove(key: Key.Value): this
+        remove(ns: Key.Section, key: string): this
+        remove(ns: Key.Section): this
+        remove(a: any, b?: any) {
+            return this._createWith(raw => {
+                const parsed = parseKey(a)
+                if (parsed instanceof ValueKey) {
+                    return raw.delete(parsed)
+                } else {
+                    return raw.filter((_, k) => !k.parent?.equals(parsed))
+                }
+            })
         }
 
         expand() {
@@ -187,6 +207,14 @@ export namespace Meta {
         add(input: InputMeta): this
         add(a: any, b?: any) {
             this._meta = this._meta.add(a, b)
+            return this
+        }
+
+        remove(key: Key.Value): this
+        remove(ns: Key.Section, key: string): this
+        remove(ns: Key.Section): this
+        remove(a: any, b?: any) {
+            this._meta = this._meta.remove(a, b)
             return this
         }
 
