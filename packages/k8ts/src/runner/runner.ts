@@ -20,7 +20,7 @@ export class Runner {
 
         const viz = summarizer.files(
             result.map(x => ({
-                filename: x.filename,
+                origin: x.file,
                 resources: x.artifacts.map(x => x.k8ts)
             }))
         )

@@ -1,4 +1,4 @@
-import { BaseOriginEntity, Origin } from "@k8ts/instruments"
+import { BaseOriginEntity, Origin, OriginEntityProps } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { k8tsBuildKind } from "../k8ts-sys-kind"
 import type { Namespace } from "../resources"
@@ -7,7 +7,7 @@ export type FileOrigin<FScope extends FileOrigin.Scope = FileOrigin.Scope> =
 export namespace FileOrigin {
     export type Scope = Namespace | "cluster"
 
-    export interface Props<FScope extends Scope = Scope> {
+    export interface Props<FScope extends Scope = Scope> extends OriginEntityProps {
         meta?: Meta.Input
         scope: FScope
     }

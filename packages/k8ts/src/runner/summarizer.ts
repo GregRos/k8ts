@@ -1,17 +1,13 @@
-import { NeedsEdge, ResourceNode, TextPostProcessor } from "@k8ts/instruments"
+import { Displayers, NeedsEdge, Origin, ResourceNode, TextPostProcessor } from "@k8ts/instruments"
 import { List, Map } from "immutable"
 import { dump } from "js-yaml"
 import { pretty } from "./exporter/pretty-print"
-
 export interface SummarizerOptions {}
 export class Summarizer {
     private _post = new TextPostProcessor()
     constructor(readonly options: SummarizerOptions) {}
     _formatRefFromTo(node: ResourceNode, edge: NeedsEdge<ResourceNode>) {
-        const target = edge.needed
-        let fqn = pretty`${target}`
-
-        return `${edge.why} -> ${this._token(fqn)}`
+        return this._token(pretty`${edge}`)
     }
 
     private _token(text: string) {
@@ -19,10 +15,10 @@ export class Summarizer {
         return token
     }
 
-    private _resource(resource: ResourceNode): any {
+    private _resource(resource: ResourceNode): any[] | null {
         const subs = resource.kids
             .map(sub => {
-                const heading = sub.localName
+                const heading = Displayers.get(sub).pretty("local")
                 const description = this._resource(sub)
                 return { [this._token(heading)]: description }
             })
@@ -44,8 +40,11 @@ export class Summarizer {
                 const text = pretty`${resource}`
                 const token = this._token(text)
                 const objForm = this._resource(resource)
+                if (!objForm) {
+                    return token
+                }
                 return {
-                    [token]: objForm
+                    [token]: [...objForm, ...(resource.isRoot ? ["SPACE"] : [])]
                 }
             })
             .reduce((a, b) => {
@@ -55,19 +54,27 @@ export class Summarizer {
         return resourceContainer
     }
 
-    private _serialize(input: object) {
+    private _yaml(input: object) {
         const result = dump(input, {
             lineWidth: 800,
             noArrayIndent: true,
             indent: 2,
             noRefs: true
         })
-        return this._post.render(result)
+        return result
     }
 
-    files(obj: { filename: string; resources: ResourceNode[] }[]) {
-        let pairs = obj.map(({ filename, resources }) => {
-            return [filename, this._resources(resources)] as [string, object]
+    private _serialize(input: object) {
+        const tree = this._yaml(input)
+        const rendered = this._post.render(tree)
+        return rendered.replaceAll("- SPACE", "")
+    }
+
+    files(obj: { origin: Origin; resources: ResourceNode[] }[]) {
+        let pairs = obj.flatMap(({ origin, resources }) => {
+            return [
+                [this._token(pretty`\n${origin}`), this._resources(resources)] as [string, object]
+            ]
         })
 
         const x = Map(pairs).toJS()

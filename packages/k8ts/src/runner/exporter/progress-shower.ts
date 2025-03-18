@@ -1,7 +1,7 @@
 import { ManifestSourceEmbedder } from "@k8ts/instruments"
 import ora from "ora"
 import { setTimeout } from "timers/promises"
-import type { Assembler, AssemblerEventsTable } from "./assembler"
+import type { Assembler, AssemblerEventsTable, AssemblyStage } from "./assembler"
 import { attr, dest, quantity, stage, verb } from "./pretty-objects"
 import { pretty } from "./pretty-print"
 export interface ProgressOptions {
@@ -30,6 +30,7 @@ export class ProgressShower {
             text: "K8ts is getting ready..."
         })
         spinner.text = "abc"
+        let lastStage: AssemblyStage = "start"
         const unsub = typedOnAny(events, async event => {
             switch (event.type) {
                 case "load":
@@ -38,12 +39,17 @@ export class ProgressShower {
                     )} ${event.resource} `
                     break
                 case "stage":
-                    console.log()
+                    if (!this._options.debug) {
+                        spinner.text = pretty`${stage(lastStage)}`
+                        spinner.render()
+                    }
 
+                    console.log()
                     spinner.text = pretty`${stage(event.stage)}`
                     if (event.stage === "done") {
                         unsub()
                     }
+                    lastStage = event.stage
                     break
                 case "received-file":
                     spinner.text = pretty`${verb("Receive")} ${event.file}`

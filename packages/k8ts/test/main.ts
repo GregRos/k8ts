@@ -6,8 +6,7 @@ async function main() {
     const runner = new Runner({
         summarizer: {},
         progress: {
-            waitTransition: 1,
-            debug: true
+            waitTransition: 77
         },
         saver: {
             outdir: ".k8ts"

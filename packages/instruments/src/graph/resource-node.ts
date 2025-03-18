@@ -8,12 +8,21 @@ import { Origin } from "./origin-node"
 import { Relations } from "./relations"
 
 @displayers({
-    default: s => `[${s.shortFqn}]`,
-    pretty(resource) {
-        const originPart = chalk.blueBright.italic(resource.origin.name)
+    simple: s => `[${s.shortFqn}]`,
+    pretty(resource, format) {
+        format ??= "global"
+
         const kindName = chalk.greenBright.bold(resource.kind.name)
-        const resourceName = chalk.cyan(resource.name)
-        return `${originPart}〚${kindName}/${resourceName}〛`
+        const resourceName = chalk.blueBright(resource.name)
+        const mainPart = `${kindName}/${resourceName}`
+        let originPart = ` (${displayers.get(resource.origin).prefix!()})`
+        let text = ""
+
+        text += mainPart
+        if (format !== "local") {
+            text += originPart
+        }
+        return text
     }
 })
 export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {

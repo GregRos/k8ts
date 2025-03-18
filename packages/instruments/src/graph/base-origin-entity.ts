@@ -7,13 +7,14 @@ import { RefKey } from "../ref-key"
 import { Origin, OriginEntity } from "./origin-node"
 export interface OriginEntityProps {
     meta?: Meta.Input
+    alias?: string
 }
 @displayers({
-    default: x => `[${x.shortFqn}]`,
+    simple: x => `[${x.shortFqn}]`,
     pretty(origin) {
         const kindPart = chalk.greenBright.bold(origin.kind.name)
         const originName = chalk.cyan(origin.name)
-        return `〚${kindPart}/${originName}〛`
+        return `${kindPart}/${originName}`
     }
 })
 export abstract class BaseOriginEntity<Props extends OriginEntityProps = OriginEntityProps>
@@ -22,6 +23,9 @@ export abstract class BaseOriginEntity<Props extends OriginEntityProps = OriginE
     abstract readonly kind: Kind.Kind
     #node: Doddle<Origin>
 
+    get alias() {
+        return this.props.alias ?? undefined
+    }
     get node() {
         return this.#node.pull()
     }

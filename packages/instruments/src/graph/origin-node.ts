@@ -1,6 +1,7 @@
 import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
-import { seq, Seq } from "doddle"
+import { doddle, seq, Seq } from "doddle"
+import { getMarkerForIndex, toSuperScript } from "../_string"
 import { Kind } from "../api-kind"
 import { displayers } from "../displayers"
 import { KindMap } from "../kind-map"
@@ -8,12 +9,19 @@ import { RefKey } from "../ref-key"
 import { BaseEntity, BaseNode } from "./base-node"
 import { ResourceNode } from "./resource-node"
 @displayers({
-    default: s => `[${s.shortFqn}]`,
-    pretty(origin) {
-        const originPart = chalk.blueBright(origin.name)
+    simple: s => `[${s.shortFqn}]`,
+    prefix: s => {
+        if (s.name === "EXTERNAL") {
+            return "🌐"
+        }
+        return getMarkerForIndex(s.index, s._entity.alias ?? toSuperScript(s.index))
+    },
+    pretty(origin, format) {
         const kindName = chalk.greenBright.bold(origin.kind.name)
         const resourceName = chalk.cyan(origin.name)
-        return `〚${originPart}:${kindName}/${resourceName}〛`
+        const pref = this.prefix!()
+
+        return `${kindName}:${resourceName} (${pref})`
     }
 })
 export class Origin extends BaseNode<Origin, OriginEntity> implements Iterable<ResourceNode> {
@@ -24,13 +32,18 @@ export class Origin extends BaseNode<Origin, OriginEntity> implements Iterable<R
     get meta() {
         return this._entity.meta
     }
-
+    readonly index: number
+    private readonly _getIndex = doddle(() => {
+        let index = 1
+        return () => index++
+    }).pull()
     constructor(
         readonly parent: Origin | null,
         entity: OriginEntity,
         readonly key: RefKey
     ) {
         super(entity)
+        this.index = parent?._getIndex() ?? 0
         this._kindMap = new KindMap(undefined, parent?._kindMap)
     }
     get resourceKinds() {
@@ -99,6 +112,7 @@ export class Origin extends BaseNode<Origin, OriginEntity> implements Iterable<R
     }
 }
 export interface OriginEntity extends BaseEntity<Origin> {
+    alias?: string
     meta: Meta
 }
 

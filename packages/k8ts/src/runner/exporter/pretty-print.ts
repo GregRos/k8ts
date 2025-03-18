@@ -7,11 +7,23 @@ type TokenClass = abstract new (...args: any[]) => TokenObject
 
 export function pretty(templateArgs: TemplateStringsArray, ...args: any[]) {
     args = args.map(arg => {
-        const x = Displayers.tryGet(arg)
+        const [format, target] = Array.isArray(arg) ? arg : [undefined, arg]
+        const x = Displayers.tryGet(target)
         if (x) {
-            return x.pretty()
+            return x.pretty(format)
         }
-        return arg
+        return target
     })
-    return String.raw(templateArgs, ...args)
+    const splat = templateArgs
+        .map((x, i) => {
+            const arg = args[i]
+            if (arg) {
+                return [x, arg]
+            }
+            return x
+        })
+        .flat()
+        .filter(x => x !== undefined)
+    const result = splat.join("")
+    return result
 }

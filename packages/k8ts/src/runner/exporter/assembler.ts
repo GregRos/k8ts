@@ -2,7 +2,6 @@ import { BaseManifest, Origin, ResourceNode } from "@k8ts/instruments"
 import { aseq, type ASeq, type DoddleAsync } from "doddle"
 import Emittery from "emittery"
 import type { File } from "../../file"
-import { FileOrigin } from "../../file/origin"
 import { ResourceLoader, type ResourceLoaderEventsTable } from "./loader"
 import { Manifester, type ManifesterEventsTable } from "./manifester"
 import { ManifestSaver, type ManifestSaverEventsTable, type ManifestSaverOptions } from "./saver"
@@ -99,7 +98,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
                     artifacts.map(x => x.yaml)
                 )
                 return {
-                    file,
+                    file: file.node,
                     filename,
                     bytes,
                     artifacts
@@ -119,7 +118,7 @@ export interface Artifact {
     yaml: string
 }
 export interface AssembledFile {
-    file: FileOrigin
+    file: Origin
     filename: string
     bytes: number
     artifacts: Artifact[]
@@ -132,6 +131,7 @@ export type AssemblyStage =
     | "manifesting"
     | "serializing"
     | "saving"
+    | "start"
     | "reporting"
     | "done"
     | "gathering"

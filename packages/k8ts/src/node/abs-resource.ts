@@ -5,7 +5,7 @@ export interface DependsOn {
     text: string
 }
 @displayers({
-    default: s => s.node,
+    simple: s => s.node,
     pretty: s => s.node
 })
 export abstract class AbsResource<Props extends object = object> {
