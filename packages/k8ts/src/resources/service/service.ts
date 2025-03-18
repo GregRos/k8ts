@@ -1,5 +1,5 @@
 import { CDK } from "@imports"
-import { connections, manifest, type InputPortMapping } from "@k8ts/instruments"
+import { manifest, relations, type InputPortMapping } from "@k8ts/instruments"
 import { v1 } from "../../api-versions"
 import { k8ts } from "../../kind-map"
 import { ManifestResource } from "../../node"
@@ -20,7 +20,7 @@ export namespace Service {
 
     const ident = v1.kind("Service")
     @k8ts(ident)
-    @connections({
+    @relations({
         needs: self => ({
             backend: self.props.backend
         })

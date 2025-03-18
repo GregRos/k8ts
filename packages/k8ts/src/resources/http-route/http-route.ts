@@ -1,5 +1,5 @@
 import type { CDK } from "@imports"
-import { connections, manifest } from "@k8ts/instruments"
+import { manifest, relations } from "@k8ts/instruments"
 import { gateway_v1 } from "../../api-versions"
 import type { External } from "../../external"
 import { k8ts } from "../../kind-map"
@@ -18,7 +18,7 @@ export namespace HttpRoute {
 
     const kind = gateway_v1.kind("HttpRoute")
     @k8ts(kind)
-    @connections({
+    @relations({
         needs: self => ({
             gateway: self.props.parent,
             service: self.props.backend.service

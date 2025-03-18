@@ -1,4 +1,4 @@
-import { BaseOriginEntity, kinded, KindMap, Origin, type Kind } from "@k8ts/instruments"
+import { BaseOriginEntity, KindMap, Origin, type Kind } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { External } from "../external"
 import { File } from "../file"
@@ -15,7 +15,6 @@ export namespace World {
     }
 
     const ident = k8tsBuildKind.kind("World")
-    @kinded(ident)
     export class Builder extends BaseOriginEntity<Props> {
         readonly kind = ident
         readonly ExternalOrigin: ExternalOriginEntity
@@ -49,7 +48,6 @@ export namespace World {
     }
 }
 const ident = k8tsBuildKind.kind("External")
-@kinded(ident)
 export class ExternalOriginEntity extends BaseOriginEntity {
     kind = ident
     constructor(parent: Origin) {

@@ -1,6 +1,6 @@
 import type { CDK } from "@imports"
 
-import { connections } from "@k8ts/instruments"
+import { relations } from "@k8ts/instruments"
 import type { ManifestResource } from "../../../node"
 import { SubResource } from "../../../node/sub-resource"
 import type { ConfigMap } from "../../configmap"
@@ -21,7 +21,7 @@ export namespace Volume {
         backend: Secret
     }
     export type Backend = PvcBackend | ConfigMapBackend | SecretBackend
-    @connections({
+    @relations({
         needs: self => ({
             backend: self.props.backend
         })

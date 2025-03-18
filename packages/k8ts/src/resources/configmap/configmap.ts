@@ -1,4 +1,4 @@
-import { connections, manifest } from "@k8ts/instruments"
+import { manifest, relations } from "@k8ts/instruments"
 import type { CDK } from "../../../imports"
 import { v1 } from "../../api-versions"
 import { k8ts } from "../../kind-map"
@@ -12,7 +12,7 @@ export namespace ConfigMap {
 
     const ident = v1.kind("ConfigMap")
     @k8ts(ident)
-    @connections("none")
+    @relations("none")
     @manifest({
         body(self): CDK.KubeConfigMapProps {
             return {

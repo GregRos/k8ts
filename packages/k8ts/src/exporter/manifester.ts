@@ -4,7 +4,7 @@ import Emittery from "emittery"
 import { cloneDeep, cloneDeepWith, get, isEmpty, unset } from "lodash"
 import { ManifestResource } from "../node"
 import { version } from "../version"
-export class ManifestGenerator extends Emittery<ManifestGeneratorEventsTable> {
+export class Manifester extends Emittery<ManifesterEventsTable> {
     constructor(options: {}) {
         super()
     }
@@ -52,15 +52,15 @@ export class ManifestGenerator extends Emittery<ManifestGeneratorEventsTable> {
 
     async generate(res: ResourceNode) {
         this._attachProductionAnnotations(res)
-        await this.emit("generating", { resource: res })
+        await this.emit("manifest", { resource: res })
         const manifest = this._generate(res.entity as ManifestResource)
         return manifest
     }
 }
-export interface GeneratingManifestEvent {
+export interface ManifesterManifestEvent {
     resource: ResourceNode
 }
 
-export interface ManifestGeneratorEventsTable {
-    generating: GeneratingManifestEvent
+export interface ManifesterEventsTable {
+    manifest: ManifesterManifestEvent
 }

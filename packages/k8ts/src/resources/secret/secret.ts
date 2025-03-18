@@ -1,5 +1,5 @@
 import { CDK } from "@imports"
-import { connections, manifest } from "@k8ts/instruments"
+import { manifest, relations } from "@k8ts/instruments"
 import { v1 } from "../../api-versions"
 import { k8ts } from "../../kind-map"
 import { ManifestResource } from "../../node/manifest-resource"
@@ -11,7 +11,7 @@ export interface Props {
 
 const ident = v1.kind("Secret")
 @k8ts(ident)
-@connections("none")
+@relations("none")
 @manifest({
     body(self): CDK.KubeSecretProps {
         return {

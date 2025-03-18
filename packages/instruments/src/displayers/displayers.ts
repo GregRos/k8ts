@@ -1,3 +1,4 @@
+import chalk from "chalk"
 import { Embedder } from "../_embedder"
 
 export namespace Displayers {
@@ -6,11 +7,13 @@ export namespace Displayers {
         pretty: () => string | object
     }
     export type In<Target extends object = object> = {
-        default: (this: Out, self: Target) => string | object
-        pretty: (this: Out, self: Target) => string | object
+        default?: (this: Out, self: Target) => string | object
+        pretty?: (this: Out, self: Target) => string | object
     }
 }
-
+const chalkNoColor = new chalk.Instance({
+    level: 0
+})
 class DisplayerDecorator {
     private _system = new Embedder<object, Displayers.In>("displayers")
 
@@ -62,8 +65,18 @@ class DisplayerDecorator {
             return undefined
         }
         const o: Displayers.Out = {
-            default: () => input.default.call(o, target),
-            pretty: () => input.pretty.call(o, target)
+            default: () => {
+                const result = input.default?.call(o, target)
+                if (!result) {
+                    const pretty = input.pretty?.call(o, target)
+                    if (typeof pretty === "string") {
+                        return chalkNoColor(pretty)
+                    }
+                    return "?!!?"
+                }
+                return result
+            },
+            pretty: () => input.pretty?.call(o, target) ?? input.default?.call(o, target) ?? "?!?"
         }
         return this.wrapRecursiveFallback(o)
     }

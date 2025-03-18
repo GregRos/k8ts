@@ -15,15 +15,9 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
         resource.meta!.add(k8ts_namespace, {
             "^constructed-at": "xxx.ts:1:1"
         })
-        if (loadEvent.subtype === "referenced") {
-            resource.meta!.add(k8ts_namespace, {
-                "^referenced-by": loadEvent.broughtBy.name
-            })
-        } else {
-            resource.meta!.add(k8ts_namespace, {
-                "^declared-in": resource.origin.name
-            })
-        }
+        resource.meta!.add(k8ts_namespace, {
+            "^declared-in": resource.origin.name
+        })
     }
 
     async load(input: File.Input) {
@@ -38,33 +32,25 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
                 throw new MakeError(`Resource ${res} is a forward reference`)
             }
             const event = {
-                subtype: "declared",
+                isExported: res.meta!.has(`^${k8ts_namespace}is-exported`),
                 resource: res
             } as const
 
             this._attachSourceAnnotations(event)
-            await this.emit("loading", event)
+            await this.emit("load", event)
             resources = resources.push(res)
         }
 
         return resources.toArray()
     }
 }
-export interface ResourceLoaded_FromDeclaration {
-    subtype: "declared"
+export interface ResourceLoadedEvent {
+    isExported: boolean
     resource: ResourceNode
 }
-
-export interface ResourceLoaded_FromReference {
-    subtype: "referenced"
-    resource: ResourceNode
-    broughtBy: ResourceNode
-}
-
-export type ResourceLoadedEvent = ResourceLoaded_FromDeclaration | ResourceLoaded_FromReference
 
 export interface ResourceLoaderEventsTable {
-    loading: ResourceLoaded_FromDeclaration | ResourceLoaded_FromReference
+    load: ResourceLoadedEvent
 }
 
 export interface ResourceLoaderOptions {}

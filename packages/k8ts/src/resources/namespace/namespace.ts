@@ -1,5 +1,5 @@
 import type { CDK } from "@imports"
-import { connections, manifest, type Origin } from "@k8ts/instruments"
+import { manifest, relations, type Origin } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { v1 } from "../../api-versions"
 import { k8ts } from "../../kind-map"
@@ -9,7 +9,7 @@ export namespace Namespace {
     export interface Props {}
     const ident = v1.kind("Namespace")
     @k8ts(ident)
-    @connections("none")
+    @relations("none")
     @manifest({
         body(self): CDK.KubeNamespaceProps {
             return {

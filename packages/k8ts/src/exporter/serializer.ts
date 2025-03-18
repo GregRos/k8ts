@@ -10,7 +10,7 @@ export interface SerializingEvent {
     manifest: BaseManifest
 }
 export interface YamlSerializerEventsTable {
-    serializing: SerializingEvent
+    serialize: SerializingEvent
 }
 export class YamlSerializer extends Emittery<YamlSerializerEventsTable> {
     constructor(private readonly _options: Partial<YamlSerializerOptions>) {
@@ -18,7 +18,7 @@ export class YamlSerializer extends Emittery<YamlSerializerEventsTable> {
     }
 
     async serialize(input: BaseManifest) {
-        await this.emit("serializing", { manifest: input })
+        await this.emit("serialize", { manifest: input })
 
         try {
             const result = dump(input, {

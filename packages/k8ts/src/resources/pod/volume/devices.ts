@@ -1,5 +1,5 @@
 import type { CDK } from "@imports"
-import { connections } from "@k8ts/instruments"
+import { relations } from "@k8ts/instruments"
 import type { ManifestResource } from "../../../node"
 import { SubResource } from "../../../node/sub-resource"
 import { Persistent } from "../../persistent"
@@ -12,7 +12,7 @@ export namespace Device {
     }
 
     export type Backend = PvcBackend
-    @connections({
+    @relations({
         needs: self => ({
             backend: self.backend.backend
         })

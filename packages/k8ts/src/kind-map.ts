@@ -8,7 +8,6 @@ import {
 import { k8tsBuildKind } from "./k8ts-sys-kind"
 const ident = k8tsBuildKind.kind("World")
 
-@kinded(ident)
 class K8tsRootOriginEntity extends BaseOriginEntity<OriginEntityProps> {
     override kind = ident
     constructor() {

@@ -1,8 +1,8 @@
 import type { CDK } from "@imports"
 import {
-    connections,
     Env,
     PortSet,
+    relations,
     ResourcesSpec,
     Unit,
     type CmdBuilder,
@@ -38,7 +38,7 @@ export namespace Container {
         securityContext?: CDK.SecurityContext
         resources?: Resources
     }
-    @connections({
+    @relations({
         needs: self => {
             const a = self.mounts
             return mapValues(

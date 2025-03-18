@@ -1,5 +1,5 @@
 import { CDK } from "@imports"
-import { connections, manifest } from "@k8ts/instruments"
+import { manifest, relations } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { omit } from "lodash"
 import { apps_v1 } from "../../api-versions"
@@ -17,7 +17,7 @@ export namespace PodTemplate {
     }
     const ident = apps_v1.kind("PodTemplate")
     @k8ts(ident)
-    @connections({
+    @relations({
         kids: s => [...s.containers, ...s.mounts.map(x => x.mount.parent)]
     })
     @manifest({

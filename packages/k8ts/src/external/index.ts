@@ -1,7 +1,8 @@
-import { Kind, Origin } from "@k8ts/instruments"
+import { Kind, Origin, relations } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { ManifestResource } from "../node"
 
+@relations("none")
 export class External<K extends Kind> extends ManifestResource {
     constructor(
         origin: Origin,
@@ -15,7 +16,7 @@ export class External<K extends Kind> extends ManifestResource {
                 name,
                 namespace
             }),
-            { KIND: kind }
+            {}
         )
     }
 

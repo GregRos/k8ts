@@ -1,10 +1,9 @@
 import { ManifestSourceEmbedder } from "@k8ts/instruments"
-import chalk from "chalk"
 import ora from "ora"
 import { setTimeout } from "timers/promises"
 import type { Assembler, AssemblerEventsTable } from "./assembler"
-import { attr, verb } from "./pretty-objects"
-import { k8tsShow } from "./pretty-print"
+import { attr, dest, quantity, stage, verb } from "./pretty-objects"
+import { pretty } from "./pretty-print"
 export interface ProgressOptions {
     waitTransition: number
     debug: boolean
@@ -33,31 +32,35 @@ export class ProgressShower {
         spinner.text = "abc"
         const unsub = typedOnAny(events, async event => {
             switch (event.type) {
-                case "loading":
-                    spinner.text = k8tsShow`${verb("Loading")} ${attr(event.subtype)} ${event.resource} `
+                case "load":
+                    spinner.text = pretty`${verb("Load")} ${attr(
+                        event.isExported ? "exported" : "internal"
+                    )} ${event.resource} `
                     break
                 case "stage":
-                    spinner.text = `Stage: ${event.stage}`
+                    console.log()
+
+                    spinner.text = pretty`${stage(event.stage)}`
                     if (event.stage === "done") {
                         unsub()
                     }
                     break
                 case "received-file":
-                    spinner.text = k8tsShow`${chalk.italic("RECEIVED")} ${event.file}`
+                    spinner.text = pretty`${verb("Receive")} ${event.file}`
                     break
-                case "serializing":
+                case "serialize":
                     const rsc = ManifestSourceEmbedder.get(event.manifest)
-                    spinner.text = k8tsShow`${chalk.italic("SERIALIZING")} ${rsc}`
+                    spinner.text = pretty`${verb("Serialize")} ${rsc}`
                     break
-                case "saving":
-                    spinner.text = `Saving ${event.content.length} bytes to ${event.filename}`
+                case "save":
+                    spinner.text = pretty`${verb("Save")} ${quantity(event.bytes, "byte")} to ${dest(event.filename)}`
                     break
 
-                case "generating":
-                    spinner.text = k8tsShow`${chalk.italic("RENDERING")} ${event.resource}`
+                case "manifest":
+                    spinner.text = pretty`${verb("Manifesting")} ${event.resource}`
                     break
-                case "purging":
-                    spinner.text = `Purging ${event.outdir}`
+                case "purge":
+                    spinner.text = pretty`${verb("Purge")} ${dest(event.outdir)}`
                     break
             }
             if (this._options.waitTransition) {

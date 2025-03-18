@@ -1,5 +1,6 @@
 import { FutureExports, Producer } from "@k8ts/instruments"
 import { seq, type Seq } from "doddle"
+import { k8tsSectionMeta } from "../meta/k8ts-section"
 import type { ManifestResource } from "../node"
 import { Factory } from "./factory"
 import type { FileOrigin } from "./origin"
@@ -29,7 +30,13 @@ export namespace FileExports {
                     return new Factory.Namespaced(props.origin.node)
                 }
             })
-            this.#produced = seq(() => producer(props.origin))
+            this.#produced = seq(() => producer(props.origin)).each(x => {
+                x.meta.add(
+                    k8tsSectionMeta({
+                        "^is-exported": "true"
+                    })
+                )
+            })
         }
 
         get __entity__() {

@@ -1,5 +1,5 @@
 import { CDK } from "@imports"
-import { connections, manifest, Origin } from "@k8ts/instruments"
+import { manifest, Origin, relations } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { omit } from "lodash"
 import { apps_v1 } from "../../api-versions"
@@ -15,7 +15,7 @@ export namespace Deployment {
 
     const ident = apps_v1.kind("Deployment")
     @k8ts(ident)
-    @connections({
+    @relations({
         kids: s => [s.template]
     })
     @manifest({

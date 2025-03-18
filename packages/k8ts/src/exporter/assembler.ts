@@ -3,8 +3,8 @@ import { aseq, type ASeq, type DoddleAsync } from "doddle"
 import Emittery from "emittery"
 import type { File } from "../file"
 import { FileOrigin } from "../file/origin"
-import { ManifestGenerator, type ManifestGeneratorEventsTable } from "./generator"
 import { ResourceLoader, type ResourceLoaderEventsTable } from "./loader"
+import { Manifester, type ManifesterEventsTable } from "./manifester"
 import { ManifestSaver, type ManifestSaverEventsTable, type ManifestSaverOptions } from "./saver"
 import { YamlSerializer, type YamlSerializerEventsTable } from "./serializer"
 
@@ -22,7 +22,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
         }
         const loader = new ResourceLoader({})
         loader.onAny(_emit)
-        const generator = new ManifestGenerator({})
+        const generator = new Manifester({})
         generator.onAny(_emit)
         const serializer = new YamlSerializer({})
         serializer.onAny(_emit)
@@ -47,7 +47,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
                 }
             })
             .after(async () => {
-                await _emit("stage", { stage: "generating" })
+                await _emit("stage", { stage: "manifesting" })
             })
             .collect()
             .map(async ({ file, resources }) => {
@@ -87,7 +87,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
                 }
             })
             .after(async () => {
-                await _emit("stage", { stage: "serializing" })
+                await _emit("stage", { stage: "saving" })
             })
             .after(async () => {
                 await saver.prepareOnce()
@@ -129,7 +129,7 @@ export interface AssemblerOptions {
 }
 export type AssemblyStage =
     | "loading"
-    | "generating"
+    | "manifesting"
     | "serializing"
     | "saving"
     | "reporting"
@@ -138,7 +138,7 @@ export type AssemblyStage =
 export interface AssemblerEventsTable
     extends ManifestSaverEventsTable,
         YamlSerializerEventsTable,
-        ManifestGeneratorEventsTable,
+        ManifesterEventsTable,
         ResourceLoaderEventsTable {
     ["received-file"]: { file: Origin }
     ["stage"]: { stage: AssemblyStage }

@@ -1,5 +1,5 @@
 import type { CDK } from "@imports"
-import { connections, manifest, ResourcesSpec, Unit } from "@k8ts/instruments"
+import { manifest, relations, ResourcesSpec, Unit } from "@k8ts/instruments"
 import { v1 } from "../../../api-versions"
 import { k8ts } from "../../../kind-map"
 import { ManifestResource } from "../../../node"
@@ -22,7 +22,7 @@ export namespace Claim {
 
     const ident = v1.kind("PersistentVolumeClaim")
     @k8ts(ident)
-    @connections({
+    @relations({
         needs: self => ({
             bind: self.props.bind
         })

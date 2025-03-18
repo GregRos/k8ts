@@ -5,7 +5,7 @@ type Shower<T> = (x: T) => string
 type TokenObject = Verb | Attr | Stage | ResourceNode | Origin
 type TokenClass = abstract new (...args: any[]) => TokenObject
 
-export function k8tsShow(templateArgs: TemplateStringsArray, ...args: any[]) {
+export function pretty(templateArgs: TemplateStringsArray, ...args: any[]) {
     args = args.map(arg => {
         const x = Displayers.tryGet(arg)
         if (x) {

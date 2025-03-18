@@ -23,9 +23,6 @@ export abstract class BaseNode<
         return this.key.kind
     }
 
-    get isTopLevel() {
-        return this.parent == null
-    }
     abstract readonly kids: Seq<Node>
     abstract readonly needs: Seq<NeedsEdge<Node>>
     abstract readonly parent: Node | null

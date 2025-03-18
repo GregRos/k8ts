@@ -29,7 +29,10 @@ export class ValueKey extends KeyType {
     get suffix() {
         const parts = []
         if (this._section) {
-            parts.push(this._section, "/")
+            parts.push(this._section)
+            if (!this._section.endsWith("/")) {
+                parts.push("/")
+            }
         }
         parts.push(this._name)
         return parts.join("")

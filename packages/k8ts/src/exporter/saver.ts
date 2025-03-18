@@ -14,7 +14,7 @@ export class ManifestSaver extends Emittery<ManifestSaverEventsTable> {
     }
 
     async prepareOnce() {
-        await this.emit("purging", {
+        await this.emit("purge", {
             outdir: this._options.outdir
         })
         await rm(this._options.outdir, {
@@ -29,30 +29,29 @@ export class ManifestSaver extends Emittery<ManifestSaverEventsTable> {
     async save(origin: Origin, manifests: string[]) {
         const content = this._splat(manifests)
         const filename = `${origin.name}`
-        await this.emit("saving", {
-            filename,
-            content: content
-        })
-        await mkdir(this._options.outdir, { recursive: true })
         const encoded = this._encoder.encode(content)
-        await writeFile(join(this._options.outdir, filename), encoded)
-        return {
-            manifests,
+        const e: SavingManifestEvent = {
             filename,
+            content: content,
             bytes: encoded.byteLength
         }
+        await this.emit("save", e)
+        await mkdir(this._options.outdir, { recursive: true })
+        await writeFile(join(this._options.outdir, filename), encoded)
+        return e
     }
 }
 export interface SavingManifestEvent {
     filename: string
     content: string
+    bytes: number
 }
 export interface PurgingDirEvent {
     outdir: string
 }
 export interface ManifestSaverEventsTable {
-    saving: SavingManifestEvent
-    purging: PurgingDirEvent
+    save: SavingManifestEvent
+    purge: PurgingDirEvent
 }
 
 export interface ManifestSaverOptions {

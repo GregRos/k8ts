@@ -1,5 +1,6 @@
 import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
+import { doddle, Doddle } from "doddle"
 import { Kind } from "../api-kind"
 import { displayers } from "../displayers"
 import { RefKey } from "../ref-key"
@@ -19,14 +20,17 @@ export abstract class BaseOriginEntity<Props extends OriginEntityProps = OriginE
     implements OriginEntity
 {
     abstract readonly kind: Kind.Kind
-    node: Origin
+    #node: Doddle<Origin>
 
+    get node() {
+        return this.#node.pull()
+    }
     constructor(
         readonly name: string,
         readonly props: Props,
         parent: Origin | null
     ) {
-        this.node = new Origin(parent, this, RefKey.make(this["kind"], name))
+        this.#node = doddle(() => new Origin(parent, this, RefKey.make(this.kind, name)))
     }
     get meta() {
         return Meta.make(this.props.meta)

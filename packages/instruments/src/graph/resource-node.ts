@@ -4,21 +4,21 @@ import { seq } from "doddle"
 import { displayers } from "../displayers"
 import { RefKey } from "../ref-key"
 import { BaseEntity, BaseNode, Formats } from "./base-node"
-import { __CONNECTIONS } from "./connections"
 import { Origin } from "./origin-node"
+import { Relations } from "./relations"
 
 @displayers({
     default: s => `[${s.shortFqn}]`,
     pretty(resource) {
-        const originPart = chalk.blueBright(resource.origin.name)
+        const originPart = chalk.blueBright.italic(resource.origin.name)
         const kindName = chalk.greenBright.bold(resource.kind.name)
         const resourceName = chalk.cyan(resource.name)
-        return `〚${originPart}:${kindName}/${resourceName}〛`
+        return `${originPart}〚${kindName}/${resourceName}〛`
     }
 })
 export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
     get needs() {
-        return seq(this._connections.needs)
+        return seq(this._relations.needs)
     }
 
     get meta() {
@@ -41,13 +41,11 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
     }
 
     get kids() {
-        return seq(this._connections.kids)
+        return seq(this._relations.kids)
     }
-    override get isTopLevel() {
-        return this.isExternal || this.parent == null
-    }
+
     get parent() {
-        return this._connections.parent()
+        return this._relations.parent()
     }
 
     override get shortFqn() {
@@ -64,8 +62,8 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
                 return this.key.name
         }
     }
-    private get _connections() {
-        return __CONNECTIONS.get(this._entity)
+    private get _relations() {
+        return Relations.get(this._entity)
     }
     constructor(
         readonly origin: Origin,

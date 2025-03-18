@@ -2,7 +2,7 @@ import { Embedder } from "../_embedder/base"
 import { Dependencies, dependencies, NeedsEdge } from "./dependencies"
 import { ResourceEntity, ResourceNode } from "./resource-node"
 
-export namespace Connections {
+export namespace Relations {
     export interface Out {
         needs: () => Iterable<NeedsEdge<ResourceNode>>
         parent: () => ResourceNode | null
@@ -18,12 +18,12 @@ export namespace Connections {
     }
 }
 
-export class ConnectionsDecorator {
-    private _system = new Embedder<ResourceEntity, Connections.In>("connections")
+class RelationsService {
+    private _system = new Embedder<ResourceEntity, Relations.In>("relations")
 
     implement(
         ctor: abstract new (...args: any[]) => ResourceEntity,
-        input: Connections.In<ResourceEntity>
+        input: Relations.In<ResourceEntity>
     ) {
         const existing = this._system.tryGet(ctor.prototype)
         if (existing) {
@@ -32,7 +32,7 @@ export class ConnectionsDecorator {
         this._system.set(ctor.prototype, input)
     }
 
-    get(target: ResourceEntity): Connections.Out {
+    get(target: ResourceEntity): Relations.Out {
         const input = this._system.get(target)
         const o = {
             kids: () => input.kids?.call(o, target).map(x => x.node) ?? [],
@@ -45,7 +45,7 @@ export class ConnectionsDecorator {
     get decorator() {
         return <
             Target extends abstract new (...args: any[]) => ResourceEntity,
-            Impl extends Partial<Connections.In<InstanceType<Target>>> | "none"
+            Impl extends Partial<Relations.In<InstanceType<Target>>> | "none"
         >(
             input: Impl
         ) => {
@@ -56,7 +56,7 @@ export class ConnectionsDecorator {
         }
     }
 }
-export const __CONNECTIONS = new ConnectionsDecorator()
-export const connections = __CONNECTIONS.decorator
+export const Relations = new RelationsService()
+export const relations = Relations.decorator
 
 // writing the decorator itself

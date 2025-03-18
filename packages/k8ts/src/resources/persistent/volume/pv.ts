@@ -1,5 +1,5 @@
 import { CDK } from "@imports"
-import { connections, manifest, type Unit } from "@k8ts/instruments"
+import { manifest, relations, type Unit } from "@k8ts/instruments"
 import { v1 } from "../../../api-versions"
 import { k8ts } from "../../../kind-map"
 import { ManifestResource } from "../../../node/manifest-resource"
@@ -46,7 +46,7 @@ export namespace Volume {
         }
     })
     @k8ts(ident)
-    @connections("none")
+    @relations("none")
     export class Volume<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
         declare readonly kind: typeof ident
     }
