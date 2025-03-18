@@ -52,6 +52,10 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
         return `${this.origin.name}:${this.key}`
     }
 
+    get localName() {
+        return this.key.string
+    }
+
     format(format: Formats) {
         switch (format) {
             case "short":

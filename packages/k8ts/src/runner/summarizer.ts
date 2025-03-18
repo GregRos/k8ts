@@ -1,33 +1,35 @@
-import { NeedsEdge, Origin, ResourceNode } from "@k8ts/instruments"
+import { NeedsEdge, ResourceNode, TextPostProcessor } from "@k8ts/instruments"
 import { List, Map } from "immutable"
 import { dump } from "js-yaml"
+import { pretty } from "./exporter/pretty-print"
 
 export interface SummarizerOptions {}
-function _formatRefFromTo(node: ResourceNode, edge: NeedsEdge<ResourceNode>) {
-    const target = edge.needed
-    let fqn = target.shortFqn
-    if (node.origin.isParentOf(target.origin)) {
-        fqn = `./${fqn}`
-    } else {
-        fqn = `${target.origin.name}:${fqn}`
+export class Summarizer {
+    private _post = new TextPostProcessor()
+    constructor(readonly options: SummarizerOptions) {}
+    _formatRefFromTo(node: ResourceNode, edge: NeedsEdge<ResourceNode>) {
+        const target = edge.needed
+        let fqn = pretty`${target}`
+
+        return `${edge.why} -> ${this._token(fqn)}`
     }
 
-    return `${edge.why} -> ${fqn}`
-}
-export class Summarizer {
-    constructor(readonly options: SummarizerOptions) {}
+    private _token(text: string) {
+        const token = this._post.token(text)
+        return token
+    }
 
     private _resource(resource: ResourceNode): any {
         const subs = resource.kids
             .map(sub => {
-                const heading = sub.shortFqn
+                const heading = sub.localName
                 const description = this._resource(sub)
-                return { [heading]: description }
+                return { [this._token(heading)]: description }
             })
             .toArray()
             .pull()
         const depends = resource.needs
-            .map(x => _formatRefFromTo(resource, x))
+            .map(x => this._formatRefFromTo(resource, x))
             .toArray()
             .pull()
         if (depends.length === 0 && subs.length === 0) {
@@ -39,21 +41,18 @@ export class Summarizer {
     private _resources(resources: ResourceNode[]): object {
         const resourceContainer = List(resources)
             .map(resource => {
+                const text = pretty`${resource}`
+                const token = this._token(text)
+                const objForm = this._resource(resource)
                 return {
-                    [resource.shortFqn]: this._resource(resource)
+                    [token]: objForm
                 }
             })
             .reduce((a, b) => {
-                return { ...a, ...b }
-            }, {})
+                return [...a, b]
+            }, [] as any)
 
         return resourceContainer
-    }
-
-    private _origin(origin: Origin): object {
-        return {
-            [origin.shortFqn]: null
-        }
     }
 
     private _serialize(input: object) {
@@ -63,7 +62,7 @@ export class Summarizer {
             indent: 2,
             noRefs: true
         })
-        return result
+        return this._post.render(result)
     }
 
     files(obj: { filename: string; resources: ResourceNode[] }[]) {

@@ -1,4 +1,5 @@
 export * from "./_embedder"
+export * from "./_string"
 export * from "./api-kind"
 export * from "./cmd"
 export * from "./displayers"

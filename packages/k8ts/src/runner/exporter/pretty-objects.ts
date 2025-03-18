@@ -30,7 +30,7 @@ export class Stage {
     pretty(self) {
         const { num, noun } = self
         const nounForm = num > 1 ? `${noun}s` : noun
-        return `${chalk.blueBright(num)} ${chalk.green(nounForm)}`
+        return `${chalk.red(num)} ${chalk.green(nounForm)}`
     }
 })
 export class Quantity {
@@ -41,7 +41,7 @@ export class Quantity {
 }
 @displayers({
     default: s => s.text,
-    pretty: dest => chalk.cyan(dest.text)
+    pretty: dest => chalk.blueBright(dest.text)
 })
 export class Dest {
     constructor(readonly text: string) {}

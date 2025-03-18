@@ -53,7 +53,7 @@ export class ProgressShower {
                     spinner.text = pretty`${verb("Serialize")} ${rsc}`
                     break
                 case "save":
-                    spinner.text = pretty`${verb("Save")} ${quantity(event.bytes, "byte")} to ${dest(event.filename)}`
+                    spinner.text = pretty`${verb("Save")} ${dest(event.filename)} (${quantity(event.bytes, "byte")})`
                     break
 
                 case "manifest":
