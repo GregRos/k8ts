@@ -1,9 +1,8 @@
-import { BaseManifest, Origin } from "@k8ts/instruments"
+import { BaseManifest, Origin, ResourceNode } from "@k8ts/instruments"
 import { aseq, type ASeq, type DoddleAsync } from "doddle"
 import Emittery from "emittery"
 import type { File } from "../file"
 import { FileOrigin } from "../file/origin"
-import { AbsResource } from "../node/abs-resource"
 import { ManifestGenerator, type ManifestGeneratorEventsTable } from "./generator"
 import { ResourceLoader, type ResourceLoaderEventsTable } from "./loader"
 import { ManifestSaver, type ManifestSaverEventsTable, type ManifestSaverOptions } from "./saver"
@@ -44,7 +43,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
                 const loaded = await loader.load(file)
                 return {
                     file: file.__entity__,
-                    resources: loaded.filter(x => !x.node.isExternal)
+                    resources: loaded.filter(x => !x.isExternal)
                 }
             })
             .after(async () => {
@@ -115,7 +114,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
     }
 }
 export interface Artifact {
-    k8ts: AbsResource
+    k8ts: ResourceNode
     manifest: BaseManifest
     yaml: string
 }

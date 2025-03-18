@@ -15,11 +15,12 @@
       "type": "node",
       "name": "TEST: k8ts",
       "request": "launch",
-      "args": ["test", "--runInBand", "--watchAll=false", "--testNamePattern"],
+      "program": "test/run-tsx.ts",
       "cwd": "c:\\codegr\\k8ts\\packages\\k8ts",
+      "runtimeExecutable": "tsx",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "runtimeExecutable": "yarn"
+      "runtimeArgs": ["--tsconfig=./test/tsconfig.json"]
     },
     {
       "type": "node",

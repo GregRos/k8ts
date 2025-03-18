@@ -3,7 +3,8 @@ import chalk from "chalk"
 import ora from "ora"
 import { setTimeout } from "timers/promises"
 import type { Assembler, AssemblerEventsTable } from "./assembler"
-import { attr, k8tsMessage, verb } from "./pretty-print"
+import { attr, verb } from "./pretty-objects"
+import { k8tsShow } from "./pretty-print"
 export interface ProgressOptions {
     waitTransition: number
     debug: boolean
@@ -33,7 +34,7 @@ export class ProgressShower {
         const unsub = typedOnAny(events, async event => {
             switch (event.type) {
                 case "loading":
-                    spinner.text = k8tsMessage`${verb("Loading")} ${attr(event.subtype)} ${event.resource} `
+                    spinner.text = k8tsShow`${verb("Loading")} ${attr(event.subtype)} ${event.resource} `
                     break
                 case "stage":
                     spinner.text = `Stage: ${event.stage}`
@@ -42,18 +43,18 @@ export class ProgressShower {
                     }
                     break
                 case "received-file":
-                    spinner.text = k8tsMessage`${chalk.italic("RECEIVED")} ${event.file}`
+                    spinner.text = k8tsShow`${chalk.italic("RECEIVED")} ${event.file}`
                     break
                 case "serializing":
                     const rsc = ManifestSourceEmbedder.get(event.manifest)
-                    spinner.text = k8tsMessage`${chalk.italic("SERIALIZING")} ${rsc}`
+                    spinner.text = k8tsShow`${chalk.italic("SERIALIZING")} ${rsc}`
                     break
                 case "saving":
                     spinner.text = `Saving ${event.content.length} bytes to ${event.filename}`
                     break
 
                 case "generating":
-                    spinner.text = k8tsMessage`${chalk.italic("RENDERING")} ${event.resource}`
+                    spinner.text = k8tsShow`${chalk.italic("RENDERING")} ${event.resource}`
                     break
                 case "purging":
                     spinner.text = `Purging ${event.outdir}`

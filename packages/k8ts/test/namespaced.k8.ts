@@ -21,37 +21,36 @@ export default W.File("deployment.yaml", {
             bind: k8tsFile["PersistentVolume/dev-sda"],
             storage: "1Gi--->5Gi"
         })
-        const pods = k.PodTemplate("xyz", {
-            *POD(k) {
-                const v = k.Volume("data", {
-                    backend: claim
-                })
-
-                const d = k.Device("dev", {
-                    backend: devClaim
-                })
-
-                yield k.Container("main", {
-                    image: Image.name("nginx").tag("latest"),
-                    ports: {
-                        http: 80
-                    },
-                    mounts: {
-                        "/xyz": v.mount(),
-                        "/etc": v.mount(),
-                        "/dev": d.mount()
-                    },
-                    resources: {
-                        cpu: "100m--->500m",
-                        memory: "100Mi--->500Mi"
-                    }
-                })
-            }
-        })
 
         const deploy = k.Deployment("xyz", {
             replicas: 1,
-            template: pods
+            template: {
+                *POD(k) {
+                    const v = k.Volume("data", {
+                        backend: claim
+                    })
+
+                    const d = k.Device("dev", {
+                        backend: devClaim
+                    })
+
+                    yield k.Container("main", {
+                        image: Image.name("nginx").tag("latest"),
+                        ports: {
+                            http: 80
+                        },
+                        mounts: {
+                            "/xyz": v.mount(),
+                            "/etc": v.mount(),
+                            "/dev": d.mount()
+                        },
+                        resources: {
+                            cpu: "100m--->500m",
+                            memory: "100Mi--->500Mi"
+                        }
+                    })
+                }
+            }
         })
 
         const svc2 = k.Service("xyz", {
@@ -68,11 +67,6 @@ export default W.File("deployment.yaml", {
             hostname: "example.com",
             parent: W.External(gwKind, "gateway"),
             backend: svc2.getPortRef("http")
-        })
-
-        k.Deployment("name", {
-            replicas: 1,
-            template: pods
         })
 
         yield route

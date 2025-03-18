@@ -21,6 +21,10 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
         return seq(this._connections.needs)
     }
 
+    get meta() {
+        return "meta" in this._entity ? (this._entity.meta as MutableMeta) : undefined
+    }
+
     get isExternal() {
         return this.origins.some(x => x.name === "EXTERNAL").pull()
     }
@@ -39,7 +43,9 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
     get kids() {
         return seq(this._connections.kids)
     }
-
+    override get isTopLevel() {
+        return this.isExternal || this.parent == null
+    }
     get parent() {
         return this._connections.parent()
     }

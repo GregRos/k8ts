@@ -1,4 +1,4 @@
-import { BaseManifest } from "@k8ts/instruments"
+import { BaseManifest, ResourceNode } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import Emittery from "emittery"
 import { cloneDeep, cloneDeepWith, get, isEmpty, unset } from "lodash"
@@ -41,24 +41,24 @@ export class ManifestGenerator extends Emittery<ManifestGeneratorEventsTable> {
         const noEmpty = this._cleanSpecificEmptyObjects(noNullish)
         return noEmpty
     }
-    private _attachProductionAnnotations(resource: ManifestResource) {
-        const origin = resource.node.origin
+    private _attachProductionAnnotations(resource: ResourceNode) {
+        const origin = resource.origin
         const common = Meta.make().add({
             "^world": origin.root.name,
             "^produced-by": `k8ts@${version}`
         })
-        resource.meta.add(common)
+        resource.meta!.add(common)
     }
 
-    async generate(res: ManifestResource) {
+    async generate(res: ResourceNode) {
         this._attachProductionAnnotations(res)
         await this.emit("generating", { resource: res })
-        const manifest = this._generate(res)
+        const manifest = this._generate(res.entity as ManifestResource)
         return manifest
     }
 }
 export interface GeneratingManifestEvent {
-    resource: ManifestResource
+    resource: ResourceNode
 }
 
 export interface ManifestGeneratorEventsTable {

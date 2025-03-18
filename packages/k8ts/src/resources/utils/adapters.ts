@@ -1,6 +1,5 @@
-import type { CDK } from "@imports"
+import { CDK } from "@imports"
 import type { EnvBuilder, PortMap, PortMapEntry, PortSet, PortSetEntry } from "@k8ts/instruments"
-import { IntOrString } from "../../../imports/k8s"
 
 export function toContainerPort(entry: PortSetEntry): CDK.ContainerPort {
     return {
@@ -17,7 +16,7 @@ export function toContainerPorts(ports: PortSet<any>) {
 export function toServicePort(entry: PortMapEntry): CDK.ServicePort {
     return {
         port: entry.source,
-        targetPort: IntOrString.fromNumber(entry.target),
+        targetPort: CDK.IntOrString.fromNumber(entry.target),
         protocol: entry.protocol,
         name: entry.name
     }

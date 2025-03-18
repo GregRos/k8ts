@@ -6,27 +6,71 @@ export namespace Displayers {
         pretty: () => string | object
     }
     export type In<Target extends object = object> = {
-        default: (self: Target) => string | object
-        pretty: (self: Target) => string | object
-    } & {
-        [key: string]: (self: Target, ...args: any[]) => any
+        default: (this: Out, self: Target) => string | object
+        pretty: (this: Out, self: Target) => string | object
     }
 }
 
-export class DisplayerDecorator {
+class DisplayerDecorator {
     private _system = new Embedder<object, Displayers.In>("displayers")
 
     implement(ctor: abstract new (...args: any[]) => object, input: Displayers.In) {
         this._system.set(ctor.prototype, input)
+        const decorator = this
+        Object.defineProperties(ctor.prototype, {
+            [Symbol.toStringTag]: {
+                get() {
+                    const a = decorator.get(this)
+                    return a.default()
+                }
+            },
+            toString: {
+                value() {
+                    return this[Symbol.toStringTag]
+                }
+            }
+        })
     }
 
-    get(target: object): Displayers.Out {
+    wrapRecursiveFallback(out: Displayers.Out) {
+        const oAny = out as any
+        for (const k in out) {
+            const orig = oAny[k]
+            if (typeof orig === "function") {
+                oAny[k] = function (...args: any[]) {
+                    const result = orig.call(oAny, ...args)
+                    if (typeof result === "object") {
+                        const sndDisplayers = Displayers.tryGet(result)
+                        if (sndDisplayers) {
+                            return (sndDisplayers as any)[k].call(sndDisplayers, result, ...args)
+                        }
+                        debugger
+                    }
+                    return result
+                }
+            }
+        }
+        return out
+    }
+
+    tryGet(target: any): Displayers.Out | undefined {
+        if (typeof target !== "object") {
+            return undefined
+        }
         const input = this._system.get(target)
+        if (!input) {
+            return undefined
+        }
         const o: Displayers.Out = {
             default: () => input.default.call(o, target),
             pretty: () => input.pretty.call(o, target)
         }
-        return o
+        return this.wrapRecursiveFallback(o)
+    }
+
+    get(target: object): Displayers.Out {
+        this._system.get(target) // error if not there
+        return this.tryGet(target)!
     }
 
     get decorator() {

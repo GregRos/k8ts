@@ -25,6 +25,10 @@ export class ConnectionsDecorator {
         ctor: abstract new (...args: any[]) => ResourceEntity,
         input: Connections.In<ResourceEntity>
     ) {
+        const existing = this._system.tryGet(ctor.prototype)
+        if (existing) {
+            input = Object.assign({}, existing, input)
+        }
         this._system.set(ctor.prototype, input)
     }
 

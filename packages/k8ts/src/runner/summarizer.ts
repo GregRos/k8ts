@@ -1,8 +1,6 @@
-import { NeedsEdge, Origin, ResourceEntity, ResourceNode } from "@k8ts/instruments"
-import { seq } from "doddle"
+import { NeedsEdge, Origin, ResourceNode } from "@k8ts/instruments"
 import { List, Map } from "immutable"
 import { dump } from "js-yaml"
-import { AbsResource } from "../node/abs-resource"
 
 export interface SummarizerOptions {}
 function _formatRefFromTo(node: ResourceNode, edge: NeedsEdge<ResourceNode>) {
@@ -38,11 +36,11 @@ export class Summarizer {
         return [...subs, ...depends]
     }
 
-    private _resources(resources: ResourceEntity[]): object {
+    private _resources(resources: ResourceNode[]): object {
         const resourceContainer = List(resources)
             .map(resource => {
                 return {
-                    [resource.shortFqn]: this._resource(resource.node)
+                    [resource.shortFqn]: this._resource(resource)
                 }
             })
             .reduce((a, b) => {
@@ -68,33 +66,11 @@ export class Summarizer {
         return result
     }
 
-    files(
-        obj: { filename: string; resources: AbsResource[] }[],
-        dangling?: (AbsResource | Origin)[]
-    ) {
+    files(obj: { filename: string; resources: ResourceNode[] }[]) {
         let pairs = obj.map(({ filename, resources }) => {
             return [filename, this._resources(resources)] as [string, object]
         })
-        if (dangling) {
-            const resources = seq(dangling)
-                .filter(x => x instanceof AbsResource)
-                .toArray()
-                .pull()
-            const r = this._resources(resources)
-            const origins = seq(dangling)
-                .filter(x => x instanceof Origin)
-                .map(x => this._origin(x))
-                .reduce(
-                    (a, b) => ({
-                        ...a,
-                        ...b
-                    }),
-                    {}
-                )
-                .pull()
-            Object.assign(r, origins)
-            pairs = [...pairs, ["Dangling", r]]
-        }
+
         const x = Map(pairs).toJS()
         return this._serialize(x)
     }

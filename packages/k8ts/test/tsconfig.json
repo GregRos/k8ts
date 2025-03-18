@@ -8,8 +8,8 @@
   "compilerOptions": {
     "composite": false,
     "declarationMap": false,
+    "outDir": "../dist_test",
     "noEmit": true,
-    "baseUrl": ".",
     "tsBuildInfoFile": "../dist/test.tsbuildinfo",
     "types": ["jest", "node"],
     "paths": {

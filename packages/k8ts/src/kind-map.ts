@@ -1,4 +1,10 @@
-import { BaseOriginEntity, Kind, MetadataEntity, OriginEntityProps } from "@k8ts/instruments"
+import {
+    BaseOriginEntity,
+    Kind,
+    kinded,
+    MetadataEntity,
+    OriginEntityProps
+} from "@k8ts/instruments"
 import { k8tsBuildKind } from "./k8ts-sys-kind"
 const ident = k8tsBuildKind.kind("World")
 
@@ -25,13 +31,6 @@ class K8tsRootOriginEntity extends BaseOriginEntity<OriginEntityProps> {
                 return ctor
             }
         }
-    }
-}
-
-export function kinded(kind: Kind.Identifier) {
-    return <T extends abstract new (...args: any[]) => object>(ctor: T) => {
-        ctor.prototype.kind = kind
-        return ctor
     }
 }
 

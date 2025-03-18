@@ -1,10 +1,7 @@
 import { Runner } from "@lib"
-import { start } from "pretty-error"
 import cluster from "./cluster-scoped.k8"
 import namespaced from "./namespaced.k8"
-start()
 
-Error.stackTraceLimit = Infinity
 async function main() {
     const runner = new Runner({
         summarizer: {},
@@ -18,6 +15,6 @@ async function main() {
         checkDanglingRefs: true
     })
 
-    runner.run([cluster, namespaced]).catch(console.error)
+    await runner.run([cluster, namespaced])
 }
 main()

@@ -1,7 +1,6 @@
 import { Seq, seq } from "doddle"
 import { hash, Set } from "immutable"
 import { Kind } from "../api-kind"
-import { displayers } from "../displayers"
 import { RefKey } from "../ref-key"
 import { ForwardRef } from "../reference"
 import { Traced } from "../tracing"
@@ -14,9 +13,7 @@ export interface BaseEntity<Node extends BaseNode<Node>> {
     readonly kind: Kind.Identifier
     readonly name: string
 }
-@displayers({
-    default: s => `[${s.shortFqn}]`
-})
+
 export abstract class BaseNode<
     Node extends BaseNode<Node, Entity>,
     Entity extends BaseEntity<Node> = BaseEntity<Node>
@@ -26,6 +23,9 @@ export abstract class BaseNode<
         return this.key.kind
     }
 
+    get isTopLevel() {
+        return this.parent == null
+    }
     abstract readonly kids: Seq<Node>
     abstract readonly needs: Seq<NeedsEdge<Node>>
     abstract readonly parent: Node | null

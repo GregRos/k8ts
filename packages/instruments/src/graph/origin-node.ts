@@ -7,13 +7,12 @@ import { KindMap } from "../kind-map"
 import { RefKey } from "../ref-key"
 import { BaseEntity, BaseNode } from "./base-node"
 import { ResourceNode } from "./resource-node"
-
 @displayers({
     default: s => `[${s.shortFqn}]`,
-    pretty(resource) {
-        const originPart = chalk.blueBright(resource.name)
-        const kindName = chalk.greenBright.bold(resource.kind.name)
-        const resourceName = chalk.cyan(resource.name)
+    pretty(origin) {
+        const originPart = chalk.blueBright(origin.name)
+        const kindName = chalk.greenBright.bold(origin.kind.name)
+        const resourceName = chalk.cyan(origin.name)
         return `〚${originPart}:${kindName}/${resourceName}〛`
     }
 })
@@ -62,7 +61,8 @@ export class Origin extends BaseNode<Origin, OriginEntity> implements Iterable<R
     }
     static registerWithOrigin<F extends Function>(ctor: F) {
         const prototype = ctor.prototype
-        for (const [key, value] of Object.entries(prototype)) {
+        for (const key of Object.getOwnPropertyNames(prototype)) {
+            const value = prototype[key]
             if (!key.match(/^[A-Z]/) || typeof value !== "function") {
                 continue
             }
@@ -76,6 +76,7 @@ export class Origin extends BaseNode<Origin, OriginEntity> implements Iterable<R
                 ) {
                     result.node.origin.__attach_resource__([result.node])
                 }
+                return result
             }
         }
     }

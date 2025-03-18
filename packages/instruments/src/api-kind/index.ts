@@ -92,3 +92,9 @@ export namespace Kind {
         return new Version(apiVersion, group(""))
     }
 }
+export function kinded(kind: Kind.Identifier) {
+    return <T extends abstract new (...args: any[]) => object>(ctor: T) => {
+        ctor.prototype.kind = kind
+        return ctor
+    }
+}

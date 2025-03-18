@@ -1,4 +1,4 @@
-import { BaseOriginEntity, Origin } from "@k8ts/instruments"
+import { BaseOriginEntity, kinded, Origin } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { k8tsBuildKind } from "../k8ts-sys-kind"
 import type { Namespace } from "../resources"
@@ -12,15 +12,10 @@ export namespace FileOrigin {
         scope: FScope
     }
 
+    const ident = k8tsBuildKind.kind("File")
+    @kinded(ident)
     export class FileEntity<FScope extends Scope> extends BaseOriginEntity<Props<FScope>> {
         kind = k8tsBuildKind.kind("File")
-        readonly node: Origin
-        get shortFqn() {
-            return this.kind.name
-        }
-        get meta() {
-            return Meta.make(this.props.meta)
-        }
 
         constructor(name: string, props: Props<FScope>, parent: Origin) {
             super(name, props, parent)

@@ -1,9 +1,9 @@
-import { BaseOriginEntity, KindMap, type Kind } from "@k8ts/instruments"
+import { BaseOriginEntity, kinded, KindMap, Origin, type Kind } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { External } from "../external"
 import { File } from "../file"
 import { k8tsBuildKind } from "../k8ts-sys-kind"
-import { K8tsRootOrigin, kinded } from "../kind-map"
+import { K8tsRootOrigin } from "../kind-map"
 import type { ManifestResource } from "../node"
 import type { Namespace } from "../resources"
 export type ManifestFileName = `${string}.yaml`
@@ -18,13 +18,14 @@ export namespace World {
     @kinded(ident)
     export class Builder extends BaseOriginEntity<Props> {
         readonly kind = ident
-
+        readonly ExternalOrigin: ExternalOriginEntity
         constructor(props: Props) {
             super("World", props, K8tsRootOrigin.node)
+            this.ExternalOrigin = new ExternalOriginEntity(this.node)
         }
 
         External<K extends Kind>(kind: K, name: string, namespace?: string) {
-            return new External(this.node, kind, name, namespace)
+            return new External(this.ExternalOrigin.node, kind, name, namespace)
         }
 
         File<T extends ManifestResource>(
@@ -45,5 +46,21 @@ export namespace World {
 
     export function make(props: Props) {
         return new Builder(props)
+    }
+}
+const ident = k8tsBuildKind.kind("External")
+@kinded(ident)
+export class ExternalOriginEntity extends BaseOriginEntity {
+    kind = ident
+    constructor(parent: Origin) {
+        super(
+            "EXTERNAL",
+            {
+                meta: {
+                    "^should not be manifested": (() => {}) as any
+                }
+            },
+            parent
+        )
     }
 }

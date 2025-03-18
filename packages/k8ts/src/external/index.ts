@@ -15,7 +15,7 @@ export class External<K extends Kind> extends ManifestResource {
                 name,
                 namespace
             }),
-            {}
+            { KIND: kind }
         )
     }
 

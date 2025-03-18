@@ -1,6 +1,10 @@
+import { connections } from "@k8ts/instruments"
 import { AbsResource } from "./abs-resource"
 import type { ManifestResource } from "./manifest-resource"
 
+@connections({
+    parent: self => self.parent
+})
 export abstract class SubResource<Props extends object = object> extends AbsResource<Props> {
     constructor(
         readonly parent: ManifestResource,
