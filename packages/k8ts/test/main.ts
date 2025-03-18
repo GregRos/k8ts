@@ -10,8 +10,7 @@ async function main() {
         },
         saver: {
             outdir: ".k8ts"
-        },
-        checkDanglingRefs: true
+        }
     })
 
     await runner.run([cluster, namespaced])

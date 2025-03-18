@@ -1,7 +1,9 @@
 import { Displayers, NeedsEdge, Origin, ResourceNode, TextPostProcessor } from "@k8ts/instruments"
+import { attr, quantity } from "@k8ts/instruments/src/_string/pretty-objects"
+import { pretty } from "@k8ts/instruments/src/_string/pretty-print"
 import { List, Map } from "immutable"
 import { dump } from "js-yaml"
-import { pretty } from "./exporter/pretty-print"
+import { AssembledResult } from "./exporter"
 export interface SummarizerOptions {}
 export class Summarizer {
     private _post = new TextPostProcessor()
@@ -10,7 +12,10 @@ export class Summarizer {
         return this._token(pretty`${edge}`)
     }
 
-    private _token(text: string) {
+    private _token(text: string | object) {
+        if (typeof text === "object") {
+            text = pretty`${text}`
+        }
         const token = this._post.token(text)
         return token
     }
@@ -68,6 +73,35 @@ export class Summarizer {
         const tree = this._yaml(input)
         const rendered = this._post.render(tree)
         return rendered.replaceAll("- SPACE", "")
+    }
+
+    result(result: AssembledResult) {
+        const obj = {
+            options: result.options,
+            files: result.files.map(x => {
+                const o = Map([
+                    [attr("path"), x.path as any],
+                    [attr("name"), x.filename as any],
+                    [attr("saved"), quantity(x.bytes, "byte")],
+                    [attr("manifested"), quantity(x.artifacts.length, "resources")]
+                ])
+                    .mapEntries(([k, v]) => {
+                        return [this._token(k), this._token(v)]
+                    })
+                    .toJS()
+
+                return o
+            })
+        }
+        return [
+            this._serialize(obj),
+            this.files(
+                result.files.map(x => ({
+                    origin: x.file,
+                    resources: x.artifacts.map(x => x.k8ts)
+                }))
+            )
+        ].join("\n")
     }
 
     files(obj: { origin: Origin; resources: ResourceNode[] }[]) {

@@ -38,7 +38,7 @@ class DisplayerDecorator {
             [Symbol.toStringTag]: {
                 get() {
                     const a = decorator.get(this)
-                    return a.simple()
+                    return a.default()
                 }
             },
             toString: {

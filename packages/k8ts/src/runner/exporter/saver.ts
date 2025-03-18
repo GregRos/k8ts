@@ -1,7 +1,7 @@
 import type { Origin } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { mkdir, rm, writeFile } from "fs/promises"
-import { join } from "path"
+import { join, resolve } from "path"
 
 export class ManifestSaver extends Emittery<ManifestSaverEventsTable> {
     private _encoder = new TextEncoder()
@@ -30,8 +30,10 @@ export class ManifestSaver extends Emittery<ManifestSaverEventsTable> {
         const content = this._splat(manifests)
         const filename = `${origin.name}`
         const encoded = this._encoder.encode(content)
+        const outPath = resolve(this._options.outdir, filename)
         const e: SavingManifestEvent = {
             filename,
+            path: outPath,
             content: content,
             bytes: encoded.byteLength
         }
@@ -42,6 +44,7 @@ export class ManifestSaver extends Emittery<ManifestSaverEventsTable> {
     }
 }
 export interface SavingManifestEvent {
+    path: string
     filename: string
     content: string
     bytes: number

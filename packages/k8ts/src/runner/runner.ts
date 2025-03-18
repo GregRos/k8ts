@@ -5,7 +5,6 @@ import { Summarizer, SummarizerOptions } from "./summarizer"
 export interface RunnerOptions extends AssemblerOptions {
     progress: ProgressOptions
     summarizer: SummarizerOptions
-    checkDanglingRefs: boolean
 }
 
 export class Runner {
@@ -18,14 +17,10 @@ export class Runner {
         const visualizer = progressShower.visualize(assembler)
         const result = await assembler.assemble(input)
 
-        const viz = summarizer.files(
-            result.map(x => ({
-                origin: x.file,
-                resources: x.artifacts.map(x => x.k8ts)
-            }))
-        )
+        const viz = summarizer.result(result)
 
         await visualizer
-        console.log("\n", viz)
+        console.log()
+        console.log(viz)
     }
 }

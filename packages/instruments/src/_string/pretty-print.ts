@@ -1,5 +1,5 @@
 import { Displayers, Origin, ResourceNode } from "@k8ts/instruments"
-import { Attr, Stage, Verb } from "./pretty-objects"
+import { Attr, Verb } from "./pretty-objects"
 
 type Shower<T> = (x: T) => string
 type TokenObject = Verb | Attr | Stage | ResourceNode | Origin

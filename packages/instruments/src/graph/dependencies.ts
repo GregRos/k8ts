@@ -14,7 +14,7 @@ export function dependencies(record: Dependencies.Input) {
 @displayers({
     simple: s => [s.why, "-->", s.needed],
     pretty: (dep, format) => {
-        return [`${chalk.gray.italic.white(`${dep.why}`)}`, "➜ ", dep.needed]
+        return [`${chalk.gray.italic.white(`${dep.why}`)}`, "➜ ", chalk.italic(`${dep.needed}`)]
     }
 })
 export class NeedsEdge<Node extends BaseNode<Node>> {

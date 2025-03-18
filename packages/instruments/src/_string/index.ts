@@ -1,3 +1,5 @@
 export * from "./markers"
 export * from "./post-processor"
+export * from "./pretty-objects"
+export * from "./pretty-print"
 export * from "./super-script"

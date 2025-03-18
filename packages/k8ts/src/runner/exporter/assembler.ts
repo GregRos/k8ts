@@ -1,6 +1,7 @@
 import { BaseManifest, Origin, ResourceNode } from "@k8ts/instruments"
-import { aseq, type ASeq, type DoddleAsync } from "doddle"
+import { aseq } from "doddle"
 import Emittery from "emittery"
+import { cloneDeep } from "lodash"
 import type { File } from "../../file"
 import { ResourceLoader, type ResourceLoaderEventsTable } from "./loader"
 import { Manifester, type ManifesterEventsTable } from "./manifester"
@@ -93,12 +94,13 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
             })
             .collect()
             .map(async ({ file, artifacts }) => {
-                const { filename, bytes } = await saver.save(
+                const { filename, bytes, path } = await saver.save(
                     file.node,
                     artifacts.map(x => x.yaml)
                 )
                 return {
                     file: file.node,
+                    path,
                     filename,
                     bytes,
                     artifacts
@@ -109,7 +111,11 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
             })
             .collect()
             .toArray()
-        return (await reports.pull()) satisfies AssembledFile[]
+        const files = (await reports.pull()) satisfies AssembledFile[]
+        return {
+            files,
+            options: cloneDeep(this._options)
+        } as AssembledResult
     }
 }
 export interface Artifact {
@@ -119,9 +125,14 @@ export interface Artifact {
 }
 export interface AssembledFile {
     file: Origin
+    path: string
     filename: string
     bytes: number
     artifacts: Artifact[]
+}
+export interface AssembledResult {
+    files: AssembledFile[]
+    options: AssemblerOptions
 }
 export interface AssemblerOptions {
     saver: ManifestSaverOptions
@@ -148,10 +159,3 @@ export type AnyAssemblerEvent = {
         type: K
     }
 }[keyof AssemblerEventsTable]
-export interface AssemblyResult {
-    assembly: DoddleAsync<{
-        filename: string
-        report: string
-    }>
-    events: ASeq<AnyAssemblerEvent>
-}

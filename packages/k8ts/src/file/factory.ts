@@ -1,4 +1,5 @@
-import { Origin, auto_register, type LiveRefable } from "@k8ts/instruments"
+import { Origin, auto_register, displayers, type LiveRefable } from "@k8ts/instruments"
+import chalk from "chalk"
 import {
     ConfigMap,
     Deployment,
@@ -9,6 +10,7 @@ import {
     Secret,
     Service
 } from "../resources"
+import { AssemblyStage } from "../runner/exporter"
 import type { FileOrigin } from "./origin"
 
 export type Factory = Factory.Factory
@@ -114,6 +116,35 @@ export namespace Factory {
                 this._metaWithName(name),
                 props_
             ) as LiveRefable<PodTemplate<Ports>, Name>
+        }
+    }
+}
+@displayers({
+    simple: s => s.text,
+    pretty: stage => chalk.bgGreenBright.bold.black(` ${stage.text} `)
+})
+export class Stage {
+    text: string
+    constructor(private stage: AssemblyStage) {
+        this.text = `${stage.toUpperCase()}`
+    }
+
+    private get _emoji() {
+        switch (this.stage) {
+            case "gathering":
+                return "🛒"
+            case "loading":
+                return "🚚"
+            case "manifesting":
+                return "👻"
+            case "start":
+                return "🚀"
+            case "saving":
+                return "💾"
+            case "serializing":
+                return "🖨️"
+            case "done":
+                return "✅"
         }
     }
 }
