@@ -1,5 +1,5 @@
-import { Assembler, AssemblerOptions, ProgressOptions, ProgressShower } from "../exporter"
 import { File } from "../file"
+import { Assembler, AssemblerOptions, ProgressOptions, ProgressShower } from "./exporter"
 import { Summarizer, SummarizerOptions } from "./summarizer"
 
 export interface RunnerOptions extends AssemblerOptions {

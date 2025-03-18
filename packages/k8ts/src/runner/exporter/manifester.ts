@@ -2,8 +2,8 @@ import { BaseManifest, ResourceNode } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import Emittery from "emittery"
 import { cloneDeep, cloneDeepWith, get, isEmpty, unset } from "lodash"
-import { ManifestResource } from "../node"
-import { version } from "../version"
+import { ManifestResource } from "../../node"
+import { version } from "../../version"
 export class Manifester extends Emittery<ManifesterEventsTable> {
     constructor(options: {}) {
         super()

@@ -57,7 +57,7 @@ export class ProgressShower {
                     break
 
                 case "manifest":
-                    spinner.text = pretty`${verb("Manifesting")} ${event.resource}`
+                    spinner.text = pretty`${verb("Manifest")} ${event.resource}`
                     break
                 case "purge":
                     spinner.text = pretty`${verb("Purge")} ${dest(event.outdir)}`

@@ -1,7 +1,7 @@
 import { BaseManifest, ManifestSourceEmbedder } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { dump, type DumpOptions } from "js-yaml"
-import { MakeError } from "../error"
+import { MakeError } from "../../error"
 
 export interface YamlSerializerOptions {
     jsYamlOptions: DumpOptions
