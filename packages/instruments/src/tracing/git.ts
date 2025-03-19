@@ -22,7 +22,7 @@ export class GitTrace {
         const shortDate = dayjs(this.props.commit.date).format("YYYY-MM-DD")
         const shortMessage = this.props.commit.message.split("\n")[0].slice(0, 20)
         const author = this.props.commit.author
-        return `${hashPart} '${shortMessage}⋯' (by ${author} at ${shortDate})`
+        return `${hashPart} '${shortMessage}⋯' (${author}@${shortDate})`
     }
 
     static async make(options?: Partial<GitTraceOptions>) {

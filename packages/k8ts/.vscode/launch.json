@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "name": "EXAMPLE: k8ts",
+      "request": "launch",
+      "args": [],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "program": "${workspaceFolder}/example/run.ts",
+      "runtimeExecutable": "tsx",
+      "runtimeArgs": ["--tsconfig=./example/tsconfig.json"]
+    }
+  ]
+}

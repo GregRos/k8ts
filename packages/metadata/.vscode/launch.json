@@ -3,18 +3,6 @@
   "configurations": [
     {
       "type": "node",
-      "name": "EXAMPLE: k8ts",
-      "request": "launch",
-      "program": "test/run-tsx.ts",
-      "cwd": "c:\\codegr\\k8ts\\packages\\k8ts",
-      "runtimeExecutable": "tsx",
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "runtimeArgs": ["--tsconfig=./test/tsconfig.json"]
-    },
-
-    {
-      "type": "node",
       "name": "TEST: metadata",
       "request": "launch",
       "args": ["test", "--runInBand", "--watchAll=false", "--testNamePattern"],

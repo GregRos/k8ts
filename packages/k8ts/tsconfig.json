@@ -8,6 +8,9 @@
     },
     {
       "path": "./test/tsconfig.json"
+    },
+    {
+      "path": "./example/tsconfig.json"
     }
   ],
   "compilerOptions": {

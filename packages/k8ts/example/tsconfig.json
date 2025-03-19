@@ -1,0 +1,22 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "references": [
+    {
+      "path": "../src/tsconfig.json"
+    }
+  ],
+  "compilerOptions": {
+    "composite": false,
+    "declarationMap": false,
+    "outDir": "../dist_test",
+    "noEmit": true,
+    "tsBuildInfoFile": "../dist/test.tsbuildinfo",
+    "types": ["jest", "node"],
+    "paths": {
+      "@lib": ["../src"],
+      "@lib/*": ["../src/*"],
+      "@imports": ["../src/_imports"]
+    }
+  },
+  "include": ["**/*.ts"]
+}

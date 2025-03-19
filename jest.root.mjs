@@ -5,7 +5,7 @@ const common = {
         "^@lib$": "<rootDir>/src"
     },
     transform: {
-        "^.+\\.tsx?$": ["@swc/jest"]
+        "^.+\\.tsx?$": ["ts-jest", { tsconfig: "test/tsconfig.json" }]
     },
     testEnvironment: "node",
     testMatch: ["<rootDir>/test/**/*.test.ts"],

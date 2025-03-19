@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "name": "TESTS: @k8ts/instruments",
+      "request": "launch",
+      "args": ["test", "--runInBand", "--watchAll=false", "--testNamePattern"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "runtimeExecutable": "yarn"
+    }
+  ]
+}
