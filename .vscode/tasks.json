@@ -16,7 +16,8 @@
       "command": "yarn",
       "args": ["tidy"],
       "type": "shell",
-      "label": "yarn tidy"
+      "label": "yarn tidy",
+      "problemMatcher": []
     }
   ]
 }
