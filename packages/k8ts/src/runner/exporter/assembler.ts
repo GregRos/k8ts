@@ -142,6 +142,7 @@ export interface AssembledResult {
 }
 export interface AssemblerOptions {
     cwd?: string
+    printOptions?: boolean
     outdir: string
     meta?: Omit<Meta.Input, "name" | "namespace"> | Meta
 }

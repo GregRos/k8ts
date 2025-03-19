@@ -10,10 +10,12 @@ import { Meta } from "@k8ts/metadata"
 import { List, Map } from "immutable"
 import { dump } from "js-yaml"
 import { AssembledResult } from "./exporter"
-export interface SummarizerOptions {}
+export interface SummarizerOptions {
+    printOptions?: boolean
+}
 export class Summarizer {
     private _post = new TextPostProcessor()
-    constructor(readonly options: SummarizerOptions) {}
+    constructor(private readonly _options: SummarizerOptions) {}
     _formatRefFromTo(node: ResourceNode, edge: NeedsEdge<ResourceNode>) {
         return this._token(pretty`${edge}`)
     }
@@ -87,7 +89,7 @@ export class Summarizer {
         return rendered.replaceAll("- SPACE", "")
     }
 
-    result(result: AssembledResult) {
+    private _getOptions(result: AssembledResult) {
         const obj = {
             options: result.options,
             output: result.files.map(x => {
@@ -99,15 +101,23 @@ export class Summarizer {
                 }
             })
         }
-        return [
-            this._serialize(obj),
+        return this._serialize(obj)
+    }
+
+    result(result: AssembledResult) {
+        const outputs = [] as string[]
+        if (this._options.printOptions) {
+            outputs.push(this._getOptions(result))
+        }
+        outputs.push(
             this.files(
                 result.files.map(x => ({
                     origin: x.file,
                     resources: x.artifacts.map(x => x.k8ts)
                 }))
             )
-        ].join("\n")
+        )
+        return outputs.join("\n")
     }
 
     files(obj: { origin: Origin; resources: ResourceNode[] }[]) {

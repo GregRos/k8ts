@@ -1,21 +1,26 @@
 import { GitTrace, Trace } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
+import chalk from "chalk"
 import StackTracey from "stacktracey"
 import { File } from "../file"
+import { proverbsPath } from "../paths"
 import { Assembler, AssemblerOptions, ProgressOptions, ProgressShower } from "./exporter"
 import { k8ts_namespace } from "./exporter/meta"
-import { Summarizer, SummarizerOptions } from "./summarizer"
+import { Proverbs } from "./silly/proverbs"
+import { Summarizer } from "./summarizer"
 
 export interface RunnerOptions extends AssemblerOptions {
     cwd?: string
+    printOptions?: boolean
     progress: ProgressOptions
-    summarizer: SummarizerOptions
 }
 
 export class Runner {
     constructor(private readonly _options: RunnerOptions) {}
 
     async run(input: Iterable<File.Input>) {
+        const proverbs = await Proverbs.make(proverbsPath)
+        console.log(chalk.italic.magentaBright(proverbs.random))
         const gitInfo = await GitTrace.make({
             cwd: this._options.cwd
         })
@@ -30,9 +35,12 @@ export class Runner {
                 "^source-git": gitInfo?.text
             })
         }
+
         const progressShower = new ProgressShower(options.progress)
         const assembler = new Assembler(options)
-        const summarizer = new Summarizer(options.summarizer)
+        const summarizer = new Summarizer({
+            printOptions: this._options.printOptions
+        })
         const visualizer = progressShower.visualize(assembler)
         const result = await assembler.assemble(input)
 
