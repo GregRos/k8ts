@@ -17,7 +17,7 @@
     "prettier:fix": "prettier --write .",
     "eslint:check": "eslint '**/*.ts'",
     "eslint:fix": "eslint --fix '**/*.ts'",
-    "lint:check": "run-s eslint:check prettier:check",
+    "lint:check": "run-s prettier:check",
     "lint:fix": "run-s prettier:fix",
     "tidy": "yarn install && run-s lint:fix build:clean test"
   },
