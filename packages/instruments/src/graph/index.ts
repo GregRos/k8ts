@@ -1,7 +1,6 @@
 export * from "./base-node"
 export * from "./base-origin-entity"
 export * from "./dependencies"
-export * from "./external-origin"
 export * from "./origin-node"
 export * from "./relations"
 export * from "./resource-node"

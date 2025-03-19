@@ -1,7 +1,7 @@
 {
   "name": "@k8ts/metadata",
-  "version": "0.0.1",
-  "description": "Abstractions for working with Kubernetes metadata",
+  "version": "0.1.0",
+  "description": "K8ts tools for working with k8ts metadata.",
   "keywords": [
     "kubernetes",
     "typescript",
@@ -59,9 +59,6 @@
     "clean": "shx rm -rf dist",
     "test": "jest",
     "test:coverage": "jest --coverage"
-  },
-  "resolutions": {
-    "doddle": "portal:../doddle"
   },
   "dependencies": {
     "doddle": "^5.0.0-beta.13",

@@ -18,23 +18,19 @@
     "eslint:check": "eslint '**/*.ts'",
     "eslint:fix": "eslint --fix '**/*.ts'",
     "lint:check": "run-s eslint:check prettier:check",
-    "lint:fix": "run-s eslint:fix prettier:fix"
+    "lint:fix": "run-s prettier:fix",
+    "tidy": "yarn install && run-s lint:fix build:clean test"
   },
   "resolutions": {
     "@k8ts/instruments": "portal:packages/instruments",
-    "@k8ts/metadata": "portal:packages/metadata",
-    "doddle": "portal:/C:/codegr/doddle"
+    "@k8ts/metadata": "portal:packages/metadata"
   },
   "devDependencies": {
-    "@swc/core": "^1.11.11",
-    "@swc/jest": "^0.2.37",
-    "@types/js-yaml": "^4",
-    "@types/node": "20.9.1",
-    "@typescript-eslint/eslint-plugin": "^7.12.0",
-    "@typescript-eslint/parser": "^7.12.0",
+    "@typescript-eslint/eslint-plugin": "^8.26.1",
+    "@typescript-eslint/parser": "^8.26.1",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-jest": "28.2.0",
+    "eslint-plugin-jest": "^28.11.0",
     "husky": "9.0.11",
     "jest": "^29.7.0",
     "lint-staged": "15.2.2",
@@ -47,8 +43,7 @@
     "shx": "^0.3.4",
     "ts-jest": "^29.2.6",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2",
-    "yamprint": "^0.8.4"
+    "typescript": "^5.8.2"
   },
   "packageManager": "yarn@4.7.0",
   "sourcesRoot": "src"

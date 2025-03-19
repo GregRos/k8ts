@@ -10,8 +10,8 @@
 
 Documentation:
 
--   [API Documentation](https://gregros.github.io/parjs/)
--   [Using Parjs - Developer guide](/documentation/using-parjs.md)
+- [API Documentation](https://gregros.github.io/parjs/)
+- [Using Parjs - Developer guide](/documentation/using-parjs.md)
 
 Parjs a parser combinator library inspired by [Parsec](https://wiki.haskell.org/Parsec) and [FParsec](http://www.quanttec.com/fparsec/) (its F# adaptation), and written in TypeScript.
 
@@ -39,35 +39,35 @@ For example, you could have **a** parser `🍕"fi"` that parses the string `fi` 
 
 ```typescript
 // 🍕string "fi" ➜ ⚙️exactly 2
-string("fi").pipe(exactly(2));
+string("fi").pipe(exactly(2))
 ```
 
 Here is an example that constructs a parser that parses n-tuples of numbers like `(12.5, -1, 2)`, which is impossible using other parsing techniques<sup>citation needed</sup>.
 
 ```typescript
-import { float, string, whitespace } from "parjs";
-import { between, manySepBy } from "parjs/combinators";
+import { float, string, whitespace } from "parjs"
+import { between, manySepBy } from "parjs/combinators"
 
 // 🍕float
 //  Parses a floating point number
-const tupleElement = float();
+const tupleElement = float()
 
 //  🍕float ➜ ⚙️between 🍕whitespace
 //  Parses a float between whitespace
-const paddedElement = tupleElement.pipe(between(whitespace()));
+const paddedElement = tupleElement.pipe(between(whitespace()))
 
 //  🍕float ➜ ⚙️between 🍕whitespace ➜
 //  ⚙️until fails, separated by 🍕","
 //  Parses many floats between whitespace, separated by commas.
-const separated = paddedElement.pipe(manySepBy(","));
+const separated = paddedElement.pipe(manySepBy(","))
 
 //  🍕float ➜ ⚙️between 🍕whitespace ➜
 //  ⚙️until fails, separated by 🍕"," ➜ ⚙️between 🍕"(" and 🍕")"
 //  Parses many floats separated by commas and surrounded by parens.
-const surrounded = separated.pipe(between("(", ")"));
+const surrounded = separated.pipe(between("(", ")"))
 
 //  Parses the string and print [1, 2, 3]
-console.log(surrounded.parse("(1,  2 , 3 )"));
+console.log(surrounded.parse("(1,  2 , 3 )"))
 ```
 
 ## Examples
@@ -88,9 +88,9 @@ Parsers that succeed return some kind of value. While basic parsers return the p
 If parsing succeeded, you can access the `result.value` property to get the return value.
 
 ```typescript
-const parser = string("hello world").pipe(map(text => text.length));
-const result = parser.parse("hello world");
-assert(result.value === 11);
+const parser = string("hello world").pipe(map(text => text.length))
+const result = parser.parse("hello world")
+assert(result.value === 11)
 ```
 
 However, doing this if parsing failed throws an exception. To check if parsing succeeded or not, use the `isOkay` property.
@@ -98,11 +98,11 @@ However, doing this if parsing failed throws an exception. To check if parsing s
 You can also use `toString` to get a textual description of the result.
 
 ```typescript
-const result2 = parser.parse("hello wrld");
+const result2 = parser.parse("hello wrld")
 if (result.isOkay) {
-    console.log(result.value);
+    console.log(result.value)
 } else {
-    console.log(result.toString());
+    console.log(result.toString())
     // Soft failure at Ln 1 Col 1
     // 1 | hello wrld
     //     ^expecting 'hello world'
@@ -114,9 +114,9 @@ if (result.isOkay) {
 
 `parjs` handles failure by using the SHF or 😕😬💀 system. It recognizes three kinds of failures:
 
--   😕 **S**oft failures — A parser quickly says it’s not applicable to the input. Used to parse alternative inputs.
--   😬 **H**ard failures — Parsing failed unexpectedly. Can only be handled by special combinators.
--   💀 **F**atal failure — Happen when you decide and tell the parser to [halt and catch fire](<https://en.wikipedia.org/wiki/Halt_and_Catch_Fire_(computing)>). They can’t be handled.
+- 😕 **S**oft failures — A parser quickly says it’s not applicable to the input. Used to parse alternative inputs.
+- 😬 **H**ard failures — Parsing failed unexpectedly. Can only be handled by special combinators.
+- 💀 **F**atal failure — Happen when you decide and tell the parser to [halt and catch fire](<https://en.wikipedia.org/wiki/Halt_and_Catch_Fire_(computing)>). They can’t be handled.
 
 Parsing failures bubble up through combinators unless they’re handled, just like exceptions. Handling a failure always means backtracking to before it happened.
 
@@ -127,7 +127,7 @@ Failing to parse something is a common occurrence and not exceptional in the sli
 The `result` object mentioned earlier also gives the failure type via its `kind` property. It can be `OK`, `Soft`, `Hard`, or `Fatal`.
 
 ```typescript
-console.log(result.kind); // "Soft"
+console.log(result.kind) // "Soft"
 ```
 
 #### The `reason` field
@@ -145,7 +145,7 @@ You can recover from soft failures by backtracking a constant amount. These fail
 ```typescript
 // 🍕"hello" ➜ ⚙️or 🍕"goodbye" ➜ ⚙️or 🍕"blort"
 // Parses any of the strings, "hello", "goodbye", or "blort"
-const parser = string("hello").pipe(or("goodbye"), or("blort"));
+const parser = string("hello").pipe(or("goodbye"), or("blort"))
 ```
 
 #### 😬 Hard failure
@@ -170,9 +170,9 @@ const helloParser = string("hello ").pipe(
     ),
     // The ⚙️or combinator can't recover from this:
     or("hello kittie")
-);
+)
 
-console.log(helloParser.parse("whatever").toString());
+console.log(helloParser.parse("whatever").toString())
 // Hard failure at Ln 1 Col 6
 // 1 | hello world
 //           ^expecting "world"
@@ -189,7 +189,7 @@ const helloParser2 = string("hello ").pipe(
         // so it doesn't reach ⚙️then
         string("world").or("kittie")
     )
-);
+)
 ```
 
 However, sometimes hard failures are inevitable or you can’t be bothered. In those cases, you can use `⚙️recover` which lets you downgrade the failure or even pass it off as a success.
@@ -203,7 +203,7 @@ const helloParser3 = string("hello ").pipe(
     recover(() => ({ kind: "Soft" })),
     // So the ⚙️or combinator can be used:
     or("kittie")
-);
+)
 ```
 
 However, code like this is the equivalent of using `try .. catch` for control flow and should be avoided.
@@ -221,9 +221,9 @@ They act kind of like thrown exceptions, except that **parsers don’t throw exc
 ```typescript
 const parser = fail({
     kind: "Fatal"
-});
+})
 
-console.log(parse.parse("").toString());
+console.log(parse.parse("").toString())
 ```
 
 ## Cool features
@@ -234,7 +234,7 @@ In `parjs`, parsers are functionally immutable. Once a `parjs` parser is created
 
 ```typescript
 // 🍕"hello world" ➜ predicate `() => Math.random() > 0.5`
-string("hello world").pipe(must(() => Math.random() > 0.5));
+string("hello world").pipe(must(() => Math.random() > 0.5))
 ```
 
 But then it’s on **you**. And _you know what you did._
@@ -252,16 +252,16 @@ This probably involves a lookup in some complicated data structure for each pote
 ```typescript
 // 🍕ᵘLetter
 // Parses any unicode letter
-const pNameChar = uniLetter();
+const pNameChar = uniLetter()
 
 // 🍕ᵘLetter ➜ ⚙️until it fails
 // Parses any number of unicode letterss
-const pName = pNameChar.pipe(many());
+const pName = pNameChar.pipe(many())
 
 // 🍕"שלום שמי " ➜ ⚙️and then, 🍕ᵘLetter ➜ ⚙️until it fails
-const greeting = string(`שלום שמי `).pipe(qthen(pName));
+const greeting = string(`שלום שמי `).pipe(qthen(pName))
 
-assert(greeting.parser("שלום, שמי גרג").value === "גרג");
+assert(greeting.parser("שלום, שמי גרג").value === "גרג")
 ```
 
 ### Shorthand for literal parsers
@@ -277,7 +277,7 @@ string("ice").pipe(
     thenq(spaces1()),
     then("ice"), // Implicitly: string("ice ")
     then(/\s*baby/) // Implicitly: regexp(/\s*baby/)
-);
+)
 ```
 
 #### Constant type inference
@@ -288,11 +288,11 @@ Here's an example of the difference:
 
 ```typescript
 // This will infer "world" to the constant type of "world"
-const parser: Parjser<["hello", "world"]> = string("hello").pipe(then(string("world")));
+const parser: Parjser<["hello", "world"]> = string("hello").pipe(then(string("world")))
 
 // This will infer to the string type, which may be more confusing to debug, and
 // have issues with type aliases
-const parser: Parjser<["hello", string]> = string("hello").pipe(then("world"));
+const parser: Parjser<["hello", string]> = string("hello").pipe(then("world"))
 ```
 
 ### Debugging
@@ -306,10 +306,10 @@ When you call `.debug()` on a parser, it enables debug mode for that parser (and
 Here's an example of how to use it:
 
 ```typescript
-const parser: Parjser<"a"> = string("a").expects("an 'a' character").debug();
+const parser: Parjser<"a"> = string("a").expects("an 'a' character").debug()
 
 // when you execute the parser:
-parser.parse("a");
+parser.parse("a")
 
 // it will console.log() something like this:
 //
@@ -350,7 +350,7 @@ let example = p.parse("hello", {token: "hi", method() {return 1;});
 The combinator `map` is a projection combinator. You can give it a function taking two parameters: the parser result and the parser state.
 
 ```typescript
-let example = string("a").pipe(map((result, state) => state.flag));
+let example = string("a").pipe(map((result, state) => state.flag))
 ```
 
 `each` is a combinator that doesn't change the parser result, so you can use it to only modify the user state.
@@ -375,12 +375,12 @@ When parsing, a unique mutable `ParsingState` object is created. This object has
 
 ```typescript
 interface ParsingState {
-    readonly input: string;
-    position: number;
-    value: unknown;
-    userState: UserState;
-    reason: string;
-    kind: ReplyKind;
+    readonly input: string
+    position: number
+    value: unknown
+    userState: UserState
+    reason: string
+    kind: ReplyKind
     //...
 }
 ```
@@ -399,14 +399,14 @@ You can modify the other properties too, except for `input` which you almost cer
 
 To create a custom `Parjs` parser you need to extend the class `ParjserBase`, which you import from `parjs/internal`.
 
--   Override the `_apply` method to set the logic of the parser (this method is the one that takes the parsing state above).
--   You also need to set `expecting` which is a default error string the parser will use in case of error.
--   Finally, set the `type` string of the parser. This string is used to identify the parser and isn't only for informational purposes. It could be used in things like optimizations for example.
+- Override the `_apply` method to set the logic of the parser (this method is the one that takes the parsing state above).
+- You also need to set `expecting` which is a default error string the parser will use in case of error.
+- Finally, set the `type` string of the parser. This string is used to identify the parser and isn't only for informational purposes. It could be used in things like optimizations for example.
 
 Here is a simple implementation of the `eof` parser, which detects the end of the input. Add type annotations as desired.
 
 ```typescript
-import { ParjserBase, ParsingState } from "parjs/internal";
+import { ParjserBase, ParsingState } from "parjs/internal"
 
 /**
  * Returns a parser that succeeds if there is no more input.
@@ -415,18 +415,18 @@ import { ParjserBase, ParsingState } from "parjs/internal";
  */
 export function eof<T>(result?: T): Parjser<T> {
     return new (class Eof extends ParjserBase<T> {
-        type = "eof";
-        expecting = "expecting end of input";
+        type = "eof"
+        expecting = "expecting end of input"
 
         _apply(ps: ParsingState): void {
             if (ps.position === ps.input.length) {
-                ps.kind = ResultKind.Ok;
-                ps.value = result;
+                ps.kind = ResultKind.Ok
+                ps.value = result
             } else {
-                ps.kind = ResultKind.SoftFail;
+                ps.kind = ResultKind.SoftFail
             }
         }
-    })();
+    })()
 }
 ```
 
@@ -438,9 +438,9 @@ There are a number of systems to help organize the monorepo, run commands, build
 
 Opening the file `parjs.code-workspace` in VS Code lets you work on any and all of the packages inside the repository. This workspace has three **workspace roots:**
 
--   **parjs** at `/packages/parjs`
--   **char-info** at `/packages/char-info`
--   **root** at `/`, but excluding the packages folder.
+- **parjs** at `/packages/parjs`
+- **char-info** at `/packages/char-info`
+- **root** at `/`, but excluding the packages folder.
 
 Here is how it looks on my highly customized installation:
 <img src="https://github.com/GregRos/parjs/assets/1788329/5f205e09-e941-4090-abfd-a56aa45e2ae8" width=300>
@@ -449,10 +449,10 @@ Here is how it looks on my highly customized installation:
 
 The yarn root `/package.json` has four [yarn workspaces](https://yarnpkg.com/features/workspaces) with a `package.json` each:
 
--   `/packages/parjs`
--   `/packages/char-info`
--   `/packages/parjs/examples`
--   `/packages/char-info/examples` 👈this is unused
+- `/packages/parjs`
+- `/packages/char-info`
+- `/packages/parjs/examples`
+- `/packages/char-info/examples` 👈this is unused
 
 #### Examples Workspaces
 
@@ -484,8 +484,8 @@ yarn add X
 
 This means it won't be a dependency of any of the packages inside it, but rather something that comes with this repo.
 
--   If it's a dev dependency, this is usually what you want right now.
--   If it's not, it's usually **not** what you want.
+- If it's a dev dependency, this is usually what you want right now.
+- If it's not, it's usually **not** what you want.
 
 #### Adding dependencies in child workspaces
 
@@ -520,15 +520,15 @@ In this case, it's a dev dependency. It seems to be needed in each package.
 
 TypeScript project at 🔗`/tsconfig.json`, referencing:
 
--   🔗 `/packages/parjs/tsconfig.json`, referencing
-    -   🏭 `/packages/parjs/src/tsconfig.json`
-    -   🚀 `/packages/parjs/spec/tsconfig.json`
-    -   🔗 `/packages/parjs/examples/tsconfig.json`, referencing
-        -   🏭 `/packages/parjs/examples/src/tsconfig.json`
-        -   🚀 `/packages/parjs/examples/spec/tsconfig.json`
--   🔗 `/packages/char-info/tsconfig.json`, referencing
-    -   🏭 `/packages/char-info/src/tsconfig.json`
-    -   🏭 `/packages/char-info/spec/tsconfig.json
+- 🔗 `/packages/parjs/tsconfig.json`, referencing
+    - 🏭 `/packages/parjs/src/tsconfig.json`
+    - 🚀 `/packages/parjs/spec/tsconfig.json`
+    - 🔗 `/packages/parjs/examples/tsconfig.json`, referencing
+        - 🏭 `/packages/parjs/examples/src/tsconfig.json`
+        - 🚀 `/packages/parjs/examples/spec/tsconfig.json`
+- 🔗 `/packages/char-info/tsconfig.json`, referencing
+    - 🏭 `/packages/char-info/src/tsconfig.json`
+    - 🏭 `/packages/char-info/spec/tsconfig.json
 
 🏭 and 🚀 tsconfigs extend `/tsconfig.base.json`, which allows it to configure compilation for the whole project. The only other properties in the different `tsconfig`s are project-specific and set `noEmit`, `composite`, `paths`, and so on. There are no meaningful overrides.d
 

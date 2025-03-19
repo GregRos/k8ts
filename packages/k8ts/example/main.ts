@@ -9,7 +9,6 @@ async function main() {
         meta: {
             "^my-custom-annotation": "my-custom-value"
         },
-        summarizer: {},
         progress: {
             waitTransition: 5
         }

@@ -4,3 +4,4 @@ yarn.lock
 .obsidian/
 .idea/
 dist/
+_imports/

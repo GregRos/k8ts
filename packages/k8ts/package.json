@@ -49,7 +49,7 @@
     "package.json",
     "LICENSE.md",
     "README.md",
-    "proverbs.yaml"
+    "proverbs.txt"
   ],
   "scripts": {
     "build": "tsc -b .",
@@ -68,6 +68,7 @@
     "doddle": "^5.0.0-beta.13",
     "emittery": "0.13.1",
     "immutable": "^5.0.3",
+    "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "ora": "5.4.1",
     "parjs": "^1.3.9",
@@ -80,6 +81,7 @@
     "@swc/jest": "^0.2.37",
     "@types/chalk": "^2.2.4",
     "@types/jest": "^29.5.12",
+    "@types/js-yaml": "^4",
     "@types/lodash": "^4.17.16",
     "@types/node": "20.9.1",
     "cdk8s": "^2.69.48",
@@ -92,6 +94,10 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2",
     "yamprint": "^0.8.4"
+  },
+  "peerDependencies": {
+    "@k8ts/instruments": "^0.1.0",
+    "@k8ts/metadata": "^0.1.0"
   },
   "packageManager": "yarn@4.1.1",
   "engines": {

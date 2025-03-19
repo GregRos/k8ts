@@ -60,9 +60,6 @@
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
-  "resolutions": {
-    "doddle": "portal:../doddle"
-  },
   "dependencies": {
     "chalk": "4.1.2",
     "declare-it": "^2.1.0",

@@ -1,7 +1,7 @@
 {
   "name": "@k8ts/instruments",
-  "version": "0.0.1",
-  "description": "Abstractions for common data types and expressions in Kubernetes manifests",
+  "version": "0.1.0",
+  "description": "A collection of utilities and core components for k8ts.",
   "keywords": [
     "kubernetes",
     "typescript",
@@ -78,6 +78,9 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2",
     "yamprint": "^0.8.4"
+  },
+  "peerDependencies": {
+    "@k8ts/metadata": "^0.1.0"
   },
   "packageManager": "yarn@4.1.1",
   "engines": {
