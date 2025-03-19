@@ -890,7 +890,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@k8ts/metadata@portal:packages/metadata::locator=%40k8ts%2Fworkspace%40workspace%3A."
   dependencies:
-    doddle: "npm:^5.0.0-beta.13"
+    doddle: "npm:^5.0.0-beta.16"
     immutable: "npm:^5.0.3"
     lodash: "npm:^4.17.21"
     parjs: "npm:^1.3.9"
@@ -3262,7 +3262,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"doddle@npm:^5.0.0-beta.13, doddle@npm:^5.0.0-beta.16":
+"doddle@npm:^5.0.0-beta.16":
   version: 5.0.0-beta.16
   resolution: "doddle@npm:5.0.0-beta.16"
   checksum: 10c0/db3c6abc9c367f4af96c4d5f9449550634d57cc9b0ebe38e9787844e4dc0e83c65f98fbe00c11d99d7964bf10743ed8ee0a75a7e8443bdd90a51b4d62722b1e2

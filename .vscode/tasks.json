@@ -11,6 +11,12 @@
         "isDefault": true
       },
       "label": "tsc: watch - tsconfig.json"
+    },
+    {
+      "command": "yarn",
+      "args": ["tidy"],
+      "type": "shell",
+      "label": "yarn tidy"
     }
   ]
 }
