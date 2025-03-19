@@ -5,7 +5,7 @@ const reqLimitCpuSpec = ResourcesSpec.make({
 })
 it("valid inputs - CPU", () => {
     const reqLimit = reqLimitCpuSpec.parse({
-        cpu: "1m--->2m"
+        cpu: "1m->2m"
     })
     expect(reqLimit.toObject()).toMatchObject({
         requests: {
@@ -33,7 +33,7 @@ it("invalid inputs - CPU", () => {
     expect(() =>
         reqLimitCpuSpec.parse({
             // @ts-expect-error
-            cpu: "1m--->2m--->3m"
+            cpu: "1m->2m->3m"
         })
     ).toThrow()
 })
@@ -44,8 +44,8 @@ const reqLimitMemoryCpuSpec = ResourcesSpec.make({
 })
 it("valid inputs - Data, Cpu", () => {
     const reqLimit = reqLimitMemoryCpuSpec.parse({
-        cpu: "1m--->2m",
-        memory: "1Mi--->2Gi"
+        cpu: "1m->2m",
+        memory: "1Mi->2Gi"
     })
     expect(reqLimit.toObject()).toMatchObject({
         requests: {
@@ -62,14 +62,14 @@ it("valid inputs - Data, Cpu", () => {
 it("invalid inputs - Data", () => {
     expect(() =>
         reqLimitMemoryCpuSpec.parse({
-            cpu: "1m--->2m",
+            cpu: "1m->2m",
             // @ts-expect-error
-            memory: "1Mi--->2"
+            memory: "1Mi->2"
         })
     ).toThrow()
     expect(() =>
         reqLimitMemoryCpuSpec.parse({
-            cpu: "1m--->2m",
+            cpu: "1m->2m",
             // @ts-expect-error
             memory: "1Mi"
         })
@@ -77,7 +77,7 @@ it("invalid inputs - Data", () => {
     expect(() =>
         // @ts-expect-error
         reqLimitMemoryCpuSpec.parse({
-            memory: "1Mi--->2Gi"
+            memory: "1Mi->2Gi"
         })
     ).toThrow()
 })

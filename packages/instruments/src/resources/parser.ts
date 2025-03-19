@@ -1,10 +1,13 @@
-import { manySepBy, map, must } from "parjs/combinators"
+import { space, string } from "parjs"
+import { between, many, manySepBy, map, must } from "parjs/combinators"
 import type { UnitParser } from "../units/unit-parser"
 import type { ReqLimit } from "./types"
 
 export function createResourceParser(pUnitValue: UnitParser) {
+    const pSpaces = space().pipe(many())
+    const rSeparator = string("->").pipe(between(pSpaces))
     return pUnitValue.parser.pipe(
-        manySepBy("--->", 2),
+        manySepBy(rSeparator, 2),
         must(x => {
             if (x.length !== 2) {
                 return {

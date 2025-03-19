@@ -8,7 +8,9 @@ export interface InputReqLimitObject<Unit extends string> {
 export type InputReqLimitArray<Unit extends string> = [_limit_term<Unit>, _limit_term<Unit>]
 export type mt_Resource_Unit_Map<T> = Record<keyof T, string>
 
-export type InputReqLimitString<U extends string> = `${_limit_term<U>}--->${_limit_term<U>}`
+type spaces = "" | " " | "  "
+export type InputReqLimitString<U extends string> =
+    `${_limit_term<U>}${spaces}->${spaces}${_limit_term<U>}`
 
 export interface ReqLimit<Unit extends string = string> {
     readonly request?: UnitValue<Unit>

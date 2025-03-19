@@ -13,14 +13,14 @@ export default W.File("deployment.yaml", {
         const claim = k.Claim("claim", {
             bind: cool,
             accessModes: ["ReadWriteOnce"],
-            storage: "1Gi--->5Gi"
+            storage: "1Gi->5Gi"
         })
 
         yield claim
         const devClaim = k.Claim("dev-claim", {
             accessModes: ["ReadWriteOnce"],
             bind: k8tsFile["PersistentVolume/dev-sda"],
-            storage: "1Gi--->5Gi"
+            storage: "1Gi->5Gi"
         })
 
         const deploy = k.Deployment("xyz", {
@@ -46,8 +46,8 @@ export default W.File("deployment.yaml", {
                             "/dev": d.mount()
                         },
                         resources: {
-                            cpu: "100m--->500m",
-                            memory: "100Mi--->500Mi"
+                            cpu: "100m->500m",
+                            memory: "100Mi->500Mi"
                         }
                     })
                 }

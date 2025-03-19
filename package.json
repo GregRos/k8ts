@@ -28,6 +28,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.26.1",
     "@typescript-eslint/parser": "^8.26.1",
+    "doddle": "^5.0.0-beta.16",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-jest": "^28.11.0",
