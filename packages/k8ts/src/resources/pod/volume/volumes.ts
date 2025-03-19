@@ -7,38 +7,42 @@ import type { ConfigMap } from "../../configmap"
 import type { Persistent } from "../../persistent"
 import type { Secret } from "../../secret"
 import { Mount } from "../container/mounts"
-export type Volume<Props extends Volume.Backend = Volume.Backend> = Volume.Volume<Props>
+export type Volume<Props extends Volume.Backend = Volume.Backend> = Volume.PodVolume<Props>
 export namespace Volume {
-    interface PvcBackend {
+    interface PodVolume_Backend_Pvc {
         backend: Persistent.Claim<"Filesystem">
         readOnly?: boolean
     }
 
-    interface ConfigMapBackend {
+    interface PodVolume_Backend_ConfigMap {
         backend: ConfigMap
     }
-    interface SecretBackend {
+    interface PodVolume_Backend_Secret {
         backend: Secret
     }
-    export type Backend = PvcBackend | ConfigMapBackend | SecretBackend
+    export type Backend =
+        | PodVolume_Backend_Pvc
+        | PodVolume_Backend_ConfigMap
+        | PodVolume_Backend_Secret
     @relations({
         needs: self => ({
             backend: self.props.backend
         })
     })
-    export abstract class Volume<Props extends Backend = Backend> extends SubResource<Props> {
+    export abstract class PodVolume<Props extends Backend = Backend> extends SubResource<Props> {
+        private KIND = "Volume" as const
         get kind() {
             return this.parent.kind.subkind("Volume")
         }
 
         abstract submanifest(): CDK.Volume
 
-        mount(options?: Mount.Options) {
-            return new Mount.Volume(this as any, options ?? {})
+        Mount(options?: Mount.Options) {
+            return new Mount.ContainerVolumeMount(this as any, options ?? {})
         }
     }
 
-    class PvcVolume extends Volume<PvcBackend> {
+    class PvcPodVolume extends PodVolume<PodVolume_Backend_Pvc> {
         override submanifest(): CDK.Volume {
             return {
                 name: this.name,
@@ -50,7 +54,7 @@ export namespace Volume {
         }
     }
 
-    class ConfigMapVolume extends Volume<ConfigMapBackend> {
+    class ConfigMapPodVolume extends PodVolume<PodVolume_Backend_ConfigMap> {
         override submanifest(): CDK.Volume {
             return {
                 name: this.name,
@@ -61,7 +65,7 @@ export namespace Volume {
         }
     }
 
-    class SecretVolume extends Volume<SecretBackend> {
+    class SecretPodVolume extends PodVolume<PodVolume_Backend_Secret> {
         override submanifest(): CDK.Volume {
             return {
                 name: this.name,
@@ -72,15 +76,15 @@ export namespace Volume {
         }
     }
 
-    export function make(parent: ManifestResource, name: string, input: Backend): Volume {
+    export function make(parent: ManifestResource, name: string, input: Backend): PodVolume {
         const { backend } = input
         switch (backend.kind.name) {
             case "PersistentVolumeClaim":
-                return new PvcVolume(parent, name, input as PvcBackend)
+                return new PvcPodVolume(parent, name, input as PodVolume_Backend_Pvc)
             case "ConfigMap":
-                return new ConfigMapVolume(parent, name, input as ConfigMapBackend)
+                return new ConfigMapPodVolume(parent, name, input as PodVolume_Backend_ConfigMap)
             case "Secret":
-                return new SecretVolume(parent, name, input as SecretBackend)
+                return new SecretPodVolume(parent, name, input as PodVolume_Backend_Secret)
         }
     }
 }

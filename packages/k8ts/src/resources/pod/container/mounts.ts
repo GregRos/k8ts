@@ -1,7 +1,7 @@
 import type { CDK } from "../../../_imports"
 import type { Device } from "../volume/devices"
 import type { Volume } from "../volume/volumes"
-export type Mount = Mount.Volume | Mount.Device
+export type Mount = Mount.ContainerVolumeMount | Mount.ContainerDeviceMount
 export namespace Mount {
     type Path_Rooted = `/${string}`
     export type Path = `${"" | "." | ".."}${Path_Rooted}`
@@ -10,14 +10,16 @@ export namespace Mount {
         readOnly?: boolean
         subPath?: string
     }
-    export class Volume {
-        kind = "VolumeMount" as const
+    export class ContainerVolumeMount {
+        get kind() {
+            return this.parent.kind.parent.subkind("ContainerVolumeMount")
+        }
         constructor(
-            readonly parent: Volume.Volume,
+            readonly parent: Volume.PodVolume,
             readonly props: Options
         ) {}
 
-        manifest(mountPath: string): CDK.VolumeMount {
+        submanifest(mountPath: string): CDK.VolumeMount {
             return {
                 name: this.parent.name,
                 mountPath: mountPath,
@@ -27,11 +29,13 @@ export namespace Mount {
         }
     }
 
-    export class Device {
-        kind = "DeviceMount" as const
-        constructor(readonly parent: Device.Device) {}
+    export class ContainerDeviceMount {
+        get kind() {
+            return this.parent.kind.parent.subkind("ContainerDeviceMount")
+        }
+        constructor(readonly parent: Device.PodDevice) {}
 
-        manifest(devicePath: string): CDK.VolumeDevice {
+        submanifest(devicePath: string): CDK.VolumeDevice {
             return {
                 devicePath: devicePath,
                 name: this.parent.name

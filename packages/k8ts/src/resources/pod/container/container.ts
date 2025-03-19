@@ -28,7 +28,7 @@ export namespace Container {
 
     type Resources = (typeof container_ResourcesSpec)["__INPUT__"]
     export type Mounts = {
-        [key: string]: Mount.Device | Mount.Volume
+        [key: string]: Mount.ContainerDeviceMount | Mount.ContainerVolumeMount
     }
     export interface Props<Ports extends string> {
         image: TaggedImage
@@ -106,10 +106,10 @@ export namespace Container {
                 volumeDevices: []
             } as Pick<CDK.Container, "volumeMounts" | "volumeDevices">
             for (const [path, mount] of Object.entries(this.props.mounts ?? {})) {
-                if (mount.kind === "DeviceMount") {
-                    x.volumeDevices!.push(mount.manifest(path))
+                if (mount instanceof Mount.ContainerDeviceMount) {
+                    x.volumeDevices!.push(mount.submanifest(path))
                 } else {
-                    x.volumeMounts!.push(mount.manifest(path))
+                    x.volumeMounts!.push(mount.submanifest(path))
                 }
             }
             return x

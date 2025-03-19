@@ -4,27 +4,27 @@ import type { ManifestResource } from "../../../node"
 import { SubResource } from "../../../node/sub-resource"
 import { Persistent } from "../../persistent"
 import { Mount } from "../container/mounts"
-export type Device = Device.Device
+export type Device = Device.PodDevice
 export namespace Device {
-    interface PvcBackend {
+    interface PodDevice_Backend_Pvc {
         backend: Persistent.Claim<"Block">
         readOnly?: boolean
     }
 
-    export type Backend = PvcBackend
+    export type Backend = PodDevice_Backend_Pvc
     @relations({
         needs: self => ({
             backend: self.backend.backend
         })
     })
-    export class Device extends SubResource<PvcBackend> {
+    export class PodDevice extends SubResource<PodDevice_Backend_Pvc> {
         get kind() {
             return this.parent.kind.subkind("Device")
         }
         constructor(
             parent: ManifestResource,
             name: string,
-            readonly backend: PvcBackend
+            readonly backend: PodDevice_Backend_Pvc
         ) {
             super(parent, name, backend)
         }
@@ -40,11 +40,11 @@ export namespace Device {
         }
 
         mount() {
-            return new Mount.Device(this)
+            return new Mount.ContainerDeviceMount(this)
         }
     }
 
     export function make(parent: ManifestResource, name: string, input: Backend) {
-        return new Device(parent, name, input)
+        return new PodDevice(parent, name, input)
     }
 }

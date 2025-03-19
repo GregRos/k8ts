@@ -1,10 +1,10 @@
 import { hash } from "immutable"
+import { InstrumentsError } from "../error"
 
 export type Kind<
-    Group extends string = string,
-    Version extends Kind.InputVersion = Kind.InputVersion,
-    Name extends string = string
-> = Kind.Kind<Group, Version, Name>
+    Name extends string = string,
+    Version extends Kind.Version = Kind.Version
+> = Kind.Kind<Name, Version>
 export namespace Kind {
     export type InputVersion = `v${string}`
 
@@ -12,6 +12,7 @@ export namespace Kind {
         text: string
         name: string
     }
+
     export abstract class Identifier<
         Name extends string = string,
         Parent extends IdentParent | null = IdentParent | null
@@ -26,6 +27,8 @@ export namespace Kind {
         get text(): string {
             return [this.parent?.text, this.name].filter(Boolean).join("/")
         }
+
+        abstract child<Name extends string>(name: Name): Identifier<Name, this>
 
         equals(other: any) {
             if (typeof other !== "object" || !other) {
@@ -49,12 +52,21 @@ export namespace Kind {
         version<Version extends InputVersion>(apiVersion: Version) {
             return new Version(apiVersion, this)
         }
+
+        child<Name extends string>(name: Name): Version<Name, this> {
+            if (!name.startsWith("v")) {
+                throw new InstrumentsError(
+                    `Invalid version name "${name}". Version name must start with "v".`
+                )
+            }
+            return this.version(name as any)
+        }
     }
 
     export class Version<
-        const Grp extends string = string,
-        const Name extends InputVersion = InputVersion
-    > extends Identifier<Name, Group<Grp>> {
+        const _Version extends string = string,
+        const _Group extends Group = Group
+    > extends Identifier<_Version, _Group> {
         kind<Kind extends string>(kind: Kind) {
             return new Kind(kind, this)
         }
@@ -62,13 +74,16 @@ export namespace Kind {
         get group() {
             return this.parent
         }
+
+        child<Name extends string>(name: Name): Kind<Name, this> {
+            return this.kind(name)
+        }
     }
 
     export class Kind<
-        const Group extends string = string,
-        const V extends InputVersion = InputVersion,
-        const Name extends string = string
-    > extends Identifier<Name, Version<Group, V>> {
+        const Name extends string = string,
+        const V extends Version = Version
+    > extends Identifier<Name, V> {
         get version() {
             return this.parent
         }
@@ -77,12 +92,31 @@ export namespace Kind {
             return this.parent?.parent
         }
 
-        subkind(subkind: string) {
+        subkind<SubKind extends string>(subkind: SubKind) {
             return new SubKind(subkind, this)
+        }
+
+        child<Name extends string>(name: Name): SubKind<Name, this> {
+            return this.subkind(name)
         }
     }
 
-    export class SubKind extends Identifier<string, Kind> {}
+    export class SubKind<
+        _SubKind extends string = string,
+        _Parent extends Kind = Kind
+    > extends Identifier<_SubKind, _Parent> {
+        constructor(name: _SubKind, parent: _Parent) {
+            super(name, parent)
+        }
+
+        subkind<SubKind extends string>(subkind: SubKind): never {
+            throw new InstrumentsError(`SubKind "${this.text}" cannot have subkind "${subkind}".`)
+        }
+
+        child<Name extends string>(name: Name): never {
+            return this.subkind(name)
+        }
+    }
 
     export function group<ApiGroup extends string>(apiGroup: ApiGroup) {
         return new Group(apiGroup)

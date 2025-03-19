@@ -41,8 +41,8 @@ export default W.File("deployment.yaml", {
                             http: 80
                         },
                         mounts: {
-                            "/xyz": v.mount(),
-                            "/etc": v.mount(),
+                            "/xyz": v.Mount(),
+                            "/etc": v.Mount(),
                             "/dev": d.mount()
                         },
                         resources: {

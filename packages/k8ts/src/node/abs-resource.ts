@@ -1,4 +1,4 @@
-import { displayers, Origin, RefKey, ResourceNode, type Kind } from "@k8ts/instruments"
+import { displayers, Kind, Origin, RefKey, ResourceNode } from "@k8ts/instruments"
 import { Doddle, doddle } from "doddle"
 export interface DependsOn {
     resource: AbsResource
@@ -9,8 +9,10 @@ export interface DependsOn {
     pretty: s => s.node
 })
 export abstract class AbsResource<Props extends object = object> {
-    abstract readonly kind: Kind.Identifier
+    abstract readonly kind: Kind.Identifier<string, Kind.Identifier>
+
     private _node: Doddle<ResourceNode>
+
     get node() {
         return this._node.pull()
     }

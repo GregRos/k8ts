@@ -16,7 +16,7 @@ export namespace Volume {
         storageClassName?: string
         mode?: Mode
         reclaimPolicy?: Reclaim
-        capacity: Unit.Data
+        capacity?: Unit.Data
         backend: Backend
         nodeAffinity?: CDK.VolumeNodeAffinity
     }
@@ -31,9 +31,11 @@ export namespace Volume {
             let base: CDK.PersistentVolumeSpec = {
                 accessModes,
                 storageClassName: pvProps.storageClassName,
-                capacity: {
-                    storage: CDK.Quantity.fromString(pvProps.capacity)
-                },
+                capacity: pvProps.capacity
+                    ? {
+                          storage: CDK.Quantity.fromString(pvProps.capacity)
+                      }
+                    : undefined,
                 volumeMode: pvProps.mode ?? "Filesystem",
                 persistentVolumeReclaimPolicy: pvProps.reclaimPolicy ?? "Retain"
             }

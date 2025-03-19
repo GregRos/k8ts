@@ -34,8 +34,8 @@ export abstract class BaseNode<
     get shortFqn() {
         return `${this.kind.name}/${this.name}`
     }
-    get root() {
-        return this.ancestors.at(-1).pull()!
+    get root(): Node {
+        return (this.ancestors.at(-1).pull() as any) ?? (this as any)
     }
     get name() {
         return this.key.name
