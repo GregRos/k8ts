@@ -1,6 +1,6 @@
 {
   "name": "k8ts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Powerful framwork for building Kubernetes manifests in TypeScript.",
   "keywords": [
     "kubernetes",
