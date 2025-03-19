@@ -1,6 +1,6 @@
 name: PUBlISH @k8ts/metadata
 env:
-  WORKSPACE: metadata
+  WORKSPACE: "@k8ts/metadata"
 on:
   push:
     branches:

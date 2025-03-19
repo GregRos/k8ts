@@ -1,6 +1,6 @@
 name: PUBlISH @k8ts/instruments
 env:
-  WORKSPACE: instruments
+  WORKSPACE: "@k8ts/instruments"
 on:
   push:
     branches:
