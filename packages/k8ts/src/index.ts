@@ -1,3 +1,4 @@
+export { CDK } from "./_imports"
 export * from "./external"
 export * from "./file"
 export * as ScopedFactory from "./file/factory"

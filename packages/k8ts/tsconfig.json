@@ -1,7 +1,7 @@
 {
   "references": [
     {
-      "path": "./imports/tsconfig.json"
+      "path": "./src/_imports/tsconfig.json"
     },
     {
       "path": "./src/tsconfig.json"

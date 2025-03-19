@@ -1,7 +1,7 @@
-import { CDK } from "@imports"
 import { manifest, Origin, relations } from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { omit } from "lodash"
+import { CDK } from "../../_imports"
 import { apps_v1 } from "../../api-versions"
 import { k8ts } from "../../kind-map"
 import { ManifestResource } from "../../node/manifest-resource"

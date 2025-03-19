@@ -1,4 +1,5 @@
 {
+  "name": "@k8ts/workspace",
   "private": true,
   "license": "MIT",
   "workspaces": [
@@ -25,23 +26,9 @@
     "@k8ts/metadata": "portal:packages/metadata",
     "doddle": "portal:/C:/codegr/doddle"
   },
-  "dependencies": {
-    "chalk": "4.1.2",
-    "dayjs": "^1.11.13",
-    "declare-it": "^2.1.0",
-    "doddle": "^5.0.0-beta.13",
-    "emittery": "0.13.1",
-    "immutable": "^5.0.3",
-    "js-yaml": "^4.1.0",
-    "ora": "5.4.1",
-    "simple-git": "^3.27.0",
-    "tsconfig-paths": "^4.2.0",
-    "yamprint": "^0.8.4"
-  },
   "devDependencies": {
     "@types/js-yaml": "^4",
     "@types/node": "20.9.1",
-    "@types/unicode-trie": "^2",
     "@typescript-eslint/eslint-plugin": "^7.12.0",
     "@typescript-eslint/parser": "^7.12.0",
     "eslint": "8.57.0",
@@ -49,7 +36,6 @@
     "eslint-plugin-jest": "28.2.0",
     "husky": "9.0.11",
     "lint-staged": "15.2.2",
-    "madge": "^6.1.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.3.1",
     "prettier-plugin-jsdoc": "^1.3.0",
@@ -58,9 +44,8 @@
     "shelljs": "0.8.5",
     "shx": "^0.3.4",
     "ts-node": "^10.9.2",
-    "typedoc": "0.25.13",
-    "typedoc-plugin-internal-external": "2.2.0",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "yamprint": "^0.8.4"
   },
   "packageManager": "yarn@4.7.0",
   "sourcesRoot": "src"

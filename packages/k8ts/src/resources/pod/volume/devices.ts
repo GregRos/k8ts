@@ -1,5 +1,5 @@
-import type { CDK } from "@imports"
 import { relations } from "@k8ts/instruments"
+import type { CDK } from "../../../_imports"
 import type { ManifestResource } from "../../../node"
 import { SubResource } from "../../../node/sub-resource"
 import { Persistent } from "../../persistent"

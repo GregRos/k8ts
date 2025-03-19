@@ -2,17 +2,15 @@
   "extends": "../../../tsconfig.base.json",
   "references": [
     {
-      "path": "../imports/tsconfig.json"
+      "path": "./_imports/tsconfig.json"
     }
   ],
   "compilerOptions": {
     "rootDir": ".",
     "noEmit": false,
     "outDir": "../dist",
-    "tsBuildInfoFile": "../dist/src.tsbuildinfo",
-    "paths": {
-      "@imports": ["../imports"]
-    }
+    "tsBuildInfoFile": "../dist/src.tsbuildinfo"
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts"],
+  "exclude": ["_imports/**/*.ts"]
 }

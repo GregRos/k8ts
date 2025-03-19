@@ -11,12 +11,12 @@
     "declarationMap": true,
     "sourceMap": true,
     "tsBuildInfoFile": "../dist/.imports.tsbuildinfo",
-    "rootDir": ".",
+    "rootDir": "../_imports",
     "noEmit": false,
     "declaration": true,
     "outDir": "../dist_imports",
     "strict": false
   },
-  "include": ["**/*.ts"],
-  "exclude": ["**/node_modules"]
+  "include": ["../_imports/**/*.ts"],
+  "exclude": ["../_imports/**/node_modules"]
 }

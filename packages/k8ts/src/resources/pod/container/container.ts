@@ -1,4 +1,3 @@
-import type { CDK } from "@imports"
 import {
     Env,
     PortSet,
@@ -11,6 +10,7 @@ import {
     type TaggedImage
 } from "@k8ts/instruments"
 import { Map } from "immutable"
+import type { CDK } from "../../../_imports"
 import { toContainerPorts, toEnvVars } from "../../utils/adapters"
 
 import { seq } from "doddle"

@@ -15,7 +15,7 @@
     "paths": {
       "@lib": ["../src"],
       "@lib/*": ["../src/*"],
-      "@imports": ["../imports"]
+      "@imports": ["../src/_imports"]
     }
   },
   "include": ["**/*.ts"]

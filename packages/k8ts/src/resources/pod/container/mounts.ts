@@ -1,4 +1,4 @@
-import type { CDK } from "@imports"
+import type { CDK } from "../../../_imports"
 import type { Device } from "../volume/devices"
 import type { Volume } from "../volume/volumes"
 export type Mount = Mount.Volume | Mount.Device

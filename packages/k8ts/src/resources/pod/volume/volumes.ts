@@ -1,4 +1,4 @@
-import type { CDK } from "@imports"
+import type { CDK } from "../../../_imports"
 
 import { relations } from "@k8ts/instruments"
 import type { ManifestResource } from "../../../node"

@@ -1,5 +1,5 @@
-import type { CDK } from "@imports"
 import { manifest, relations } from "@k8ts/instruments"
+import type { CDK } from "../../_imports"
 import { gateway_v1 } from "../../api-versions"
 import type { External } from "../../external"
 import { k8ts } from "../../kind-map"
