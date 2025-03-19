@@ -8,10 +8,16 @@ export interface TraceFormatOptions {
 }
 
 export class Trace {
-    constructor(readonly frame: StackTracey.Entry) {}
+    readonly trace: StackTracey.Entry
+    constructor(trace: StackTracey) {
+        const findGoodFrame = (e: StackTracey.Entry) => {
+            return !e.native && e.file && !e.file.includes("node:")
+        }
+        this.trace = trace.filter(x => !!findGoodFrame(x)).at(0)
+    }
 
     format(inOptions?: Partial<TraceFormatOptions>) {
-        const e = this.frame
+        const e = this.trace
         const options = defaults(inOptions, {
             cwd: ".",
             absolute: false

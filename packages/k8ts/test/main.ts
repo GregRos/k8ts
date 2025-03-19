@@ -11,7 +11,7 @@ async function main() {
         },
         summarizer: {},
         progress: {
-            waitTransition: 77
+            waitTransition: 5
         }
     })
 

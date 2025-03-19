@@ -90,9 +90,8 @@ export class Origin extends BaseNode<Origin, OriginEntity> implements Iterable<R
                         "node" in result &&
                         result.node instanceof ResourceNode
                     ) {
-                        result.node.meta?.add(result.node.origin.meta)
                         result.node.origin.__attach_resource__([result.node])
-                        TraceEmbedder.set(result.node, new Trace(new StackTracey().at(1)))
+                        TraceEmbedder.set(result.node, new Trace(new StackTracey().slice(1)))
                     }
                     return result
                 }

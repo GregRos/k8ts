@@ -55,9 +55,8 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
         const loc = resource.trace.format({
             cwd: this._options.cwd
         })
-        const exportedPart = resource.isExported ? "(EXP) " : ""
         resource.meta!.add(k8ts_namespace, {
-            "^constructed-at": `${exportedPart}${loc}`,
+            "^constructed-at": loc,
             "^produced-by": `k8ts@${version}`
         })
     }
