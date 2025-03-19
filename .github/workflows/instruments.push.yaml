@@ -1,19 +1,24 @@
-name: PUBlISH @k8ts/metadata
+name: PUBlISH @k8ts/instruments
 env:
-  WORKSPACE: metadata
+  WORKSPACE: instruments
 on:
   push:
     branches:
       - master
     paths:
-      - "packages/metadata/**"
-      - ".github/workflows/metadata.push.yaml"
+      - "packages/instruments/**"
+      - ".github/workflows/instruments.push.yaml"
       - "yaml.lock"
       - ".*"
   workflow_dispatch:
 
 jobs:
   build_deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 20.9.0
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
