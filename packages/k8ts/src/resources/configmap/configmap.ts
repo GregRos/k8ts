@@ -7,7 +7,6 @@ export type ConfigMap = ConfigMap.ConfigMap
 export namespace ConfigMap {
     export interface Props {
         data: Record<string, string>
-        name: string
     }
 
     const ident = v1.kind("ConfigMap")
