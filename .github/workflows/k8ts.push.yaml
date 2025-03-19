@@ -8,8 +8,10 @@ on:
     paths:
       - "packages/k8ts/**"
       - ".github/workflows/k8ts.push.yaml"
-      - "yaml.lock"
-      - ".*"
+      - "yarn.lock"
+      - "package.json"
+      - "jest.root.mjs"
+      - "tsconfig.base.json"
   workflow_dispatch:
 
 jobs:

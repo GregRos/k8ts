@@ -8,7 +8,10 @@ on:
     paths:
       - "packages/metadata/**"
       - ".github/workflows/metadata.push.yaml"
-      - "yaml.lock"
+      - "yarn.lock"
+      - "package.json"
+      - "jest.root.mjs"
+      - "tsconfig.base.json"
       - ".*"
   workflow_dispatch:
 
