@@ -61,5 +61,5 @@ jobs:
         run: 'echo "npmAuthToken: ${NPM_TOKEN}" >> ~/.yarnrc.yml'
 
       - name: PUBLISH PACKAGE
-        working-directory: packages/$WORKSPACE
+        working-directory: packages/metadata
         run: yarn npm publish --access public
