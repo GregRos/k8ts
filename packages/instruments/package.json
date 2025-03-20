@@ -1,6 +1,6 @@
 {
   "name": "@k8ts/instruments",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A collection of utilities and core components for k8ts.",
   "keywords": [
     "kubernetes",
@@ -54,7 +54,6 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
-    "@k8ts/metadata": "workspace:^",
     "chalk": "4.1.2",
     "dayjs": "^1.11.13",
     "doddle": "^5.0.0-beta.16",
@@ -80,7 +79,7 @@
     "yamprint": "^0.8.4"
   },
   "peerDependencies": {
-    "@k8ts/metadata": "^0.1.0"
+    "@k8ts/metadata": "^0.3.0"
   },
   "packageManager": "yarn@4.1.1",
   "engines": {

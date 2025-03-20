@@ -1,6 +1,6 @@
 {
   "name": "k8ts",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Powerful framwork for building Kubernetes manifests in TypeScript.",
   "keywords": [
     "kubernetes",
@@ -97,8 +97,8 @@
     "yamprint": "^0.8.4"
   },
   "peerDependencies": {
-    "@k8ts/instruments": "^0.1.0",
-    "@k8ts/metadata": "^0.1.0"
+    "@k8ts/instruments": "^0.3.0",
+    "@k8ts/metadata": "^0.3.0"
   },
   "packageManager": "yarn@4.1.1",
   "engines": {
