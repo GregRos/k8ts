@@ -11,7 +11,7 @@ export type HttpRoute<Ports extends string> = HttpRoute.HttpRoute<Ports>
 export namespace HttpRoute {
     const gwKind = gateway_v1.kind("Gateway")
     export interface Props<Ports extends string> {
-        parent: External<typeof gwKind>
+        gateway: External<typeof gwKind>
         hostname: string
         backend: Service.Port<Ports>
     }
@@ -20,7 +20,7 @@ export namespace HttpRoute {
     @k8ts(kind)
     @relations({
         needs: self => ({
-            gateway: self.props.parent,
+            gateway: self.props.gateway,
             service: self.props.backend.service
         })
     })
@@ -28,7 +28,7 @@ export namespace HttpRoute {
         body(self): CDK.HttpRouteProps {
             return {
                 spec: {
-                    parentRefs: [self.props.parent.ref()],
+                    parentRefs: [self.props.gateway.ref()],
                     hostnames: [self.props.hostname],
                     rules: [
                         {

@@ -2,12 +2,12 @@ import { relations } from "@k8ts/instruments"
 import type { CDK } from "../../../_imports"
 import type { ManifestResource } from "../../../node"
 import { SubResource } from "../../../node/sub-resource"
-import { Persistent } from "../../persistent"
+import { Pvc } from "../../persistent"
 import { Mount } from "../container/mounts"
 export type Device = Device.PodDevice
 export namespace Device {
     interface PodDevice_Backend_Pvc {
-        backend: Persistent.Claim<"Block">
+        backend: Pvc.Pvc<"Block">
         readOnly?: boolean
     }
 
@@ -39,7 +39,7 @@ export namespace Device {
             }
         }
 
-        mount() {
+        Mount() {
             return new Mount.ContainerDeviceMount(this)
         }
     }

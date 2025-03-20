@@ -4,13 +4,13 @@ import { relations } from "@k8ts/instruments"
 import type { ManifestResource } from "../../../node"
 import { SubResource } from "../../../node/sub-resource"
 import type { ConfigMap } from "../../configmap"
-import type { Persistent } from "../../persistent"
+import { Pvc } from "../../persistent"
 import type { Secret } from "../../secret"
 import { Mount } from "../container/mounts"
 export type Volume<Props extends Volume.Backend = Volume.Backend> = Volume.PodVolume<Props>
 export namespace Volume {
     interface PodVolume_Backend_Pvc {
-        backend: Persistent.Claim<"Filesystem">
+        backend: Pvc.Pvc<"Filesystem">
         readOnly?: boolean
     }
 
@@ -30,7 +30,6 @@ export namespace Volume {
         })
     })
     export abstract class PodVolume<Props extends Backend = Backend> extends SubResource<Props> {
-        private KIND = "Volume" as const
         get kind() {
             return this.parent.kind.subkind("Volume")
         }

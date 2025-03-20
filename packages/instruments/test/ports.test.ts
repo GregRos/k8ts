@@ -26,6 +26,7 @@ it("should do mapping", () => {
 
     expect(() =>
         // @ts-expect-error
+
         ps2.map({
             also: 1
         })

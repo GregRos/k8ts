@@ -8,12 +8,13 @@ import {
 import { Embedder } from "../_embedder/base"
 import { MetadataEntity } from "../graph/resource-node"
 
+type MaybePromise<T> = T | Promise<T>
 export namespace ManifestBuilder {
     export interface Out {
-        body: () => PreManifest
-        metadata: () => ManifestMetadata
+        body: () => MaybePromise<PreManifest>
+        metadata: () => Partial<ManifestMetadata>
         ident: () => ManifestIdentFields
-        manifest: () => BaseManifest
+        manifest: () => MaybePromise<BaseManifest>
     }
 
     export type In<Target extends MetadataEntity = MetadataEntity> = Partial<{
@@ -52,11 +53,11 @@ class BuilderDecorator {
         }
     }
 
-    manifest(trait: ManifestBuilder.Out, self: MetadataEntity) {
+    async manifest(trait: ManifestBuilder.Out, self: MetadataEntity) {
         const mani = {
             ...trait.ident(),
             metadata: trait.metadata(),
-            ...trait.body()
+            ...(await trait.body())
         }
         ManifestSourceEmbedder.set(mani, self)
         return mani

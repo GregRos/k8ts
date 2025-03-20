@@ -1,4 +1,4 @@
-import { BaseManifest, ResourceNode, TraceEmbedder } from "@k8ts/instruments"
+import { BaseManifest, ResourceNode } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { cloneDeep, cloneDeepWith, isEmpty, unset } from "lodash"
 import { ManifestResource } from "../../node"
@@ -42,16 +42,14 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
 
         return cloneDeepWith(clone, _cleanKeys)
     }
-    private _generate(resource: ManifestResource): BaseManifest {
-        const manifest = resource["manifest"]()
+    private async _generate(resource: ManifestResource): Promise<BaseManifest> {
+        const manifest = await resource["manifest"]()
         const noNullish = this._cleanNullishValues(manifest)
         const noEmpty = this._cleanSpecificEmptyObjects(noNullish)
         return noEmpty
     }
 
     private _attachProductionAnnotations(resource: ResourceNode) {
-        const origin = resource.origin
-        const entry = TraceEmbedder.get(resource)
         const loc = resource.trace.format({
             cwd: this._options.cwd
         })
@@ -64,7 +62,7 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
     async generate(res: ResourceNode) {
         this._attachProductionAnnotations(res)
         await this.emit("manifest", { resource: res })
-        const manifest = this._generate(res.entity as ManifestResource)
+        const manifest = await this._generate(res.entity as ManifestResource)
         return manifest
     }
 }

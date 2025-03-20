@@ -8,8 +8,8 @@ import type { DataMode } from "../block-mode"
 import { Backend as Backend_ } from "./backend"
 import { parseBackend } from "./parse-backend"
 
-export type Volume<T extends DataMode = DataMode> = Volume.Volume<T>
-export namespace Volume {
+export type Pv<T extends DataMode = DataMode> = Pv.Pv<T>
+export namespace Pv {
     export import Backend = Backend_
     export interface Props<Mode extends DataMode = DataMode> {
         accessModes: Access
@@ -50,7 +50,7 @@ export namespace Volume {
     })
     @k8ts(ident)
     @relations("none")
-    export class Volume<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
+    export class Pv<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
         declare readonly kind: typeof ident
     }
 }

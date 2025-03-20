@@ -37,6 +37,8 @@ export interface InputPortMapEntry {
 export type InputPortSetRecord<Names extends string = string> = {
     [K in Names]: InputPortSetSpec
 }
-export type InputPortMapping<Names extends string = string> = {
-    [K in Names]: number
-}
+export type InputPortMapping<Names extends string = string> = [Names] extends [never]
+    ? never
+    : {
+          [K in Names]: number | true
+      }

@@ -1,4 +1,4 @@
-import { Image } from "@k8ts/instruments"
+import { Image, localFile } from "@k8ts/instruments"
 import { gateway_v1 } from "@lib/api-versions"
 import k8tsFile from "./cluster-scoped.k8"
 import { W } from "./world"
@@ -22,7 +22,11 @@ export default W.File("deployment.yaml", {
             bind: k8tsFile["PersistentVolume/dev-sda"],
             storage: "1Gi->5Gi"
         })
-
+        yield k.ConfigMap("config", {
+            data: {
+                "config.yaml": localFile("./example.txt")
+            }
+        })
         const deploy = k.Deployment("xyz", {
             replicas: 1,
             template: {
@@ -36,14 +40,14 @@ export default W.File("deployment.yaml", {
                     })
 
                     yield k.Container("main", {
-                        image: Image.name("nginx").tag("latest"),
+                        image: Image.name("nginx/nginx").tag("latest"),
                         ports: {
                             http: 80
                         },
                         mounts: {
                             "/xyz": v.Mount(),
                             "/etc": v.Mount(),
-                            "/dev": d.mount()
+                            "/dev": d.Mount()
                         },
                         resources: {
                             cpu: "100m->500m",
@@ -54,20 +58,29 @@ export default W.File("deployment.yaml", {
             }
         })
 
+        const dpeloy2 = k.Deployment("xyz2", {
+            replicas: 1,
+            template: {
+                *POD(k) {
+                    k.Container("x", {
+                        image: "" as any
+                    })
+                }
+            }
+        })
+
         const svc2 = k.Service("xyz", {
             frontend: {
                 type: "ClusterIP"
             },
-            ports: {
-                http: 80
-            },
+            ports: {},
             backend: deploy
         })
         yield svc2
         const route = k.DomainRoute("my-route", {
             hostname: "example.com",
-            parent: W.External(gwKind, "gateway"),
-            backend: svc2.getPortRef("http")
+            gateway: W.External(gwKind, "gateway"),
+            backend: svc2.portRef("http")
         })
 
         yield route

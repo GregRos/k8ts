@@ -2,11 +2,13 @@ import { Origin, auto_register, displayers, type LiveRefable } from "@k8ts/instr
 import chalk from "chalk"
 import {
     ConfigMap,
+    DataMode,
     Deployment,
     HttpRoute,
     Namespace,
-    Persistent,
     PodTemplate,
+    Pv,
+    Pvc,
     Secret,
     Service
 } from "../resources"
@@ -31,15 +33,14 @@ export namespace Factory {
     }
     @auto_register
     export class Cluster extends Base {
-        PersistentVolume<Name extends string, Mode extends Persistent.DataMode = "Filesystem">(
+        PersistentVolume<Name extends string, Mode extends DataMode = "Filesystem">(
             name: Name,
-            props: Persistent.Volume.Props<Mode>
+            props: Pv.Props<Mode>
         ) {
-            return new Persistent.Volume.Volume(
-                this.origin,
-                this._metaWithName(name),
-                props
-            ) as LiveRefable<Persistent.Volume<Mode>, Name>
+            return new Pv.Pv(this.origin, this._metaWithName(name), props) as LiveRefable<
+                Pv.Pv<Mode>,
+                Name
+            >
         }
         Namespace<Name extends string>(name: Name, props?: Namespace.Props) {
             return new Namespace.Namespace(
@@ -52,15 +53,11 @@ export namespace Factory {
 
     @auto_register
     export class Namespaced extends Base {
-        Claim<Mode extends Persistent.DataMode, Name extends string>(
-            name: Name,
-            mode: Persistent.Claim.Props<Mode>
-        ) {
-            return new Persistent.Claim.Claim(
-                this.origin,
-                this._metaWithName(name),
-                mode
-            ) as LiveRefable<Persistent.Claim<Mode>, Name>
+        Claim<Mode extends DataMode, Name extends string>(name: Name, mode: Pvc.Props<Mode>) {
+            return new Pvc.Pvc(this.origin, this._metaWithName(name), mode) as LiveRefable<
+                Pvc.Pvc<Mode>,
+                Name
+            >
         }
         ConfigMap<Name extends string>(name: Name, props: ConfigMap.Props) {
             return new ConfigMap.ConfigMap(
@@ -68,6 +65,16 @@ export namespace Factory {
                 this._metaWithName(name),
                 props
             ) as LiveRefable<ConfigMap, Name>
+        }
+        HttpRoute<Name extends string, Ports extends string>(
+            name: Name,
+            props: HttpRoute.Props<Ports>
+        ) {
+            return new HttpRoute.HttpRoute(
+                this.origin,
+                this._metaWithName(name),
+                props
+            ) as LiveRefable<HttpRoute<Ports>, Name>
         }
         Secret<Name extends string>(name: Name, props: Secret.Props) {
             return new Secret.Secret(this.origin, this._metaWithName(name), props) as LiveRefable<
@@ -85,7 +92,7 @@ export namespace Factory {
             >
         }
 
-        Deployment<Name extends string, Ports extends string>(
+        Deployment<Name extends string, Ports extends string = never>(
             name: Name,
             props: Deployment.Props<Ports>
         ) {

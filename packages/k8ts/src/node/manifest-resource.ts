@@ -3,7 +3,7 @@ import type { Meta, MutableMeta } from "@k8ts/metadata"
 import { TopResource } from "./top-resource"
 
 export abstract class ManifestResource<Props extends object = object> extends TopResource<Props> {
-    protected manifest() {
+    protected async manifest() {
         return Builder.get(this).manifest()
     }
     abstract override readonly kind: Kind.Kind

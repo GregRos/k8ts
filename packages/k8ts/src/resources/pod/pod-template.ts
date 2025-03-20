@@ -9,7 +9,7 @@ import { Container } from "./container"
 import { Device, Volume } from "./volume"
 export type PodTemplate<Ports extends string> = PodTemplate.PodTemplate<Ports>
 export namespace PodTemplate {
-    export type Props<Ports extends string> = Omit<
+    export type Props<Ports extends string = never> = Omit<
         CDK.PodSpec,
         "containers" | "initContainers" | "volumes"
     > & {

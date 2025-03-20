@@ -19,7 +19,7 @@ export namespace Deployment {
         kids: s => [s.template]
     })
     @manifest({
-        body(self): CDK.KubeDeploymentProps {
+        async body(self): Promise<CDK.KubeDeploymentProps> {
             return {
                 spec: {
                     ...omit(self.props, "template"),
@@ -28,7 +28,7 @@ export namespace Deployment {
                             app: self.name
                         }
                     },
-                    template: self.template["manifest"]()
+                    template: await self.template["manifest"]()
                 }
             }
         }

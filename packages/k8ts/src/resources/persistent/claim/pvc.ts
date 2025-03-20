@@ -5,10 +5,10 @@ import { k8ts } from "../../../kind-map"
 import { ManifestResource } from "../../../node"
 import { Access } from "../access-mode"
 import type { DataMode } from "../block-mode"
-import type { Volume } from "../volume"
+import { Pv } from "../volume"
 
-export type Claim<T extends DataMode = DataMode> = Claim.Claim<T>
-export namespace Claim {
+export type Pvc<T extends DataMode = DataMode> = Pvc.Pvc<T>
+export namespace Pvc {
     const pvc_ResourcesSpec = ResourcesSpec.make({
         storage: Unit.Data
     })
@@ -17,7 +17,7 @@ export namespace Claim {
     export interface Props<Mode extends DataMode> extends PvcResources {
         accessModes: Access
         mode?: Mode
-        bind: Volume.Volume<Mode>
+        bind: Pv<Mode>
     }
 
     const ident = v1.kind("PersistentVolumeClaim")
@@ -46,7 +46,7 @@ export namespace Claim {
             }
         }
     })
-    export class Claim<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
+    export class Pvc<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
         kind = ident
     }
 }

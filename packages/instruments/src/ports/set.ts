@@ -28,8 +28,11 @@ export class PortSet<Names extends string = never> {
         protocol: InputProtocol
     ): PortSet<Names | Name>
     add<Name extends string>(name: Name, entry: InputPortSetEntry): PortSet<Names | Name>
-    add<InNames extends string>(input: InputPortSetRecord<InNames>): PortSet<Names | InNames>
+    add<InNames extends string>(input?: InputPortSetRecord<InNames>): PortSet<Names | InNames>
     add(a: any, b?: any, c?: any): any {
+        if (!a) {
+            return this
+        }
         if (c) {
             return this._apply(map => map.set(a, { name: a, port: +b, protocol: c.toUpperCase() }))
         }
@@ -63,17 +66,28 @@ export class PortSet<Names extends string = never> {
                 if (!(entry.name in mapping)) {
                     throw new PortError(`Port ${entry.name} not found in mapping`)
                 }
+                const portIn = mapping[entry.name as keyof typeof mapping]
+                let portVal: number
+                if (typeof portIn === "boolean") {
+                    portVal = entry.port
+                } else if (typeof portIn === "number") {
+                    portVal = portIn
+                } else {
+                    throw new PortError(
+                        `Port ${entry.name} mapping value must be a number or boolean`
+                    )
+                }
                 return {
                     name: entry.name,
                     protocol: entry.protocol,
                     source: entry.port,
-                    target: mapping[entry.name as keyof typeof mapping]
+                    target: portVal as any
                 }
             })
         )
     }
 
-    static make<Names extends string>(input: InputPortSetRecord<Names>) {
+    static make<Names extends string>(input?: InputPortSetRecord<Names>) {
         return new PortSet().add(input)
     }
 }

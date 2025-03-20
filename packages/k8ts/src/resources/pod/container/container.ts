@@ -30,9 +30,9 @@ export namespace Container {
     export type Mounts = {
         [key: string]: Mount.ContainerDeviceMount | Mount.ContainerVolumeMount
     }
-    export interface Props<Ports extends string> {
+    export interface Props<Ports extends string = never> {
         image: TaggedImage
-        ports: InputPortSetRecord<Ports>
+        ports?: InputPortSetRecord<Ports>
         command?: CmdBuilder
         mounts?: Mounts
         env?: InputEnvMapping
@@ -82,7 +82,7 @@ export namespace Container {
             const container: CDK.Container = {
                 name: self.name,
                 image: image.text,
-                ports: toContainerPorts(PortSet.make(ports)).valueSeq().toArray(),
+                ports: ports && toContainerPorts(PortSet.make(ports)).valueSeq().toArray(),
                 resources: self._resources()?.toObject(),
                 command: command?.toArray(),
                 env: toEnvVars(Env(env)).valueSeq().toArray(),

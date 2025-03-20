@@ -19,8 +19,11 @@ export class Runner {
     constructor(private readonly _options: RunnerOptions) {}
 
     async run(input: Iterable<File.Input>) {
-        const proverbs = await Proverbs.make(proverbsPath)
-        console.log(chalk.italic.magentaBright(proverbs.random))
+        try {
+            const proverbs = await Proverbs.make(proverbsPath)
+            console.log(chalk.italic.magentaBright(proverbs.random))
+        } catch {}
+
         const gitInfo = await GitTrace.make({
             cwd: this._options.cwd
         })

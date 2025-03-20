@@ -17,14 +17,14 @@ export namespace World {
     const ident = k8tsBuildKind.kind("World")
     export class Builder extends BaseOriginEntity<Props> {
         readonly kind = ident
-        readonly ExternalOrigin: ExternalOriginEntity
+        private readonly _ExternalOrigin: ExternalOriginEntity
         constructor(props: Props) {
             super("World", props, K8tsRootOrigin.node)
-            this.ExternalOrigin = new ExternalOriginEntity(this.node)
+            this._ExternalOrigin = new ExternalOriginEntity(this.node)
         }
 
         External<K extends Kind>(kind: K, name: string, namespace?: string) {
-            return new External(this.ExternalOrigin.node, kind, name, namespace)
+            return new External(this._ExternalOrigin.node, kind, name, namespace)
         }
 
         File<T extends ManifestResource>(
