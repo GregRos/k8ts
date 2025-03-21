@@ -39,7 +39,7 @@ export class LocalFileSource<Mode extends LocalFileMode = "text"> {
     }) as DoddleAsync<Mode extends "text" ? string : Uint8Array>
 }
 
-export function localFile<Mode extends LocalFileMode>(
+export function localFile<Mode extends LocalFileMode = "text">(
     path: string,
     props?: Pick<LocalFileSourceProps<Mode>, "cwd" | "mode">
 ): LocalFileSource<Mode>
