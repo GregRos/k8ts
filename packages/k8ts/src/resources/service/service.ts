@@ -12,9 +12,9 @@ export type Service<Ports extends string> = Service.Service<Ports>
 export namespace Service {
     export import Port = Port_
     export import Frontend = Frontend_
-    export interface Props<Ports extends string> {
-        ports: Partial<InputPortMapping<Ports>>
-        backend: Deployment.Deployment<Ports>
+    export interface Props<ExposedPorts extends DeployPorts, DeployPorts extends string> {
+        ports: InputPortMapping<ExposedPorts>
+        backend: Deployment.Deployment<DeployPorts>
         frontend: Frontend
     }
 
@@ -53,7 +53,7 @@ export namespace Service {
         }
 
         portRef(port: Ports) {
-            return new Port.Port(this, port)
+            return new Port.Port(this, port, this.ports.get(port).target)
         }
     }
 }

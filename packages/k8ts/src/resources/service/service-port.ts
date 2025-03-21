@@ -1,3 +1,4 @@
+import { CDK } from "../../_imports"
 import type { Service } from "./service"
 
 export type Port<Port extends string> = Port.Port<Port>
@@ -10,14 +11,16 @@ export namespace Port {
     export class Port<Port extends string> {
         constructor(
             readonly service: Service<Port>,
-            readonly port: Port
+            readonly portName: Port,
+            readonly port: number
         ) {}
 
-        ref() {
+        ref(): CDK.HttpRouteSpecRulesBackendRefs {
             return {
                 kind: "Service",
                 namespace: this.service.meta.tryGet("namespace"),
-                name: this.service.meta.get("name")
+                name: this.service.meta.get("name"),
+                port: this.port
             }
         }
     }

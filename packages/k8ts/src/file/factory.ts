@@ -82,12 +82,12 @@ export namespace Factory {
                 Name
             >
         }
-        Service<Name extends string, Ports extends string>(
+        Service<Name extends string, DeployPorts extends string, ExposedPorts extends DeployPorts>(
             name: Name,
-            props: Service.Props<Ports>
+            props: Service.Props<ExposedPorts, DeployPorts>
         ) {
             return new Service.Service(this.origin, this._metaWithName(name), props) as LiveRefable<
-                Service<Ports>,
+                Service<DeployPorts>,
                 Name
             >
         }

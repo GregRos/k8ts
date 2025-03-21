@@ -21,6 +21,8 @@ export namespace Deployment {
     })
     @manifest({
         async body(self): Promise<CDK.KubeDeploymentProps> {
+            const template = await self.template["manifest"]()
+            const noKindFields = omit(template, ["kind", "apiVersion"])
             return {
                 spec: {
                     ...omit(self.props, "template"),
@@ -29,7 +31,7 @@ export namespace Deployment {
                             app: self.name
                         }
                     },
-                    template: await self.template["manifest"]()
+                    template: noKindFields
                 }
             }
         }

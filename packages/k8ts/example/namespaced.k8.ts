@@ -69,7 +69,9 @@ export default W.Scope(k8sNamespace)
             frontend: {
                 type: "ClusterIP"
             },
-            ports: {},
+            ports: {
+                http: 80
+            },
             backend: deploy2
         })
         yield svc2
