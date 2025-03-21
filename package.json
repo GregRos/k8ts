@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "shx": "^0.3.4",
-    "build": "yarn workspaces foreach --topological-dev -Ap run build",
+    "build": "tsc -b .",
     "build:clean": "run-s clean build",
     "test": "yarn workspaces foreach -Ap --topological-dev run test",
     "watch": "tsc -b . -w",

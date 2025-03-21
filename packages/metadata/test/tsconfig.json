@@ -9,7 +9,6 @@
     "composite": false,
     "declarationMap": false,
     "noEmit": true,
-    "baseUrl": ".",
     "tsBuildInfoFile": "../dist/test.tsbuildinfo",
     "types": ["jest", "node"],
     "paths": {

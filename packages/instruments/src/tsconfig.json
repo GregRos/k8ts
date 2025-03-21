@@ -1,5 +1,10 @@
 {
   "extends": "../../../tsconfig.base.json",
+  "references": [
+    {
+      "path": "../../metadata/src/tsconfig.json"
+    }
+  ],
   "compilerOptions": {
     "rootDir": ".",
     "noEmit": false,

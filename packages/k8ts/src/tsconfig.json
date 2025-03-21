@@ -3,6 +3,12 @@
   "references": [
     {
       "path": "./_imports/tsconfig.json"
+    },
+    {
+      "path": "../../metadata/src/tsconfig.json"
+    },
+    {
+      "path": "../../instruments/src/tsconfig.json"
     }
   ],
   "compilerOptions": {
