@@ -16,7 +16,7 @@ export namespace HttpRoute {
         backend: Service.Port<Ports>
     }
 
-    const kind = gateway_v1.kind("HttpRoute")
+    const kind = gateway_v1.kind("HTTPRoute")
     @k8ts(kind)
     @relations({
         needs: self => ({
