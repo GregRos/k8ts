@@ -132,4 +132,4 @@ export abstract class BaseNode<
             .cache()
     })
 }
-export type Formats = "short" | "fqn" | "shortFqn"
+export type Formats = "local" | "source" | undefined

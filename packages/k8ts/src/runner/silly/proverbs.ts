@@ -9,6 +9,6 @@ export class Proverbs {
 
     get random() {
         const idx = Math.floor(Math.random() * this._proverbs.length)
-        return `K8ts says: ${this._proverbs[idx]}`
+        return this._proverbs[idx]
     }
 }

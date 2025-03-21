@@ -1,7 +1,7 @@
 import { ForwardRef, ResourceNode } from "@k8ts/instruments"
 import { seq } from "doddle"
 import Emittery from "emittery"
-import { Set } from "immutable"
+import { Map, Set } from "immutable"
 import { MakeError } from "../../error"
 import type { File } from "../../file"
 import { k8ts_namespace } from "./meta"
@@ -16,6 +16,22 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
         resource.meta!.add(k8ts_namespace, {
             "^declared-in": `(${resource.origin.root.name}) ${resource.origin.name}`
         })
+    }
+
+    private _checkConflictingNames(resources: Set<ResourceNode>) {
+        let names = Map<string, ResourceNode>()
+        for (const resource of resources) {
+            const name = [resource.kind.name, resource.namespace, resource.name]
+                .filter(Boolean)
+                .join("/")
+            const existing = names.get(name)
+            if (existing) {
+                throw new MakeError(
+                    `Duplicate resource designation ${name}. Existing: ${existing.format("source")}, new: ${resource.format("source")}`
+                )
+            }
+            names = names.set(name, resource)
+        }
     }
 
     async load(input: File.Input) {
@@ -66,6 +82,7 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
             await addResource(resource)
         }
 
+        this._checkConflictingNames(resources)
         return resources.toArray()
     }
 }

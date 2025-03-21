@@ -1,22 +1,19 @@
 Helping you manifest a better future.
 All your cluster are belong to us.
-Let your freak flag fly.
-It's for pronounced "Kate's."
-We don't know who Kate is.
+It's actually pronounced "Kate's." 
 It's not even your cluster's final form.
-K8ts, for one, welcomes our new cloud-native overlords.
-Now 100% unethically sourced. And unsourced too.
-Made with no natural ingredients of any kind.
+Now 100% unethically sourced.
+Made with no natural ingredients whatsoever.
 PROTIP: K8ts is most effective when used together with a Kubernetes cluster.
 PROTIP: In JavaScript, variables may be declared with either let or const.
 Shameless plug: https://gregros.dev
-Comes with no warranty. But with an A4 and some crayons, you can make your own!
+COMES WITHOUT WARRANTY OF ANY KIND. But with an A4 and some crayons, you can make your own!
 You can turn these off using the --no-proverbs flag! Sadly, it's not implemented yet.
 Always runs in Kernel mode.
 There is no such thing as too many build steps.
 In the running for most complex YAML serializer ever built.
 K8ts can make mistakes. Check important manifests.
-Report issues at https://github.com/GregRos/K8ts
+Report issues at https://github.com/GregRos/K8ts.
 PROTIP: YAML is a subet of JSON, but with less ugly quotes.
 Because we all know Helm and Kustomize kind'a suck.
 Is so debug-friendly even its traces have traces.

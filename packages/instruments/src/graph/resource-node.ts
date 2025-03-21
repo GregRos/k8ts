@@ -1,7 +1,7 @@
 import { MutableMeta } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq } from "doddle"
-import { displayers } from "../displayers"
+import { Displayers, displayers } from "../displayers"
 import { RefKey } from "../ref-key"
 import { TraceEmbedder } from "../tracing"
 import { BaseEntity, BaseNode, Formats } from "./base-node"
@@ -26,12 +26,19 @@ import { Relations } from "./relations"
         if (format !== "local") {
             text = `${originPart}${text}`
         }
+        if (format === "source") {
+            text += ` (at ${resource.trace.format()})`
+        }
         return text
     }
 })
 export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
     get relations() {
         return seq(this._relations.needs)
+    }
+
+    get namespace() {
+        return this.meta?.tryGet("namespace")
     }
 
     get trace() {
@@ -78,14 +85,7 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
     }
 
     format(format: Formats) {
-        switch (format) {
-            case "short":
-                return this.name
-            case "fqn":
-                return this.key.string
-            case "shortFqn":
-                return this.key.name
-        }
+        return Displayers.get(this).pretty(format)
     }
     private get _relations() {
         return Relations.get(this._entity)
