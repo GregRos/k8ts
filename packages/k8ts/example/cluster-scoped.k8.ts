@@ -10,7 +10,8 @@ export default W.Scope("cluster")
             backend: {
                 type: "Local",
                 path: "/mnt/data"
-            }
+            },
+            nodeAffinity: {} as any
         })
         yield FILE.PersistentVolume("dev-sda", {
             capacity: "1Gi",
@@ -19,6 +20,7 @@ export default W.Scope("cluster")
                 type: "Local",
                 path: "/dev/sda"
             },
-            mode: "Block"
+            mode: "Block",
+            nodeAffinity: {} as any
         })
     })

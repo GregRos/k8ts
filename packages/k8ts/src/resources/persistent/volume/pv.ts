@@ -1,6 +1,7 @@
 import { manifest, relations, type Unit } from "@k8ts/instruments"
 import { CDK } from "../../../_imports"
 import { v1 } from "../../../api-versions"
+import { MakeError } from "../../../error"
 import { k8ts } from "../../../kind-map"
 import { ManifestResource } from "../../../node/manifest-resource"
 import { Access } from "../access-mode"
@@ -28,6 +29,13 @@ export namespace Pv {
         body(self) {
             const pvProps = self.props
             const accessModes = Access.parse(pvProps.accessModes)
+            if (self.props.backend.type === "Local") {
+                if (!pvProps.nodeAffinity) {
+                    throw new MakeError(
+                        `While manifesting ${self.node.format("source")}, PV with Local backend must have nodeAffinity.`
+                    )
+                }
+            }
             let base: CDK.PersistentVolumeSpec = {
                 accessModes,
                 storageClassName: pvProps.storageClassName,
@@ -37,7 +45,8 @@ export namespace Pv {
                       }
                     : undefined,
                 volumeMode: pvProps.mode ?? "Filesystem",
-                persistentVolumeReclaimPolicy: pvProps.reclaimPolicy ?? "Retain"
+                persistentVolumeReclaimPolicy: pvProps.reclaimPolicy ?? "Retain",
+                nodeAffinity: pvProps.nodeAffinity
             }
             base = {
                 ...base,
