@@ -51,7 +51,7 @@ export default W.Scope(k8sNamespace)
                 yield k.Container("main", {
                     image: Image.name("nginx/nginx").tag("latest"),
                     ports: {
-                        http: 80
+                        http: 3333
                     },
                     mounts: {
                         "/xyz": v.Mount(),

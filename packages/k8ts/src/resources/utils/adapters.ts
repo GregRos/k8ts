@@ -15,8 +15,8 @@ export function toContainerPorts(ports: PortSet<any>) {
 
 export function toServicePort(entry: PortMapEntry): CDK.ServicePort {
     return {
-        port: entry.source,
-        targetPort: CDK.IntOrString.fromNumber(entry.target),
+        port: entry.frontend,
+        targetPort: CDK.IntOrString.fromString(entry.name),
         protocol: entry.protocol,
         name: entry.name
     }

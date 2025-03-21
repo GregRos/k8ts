@@ -11,8 +11,7 @@ export type InputPortProto = `${Port}/${InputProtocol}`
 export interface PortMapEntry {
     name: string
     protocol: Protocol
-    source: number
-    target: number
+    frontend: number
 }
 
 export interface PortSetEntry {

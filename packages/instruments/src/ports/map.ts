@@ -21,8 +21,7 @@ export class PortMap<Names extends string> {
             this._map.map(entry => {
                 return {
                     ...entry,
-                    source: entry.target,
-                    target: mapping[entry.name as keyof typeof mapping]
+                    frontend: mapping[entry.name as keyof typeof mapping]
                 }
             })
         )

@@ -80,8 +80,8 @@ export class PortSet<Names extends string = never> {
                 return {
                     name: entry.name,
                     protocol: entry.protocol,
-                    source: entry.port,
-                    target: portVal as any
+                    backend: entry.name,
+                    frontend: portVal as any
                 }
             })
         )

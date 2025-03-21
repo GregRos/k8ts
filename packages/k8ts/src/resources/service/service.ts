@@ -65,7 +65,7 @@ export namespace Service {
         }
 
         portRef(port: ExposedPorts) {
-            return new Port.Port(this, port, this.ports.get(port).target)
+            return new Port.Port(this, port, this.ports.get(port).frontend)
         }
     }
 }
