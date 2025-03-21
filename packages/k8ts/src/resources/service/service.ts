@@ -37,6 +37,12 @@ export namespace Service {
                     selector: {
                         app: self.props.backend.name
                     },
+                    ...(self.props.frontend.type === "LoadBalancer"
+                        ? {
+                              allocateLoadBalancerNodePorts: false,
+                              externalTrafficPolicy: "Local"
+                          }
+                        : {}),
                     ...self.props.frontend
                 }
             }
