@@ -1,4 +1,4 @@
-import { manifest, relations } from "@k8ts/instruments"
+import { manifest, Producer, relations } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { omit } from "lodash"
 import { CDK } from "../../_imports"
@@ -9,11 +9,13 @@ import { Container } from "./container"
 import { Device, Volume } from "./volume"
 export type PodTemplate<Ports extends string> = PodTemplate.PodTemplate<Ports>
 export namespace PodTemplate {
-    export type Props<Ports extends string = never> = Omit<
-        CDK.PodSpec,
-        "containers" | "initContainers" | "volumes"
-    > & {
-        POD(scope: PodScope): Iterable<Container.Container<Ports>>
+    export type PodProps = Omit<CDK.PodSpec, "containers" | "initContainers" | "volumes">
+    export type PodContainerProducer<Ports extends string> = Producer<
+        PodScope,
+        Container.Container<Ports>
+    >
+    export type Props<Ports extends string = never> = PodProps & {
+        POD: PodContainerProducer<Ports>
     }
     const ident = apps_v1.kind("PodTemplate")
     @k8ts(ident)

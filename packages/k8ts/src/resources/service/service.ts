@@ -31,7 +31,9 @@ export namespace Service {
             return {
                 spec: {
                     ports: toServicePorts(svcPorts).toArray(),
-                    selector: self.props.backend.meta.pick("%app").labels,
+                    selector: {
+                        app: self.props.backend.name
+                    },
                     ...self.props.frontend
                 }
             }

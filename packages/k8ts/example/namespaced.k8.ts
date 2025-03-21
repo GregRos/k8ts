@@ -9,30 +9,36 @@ const gwKind = gateway_v1.kind("Gateway")
 export default W.File("deployment.yaml", {
     scope: k8sNamespace,
     alias: "dep",
-    *FILE(k) {
-        const claim = k.Claim("claim", {
+    *FILE(FILE) {
+        const claim = FILE.Claim("claim", {
             bind: cool,
             accessModes: ["ReadWriteOnce"],
             storage: "1Gi->5Gi"
         })
 
         yield claim
-        const devClaim = k.Claim("dev-claim", {
+        const devClaim = FILE.Claim("dev-claim", {
             accessModes: ["ReadWriteOnce"],
             bind: k8tsFile["PersistentVolume/dev-sda"],
             storage: "1Gi->5Gi"
         })
-        yield k.ConfigMap("config", {
+        yield FILE.ConfigMap("config", {
             data: {
                 "config.yaml": localFile("./example.txt")
             }
         })
-        const deploy = k.Deployment("xyz", {
+        const deploy = FILE.Deployment("xyz", {
             replicas: 1,
             template: {
                 *POD(k) {
                     const v = k.Volume("data", {
                         backend: claim
+                    })
+
+                    FILE.ConfigMap("abc", {
+                        data: {
+                            a: "1"
+                        }
                     })
 
                     const d = k.Device("dev", {
@@ -58,7 +64,7 @@ export default W.File("deployment.yaml", {
             }
         })
 
-        const dpeloy2 = k.Deployment("xyz2", {
+        const dpeloy2 = FILE.Deployment("xyz2", {
             replicas: 1,
             template: {
                 *POD(k) {
@@ -69,7 +75,7 @@ export default W.File("deployment.yaml", {
             }
         })
 
-        const svc2 = k.Service("xyz", {
+        const svc2 = FILE.Service("xyz", {
             frontend: {
                 type: "ClusterIP"
             },
@@ -77,7 +83,7 @@ export default W.File("deployment.yaml", {
             backend: deploy
         })
         yield svc2
-        const route = k.DomainRoute("my-route", {
+        const route = FILE.DomainRoute("my-route", {
             hostname: "example.com",
             gateway: W.External(gwKind, "gateway"),
             backend: svc2.portRef("http")

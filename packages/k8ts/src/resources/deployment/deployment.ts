@@ -9,7 +9,8 @@ import { PodTemplate } from "../pod/pod-template"
 
 export type Deployment<Ports extends string> = Deployment.Deployment<Ports>
 export namespace Deployment {
-    export type Props<Ports extends string> = Omit<CDK.DeploymentSpec, "selector" | "template"> & {
+    export type SmallerProps = Omit<CDK.DeploymentSpec, "selector" | "template">
+    export type Props<Ports extends string> = SmallerProps & {
         template: PodTemplate.Props<Ports>
     }
 

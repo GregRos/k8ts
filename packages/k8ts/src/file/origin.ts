@@ -7,6 +7,9 @@ export type FileOrigin<FScope extends FileOrigin.Scope = FileOrigin.Scope> =
 export namespace FileOrigin {
     export type Scope = Namespace | "cluster"
 
+    export interface SmallerProps extends OriginEntityProps {
+        meta?: Meta.Input
+    }
     export interface Props<FScope extends Scope = Scope> extends OriginEntityProps {
         meta?: Meta.Input
         scope: FScope

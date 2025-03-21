@@ -52,6 +52,7 @@ export namespace Container {
         get kind() {
             return this.parent.kind.subkind("Container")
         }
+
         get mounts() {
             return Map(this.props.mounts ?? {})
                 .mapEntries(([path, mount]) => {
@@ -81,7 +82,7 @@ export namespace Container {
             const { image, ports, command, env, securityContext } = self.props
             const container: CDK.Container = {
                 name: self.name,
-                image: image.text,
+                image: image.toString(),
                 ports: ports && toContainerPorts(PortSet.make(ports)).valueSeq().toArray(),
                 resources: self._resources()?.toObject(),
                 command: command?.toArray(),

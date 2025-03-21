@@ -2,6 +2,8 @@ import { BaseOriginEntity, KindMap, Origin, type Kind } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { External } from "../external"
 import { File } from "../file"
+import { FileExports } from "../file/exports"
+import { FileOrigin } from "../file/origin"
 import { k8tsBuildKind } from "../k8ts-sys-kind"
 import { K8tsRootOrigin } from "../kind-map"
 import type { ManifestResource } from "../node"
@@ -25,6 +27,26 @@ export namespace World {
 
         External<K extends Kind>(kind: K, name: string, namespace?: string) {
             return new External(this._ExternalOrigin.node, kind, name, namespace)
+        }
+
+        Scope<Scope extends FileOrigin.Scope>(scope: Scope) {
+            const builder = this
+            return {
+                File(name: ManifestFileName, props?: FileOrigin.SmallerProps) {
+                    props ??= {}
+                    return {
+                        Resources: <Produced extends ManifestResource>(
+                            producer: FileExports.Producer<Scope, Produced>
+                        ) => {
+                            return builder.File(name, {
+                                ...props,
+                                scope,
+                                FILE: producer
+                            } as any)
+                        }
+                    }
+                }
+            }
         }
 
         File<T extends ManifestResource>(

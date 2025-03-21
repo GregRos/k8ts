@@ -103,6 +103,27 @@ export namespace Factory {
             ) as LiveRefable<Deployment<Ports>, Name>
         }
 
+        Deployment2<Name extends string>(name: Name, props: Deployment.SmallerProps) {
+            const builder = this
+            return {
+                Template(templateProps?: PodTemplate.PodProps) {
+                    return {
+                        POD<Ports extends string>(
+                            producer: PodTemplate.PodContainerProducer<Ports>
+                        ) {
+                            return builder.Deployment(name, {
+                                ...props,
+                                template: {
+                                    ...templateProps,
+                                    POD: producer
+                                }
+                            })
+                        }
+                    }
+                }
+            }
+        }
+
         DomainRoute<Name extends string, Ports extends string>(
             name: Name,
             props: HttpRoute.Props<Ports>
