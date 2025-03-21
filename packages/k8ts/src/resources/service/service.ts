@@ -8,11 +8,14 @@ import type { Deployment } from "../deployment/deployment"
 import { toServicePorts } from "../utils/adapters"
 import { Frontend as Frontend_ } from "./frontend"
 import { Port as Port_ } from "./service-port"
-export type Service<Ports extends string> = Service.Service<Ports>
+export type Service<DeployPorts extends string, ExposedPorts extends DeployPorts> = Service.Service<
+    DeployPorts,
+    ExposedPorts
+>
 export namespace Service {
     export import Port = Port_
     export import Frontend = Frontend_
-    export interface Props<ExposedPorts extends DeployPorts, DeployPorts extends string> {
+    export interface Props<DeployPorts extends string, ExposedPorts extends DeployPorts> {
         ports: InputPortMapping<ExposedPorts>
         backend: Deployment.Deployment<DeployPorts>
         frontend: Frontend
@@ -39,7 +42,10 @@ export namespace Service {
             }
         }
     })
-    export class Service<Ports extends string = string> extends ManifestResource<Props<Ports>> {
+    export class Service<
+        DeployPorts extends string = string,
+        ExposedPorts extends DeployPorts = DeployPorts
+    > extends ManifestResource<Props<DeployPorts, ExposedPorts>> {
         kind = ident
 
         get ports() {
@@ -47,12 +53,12 @@ export namespace Service {
             const knownPorts = Map(this.props.ports)
                 .filter(x => x !== undefined)
                 .keySeq()
-                .toArray() as Ports[]
+                .toArray() as ExposedPorts[]
             const svcPorts = srcPorts.pick(...knownPorts).map(this.props.ports as any)
             return svcPorts
         }
 
-        portRef(port: Ports) {
+        portRef(port: ExposedPorts) {
             return new Port.Port(this, port, this.ports.get(port).target)
         }
     }
