@@ -30,18 +30,37 @@ const interchangeable = {
     mac_char: "⌘ "
 }
 
-const colors = [chalk.red, chalk.green, chalk.yellow, chalk.blue, chalk.magenta, chalk.cyan]
+const colors = [
+    chalk.redBright,
+    chalk.yellowBright,
+    chalk.blue,
+    chalk.magenta,
+    chalk.cyan,
+    chalk.blueBright
+]
 
 const numbered = Object.values(interchangeable)
 
-export function getMarkerForIndex(index: number, alias: string) {
-    const clamedIndex = index % numbered.length
+// We want to have symbols be as distinct as possible
+// that means we use each symbol with a different color
+
+// Instead of using all symbols of a single color, then all symbols of another color
+// We mix it up, so we only get repeat colors after all symbols have been used
+
+// we can get combinations of color + symbol like this:
+// symbol = i % symbols.length
+// color = (Math.floor(i / colors.length) + i)
+
+export function getMarkerForIndex(index: number) {
+    const clampedIndex = index % numbered.length
     const multiplier = Math.floor(index / numbered.length)
-    const char = numbered[clamedIndex]
-    const color = colors[multiplier % colors.length]
-    const marker = [char, alias].join(" ")
-    const colored = color(marker)
-    return colored
+    const char = numbered[clampedIndex]
+    const color = colors[(multiplier + clampedIndex) % colors.length]
+    const colored = color(char)
+    return `${colored} `
 }
 
-export const external = "∃"
+export function getMarkerForExternal() {
+    const external = "∃"
+    return chalk.yellowBright(external)
+}

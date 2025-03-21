@@ -2,7 +2,7 @@ import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
 import { doddle, seq, Seq } from "doddle"
 import StackTracey from "stacktracey"
-import { getMarkerForIndex, toSuperScript } from "../_string"
+import { getMarkerForExternal, getMarkerForIndex } from "../_string"
 import { displayers } from "../displayers"
 import { KindMap } from "../kind-map"
 import { RefKey } from "../ref-key"
@@ -14,16 +14,16 @@ import { ResourceNode } from "./resource-node"
     simple: s => `[${s.shortFqn}]`,
     prefix: s => {
         if (s.name === "EXTERNAL") {
-            return "🌐"
+            return getMarkerForExternal()
         }
-        return getMarkerForIndex(s.index, s._entity.alias ?? toSuperScript(s.index))
+        return getMarkerForIndex(s.index)
     },
     pretty(origin, format) {
         const kindName = chalk.greenBright.bold(origin.kind.name)
         const resourceName = chalk.cyan(origin.name)
         const pref = this.prefix!()
 
-        return `${kindName}:${resourceName} (${pref})`
+        return chalk.underline(`${pref}${kindName}:${resourceName}`)
     }
 })
 export class Origin extends BaseNode<Origin, OriginEntity> implements Iterable<ResourceNode> {

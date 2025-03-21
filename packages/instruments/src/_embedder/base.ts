@@ -34,7 +34,7 @@ export class Embedder<Target extends object, Value> {
         const input = this.tryGet(target)
         if (!input) {
             throw new Error(
-                `Target of type ${target.constructor.name} doesn't have any embedded data for ${this.name}!`
+                `Target of type ${target} doesn't have any embedded data for ${this.name}!`
             )
         }
         return input
