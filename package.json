@@ -8,11 +8,12 @@
     "packages/instruments"
   ],
   "scripts": {
-    "build": "yarn workspaces foreach -Apt run build",
+    "shx": "^0.3.4",
+    "build": "yarn workspaces foreach --topological-dev -Ap run build",
     "build:clean": "run-s clean build",
-    "test": "yarn workspaces foreach -Apt run test",
+    "test": "yarn workspaces foreach -Ap --topological-dev run test",
     "watch": "tsc -b . -w",
-    "clean": "yarn workspaces foreach -Apt run clean",
+    "clean": "yarn workspaces foreach -Ap run clean",
     "prettier:check": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "eslint:check": "eslint '**/*.ts'",

@@ -1016,7 +1016,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@k8ts/instruments@portal:packages/instruments::locator=%40k8ts%2Fworkspace%40workspace%3A."
   dependencies:
-    "@k8ts/metadata": "workspace:^"
     chalk: "npm:4.1.2"
     dayjs: "npm:^1.11.13"
     doddle: "npm:^5.0.0-beta.16"
@@ -1026,7 +1025,7 @@ __metadata:
     simple-git: "npm:^3.27.0"
     stacktracey: "npm:^2.1.8"
   peerDependencies:
-    "@k8ts/metadata": ^0.1.0
+    "@k8ts/metadata": "workspace:^"
   languageName: node
   linkType: soft
 
@@ -1057,7 +1056,7 @@ __metadata:
     typescript: "npm:^5.8.2"
     yamprint: "npm:^0.8.4"
   peerDependencies:
-    "@k8ts/metadata": ^0.1.0
+    "@k8ts/metadata": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -6567,8 +6566,8 @@ __metadata:
     typescript: "npm:^5.8.2"
     yamprint: "npm:^0.8.4"
   peerDependencies:
-    "@k8ts/instruments": ^0.1.0
-    "@k8ts/metadata": ^0.1.0
+    "@k8ts/instruments": "workspace:^"
+    "@k8ts/metadata": "workspace:^"
   languageName: unknown
   linkType: soft
 
