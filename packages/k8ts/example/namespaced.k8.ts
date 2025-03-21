@@ -8,6 +8,9 @@ const cool = k8tsFile["PersistentVolume/pv-cool"]
 const gwKind = gateway_v1.kind("Gateway")
 export default W.Scope(k8sNamespace)
     .File("deployment2.yaml")
+    .metadata({
+        "^a": "xxxx"
+    })
     .Resources(function* FILE(FILE) {
         const claim = FILE.Claim("claim", {
             bind: cool,

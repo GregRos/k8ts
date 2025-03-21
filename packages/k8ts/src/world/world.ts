@@ -1,5 +1,6 @@
 import { BaseOriginEntity, KindMap, Origin, type Kind } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
+import { assign } from "lodash"
 import { External } from "../external"
 import { File } from "../file"
 import { FileExports } from "../file/exports"
@@ -16,6 +17,12 @@ export namespace World {
     }
 
     const ident = k8tsBuildKind.kind("World")
+    export type DefineScopedFile<Scope extends FileOrigin.Scope> = {
+        metadata(input: Meta.Input): DefineScopedFile<Scope>
+        Resources<const Produced extends ManifestResource>(
+            producer: FileExports.Producer<Scope, Produced>
+        ): File<Produced>
+    }
     export class Builder extends BaseOriginEntity<Props> {
         readonly kind = ident
         private readonly _ExternalOrigin: ExternalOriginEntity
@@ -30,13 +37,21 @@ export namespace World {
 
         Scope<const Scope extends FileOrigin.Scope>(scope: Scope) {
             const builder = this
+            let meta = Meta.make()
             return {
                 File(name: ManifestFileName, props?: FileOrigin.SmallerProps) {
                     props ??= {}
-                    return {
-                        Resources: <const Produced extends ManifestResource>(
+
+                    const self: DefineScopedFile<Scope> = {
+                        metadata(input: Meta.Input) {
+                            props = assign({}, props!, {
+                                meta: Meta.splat(props?.meta, input)
+                            })
+                            return self
+                        },
+                        Resources<const Produced extends ManifestResource>(
                             producer: FileExports.Producer<Scope, Produced>
-                        ): File<Produced> => {
+                        ): File<Produced> {
                             return builder._File(name, {
                                 ...props,
                                 scope,
@@ -44,6 +59,7 @@ export namespace World {
                             } as any)
                         }
                     }
+                    return self
                 }
             }
         }
