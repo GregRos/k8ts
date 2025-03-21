@@ -30,11 +30,13 @@ export namespace FileExports {
                     return new Factory.Namespaced(props.origin.node)
                 }
             })
-            this.#produced = seq(() => producer(props.origin)).each(x => {
-                x.meta.add(k8ts_namespace, {
-                    "#is-exported": "true"
+            this.#produced = seq(() => producer(props.origin))
+                .each(x => {
+                    x.meta.add(k8ts_namespace, {
+                        "#is-exported": "true"
+                    })
                 })
-            })
+                .cache()
         }
 
         get __entity__() {
