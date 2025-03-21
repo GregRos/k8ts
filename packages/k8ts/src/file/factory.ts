@@ -92,7 +92,7 @@ export namespace Factory {
             >
         }
 
-        Deployment<Name extends string, Ports extends string = never>(
+        private _Deployment<Name extends string, Ports extends string = never>(
             name: Name,
             props: Deployment.Props<Ports>
         ) {
@@ -111,7 +111,7 @@ export namespace Factory {
                         POD<Ports extends string>(
                             producer: PodTemplate.PodContainerProducer<Ports>
                         ) {
-                            return builder.Deployment(name, {
+                            return builder._Deployment(name, {
                                 ...props,
                                 template: {
                                     ...templateProps,

@@ -7,7 +7,6 @@ import { FileOrigin } from "../file/origin"
 import { k8tsBuildKind } from "../k8ts-sys-kind"
 import { K8tsRootOrigin } from "../kind-map"
 import type { ManifestResource } from "../node"
-import type { Namespace } from "../resources"
 export type ManifestFileName = `${string}.yaml`
 export namespace World {
     export interface Props {
@@ -29,16 +28,16 @@ export namespace World {
             return new External(this._ExternalOrigin.node, kind, name, namespace)
         }
 
-        Scope<Scope extends FileOrigin.Scope>(scope: Scope) {
+        Scope<const Scope extends FileOrigin.Scope>(scope: Scope) {
             const builder = this
             return {
                 File(name: ManifestFileName, props?: FileOrigin.SmallerProps) {
                     props ??= {}
                     return {
-                        Resources: <Produced extends ManifestResource>(
+                        Resources: <const Produced extends ManifestResource>(
                             producer: FileExports.Producer<Scope, Produced>
-                        ) => {
-                            return builder.File(name, {
+                        ): File<Produced> => {
+                            return builder._File(name, {
                                 ...props,
                                 scope,
                                 FILE: producer
@@ -49,15 +48,7 @@ export namespace World {
             }
         }
 
-        File<T extends ManifestResource>(
-            name: ManifestFileName,
-            props: File.Props<Namespace, T>
-        ): File<T>
-        File<T extends ManifestResource>(
-            name: ManifestFileName,
-            props: File.Props<"cluster", T>
-        ): File<T>
-        File<T extends ManifestResource>(
+        private _File<T extends ManifestResource>(
             name: ManifestFileName,
             props: File.Props<any, T>
         ): File<T> {

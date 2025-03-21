@@ -1,9 +1,8 @@
 import { W } from "./world"
 
-export default W.File("namespace.yaml", {
-    scope: "cluster",
-    alias: "ns",
-    *FILE(FILE) {
+export default W.Scope("cluster")
+    .File("namespace.yaml")
+    .Resources(function* FILE(FILE) {
         yield FILE.Namespace("namespace")
         yield FILE.PersistentVolume("pv-cool", {
             capacity: "1Gi",
@@ -22,5 +21,4 @@ export default W.File("namespace.yaml", {
             },
             mode: "Block"
         })
-    }
-})
+    })

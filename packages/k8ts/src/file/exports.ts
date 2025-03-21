@@ -53,7 +53,7 @@ export namespace FileExports {
     export function make<Scope extends FileOrigin.Scope, Produced extends ManifestResource>(
         props: Props<Scope, Produced>
     ): Core & FutureExports<Produced> {
-        const core = new Core(props)
+        const core = new Core(props as any)
         return FutureExports.make({
             actual: core,
             origin: props.origin.node,

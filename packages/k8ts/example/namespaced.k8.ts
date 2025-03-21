@@ -6,10 +6,9 @@ const k8sNamespace = k8tsFile["Namespace/namespace"]
 const k8sPv = k8tsFile["PersistentVolume/dev-sda"]
 const cool = k8tsFile["PersistentVolume/pv-cool"]
 const gwKind = gateway_v1.kind("Gateway")
-export default W.File("deployment.yaml", {
-    scope: k8sNamespace,
-    alias: "dep",
-    *FILE(FILE) {
+export default W.Scope(k8sNamespace)
+    .File("deployment2.yaml")
+    .Resources(function* FILE(FILE) {
         const claim = FILE.Claim("claim", {
             bind: cool,
             accessModes: ["ReadWriteOnce"],
@@ -27,60 +26,48 @@ export default W.File("deployment.yaml", {
                 "config.yaml": localFile("./example.txt")
             }
         })
-        const deploy = FILE.Deployment("xyz", {
-            replicas: 1,
-            template: {
-                *POD(k) {
-                    const v = k.Volume("data", {
-                        backend: claim
-                    })
-
-                    FILE.ConfigMap("abc", {
-                        data: {
-                            a: "1"
-                        }
-                    })
-
-                    const d = k.Device("dev", {
-                        backend: devClaim
-                    })
-
-                    yield k.Container("main", {
-                        image: Image.name("nginx/nginx").tag("latest"),
-                        ports: {
-                            http: 80
-                        },
-                        mounts: {
-                            "/xyz": v.Mount(),
-                            "/etc": v.Mount(),
-                            "/dev": d.Mount()
-                        },
-                        resources: {
-                            cpu: "100m->500m",
-                            memory: "100Mi->500Mi"
-                        }
-                    })
-                }
-            }
+        const deploy2 = FILE.Deployment2("xyz2", {
+            replicas: 1
         })
+            .Template()
+            .POD(function* POD(k) {
+                const v = k.Volume("data", {
+                    backend: claim
+                })
 
-        const dpeloy2 = FILE.Deployment("xyz2", {
-            replicas: 1,
-            template: {
-                *POD(k) {
-                    k.Container("x", {
-                        image: "" as any
-                    })
-                }
-            }
-        })
+                FILE.ConfigMap("abc", {
+                    data: {
+                        a: "1"
+                    }
+                })
+
+                const d = k.Device("dev", {
+                    backend: devClaim
+                })
+
+                yield k.Container("main", {
+                    image: Image.name("nginx/nginx").tag("latest"),
+                    ports: {
+                        http: 80
+                    },
+                    mounts: {
+                        "/xyz": v.Mount(),
+                        "/etc": v.Mount(),
+                        "/dev": d.Mount()
+                    },
+                    resources: {
+                        cpu: "100m->500m",
+                        memory: "100Mi->500Mi"
+                    }
+                })
+            })
 
         const svc2 = FILE.Service("xyz", {
             frontend: {
                 type: "ClusterIP"
             },
             ports: {},
-            backend: deploy
+            backend: deploy2
         })
         yield svc2
         const route = FILE.DomainRoute("my-route", {
@@ -90,5 +77,4 @@ export default W.File("deployment.yaml", {
         })
 
         yield route
-    }
-})
+    })
