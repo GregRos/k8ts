@@ -1,7 +1,7 @@
 import { ForwardRef, ResourceNode } from "@k8ts/instruments"
 import { seq } from "doddle"
 import Emittery from "emittery"
-import { List } from "immutable"
+import { Set } from "immutable"
 import { MakeError } from "../../error"
 import type { File } from "../../file"
 import { k8ts_namespace } from "./meta"
@@ -19,15 +19,20 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
     }
 
     async load(input: File.Input) {
-        let resources = List<ResourceNode>()
-        seq(input).drain().pull()
-        for (let res of input.__node__.resources) {
-            const origin = res.origin
-            if (!origin.isChildOf(origin)) {
-                throw new MakeError(`Resource ${res} is not a child of the input file ${input}`)
+        // TODO: Handle ORIGINS that are referenced but not passed to the runner
+        const parentOrigin = input.__node__
+
+        const addResource = async (res: ResourceNode) => {
+            if (resources.has(res)) {
+                return
             }
-            if (ForwardRef.is(res)) {
-                throw new MakeError(`Resource ${res} is a forward reference`)
+            if (!res.isRoot) {
+                return
+            }
+            const origin = res.origin
+
+            if (!origin.isChildOf(parentOrigin)) {
+                return
             }
             const event = {
                 isExported: res.meta!.has(`#${k8ts_namespace}is-exported`),
@@ -36,7 +41,29 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
 
             this._attachSourceAnnotations(event)
             await this.emit("load", event)
-            resources = resources.push(res)
+            resources = resources.add(res)
+        }
+
+        let resources = Set<ResourceNode>()
+        // We execute the main FILE iterable to load all the resources attached to the origin
+        seq(input).drain().pull()
+        for (let res of input.__node__.resources) {
+            if (ForwardRef.is(res)) {
+                throw new MakeError(`Resource ${res} is a forward reference`)
+            }
+            await addResource(res)
+        }
+        // Some resources might appear as dependencies to sub-resources that
+        // haven't loaded. We can acquire them by getting all the needed resources
+        for (const resource of resources.toArray()) {
+            for (const relation of resource.recursiveRelationsSubtree) {
+                await addResource(relation.needed)
+            }
+        }
+
+        // The lazy sections might have attached more resources to the origin
+        for (const resource of parentOrigin.resources) {
+            await addResource(resource)
         }
 
         return resources.toArray()

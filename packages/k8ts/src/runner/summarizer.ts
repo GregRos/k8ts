@@ -1,8 +1,8 @@
 import {
     Displayers,
-    NeedsEdge,
     Origin,
     pretty,
+    Relation,
     ResourceNode,
     TextPostProcessor
 } from "@k8ts/instruments"
@@ -16,7 +16,7 @@ export interface SummarizerOptions {
 export class Summarizer {
     private _post = new TextPostProcessor()
     constructor(private readonly _options: SummarizerOptions) {}
-    _formatRefFromTo(node: ResourceNode, edge: NeedsEdge<ResourceNode>) {
+    _formatRefFromTo(node: ResourceNode, edge: Relation<ResourceNode>) {
         return this._token(pretty`${edge}`)
     }
 
@@ -37,7 +37,7 @@ export class Summarizer {
             })
             .toArray()
             .pull()
-        const depends = resource.needs
+        const depends = resource.relations
             .map(x => this._formatRefFromTo(resource, x))
             .toArray()
             .pull()

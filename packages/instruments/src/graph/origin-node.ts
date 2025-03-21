@@ -54,7 +54,7 @@ export class Origin extends BaseNode<Origin, OriginEntity> implements Iterable<R
     private _kindMap: KindMap
     private _attached = [] as ResourceNode[]
 
-    get needs() {
+    get relations() {
         return seq.empty()
     }
     [Symbol.iterator]() {

@@ -3,7 +3,7 @@ import { hash, Set } from "immutable"
 import { Kind } from "../api-kind"
 import { RefKey } from "../ref-key"
 import { ForwardRef } from "../reference"
-import { NeedsEdge } from "./dependencies"
+import { Relation } from "./dependencies"
 
 export interface BaseEntity<Node extends BaseNode<Node>> {
     readonly node: Node
@@ -17,13 +17,14 @@ export abstract class BaseNode<
     Node extends BaseNode<Node, Entity>,
     Entity extends BaseEntity<Node> = BaseEntity<Node>
 > {
+    private _eqProxy = {}
     abstract readonly key: RefKey
     get kind() {
         return this.key.kind
     }
 
     abstract readonly kids: Seq<Node>
-    abstract readonly needs: Seq<NeedsEdge<Node>>
+    abstract readonly relations: Seq<Relation<Node>>
     abstract readonly parent: Node | null
     protected get _asNode() {
         return this as any as Node
@@ -41,11 +42,11 @@ export abstract class BaseNode<
         return this.key.name
     }
     get isRoot() {
-        return this.parent === null
+        return this.parent === null && this._entity.kind.name !== "PodTemplate"
     }
 
     hashCode() {
-        return hash(this)
+        return hash(this._eqProxy)
     }
     equals(other: any) {
         if (ForwardRef.is(other)) {
@@ -97,25 +98,34 @@ export abstract class BaseNode<
         return this.equals(other) || Set(this.ancestors).has(other._asNode)
     }
 
-    isNeeding(other: Node): boolean {
-        return this.needsGraph.some(x => x.needed.equals(other)).pull()
+    hasRelationTo(other: Node): boolean {
+        return this.recursiveRelations.some(x => x.needed.equals(other)).pull()
     }
 
-    readonly needsGraph = seq(() => {
+    readonly recursiveRelationsSubtree = seq((): Seq<Relation<Node>> => {
+        const self = this
+        return seq(function* () {
+            for (const child of [self, ...self.descendants] as Node[]) {
+                yield* child.recursiveRelations
+            }
+        }) as any
+    })
+
+    readonly recursiveRelations = seq(() => {
         let resources = Set<Node>()
-        const recurseIntoDependency = function* (root: NeedsEdge<Node>): Iterable<NeedsEdge<Node>> {
+        const recurseIntoDependency = function* (root: Relation<Node>): Iterable<Relation<Node>> {
             yield root
             if (resources.has(root.needed)) {
                 return
             }
             resources = resources.add(root.needed)
 
-            const ownDeps = root.needed.needs
+            const ownDeps = root.needed.relations
             for (const needsEdge of ownDeps) {
                 yield* recurseIntoDependency(needsEdge)
             }
         }
-        return seq(recurseIntoDependency.bind(null, new NeedsEdge<Node>("self", this._asNode)))
+        return seq(recurseIntoDependency.bind(null, new Relation<Node>("self", this._asNode)))
             .after(() => {
                 resources = Set()
             })

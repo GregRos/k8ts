@@ -9,7 +9,7 @@ export namespace Dependencies {
 }
 export function dependencies(record: Dependencies.Input) {
     return Object.entries(record).map(([key, value]) => {
-        return new NeedsEdge(key, value.node)
+        return new Relation(key, value.node)
     })
 }
 @displayers({
@@ -19,7 +19,7 @@ export function dependencies(record: Dependencies.Input) {
         return [`${chalk.gray.italic.white(`${dep.why}`)}`, "➜ ", chalk.italic(`${neededFmt}`)]
     }
 })
-export class NeedsEdge<Node extends BaseNode<Node>> {
+export class Relation<Node extends BaseNode<Node>> {
     constructor(
         readonly why: string,
         readonly needed: Node

@@ -30,7 +30,7 @@ import { Relations } from "./relations"
     }
 })
 export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
-    get needs() {
+    get relations() {
         return seq(this._relations.needs)
     }
 

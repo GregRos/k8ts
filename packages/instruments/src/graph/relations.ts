@@ -1,10 +1,10 @@
 import { Embedder } from "../_embedder/base"
-import { Dependencies, dependencies, NeedsEdge } from "./dependencies"
+import { Dependencies, dependencies, Relation } from "./dependencies"
 import { ResourceEntity, ResourceNode } from "./resource-node"
 
 export namespace Relations {
     export interface Out {
-        needs: () => Iterable<NeedsEdge<ResourceNode>>
+        needs: () => Iterable<Relation<ResourceNode>>
         parent: () => ResourceNode | null
         kids: () => ResourceNode[]
     }
