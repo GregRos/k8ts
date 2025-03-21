@@ -1107,6 +1107,7 @@ __metadata:
     eslint-plugin-jest: "npm:^28.11.0"
     husky: "npm:9.0.11"
     jest: "npm:^29.7.0"
+    k8ts: "workspace:^"
     lint-staged: "npm:15.2.2"
     npm-run-all: "npm:^4.1.5"
     prettier: "npm:^3.3.1"
@@ -6528,7 +6529,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"k8ts@workspace:packages/k8ts":
+"k8ts@workspace:^, k8ts@workspace:packages/k8ts":
   version: 0.0.0-use.local
   resolution: "k8ts@workspace:packages/k8ts"
   dependencies:

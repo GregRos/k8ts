@@ -18,8 +18,9 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
         })
     }
 
-    private _checkConflictingNames(resources: Set<ResourceNode>) {
+    private _checkNames(resources: Set<ResourceNode>) {
         let names = Map<string, ResourceNode>()
+        const nameRegexp = /^[a-zA-Z0-9][a-zA-Z0-9_-]*$/
         for (const resource of resources) {
             const name = [resource.kind.name, resource.namespace, resource.name]
                 .filter(Boolean)
@@ -28,6 +29,11 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
             if (existing) {
                 throw new MakeError(
                     `Duplicate resource designation ${name}. Existing: ${existing.format("source")}, new: ${resource.format("source")}`
+                )
+            }
+            if (!nameRegexp.test(resource.name)) {
+                throw new MakeError(
+                    `Invalid resource name ${resource.name}. Must match ${nameRegexp}`
                 )
             }
             names = names.set(name, resource)
@@ -82,7 +88,7 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
             await addResource(resource)
         }
 
-        this._checkConflictingNames(resources)
+        this._checkNames(resources)
         return resources.toArray()
     }
 }
