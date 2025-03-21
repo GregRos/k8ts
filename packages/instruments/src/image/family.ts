@@ -41,7 +41,7 @@ export class ImageAuthor<Text extends string = string> {
 }
 @displayers({
     simple: s => {
-        if (s._base) {
+        if (!s._base) {
             return s._name
         }
         return [s._base, s._name].join("/")
