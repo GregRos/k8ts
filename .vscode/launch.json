@@ -1,0 +1,37 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "name": "EXAMPLE: k8ts",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}/packages/k8ts",
+      "program": "example/run.ts",
+      "sourceMaps": true,
+      "runtimeExecutable": "tsx",
+      "runtimeArgs": ["--tsconfig=example/tsconfig.json"]
+    },
+    {
+      "type": "node",
+      "name": "TEST: metadata",
+      "request": "launch",
+      "args": ["test", "--runInBand", "--watchAll=false", "--testNamePattern"],
+      "cwd": "c:\\codegr\\k8ts\\packages\\metadata",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "runtimeExecutable": "yarn"
+    },
+    {
+      "type": "node",
+      "name": "TEST: instruments",
+      "request": "launch",
+      "args": ["test", "--runInBand", "--watchAll=false", "--testNamePattern"],
+      "cwd": "c:\\codegr\\k8ts\\packages\\instruments",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "runtimeExecutable": "yarn"
+    }
+  ]
+}
