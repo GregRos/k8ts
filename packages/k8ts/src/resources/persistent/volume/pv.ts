@@ -38,7 +38,7 @@ export namespace Pv {
             }
             let base: CDK.PersistentVolumeSpec = {
                 accessModes,
-                storageClassName: pvProps.storageClassName,
+                storageClassName: pvProps.storageClassName ?? "standard",
                 capacity: pvProps.capacity
                     ? {
                           storage: CDK.Quantity.fromString(pvProps.capacity)
