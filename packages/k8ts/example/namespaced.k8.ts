@@ -26,7 +26,7 @@ export default W.Scope(k8sNamespace)
                 "config.yaml": localFile("./example.txt")
             }
         })
-        const deploy2 = FILE.Deployment2("xyz2", {
+        const deploy2 = FILE.Deployment("xyz2", {
             replicas: 1
         })
             .Template()
