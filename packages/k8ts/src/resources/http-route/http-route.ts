@@ -40,6 +40,6 @@ export namespace HttpRoute {
         }
     })
     export class HttpRoute<Ports extends string> extends ManifestResource<Props<Ports>> {
-        kind = gateway_v1.kind("HttpRoute")
+        kind = gateway_v1.kind("HTTPRoute")
     }
 }

@@ -17,7 +17,7 @@ export namespace Pv {
         storageClassName?: string
         mode?: Mode
         reclaimPolicy?: Reclaim
-        capacity?: Unit.Data
+        capacity: Unit.Data
         backend: Backend
         nodeAffinity?: CDK.VolumeNodeAffinity
     }
