@@ -37,6 +37,10 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
         return seq(this._relations.needs)
     }
 
+    get fullFqn() {
+        return [this.kind.dns, this.namespace, this.name].filter(Boolean).join("/")
+    }
+
     get namespace() {
         return this.meta?.tryGet("namespace")
     }

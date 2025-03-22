@@ -4,6 +4,7 @@ import { CDK } from "../../_imports"
 import { v1 } from "../../api-versions"
 import { k8ts } from "../../kind-map"
 import { ManifestResource } from "../../node"
+import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import type { Deployment } from "../deployment/deployment"
 import { toServicePorts } from "../utils/adapters"
 import { Frontend as Frontend_ } from "./frontend"
@@ -28,6 +29,7 @@ export namespace Service {
             backend: self.props.backend
         })
     })
+    @equiv_cdk8s(CDK.KubeService)
     @manifest({
         body(self): CDK.KubeServiceProps {
             const svcPorts = self.ports

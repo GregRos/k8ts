@@ -1,8 +1,9 @@
 import { manifest, relations, type Origin } from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
-import type { CDK } from "../../_imports"
+import { CDK } from "../../_imports"
 import { v1 } from "../../api-versions"
 import { k8ts } from "../../kind-map"
+import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { ManifestResource } from "../../node/manifest-resource"
 export type Namespace = Namespace.Namespace
 export namespace Namespace {
@@ -10,6 +11,7 @@ export namespace Namespace {
     const ident = v1.kind("Namespace")
     @k8ts(ident)
     @relations("none")
+    @equiv_cdk8s(CDK.KubeNamespace)
     @manifest({
         body(self): CDK.KubeNamespaceProps {
             return {

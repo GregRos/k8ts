@@ -59,12 +59,20 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
         })
     }
 
-    async generate(res: ResourceNode) {
+    async generate(res: ResourceNode): Promise<NodeManifest> {
         this._attachProductionAnnotations(res)
         await this.emit("manifest", { resource: res })
         const manifest = await this._generate(res.entity as ManifestResource)
-        return manifest
+        return {
+            node: res,
+            manifest: manifest
+        }
     }
+}
+
+export interface NodeManifest {
+    node: ResourceNode
+    manifest: BaseManifest
 }
 export interface ManifesterManifestEvent {
     resource: ResourceNode

@@ -1,9 +1,10 @@
 import { manifest, relations } from "@k8ts/instruments"
-import type { CDK } from "../../_imports"
+import { CDK } from "../../_imports"
 import { gateway_v1 } from "../../api-versions"
 import type { External } from "../../external"
 import { k8ts } from "../../kind-map"
 import { ManifestResource } from "../../node"
+import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import type { Service } from "../service"
 
 export type HttpRoute<Ports extends string> = HttpRoute.HttpRoute<Ports>
@@ -24,6 +25,7 @@ export namespace HttpRoute {
             service: self.props.backend.service
         })
     })
+    @equiv_cdk8s(CDK.HttpRoute)
     @manifest({
         body(self): CDK.HttpRouteProps {
             return {

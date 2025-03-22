@@ -1,8 +1,9 @@
 import { manifest, relations, ResourcesSpec, Unit } from "@k8ts/instruments"
-import type { CDK } from "../../../_imports"
+import { CDK } from "../../../_imports"
 import { v1 } from "../../../api-versions"
 import { k8ts } from "../../../kind-map"
 import { ManifestResource } from "../../../node"
+import { equiv_cdk8s } from "../../../node/equiv-cdk8s"
 import { Access } from "../access-mode"
 import type { DataMode } from "../block-mode"
 import { Pv } from "../volume"
@@ -22,6 +23,7 @@ export namespace Pvc {
 
     const ident = v1.kind("PersistentVolumeClaim")
     @k8ts(ident)
+    @equiv_cdk8s(CDK.KubePersistentVolumeClaim)
     @relations({
         needs: self => ({
             bind: self.props.bind

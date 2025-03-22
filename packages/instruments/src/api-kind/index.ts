@@ -11,6 +11,7 @@ export namespace Kind {
     export interface IdentParent {
         text: string
         name: string
+        dns: string
     }
 
     export abstract class Identifier<
@@ -26,6 +27,10 @@ export namespace Kind {
         }
         get text(): string {
             return [this.parent?.text, this.name].filter(Boolean).join("/")
+        }
+
+        get dns() {
+            return [this.name, this.parent?.dns].filter(Boolean).join(".")
         }
 
         abstract child<Name extends string>(name: Name): Identifier<Name, this>

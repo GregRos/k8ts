@@ -2,17 +2,32 @@ import { Map, Set } from "immutable"
 import { MetadataError } from "./error"
 import type { InputMeta, MetaInputParts } from "./input/dict-input"
 import { parseKey, parseMetaInput } from "./key"
-import { ValueKey, type SectionKey } from "./key/repr"
+import { pNameValue } from "./key/parse-key"
+import { checkMetaString, ValueKey, type SectionKey } from "./key/repr"
 import { Key as Key_ } from "./key/types"
 export type Meta = Meta.Meta
 export type MutableMeta = Meta.MutableMeta
 export namespace Meta {
+    export function _checkNameValue(what: string, v: string) {
+        if (!pNameValue.parse(v).isOk) {
+            throw new MetadataError(`Invalid ${what}: ${v}`)
+        }
+        checkMetaString(what, v, 63)
+    }
+    export function _checkValue(key: ValueKey, v: string) {
+        if (key.metaType === "label") {
+            checkMetaString(`value of ${key.str}`, v, 63)
+        } else if (key.metaType === "core") {
+            _checkNameValue(`value of ${key.str}`, v, 63)
+        }
+    }
     export type Input = InputMeta
     export import Key = Key_
     export class Meta implements Iterable<[ValueKey, string]> {
         constructor(private readonly _dict: Map<ValueKey, string>) {
-            const a = _dict
-            const aaa = 1
+            for (const [key, value] of _dict.entries()) {
+                _checkValue(key, value)
+            }
         }
 
         [Symbol.iterator]() {

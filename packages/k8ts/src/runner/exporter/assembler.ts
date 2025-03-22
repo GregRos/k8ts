@@ -1,13 +1,14 @@
-import { BaseManifest, Origin, ResourceNode } from "@k8ts/instruments"
+import { Origin } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { aseq } from "doddle"
 import Emittery from "emittery"
 import { cloneDeep } from "lodash"
 import type { File } from "../../file"
 import { ResourceLoader, type ResourceLoaderEventsTable } from "./loader"
-import { Manifester, type ManifesterEventsTable } from "./manifester"
+import { Manifester, NodeManifest, type ManifesterEventsTable } from "./manifester"
 import { ManifestSaver, type ManifestSaverEventsTable } from "./saver"
 import { YamlSerializer, type YamlSerializerEventsTable } from "./serializer"
+import { NodeGraphValidator, ValidatorEventsTable } from "./validator"
 
 export class Assembler extends Emittery<AssemblerEventsTable> {
     constructor(private readonly _options: AssemblerOptions) {
@@ -21,6 +22,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
         ) => {
             return await this.emit(event, payload)
         }
+        const validator = new NodeGraphValidator({})
         const loader = new ResourceLoader({})
         loader.onAny(_emit)
         const generator = new Manifester({
@@ -59,25 +61,29 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
             .map(async ({ file, resources }) => {
                 const manifests = await aseq(resources)
                     .map(async resource => {
-                        return {
-                            k8ts: resource,
-                            manifest: await generator.generate(resource)
-                        }
+                        return await generator.generate(resource)
                     })
                     .toArray()
                     .pull()
 
                 return {
-                    file,
-                    manifests
-                }
+                    file: file.node,
+                    resources: manifests
+                } satisfies FileNodes
+            })
+            .after(async () => {
+                await _emit("stage", { stage: "validating" })
+            })
+            .collect("array")
+            .concatMap(async x => {
+                validator.validate(x)
+                return x
             })
             .after(async () => {
                 await _emit("stage", { stage: "serializing" })
             })
-            .collect()
-            .map(async ({ file, manifests }) => {
-                const artifacts = await aseq(manifests)
+            .map(async ({ file, resources }) => {
+                const artifacts = await aseq(resources)
                     .map(async obj => {
                         return {
                             ...obj,
@@ -101,11 +107,11 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
             .collect()
             .map(async ({ file, artifacts }) => {
                 const { filename, bytes, path } = await saver.save(
-                    file.node,
+                    file,
                     artifacts.map(x => x.yaml)
                 )
                 return {
-                    file: file.node,
+                    file: file,
                     path,
                     filename,
                     bytes,
@@ -124,9 +130,11 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
         } as AssembledResult
     }
 }
-export interface Artifact {
-    k8ts: ResourceNode
-    manifest: BaseManifest
+export interface FileNodes {
+    file: Origin
+    resources: NodeManifest[]
+}
+export interface Artifact extends NodeManifest {
     yaml: string
 }
 export interface AssembledFile {
@@ -148,6 +156,7 @@ export interface AssemblerOptions {
 }
 export type AssemblyStage =
     | "loading"
+    | "validating"
     | "manifesting"
     | "serializing"
     | "saving"
@@ -159,7 +168,8 @@ export interface AssemblerEventsTable
     extends ManifestSaverEventsTable,
         YamlSerializerEventsTable,
         ManifesterEventsTable,
-        ResourceLoaderEventsTable {
+        ResourceLoaderEventsTable,
+        ValidatorEventsTable {
     ["received-file"]: { file: Origin }
     ["stage"]: { stage: AssemblyStage }
 }

@@ -7,9 +7,10 @@ import {
     resolveBinary,
     resolveText
 } from "@k8ts/instruments"
-import type { CDK } from "../../_imports"
+import { CDK } from "../../_imports"
 import { v1 } from "../../api-versions"
 import { k8ts } from "../../kind-map"
+import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { ManifestResource } from "../../node/manifest-resource"
 export type ConfigMap = ConfigMap.ConfigMap
 export namespace ConfigMap {
@@ -22,6 +23,7 @@ export namespace ConfigMap {
     const ident = v1.kind("ConfigMap")
     @k8ts(ident)
     @relations("none")
+    @equiv_cdk8s(CDK.KubeConfigMap)
     @manifest({
         async body(self): Promise<CDK.KubeConfigMapProps> {
             const binaryData = await resolveBinary(self.props.binaryData ?? {})

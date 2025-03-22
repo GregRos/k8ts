@@ -3,6 +3,7 @@ import { CDK } from "../../../_imports"
 import { v1 } from "../../../api-versions"
 import { MakeError } from "../../../error"
 import { k8ts } from "../../../kind-map"
+import { equiv_cdk8s } from "../../../node/equiv-cdk8s"
 import { ManifestResource } from "../../../node/manifest-resource"
 import { Access } from "../access-mode"
 import type { DataMode } from "../block-mode"
@@ -25,6 +26,7 @@ export namespace Pv {
 
     const ident = v1.kind("PersistentVolume")
 
+    @equiv_cdk8s(CDK.KubePersistentVolume)
     @manifest({
         body(self) {
             const pvProps = self.props

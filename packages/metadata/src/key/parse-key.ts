@@ -1,5 +1,5 @@
 import { anyCharOf, anyStringOf, digit, lower, string, upper } from "parjs"
-import { many1, map, maybe, or, qthen, stringify, then, thenq } from "parjs/combinators"
+import { many, many1, map, maybe, or, qthen, stringify, then, thenq } from "parjs/combinators"
 
 import { MetadataError } from "../error"
 import { SectionKey, ValueKey } from "./repr"
@@ -7,15 +7,18 @@ import { SectionKey, ValueKey } from "./repr"
 const cPrefix = anyCharOf("%^#")
 const cSection = string("/")
 
-const cExtra = anyCharOf("-_.")
-const cInterior = upper().pipe(or(lower(), digit(), cExtra))
+const cExtra = anyCharOf("-_.").expects("'-', '_', or '.'")
+export const normalChar = upper().pipe(or(lower(), digit())).expects("alphanumeric")
+const cNameChar = lower().pipe(or(digit())).pipe(or("-"))
+const cInterior = normalChar.pipe(or(cExtra)).expects("alphanumeric, '-', '_', or '.'")
 
+export const pNameValue = cNameChar.pipe(many1(), stringify())
 const pSpecialKey = anyStringOf("namespace", "name").pipe(
     map(key => {
         return new ValueKey("", "", key)
     })
 )
-const pCleanKey = cInterior.pipe(many1(), stringify())
+const pCleanKey = cInterior.pipe(many(), stringify())
 
 const pSectionKey = pCleanKey.pipe(
     thenq(cSection),
@@ -42,6 +45,9 @@ const pKey = cPrefix.pipe(
 const pOuterKey = pKey.pipe(or(pSectionKey))
 export function parseSectionKey(key: string) {
     return pSectionKey.parse(key).value
+}
+export function checkValue(value: string) {
+    return value === "" ? "" : pCleanKey.parse(value).value
 }
 export function parseInnerKey(key: string) {
     return pInnerKey.parse(key).value

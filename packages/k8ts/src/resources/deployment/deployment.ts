@@ -4,6 +4,7 @@ import { omit } from "lodash"
 import { CDK } from "../../_imports"
 import { apps_v1 } from "../../api-versions"
 import { k8ts } from "../../kind-map"
+import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { ManifestResource } from "../../node/manifest-resource"
 import { PodTemplate } from "../pod/pod-template"
 
@@ -16,6 +17,7 @@ export namespace Deployment {
 
     const ident = apps_v1.kind("Deployment")
     @k8ts(ident)
+    @equiv_cdk8s(CDK.KubeDeployment)
     @relations({
         kids: s => [s.template]
     })

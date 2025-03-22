@@ -51,7 +51,7 @@ export default W.Scope(k8sNamespace)
                 yield k.Container("main", {
                     image: Image.name("nginx/nginx").tag("latest"),
                     ports: {
-                        http: 3333
+                        x: 3333
                     },
                     mounts: {
                         "/xyz": v.Mount(),
@@ -70,15 +70,16 @@ export default W.Scope(k8sNamespace)
                 type: "ClusterIP"
             },
             ports: {
-                http: 80
+                x: 80
             },
             backend: deploy2
         })
+
         yield svc2
         const route = FILE.DomainRoute("my-route", {
             hostname: "example.com",
             gateway: W.External(gwKind, "gateway", "gateways"),
-            backend: svc2.portRef("http")
+            backend: svc2.portRef("x")
         })
 
         yield route

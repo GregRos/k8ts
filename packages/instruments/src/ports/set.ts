@@ -1,3 +1,4 @@
+import { Meta } from "@k8ts/metadata"
 import { Map } from "immutable"
 import { PortError } from "./error"
 import { PortMap } from "./map"
@@ -13,7 +14,11 @@ import type {
 
 declare const __NAMES__: unique symbol
 export class PortSet<Names extends string = never> {
-    constructor(private readonly _map: Map<Names, PortSetEntry> = Map()) {}
+    constructor(private readonly _map: Map<Names, PortSetEntry> = Map()) {
+        for (const entry of _map.values()) {
+            Meta._checkNameValue(`container port '${entry.name}' (${entry.port})`, entry.name)
+        }
+    }
 
     private _apply(f: (map: Map<string, PortSetEntry>) => Map<string, PortSetEntry>) {
         return new PortSet(f(this._map))

@@ -113,7 +113,7 @@ export class Summarizer {
             this.files(
                 result.files.map(x => ({
                     origin: x.file,
-                    resources: x.artifacts.map(x => x.k8ts)
+                    resources: x.artifacts.map(x => x.node)
                 }))
             )
         )
