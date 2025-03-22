@@ -41,8 +41,8 @@ it("should do mapping", () => {
 
     expect(ok.get("http")).toEqual({
         name: "http",
+        backend: "http",
         protocol: "TCP",
-        source: 80,
-        target: 8080
+        frontend: 8080
     })
 })

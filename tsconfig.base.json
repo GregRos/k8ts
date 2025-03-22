@@ -13,6 +13,7 @@
     "declarationMap": true,
     "noEmit": true,
     "strict": true,
+    "sourceMap": true,
     // Treat files as modules even if it doesn't use import/export
     "moduleDetection": "force",
 
