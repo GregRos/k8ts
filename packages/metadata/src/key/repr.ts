@@ -96,11 +96,7 @@ export class SectionKey extends KeyType {
     type = "heading" as const
     constructor(readonly _section: string) {
         super()
-        if (_section.length > 253) {
-            throw new MetadataError(
-                `Metadata DNS prefix ${section} must be no more than 253 characters.`
-            )
-        }
+        checkMetaString(`Section name ${this._section}`, _section, 253)
     }
 
     get str() {

@@ -18,7 +18,7 @@ export namespace Meta {
         if (key.metaType === "label") {
             checkMetaString(`value of ${key.str}`, v, 63)
         } else if (key.metaType === "core") {
-            _checkNameValue(`value of ${key.str}`, v, 63)
+            _checkNameValue(`value of ${key.str}`, v)
         }
     }
     export type Input = InputMeta
