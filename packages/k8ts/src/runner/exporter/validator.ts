@@ -16,11 +16,10 @@ export class NodeGraphValidator {
         const app = new App()
         const rootChart = new Chart(app, "root_chart")
         for (const fileNode of collection) {
-            const fileChart = new Chart(rootChart, fileNode.file.name)
             for (const nodeManifest of fileNode.resources) {
                 const equiv = EquivCdk8s.get(nodeManifest.node._entity as ManifestResource)
                 const fullFqn = nodeManifest.node.fullFqn.replaceAll("/", "_").replaceAll(".", "-")
-                const cdk8sNode = new equiv(fileChart, fullFqn, nodeManifest.manifest)
+                const cdk8sNode = new equiv(rootChart, fullFqn, nodeManifest.manifest)
             }
         }
         app.synthYaml()
