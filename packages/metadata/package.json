@@ -1,6 +1,6 @@
 {
   "name": "@k8ts/metadata",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "K8ts tools for working with k8ts metadata.",
   "keywords": [
     "kubernetes",
