@@ -31,7 +31,7 @@ export namespace World {
             this._ExternalOrigin = new ExternalOriginEntity(this.node)
         }
 
-        External<K extends Kind>(kind: K, name: string, namespace?: string) {
+        External<K extends Kind>(kind: K, name: string, namespace: string) {
             return new External(this._ExternalOrigin.node, kind, name, namespace)
         }
 

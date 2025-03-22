@@ -77,7 +77,7 @@ export default W.Scope(k8sNamespace)
         yield svc2
         const route = FILE.DomainRoute("my-route", {
             hostname: "example.com",
-            gateway: W.External(gwKind, "gateway"),
+            gateway: W.External(gwKind, "gateway", "gateways"),
             backend: svc2.portRef("http")
         })
 
