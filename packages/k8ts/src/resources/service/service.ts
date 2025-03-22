@@ -33,6 +33,7 @@ export namespace Service {
             const svcPorts = self.ports
             return {
                 spec: {
+                    ...self.props.frontend,
                     ports: toServicePorts(svcPorts).toArray(),
                     selector: {
                         app: self.props.backend.name
@@ -42,8 +43,7 @@ export namespace Service {
                               allocateLoadBalancerNodePorts: false,
                               externalTrafficPolicy: "Local"
                           }
-                        : {}),
-                    ...self.props.frontend
+                        : {})
                 }
             }
         }
