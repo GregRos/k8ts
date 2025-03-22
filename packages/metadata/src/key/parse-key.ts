@@ -1,5 +1,5 @@
 import { anyCharOf, anyStringOf, digit, lower, string, upper } from "parjs"
-import { many, many1, map, maybe, or, qthen, stringify, then, thenq } from "parjs/combinators"
+import { many1, map, maybe, or, qthen, stringify, then, thenq } from "parjs/combinators"
 
 import { MetadataError } from "../error"
 import { SectionKey, ValueKey } from "./repr"
@@ -18,7 +18,7 @@ const pSpecialKey = anyStringOf("namespace", "name").pipe(
         return new ValueKey("", "", key)
     })
 )
-const pCleanKey = cInterior.pipe(many(), stringify())
+const pCleanKey = cInterior.pipe(many1(), stringify())
 
 const pSectionKey = pCleanKey.pipe(
     thenq(cSection),
