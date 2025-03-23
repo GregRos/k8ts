@@ -1,17 +1,21 @@
-import { manifest, Producer, relations } from "@k8ts/instruments"
+import { Kinded, manifest, Producer, relations } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { omit } from "lodash"
 import { CDK } from "../../_imports"
-import { api } from "../../api-kinds"
 import { k8ts } from "../../kind-map"
+import { api } from "../../kinds"
 import { ManifestResource } from "../../node/manifest-resource"
 import { Container } from "./container"
 import { Device, Volume } from "./volume"
 export type PodTemplate<Ports extends string = string> = PodTemplate.PodTemplate<Ports>
 export namespace PodTemplate {
     export type PodProps = Omit<CDK.PodSpec, "containers" | "initContainers" | "volumes">
-    export type Props<C extends object> = PodProps & {
-        POD: Producer<PodScope, C>
+    type AbsContainer<Ports extends string> = Kinded<api.v1_.Pod_.Container> & {
+        __PORTS__: Ports
+    }
+    export type PodContainerProducer<Ports extends string> = Producer<PodScope, AbsContainer<Ports>>
+    export type Props<Ports extends string> = PodProps & {
+        POD: PodContainerProducer<Ports>
     }
     @k8ts(api.v1_.PodTemplate)
     @relations({
@@ -41,9 +45,13 @@ export namespace PodTemplate {
             }
         }
     })
-    export class PodTemplate<C extends Container = Container> extends ManifestResource<Props<C>> {
+    export class PodTemplate<Ports extends string = string> extends ManifestResource<Props<Ports>> {
         readonly kind = api.v1_.PodTemplate
-        readonly containers = seq(() => this.props.POD(new PodScope(this))).cache()
+        readonly containers = seq(() => this.props.POD(new PodScope(this)))
+            .map(x => {
+                return x as Container<Ports>
+            })
+            .cache()
         readonly mounts = seq(() => this.containers.concatMap(x => x.mounts)).cache()
         readonly volumes = seq(() => this.containers.concatMap(x => x.volumes)).uniq()
         readonly ports = seq(() => this.containers.map(x => x.ports)).reduce((a, b) => a.union(b))
@@ -51,19 +59,16 @@ export namespace PodTemplate {
 
     export class PodScope {
         constructor(private readonly _parent: PodTemplate) {}
-        Container<Ports extends string>(
-            name: string,
-            options: Container.Props<Ports>
-        ): Container<Ports> {
-            return Container.make(this._parent, name, "main", options)
+        Container<Ports extends string>(name: string, options: Container.Props<Ports>) {
+            return new Container.Container(this._parent, name, "main", options)
         }
-        InitContainer(name: string, options: Container.K8tsProps<never>): Container<never> {
-            return Container.make(this._parent, name, "init", options)
+        InitContainer(name: string, options: Container.K8tsProps<never>) {
+            return new Container.Container(this._parent, name, "init", options)
         }
-        Volume(name: string, options: Volume.Backend): Volume {
+        Volume(name: string, options: Volume.Backend) {
             return Volume.make(this._parent, name, options)
         }
-        Device(name: string, options: Device.Backend): Device {
+        Device(name: string, options: Device.Backend) {
             return Device.make(this._parent, name, options)
         }
     }

@@ -1,11 +1,11 @@
-import { BaseOriginEntity, Origin, OriginEntityProps } from "@k8ts/instruments"
+import { BaseOriginEntity, Origin, OriginEntityProps, Refable } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { k8tsBuildKind } from "../k8ts-sys-kind"
-import type { Namespace } from "../resources"
+import { api } from "../kinds"
 export type FileOrigin<FScope extends FileOrigin.Scope = FileOrigin.Scope> =
     FileOrigin.FileEntity<FScope>
 export namespace FileOrigin {
-    export type Scope = Namespace | "cluster"
+    export type Scope = Refable<api.v1_.Namespace> | "cluster"
 
     export interface SmallerProps extends OriginEntityProps {
         meta?: Meta.Input

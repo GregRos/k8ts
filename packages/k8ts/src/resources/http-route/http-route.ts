@@ -1,8 +1,8 @@
 import { manifest, relations } from "@k8ts/instruments"
 import { CDK } from "../../_imports"
-import { api } from "../../api-kinds"
 import type { External } from "../../external"
 import { k8ts } from "../../kind-map"
+import { api } from "../../kinds"
 import { ManifestResource } from "../../node"
 import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import type { Service } from "../service"
@@ -11,7 +11,7 @@ export type HttpRoute<Ports extends string> = HttpRoute.HttpRoute<Ports>
 
 export namespace HttpRoute {
     export interface Props<Ports extends string> {
-        gateway: External<typeof api.gateway_.v1_.Gateway>
+        gateway: External<api.gateway_.v1_.Gateway>
         hostname: string
         backend: Service.Port<Ports>
     }

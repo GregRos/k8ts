@@ -1,5 +1,5 @@
 import type { CDK } from "../../../_imports"
-import { api } from "../../../api-kinds"
+import { api } from "../../../kinds"
 import { Volume } from "../volume"
 import type { Device } from "../volume/devices"
 export type Mount = Mount.ContainerVolumeMount | Mount.ContainerDeviceMount

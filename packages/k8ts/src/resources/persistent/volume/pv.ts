@@ -1,8 +1,8 @@
-import { manifest, relations, type Unit } from "@k8ts/instruments"
+import { manifest, Refable, relations, type Unit } from "@k8ts/instruments"
 import { CDK } from "../../../_imports"
-import { api } from "../../../api-kinds"
 import { MakeError } from "../../../error"
 import { k8ts } from "../../../kind-map"
+import { api } from "../../../kinds"
 import { equiv_cdk8s } from "../../../node/equiv-cdk8s"
 import { ManifestResource } from "../../../node/manifest-resource"
 import { Access } from "../access-mode"
@@ -23,7 +23,9 @@ export namespace Pv {
         nodeAffinity?: CDK.VolumeNodeAffinity
     }
     export type Reclaim = "Retain" | "Delete" | "Recycle"
-
+    export type AbsPv<Mode extends DataMode = DataMode> = Refable<api.v1_.PersistentVolume> & {
+        __MODE__: Mode
+    }
     @equiv_cdk8s(CDK.KubePersistentVolume)
     @manifest({
         body(self) {
@@ -60,6 +62,7 @@ export namespace Pv {
     @k8ts(api.v1_.PersistentVolume)
     @relations("none")
     export class Pv<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
+        __MODE__!: Mode
         readonly kind = api.v1_.PersistentVolume
     }
 }

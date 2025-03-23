@@ -87,7 +87,7 @@ export namespace Factory {
             props: Service.Props<DeployPorts, ExposedPorts>
         ) {
             return new Service.Service(this.origin, this._metaWithName(name), props) as LiveRefable<
-                Service<DeployPorts, ExposedPorts>,
+                Service<ExposedPorts>,
                 Name
             >
         }

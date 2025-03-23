@@ -31,7 +31,7 @@ class DisplayerDecorator {
             return result
         }
     }
-    implement(ctor: abstract new (...args: any[]) => object, input: Displayers.In) {
+    implement(ctor: typeof PrivateCtorExemplar, input: Displayers.In) {
         this._system.set(ctor.prototype, input)
         const decorator = this
         Object.defineProperties(ctor.prototype, {
@@ -123,25 +123,29 @@ class DisplayerDecorator {
     }
 
     get decorator() {
-        return Object.assign(
-            <
-                Target extends abstract new (...args: any[]) => object,
-                Impl extends Displayers.In<InstanceType<Target>>
-            >(
-                input: Impl
-            ) => {
-                return (ctor: Target) => {
-                    this.implement(ctor, input as any)
-                    return ctor
-                }
-            },
-            {
-                get: (target: object): Displayers.Out => {
-                    return this.get(target)
-                }
+        return <Target extends AnyCtor<any>, Impl extends Displayers.In<InstanceTypeOf<Target>>>(
+            input: Impl
+        ) => {
+            return (ctor: Target) => {
+                this.implement(ctor, input as any)
             }
-        )
+        }
     }
 }
+
+export type PrivateCtor<T extends object> = typeof PrivateCtorExemplar & {
+    prototype: T
+}
+
+export type PublicCtor<T extends object> = abstract new (...args: any[]) => T
+
+export type AnyCtor<T extends object> = PrivateCtor<T> | PublicCtor<T>
+
+export type InstanceTypeOf<T extends AnyCtor<any>> =
+    T extends PrivateCtor<infer U> ? U : T extends PublicCtor<infer U> ? U : never
+abstract class PrivateCtorExemplar {
+    protected constructor(...args: any[]) {}
+}
+
 export const Displayers = new DisplayerDecorator()
 export const displayers = Displayers.decorator

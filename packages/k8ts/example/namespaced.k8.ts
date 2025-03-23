@@ -1,5 +1,5 @@
 import { Image, localFile } from "@k8ts/instruments"
-import { api } from "@lib/api-kinds"
+import { api } from "@lib/kinds"
 import k8tsFile from "./cluster-scoped.k8"
 import { W } from "./world"
 const k8sNamespace = k8tsFile["Namespace/namespace"]

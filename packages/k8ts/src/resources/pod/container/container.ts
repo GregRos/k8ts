@@ -1,5 +1,6 @@
 import {
     Env,
+    Kinded,
     PortSet,
     relations,
     ResourcesSpec,
@@ -15,14 +16,13 @@ import { toContainerPorts, toEnvVars } from "../../utils/adapters"
 
 import { seq } from "doddle"
 import { mapKeys, mapValues } from "lodash"
-import { api } from "../../../api-kinds"
 import { k8ts } from "../../../kind-map"
+import { api } from "../../../kinds"
 import type { ManifestResource } from "../../../node"
 import { SubResource } from "../../../node/sub-resource"
 import { Mount as Mount_ } from "./mounts"
 export type Container<Ports extends string = string> = Container.Container<Ports>
 export namespace Container {
-    const PORTS = Symbol("CONTAINER_PORTS")
     export import Mount = Mount_
     const container_ResourcesSpec = ResourcesSpec.make({
         cpu: Unit.Cpu,
@@ -30,8 +30,9 @@ export namespace Container {
     })
 
     type Resources = (typeof container_ResourcesSpec)["__INPUT__"]
+    type SomeMount = Kinded<api.v1_.Pod_.DeviceMount | api.v1_.Pod_.VolumeMount>
     export type Mounts = {
-        [key: string]: Mount.ContainerDeviceMount | Mount.ContainerVolumeMount
+        [key: string]: SomeMount
     }
     export interface K8tsProps<Ports extends string = never> {
         image: TaggedImage
@@ -56,9 +57,7 @@ export namespace Container {
         }
     })
     export class Container<Ports extends string = string> extends SubResource<Props<Ports>> {
-        get portNames() {
-            return this.portNames
-        }
+        __PORTS__!: Ports
         readonly kind = api.v1_.Pod_.Container
 
         get mounts() {
@@ -67,7 +66,7 @@ export namespace Container {
                     return [
                         mount,
                         {
-                            mount,
+                            mount: mount as Mount.ContainerVolumeMount | Mount.ContainerDeviceMount,
                             path: path as string
                         }
                     ]
@@ -114,7 +113,8 @@ export namespace Container {
                 volumeMounts: [],
                 volumeDevices: []
             } as Pick<CDK.Container, "volumeMounts" | "volumeDevices">
-            for (const [path, mount] of Object.entries(this.props.mounts ?? {})) {
+            for (const mnt of this.mounts) {
+                const { mount, path } = mnt
                 if (mount instanceof Mount.ContainerDeviceMount) {
                     x.volumeDevices!.push(mount.submanifest(path))
                 } else {

@@ -1,8 +1,9 @@
 import { displayers, Kind, Origin, RefKey, ResourceEntity, ResourceNode } from "@k8ts/instruments"
 import { Doddle, doddle } from "doddle"
-export interface DependsOn {
-    resource: AbsResource
-    text: string
+
+export interface ResourceIdentBlock {
+    kind: Kind.IdentParent
+    name: string
 }
 @displayers({
     simple: s => s.node,
@@ -16,7 +17,7 @@ export abstract class AbsResource<Props extends object = object> implements Reso
     get node() {
         return this._node.pull()
     }
-    constructor(
+    protected constructor(
         origin: Origin,
         readonly name: string,
         readonly props: Props

@@ -1,6 +1,6 @@
-import { FutureExports, Producer } from "@k8ts/instruments"
+import { FutureExports, LiveRefable, Producer } from "@k8ts/instruments"
 import { seq, type Seq } from "doddle"
-import type { ManifestResource } from "../node"
+import { ManifestResource } from "../node"
 import { k8ts_namespace } from "../runner/exporter/meta"
 import { Factory } from "./factory"
 import type { FileOrigin } from "./origin"
@@ -12,7 +12,7 @@ export namespace FileExports {
     > = Producer.Producer<Factory.FromScope<Scope>, Produced>
     export interface Props<
         Scope extends FileOrigin.Scope = FileOrigin.Scope,
-        Produced extends ManifestResource = ManifestResource
+        Produced extends LiveRefable = LiveRefable
     > {
         origin: FileOrigin<Scope>
         FILE: Producer<Scope, Produced>
@@ -20,7 +20,7 @@ export namespace FileExports {
 
     export class Core {
         #props: Props
-        #produced: Seq<ManifestResource>
+        #produced: Seq<LiveRefable>
         constructor(props: Props) {
             this.#props = props
             const producer = Producer.map(props.FILE, () => {
@@ -31,6 +31,7 @@ export namespace FileExports {
                 }
             })
             this.#produced = seq(() => producer(props.origin))
+                .as<ManifestResource>()
                 .each(x => {
                     x.meta.add(k8ts_namespace, {
                         "#is-exported": "true"
@@ -52,7 +53,7 @@ export namespace FileExports {
         }
     }
 
-    export function make<Scope extends FileOrigin.Scope, Produced extends ManifestResource>(
+    export function make<Scope extends FileOrigin.Scope, Produced extends LiveRefable>(
         props: Props<Scope, Produced>
     ): Core & FutureExports<Produced> {
         const core = new Core(props as any)

@@ -1,9 +1,9 @@
-import { manifest, Origin, relations } from "@k8ts/instruments"
+import { manifest, Origin, Refable, relations } from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { omit } from "lodash"
 import { CDK } from "../../_imports"
-import { api } from "../../api-kinds"
 import { k8ts } from "../../kind-map"
+import { api } from "../../kinds"
 import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { ManifestResource } from "../../node/manifest-resource"
 import { PodTemplate } from "../pod/pod-template"
@@ -14,7 +14,9 @@ export namespace Deployment {
     export type Props<Ports extends string> = SmallerProps & {
         template: PodTemplate.Props<Ports>
     }
-
+    export type AbsDeployment<Ports extends string> = Refable<api.apps_.v1_.Deployment> & {
+        __PORTS__: Ports
+    }
     @k8ts(api.apps_.v1_.Deployment)
     @equiv_cdk8s(CDK.KubeDeployment)
     @relations({
@@ -38,8 +40,10 @@ export namespace Deployment {
         }
     })
     export class Deployment<Ports extends string = string> extends ManifestResource<Props<Ports>> {
+        __PORTS__!: Ports
         kind = api.apps_.v1_.Deployment
         template: PodTemplate<Ports>
+
         constructor(origin: Origin, meta: Meta | MutableMeta, props: Props<Ports>) {
             super(origin, meta, props)
             this.template = new PodTemplate.PodTemplate(

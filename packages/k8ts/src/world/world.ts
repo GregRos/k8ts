@@ -1,4 +1,4 @@
-import { BaseOriginEntity, KindMap, Origin, type Kind } from "@k8ts/instruments"
+import { BaseOriginEntity, KindMap, LiveRefable, Origin, type Kind } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { assign } from "lodash"
 import { External } from "../external"
@@ -7,7 +7,6 @@ import { FileExports } from "../file/exports"
 import { FileOrigin } from "../file/origin"
 import { k8tsBuildKind } from "../k8ts-sys-kind"
 import { K8tsRootOrigin } from "../kind-map"
-import type { ManifestResource } from "../node"
 export type ManifestFileName = `${string}.yaml`
 export namespace World {
     export interface Props {
@@ -19,7 +18,7 @@ export namespace World {
     const ident = k8tsBuildKind.kind("World")
     export type DefineScopedFile<Scope extends FileOrigin.Scope> = {
         metadata(input: Meta.Input): DefineScopedFile<Scope>
-        Resources<const Produced extends ManifestResource>(
+        Resources<const Produced extends LiveRefable>(
             producer: FileExports.Producer<Scope, Produced>
         ): File<Produced>
     }
@@ -49,7 +48,7 @@ export namespace World {
                             })
                             return self
                         },
-                        Resources<const Produced extends ManifestResource>(
+                        Resources<const Produced extends LiveRefable>(
                             producer: FileExports.Producer<Scope, Produced>
                         ): File<Produced> {
                             return builder._File(name, {
@@ -64,7 +63,7 @@ export namespace World {
             }
         }
 
-        private _File<T extends ManifestResource>(
+        private _File<T extends LiveRefable>(
             name: ManifestFileName,
             props: File.Props<any, T>
         ): File<T> {

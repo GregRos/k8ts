@@ -1,3 +1,4 @@
+import { displayers } from "../displayers"
 import { InstrumentsError } from "../error"
 import type { CliValue } from "./types"
 
@@ -15,6 +16,9 @@ export class CliFlag {
 
 export type ValueTermJoiner = "=" | " "
 
+@displayers({
+    simple: s => s.str("=")
+})
 export class CliOptionValue {
     constructor(
         private readonly key: string,

@@ -1,31 +1,36 @@
-import { manifest, relations, type InputPortMapping } from "@k8ts/instruments"
+import {
+    manifest,
+    Refable,
+    relations,
+    ResourceEntity,
+    type InputPortMapping
+} from "@k8ts/instruments"
 import { Map } from "immutable"
 import { CDK } from "../../_imports"
-import { api } from "../../api-kinds"
 import { k8ts } from "../../kind-map"
+import { api } from "../../kinds"
 import { ManifestResource } from "../../node"
 import { equiv_cdk8s } from "../../node/equiv-cdk8s"
-import type { Deployment } from "../deployment/deployment"
+import { Deployment } from "../deployment"
 import { toServicePorts } from "../utils/adapters"
 import { Frontend as Frontend_ } from "./frontend"
 import { Port as Port_ } from "./service-port"
-export type Service<DeployPorts extends string, ExposedPorts extends DeployPorts> = Service.Service<
-    DeployPorts,
-    ExposedPorts
->
+export type Service<ExposedPorts extends string = string> = Service.Service<ExposedPorts>
 export namespace Service {
     export import Port = Port_
     export import Frontend = Frontend_
     export interface Props<DeployPorts extends string, ExposedPorts extends DeployPorts> {
         ports: InputPortMapping<ExposedPorts>
-        backend: Deployment.Deployment<DeployPorts>
+        backend: Deployment.AbsDeployment<DeployPorts>
         frontend: Frontend
     }
-
+    export type AbsService<ExposedPorts extends string> = Refable<api.v1_.Service> & {
+        __PORTS__: ExposedPorts
+    }
     @k8ts(api.v1_.Service)
     @relations({
         needs: self => ({
-            backend: self.props.backend
+            backend: self.backend as ResourceEntity
         })
     })
     @equiv_cdk8s(CDK.KubeService)
@@ -49,14 +54,17 @@ export namespace Service {
             }
         }
     })
-    export class Service<
-        DeployPorts extends string = string,
-        ExposedPorts extends DeployPorts = DeployPorts
-    > extends ManifestResource<Props<DeployPorts, ExposedPorts>> {
+    export class Service<ExposedPorts extends string = string> extends ManifestResource<
+        Props<string, ExposedPorts>
+    > {
+        __PORTS__!: ExposedPorts
         kind = api.v1_.Service
 
+        private get backend() {
+            return this.props.backend as Deployment<ExposedPorts>
+        }
         get ports() {
-            const srcPorts = this.props.backend.ports.pull()
+            const srcPorts = this.backend.ports.pull()
             const knownPorts = Map(this.props.ports)
                 .filter(x => x !== undefined)
                 .keySeq()
@@ -65,8 +73,11 @@ export namespace Service {
             return svcPorts
         }
 
-        portRef(port: ExposedPorts) {
-            return new Port.Port(this, port, this.ports.get(port).frontend)
+        portRef(name: ExposedPorts) {
+            return new Port.Port({
+                service: this,
+                name: name
+            })
         }
     }
 }

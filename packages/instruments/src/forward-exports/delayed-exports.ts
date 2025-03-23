@@ -1,5 +1,6 @@
 import { seq } from "doddle"
 import { ProxyOperationError } from "../error"
+import { ResourceEntity } from "../graph"
 import { Origin } from "../graph/origin-node"
 import type { LiveRefable } from "../reference"
 import { ForwardRef } from "../reference"
@@ -8,7 +9,7 @@ export type FutureExports<Exps extends LiveRefable> = FutureExports.FutureExport
 export namespace FutureExports {
     export type FutureExports<Exps extends LiveRefable> = _ExportsByKey<Exps>
     type _ExportsByKey<Exports extends LiveRefable = LiveRefable> = {
-        [E in Exports as `${E["kind"]["name"]}/${E["node"]["key"]["name"]}`]: ForwardRef<E>
+        [E in Exports as `${E["kind"]["name"]}/${E["name"]}`]: ForwardRef<E>
     }
     export interface Props<
         Actual extends object = object,
@@ -79,6 +80,7 @@ export namespace FutureExports {
                 origin: this._props.origin,
                 namespace: this._props.origin.meta.tryGet("namespace"),
                 resolver: this.seq
+                    .as<ResourceEntity>()
                     .find(exp => exp.node.key.equals(refKey))
                     .map(x => {
                         if (x == null) {

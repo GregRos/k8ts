@@ -1,5 +1,6 @@
 import { List, Map } from "immutable"
 import { defaultsDeep, merge } from "lodash"
+import { displayers } from "../displayers"
 import {
     CliFlag,
     CliOptionValue,
@@ -13,6 +14,9 @@ export interface CliCommandBuilderOptions {
     joiner: ValueTermJoiner
 }
 
+@displayers({
+    simple: s => s.string
+})
 export class CmdBuilder {
     protected constructor(
         readonly executable: string,
@@ -70,7 +74,7 @@ export class CmdBuilder {
         return terms
     }
 
-    toString() {
+    get string() {
         return this.toArray().join(" ")
     }
 

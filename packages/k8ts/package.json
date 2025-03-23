@@ -1,6 +1,6 @@
 {
   "name": "k8ts",
-  "version": "0.4.19",
+  "version": "0.4.20",
   "description": "Powerful framwork for building Kubernetes manifests in TypeScript.",
   "keywords": [
     "kubernetes",
@@ -34,11 +34,11 @@
       "default": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./api-versions": {
-      "require": "./dist/api-versions.js",
-      "import": "./dist/api-versions.js",
-      "default": "./dist/api-versions.js",
-      "types": "./dist/api-versions.d.ts"
+    "./kinds": {
+      "require": "./dist/kinds.js",
+      "import": "./dist/kinds.js",
+      "default": "./dist/kinds.js",
+      "types": "./dist/kinds.d.ts"
     }
   },
   "main": "dist/index.js",

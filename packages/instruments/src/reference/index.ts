@@ -1,3 +1,3 @@
 export { RefKey } from "../ref-key"
 export { ForwardRef } from "./forward-ref"
-export { Kinded, LiveRefable } from "./refable"
+export { Kinded, LiveRefable, Refable } from "./refable"

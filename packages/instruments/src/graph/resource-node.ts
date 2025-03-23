@@ -19,7 +19,7 @@ import { Relations } from "./relations"
         }
         const resourceName = chalk.blueBright(resource.name)
         const mainPart = `${kindName}/${resourceName}`
-        let originPart = `${displayers.get(resource.origin).prefix!()}`
+        let originPart = `${Displayers.get(resource.origin).prefix!()}`
         let text = ""
 
         text += mainPart

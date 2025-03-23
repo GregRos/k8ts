@@ -1,7 +1,7 @@
 import { relations } from "@k8ts/instruments"
 import type { CDK } from "../../../_imports"
-import { api } from "../../../api-kinds"
 import { k8ts } from "../../../kind-map"
+import { api } from "../../../kinds"
 import type { ManifestResource } from "../../../node"
 import { SubResource } from "../../../node/sub-resource"
 import { Pvc } from "../../persistent"

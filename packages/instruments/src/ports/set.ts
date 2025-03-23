@@ -54,6 +54,10 @@ export class PortSet<Names extends string = never> {
         return this._apply(map => map.filter((_, key) => name.includes(key as InNames))) as any
     }
 
+    get names() {
+        return this._map.keySeq().toArray() as Names[]
+    }
+
     get(name: Names): PortSetEntry {
         if (!this._map.has(name)) {
             throw new PortError(`Port ${name} not found`)

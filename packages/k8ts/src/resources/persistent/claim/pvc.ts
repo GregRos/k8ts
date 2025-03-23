@@ -1,7 +1,7 @@
 import { manifest, relations, ResourcesSpec, Unit } from "@k8ts/instruments"
 import { CDK } from "../../../_imports"
-import { api } from "../../../api-kinds"
 import { k8ts } from "../../../kind-map"
+import { api } from "../../../kinds"
 import { ManifestResource } from "../../../node"
 import { equiv_cdk8s } from "../../../node/equiv-cdk8s"
 import { Access } from "../access-mode"
@@ -18,14 +18,14 @@ export namespace Pvc {
     export interface Props<Mode extends DataMode> extends PvcResources {
         accessModes: Access
         mode?: Mode
-        bind: Pv<Mode>
+        bind: Pv.AbsPv<Mode>
     }
 
     @k8ts(api.v1_.PersistentVolumeClaim)
     @equiv_cdk8s(CDK.KubePersistentVolumeClaim)
     @relations({
         needs: self => ({
-            bind: self.props.bind
+            bind: self.bound
         })
     })
     @manifest({
@@ -49,5 +49,9 @@ export namespace Pvc {
     })
     export class Pvc<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
         kind = api.v1_.PersistentVolumeClaim
+
+        get bound() {
+            return this.props.bind as Pv<Mode>
+        }
     }
 }

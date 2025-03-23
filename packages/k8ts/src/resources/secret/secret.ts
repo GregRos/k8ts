@@ -1,7 +1,7 @@
 import { manifest, relations } from "@k8ts/instruments"
 import { CDK } from "../../_imports"
-import { api } from "../../api-kinds"
 import { k8ts } from "../../kind-map"
+import { api } from "../../kinds"
 import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { ManifestResource } from "../../node/manifest-resource"
 
