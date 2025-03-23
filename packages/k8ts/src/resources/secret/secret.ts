@@ -1,6 +1,6 @@
 import { manifest, relations } from "@k8ts/instruments"
 import { CDK } from "../../_imports"
-import { v1 } from "../../api-versions"
+import { api } from "../../api-kinds"
 import { k8ts } from "../../kind-map"
 import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { ManifestResource } from "../../node/manifest-resource"
@@ -10,8 +10,7 @@ export interface Props {
     stringData: Record<string, string>
 }
 
-const ident = v1.kind("Secret")
-@k8ts(ident)
+@k8ts(api.v1_.Secret)
 @equiv_cdk8s(CDK.KubeSecret)
 @relations("none")
 @manifest({
@@ -23,5 +22,5 @@ const ident = v1.kind("Secret")
     }
 })
 export class Secret extends ManifestResource<Props> {
-    kind = ident
+    readonly kind = api.v1_.Secret
 }

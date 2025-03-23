@@ -8,7 +8,7 @@ import {
     resolveText
 } from "@k8ts/instruments"
 import { CDK } from "../../_imports"
-import { v1 } from "../../api-versions"
+import { api } from "../../api-kinds"
 import { k8ts } from "../../kind-map"
 import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { ManifestResource } from "../../node/manifest-resource"
@@ -20,8 +20,7 @@ export namespace ConfigMap {
         binaryData?: DataSourceRecord_Binary
     }
 
-    const ident = v1.kind("ConfigMap")
-    @k8ts(ident)
+    @k8ts(api.v1_.ConfigMap)
     @relations("none")
     @equiv_cdk8s(CDK.KubeConfigMap)
     @manifest({
@@ -37,6 +36,6 @@ export namespace ConfigMap {
         }
     })
     export class ConfigMap extends ManifestResource<Props> {
-        override kind = ident
+        override kind = api.v1_.ConfigMap
     }
 }

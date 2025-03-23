@@ -2,7 +2,7 @@ import { manifest, Origin, relations } from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { omit } from "lodash"
 import { CDK } from "../../_imports"
-import { apps_v1 } from "../../api-versions"
+import { api } from "../../api-kinds"
 import { k8ts } from "../../kind-map"
 import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { ManifestResource } from "../../node/manifest-resource"
@@ -15,8 +15,7 @@ export namespace Deployment {
         template: PodTemplate.Props<Ports>
     }
 
-    const ident = apps_v1.kind("Deployment")
-    @k8ts(ident)
+    @k8ts(api.apps_.v1_.Deployment)
     @equiv_cdk8s(CDK.KubeDeployment)
     @relations({
         kids: s => [s.template]
@@ -39,7 +38,7 @@ export namespace Deployment {
         }
     })
     export class Deployment<Ports extends string = string> extends ManifestResource<Props<Ports>> {
-        kind = ident
+        kind = api.apps_.v1_.Deployment
         template: PodTemplate<Ports>
         constructor(origin: Origin, meta: Meta | MutableMeta, props: Props<Ports>) {
             super(origin, meta, props)

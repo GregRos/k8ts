@@ -1,4 +1,6 @@
 import { hash } from "immutable"
+import { displayers } from "../displayers"
+import { bind_own_methods } from "../displayers/bind"
 import { InstrumentsError } from "../error"
 
 export type Kind<
@@ -14,6 +16,10 @@ export namespace Kind {
         dns: string
     }
 
+    @displayers({
+        simple: self => self.text
+    })
+    @bind_own_methods()
     export abstract class Identifier<
         Name extends string = string,
         Parent extends IdentParent | null = IdentParent | null
@@ -22,9 +28,7 @@ export namespace Kind {
         constructor(
             readonly name: Name,
             readonly parent: Parent
-        ) {
-            this.toString = () => this.text
-        }
+        ) {}
         get text(): string {
             return [this.parent?.text, this.name].filter(Boolean).join("/")
         }
@@ -49,7 +53,7 @@ export namespace Kind {
             return hash(this.text)
         }
     }
-
+    @bind_own_methods()
     export class Group<const Name extends string = string> extends Identifier<Name, null> {
         constructor(override name: Name) {
             super(name, null)
@@ -67,7 +71,7 @@ export namespace Kind {
             return this.version(name as any)
         }
     }
-
+    @bind_own_methods()
     export class Version<
         const _Version extends string = string,
         const _Group extends Group = Group
@@ -84,7 +88,7 @@ export namespace Kind {
             return this.kind(name)
         }
     }
-
+    @bind_own_methods()
     export class Kind<
         const Name extends string = string,
         const V extends Version = Version
@@ -105,20 +109,19 @@ export namespace Kind {
             return this.subkind(name)
         }
     }
-
+    @bind_own_methods()
     export class SubKind<
         _SubKind extends string = string,
-        _Parent extends Kind = Kind
+        _Parent extends Identifier = Identifier
     > extends Identifier<_SubKind, _Parent> {
         constructor(name: _SubKind, parent: _Parent) {
             super(name, parent)
         }
-
-        subkind<SubKind extends string>(subkind: SubKind): never {
-            throw new InstrumentsError(`SubKind "${this.text}" cannot have subkind "${subkind}".`)
+        subkind<_SubKind2 extends string>(subkind: _SubKind2): SubKind<_SubKind2, this> {
+            return new SubKind(subkind, this)
         }
 
-        child<Name extends string>(name: Name): never {
+        child<Name extends string>(name: Name) {
             return this.subkind(name)
         }
     }

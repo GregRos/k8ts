@@ -1,11 +1,11 @@
 import { Image, localFile } from "@k8ts/instruments"
-import { gateway_v1 } from "@lib/api-versions"
+import { api } from "@lib/api-kinds"
 import k8tsFile from "./cluster-scoped.k8"
 import { W } from "./world"
 const k8sNamespace = k8tsFile["Namespace/namespace"]
 const k8sPv = k8tsFile["PersistentVolume/dev-sda"]
 const cool = k8tsFile["PersistentVolume/pv-cool"]
-const gwKind = gateway_v1.kind("Gateway")
+const gwKind = api.gateway_.v1_.Gateway
 export default W.Scope(k8sNamespace)
     .File("deployment2.yaml")
     .metadata({
@@ -32,7 +32,7 @@ export default W.Scope(k8sNamespace)
         const deploy2 = FILE.Deployment("xyz2", {
             replicas: 1
         })
-            .Template()
+            .Template({})
             .POD(function* POD(k) {
                 const v = k.Volume("data", {
                     backend: claim

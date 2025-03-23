@@ -2,7 +2,7 @@ import { manifest, Producer, relations } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { omit } from "lodash"
 import { CDK } from "../../_imports"
-import { apps_v1 } from "../../api-versions"
+import { api } from "../../api-kinds"
 import { k8ts } from "../../kind-map"
 import { ManifestResource } from "../../node/manifest-resource"
 import { Container } from "./container"
@@ -17,8 +17,7 @@ export namespace PodTemplate {
     export type Props<Ports extends string = never> = PodProps & {
         POD: PodContainerProducer<Ports>
     }
-    const ident = apps_v1.kind("PodTemplate")
-    @k8ts(ident)
+    @k8ts(api.v1_.PodTemplate)
     @relations({
         kids: s => [...s.containers, ...s.volumes]
     })
@@ -47,7 +46,7 @@ export namespace PodTemplate {
         }
     })
     export class PodTemplate<Ports extends string = string> extends ManifestResource<Props<Ports>> {
-        kind = ident
+        readonly kind = api.v1_.PodTemplate
         readonly containers = seq(() => this.props.POD(new PodScope(this))).cache()
         readonly mounts = seq(() => this.containers.concatMap(x => x.mounts)).cache()
         readonly volumes = seq(() => this.containers.concatMap(x => x.volumes)).uniq()
@@ -62,7 +61,7 @@ export namespace PodTemplate {
         ): Container<Ports> {
             return Container.make(this._parent, name, "main", options)
         }
-        InitContainer(name: string, options: Container.Props<never>): Container<never> {
+        InitContainer(name: string, options: Container.K8tsProps<never>): Container<never> {
             return Container.make(this._parent, name, "init", options)
         }
         Volume(name: string, options: Volume.Backend) {

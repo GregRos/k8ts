@@ -41,7 +41,7 @@ export class YamlSerializer extends Emittery<YamlSerializerEventsTable> {
             return result
         } catch (err) {
             const resource = ManifestSourceEmbedder.get(input)
-            throw new MakeError(`Failed to serialize manifest ${resource?.shortFqn ?? "???"}`, {
+            throw new MakeError(`Failed to serialize manifest ${resource}`, {
                 cause: err
             })
         }

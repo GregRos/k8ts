@@ -1101,6 +1101,7 @@ __metadata:
   dependencies:
     "@typescript-eslint/eslint-plugin": "npm:^8.26.1"
     "@typescript-eslint/parser": "npm:^8.26.1"
+    "@typescript/analyze-trace": "npm:^0.10.1"
     doddle: "npm:^5.0.0-beta.16"
     eslint: "npm:8.57.0"
     eslint-config-prettier: "npm:9.1.0"
@@ -1113,6 +1114,7 @@ __metadata:
     prettier-plugin-jsdoc: "npm:^1.3.0"
     prettier-plugin-organize-imports: "npm:3.2.4"
     prettier-plugin-packagejson: "npm:2.5.0"
+    process-tracing: "npm:^1.0.2"
     shelljs: "npm:0.8.5"
     shx: "npm:^0.3.4"
     ts-jest: "npm:^29.2.6"
@@ -1815,6 +1817,26 @@ __metadata:
     "@typescript-eslint/types": "npm:8.26.1"
     eslint-visitor-keys: "npm:^4.2.0"
   checksum: 10c0/51b1016d06cd2b9eac0a213de418b0a26022fd3b71478014541bfcbc2a3c4d666552390eb9c209fa9e52c868710d9f1b21a2c789d35c650239438c366a27a239
+  languageName: node
+  linkType: hard
+
+"@typescript/analyze-trace@npm:^0.10.1":
+  version: 0.10.1
+  resolution: "@typescript/analyze-trace@npm:0.10.1"
+  dependencies:
+    chalk: "npm:^4.1.2"
+    exit: "npm:^0.1.2"
+    jsonparse: "npm:^1.3.1"
+    jsonstream-next: "npm:^3.0.0"
+    p-limit: "npm:^3.1.0"
+    split2: "npm:^3.2.2"
+    treeify: "npm:^1.1.0"
+    yargs: "npm:^16.2.0"
+  bin:
+    analyze-trace: bin/analyze-trace
+    print-trace-types: bin/print-trace-types
+    simplify-trace-types: bin/simplify-trace-types
+  checksum: 10c0/c6a5427e0f5109fa95b11e0087160315fb3358f486502dff3d792d95f310ed58bed7aac6295784a07ce8d40fc12e29827655b5a746659883f872e76c58ef6b4c
   languageName: node
   linkType: hard
 
@@ -6516,6 +6538,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jsonparse@npm:^1.2.0, jsonparse@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "jsonparse@npm:1.3.1"
+  checksum: 10c0/89bc68080cd0a0e276d4b5ab1b79cacd68f562467008d176dc23e16e97d4efec9e21741d92ba5087a8433526a45a7e6a9d5ef25408696c402ca1cfbc01a90bf0
+  languageName: node
+  linkType: hard
+
+"jsonstream-next@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "jsonstream-next@npm:3.0.0"
+  dependencies:
+    jsonparse: "npm:^1.2.0"
+    through2: "npm:^4.0.2"
+  bin:
+    jsonstream-next: bin.js
+  checksum: 10c0/96c4547f001d60035291182cb4f4d6af505426c34f74835ac7c7c72d68266e0f99f048328e91eac3a2a53cf58b2b4eee655568940fd2eb74545da55a6e7a5b73
+  languageName: node
+  linkType: hard
+
 "jsprim@npm:^1.2.2":
   version: 1.4.2
   resolution: "jsprim@npm:1.4.2"
@@ -8474,6 +8515,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"process-tracing@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "process-tracing@npm:1.0.2"
+  dependencies:
+    jsonstream-next: "npm:^3.0.0"
+    split2: "npm:^3.2.2"
+    yargs: "npm:^16.2.0"
+  bin:
+    process-tracing: index.js
+  checksum: 10c0/903a13abcbeafdeefc31448bd9859a4be6b15c6b7732fe07cef59c16654c3ea509a48cd61bf9fd87e6f481d7e33082bddd641fed45546c3484f4ef0a01848866
+  languageName: node
+  linkType: hard
+
 "promise-retry@npm:^2.0.1":
   version: 2.0.1
   resolution: "promise-retry@npm:2.0.1"
@@ -8612,7 +8666,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^3.4.0":
+"readable-stream@npm:3, readable-stream@npm:^3.0.0, readable-stream@npm:^3.4.0":
   version: 3.6.2
   resolution: "readable-stream@npm:3.6.2"
   dependencies:
@@ -9408,6 +9462,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"split2@npm:^3.2.2":
+  version: 3.2.2
+  resolution: "split2@npm:3.2.2"
+  dependencies:
+    readable-stream: "npm:^3.0.0"
+  checksum: 10c0/2dad5603c52b353939befa3e2f108f6e3aff42b204ad0f5f16dd12fd7c2beab48d117184ce6f7c8854f9ee5ffec6faae70d243711dd7d143a9f635b4a285de4e
+  languageName: node
+  linkType: hard
+
 "split@npm:^1.0.1":
   version: 1.0.1
   resolution: "split@npm:1.0.1"
@@ -9870,6 +9933,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"through2@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "through2@npm:4.0.2"
+  dependencies:
+    readable-stream: "npm:3"
+  checksum: 10c0/3741564ae99990a4a79097fe7a4152c22348adc4faf2df9199a07a66c81ed2011da39f631e479fdc56483996a9d34a037ad64e76d79f18c782ab178ea9b6778c
+  languageName: node
+  linkType: hard
+
 "through@npm:2, through@npm:^2.3.6, through@npm:^2.3.8":
   version: 2.3.8
   resolution: "through@npm:2.3.8"
@@ -9923,6 +9995,13 @@ __metadata:
     psl: "npm:^1.1.28"
     punycode: "npm:^2.1.1"
   checksum: 10c0/e1cadfb24d40d64ca16de05fa8192bc097b66aeeb2704199b055ff12f450e4f30c927ce250f53d01f39baad18e1c11d66f65e545c5c6269de4c366fafa4c0543
+  languageName: node
+  linkType: hard
+
+"treeify@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "treeify@npm:1.1.0"
+  checksum: 10c0/2f0dea9e89328b8a42296a3963d341ab19897a05b723d6b0bced6b28701a340d2a7b03241aef807844198e46009aaf3755139274eb082cfce6fdc1935cbd69dd
   languageName: node
   linkType: hard
 

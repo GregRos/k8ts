@@ -1,7 +1,7 @@
 import { manifest, relations, type InputPortMapping } from "@k8ts/instruments"
 import { Map } from "immutable"
 import { CDK } from "../../_imports"
-import { v1 } from "../../api-versions"
+import { api } from "../../api-kinds"
 import { k8ts } from "../../kind-map"
 import { ManifestResource } from "../../node"
 import { equiv_cdk8s } from "../../node/equiv-cdk8s"
@@ -22,8 +22,7 @@ export namespace Service {
         frontend: Frontend
     }
 
-    const ident = v1.kind("Service")
-    @k8ts(ident)
+    @k8ts(api.v1_.Service)
     @relations({
         needs: self => ({
             backend: self.props.backend
@@ -54,7 +53,7 @@ export namespace Service {
         DeployPorts extends string = string,
         ExposedPorts extends DeployPorts = DeployPorts
     > extends ManifestResource<Props<DeployPorts, ExposedPorts>> {
-        kind = ident
+        kind = api.v1_.Service
 
         get ports() {
             const srcPorts = this.props.backend.ports.pull()

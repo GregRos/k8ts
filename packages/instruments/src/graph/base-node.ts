@@ -8,7 +8,6 @@ import { Relation } from "./dependencies"
 export interface BaseEntity<Node extends BaseNode<Node>> {
     readonly node: Node
 
-    readonly shortFqn: string
     readonly kind: Kind.Identifier
     readonly name: string
 }

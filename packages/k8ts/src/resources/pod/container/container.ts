@@ -15,11 +15,14 @@ import { toContainerPorts, toEnvVars } from "../../utils/adapters"
 
 import { seq } from "doddle"
 import { mapKeys, mapValues } from "lodash"
+import { api } from "../../../api-kinds"
+import { k8ts } from "../../../kind-map"
 import type { ManifestResource } from "../../../node"
 import { SubResource } from "../../../node/sub-resource"
 import { Mount as Mount_ } from "./mounts"
 export type Container<Ports extends string> = Container.Container<Ports>
 export namespace Container {
+    const PORTS = Symbol("CONTAINER_PORTS")
     export import Mount = Mount_
     const container_ResourcesSpec = ResourcesSpec.make({
         cpu: Unit.Cpu,
@@ -30,7 +33,7 @@ export namespace Container {
     export type Mounts = {
         [key: string]: Mount.ContainerDeviceMount | Mount.ContainerVolumeMount
     }
-    export interface Props<Ports extends string = never> {
+    export interface K8tsProps<Ports extends string = never> {
         image: TaggedImage
         ports?: InputPortSetRecord<Ports>
         command?: CmdBuilder
@@ -39,19 +42,21 @@ export namespace Container {
         securityContext?: CDK.SecurityContext
         resources?: Resources
     }
+    export type Props<Ports extends string = never> = K8tsProps<Ports> &
+        Omit<CDK.Container, keyof K8tsProps | "name">
+
+    @k8ts(api.v1_.Pod_.Container)
     @relations({
         needs: self => {
             const a = self.mounts
             return mapValues(
                 mapKeys(a, x => x.path),
-                x => x.mount.parent
+                x => x.mount.volume
             )
         }
     })
     export class Container<Ports extends string> extends SubResource<Props<Ports>> {
-        get kind() {
-            return this.parent.kind.subkind("Container")
-        }
+        readonly kind = api.v1_.Pod_.Container
 
         get mounts() {
             return Map(this.props.mounts ?? {})
@@ -69,7 +74,7 @@ export namespace Container {
         }
 
         get volumes() {
-            return seq(this.mounts.map(x => x.mount.parent))
+            return seq(this.mounts.map(x => x.mount.volume))
                 .uniq()
                 .toArray()
                 .pull()
@@ -96,7 +101,7 @@ export namespace Container {
             parent: ManifestResource,
             name: string,
             readonly subtype: "init" | "main",
-            override readonly props: Props<Ports>
+            override readonly props: K8tsProps<Ports>
         ) {
             super(parent, name, props)
         }
