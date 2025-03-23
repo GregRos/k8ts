@@ -1,7 +1,8 @@
 import type { Kind } from "../api-kind"
 import type { RefKey } from "../ref-key"
 
-export type Kinded = { kind: Kind.Kind }
+export type Kinded<K extends Kind.IdentParent = Kind.IdentParent> = { kind: K }
+
 export type Refable<Kind extends string, Name extends string> = {
     node: {
         key: RefKey<Kind, Name>

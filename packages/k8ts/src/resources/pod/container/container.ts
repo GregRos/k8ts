@@ -20,7 +20,7 @@ import { k8ts } from "../../../kind-map"
 import type { ManifestResource } from "../../../node"
 import { SubResource } from "../../../node/sub-resource"
 import { Mount as Mount_ } from "./mounts"
-export type Container<Ports extends string> = Container.Container<Ports>
+export type Container<Ports extends string = string> = Container.Container<Ports>
 export namespace Container {
     const PORTS = Symbol("CONTAINER_PORTS")
     export import Mount = Mount_
@@ -55,7 +55,10 @@ export namespace Container {
             )
         }
     })
-    export class Container<Ports extends string> extends SubResource<Props<Ports>> {
+    export class Container<Ports extends string = string> extends SubResource<Props<Ports>> {
+        get portNames() {
+            return this.portNames
+        }
         readonly kind = api.v1_.Pod_.Container
 
         get mounts() {
