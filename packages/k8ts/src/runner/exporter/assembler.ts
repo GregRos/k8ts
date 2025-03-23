@@ -7,7 +7,7 @@ import type { File } from "../../file"
 import { ResourceLoader, type ResourceLoaderEventsTable } from "./loader"
 import { Manifester, NodeManifest, type ManifesterEventsTable } from "./manifester"
 import { ManifestSaver, type ManifestSaverEventsTable } from "./saver"
-import { YamlSerializer, type YamlSerializerEventsTable } from "./serializer"
+import { YamlSerializer, type SerializerEventsTable } from "./serializer"
 import { NodeGraphValidator, ValidatorEventsTable } from "./validator"
 
 export class Assembler extends Emittery<AssemblerEventsTable> {
@@ -166,7 +166,7 @@ export type AssemblyStage =
     | "gathering"
 export interface AssemblerEventsTable
     extends ManifestSaverEventsTable,
-        YamlSerializerEventsTable,
+        SerializerEventsTable,
         ManifesterEventsTable,
         ResourceLoaderEventsTable,
         ValidatorEventsTable {

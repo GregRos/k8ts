@@ -5,6 +5,7 @@ import {
     relations,
     ResourcesSpec,
     Unit,
+    WritableDeep,
     type CmdBuilder,
     type InputEnvMapping,
     type InputPortSetRecord,
@@ -45,7 +46,7 @@ export namespace Container {
         resources?: Resources
     }
     export type Props<Ports extends string = never> = K8tsProps<Ports> &
-        Omit<CDK.Container, keyof K8tsProps | "name">
+        WritableDeep<Omit<CDK.Container, keyof K8tsProps | "name">>
 
     @k8ts(api.v1_.Pod_.Container)
     @relations({

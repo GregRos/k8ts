@@ -1,7 +1,8 @@
-import { manifest, Origin, Refable, relations } from "@k8ts/instruments"
+import { manifest, Origin, Refable, relations, WritableDeep } from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { omit } from "lodash"
 import { CDK } from "../../_imports"
+import { MakeError } from "../../error"
 import { k8ts } from "../../kind-map"
 import { api } from "../../kinds"
 import { equiv_cdk8s } from "../../node/equiv-cdk8s"
@@ -10,9 +11,17 @@ import { PodTemplate } from "../pod/pod-template"
 
 export type Deployment<Ports extends string> = Deployment.Deployment<Ports>
 export namespace Deployment {
-    export type SmallerProps = Omit<CDK.DeploymentSpec, "selector" | "template">
-    export type Props<Ports extends string> = SmallerProps & {
+    export type DeploymentStrategy =
+        | { type: "Recreate" }
+        | ({
+              type: "RollingUpdate"
+          } & CDK.RollingUpdateDeployment)
+    export type NormalProps = WritableDeep<
+        Omit<CDK.DeploymentSpec, "selector" | "template" | "strategy">
+    >
+    export type Props<Ports extends string> = NormalProps & {
         template: PodTemplate.Props<Ports>
+        strategy?: DeploymentStrategy
     }
     export type AbsDeployment<Ports extends string> = Refable<api.apps_.v1_.Deployment> & {
         __PORTS__: Ports
@@ -35,7 +44,8 @@ export namespace Deployment {
                             app: self.name
                         }
                     },
-                    template: noKindFields
+                    template: noKindFields,
+                    strategy: self._strategy
                 }
             }
         }
@@ -45,6 +55,22 @@ export namespace Deployment {
         kind = api.apps_.v1_.Deployment
         template: PodTemplate<Ports>
 
+        private get _strategy() {
+            const strat = this.props.strategy
+            if (!strat) {
+                return undefined
+            }
+            if (strat.type === "Recreate") {
+                return strat
+            }
+            if (strat.type === "RollingUpdate") {
+                return {
+                    type: "RollingUpdate",
+                    rollingUpdate: omit(strat, "type")
+                }
+            }
+            throw new MakeError(`Invalid strategy type: ${strat}`)
+        }
         constructor(origin: Origin, meta: Meta | MutableMeta, props: Props<Ports>) {
             super(origin, meta, props)
             this.template = new PodTemplate.PodTemplate(

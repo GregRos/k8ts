@@ -100,7 +100,7 @@ export namespace Factory {
             >
         }
 
-        Deployment<Name extends string>(name: Name, props: Deployment.SmallerProps) {
+        Deployment<Name extends string>(name: Name, props: Deployment.NormalProps) {
             const builder = this
             const traceHere = new Trace(new StackTracey().slice(2))
 
