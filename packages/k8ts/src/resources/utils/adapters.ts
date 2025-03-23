@@ -5,7 +5,9 @@ export function toContainerPort(entry: PortSetEntry): CDK.ContainerPort {
     return {
         containerPort: entry.port,
         name: entry.name,
-        protocol: entry.protocol
+        protocol: entry.protocol,
+        hostPort: entry.hostPort,
+        hostIp: entry.hostIp?.text
     }
 }
 

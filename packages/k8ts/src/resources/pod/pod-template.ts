@@ -17,6 +17,16 @@ export namespace PodTemplate {
     export type Props<Ports extends string> = PodProps & {
         POD: PodContainerProducer<Ports>
     }
+    export type HostPortSpec<Ports extends string> = {
+        [port in Ports]?: {
+            ip?: string
+            port?: number
+        }
+    }
+    export interface HostNetInput<Ports extends string> {
+        hostNetwork?: boolean
+        ports: HostPortSpec<Ports>
+    }
     @k8ts(api.v1_.PodTemplate)
     @relations({
         kids: s => [...s.containers, ...s.volumes]

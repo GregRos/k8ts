@@ -1,4 +1,5 @@
 import { Map } from "immutable"
+import { Ip4 } from "../../_ip"
 import { PortSet } from "../set"
 import type {
     InputPortSetEntry,
@@ -13,7 +14,9 @@ function portSetEntry(name: string, value: InputPortSetEntry): PortSetEntry {
     return {
         name,
         port: value.port,
-        protocol: value.protocol.toUpperCase() as Protocol
+        protocol: value.protocol.toUpperCase() as Protocol,
+        hostIp: value.hostIp ? new Ip4(value.hostIp) : undefined,
+        hostPort: value.hostPort
     }
 }
 
@@ -37,7 +40,5 @@ export function portRecordInput(
         return record.values
     }
     const inputMap = Map(record)
-    return inputMap
-        .map((v, k) => parsePortInput(k, v))
-        .map((value, key) => portSetEntry(key, value))
+    return inputMap.map((v, k) => parsePortInput(k, v))
 }

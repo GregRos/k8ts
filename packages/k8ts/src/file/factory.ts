@@ -1,5 +1,13 @@
-import { Origin, auto_register, displayers, type LiveRefable } from "@k8ts/instruments"
+import {
+    Origin,
+    Trace,
+    TraceEmbedder,
+    auto_register,
+    displayers,
+    type LiveRefable
+} from "@k8ts/instruments"
 import chalk from "chalk"
+import StackTracey from "stacktracey"
 import {
     ConfigMap,
     DataMode,
@@ -92,32 +100,30 @@ export namespace Factory {
             >
         }
 
-        private PrvDeployment<Name extends string, Ports extends string = never>(
-            name: Name,
-            props: Deployment.Props<Ports>
-        ) {
-            return new Deployment.Deployment(
-                this.origin,
-                this._metaWithName(name),
-                props
-            ) as LiveRefable<Deployment<Ports>, Name>
-        }
-
         Deployment<Name extends string>(name: Name, props: Deployment.SmallerProps) {
             const builder = this
+            const traceHere = new Trace(new StackTracey().slice(2))
+
             return {
                 Template(templateProps?: PodTemplate.PodProps) {
                     return {
                         POD<Ports extends string>(
                             producer: PodTemplate.PodContainerProducer<Ports>
                         ) {
-                            return builder.PrvDeployment(name, {
-                                ...props,
-                                template: {
-                                    ...templateProps,
-                                    POD: producer
+                            const dep = new Deployment.Deployment(
+                                builder.origin,
+                                builder._metaWithName(name),
+                                {
+                                    ...props,
+                                    template: {
+                                        ...templateProps,
+                                        POD: producer
+                                    }
                                 }
-                            })
+                            ) as LiveRefable<Deployment<Ports>, Name>
+                            TraceEmbedder.set(dep.node, traceHere)
+                            dep.node.origin["__attach_resource__"]([dep.node])
+                            return dep
                         }
                     }
                 }

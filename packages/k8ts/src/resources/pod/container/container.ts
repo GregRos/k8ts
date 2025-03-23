@@ -34,6 +34,7 @@ export namespace Container {
     export type Mounts = {
         [key: string]: SomeMount
     }
+
     export interface K8tsProps<Ports extends string = never> {
         image: TaggedImage
         ports?: InputPortSetRecord<Ports>

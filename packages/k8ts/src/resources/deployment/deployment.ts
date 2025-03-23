@@ -17,6 +17,7 @@ export namespace Deployment {
     export type AbsDeployment<Ports extends string> = Refable<api.apps_.v1_.Deployment> & {
         __PORTS__: Ports
     }
+
     @k8ts(api.apps_.v1_.Deployment)
     @equiv_cdk8s(CDK.KubeDeployment)
     @relations({
