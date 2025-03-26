@@ -1,5 +1,6 @@
 export * from "./_embedder"
 export * from "./_string"
+export * from "./_user"
 export * from "./api-kind"
 export * from "./cmd"
 export * from "./data-sources"
