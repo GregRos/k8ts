@@ -32,7 +32,7 @@ export function toEnvVars(env: EnvBuilder) {
     return env.values.map((x, key) => {
         return {
             name: key,
-            value: x
+            value: `${x}`
         } as CDK.EnvVar
     })
 }
