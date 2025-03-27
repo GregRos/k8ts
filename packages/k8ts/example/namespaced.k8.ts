@@ -13,16 +13,16 @@ export default W.Scope(k8sNamespace)
     })
     .Resources(function* FILE(FILE) {
         const claim = FILE.Claim("claim", {
-            bind: cool,
-            accessModes: ["ReadWriteOnce"],
-            storage: "1Gi->5Gi"
+            $bind: cool,
+            $accessModes: ["ReadWriteOnce"],
+            $storage: "1Gi->5Gi"
         })
 
         yield claim
         const devClaim = FILE.Claim("dev-claim", {
-            accessModes: ["ReadWriteOnce"],
-            bind: k8tsFile["PersistentVolume/dev-sda"],
-            storage: "1Gi->5Gi"
+            $accessModes: ["ReadWriteOnce"],
+            $bind: k8tsFile["PersistentVolume/dev-sda"],
+            $storage: "1Gi->5Gi"
         })
         yield FILE.ConfigMap("config", {
             data: {
@@ -35,7 +35,7 @@ export default W.Scope(k8sNamespace)
             .Template({})
             .POD(function* POD(k) {
                 const v = k.Volume("data", {
-                    backend: claim
+                    $backend: claim
                 })
 
                 FILE.ConfigMap("abc", {
@@ -45,20 +45,20 @@ export default W.Scope(k8sNamespace)
                 })
 
                 const d = k.Device("dev", {
-                    backend: devClaim
+                    $backend: devClaim
                 })
 
                 yield k.Container("main", {
-                    image: Image.name("nginx/nginx").tag("latest"),
-                    ports: {
+                    $image: Image.name("nginx/nginx").tag("latest"),
+                    $ports: {
                         x: 3333
                     },
-                    mounts: {
+                    $mounts: {
                         "/xyz": v.Mount(),
                         "/etc": v.Mount(),
                         "/dev": d.Mount()
                     },
-                    resources: {
+                    $resources: {
                         cpu: "100m->500m",
                         memory: "100Mi->500Mi"
                     }
@@ -66,20 +66,20 @@ export default W.Scope(k8sNamespace)
             })
 
         const svc2 = FILE.Service("xyz", {
-            frontend: {
+            $frontend: {
                 type: "ClusterIP"
             },
-            ports: {
+            $ports: {
                 x: 80
             },
-            backend: deploy2
+            $backend: deploy2
         })
 
         yield svc2
         const route = FILE.DomainRoute("my-route", {
-            hostname: "example.com",
-            gateway: W.External(gwKind, "gateway", "gateways"),
-            backend: svc2.portRef("x")
+            $hostname: "example.com",
+            $gateway: W.External(gwKind, "gateway", "gateways"),
+            $backend: svc2.portRef("x")
         })
 
         yield route

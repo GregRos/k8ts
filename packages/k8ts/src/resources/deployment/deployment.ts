@@ -1,6 +1,6 @@
 import { manifest, Origin, Refable, relations, WritableDeep } from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
-import { omit } from "lodash"
+import { omit, omitBy } from "lodash"
 import { CDK } from "../../_imports"
 import { MakeError } from "../../error"
 import { k8ts } from "../../kind-map"
@@ -20,8 +20,8 @@ export namespace Deployment {
         Omit<CDK.DeploymentSpec, "selector" | "template" | "strategy">
     >
     export type Props<Ports extends string> = NormalProps & {
-        template: PodTemplate.Props<Ports>
-        strategy?: DeploymentStrategy
+        $template: PodTemplate.Props<Ports>
+        $strategy?: DeploymentStrategy
     }
     export type AbsDeployment<Ports extends string> = Refable<api.apps_.v1_.Deployment> & {
         __PORTS__: Ports
@@ -38,7 +38,7 @@ export namespace Deployment {
             const noKindFields = omit(template, ["kind", "apiVersion"])
             return {
                 spec: {
-                    ...omit(self.props, "template"),
+                    ...omitBy(self.props, (x, k) => k.startsWith("$")),
                     selector: {
                         matchLabels: {
                             app: self.name
@@ -56,7 +56,7 @@ export namespace Deployment {
         template: PodTemplate<Ports>
 
         private get _strategy() {
-            const strat = this.props.strategy
+            const strat = this.props.$strategy
             if (!strat) {
                 return undefined
             }
@@ -79,7 +79,7 @@ export namespace Deployment {
                     name: this.name,
                     "%app": this.name
                 }),
-                props.template
+                props.$template
             )
         }
         get ports() {

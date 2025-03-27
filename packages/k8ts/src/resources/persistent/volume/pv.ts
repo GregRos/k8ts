@@ -14,12 +14,12 @@ export type Pv<T extends DataMode = DataMode> = Pv.Pv<T>
 export namespace Pv {
     export import Backend = Backend_
     export interface Props<Mode extends DataMode = DataMode> {
-        accessModes: Access
+        $accessModes: Access
         storageClassName?: string
-        mode?: Mode
+        $mode?: Mode
         reclaimPolicy?: Reclaim
-        capacity: Unit.Data
-        backend: Backend
+        $capacity: Unit.Data
+        $backend: Backend
         nodeAffinity?: CDK.VolumeNodeAffinity
     }
     export type Reclaim = "Retain" | "Delete" | "Recycle"
@@ -30,8 +30,8 @@ export namespace Pv {
     @manifest({
         body(self) {
             const pvProps = self.props
-            const accessModes = Access.parse(pvProps.accessModes)
-            if (self.props.backend.type === "Local") {
+            const accessModes = Access.parse(pvProps.$accessModes)
+            if (self.props.$backend.type === "Local") {
                 if (!pvProps.nodeAffinity) {
                     throw new MakeError(
                         `While manifesting ${self.node.format("source")}, PV with Local backend must have nodeAffinity.`
@@ -41,18 +41,18 @@ export namespace Pv {
             let base: CDK.PersistentVolumeSpec = {
                 accessModes,
                 storageClassName: pvProps.storageClassName ?? "standard",
-                capacity: pvProps.capacity
+                capacity: pvProps.$capacity
                     ? {
-                          storage: CDK.Quantity.fromString(pvProps.capacity)
+                          storage: CDK.Quantity.fromString(pvProps.$capacity)
                       }
                     : undefined,
-                volumeMode: pvProps.mode ?? "Filesystem",
+                volumeMode: pvProps.$mode ?? "Filesystem",
                 persistentVolumeReclaimPolicy: pvProps.reclaimPolicy ?? "Retain",
                 nodeAffinity: pvProps.nodeAffinity
             }
             base = {
                 ...base,
-                ...parseBackend(pvProps.backend)
+                ...parseBackend(pvProps.$backend)
             }
             return {
                 spec: base

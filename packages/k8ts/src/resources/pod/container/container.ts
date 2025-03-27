@@ -16,7 +16,7 @@ import type { CDK } from "../../../_imports"
 import { toContainerPorts, toEnvVars } from "../../utils/adapters"
 
 import { seq } from "doddle"
-import { mapKeys, mapValues } from "lodash"
+import { mapKeys, mapValues, omitBy } from "lodash"
 import { k8ts } from "../../../kind-map"
 import { api } from "../../../kinds"
 import type { ManifestResource } from "../../../node"
@@ -36,17 +36,19 @@ export namespace Container {
         [key: string]: SomeMount
     }
 
-    export interface K8tsProps<Ports extends string = never> {
+    interface K8tsPropsClean<Ports extends string = never> {
         image: TaggedImage
         ports?: InputPortSetRecord<Ports>
         command?: CmdBuilder
         mounts?: Mounts
         env?: InputEnvMapping
-        securityContext?: CDK.SecurityContext
         resources?: Resources
     }
+    export type K8tsProps<Ports extends string = never> = {
+        [key in keyof K8tsPropsClean<Ports> as `$${key}`]: K8tsPropsClean<Ports>[key]
+    }
     export type Props<Ports extends string = never> = K8tsProps<Ports> &
-        WritableDeep<Omit<CDK.Container, keyof K8tsProps | "name">>
+        WritableDeep<Omit<CDK.Container, keyof K8tsPropsClean | "name">>
 
     @k8ts(api.v1_.Pod_.Container)
     @relations({
@@ -63,7 +65,7 @@ export namespace Container {
         readonly kind = api.v1_.Pod_.Container
 
         get mounts() {
-            return Map(this.props.mounts ?? {})
+            return Map(this.props.$mounts ?? {})
                 .mapEntries(([path, mount]) => {
                     return [
                         mount,
@@ -84,19 +86,20 @@ export namespace Container {
                 .pull()
         }
         get ports() {
-            return PortSet.make(this.props.ports)
+            return PortSet.make(this.props.$ports)
         }
         submanifest(): CDK.Container {
             const self = this
-            const { image, ports, command, env, securityContext } = self.props
+            const { $image, $ports, $command, $env } = self.props
+            const untaggedProps = omitBy(self.props, (_, k) => k.startsWith("$"))
             const container: CDK.Container = {
+                ...untaggedProps,
                 name: self.name,
-                image: image.toString(),
-                ports: ports && toContainerPorts(PortSet.make(ports)).valueSeq().toArray(),
+                image: $image.toString(),
+                ports: $ports && toContainerPorts(PortSet.make($ports)).valueSeq().toArray(),
                 resources: self._resources()?.toObject(),
-                command: command?.toArray(),
-                env: toEnvVars(Env(env)).valueSeq().toArray(),
-                securityContext,
+                command: $command?.toArray(),
+                env: toEnvVars(Env($env)).valueSeq().toArray(),
                 ...self._groupedMounts()
             }
             return container
@@ -105,7 +108,7 @@ export namespace Container {
             parent: ManifestResource,
             name: string,
             readonly subtype: "init" | "main",
-            override readonly props: K8tsProps<Ports>
+            override readonly props: Props<Ports>
         ) {
             super(parent, name, props)
         }
@@ -126,10 +129,10 @@ export namespace Container {
             return x
         }
         private _resources() {
-            if (!this.props.resources) {
+            if (!this.props.$resources) {
                 return undefined
             }
-            const { cpu, memory } = this.props.resources
+            const { cpu, memory } = this.props.$resources
             return container_ResourcesSpec.parse({
                 cpu: cpu,
                 memory: memory

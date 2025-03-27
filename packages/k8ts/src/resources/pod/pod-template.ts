@@ -1,6 +1,6 @@
 import { Kinded, manifest, Producer, relations } from "@k8ts/instruments"
 import { seq } from "doddle"
-import { omit } from "lodash"
+import { omitBy } from "lodash"
 import { CDK } from "../../_imports"
 import { k8ts } from "../../kind-map"
 import { api } from "../../kinds"
@@ -15,7 +15,7 @@ export namespace PodTemplate {
     }
     export type PodContainerProducer<Ports extends string> = Producer<PodScope, AbsContainer<Ports>>
     export type Props<Ports extends string> = PodProps & {
-        POD: PodContainerProducer<Ports>
+        $POD: PodContainerProducer<Ports>
     }
     export type HostPortSpec<Ports extends string> = {
         [port in Ports]?: {
@@ -23,10 +23,7 @@ export namespace PodTemplate {
             port?: number
         }
     }
-    export interface HostNetInput<Ports extends string> {
-        hostNetwork?: boolean
-        ports: HostPortSpec<Ports>
-    }
+
     @k8ts(api.v1_.PodTemplate)
     @relations({
         kids: s => [...s.containers, ...s.volumes]
@@ -47,7 +44,7 @@ export namespace PodTemplate {
             const volumes = self.volumes.map(x => x.submanifest()).toArray()
             return {
                 spec: {
-                    ...omit(props, "POD"),
+                    ...omitBy(props, (x, k) => k.startsWith("$")),
                     containers: mainContainers.pull(),
                     initContainers: initContainers.pull(),
                     volumes: volumes.pull()
@@ -57,7 +54,7 @@ export namespace PodTemplate {
     })
     export class PodTemplate<Ports extends string = string> extends ManifestResource<Props<Ports>> {
         readonly kind = api.v1_.PodTemplate
-        readonly containers = seq(() => this.props.POD(new PodScope(this)))
+        readonly containers = seq(() => this.props.$POD(new PodScope(this)))
             .map(x => {
                 return x as Container<Ports>
             })

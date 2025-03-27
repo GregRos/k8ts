@@ -20,9 +20,9 @@ export namespace Service {
     export import Port = Port_
     export import Frontend = Frontend_
     export interface Props<DeployPorts extends string, ExposedPorts extends DeployPorts> {
-        ports: InputPortMapping<ExposedPorts>
-        backend: Deployment.AbsDeployment<DeployPorts>
-        frontend: Frontend
+        $ports: InputPortMapping<ExposedPorts>
+        $backend: Deployment.AbsDeployment<DeployPorts>
+        $frontend: Frontend
     }
     export type AbsService<ExposedPorts extends string> = Refable<api.v1_.Service> & {
         __PORTS__: ExposedPorts
@@ -39,12 +39,12 @@ export namespace Service {
             const svcPorts = self.ports
             return {
                 spec: {
-                    ...self.props.frontend,
+                    ...self.props.$frontend,
                     ports: toServicePorts(svcPorts).toArray(),
                     selector: {
-                        app: self.props.backend.name
+                        app: self.props.$backend.name
                     },
-                    ...(self.props.frontend.type === "LoadBalancer"
+                    ...(self.props.$frontend.type === "LoadBalancer"
                         ? {
                               allocateLoadBalancerNodePorts: false,
                               externalTrafficPolicy: "Local"
@@ -61,15 +61,15 @@ export namespace Service {
         kind = api.v1_.Service
 
         private get backend() {
-            return this.props.backend as Deployment<ExposedPorts>
+            return this.props.$backend as Deployment<ExposedPorts>
         }
         get ports() {
             const srcPorts = this.backend.ports.pull()
-            const knownPorts = Map(this.props.ports)
+            const knownPorts = Map(this.props.$ports)
                 .filter(x => x !== undefined)
                 .keySeq()
                 .toArray() as ExposedPorts[]
-            const svcPorts = srcPorts.pick(...knownPorts).map(this.props.ports as any)
+            const svcPorts = srcPorts.pick(...knownPorts).map(this.props.$ports as any)
             return svcPorts
         }
 

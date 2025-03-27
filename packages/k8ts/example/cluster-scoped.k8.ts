@@ -5,22 +5,22 @@ export default W.Scope("cluster")
     .Resources(function* FILE(FILE) {
         yield FILE.Namespace("namespace")
         yield FILE.PersistentVolume("pv-cool", {
-            capacity: "1Gi",
-            accessModes: ["ReadWriteOnce"],
-            backend: {
+            $capacity: "1Gi",
+            $accessModes: ["ReadWriteOnce"],
+            $backend: {
                 type: "Local",
                 path: "/mnt/data"
             },
             nodeAffinity: {} as any
         })
         yield FILE.PersistentVolume("dev-sda", {
-            capacity: "1Gi",
-            accessModes: ["ReadWriteOnce"],
-            backend: {
+            $capacity: "1Gi",
+            $accessModes: ["ReadWriteOnce"],
+            $backend: {
                 type: "Local",
                 path: "/dev/sda"
             },
-            mode: "Block",
+            $mode: "Block",
             nodeAffinity: {} as any
         })
     })

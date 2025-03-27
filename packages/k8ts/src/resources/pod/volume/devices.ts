@@ -9,7 +9,7 @@ import { Mount } from "../container/mounts"
 export type Device = Device.PodDevice
 export namespace Device {
     interface PodDevice_Backend_Pvc {
-        backend: Pvc.Pvc<"Block">
+        $backend: Pvc.Pvc<"Block">
         readOnly?: boolean
     }
 
@@ -17,7 +17,7 @@ export namespace Device {
     @k8ts(api.v1_.Pod_.Device)
     @relations({
         needs: self => ({
-            backend: self.backend.backend
+            backend: self.backend.$backend
         })
     })
     export class PodDevice extends SubResource<PodDevice_Backend_Pvc> {
@@ -34,7 +34,7 @@ export namespace Device {
             return {
                 name: this.name,
                 persistentVolumeClaim: {
-                    claimName: this.backend.backend.name,
+                    claimName: this.backend.$backend.name,
                     readOnly: this.backend.readOnly
                 }
             }

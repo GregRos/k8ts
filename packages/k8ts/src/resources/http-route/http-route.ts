@@ -11,16 +11,16 @@ export type HttpRoute<Ports extends string> = HttpRoute.HttpRoute<Ports>
 
 export namespace HttpRoute {
     export interface Props<Ports extends string> {
-        gateway: External<api.gateway_.v1_.Gateway>
-        hostname: string
-        backend: Service.Port<Ports>
+        $gateway: External<api.gateway_.v1_.Gateway>
+        $hostname: string
+        $backend: Service.Port<Ports>
     }
 
     @k8ts(api.gateway_.v1_.HttpRoute)
     @relations({
         needs: self => ({
-            gateway: self.props.gateway,
-            service: self.props.backend.service
+            gateway: self.props.$gateway,
+            service: self.props.$backend.service
         })
     })
     @equiv_cdk8s(CDK.HttpRoute)
@@ -28,11 +28,11 @@ export namespace HttpRoute {
         body(self): CDK.HttpRouteProps {
             return {
                 spec: {
-                    parentRefs: [self.props.gateway.ref()],
-                    hostnames: [self.props.hostname],
+                    parentRefs: [self.props.$gateway.ref()],
+                    hostnames: [self.props.$hostname],
                     rules: [
                         {
-                            backendRefs: [self.props.backend.ref()]
+                            backendRefs: [self.props.$backend.ref()]
                         }
                     ]
                 }

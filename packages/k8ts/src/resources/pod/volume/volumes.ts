@@ -12,15 +12,15 @@ import { Mount } from "../container/mounts"
 export type Volume<Props extends Volume.Backend = Volume.Backend> = Volume.PodVolume<Props>
 export namespace Volume {
     interface PodVolume_Backend_Pvc {
-        backend: Pvc.Pvc<"Filesystem">
+        $backend: Pvc.Pvc<"Filesystem">
         readOnly?: boolean
     }
 
     interface PodVolume_Backend_ConfigMap {
-        backend: ConfigMap
+        $backend: ConfigMap
     }
     interface PodVolume_Backend_Secret {
-        backend: Secret
+        $backend: Secret
     }
     export type Backend =
         | PodVolume_Backend_Pvc
@@ -30,7 +30,7 @@ export namespace Volume {
     @k8ts(api.v1_.Pod_.Volume)
     @relations({
         needs: self => ({
-            backend: self.props.backend
+            backend: self.props.$backend
         })
     })
     export abstract class PodVolume<Props extends Backend = Backend> extends SubResource<Props> {
@@ -51,7 +51,7 @@ export namespace Volume {
             return {
                 name: this.name,
                 persistentVolumeClaim: {
-                    claimName: this.props.backend.name,
+                    claimName: this.props.$backend.name,
                     readOnly: this.props.readOnly
                 }
             }
@@ -63,7 +63,7 @@ export namespace Volume {
             return {
                 name: this.name,
                 configMap: {
-                    name: this.props.backend.name
+                    name: this.props.$backend.name
                 }
             }
         }
@@ -74,15 +74,15 @@ export namespace Volume {
             return {
                 name: this.name,
                 secret: {
-                    secretName: this.props.backend.name
+                    secretName: this.props.$backend.name
                 }
             }
         }
     }
 
     export function make(parent: ManifestResource, name: string, input: Backend): PodVolume {
-        const { backend } = input
-        switch (backend.kind.name) {
+        const { $backend } = input
+        switch ($backend.kind.name) {
             case "PersistentVolumeClaim":
                 return new PvcPodVolume(parent, name, input as PodVolume_Backend_Pvc)
             case "ConfigMap":

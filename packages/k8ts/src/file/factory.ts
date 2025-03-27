@@ -115,9 +115,9 @@ export namespace Factory {
                                 builder._metaWithName(name),
                                 {
                                     ...props,
-                                    template: {
+                                    $template: {
                                         ...templateProps,
-                                        POD: producer
+                                        $POD: producer
                                     }
                                 }
                             ) as LiveRefable<Deployment<Ports>, Name>
@@ -142,9 +142,9 @@ export namespace Factory {
         }
         PodTemplate<Name extends string, Ports extends string>(
             name: Name,
-            props: PodTemplate.Props<Ports> | PodTemplate.Props<Ports>["POD"]
+            props: PodTemplate.Props<Ports> | PodTemplate.Props<Ports>["$POD"]
         ) {
-            const props_ = typeof props === "function" ? { POD: props } : props
+            const props_ = typeof props === "function" ? { $POD: props } : props
             return new PodTemplate.PodTemplate(
                 this.origin,
                 this._metaWithName(name),

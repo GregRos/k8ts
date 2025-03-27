@@ -1,5 +1,6 @@
 import { manifest, relations, ResourcesSpec, Unit } from "@k8ts/instruments"
 import { CDK } from "../../../_imports"
+import { Prefix$ } from "../../../_type/prefix$"
 import { k8ts } from "../../../kind-map"
 import { api } from "../../../kinds"
 import { ManifestResource } from "../../../node"
@@ -14,11 +15,11 @@ export namespace Pvc {
         storage: Unit.Data
     })
     type PvcResourceSpec = typeof pvc_ResourcesSpec
-    type PvcResources = PvcResourceSpec["__INPUT__"]
+    type PvcResources = Prefix$<PvcResourceSpec["__INPUT__"]>
     export interface Props<Mode extends DataMode> extends PvcResources {
-        accessModes: Access
-        mode?: Mode
-        bind: Pv.AbsPv<Mode>
+        $accessModes: Access
+        $mode?: Mode
+        $bind: Pv.AbsPv<Mode>
     }
 
     @k8ts(api.v1_.PersistentVolumeClaim)
@@ -30,16 +31,16 @@ export namespace Pvc {
     })
     @manifest({
         body(self): CDK.KubePersistentVolumeClaimProps {
-            const { storage, accessModes, mode } = self.props
-            const nAccessModes = Access.parse(accessModes)
+            const { $storage, $accessModes, $mode } = self.props
+            const nAccessModes = Access.parse($accessModes)
             return {
                 spec: {
                     accessModes: nAccessModes,
-                    volumeName: self.props.bind!.name,
-                    volumeMode: mode,
+                    volumeName: self.props.$bind!.name,
+                    volumeMode: $mode,
                     resources: pvc_ResourcesSpec
                         .parse({
-                            storage
+                            storage: $storage
                         })
                         .toObject(),
                     storageClassName: "standard"
@@ -51,7 +52,7 @@ export namespace Pvc {
         kind = api.v1_.PersistentVolumeClaim
 
         get bound() {
-            return this.props.bind as Pv<Mode>
+            return this.props.$bind as Pv<Mode>
         }
     }
 }
