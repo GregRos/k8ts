@@ -22,10 +22,6 @@
     "lint:fix": "run-s prettier:fix",
     "tidy": "yarn install && run-s lint:fix build:clean test"
   },
-  "resolutions": {
-    "@k8ts/instruments": "portal:packages/instruments",
-    "@k8ts/metadata": "portal:packages/metadata"
-  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.26.1",
     "@typescript-eslint/parser": "^8.26.1",
