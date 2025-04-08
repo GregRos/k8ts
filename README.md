@@ -1,3 +1,33 @@
-# K8ts
+k8ts (pronounced “Kate’s”) is a revolutionary TypeScript framework for generating k8s manifests. It’s kind of like [cdk8s](https://cdk8s.io/), and serves the same purpose as Helm and Kustomize. 
 
-Build Kubernetes manifests with the power of TypeScript.
+Before you ask, we don’t know who Kate even is. 
+
+⌨️ **No typos ever again!** 
+- Keeps track of references between resources *as you type*.
+- Captures manifest structure using advanced TS features.
+
+🔗 **Keep track of resources**
+- Metadata traces resources to:
+	- The *code that created them*
+	- The *commit* that code is from.
+	- The *package version* that was used to generate them.
+- Also prints detailed reports of everything that got created.
+
+📂 **Build directory trees**
+- Rich *file-based model* lets you pack resources into individual files.
+- Organize *files* into *directory trees*.
+- Perfect for deploying using GitOps tools.
+
+🧰 **Common APIs**
+- Assembling maintainable command-lines
+- Describing environment variables
+- Embedding local files into manifests.
+- Composing paths
+
+🗃️ **Advanced metadata management** 
+- Shared, inheritable metadata based on rich object model.
+
+🧩 **Highly extensible**
+- Use *decorators* to capture common functionality between objects.
+- Describe connections between resources.
+- Feed everything to k8ts to figure out!
