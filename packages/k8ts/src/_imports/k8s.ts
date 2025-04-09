@@ -15157,7 +15157,7 @@ export interface PodSpec {
      * @default false.
      * @schema io.k8s.api.core.v1.PodSpec#hostPID
      */
-    readonly hostPid?: boolean
+    readonly hostPID?: boolean
 
     /**
      * Use the host's user namespace. Optional: Default to true. If set to true or not present, the
@@ -15450,7 +15450,7 @@ export function toJson_PodSpec(obj: PodSpec | undefined): Record<string, any> | 
         hostAliases: obj.hostAliases?.map(y => toJson_HostAlias(y)),
         hostIPC: obj.hostIpc,
         hostNetwork: obj.hostNetwork,
-        hostPID: obj.hostPid,
+        hostPID: obj.hostPID,
         hostUsers: obj.hostUsers,
         hostname: obj.hostname,
         imagePullSecrets: obj.imagePullSecrets?.map(y => toJson_LocalObjectReference(y)),
