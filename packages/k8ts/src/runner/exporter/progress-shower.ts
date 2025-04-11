@@ -12,7 +12,9 @@ function typedOnAny(
     target: Assembler,
     handler: (
         typedEvent: {
-            [K in keyof AssemblerEventsTable]: AssemblerEventsTable[K] & { type: K }
+            [K in keyof AssemblerEventsTable]: AssemblerEventsTable[K] & {
+                type: K
+            }
         }[keyof AssemblerEventsTable]
     ) => void | Promise<void>
 ) {

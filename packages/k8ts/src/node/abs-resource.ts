@@ -19,7 +19,7 @@ export abstract class AbsResource<Props extends object = object> implements Reso
     }
     protected constructor(
         origin: Origin,
-        readonly name: string,
+        public name: string,
         readonly props: Props
     ) {
         this._node = doddle(() => new ResourceNode(origin, this, RefKey.make(this.kind, this.name)))

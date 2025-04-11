@@ -5,12 +5,16 @@ import { BaseNode } from "./base-node"
 import { ResourceEntity } from "./resource-node"
 
 export namespace Dependencies {
-    export type Input = Record<string, ResourceEntity>
+    export type Input = Record<string, ResourceEntity | undefined>
 }
 export function dependencies(record: Dependencies.Input) {
-    return Object.entries(record).map(([key, value]) => {
-        return new Relation(key, value.node)
-    })
+    return Object.entries(record)
+        .map(([key, value]) => {
+            if (value) {
+                return new Relation(key, value.node)
+            }
+        })
+        .filter(x => !!x)
 }
 @displayers({
     simple: s => [s.why, "-->", s.needed],

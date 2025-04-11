@@ -11,13 +11,14 @@ export type mt_Resource_Unit_Map<T> = Record<keyof T, string>
 type spaces = "" | " " | "  "
 export type InputReqLimitString<U extends string> =
     `${_limit_term<U>}${spaces}->${spaces}${_limit_term<U>}`
-
+export type InputIdenticalReqLimitString<U extends string> = `=${_limit_term<U>}`
 export interface ReqLimit<Unit extends string = string> {
     readonly request?: UnitValue<Unit>
     readonly limit?: UnitValue<Unit>
 }
 export type InputReqLimit<Unit extends string> =
     | InputReqLimitString<Unit>
+    | InputIdenticalReqLimitString<Unit>
     | InputReqLimitObject<Unit>
     | InputReqLimitArray<Unit>
 export type mt_Resource_Input_Map<ResourceUnit extends mt_Resource_Unit_Map<ResourceUnit>> = {

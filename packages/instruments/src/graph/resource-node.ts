@@ -1,7 +1,8 @@
 import { MutableMeta } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq } from "doddle"
-import { Displayers, displayers } from "../displayers"
+import { Kind } from "../api-kind"
+import { Displayers, displayers, PrivateCtor } from "../displayers"
 import { RefKey } from "../ref-key"
 import { TraceEmbedder } from "../tracing"
 import { BaseEntity, BaseNode, Formats } from "./base-node"
@@ -61,6 +62,26 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
         return this.origins.some(x => x.name === "EXTERNAL").pull()
     }
 
+    when<EntityType extends ResourceEntity>(
+        type: PrivateCtor<EntityType>,
+        fn: (entity: EntityType) => void
+    ) {
+        const entity = this._entity as EntityType
+        if (entity instanceof type) {
+            fn(entity)
+        }
+    }
+
+    as<EntityType extends ResourceEntity>(type: PrivateCtor<EntityType>) {
+        const entity = this._entity as EntityType
+        if (entity instanceof type) {
+            return entity
+        }
+        throw new Error(
+            `This node is for an entity of type ${entity.constructor.name}, not ${type.name}`
+        )
+    }
+
     get origins() {
         const self = this
         return seq(function* () {
@@ -93,6 +114,10 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
     }
     private get _relations() {
         return Relations.get(this._entity)
+    }
+
+    hasKind(kind: Kind.Identifier) {
+        return this.kind.equals(kind)
     }
     constructor(
         readonly origin: Origin,

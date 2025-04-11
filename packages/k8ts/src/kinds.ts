@@ -124,4 +124,19 @@ export namespace api {
             export type TlsRoute = typeof TlsRoute
         }
     }
+
+    export const storage = Kind.group("storage.k8s.io")
+    export type storage = typeof storage
+    export namespace storage_ {
+        export const v1 = storage.version("v1")
+        export type v1 = typeof v1
+
+        export namespace v1_ {
+            export const StorageClass = v1.kind("StorageClass")
+            export type StorageClass = typeof StorageClass
+
+            export const VolumeAttachment = v1.kind("VolumeAttachment")
+            export type VolumeAttachment = typeof VolumeAttachment
+        }
+    }
 }

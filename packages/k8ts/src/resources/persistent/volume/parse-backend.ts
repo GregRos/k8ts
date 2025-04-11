@@ -1,7 +1,10 @@
 import { MakeError } from "../../../error"
 import { Backend } from "./backend"
-export function parseBackend(backend: Backend) {
-    switch (backend.type) {
+export function parseBackend(backend?: Backend) {
+    switch (backend?.type) {
+        case undefined:
+        case null:
+            return {}
         case "HostPath":
             return {
                 hostPath: {

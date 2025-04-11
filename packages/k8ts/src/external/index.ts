@@ -8,7 +8,7 @@ export class External<K extends Kind> extends ManifestResource {
         origin: Origin,
         readonly kind: K,
         name: string,
-        namespace: string
+        namespace: string | undefined = undefined
     ) {
         super(
             origin,

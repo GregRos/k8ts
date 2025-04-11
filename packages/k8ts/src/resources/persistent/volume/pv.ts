@@ -1,6 +1,7 @@
 import { manifest, Refable, relations, type Unit } from "@k8ts/instruments"
 import { CDK } from "../../../_imports"
 import { MakeError } from "../../../error"
+import { External } from "../../../external"
 import { k8ts } from "../../../kind-map"
 import { api } from "../../../kinds"
 import { equiv_cdk8s } from "../../../node/equiv-cdk8s"
@@ -15,11 +16,11 @@ export namespace Pv {
     export import Backend = Backend_
     export interface Props<Mode extends DataMode = DataMode> {
         $accessModes: Access
-        storageClassName?: string
+        $storageClass?: External<api.storage_.v1_.StorageClass>
         $mode?: Mode
         reclaimPolicy?: Reclaim
         $capacity: Unit.Data
-        $backend: Backend
+        $backend?: Backend
         nodeAffinity?: CDK.VolumeNodeAffinity
     }
     export type Reclaim = "Retain" | "Delete" | "Recycle"
@@ -31,16 +32,21 @@ export namespace Pv {
         body(self) {
             const pvProps = self.props
             const accessModes = Access.parse(pvProps.$accessModes)
-            if (self.props.$backend.type === "Local") {
+            if (self.props.$backend?.type === "Local") {
                 if (!pvProps.nodeAffinity) {
                     throw new MakeError(
                         `While manifesting ${self.node.format("source")}, PV with Local backend must have nodeAffinity.`
                     )
                 }
             }
+            if (!self.props.$backend && !self.props.$storageClass) {
+                throw new MakeError(
+                    `While manifesting ${self.node.format("source")}, PV that doesn't have a $backend must have a $storageClass.`
+                )
+            }
             let base: CDK.PersistentVolumeSpec = {
                 accessModes,
-                storageClassName: pvProps.storageClassName ?? "standard",
+                storageClassName: pvProps.$storageClass?.name ?? "standard",
                 capacity: pvProps.$capacity
                     ? {
                           storage: CDK.Quantity.fromString(pvProps.$capacity)
@@ -60,7 +66,13 @@ export namespace Pv {
         }
     })
     @k8ts(api.v1_.PersistentVolume)
-    @relations("none")
+    @relations({
+        needs(self) {
+            return {
+                storageClass: self.props.$storageClass
+            }
+        }
+    })
     export class Pv<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
         __MODE__!: Mode
         readonly kind = api.v1_.PersistentVolume

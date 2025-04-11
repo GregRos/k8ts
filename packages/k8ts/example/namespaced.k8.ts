@@ -18,6 +18,16 @@ export default W.Scope(k8sNamespace)
             $storage: "1Gi->5Gi"
         })
 
+        const claim2 = FILE.Claim("claim2", {
+            $storageClass: W.External(api.storage_.v1_.StorageClass, "topolvm"),
+            $accessModes: ["ReadWriteOnce"],
+            $storage: "1Gi->5Gi"
+        })
+        const claim3 = FILE.Claim("claim3", {
+            $storageClass: W.External(api.storage_.v1_.StorageClass, "topolvm"),
+            $accessModes: ["ReadWriteOnce"],
+            $storage: "=1Gi"
+        })
         yield claim
         const devClaim = FILE.Claim("dev-claim", {
             $accessModes: ["ReadWriteOnce"],

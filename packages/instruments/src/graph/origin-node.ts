@@ -74,6 +74,7 @@ export class Origin extends BaseNode<Origin, OriginEntity> implements Iterable<R
     get resources() {
         return this._attached
     }
+
     static registerWithOrigin<F extends Function>(ctor: F) {
         const prototype = ctor.prototype
         for (const key of Object.getOwnPropertyNames(prototype)) {
