@@ -61,7 +61,10 @@ export namespace Factory {
 
     @auto_register
     export class Namespaced extends Base {
-        Claim<Mode extends DataMode, Name extends string>(name: Name, mode: Pvc.Props<Mode>) {
+        Claim<Name extends string, Mode extends DataMode = "Filesystem">(
+            name: Name,
+            mode: Pvc.Props<Mode>
+        ) {
             return new Pvc.Pvc(this.origin, this._metaWithName(name), mode) as LiveRefable<
                 Pvc.Pvc<Mode>,
                 Name
