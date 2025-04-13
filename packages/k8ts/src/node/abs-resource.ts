@@ -14,6 +14,10 @@ export abstract class AbsResource<Props extends object = object> implements Reso
 
     private _node: Doddle<ResourceNode>
 
+    with(callback: (self: this) => void) {
+        callback(this)
+        return this
+    }
     get node() {
         return this._node.pull()
     }
