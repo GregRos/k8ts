@@ -11,7 +11,9 @@ import { PodTemplate } from "../pod/pod-template"
 export interface K8tsCronJobProps<CronSpec extends Cron.Record>
     extends Omit<CDK.CronJobSpec, "jobTemplate" | "schedule" | "timeZone"> {
     $schedule: CronStanza<CronSpec>
-    $template: PodTemplate.Props<never>
+    $template: PodTemplate.Props<never> & {
+        restartPolicy: "Always" | "OnFailure" | "Never"
+    }
     $meta?: Meta.Input
     timeZone: Timezone
 }
@@ -29,7 +31,11 @@ export interface K8tsCronJobProps<CronSpec extends Cron.Record>
             spec: {
                 ...omitBy(self.props, (x, k) => k.startsWith("$")),
                 schedule: self.props.$schedule.string,
-                jobTemplate: noKindFields,
+                jobTemplate: {
+                    spec: {
+                        template: noKindFields
+                    }
+                },
                 timeZone: self.props.timeZone
             }
         }

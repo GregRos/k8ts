@@ -33,6 +33,7 @@ export default W.Scope(k8sNamespace)
             $schedule: Cron.hourly,
             timeZone: "UTC",
             $template: {
+                restartPolicy: "Never",
                 *$POD(POD) {
                     yield POD.Container("main", {
                         $image: Image.name("docker.io/library/busybox").tag("latest"),
