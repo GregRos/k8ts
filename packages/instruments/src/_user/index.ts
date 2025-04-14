@@ -15,10 +15,10 @@ export class User {
         return new User(id, name, new Group(id, name))
     }
 
-    toDockerEnv() {
+    toDockerEnv(prefix = "P") {
         return {
-            PUID: this.id,
-            PGID: this.group.id
+            [`${prefix}UID`]: this.id,
+            [`${prefix}GID`]: this.group.id
         }
     }
 }
