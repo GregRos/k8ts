@@ -1,6 +1,6 @@
 {
   "name": "@k8ts/instruments",
-  "version": "0.4.12",
+  "version": "0.4.13",
   "description": "A collection of utilities and core components for k8ts.",
   "keywords": [
     "kubernetes",
@@ -62,7 +62,8 @@
     "lodash": "^4.17.21",
     "parjs": "^1.3.9",
     "simple-git": "^3.27.0",
-    "stacktracey": "^2.1.8"
+    "stacktracey": "^2.1.8",
+    "timezone-enum": "^1.0.4"
   },
   "devDependencies": {
     "@k8ts/metadata": "workspace:^",

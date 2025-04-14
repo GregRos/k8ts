@@ -66,7 +66,9 @@ export class CmdBuilder {
     toArray() {
         const terms = this._terms
             .filter(x => !x.isMissing)
-            .map(term => term.str(this._options.joiner))
+            .flatMap(term => {
+                return term.arr(this._options.joiner)
+            })
             .toArray()
         if (this.executable !== "") {
             terms.unshift(this.executable)

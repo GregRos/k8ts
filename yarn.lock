@@ -1035,6 +1035,7 @@ __metadata:
     shx: "npm:^0.3.4"
     simple-git: "npm:^3.27.0"
     stacktracey: "npm:^2.1.8"
+    timezone-enum: "npm:^1.0.4"
     ts-jest: "npm:^29.2.6"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.8.2"
@@ -9928,6 +9929,13 @@ __metadata:
   version: 2.3.8
   resolution: "through@npm:2.3.8"
   checksum: 10c0/4b09f3774099de0d4df26d95c5821a62faee32c7e96fb1f4ebd54a2d7c11c57fe88b0a0d49cf375de5fee5ae6bf4eb56dbbf29d07366864e2ee805349970d3cc
+  languageName: node
+  linkType: hard
+
+"timezone-enum@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "timezone-enum@npm:1.0.4"
+  checksum: 10c0/eff53af55cc02d0d23b0d80b8766aabe28722c300119b8cabf7259d6192e3a28b7f3f58ab4c0c6e5ec0a89be30707511d048c862bf3472160440dac8e3d67649
   languageName: node
   linkType: hard
 

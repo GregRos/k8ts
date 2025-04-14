@@ -9,6 +9,10 @@ export class CliFlag {
         return this.key
     }
 
+    arr() {
+        return [this.key]
+    }
+
     get isMissing() {
         return false
     }
@@ -47,6 +51,14 @@ export class CliOptionValue {
 
         return [this.key, this._valueStr()].join(this.overrideTermJoiner ?? joiner)
     }
+
+    arr(joiner: string) {
+        joiner = this.overrideTermJoiner ?? joiner
+        if (joiner === " ") {
+            return [this.key, this._valueStr()]
+        }
+        return [this.str(joiner)]
+    }
 }
 
 export class VerbatimTerm {
@@ -54,6 +66,10 @@ export class VerbatimTerm {
 
     str(joiner: string) {
         return this.value
+    }
+
+    arr() {
+        return [this.value]
     }
 
     get isMissing() {

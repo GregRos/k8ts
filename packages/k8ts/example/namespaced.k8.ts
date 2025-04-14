@@ -1,4 +1,4 @@
-import { Image, localFile } from "@k8ts/instruments"
+import { Cmd, Cron, Image, localFile } from "@k8ts/instruments"
 import { api } from "@lib/kinds"
 import k8tsFile from "./cluster-scoped.k8"
 import { W } from "./world"
@@ -29,6 +29,24 @@ export default W.Scope(k8sNamespace)
             $storage: "=1Gi"
         })
         yield claim
+        yield FILE.CronJob("test", {
+            $schedule: Cron.hourly,
+            timeZone: "UTC",
+            $template: {
+                *$POD(POD) {
+                    yield POD.Container("main", {
+                        $image: Image.name("docker.io/library/busybox").tag("latest"),
+                        $command: Cmd("/bin/sh").option({
+                            "-c": "date; echo Hello from the Kubernetes cluster"
+                        }),
+                        $resources: {
+                            cpu: "100m->500m",
+                            memory: "100Mi->500Mi"
+                        }
+                    })
+                }
+            }
+        })
         const devClaim = FILE.Claim("dev-claim", {
             $accessModes: ["ReadWriteOnce"],
             $bind: k8tsFile["PersistentVolume/dev-sda"],

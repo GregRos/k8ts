@@ -1,4 +1,5 @@
 import {
+    Cron,
     Origin,
     Trace,
     TraceEmbedder,
@@ -20,6 +21,7 @@ import {
     Secret,
     Service
 } from "../resources"
+import { K8tsCronJob, K8tsCronJobProps } from "../resources/cronjob"
 import { AssemblyStage } from "../runner/exporter"
 import type { FileOrigin } from "./origin"
 
@@ -70,6 +72,16 @@ export namespace Factory {
                 Name
             >
         }
+        CronJob<Name extends string, Cr extends Cron.Record>(
+            name: Name,
+            props: K8tsCronJobProps<Cr>
+        ) {
+            return new K8tsCronJob(this.origin, this._metaWithName(name), props) as LiveRefable<
+                K8tsCronJob<Cr>,
+                Name
+            >
+        }
+
         ConfigMap<Name extends string>(name: Name, props: ConfigMap.Props) {
             return new ConfigMap.ConfigMap(
                 this.origin,

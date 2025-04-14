@@ -1,4 +1,5 @@
 export * from "./configmap"
+export * from "./cronjob"
 export * from "./deployment"
 export * from "./http-route/http-route"
 export * from "./namespace"

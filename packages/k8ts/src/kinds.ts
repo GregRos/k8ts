@@ -3,6 +3,22 @@ export namespace api {
     export const v1 = Kind.version("v1")
     export type v1 = typeof v1
 
+    export const batch = Kind.group("batch")
+    export type batch = typeof batch
+    export namespace batch_ {
+        export const v1 = batch.version("v1")
+        export namespace v1_ {
+            export function kind_<Name extends string>(name: Name): Kind<Name, typeof v1> {
+                return v1.kind(name)
+            }
+
+            export const Job = v1.kind("Job")
+            export type Job = typeof Job
+
+            export const CronJob = v1.kind("CronJob")
+            export type CronJob = typeof CronJob
+        }
+    }
     export namespace v1_ {
         export function kind_<Name extends string>(name: Name): Kind<Name, typeof v1> {
             return v1.kind(name)
