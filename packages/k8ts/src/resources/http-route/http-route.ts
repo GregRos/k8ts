@@ -14,6 +14,7 @@ export namespace HttpRoute {
         $gateway: External<api.gateway_.v1_.Gateway>
         $hostname: string
         $backend: Service.Port<Ports>
+        _filters: CDK.HttpRouteSpecRulesFilters[]
     }
 
     @k8ts(api.gateway_.v1_.HttpRoute)
@@ -32,7 +33,8 @@ export namespace HttpRoute {
                     hostnames: [self.props.$hostname],
                     rules: [
                         {
-                            backendRefs: [self.props.$backend.ref()]
+                            backendRefs: [self.props.$backend.ref()],
+                            filters: self.props._filters
                         }
                     ]
                 }
