@@ -14,7 +14,7 @@ export namespace HttpRoute {
         $gateway: External<api.gateway_.v1_.Gateway>
         $hostname: string
         $backend: Service.Port<Ports>
-        _filters: CDK.HttpRouteSpecRulesFilters[]
+        _filters?: CDK.HttpRouteSpecRulesFilters[]
     }
 
     @k8ts(api.gateway_.v1_.HttpRoute)
