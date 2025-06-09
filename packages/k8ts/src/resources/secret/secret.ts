@@ -6,8 +6,8 @@ import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { ManifestResource } from "../../node/manifest-resource"
 
 export interface Props {
-    data: Record<string, string>
-    stringData: Record<string, string>
+    data?: Record<string, string>
+    stringData?: Record<string, string>
 }
 
 @k8ts(api.v1_.Secret)
