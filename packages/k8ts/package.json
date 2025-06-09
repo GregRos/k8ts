@@ -1,6 +1,6 @@
 {
   "name": "k8ts",
-  "version": "0.5.8",
+  "version": "0.5.9",
   "description": "Powerful framework for building Kubernetes manifests in TypeScript.",
   "keywords": [
     "kubernetes",
@@ -64,7 +64,7 @@
     "chalk": "4.1.2",
     "constructs": "^10.4.2",
     "dayjs": "^1.11.13",
-    "doddle": "^5.0.0-beta.16",
+    "doddle": "^5.2.0",
     "emittery": "0.13.1",
     "immutable": "^5.0.3",
     "ip-address": "^10.0.1",

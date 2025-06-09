@@ -81,7 +81,7 @@ export namespace FutureExports {
                 namespace: this._props.origin.meta.tryGet("namespace"),
                 resolver: this.seq
                     .as<ResourceEntity>()
-                    .find(exp => exp.node.key.equals(refKey))
+                    .first(exp => exp.node.key.equals(refKey))
                     .map(x => {
                         if (x == null) {
                             throw new ProxyOperationError(

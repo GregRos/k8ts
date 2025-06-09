@@ -1,6 +1,6 @@
 {
   "name": "@k8ts/instruments",
-  "version": "0.4.14",
+  "version": "0.4.15",
   "description": "A collection of utilities and core components for k8ts.",
   "keywords": [
     "kubernetes",
@@ -56,7 +56,7 @@
   "dependencies": {
     "chalk": "4.1.2",
     "dayjs": "^1.11.13",
-    "doddle": "^5.0.0-beta.16",
+    "doddle": "^5.2.0",
     "immutable": "^5.0.3",
     "ip-address": "^10.0.1",
     "lodash": "^4.17.21",

@@ -74,7 +74,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
             .after(async () => {
                 await _emit("stage", { stage: "validating" })
             })
-            .collect("array")
+            .chunk(1000000)
             .concatMap(async x => {
                 validator.validate(x)
                 return x

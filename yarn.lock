@@ -1025,7 +1025,7 @@ __metadata:
     chalk: "npm:4.1.2"
     dayjs: "npm:^1.11.13"
     declare-it: "npm:^2.1.0"
-    doddle: "npm:^5.0.0-beta.16"
+    doddle: "npm:^5.2.0"
     immutable: "npm:^5.0.3"
     ip-address: "npm:^10.0.1"
     jest: "npm:^29.7.0"
@@ -1055,7 +1055,7 @@ __metadata:
     "@types/lodash": "npm:^4.17.16"
     "@types/node": "npm:20.9.1"
     declare-it: "npm:^2.1.0"
-    doddle: "npm:^5.0.0-beta.16"
+    doddle: "npm:^5.2.0"
     immutable: "npm:^5.0.3"
     ip-address: "npm:^10.0.1"
     jest: "npm:^29.7.0"
@@ -1077,7 +1077,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^8.26.1"
     "@typescript-eslint/parser": "npm:^8.26.1"
     "@typescript/analyze-trace": "npm:^0.10.1"
-    doddle: "npm:^5.0.0-beta.16"
+    doddle: "npm:^5.2.0"
     eslint: "npm:8.57.0"
     eslint-config-prettier: "npm:9.1.0"
     eslint-plugin-jest: "npm:^28.11.0"
@@ -3433,10 +3433,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"doddle@npm:^5.0.0-beta.16":
-  version: 5.0.0-beta.16
-  resolution: "doddle@npm:5.0.0-beta.16"
-  checksum: 10c0/db3c6abc9c367f4af96c4d5f9449550634d57cc9b0ebe38e9787844e4dc0e83c65f98fbe00c11d99d7964bf10743ed8ee0a75a7e8443bdd90a51b4d62722b1e2
+"doddle@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "doddle@npm:5.2.0"
+  checksum: 10c0/99ae4c5d4bc77a9d257d29e6ffcf27f428c6c24aef91941ebd607935e025fda20b405e655a03173776c5d35a16723d8a22f2da85e3c5abdae3a5ac8714a44d4e
   languageName: node
   linkType: hard
 
@@ -6571,7 +6571,7 @@ __metadata:
     constructs: "npm:^10.4.2"
     dayjs: "npm:^1.11.13"
     declare-it: "npm:^2.1.0"
-    doddle: "npm:^5.0.0-beta.16"
+    doddle: "npm:^5.2.0"
     emittery: "npm:0.13.1"
     immutable: "npm:^5.0.3"
     ip-address: "npm:^10.0.1"

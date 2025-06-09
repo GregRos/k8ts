@@ -68,7 +68,7 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
 
         let resources = Set<ResourceNode>()
         // We execute the main FILE iterable to load all the resources attached to the origin
-        seq(input).drain().pull()
+        seq(input).toArray().pull()
         for (let res of input.__node__.resources) {
             if (ForwardRef.is(res)) {
                 throw new MakeError(`Resource ${res} is a forward reference`)
