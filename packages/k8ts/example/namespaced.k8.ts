@@ -80,7 +80,8 @@ export default W.Scope(k8sNamespace)
                 yield k.Container("main", {
                     $image: Image.name("nginx/nginx").tag("latest"),
                     $ports: {
-                        x: 3333
+                        x: 3333,
+                        y: 1111
                     },
                     $mounts: {
                         "/xyz": v.Mount(),
@@ -99,11 +100,18 @@ export default W.Scope(k8sNamespace)
                 type: "ClusterIP"
             },
             $ports: {
-                x: 80
+                x: 80,
+                y: 1111
             },
             $backend: deploy2
         })
 
+        const addr1 = svc2.address("http", "x")
+        const addr2 = svc2.address("http", "y")
+        console.log(addr1)
+        console.log(addr2)
+        console.assert(addr1, "http://xyz.namespace.svc.cluster.local")
+        console.assert(addr2, "http://xyz.namespace.svc.cluster.local:1111")
         yield svc2
         const route = FILE.DomainRoute("my-route", {
             $hostname: "example.com",

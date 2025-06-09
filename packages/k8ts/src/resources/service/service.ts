@@ -7,6 +7,7 @@ import {
 } from "@k8ts/instruments"
 import { Map } from "immutable"
 import { CDK } from "../../_imports"
+import { MakeError } from "../../error"
 import { k8ts } from "../../kind-map"
 import { api } from "../../kinds"
 import { ManifestResource } from "../../node"
@@ -78,6 +79,28 @@ export namespace Service {
                 service: this,
                 name: name
             })
+        }
+
+        get hostname() {
+            return `${this.name}.${this.namespace}.svc.cluster.local`
+        }
+
+        private _getPortoPart(port: ExposedPorts, protocol: "http" | "https") {
+            const portNumber = this.ports.get(port)?.frontend
+            if (portNumber === 80 && protocol === "http") {
+                return ""
+            }
+            if (portNumber === 443 && protocol === "https") {
+                return ""
+            }
+            if (portNumber === undefined) {
+                throw new MakeError(`Port ${port} is not defined in service ${this.name}`)
+            }
+            return `:${portNumber}`
+        }
+
+        address(protocol: "http" | "https", port: ExposedPorts) {
+            return `${protocol}://${this.hostname}${this._getPortoPart(port, protocol)}`
         }
     }
 }
