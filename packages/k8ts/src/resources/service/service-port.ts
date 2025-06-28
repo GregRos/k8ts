@@ -19,6 +19,7 @@ export namespace Port {
             return this.props
         }
 
+        // TODO: Does this need to resolve ports?
         ref(): CDK.HttpRouteSpecRulesBackendRefs {
             return {
                 kind: "Service",

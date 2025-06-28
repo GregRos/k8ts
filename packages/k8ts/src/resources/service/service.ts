@@ -64,6 +64,7 @@ export namespace Service {
         private get backend() {
             return this.props.$backend as Deployment<ExposedPorts>
         }
+        // TODO: Ports force evaluates the backend which is not needed
         get ports() {
             const srcPorts = this.backend.ports.pull()
             const knownPorts = Map(this.props.$ports)
@@ -86,7 +87,7 @@ export namespace Service {
         }
 
         private _getPortoPart(port: ExposedPorts, protocol: "http" | "https") {
-            const portNumber = this.ports.get(port)?.frontend
+            const portNumber = this.props.$ports[port]
             if (portNumber === 80 && protocol === "http") {
                 return ""
             }
