@@ -1,4 +1,5 @@
 import { Map } from "immutable"
+import { isNullish } from "what-are-you"
 import { parseInnerKey, parseOuterKey } from "../key/parse-key"
 import { SectionKey, ValueKey } from "../key/repr"
 import { Meta } from "../meta"
@@ -20,7 +21,7 @@ export function parseMetaInput(input: InputMeta): Map<ValueKey, string> {
     let map = Map<ValueKey, string>()
     for (const [key, value] of Object.entries(input)) {
         const outer = parseOuterKey(key)
-        if (value == null) {
+        if (isNullish(value)) {
             continue
         }
         if (outer instanceof SectionKey) {
@@ -28,7 +29,11 @@ export function parseMetaInput(input: InputMeta): Map<ValueKey, string> {
                 throw new Error(`Expected object for section key ${key}`)
             }
             for (const [kk, vv] of Object.entries(value)) {
+                if (isNullish(vv)) {
+                    continue
+                }
                 const inner = parseInnerKey(kk)
+
                 if (typeof vv !== "string") {
                     throw new Error(`Expected string value for inner key ${kk}`)
                 }

@@ -1039,6 +1039,7 @@ __metadata:
     ts-jest: "npm:^29.2.6"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.8.2"
+    what-are-you: "npm:^0.1.12"
     yamprint: "npm:^0.8.4"
   peerDependencies:
     "@k8ts/metadata": "workspace:^"
@@ -1066,6 +1067,7 @@ __metadata:
     ts-jest: "npm:^29.2.6"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.8.2"
+    what-are-you: "npm:^0.1.12"
     yamprint: "npm:^0.8.4"
   languageName: unknown
   linkType: soft
@@ -1095,6 +1097,7 @@ __metadata:
     ts-jest: "npm:^29.2.6"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.8.2"
+    what-are-you: "npm:^0.1.12"
   languageName: unknown
   linkType: soft
 
