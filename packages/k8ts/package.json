@@ -1,6 +1,6 @@
 {
   "name": "k8ts",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Powerful framework for building Kubernetes manifests in TypeScript.",
   "keywords": [
     "kubernetes",
@@ -73,7 +73,8 @@
     "ora": "5.4.1",
     "parjs": "^1.3.9",
     "simple-git": "^3.27.0",
-    "stacktracey": "^2.1.8"
+    "stacktracey": "^2.1.8",
+    "what-are-you": "^0.1.12"
   },
   "devDependencies": {
     "@datreeio/datree-cdk8s": "^1.3.5",

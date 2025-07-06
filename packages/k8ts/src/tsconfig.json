@@ -17,6 +17,6 @@
     "outDir": "../dist",
     "tsBuildInfoFile": "../dist/src.tsbuildinfo"
   },
-  "include": ["**/*.ts", "../../instruments/src/timezone.ts"],
+  "include": ["**/*.ts"],
   "exclude": ["_imports/**/*.ts"]
 }

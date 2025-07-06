@@ -6588,6 +6588,7 @@ __metadata:
     ts-node: "npm:^10.9.2"
     tsx: "npm:^4.19.3"
     typescript: "npm:^5.8.2"
+    what-are-you: "npm:^0.1.12"
     yamprint: "npm:^0.8.4"
   peerDependencies:
     "@k8ts/instruments": "workspace:^"
@@ -10567,6 +10568,13 @@ __metadata:
   dependencies:
     defaults: "npm:^1.0.3"
   checksum: 10c0/5b61ca583a95e2dd85d7078400190efd452e05751a64accb8c06ce4db65d7e0b0cde9917d705e826a2e05cc2548f61efde115ffa374c3e436d04be45c889e5b4
+  languageName: node
+  linkType: hard
+
+"what-are-you@npm:^0.1.12":
+  version: 0.1.12
+  resolution: "what-are-you@npm:0.1.12"
+  checksum: 10c0/155483b18bea858a5edd5a675f8ed9e8ea97dc0940a33015822ca6080845f6dfea527f7bdf112a7e65844687eeff28ab37c39810171c81bc96139a8f5a49ba57
   languageName: node
   linkType: hard
 

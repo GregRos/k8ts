@@ -91,6 +91,17 @@ export default W.Scope(k8sNamespace)
                     $resources: {
                         cpu: "100m->500m",
                         memory: "100Mi->500Mi"
+                    },
+                    $env: {
+                        abc: "a",
+                        xyz: {
+                            $ref: W.External(api.v1_.ConfigMap, "config"),
+                            key: "abc"
+                        },
+                        a123: {
+                            $ref: W.External(api.v1_.Secret, "config"),
+                            key: "a123"
+                        }
                     }
                 })
             })

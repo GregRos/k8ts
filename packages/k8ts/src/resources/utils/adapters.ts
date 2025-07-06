@@ -1,6 +1,5 @@
-import type { EnvBuilder, PortMap, PortMapEntry, PortSet, PortSetEntry } from "@k8ts/instruments"
+import type { PortMap, PortMapEntry, PortSet, PortSetEntry } from "@k8ts/instruments"
 import { CDK } from "../../_imports"
-
 export function toContainerPort(entry: PortSetEntry): CDK.ContainerPort {
     return {
         containerPort: entry.port,
@@ -26,13 +25,4 @@ export function toServicePort(entry: PortMapEntry): CDK.ServicePort {
 
 export function toServicePorts(ports: PortMap<any>) {
     return ports.values.map(toServicePort).toList()
-}
-
-export function toEnvVars(env: EnvBuilder) {
-    return env.values.map((x, key) => {
-        return {
-            name: key,
-            value: `${x}`
-        } as CDK.EnvVar
-    })
 }

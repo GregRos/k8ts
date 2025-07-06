@@ -1,5 +1,4 @@
 import {
-    Env,
     Kinded,
     PortSet,
     relations,
@@ -7,16 +6,16 @@ import {
     Unit,
     WritableDeep,
     type CmdBuilder,
-    type InputEnvMapping,
     type InputPortSetRecord,
     type TaggedImage
 } from "@k8ts/instruments"
 import { Map } from "immutable"
 import type { CDK } from "../../../_imports"
-import { toContainerPorts, toEnvVars } from "../../utils/adapters"
+import { toContainerPorts } from "../../utils/adapters"
 
 import { seq } from "doddle"
 import { mapKeys, mapValues, omitBy } from "lodash"
+import { Env, type InputEnvMapping } from "../../../env"
 import { k8ts } from "../../../kind-map"
 import { api } from "../../../kinds"
 import type { ManifestResource } from "../../../node"
@@ -35,7 +34,6 @@ export namespace Container {
     export type Mounts = {
         [key: string]: SomeMount
     }
-
     interface K8tsPropsClean<Ports extends string = never> {
         image: TaggedImage
         ports?: InputPortSetRecord<Ports>
@@ -99,7 +97,7 @@ export namespace Container {
                 ports: $ports && toContainerPorts(PortSet.make($ports)).valueSeq().toArray(),
                 resources: self._resources()?.toObject(),
                 command: $command?.toArray(),
-                env: toEnvVars(Env($env)).valueSeq().toArray(),
+                env: Env($env).toEnvVars(),
                 ...self._groupedMounts()
             }
             return container
