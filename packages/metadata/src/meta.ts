@@ -200,7 +200,7 @@ export namespace Meta {
         return key
     }
     function _pairToMap(pair: [string, string | object] | [object]) {
-        return parseMetaInput(_pairToObject(pair))
+        return parseMetaInput(_pairToObject(pair)).filter((v, k) => v != null)
     }
     export function makeMutable(input: InputMeta = {}) {
         return make(input).toMutable()
