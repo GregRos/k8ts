@@ -1,6 +1,6 @@
 {
   "name": "@k8ts/metadata",
-  "version": "0.4.13",
+  "version": "0.4.14",
   "description": "K8ts tools for working with k8ts metadata.",
   "keywords": [
     "kubernetes",
@@ -50,7 +50,8 @@
     "package.json",
     "LICENSE.md",
     "README.md",
-    "tsconfig.json"
+    "!**/tsconfig*",
+    "!**/*.tsbuildinfo"
   ],
   "scripts": {
     "build": "tsc -b .",
@@ -58,7 +59,8 @@
     "watch": "tsc -b . --watch",
     "clean": "shx rm -rf dist",
     "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "prepack": "shx rm -rf **/tsconfig*"
   },
   "dependencies": {
     "doddle": "^5.2.0",

@@ -1,6 +1,6 @@
 {
   "name": "@k8ts/instruments",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A collection of utilities and core components for k8ts.",
   "keywords": [
     "kubernetes",
@@ -43,7 +43,9 @@
     "package.json",
     "LICENSE.md",
     "README.md",
-    "tsconfig.json"
+    "tsconfig.json",
+    "!**/tsconfig*",
+    "!**/*.tsbuildinfo"
   ],
   "scripts": {
     "build": "tsc -b .",
