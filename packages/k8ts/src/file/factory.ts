@@ -19,7 +19,9 @@ import {
     Pv,
     Pvc,
     Secret,
-    Service
+    Service,
+    GenericResource,
+    GenericManifest,
 } from "../resources"
 import { K8tsCronJob, K8tsCronJobProps } from "../resources/cronjob"
 import { AssemblyStage } from "../runner/exporter"
@@ -43,6 +45,13 @@ export namespace Factory {
     }
     @auto_register
     export class Cluster extends Base {
+        Resource<Name extends string>(name: Name, manifest: GenericManifest) {
+            return new GenericResource(
+                this.origin,
+                this._metaWithName(name),
+                manifest
+            ) as LiveRefable<GenericResource, Name>;
+        }
         PersistentVolume<Name extends string, Mode extends DataMode = "Filesystem">(
             name: Name,
             props: Pv.Props<Mode>
@@ -63,6 +72,13 @@ export namespace Factory {
 
     @auto_register
     export class Namespaced extends Base {
+        Resource<Name extends string>(name: Name, manifest: GenericManifest) {
+            return new GenericResource(
+                this.origin,
+                this._metaWithName(name),
+                manifest
+            ) as LiveRefable<GenericResource, Name>;
+        }
         Claim<Name extends string, Mode extends DataMode = "Filesystem">(
             name: Name,
             mode: Pvc.Props<Mode>

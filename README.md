@@ -50,6 +50,16 @@ Currently three packages are needed:
 yarn add -D k8ts @k8ts/instruments @k8ts/metadata
 ```
 
+## Development
+
+Run the full test suite after installing dependencies to make sure everything
+builds correctly:
+
+```bash
+yarn install
+yarn test
+```
+
 # Docs
 
 The topmost k8ts abstraction is the World, which captures everything that’s going to be generated.
@@ -98,12 +108,22 @@ export default W.Scope("cluster")
     .Resources(function* FILE(FILE) {
         yield FILE.Namespace("namespace")
         yield FILE.PersistentVolume("pv-cool", {
-            $capacity: "1Gi",
-            $accessModes: ["ReadWriteOnce"]
+            capacity: "1Gi",
+            accessModes: ["ReadWriteOnce"]
         })
     })
 ```
 
+If you don’t need the typed helpers, raw manifests can be emitted directly:
+
+```ts
+yield FILE.Resource("cm", {
+    apiVersion: "v1",
+    kind: "ConfigMap",
+    data: { key: "value" }
+})
+```
+
 The nesting structure is pretty deep, but it becomes simpler when you notice that each block is closed by `})`.
 
-Fields are validated by TypeScript, including most fields that contain liters. So we can’t write a string like “xyz” for `$capacity` as it would error.
+Fields are validated by TypeScript, including most fields that contain liters. So we can’t write a string like “xyz” for `capacity` as it would error.
