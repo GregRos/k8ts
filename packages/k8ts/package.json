@@ -54,7 +54,6 @@
     "!**/*.tsbuildinfo"
   ],
   "scripts": {
-    "prepack": "shx rm -rf **/tsconfig*",
     "build": "tsc -b .",
     "build:clean": "run-s clean build",
     "watch": "tsc -b . --watch",

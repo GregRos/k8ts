@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "name": "TEST: instruments",
+      "request": "launch",
+      "args": ["test", "--runInBand", "--watchAll=false", "--testNamePattern"],
+      "cwd": "c:\\codegr\\k8ts\\packages\\instruments",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "runtimeExecutable": "yarn"
+    }
+  ]
+}

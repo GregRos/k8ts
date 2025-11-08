@@ -62,12 +62,15 @@ export class Origin extends BaseNode<Origin, OriginEntity> implements Iterable<R
     }
     readonly attachedTree: Seq<ResourceNode> = seq(() => {
         const self = this
-        const desc = self.descendants.concatFirst([this]).concatMap(function* (x) {
-            yield* self.resources
-            for (const kid of self.kids) {
-                yield* kid.resources
-            }
-        })
+        const desc = self.descendants
+            .concatFirst([this])
+            .map(x => x)
+            .concatMap(function* (x) {
+                yield* self.resources
+                for (const kid of self.kids) {
+                    yield* kid.resources
+                }
+            })
         return desc
     }).cache()
 

@@ -1,4 +1,3 @@
-import chalk from "chalk"
 import { pretty } from "../_string"
 import { displayers } from "../displayers"
 import { BaseNode } from "./base-node"
@@ -20,7 +19,7 @@ export function dependencies(record: Dependencies.Input) {
     simple: s => [s.why, "-->", s.needed],
     pretty: (dep, format) => {
         const neededFmt = pretty`${["lowkey", dep.needed]}`
-        return [`${chalk.gray.italic.white(`${dep.why}`)}`, "➜ ", chalk.italic(`${neededFmt}`)]
+        return [dep.why, neededFmt].join("➜ ")
     }
 })
 export class Relation<Node extends BaseNode<Node>> {

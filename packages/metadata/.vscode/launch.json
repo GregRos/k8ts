@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "name": "TEST: metadata",
+      "request": "launch",
+      "args": ["test", "--runInBand", "--watchAll=false", "--testNamePattern"],
+      "cwd": "c:\\codegr\\k8ts\\packages\\metadata",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "runtimeExecutable": "yarn"
+    }
+  ]
+}

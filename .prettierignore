@@ -1,8 +1,12 @@
 package-lock.json
-node_modules/
+**/node_modules/
+**/dist/
+**/dist-spec/
 yarn.lock
 .obsidian/
 .idea/
-dist/
-_imports/
-_unused
+coverage/
+.nyc_output/
+.obsidian/
+.git/
+*.md

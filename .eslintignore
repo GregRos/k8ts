@@ -1,7 +1,0 @@
-node_modules/
-.git
-.idea/
-.vscode/
-.obsidian/
-**/_imports/**/*
-_unused
