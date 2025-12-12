@@ -18,6 +18,13 @@ export function parseBackend(backend?: Backend) {
                     path: backend.path
                 }
             }
+        case "NFS":
+            return {
+                nfs: {
+                    server: backend.server,
+                    path: backend.path
+                }
+            }
         default:
             throw new MakeError(`Unknown backend kind!`, {
                 backend

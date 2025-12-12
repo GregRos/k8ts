@@ -10,3 +10,4 @@ coverage/
 .obsidian/
 .git/
 *.md
+_imports/

@@ -22,4 +22,13 @@ export default W.Scope("cluster")
             $mode: "Block",
             nodeAffinity: {} as any
         })
+        yield FILE.PersistentVolume("nfs-volume", {
+            $capacity: "5Gi",
+            $accessModes: ["ReadWriteMany"],
+            $backend: {
+                type: "NFS",
+                server: "nfs.example.com",
+                path: "/exported/path"
+            }
+        })
     })

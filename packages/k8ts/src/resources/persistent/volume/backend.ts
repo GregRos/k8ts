@@ -7,8 +7,13 @@ export namespace Backend {
         type: "Local"
         path: string
     }
+    export interface NFS {
+        type: "NFS"
+        server: string
+        path: string
+    }
 
-    export type Backend = HostPath | Local
+    export type Backend = HostPath | Local | NFS
 }
 
 export type Backend = Backend.Backend

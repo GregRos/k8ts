@@ -21,6 +21,7 @@ export namespace Pv {
         reclaimPolicy?: Reclaim
         $capacity: Unit.Data
         $backend?: Backend
+        mountOptions?: string[]
         nodeAffinity?: CDK.VolumeNodeAffinity
     }
     export type Reclaim = "Retain" | "Delete" | "Recycle"
@@ -53,6 +54,7 @@ export namespace Pv {
                       }
                     : undefined,
                 volumeMode: pvProps.$mode ?? "Filesystem",
+                mountOptions: pvProps.mountOptions,
                 persistentVolumeReclaimPolicy: pvProps.reclaimPolicy ?? "Retain",
                 nodeAffinity: pvProps.nodeAffinity
             }

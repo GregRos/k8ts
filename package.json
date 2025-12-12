@@ -20,7 +20,6 @@
     "lint:fix": "run-s prettier:fix",
     "tidy": "yarn install && run-s lint:fix build:clean test"
   },
-  "dependencies": {},
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.46.3",
     "@typescript-eslint/parser": "^8.46.3",
