@@ -21,6 +21,10 @@ export type InputReqLimit<Unit extends string> =
     | InputIdenticalReqLimitString<Unit>
     | InputReqLimitObject<Unit>
     | InputReqLimitArray<Unit>
+type CustomResource = `${string}/${string}`
+
 export type mt_Resource_Input_Map<ResourceUnit extends mt_Resource_Unit_Map<ResourceUnit>> = {
     [K in keyof ResourceUnit]: InputReqLimit<ResourceUnit[K]>
+} & {
+    [K in CustomResource]?: InputReqLimit<string>
 }

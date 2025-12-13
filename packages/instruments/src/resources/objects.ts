@@ -4,6 +4,7 @@ import { string, type Parjser } from "parjs"
 import { mapConst, or } from "parjs/combinators"
 import { InstrumentsError } from "../error"
 import type { UnitParser, UnitValue } from "../units"
+import { AnyUnitParser } from "../units/unit-parser"
 import { createResourceParser } from "./parser"
 import type { mt_Resource_Input_Map, mt_Resource_Unit_Map, ReqLimit } from "./types"
 
@@ -15,12 +16,12 @@ export class ResourcesMap<const RM extends mt_Resource_Unit_Map<RM>> {
             const result = {} as any
             if (value.request) {
                 result.requests = {
-                    [key]: value.request.str
+                    [key]: value.request.val
                 }
             }
             if (value.limit) {
                 result.limits = {
-                    [key]: value.limit.str
+                    [key]: value.limit.val
                 }
             }
             if (!isEmpty(result)) {
@@ -36,6 +37,8 @@ export class ResourcesMap<const RM extends mt_Resource_Unit_Map<RM>> {
 export class ResourcesSpec<const RM extends mt_Resource_Unit_Map<RM>> {
     readonly _unitParsers: Map<string, Parjser<UnitValue | undefined>>
     readonly _reqLimitParsers: Map<string, Parjser<ReqLimit>>
+    readonly _anyUnitParser = AnyUnitParser.make()
+    readonly _anyReqLimitParser = createResourceParser(this._anyUnitParser)
     constructor(_unitMap: Map<string, UnitParser>) {
         const questionMarkParser = string("?").pipe(mapConst(undefined))
         this._unitParsers = _unitMap.map(parser => parser.parser.pipe(or(questionMarkParser)))
@@ -53,7 +56,7 @@ export class ResourcesSpec<const RM extends mt_Resource_Unit_Map<RM>> {
     private _parseReqLimit(resource: string, input: string): ReqLimit {
         const pReqLimit = this._reqLimitParsers.get(resource)
         if (!pReqLimit) {
-            throw new InstrumentsError(`No parser found for ${resource}`)
+            return this._anyReqLimitParser.parse(input).value
         }
         return pReqLimit.parse(input).value
     }
@@ -63,7 +66,7 @@ export class ResourcesSpec<const RM extends mt_Resource_Unit_Map<RM>> {
         const allKeys = Set([...Object.keys(input), ...this._unitParsers.keys()]).toMap()
         const map = allKeys.map((_, key) => {
             const value = input[key as keyof R]
-            const pUnitValue = this._unitParsers.get(key)
+            const pUnitValue = this._unitParsers.get(key) ?? this._anyUnitParser.parser
             if (!pUnitValue) {
                 throw new InstrumentsError(`No parser found for ${String(key)}`)
             }

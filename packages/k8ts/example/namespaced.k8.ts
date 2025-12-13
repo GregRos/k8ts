@@ -42,7 +42,8 @@ export default W.Scope(k8sNamespace)
                         }),
                         $resources: {
                             cpu: "100m->500m",
-                            memory: "100Mi->500Mi"
+                            memory: "100Mi->500Mi",
+                            "a/b": "1->2"
                         }
                     })
                 }

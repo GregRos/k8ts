@@ -90,12 +90,14 @@ export namespace Container {
             const self = this
             const { $image, $ports, $command, $env } = self.props
             const untaggedProps = omitBy(self.props, (_, k) => k.startsWith("$"))
+            let resourcesObject = self._resources()?.toObject()
+
             const container: CDK.Container = {
                 ...untaggedProps,
                 name: self.name,
                 image: $image.toString(),
                 ports: $ports && toContainerPorts(PortSet.make($ports)).valueSeq().toArray(),
-                resources: self._resources()?.toObject(),
+                resources: resourcesObject,
                 command: $command?.toArray(),
                 env: Env($env).toEnvVars(),
                 ...self._groupedMounts()
@@ -130,11 +132,8 @@ export namespace Container {
             if (!this.props.$resources) {
                 return undefined
             }
-            const { cpu, memory } = this.props.$resources
-            return container_ResourcesSpec.parse({
-                cpu: cpu,
-                memory: memory
-            })
+            const result = container_ResourcesSpec.parse(this.props.$resources)
+            return result
         }
     }
 
