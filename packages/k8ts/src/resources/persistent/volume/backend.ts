@@ -1,6 +1,7 @@
 export namespace Backend {
     export interface HostPath {
         type: "HostPath"
+        hostpathType: string
         path: string
     }
     export interface Local {

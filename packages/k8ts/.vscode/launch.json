@@ -7,7 +7,7 @@
       "request": "launch",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "cwd": "${workspaceFolder}/packages/k8ts",
+      "cwd": "${workspaceFolder}",
       "program": "example/run.ts",
       "sourceMaps": true,
       "runtimeExecutable": "tsx",
