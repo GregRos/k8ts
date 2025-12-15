@@ -1,4 +1,4 @@
-import type { CDK } from "../../../_imports"
+import type { CDK } from "@k8ts/imports"
 import { api_ } from "../../../kinds"
 import { Volume } from "../volume"
 import type { Device } from "../volume/devices"

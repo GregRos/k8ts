@@ -1,6 +1,10 @@
 {
     "folders": [
         {
+            "path": "./packages/imports",
+            "name": "imports"
+        },
+        {
             "path": "./packages/k8ts",
             "name": "k8ts"
         },
@@ -12,6 +16,7 @@
             "path": "./packages/metadata",
             "name": "metadata"
         },
+
         {
             "path": ".",
             "name": "root"

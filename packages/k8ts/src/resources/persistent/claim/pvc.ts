@@ -1,5 +1,5 @@
+import { CDK } from "@k8ts/imports"
 import { manifest, relations, ResourcesSpec, Unit } from "@k8ts/instruments"
-import { CDK } from "../../../_imports"
 import { Prefix$ } from "../../../_type/prefix$"
 import { MakeError } from "../../../error"
 import { External } from "../../../external"

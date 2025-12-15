@@ -1,5 +1,5 @@
+import { CDK } from "@k8ts/imports"
 import type { PortMap, PortMapEntry, PortSet, PortSetEntry } from "@k8ts/instruments"
-import { CDK } from "../../_imports"
 export function toContainerPort(entry: PortSetEntry): CDK.ContainerPort {
     return {
         containerPort: entry.port,

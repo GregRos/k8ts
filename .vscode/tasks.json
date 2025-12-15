@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "type": "typescript",
+      "type": "npm",
       "tsconfig": "tsconfig.json",
       "problemMatcher": ["$tsc-watch"],
       "option": "watch",
@@ -15,6 +15,7 @@
       },
       "label": "tsc: watch - tsconfig.json"
     },
+
     {
       "command": "yarn",
       "args": ["tidy"],

@@ -1,4 +1,4 @@
-import { CDK } from "../../_imports"
+import { CDK } from "@k8ts/imports"
 import type { Service } from "./service"
 
 export type Port<Port extends string> = Port.Port<Port>

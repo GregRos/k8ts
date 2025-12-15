@@ -1,3 +1,4 @@
+import { CDK } from "@k8ts/imports"
 import {
     manifest,
     Refable,
@@ -6,7 +7,6 @@ import {
     type InputPortMapping
 } from "@k8ts/instruments"
 import { Map } from "immutable"
-import { CDK } from "../../_imports"
 import { MakeError } from "../../error"
 import { k8ts } from "../../kind-map"
 import { api_ } from "../../kinds"

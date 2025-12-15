@@ -33,7 +33,6 @@ it("accepts mix of value and section keys", () => {
     expect(m.get("namespace")).toBe("y")
     expect(m.get("^label/a")).toBe("A")
 
-    // @ts-expect-error
     expect(() => m.get("%x/")).toThrow()
 })
 

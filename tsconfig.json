@@ -1,6 +1,9 @@
 {
   "references": [
     {
+      "path": "./packages/imports/src/tsconfig.json"
+    },
+    {
       "path": "./packages/metadata/tsconfig.json"
     },
     {

@@ -1,3 +1,4 @@
+import type { CDK } from "@k8ts/imports"
 import {
     Kinded,
     PortSet,
@@ -10,7 +11,6 @@ import {
     type TaggedImage
 } from "@k8ts/instruments"
 import { Map } from "immutable"
-import type { CDK } from "../../../_imports"
 import { toContainerPorts } from "../../utils/adapters"
 
 import { seq } from "doddle"

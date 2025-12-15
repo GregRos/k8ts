@@ -1,6 +1,6 @@
+import type { CDK } from "@k8ts/imports"
 import { Map, type MapOf } from "immutable"
 import { isObject } from "what-are-you"
-import type { CDK } from "../_imports"
 import { MakeError } from "../error"
 import { api_ } from "../kinds"
 import type { EnvVarFrom, InputEnv, InputEnvMapping } from "./types"

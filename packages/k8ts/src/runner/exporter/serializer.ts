@@ -1,7 +1,7 @@
+import { CDK } from "@k8ts/imports"
 import { BaseManifest, ManifestSourceEmbedder, type ResourceNode } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { dump, type DumpOptions } from "js-yaml"
-import { CDK } from "../../_imports"
 import { MakeError } from "../../error"
 
 export interface YamlSerializerOptions {

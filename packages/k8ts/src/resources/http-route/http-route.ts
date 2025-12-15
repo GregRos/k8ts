@@ -1,5 +1,5 @@
+import { CDK } from "@k8ts/imports"
 import { manifest, relations } from "@k8ts/instruments"
-import { CDK } from "../../_imports"
 import type { External } from "../../external"
 import { k8ts } from "../../kind-map"
 import { api_ } from "../../kinds"

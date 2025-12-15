@@ -1,4 +1,4 @@
-import type { CDK } from "../../../_imports"
+import type { CDK } from "@k8ts/imports"
 
 import { relations } from "@k8ts/instruments"
 import { k8ts } from "../../../kind-map"

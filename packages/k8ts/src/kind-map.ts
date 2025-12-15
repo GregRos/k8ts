@@ -5,17 +5,16 @@ import {
     OriginEntityProps,
     ResourceEntity
 } from "@k8ts/instruments"
-import { k8tsBuildKind } from "./k8ts-sys-kind"
-const ident = k8tsBuildKind.kind("World", "worlds")
+import { K8tsKinds } from "./k8ts-sys-kind"
 
 class K8tsRootOriginEntity extends BaseOriginEntity<OriginEntityProps> {
-    override kind = ident
+    override kind = K8tsKinds.build_.current_.World
     constructor() {
         super(
             "K8ts",
             {
                 meta: {
-                    "^produced-by": `k8ts@${k8tsBuildKind.name.slice(1)}`
+                    "^produced-by": `k8ts@${K8tsKinds.build_.current.name.slice(1)}`
                 }
             },
             null

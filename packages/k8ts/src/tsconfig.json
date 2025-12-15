@@ -2,8 +2,9 @@
   "extends": "../../../tsconfig.base.json",
   "references": [
     {
-      "path": "./_imports/tsconfig.json"
+      "path": "../../imports/src/tsconfig.json"
     },
+
     {
       "path": "../../metadata/src/tsconfig.json"
     },
@@ -17,6 +18,6 @@
     "outDir": "../dist",
     "tsBuildInfoFile": "../dist/src.tsbuildinfo"
   },
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "../../instruments/src/api-kind/pluralize.ts"],
   "exclude": ["_imports/**/*.ts"]
 }

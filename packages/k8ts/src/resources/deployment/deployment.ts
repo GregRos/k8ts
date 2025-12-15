@@ -1,7 +1,7 @@
+import { CDK } from "@k8ts/imports"
 import { manifest, Origin, Refable, relations, WritableDeep } from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { omit, omitBy } from "lodash"
-import { CDK } from "../../_imports"
 import { MakeError } from "../../error"
 import { k8ts } from "../../kind-map"
 import { api_ } from "../../kinds"

@@ -1,7 +1,7 @@
+import { CDK } from "@k8ts/imports"
 import { Kind, manifest, relations, type Origin, type Producer } from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { seq } from "doddle"
-import { CDK } from "../../_imports"
 import { k8ts } from "../../kind-map"
 import { api_ } from "../../kinds"
 import { equiv_cdk8s } from "../../node/equiv-cdk8s"

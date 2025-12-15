@@ -1,7 +1,7 @@
+import { CDK } from "@k8ts/imports"
 import { Kinded, manifest, Producer, relations } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { omitBy } from "lodash"
-import { CDK } from "../../_imports"
 import { k8ts } from "../../kind-map"
 import { api_ } from "../../kinds"
 import { ManifestResource } from "../../node/manifest-resource"

@@ -15245,8 +15245,10 @@ export interface PodSpec {
      *   spec.containers[_].securityContext.readOnlyRootFilesystem -
      *   spec.containers[_].securityContext.privileged -
      *   spec.containers[_].securityContext.allowPrivilegeEscalation -
-     *   spec.containers[_].securityContext.procMount - spec.containers[_].securityContext.runAsUser
-     *   - spec.containers[*].securityContext.runAsGroup
+     *   spec.containers[_].securityContext.procMount -
+     *   spec.containers[_].securityContext.runAsUser
+     *
+     *   - Spec.containers[*].securityContext.runAsGroup
      *
      * @schema io.k8s.api.core.v1.PodSpec#os
      */

@@ -1,5 +1,5 @@
+import type { CDK } from "@k8ts/imports"
 import { relations } from "@k8ts/instruments"
-import type { CDK } from "../../../_imports"
 import { k8ts } from "../../../kind-map"
 import { api_ } from "../../../kinds"
 import type { ManifestResource } from "../../../node"

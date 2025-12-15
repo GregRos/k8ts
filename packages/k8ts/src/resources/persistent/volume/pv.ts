@@ -1,5 +1,5 @@
+import { CDK } from "@k8ts/imports"
 import { manifest, Refable, relations, type Unit } from "@k8ts/instruments"
-import { CDK } from "../../../_imports"
 import { MakeError } from "../../../error"
 import { External } from "../../../external"
 import { k8ts } from "../../../kind-map"

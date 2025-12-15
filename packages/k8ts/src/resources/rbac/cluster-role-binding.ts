@@ -1,6 +1,6 @@
+import { CDK } from "@k8ts/imports"
 import { manifest, relations, type Origin } from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
-import { CDK } from "../../_imports"
 import { k8ts } from "../../kind-map"
 import { api_ } from "../../kinds"
 import { equiv_cdk8s } from "../../node/equiv-cdk8s"
@@ -19,9 +19,7 @@ export namespace ClusterRoleBinding {
     @relations({
         needs: self => ({
             role: self.props.$role,
-            ...Object.fromEntries(
-                self.props.$subjects.map((sa, i) => [`subject_${i}`, sa])
-            )
+            ...Object.fromEntries(self.props.$subjects.map((sa, i) => [`subject_${i}`, sa]))
         })
     })
     @equiv_cdk8s(CDK.KubeClusterRoleBinding)
