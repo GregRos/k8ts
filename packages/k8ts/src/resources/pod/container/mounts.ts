@@ -1,5 +1,5 @@
 import type { CDK } from "../../../_imports"
-import { api } from "../../../kinds"
+import { api_ } from "../../../kinds"
 import { Volume } from "../volume"
 import type { Device } from "../volume/devices"
 export type Mount = Mount.ContainerVolumeMount | Mount.ContainerDeviceMount
@@ -13,7 +13,7 @@ export namespace Mount {
         volume: Volume
     }
     export class ContainerVolumeMount {
-        readonly kind = api.v1_.Pod_.VolumeMount
+        readonly kind = api_.v1_.Pod_.VolumeMount
 
         constructor(readonly props: Props) {}
 
@@ -35,7 +35,7 @@ export namespace Mount {
     }
 
     export class ContainerDeviceMount {
-        kind = api.v1_.Pod_.DeviceMount
+        kind = api_.v1_.Pod_.DeviceMount
         get volume() {
             return this.props.device
         }

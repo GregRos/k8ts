@@ -1,11 +1,11 @@
 import { BaseOriginEntity, Origin, OriginEntityProps, Refable } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
-import { k8tsBuildKind } from "../k8ts-sys-kind"
-import { api } from "../kinds"
+import { K8tsKinds } from "../k8ts-sys-kind"
+import { api_ } from "../kinds"
 export type FileOrigin<FScope extends FileOrigin.Scope = FileOrigin.Scope> =
     FileOrigin.FileEntity<FScope>
 export namespace FileOrigin {
-    export type Scope = Refable<api.v1_.Namespace> | "cluster"
+    export type Scope = Refable<api_.v1_.Namespace> | "cluster"
 
     export interface SmallerProps extends OriginEntityProps {
         meta?: Meta.Input
@@ -15,9 +15,8 @@ export namespace FileOrigin {
         scope: FScope
     }
 
-    const ident = k8tsBuildKind.kind("File")
     export class FileEntity<FScope extends Scope> extends BaseOriginEntity<Props<FScope>> {
-        kind = k8tsBuildKind.kind("File")
+        kind = K8tsKinds.build_.current_.File
 
         constructor(name: string, props: Props<FScope>, parent: Origin) {
             super(name, props, parent)

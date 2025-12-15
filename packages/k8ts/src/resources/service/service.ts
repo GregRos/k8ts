@@ -9,7 +9,7 @@ import { Map } from "immutable"
 import { CDK } from "../../_imports"
 import { MakeError } from "../../error"
 import { k8ts } from "../../kind-map"
-import { api } from "../../kinds"
+import { api_ } from "../../kinds"
 import { ManifestResource } from "../../node"
 import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { Deployment } from "../deployment"
@@ -25,10 +25,10 @@ export namespace Service {
         $backend: Deployment.AbsDeployment<DeployPorts>
         $frontend: Frontend
     }
-    export type AbsService<ExposedPorts extends string> = Refable<api.v1_.Service> & {
+    export type AbsService<ExposedPorts extends string> = Refable<api_.v1_.Service> & {
         __PORTS__: ExposedPorts
     }
-    @k8ts(api.v1_.Service)
+    @k8ts(api_.v1_.Service)
     @relations({
         needs: self => ({
             backend: self.backend as ResourceEntity
@@ -59,7 +59,7 @@ export namespace Service {
         Props<string, ExposedPorts>
     > {
         __PORTS__!: ExposedPorts
-        kind = api.v1_.Service
+        kind = api_.v1_.Service
 
         private get backend() {
             return this.props.$backend as Deployment<ExposedPorts>

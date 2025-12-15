@@ -6,7 +6,7 @@ import {
     ResourceEntity
 } from "@k8ts/instruments"
 import { k8tsBuildKind } from "./k8ts-sys-kind"
-const ident = k8tsBuildKind.kind("World")
+const ident = k8tsBuildKind.kind("World", "worlds")
 
 class K8tsRootOriginEntity extends BaseOriginEntity<OriginEntityProps> {
     override kind = ident

@@ -2,7 +2,7 @@ import { Map, type MapOf } from "immutable"
 import { isObject } from "what-are-you"
 import type { CDK } from "../_imports"
 import { MakeError } from "../error"
-import { api } from "../kinds"
+import { api_ } from "../kinds"
 import type { EnvVarFrom, InputEnv, InputEnvMapping } from "./types"
 import { isValidEnvVarName } from "./validate-name"
 
@@ -22,7 +22,7 @@ export class EnvBuilder {
         return this._env
     }
 
-    private _envFromSecret(value: EnvVarFrom<api.v1_.Secret>): CDK.EnvVarSource {
+    private _envFromSecret(value: EnvVarFrom<api_.v1_.Secret>): CDK.EnvVarSource {
         return {
             secretKeyRef: {
                 name: value.$ref.name,
@@ -32,7 +32,7 @@ export class EnvBuilder {
         }
     }
 
-    private _envFromConfigMap(value: EnvVarFrom<api.v1_.ConfigMap>): CDK.EnvVarSource {
+    private _envFromConfigMap(value: EnvVarFrom<api_.v1_.ConfigMap>): CDK.EnvVarSource {
         return {
             configMapKeyRef: {
                 name: value.$ref.name,
@@ -51,14 +51,14 @@ export class EnvBuilder {
                         value: `${value}`
                     }
                 }
-                const resourceValue = value as EnvVarFrom<api.v1_.Secret | api.v1_.ConfigMap>
+                const resourceValue = value as EnvVarFrom<api_.v1_.Secret | api_.v1_.ConfigMap>
                 switch (resourceValue.$ref.kind) {
-                    case api.v1_.Secret:
+                    case api_.v1_.Secret:
                         return {
                             name: key,
                             valueFrom: this._envFromSecret(resourceValue as any)
                         }
-                    case api.v1_.ConfigMap:
+                    case api_.v1_.ConfigMap:
                         return {
                             name: key,
                             valueFrom: this._envFromConfigMap(resourceValue as any)

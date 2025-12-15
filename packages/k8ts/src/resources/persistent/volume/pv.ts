@@ -3,7 +3,7 @@ import { CDK } from "../../../_imports"
 import { MakeError } from "../../../error"
 import { External } from "../../../external"
 import { k8ts } from "../../../kind-map"
-import { api } from "../../../kinds"
+import { api_ } from "../../../kinds"
 import { equiv_cdk8s } from "../../../node/equiv-cdk8s"
 import { ManifestResource } from "../../../node/manifest-resource"
 import { Access } from "../access-mode"
@@ -16,7 +16,7 @@ export namespace Pv {
     export import Backend = Backend_
     export interface Props<Mode extends DataMode = DataMode> {
         $accessModes: Access
-        $storageClass?: External<api.storage_.v1_.StorageClass>
+        $storageClass?: External<api_.storage_.v1_.StorageClass>
         $mode?: Mode
         reclaimPolicy?: Reclaim
         $capacity: Unit.Data
@@ -25,7 +25,7 @@ export namespace Pv {
         nodeAffinity?: CDK.VolumeNodeAffinity
     }
     export type Reclaim = "Retain" | "Delete" | "Recycle"
-    export type AbsPv<Mode extends DataMode = DataMode> = Refable<api.v1_.PersistentVolume> & {
+    export type AbsPv<Mode extends DataMode = DataMode> = Refable<api_.v1_.PersistentVolume> & {
         __MODE__: Mode
     }
     @equiv_cdk8s(CDK.KubePersistentVolume)
@@ -67,7 +67,7 @@ export namespace Pv {
             }
         }
     })
-    @k8ts(api.v1_.PersistentVolume)
+    @k8ts(api_.v1_.PersistentVolume)
     @relations({
         needs(self) {
             return {
@@ -77,6 +77,6 @@ export namespace Pv {
     })
     export class Pv<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
         __MODE__!: Mode
-        readonly kind = api.v1_.PersistentVolume
+        readonly kind = api_.v1_.PersistentVolume
     }
 }

@@ -2,6 +2,7 @@ import { hash } from "immutable"
 import { displayers } from "../displayers"
 import { bind_own_methods } from "../displayers/bind"
 import { InstrumentsError } from "../error"
+import { pluralize } from "./pluralize"
 
 export type Kind<
     Name extends string = string,
@@ -93,6 +94,13 @@ export namespace Kind {
         const Name extends string = string,
         const V extends Version = Version
     > extends Identifier<Name, V> {
+        constructor(name: Name, parent: V) {
+            super(name, parent)
+        }
+
+        get plural() {
+            return pluralize(this.name.toLowerCase())
+        }
         get version() {
             return this.parent
         }
@@ -109,6 +117,9 @@ export namespace Kind {
             return this.subkind(name)
         }
     }
+
+    export type OfGroup<G extends Group, N extends string = string> = Kind<N, Version<string, G>>
+
     @bind_own_methods()
     export class SubKind<
         _SubKind extends string = string,

@@ -17,7 +17,7 @@ import { seq } from "doddle"
 import { mapKeys, mapValues, omitBy } from "lodash"
 import { Env, type InputEnvMapping } from "../../../env"
 import { k8ts } from "../../../kind-map"
-import { api } from "../../../kinds"
+import { api_ } from "../../../kinds"
 import type { ManifestResource } from "../../../node"
 import { SubResource } from "../../../node/sub-resource"
 import { Mount as Mount_ } from "./mounts"
@@ -30,7 +30,7 @@ export namespace Container {
     })
 
     type Resources = (typeof container_ResourcesSpec)["__INPUT__"]
-    type SomeMount = Kinded<api.v1_.Pod_.DeviceMount | api.v1_.Pod_.VolumeMount>
+    type SomeMount = Kinded<api_.v1_.Pod_.DeviceMount | api_.v1_.Pod_.VolumeMount>
     export type Mounts = {
         [key: string]: SomeMount
     }
@@ -48,7 +48,7 @@ export namespace Container {
     export type Props<Ports extends string = never> = K8tsProps<Ports> &
         WritableDeep<Omit<CDK.Container, keyof K8tsPropsClean | "name">>
 
-    @k8ts(api.v1_.Pod_.Container)
+    @k8ts(api_.v1_.Pod_.Container)
     @relations({
         needs: self => {
             const a = self.mounts
@@ -60,7 +60,7 @@ export namespace Container {
     })
     export class Container<Ports extends string = string> extends SubResource<Props<Ports>> {
         __PORTS__!: Ports
-        readonly kind = api.v1_.Pod_.Container
+        readonly kind = api_.v1_.Pod_.Container
 
         get mounts() {
             return Map(this.props.$mounts ?? {})

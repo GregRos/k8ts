@@ -2,7 +2,7 @@ import type { CDK } from "../../../_imports"
 
 import { relations } from "@k8ts/instruments"
 import { k8ts } from "../../../kind-map"
-import { api } from "../../../kinds"
+import { api_ } from "../../../kinds"
 import type { ManifestResource } from "../../../node"
 import { SubResource } from "../../../node/sub-resource"
 import type { ConfigMap } from "../../configmap"
@@ -27,14 +27,14 @@ export namespace Volume {
         | PodVolume_Backend_ConfigMap
         | PodVolume_Backend_Secret
 
-    @k8ts(api.v1_.Pod_.Volume)
+    @k8ts(api_.v1_.Pod_.Volume)
     @relations({
         needs: self => ({
             backend: self.props.$backend
         })
     })
     export abstract class PodVolume<Props extends Backend = Backend> extends SubResource<Props> {
-        readonly kind = api.v1_.Pod_.Volume
+        readonly kind = api_.v1_.Pod_.Volume
 
         abstract submanifest(): CDK.Volume
 

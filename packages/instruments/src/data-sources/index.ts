@@ -107,7 +107,7 @@ export async function resolveText(record: DataSourceRecord_Text) {
 }
 export async function resolveBinary(record: DataSourceRecord_Binary) {
     const mp = Map(record).map(async (v, k) => {
-        let resolved = v
+        let resolved = v as any
         if (v instanceof LocalFileSource) {
             resolved = await v.contents.pull()
         }

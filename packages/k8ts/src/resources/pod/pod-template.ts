@@ -3,14 +3,14 @@ import { seq } from "doddle"
 import { omitBy } from "lodash"
 import { CDK } from "../../_imports"
 import { k8ts } from "../../kind-map"
-import { api } from "../../kinds"
+import { api_ } from "../../kinds"
 import { ManifestResource } from "../../node/manifest-resource"
 import { Container } from "./container"
 import { Device, Volume } from "./volume"
 export type PodTemplate<Ports extends string = string> = PodTemplate.PodTemplate<Ports>
 export namespace PodTemplate {
     export type PodProps = Omit<CDK.PodSpec, "containers" | "initContainers" | "volumes">
-    type AbsContainer<Ports extends string> = Kinded<api.v1_.Pod_.Container> & {
+    type AbsContainer<Ports extends string> = Kinded<api_.v1_.Pod_.Container> & {
         __PORTS__: Ports
     }
     export type PodContainerProducer<Ports extends string> = Producer<PodScope, AbsContainer<Ports>>
@@ -24,7 +24,7 @@ export namespace PodTemplate {
         }
     }
 
-    @k8ts(api.v1_.PodTemplate)
+    @k8ts(api_.v1_.PodTemplate)
     @relations({
         kids: s => [...s.containers, ...s.volumes]
     })
@@ -53,7 +53,7 @@ export namespace PodTemplate {
         }
     })
     export class PodTemplate<Ports extends string = string> extends ManifestResource<Props<Ports>> {
-        readonly kind = api.v1_.PodTemplate
+        readonly kind = api_.v1_.PodTemplate
         readonly containers = seq(() => this.props.$POD(new PodScope(this)))
             .map(x => {
                 return x as Container<Ports>

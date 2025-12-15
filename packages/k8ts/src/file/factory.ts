@@ -19,9 +19,12 @@ import {
     Pv,
     Pvc,
     Secret,
-    Service
+    Service,
+    ServiceAccount
 } from "../resources"
 import { K8tsCronJob, K8tsCronJobProps } from "../resources/cronjob"
+import { ClusterRole } from "../resources/rbac/cluster-role"
+import { ClusterRoleBinding } from "../resources/rbac/cluster-role-binding"
 import { AssemblyStage } from "../runner/exporter"
 import type { FileOrigin } from "./origin"
 
@@ -43,6 +46,20 @@ export namespace Factory {
     }
     @auto_register
     export class Cluster extends Base {
+        ClusterRole<Name extends string>(name: Name, props: ClusterRole.Props) {
+            return new ClusterRole.ClusterRole(
+                this.origin,
+                this._metaWithName(name),
+                props
+            ) as LiveRefable<ClusterRole.ClusterRole, Name>
+        }
+        ClusterRoleBinding<Name extends string>(name: Name, props: ClusterRoleBinding.Props) {
+            return new ClusterRoleBinding.ClusterRoleBinding(
+                this.origin,
+                this._metaWithName(name),
+                props
+            ) as LiveRefable<ClusterRoleBinding.ClusterRoleBinding, Name>
+        }
         PersistentVolume<Name extends string, Mode extends DataMode = "Filesystem">(
             name: Name,
             props: Pv.Props<Mode>
@@ -104,6 +121,13 @@ export namespace Factory {
                 Secret,
                 Name
             >
+        }
+        ServiceAccount<Name extends string>(name: Name, props?: ServiceAccount.Props) {
+            return new ServiceAccount.ServiceAccount(
+                this.origin,
+                this._metaWithName(name),
+                props
+            ) as LiveRefable<ServiceAccount, Name>
         }
         Service<Name extends string, DeployPorts extends string, ExposedPorts extends DeployPorts>(
             name: Name,

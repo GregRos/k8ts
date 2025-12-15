@@ -5,7 +5,7 @@ import { External } from "../external"
 import { File } from "../file"
 import { FileExports } from "../file/exports"
 import { FileOrigin } from "../file/origin"
-import { k8tsBuildKind } from "../k8ts-sys-kind"
+import { K8tsKinds } from "../k8ts-sys-kind"
 import { K8tsRootOrigin } from "../kind-map"
 export type ManifestFileName = `${string}.yaml`
 export namespace World {
@@ -15,7 +15,6 @@ export namespace World {
         kinds?: KindMap
     }
 
-    const ident = k8tsBuildKind.kind("World")
     export type DefineScopedFile<Scope extends FileOrigin.Scope> = {
         metadata(input: Meta.Input): DefineScopedFile<Scope>
         Resources<const Produced extends LiveRefable>(
@@ -23,7 +22,7 @@ export namespace World {
         ): File<Produced>
     }
     export class Builder extends BaseOriginEntity<Props> {
-        readonly kind = ident
+        readonly kind = K8tsKinds.build_.current_.World
         private readonly _ExternalOrigin: ExternalOriginEntity
         constructor(props: Props) {
             super("World", props, K8tsRootOrigin.node)
@@ -75,9 +74,8 @@ export namespace World {
         return new Builder(props)
     }
 }
-const ident = k8tsBuildKind.kind("External")
 export class ExternalOriginEntity extends BaseOriginEntity {
-    kind = ident
+    kind = K8tsKinds.build_.current_.External
     constructor(parent: Origin) {
         super(
             "EXTERNAL",

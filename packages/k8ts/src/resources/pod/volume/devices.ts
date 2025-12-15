@@ -1,7 +1,7 @@
 import { relations } from "@k8ts/instruments"
 import type { CDK } from "../../../_imports"
 import { k8ts } from "../../../kind-map"
-import { api } from "../../../kinds"
+import { api_ } from "../../../kinds"
 import type { ManifestResource } from "../../../node"
 import { SubResource } from "../../../node/sub-resource"
 import { Pvc } from "../../persistent"
@@ -14,14 +14,14 @@ export namespace Device {
     }
 
     export type Backend = PodDevice_Backend_Pvc
-    @k8ts(api.v1_.Pod_.Device)
+    @k8ts(api_.v1_.Pod_.Device)
     @relations({
         needs: self => ({
             backend: self.backend.$backend
         })
     })
     export class PodDevice extends SubResource<PodDevice_Backend_Pvc> {
-        readonly kind = api.v1_.Pod_.Device
+        readonly kind = api_.v1_.Pod_.Device
         constructor(
             parent: ManifestResource,
             name: string,

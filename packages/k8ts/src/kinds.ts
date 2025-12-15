@@ -1,5 +1,9 @@
 import { Kind } from "@k8ts/instruments"
-export namespace api {
+
+export const api = Kind.group("")
+export type api = typeof api
+
+export namespace api_ {
     export const v1 = Kind.version("v1")
     export type v1 = typeof v1
 
@@ -8,10 +12,6 @@ export namespace api {
     export namespace batch_ {
         export const v1 = batch.version("v1")
         export namespace v1_ {
-            export function kind_<Name extends string>(name: Name): Kind<Name, typeof v1> {
-                return v1.kind(name)
-            }
-
             export const Job = v1.kind("Job")
             export type Job = typeof Job
 
@@ -19,11 +19,8 @@ export namespace api {
             export type CronJob = typeof CronJob
         }
     }
-    export namespace v1_ {
-        export function kind_<Name extends string>(name: Name): Kind<Name, typeof v1> {
-            return v1.kind(name)
-        }
 
+    export namespace v1_ {
         export const ConfigMap = v1.kind("ConfigMap")
         export type ConfigMap = typeof ConfigMap
 
@@ -81,6 +78,20 @@ export namespace api {
     export const apps = Kind.group("apps")
     export type apps = typeof apps
 
+    export const metrics = Kind.group("metrics.k8s.io")
+    export type metrics = typeof metrics
+    export namespace metrics_ {
+        export const v1beta1 = metrics.version("v1beta1")
+        export type v1beta1 = typeof v1beta1
+
+        export namespace v1beta1_ {
+            export const NodeMetrics = v1beta1.kind("NodeMetrics")
+            export type NodeMetrics = typeof NodeMetrics
+
+            export const PodMetrics = v1beta1.kind("PodMetrics")
+            export type PodMetrics = typeof PodMetrics
+        }
+    }
     export namespace apps_ {
         export const v1 = apps.version("v1")
         export type v1 = typeof v1
@@ -119,6 +130,27 @@ export namespace api {
     export const gateway = Kind.group("gateway.networking.k8s.io")
     export type gateway = typeof gateway
 
+    export const rbac = Kind.group("rbac.authorization.k8s.io")
+    export type rbac = typeof rbac
+
+    export namespace rbac_ {
+        export const v1 = rbac.version("v1")
+        export type v1 = typeof v1
+
+        export namespace v1_ {
+            export const Role = v1.kind("Role")
+            export type Role = typeof Role
+
+            export const ClusterRole = v1.kind("ClusterRole")
+            export type ClusterRole = typeof ClusterRole
+
+            export const RoleBinding = v1.kind("RoleBinding")
+            export type RoleBinding = typeof RoleBinding
+
+            export const ClusterRoleBinding = v1.kind("ClusterRoleBinding")
+            export type ClusterRoleBinding = typeof ClusterRoleBinding
+        }
+    }
     export namespace gateway_ {
         export const v1 = gateway.version("v1")
         export type v1 = typeof v1

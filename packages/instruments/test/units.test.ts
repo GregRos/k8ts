@@ -23,7 +23,7 @@ describe("parses specific types", () => {
     it("parses data", () => {
         expect(Unit.Data.parse("1Ki").type).toBe("data")
         // @ts-expect-error
-        expect(() => Unit.Data.parse("1m").type).toThrow()
+        expect(() => Unit.Data.parse("1").type).toThrow()
     })
     it("parses time", () => {
         // @ts-expect-error
