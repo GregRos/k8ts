@@ -81,8 +81,11 @@ class BuilderDecorator {
     }
 
     get decorator() {
-        return <Target extends new (...args: any[]) => MetadataEntity>(
-            input: ManifestBuilder.In<InstanceType<Target>>
+        return <
+            Target extends new (...args: any[]) => MetadataEntity,
+            Builder extends ManifestBuilder.In<InstanceType<Target>>
+        >(
+            input: Builder
         ) => {
             return (ctor: Target) => {
                 this.implement(ctor, input as any)
