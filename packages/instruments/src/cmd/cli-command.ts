@@ -1,4 +1,4 @@
-import { List, Map } from "immutable"
+import { seq } from "doddle"
 import { defaultsDeep, merge } from "lodash"
 import { displayers } from "../displayers"
 import {
@@ -20,11 +20,11 @@ export interface CliCommandBuilderOptions {
 export class CmdBuilder {
     protected constructor(
         readonly executable: string,
-        private readonly _terms: List<CliTerm>,
+        private readonly _terms: CliTerm[],
         private readonly _options: CliCommandBuilderOptions
     ) {}
 
-    private _withArgs(f: (args: List<CliTerm>) => List<CliTerm>) {
+    private _withArgs(f: (args: CliTerm[]) => CliTerm[]) {
         return new CmdBuilder(this.executable, f(this._terms), this._options)
     }
 
@@ -43,19 +43,22 @@ export class CmdBuilder {
     }
 
     option(args: CliArgsMapping) {
-        const map = Map(args)
-        const optionTerms = map.entrySeq().map(([key, value]) => {
-            let joiner: string | undefined
-            const lastChar = key.at(-1)
-            if (lastChar === "=") {
-                joiner = "="
-                key = key.slice(0, -1) as CliKey
-            } else if (lastChar === " ") {
-                joiner = " "
-                key = key.slice(0, -1) as CliKey
-            }
-            return new CliOptionValue(key, joiner, value)
-        })
+        const map = new Map(Object.entries(args)) as Map<CliKey, string>
+        const optionTerms = seq(map)
+            .map(([key, value]) => {
+                let joiner: string | undefined
+                const lastChar = key.at(-1)
+                if (lastChar === "=") {
+                    joiner = "="
+                    key = key.slice(0, -1) as CliKey
+                } else if (lastChar === " ") {
+                    joiner = " "
+                    key = key.slice(0, -1) as CliKey
+                }
+                return new CliOptionValue(key, joiner, value)
+            })
+            .toArray()
+            .pull()
         return this._withArgs(terms => terms.concat(optionTerms))
     }
 
@@ -64,12 +67,13 @@ export class CmdBuilder {
     }
 
     toArray() {
-        const terms = this._terms
+        const terms = seq(this._terms)
             .filter(x => !x.isMissing)
             .flatMap(term => {
                 return term.arr(this._options.joiner)
             })
             .toArray()
+            .pull()
         if (this.executable !== "") {
             terms.unshift(this.executable)
         }
@@ -81,7 +85,7 @@ export class CmdBuilder {
     }
 
     static make(executable: string, options: CliCommandBuilderOptions) {
-        return new CmdBuilder(executable, List(), options)
+        return new CmdBuilder(executable, [], options)
     }
 }
 

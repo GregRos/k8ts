@@ -1,2 +1,2 @@
 export { Cmd, CmdBuilder } from "./cli-command"
-export { CliArgsMapping, CliKey, CliValue } from "./types"
+export type { CliArgsMapping, CliKey, CliValue } from "./types"

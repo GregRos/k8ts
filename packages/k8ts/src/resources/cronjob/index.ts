@@ -1,6 +1,6 @@
 import { CDK } from "@k8ts/imports"
 import { Cron, CronStanza, manifest, Origin, relations } from "@k8ts/instruments"
-import { Timezone } from "@k8ts/instruments/src/timezone"
+import { Timezone } from "@k8ts/instruments/timezone"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { omit, omitBy } from "lodash"
 import { k8ts } from "../../kind-map"

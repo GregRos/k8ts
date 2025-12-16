@@ -1,9 +1,7 @@
-import { hash } from "immutable"
 import { MetadataError } from "../error"
 import { normalChar } from "./parse-key"
 interface ImmObject {
     equals(other: ImmObject): boolean
-    hashCode(): number
 }
 
 abstract class KeyType implements ImmObject {
@@ -11,9 +9,7 @@ abstract class KeyType implements ImmObject {
     equals(other: ImmObject): boolean {
         return this.constructor === other.constructor && this.toString() === other.toString()
     }
-    hashCode(): number {
-        return hash(this.toString())
-    }
+
     toString() {
         return this.str
     }

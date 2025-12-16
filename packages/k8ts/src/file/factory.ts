@@ -39,7 +39,7 @@ export namespace Factory {
         constructor(readonly origin: Origin) {}
 
         protected _metaWithName(name: string) {
-            return this.origin.meta.add({
+            return this.origin.meta.clone().add({
                 name
             })
         }

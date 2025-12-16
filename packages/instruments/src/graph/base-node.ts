@@ -1,5 +1,4 @@
 import { Seq, seq } from "doddle"
-import { hash, Set } from "immutable"
 import { Kind } from "../api-kind"
 import { RefKey } from "../ref-key"
 import { ForwardRef } from "../reference"
@@ -45,9 +44,6 @@ export abstract class BaseNode<
         return this.parent === null && this._entity.kind.name !== "PodTemplate"
     }
 
-    hashCode() {
-        return hash(this._eqProxy)
-    }
     equals(other: any) {
         if (ForwardRef.is(other)) {
             return other.equals(this)
@@ -56,7 +52,7 @@ export abstract class BaseNode<
     }
 
     readonly ancestors = seq(() => {
-        const seen = Set<Node>()
+        const seen = new Set<Node>()
         const recurse = function* (from: Node): Iterable<Node> {
             const parent = from.parent
             if (parent && !seen.has(parent)) {
@@ -70,7 +66,7 @@ export abstract class BaseNode<
 
     readonly descendants = seq(() => {
         const self = this
-        let seen = Set<Node>()
+        let seen = new Set<Node>()
         const recurse = function* (from: Node): Iterable<Node> {
             for (const kid of from.kids) {
                 if (seen.has(kid)) {
@@ -88,14 +84,14 @@ export abstract class BaseNode<
         if (ForwardRef.is(other)) {
             return other.isChildOf(this._asNode)
         }
-        return Set(this.descendants).has(other)
+        return new Set(this.descendants).has(other)
     }
 
     isChildOf(other: Node): boolean {
         if (ForwardRef.is(other)) {
             return other.isParentOf(this._asNode)
         }
-        return this.equals(other) || Set(this.ancestors).has(other._asNode)
+        return this.equals(other) || new Set(this.ancestors).has(other._asNode)
     }
 
     hasRelationTo(other: Node): boolean {
@@ -112,7 +108,7 @@ export abstract class BaseNode<
     })
 
     readonly recursiveRelations = seq(() => {
-        let resources = Set<Node>()
+        let resources = new Set<Node>()
         const recurseIntoDependency = function* (root: Relation<Node>): Iterable<Relation<Node>> {
             yield root
             if (resources.has(root.needed)) {
@@ -127,7 +123,7 @@ export abstract class BaseNode<
         }
         return seq(recurseIntoDependency.bind(null, new Relation<Node>("self", this._asNode)))
             .after(() => {
-                resources = Set()
+                resources = new Set()
             })
             .cache()
     })

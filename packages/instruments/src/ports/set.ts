@@ -1,5 +1,6 @@
 import { Meta } from "@k8ts/metadata"
-import { Map } from "immutable"
+import { filterMap, mapValues, merge } from "@k8ts/metadata/util"
+import { seq } from "doddle"
 import { PortError } from "./error"
 import { PortMap } from "./map"
 import { parsePortInput, portRecordInput } from "./tools/entry"
@@ -14,7 +15,7 @@ import type {
 
 declare const __NAMES__: unique symbol
 export class PortSet<Names extends string = never> {
-    constructor(private readonly _map: Map<Names, PortSetEntry> = Map()) {
+    constructor(private readonly _map: Map<Names, PortSetEntry> = new Map()) {
         for (const entry of _map.values()) {
             Meta._checkNameValue(`container port '${entry.name}' (${entry.port})`, entry.name)
         }
@@ -25,7 +26,7 @@ export class PortSet<Names extends string = never> {
     }
 
     union<InNames extends string>(other: PortSet<InNames>): PortSet<Names | InNames> {
-        return new PortSet(this._map.merge(other._map))
+        return new PortSet(merge(this._map, other._map))
     }
     add<Name extends string>(
         name: Name,
@@ -46,16 +47,16 @@ export class PortSet<Names extends string = never> {
         }
         return this._apply(map => {
             const processed = portRecordInput(a)
-            return map.merge(processed)
+            return merge(map, processed)
         })
     }
 
     pick<InNames extends Names>(...name: InNames[]): PortSet<InNames> {
-        return this._apply(map => map.filter((_, key) => name.includes(key as InNames))) as any
+        return this._apply(map => filterMap(map, (_, key) => name.includes(key as InNames))) as any
     }
 
     get names() {
-        return this._map.keySeq().toArray() as Names[]
+        return seq(this._map.keys()).toArray().pull() as Names[]
     }
 
     get(name: Names): PortSetEntry {
@@ -71,7 +72,7 @@ export class PortSet<Names extends string = never> {
 
     map(mapping: InputPortMapping<Names>): PortMap<Names> {
         return new PortMap(
-            this._map.map(entry => {
+            mapValues(this._map, entry => {
                 if (!(entry.name in mapping)) {
                     throw new PortError(`Port ${entry.name} not found in mapping`)
                 }

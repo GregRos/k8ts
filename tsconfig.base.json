@@ -1,14 +1,16 @@
 {
   "compilerOptions": {
     "composite": true,
-    "module": "CommonJS",
+    "module": "node16",
     "noImplicitOverride": true,
     "target": "ES2024",
     "lib": ["ES2023"],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "isolatedModules": true,
+
     "skipLibCheck": true,
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "resolveJsonModule": true,
     "declarationMap": true,
     "noEmit": true,

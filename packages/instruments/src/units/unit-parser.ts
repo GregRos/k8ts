@@ -1,4 +1,3 @@
-import type { Set } from "immutable"
 import { int, letter, type Parjser } from "parjs"
 import { many, map, stringify, then } from "parjs/combinators"
 import { InstrumentsError } from "../error"

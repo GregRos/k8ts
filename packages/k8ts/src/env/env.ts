@@ -1,14 +1,20 @@
 import type { CDK } from "@k8ts/imports"
-import { Map, type MapOf } from "immutable"
+import { merge } from "@k8ts/metadata/util"
+import { seq } from "doddle"
 import { isObject } from "what-are-you"
 import { MakeError } from "../error"
 import { api_ } from "../kinds"
-import type { EnvVarFrom, InputEnv, InputEnvMapping } from "./types"
+import {
+    toInputEnv,
+    type EnvVarFrom,
+    type InputEnv,
+    type InputEnvMap,
+    type InputEnvMapping,
+    type InputEnvValue
+} from "./types"
 import { isValidEnvVarName } from "./validate-name"
-
-type _EnvBuilderMap = MapOf<InputEnvMapping>
 export class EnvBuilder {
-    constructor(private readonly _env: _EnvBuilderMap) {
+    constructor(private readonly _env: InputEnvMap) {
         for (const key of _env.keys()) {
             if (!isValidEnvVarName(key)) {
                 throw new MakeError("Invalid environment variable name", {
@@ -42,9 +48,15 @@ export class EnvBuilder {
         }
     }
 
+    *[Symbol.iterator](): IterableIterator<[string, InputEnvValue]> {
+        for (const entry of this._env.entries()) {
+            yield entry
+        }
+    }
+
     toEnvVars() {
-        return this.values
-            .map((value, key) => {
+        return seq(this)
+            .map(([key, value]) => {
                 if (!isObject(value)) {
                     return {
                         name: key,
@@ -70,10 +82,10 @@ export class EnvBuilder {
                         })
                 }
             })
-            .valueSeq()
             .toArray()
+            .pull()
     }
-    private _withEnv(f: (env: _EnvBuilderMap) => _EnvBuilderMap) {
+    private _withEnv(f: (env: InputEnvMap) => InputEnvMap) {
         return new EnvBuilder(f(this._env))
     }
 
@@ -81,17 +93,17 @@ export class EnvBuilder {
     add(input: InputEnvMapping): EnvBuilder
     add(a: any, b?: any) {
         const pairs: [string, string][] = typeof a === "string" ? [[a, b]] : Object.entries(a)
-        const map = Map(pairs)
-        const existingKeys = map
-            .keySeq()
+        const map = new Map(pairs)
+        const existingKeys = seq(map.keys())
             .filter(k => this._env.has(k))
-            .toList()
-        if (existingKeys.size > 0) {
+            .toArray()
+            .pull()
+        if (existingKeys.length > 0) {
             throw new MakeError("Cannot overwrite existing keys using add", {
-                keys: existingKeys.toArray()
+                keys: existingKeys
             })
         }
-        return this._withEnv(env => env.merge(map) as any)
+        return this._withEnv(env => merge(env, map))
     }
 
     overwrite(name: string, value: string): EnvBuilder
@@ -100,26 +112,20 @@ export class EnvBuilder {
         if (typeof a === "string") {
             return this._withEnv(env => env.set(a, b))
         } else {
-            const map = Map(a as InputEnvMapping) as _EnvBuilderMap
-            return this._withEnv(env => env.merge(map) as any)
+            const map = toInputEnv(a)
+            return this._withEnv(env => merge(env, map))
         }
     }
 
     toObject() {
-        return this._env
-            .filter(v => v != null)
-            .map(x => `${x}`)
-            .toObject()
+        return seq(this)
+            .filter(([, v]) => v != null)
+            .toRecord(([k, v]) => [k, `${v}`])
+            .pull()
     }
 
     static make(env?: InputEnv) {
-        if (!env) {
-            return new EnvBuilder(Map({}))
-        }
-        if (env instanceof EnvBuilder) {
-            return env
-        }
-        return new EnvBuilder(Map(env ?? {}).filter(v => v != null) as _EnvBuilderMap)
+        return new EnvBuilder(toInputEnv(env ?? {}))
     }
 }
 

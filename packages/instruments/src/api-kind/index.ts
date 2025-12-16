@@ -1,4 +1,3 @@
-import { hash } from "immutable"
 import { displayers } from "../displayers"
 import { bind_own_methods } from "../displayers/bind"
 import { InstrumentsError } from "../error"
@@ -48,10 +47,6 @@ export namespace Kind {
                 return false
             }
             return this.text === other.text
-        }
-
-        private hashCode() {
-            return hash(this.text)
         }
     }
     @bind_own_methods()

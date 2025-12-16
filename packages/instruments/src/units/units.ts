@@ -1,4 +1,3 @@
-import { Set } from "immutable"
 import { SetUnitParser } from "./unit-parser"
 
 export type G = `${number}G`
@@ -45,9 +44,9 @@ export namespace Unit {
     export type Time = m | h | d | s | ms
     export type Any = Data | Cpu | Time
 
-    export const Cpu = SetUnitParser.make("cpu", Set(["m"]))
+    export const Cpu = SetUnitParser.make("cpu", new Set(["m"]))
 
-    export const Data = SetUnitParser.make("data", Set(["M", "G", "T", "K", "Mi", "Gi", "Ki"]))
+    export const Data = SetUnitParser.make("data", new Set(["M", "G", "T", "K", "Mi", "Gi", "Ki"]))
 
-    export const Time = SetUnitParser.make("time", Set(["m", "h", "d", "s", "ms"]))
+    export const Time = SetUnitParser.make("time", new Set(["m", "h", "d", "s", "ms"]))
 }

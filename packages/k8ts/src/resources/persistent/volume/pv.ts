@@ -8,12 +8,26 @@ import { equiv_cdk8s } from "../../../node/equiv-cdk8s"
 import { ManifestResource } from "../../../node/manifest-resource"
 import { Access } from "../access-mode"
 import type { Pv_VolumeMode } from "../block-mode"
-import { Backend as Backend_ } from "./backend"
 import { parseBackend } from "./parse-backend"
 
 export type Pv<T extends Pv_VolumeMode = Pv_VolumeMode> = Pv.Pv<T>
 export namespace Pv {
-    export import Backend = Backend_
+    export interface Pv_Backend_HostPath {
+        type: "HostPath"
+        hostpathType: string
+        path: string
+    }
+    export interface Pv_Backend_Local {
+        type: "Local"
+        path: string
+    }
+    export interface Pv_Backend_Nfs {
+        type: "NFS"
+        server: string
+        path: string
+    }
+
+    export type Backend = Pv_Backend_HostPath | Pv_Backend_Local | Pv_Backend_Nfs
     export interface Pv_Props_K8ts<Mode extends Pv_VolumeMode = Pv_VolumeMode> {
         $accessModes: Access
         $storageClass?: External<api_.storage_.v1_.StorageClass>

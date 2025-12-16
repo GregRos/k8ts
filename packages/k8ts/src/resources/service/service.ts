@@ -6,7 +6,7 @@ import {
     ResourceEntity,
     type InputPortMapping
 } from "@k8ts/instruments"
-import { Map } from "immutable"
+import { seq } from "doddle"
 import { MakeError } from "../../error"
 import { k8ts } from "../../kind-map"
 import { api_ } from "../../kinds"
@@ -14,12 +14,19 @@ import { ManifestResource } from "../../node"
 import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { Deployment } from "../deployment"
 import { toServicePorts } from "../utils/adapters"
-import { Frontend as Frontend_ } from "./frontend"
 import { Port as Port_ } from "./service-port"
 export type Service<ExposedPorts extends string = string> = Service.Service<ExposedPorts>
 export namespace Service {
     export import Port = Port_
-    export import Frontend = Frontend_
+    export interface Service_ClusterIp {
+        type: "ClusterIP"
+    }
+
+    export interface Service_LoadBalancer {
+        type: "LoadBalancer"
+        loadBalancerIP?: string
+    }
+    export type Frontend = Service_ClusterIp | Service_LoadBalancer
     export interface Service_Props<DeployPorts extends string, ExposedPorts extends DeployPorts> {
         $ports: InputPortMapping<ExposedPorts>
         $backend: Deployment.Deployment_Ref<DeployPorts>
@@ -42,7 +49,7 @@ export namespace Service {
             return {
                 spec: {
                     ...self.props.$frontend,
-                    ports: toServicePorts(svcPorts).toArray(),
+                    ports: toServicePorts(svcPorts),
                     selector: {
                         app: self.props.$backend.name
                     },
@@ -68,10 +75,11 @@ export namespace Service {
         // TODO: Ports force evaluates the backend which is not needed
         get ports() {
             const srcPorts = this.backend.ports.pull()
-            const knownPorts = Map(this.props.$ports)
-                .filter(x => x !== undefined)
-                .keySeq()
-                .toArray() as ExposedPorts[]
+            const knownPorts = seq(Object.entries(this.props.$ports))
+                .filter(([, v]) => v !== undefined)
+                .map(([k]) => k)
+                .toArray()
+                .pull() as ExposedPorts[]
             const svcPorts = srcPorts.pick(...knownPorts).map(this.props.$ports as any)
             return svcPorts
         }

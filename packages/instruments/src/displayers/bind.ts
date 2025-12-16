@@ -1,5 +1,3 @@
-import { List, Map } from "immutable"
-
 export function getPrototypes(target: object) {
     const prototypes = []
     let proto = Object.getPrototypeOf(target)
@@ -7,12 +5,14 @@ export function getPrototypes(target: object) {
         prototypes.push(proto)
         proto = Object.getPrototypeOf(proto)
     }
-    return List(prototypes)
+    return prototypes
 }
 
 export function bind_own_methods() {
     return <F extends abstract new (...args: any[]) => any>(target: F) => {
-        for (const [key, desc] of Map(Object.getOwnPropertyDescriptors(target.prototype))) {
+        for (const [key, desc] of new Map(
+            Object.entries(Object.getOwnPropertyDescriptors(target.prototype))
+        )) {
             if (!desc.value || typeof desc.value !== "function") {
                 continue
             }

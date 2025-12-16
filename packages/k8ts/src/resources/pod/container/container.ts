@@ -9,7 +9,6 @@ import {
     type InputPortSetRecord,
     type TaggedImage
 } from "@k8ts/instruments"
-import { Map } from "immutable"
 import { toContainerPorts } from "../../utils/adapters"
 
 import { seq } from "doddle"
@@ -62,20 +61,15 @@ export namespace Container {
         readonly kind = api_.v1_.Pod_.Container
 
         get mounts() {
-            return Map(this.props.$mounts ?? {})
-                .mapEntries(([path, mount]) => {
-                    return [
-                        mount,
-                        {
-                            mount: mount as
-                                | Mount.Container_Mount_Volume
-                                | Mount.Container_Mount_Device,
-                            path: path as string
-                        }
-                    ]
+            return seq(Object.entries(this.props.$mounts ?? {}))
+                .map(([path, mount]) => {
+                    return {
+                        mount: mount as Mount.Container_Mount_Volume | Mount.Container_Mount_Device,
+                        path: path as string
+                    }
                 })
-                .valueSeq()
                 .toArray()
+                .pull()
         }
 
         get volumes() {
@@ -92,12 +86,16 @@ export namespace Container {
             const { $image, $ports, $command, $env } = self.props
             const untaggedProps = omitBy(self.props, (_, k) => k.startsWith("$"))
             let resourcesObject = self._resources()?.toObject()
-
+            const containerPorts =
+                $ports &&
+                seq(toContainerPorts(PortSet.make($ports)).values())
+                    .toArray()
+                    .pull()
             const container: CDK.Container = {
                 ...untaggedProps,
                 name: self.name,
                 image: $image.toString(),
-                ports: $ports && toContainerPorts(PortSet.make($ports)).valueSeq().toArray(),
+                ports: containerPorts,
                 resources: resourcesObject,
                 command: $command?.toArray(),
                 env: Env($env).toEnvVars(),

@@ -1,4 +1,4 @@
-import { Map } from "immutable"
+import { seq } from "doddle"
 import { Ip4 } from "../../_ip"
 import { PortSet } from "../set"
 import type {
@@ -39,6 +39,8 @@ export function portRecordInput(
     if (record instanceof PortSet) {
         return record.values
     }
-    const inputMap = Map(record)
-    return inputMap.map((v, k) => parsePortInput(k, v))
+    const inputMap = seq(Object.entries(record))
+        .toMap(([k, v]) => [k, parsePortInput(k, v)])
+        .pull()
+    return inputMap
 }

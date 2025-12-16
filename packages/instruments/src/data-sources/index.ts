@@ -1,6 +1,5 @@
-import { doddle, DoddleAsync } from "doddle"
+import { doddle, DoddleAsync, seq, type Doddle } from "doddle"
 import { readFile } from "fs/promises"
-import { Map } from "immutable"
 import { dirname, join, resolve } from "path"
 import StackTracey from "stacktracey"
 import { InstrumentsError } from "../error"
@@ -85,42 +84,61 @@ export interface DataSourceResolvedRecord {
     binaryData: Record<string, Uint8Array>
 }
 type MaybePromise<T> = T | Promise<T>
-async function promiseAllMap<K, V>(m: Map<K, MaybePromise<V>>) {
-    const promises = m.toArray().map(async x => [x[0], await x[1]] as [K, V])
+async function promiseAllMap<K, V>(m: Map<K, Doddle<MaybePromise<V>>>): Promise<Map<K, V>> {
+    const promises = seq(m)
+        .map(async x => [x[0], await x[1].pull()] as [K, V])
+        .toArray()
+        .pull()
     const res = await Promise.all(promises)
-    return Map(res)
+    return new Map(res)
 }
 export async function resolveText(record: DataSourceRecord_Text) {
-    const mp = Map(record).map(async (v, k) => {
-        let resolved = v
-        if (v instanceof LocalFileSource) {
-            resolved = await v.contents.pull()
-        }
-        if (typeof resolved !== "string") {
-            throw new InstrumentsError(
-                `Got an invalid data value ${v} for key ${k}. Must be a string.`
-            )
-        }
-        return resolved
-    })
+    const mp = seq(Object.entries(record))
+        .map(([k, v]) => {
+            return [
+                k,
+                doddle(async () => {
+                    let resolved = v
+                    if (v instanceof LocalFileSource) {
+                        resolved = await v.contents.pull()
+                    }
+                    if (typeof resolved !== "string") {
+                        throw new InstrumentsError(
+                            `Got an invalid data value ${v} for key ${k}. Must be a string.`
+                        )
+                    }
+                    return resolved
+                })
+            ] as const
+        })
+        .toMap(x => x)
+        .pull()
     return promiseAllMap(mp)
 }
 export async function resolveBinary(record: DataSourceRecord_Binary) {
-    const mp = Map(record).map(async (v, k) => {
-        let resolved = v as any
-        if (v instanceof LocalFileSource) {
-            resolved = await v.contents.pull()
-        }
-        if (isTypedArray(resolved)) {
-            return new Uint8Array(resolved.buffer)
-        } else if (isArrayBuffer(resolved)) {
-            return new Uint8Array(resolved)
-        } else {
-            throw new InstrumentsError(
-                `Got an invalid data value ${v} for key ${k}. Must be binary data.`
-            )
-        }
-    })
+    const mp = seq(Object.entries(record))
+        .map(([k, v]) => {
+            return [
+                k,
+                doddle(async () => {
+                    let resolved = v as any
+                    if (v instanceof LocalFileSource) {
+                        resolved = await v.contents.pull()
+                    }
+                    if (isTypedArray(resolved)) {
+                        return new Uint8Array(resolved.buffer)
+                    } else if (isArrayBuffer(resolved)) {
+                        return new Uint8Array(resolved)
+                    } else {
+                        throw new InstrumentsError(
+                            `Got an invalid data value ${v} for key ${k}. Must be binary data.`
+                        )
+                    }
+                })
+            ] as const
+        })
+        .toMap(x => x)
+        .pull()
 
     return promiseAllMap(mp)
 }

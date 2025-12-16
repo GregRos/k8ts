@@ -1,24 +1,20 @@
-import { Map } from "immutable"
 import { isNullish } from "what-are-you"
 import { parseInnerKey, parseOuterKey } from "../key/parse-key"
-import { SectionKey, ValueKey } from "../key/repr"
+import { SectionKey } from "../key/repr"
 import { Meta } from "../meta"
 import type { InputMeta } from "./dict-input"
 
-export function parseMetaInput(input: InputMeta): Map<ValueKey, string> {
+export function parseMetaInput(input: InputMeta): Map<string, string> {
     if (input == null) {
-        return Map()
+        return new Map()
     }
-    if (Map.isMap(input)) {
-        return input as Map<ValueKey, string>
+    if (input instanceof Map) {
+        return new Map(input) as Map<string, string>
     }
     if (input instanceof Meta.Meta) {
-        return input["_dict"]
+        return new Map(input["_dict"] as Map<string, string>)
     }
-    if (input instanceof Meta.MutableMeta) {
-        return input["_meta"]["_dict"]
-    }
-    let map = Map<ValueKey, string>()
+    let map = new Map<string, string>()
     for (const [key, value] of Object.entries(input)) {
         const outer = parseOuterKey(key)
         if (isNullish(value)) {
@@ -37,13 +33,13 @@ export function parseMetaInput(input: InputMeta): Map<ValueKey, string> {
                 if (typeof vv !== "string") {
                     throw new Error(`Expected string value for inner key ${kk}`)
                 }
-                map = map.set(inner.section(outer), vv as string)
+                map.set(inner.section(outer).str, vv as string)
             }
         } else {
             if (typeof value !== "string") {
                 throw new Error(`Expected string value for key ${key}`)
             }
-            map = map.set(outer, value as string)
+            map.set(outer.str, value as string)
         }
     }
     return map

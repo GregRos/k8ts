@@ -1,4 +1,4 @@
-import { Map } from "immutable"
+import { filterMap, mapValues } from "@k8ts/metadata/util"
 import { PortError } from "./error"
 import type { PortMapEntry } from "./types"
 export class PortMap<Names extends string> {
@@ -9,7 +9,7 @@ export class PortMap<Names extends string> {
     }
 
     pick<InNames extends Names>(...name: InNames[]): PortMap<InNames> {
-        return this._apply(map => map.filter((_, key) => name.includes(key as InNames)))
+        return this._apply(map => filterMap(map, (_, key) => name.includes(key as InNames)))
     }
 
     get values() {
@@ -18,7 +18,7 @@ export class PortMap<Names extends string> {
 
     map(mapping: Record<Names, number>): PortMap<Names> {
         return new PortMap(
-            this._map.map(entry => {
+            mapValues(this._map, entry => {
                 return {
                     ...entry,
                     frontend: mapping[entry.name as keyof typeof mapping]

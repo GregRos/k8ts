@@ -8,6 +8,8 @@ import {
     resolveBinary,
     resolveText
 } from "@k8ts/instruments"
+import { toObject } from "@k8ts/metadata/util"
+import { seq } from "doddle"
 import { k8ts } from "../../kind-map"
 import { api_ } from "../../kinds"
 import { equiv_cdk8s } from "../../node/equiv-cdk8s"
@@ -27,11 +29,13 @@ export namespace ConfigMap {
         async body(self): Promise<CDK.KubeConfigMapProps> {
             const binaryData = await resolveBinary(self.props.binaryData ?? {})
             const data = await resolveText(self.props.data)
+            const encodedBinaryData = seq(binaryData)
+                .map(([k, x]) => [k, Buffer.from(x).toString("base64")] as const)
+                .toRecord(x => x)
+                .pull()
             return {
-                data: data.isEmpty() ? undefined : data.toObject(),
-                binaryData: binaryData.isEmpty()
-                    ? undefined
-                    : binaryData.map(x => Buffer.from(x).toString("base64")).toObject()
+                data: data.size === 0 ? undefined : toObject(data),
+                binaryData: binaryData.size === 0 ? undefined : encodedBinaryData
             }
         }
     })
