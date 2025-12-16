@@ -9,9 +9,8 @@ import {
 import { seq } from "doddle"
 import { MakeError } from "../../error"
 import { k8ts } from "../../kind-map"
-import { api_ } from "../../kinds"
+import { api2 } from "../../kinds"
 import { ManifestResource } from "../../node"
-import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { Deployment } from "../deployment"
 import { toServicePorts } from "../utils/adapters"
 import { Port as Port_ } from "./service-port"
@@ -26,23 +25,23 @@ export namespace Service {
         type: "LoadBalancer"
         loadBalancerIP?: string
     }
-    export type Frontend = Service_ClusterIp | Service_LoadBalancer
+    export type Service_Frontend = Service_ClusterIp | Service_LoadBalancer
     export interface Service_Props<DeployPorts extends string, ExposedPorts extends DeployPorts> {
         $ports: InputPortMapping<ExposedPorts>
         $backend: Deployment.Deployment_Ref<DeployPorts>
-        $frontend: Frontend
+        $frontend: Service_Frontend
     }
-    export interface Service_Ref<ExposedPorts extends string> extends Refable<api_.v1_.Service> {
+    export interface Service_Ref<ExposedPorts extends string>
+        extends Refable<typeof api2.v1.Service._> {
         __PORTS__: ExposedPorts
     }
 
-    @k8ts(api_.v1_.Service)
+    @k8ts(api2.v1.Service._)
     @relations({
         needs: self => ({
             backend: self.backend as ResourceEntity
         })
     })
-    @equiv_cdk8s(CDK.KubeService)
     @manifest({
         body(self): CDK.KubeServiceProps {
             const svcPorts = self.ports
@@ -67,7 +66,7 @@ export namespace Service {
         Service_Props<string, ExposedPorts>
     > {
         __PORTS__!: ExposedPorts
-        kind = api_.v1_.Service
+        kind = api2.v1.Service._
 
         private get backend() {
             return this.props.$backend as Deployment<ExposedPorts>

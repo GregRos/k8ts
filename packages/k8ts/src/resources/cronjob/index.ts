@@ -5,7 +5,6 @@ import { Meta, MutableMeta } from "@k8ts/metadata"
 import { omit, omitBy } from "lodash"
 import { k8ts } from "../../kind-map"
 import { api_ } from "../../kinds"
-import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { ManifestResource } from "../../node/manifest-resource"
 import { PodTemplate } from "../pod/pod-template"
 export interface CronJob_Props<CronSpec extends Cron.Record>
@@ -19,7 +18,6 @@ export interface CronJob_Props<CronSpec extends Cron.Record>
 }
 
 @k8ts(api_.batch_.v1_.CronJob)
-@equiv_cdk8s(CDK.KubeCronJob)
 @relations({
     kids: s => [s.template]
 })

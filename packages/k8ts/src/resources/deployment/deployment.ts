@@ -4,8 +4,7 @@ import { Meta, MutableMeta } from "@k8ts/metadata"
 import { omit, omitBy } from "lodash"
 import { MakeError } from "../../error"
 import { k8ts } from "../../kind-map"
-import { api_ } from "../../kinds"
-import { equiv_cdk8s } from "../../node/equiv-cdk8s"
+import { api2 } from "../../kinds"
 import { ManifestResource } from "../../node/manifest-resource"
 import { PodTemplate } from "../pod/pod-template"
 
@@ -29,12 +28,11 @@ export namespace Deployment {
         $template: PodTemplate.Pod_Props<Ports>
         $strategy?: Deployment_Strategy
     }
-    export type Deployment_Ref<Ports extends string> = Refable<api_.apps_.v1_.Deployment> & {
+    export type Deployment_Ref<Ports extends string> = Refable<typeof api2.apps.v1.Deployment._> & {
         __PORTS__: Ports
     }
 
-    @k8ts(api_.apps_.v1_.Deployment)
-    @equiv_cdk8s(CDK.KubeDeployment)
+    @k8ts(api2.apps.v1.Deployment._)
     @relations({
         kids: s => [s.template]
     })
@@ -60,7 +58,7 @@ export namespace Deployment {
         Deployment_Props<Ports>
     > {
         __PORTS__!: Ports
-        kind = api_.apps_.v1_.Deployment
+        kind = api2.apps.v1.Deployment._
         template: PodTemplate<Ports>
 
         private get _strategy() {

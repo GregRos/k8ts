@@ -12,7 +12,6 @@ import { toObject } from "@k8ts/metadata/util"
 import { seq } from "doddle"
 import { k8ts } from "../../kind-map"
 import { api_ } from "../../kinds"
-import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { ManifestResource } from "../../node/manifest-resource"
 export type ConfigMap = ConfigMap.ConfigMap
 export namespace ConfigMap {
@@ -24,7 +23,6 @@ export namespace ConfigMap {
 
     @k8ts(api_.v1_.ConfigMap)
     @relations("none")
-    @equiv_cdk8s(CDK.KubeConfigMap)
     @manifest({
         async body(self): Promise<CDK.KubeConfigMapProps> {
             const binaryData = await resolveBinary(self.props.binaryData ?? {})

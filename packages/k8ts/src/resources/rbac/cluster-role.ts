@@ -3,14 +3,13 @@ import { Kind, manifest, relations, type Origin, type Producer } from "@k8ts/ins
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { seq } from "doddle"
 import { k8ts } from "../../kind-map"
-import { api_ } from "../../kinds"
-import { equiv_cdk8s } from "../../node/equiv-cdk8s"
+import { api2 } from "../../kinds"
 import { ManifestResource } from "../../node/manifest-resource"
 export type ClusterRole = ClusterRole.ClusterRole
 export namespace ClusterRole {
     export interface ClusterRole_Rule<
         Groups extends Kind.Group[] = Kind.Group[],
-        Resources extends Kind.Kind<string, Kind.Version<string, Groups[number]>>[] = Kind.Kind[]
+        Resources extends Kind.Kind<Groups[number]["name"], string, string>[] = Kind.Kind[]
     > {
         resources: Resources
         verbs: Verbs[]
@@ -34,9 +33,8 @@ export namespace ClusterRole {
     export interface ClusterRole_Props<Rules extends ClusterRole_Rule = ClusterRole_Rule> {
         rules: ClusterRole_RuleProducer<Rules>
     }
-    @k8ts(api_.rbac_.v1_.ClusterRole)
+    @k8ts(api2["rbac.authorization.k8s.io"].v1.ClusterRole._)
     @relations("none")
-    @equiv_cdk8s(CDK.KubeClusterRole)
     @manifest({
         _fromObject(self, rule: ClusterRole_Rule) {
             return {
@@ -58,7 +56,7 @@ export namespace ClusterRole {
         }
     })
     export class ClusterRole extends ManifestResource<ClusterRole_Props> {
-        override kind = api_.rbac_.v1_.ClusterRole
+        override kind = api2["rbac.authorization.k8s.io"].v1.ClusterRole._
         constructor(origin: Origin, meta: Meta | MutableMeta, props: ClusterRole_Props) {
             super(origin, meta.toMutable(), props)
         }

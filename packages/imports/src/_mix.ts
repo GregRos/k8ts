@@ -1,3 +1,3 @@
-export * from "./acme.cert-manager.io"
-export * from "./gateway.networking.k8s.io"
-export * from "./k8s"
+export type * from "./gateway.networking.k8s.io"
+export type * from "./k8s"
+export { IntOrString, Quantity } from "./k8s"

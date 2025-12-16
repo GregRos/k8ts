@@ -1,4 +1,4 @@
-export { CDK } from "@k8ts/imports"
+export type { CDK } from "@k8ts/imports"
 export * from "./external"
 export * from "./file"
 export * as ScopedFactory from "./file/factory"

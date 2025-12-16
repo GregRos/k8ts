@@ -1,6 +1,6 @@
 import { Kind } from "@k8ts/instruments"
 import { version } from "./version"
-const major = version.split(".")[0]
+const major = +version.split(".")[0]
 export namespace K8tsKinds {
     export const build = Kind.group("build.k8ts.org")
     export namespace build_ {

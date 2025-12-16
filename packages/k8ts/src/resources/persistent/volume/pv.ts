@@ -4,7 +4,6 @@ import { MakeError } from "../../../error"
 import { External } from "../../../external"
 import { k8ts } from "../../../kind-map"
 import { api_ } from "../../../kinds"
-import { equiv_cdk8s } from "../../../node/equiv-cdk8s"
 import { ManifestResource } from "../../../node/manifest-resource"
 import { Access } from "../access-mode"
 import type { Pv_VolumeMode } from "../block-mode"
@@ -43,7 +42,6 @@ export namespace Pv {
         Refable<api_.v1_.PersistentVolume> & {
             __MODE__: Mode
         }
-    @equiv_cdk8s(CDK.KubePersistentVolume)
     @manifest({
         body(self) {
             const pvProps = self.props

@@ -6,7 +6,6 @@ import { External } from "../../../external"
 import { k8ts } from "../../../kind-map"
 import { api_ } from "../../../kinds"
 import { ManifestResource } from "../../../node"
-import { equiv_cdk8s } from "../../../node/equiv-cdk8s"
 import { Access } from "../access-mode"
 import type { Pv_VolumeMode } from "../block-mode"
 import { Pv } from "../volume"
@@ -25,7 +24,6 @@ export namespace Pvc {
     }
 
     @k8ts(api_.v1_.PersistentVolumeClaim)
-    @equiv_cdk8s(CDK.KubePersistentVolumeClaim)
     @relations({
         needs: self => ({
             bind: self.bound,
