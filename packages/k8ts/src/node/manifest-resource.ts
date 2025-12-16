@@ -1,11 +1,7 @@
 import { Builder, Kind, type Origin } from "@k8ts/instruments"
 import type { Meta, MutableMeta } from "@k8ts/metadata"
-import { ResourceIdentBlock } from "./abs-resource"
 import { TopResource } from "./top-resource"
 
-export interface ManifestResourceIdent extends ResourceIdentBlock {
-    name: string
-}
 export abstract class ManifestResource<Props extends object = object> extends TopResource<Props> {
     protected async manifest() {
         return Builder.get(this).manifest()

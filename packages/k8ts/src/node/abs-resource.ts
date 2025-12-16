@@ -1,10 +1,6 @@
 import { displayers, Kind, Origin, RefKey, ResourceEntity, ResourceNode } from "@k8ts/instruments"
 import { Doddle, doddle } from "doddle"
 
-export interface ResourceIdentBlock {
-    kind: Kind.IdentParent
-    name: string
-}
 @displayers({
     simple: s => s.node,
     pretty: s => s.node
