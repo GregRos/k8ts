@@ -1,5 +1,5 @@
 import { CDK } from "@k8ts/imports"
-import { manifest, Origin, Refable, relations, WritableDeep } from "@k8ts/instruments"
+import { manifest, Origin, Refable, relations } from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { omit, omitBy } from "lodash"
 import { MakeError } from "../../error"
@@ -16,9 +16,8 @@ export namespace Deployment {
         | ({
               type: "RollingUpdate"
           } & CDK.RollingUpdateDeployment)
-    export type NormalProps = WritableDeep<
-        Omit<CDK.DeploymentSpec, "selector" | "template" | "strategy">
-    >
+    export type NormalProps = Omit<CDK.DeploymentSpec, "selector" | "template" | "strategy">
+
     export type Props<Ports extends string> = NormalProps & {
         $template: PodTemplate.Props<Ports>
         $strategy?: DeploymentStrategy

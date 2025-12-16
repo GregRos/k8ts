@@ -9,7 +9,7 @@ import { Construct } from "constructs"
  */
 export class Bucket extends ApiObject {
     /** Returns the apiVersion and kind for "Bucket" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "source.toolkit.fluxcd.io/v1",
         kind: "Bucket"
     }
@@ -60,7 +60,7 @@ export class Bucket extends ApiObject {
  */
 export interface BucketProps {
     /** @schema Bucket#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * BucketSpec specifies the required configuration to produce an Artifact for an object storage
@@ -68,7 +68,7 @@ export interface BucketProps {
      *
      * @schema Bucket#spec
      */
-    readonly spec?: BucketSpec
+    spec?: BucketSpec
 }
 
 /** Converts an object of type 'BucketProps' to JSON representation. */
@@ -101,7 +101,7 @@ export interface BucketSpec {
      *
      * @schema BucketSpec#bucketName
      */
-    readonly bucketName: string
+    bucketName: string
 
     /**
      * CertSecretRef can be given the name of a Secret containing either or both of
@@ -109,53 +109,54 @@ export interface BucketSpec {
      * - A PEM-encoded client certificate (`tls.crt`) and private key (`tls.key`);
      * - A PEM-encoded CA certificate (`ca.crt`)
      *
-     * And whichever are supplied, will be used for connecting to the bucket. The client cert and key
-     * are useful if you are authenticating with a certificate; the CA cert is useful if you are using
-     * a self-signed server certificate. The Secret must be of type `Opaque` or `kubernetes.io/tls`.
+     * And whichever are supplied, will be used for connecting to the bucket. The client cert and
+     * key are useful if you are authenticating with a certificate; the CA cert is useful if you are
+     * using a self-signed server certificate. The Secret must be of type `Opaque` or
+     * `kubernetes.io/tls`.
      *
      * This field is only supported for the `generic` provider.
      *
      * @schema BucketSpec#certSecretRef
      */
-    readonly certSecretRef?: BucketSpecCertSecretRef
+    certSecretRef?: BucketSpecCertSecretRef
 
     /**
      * Endpoint is the object storage address the BucketName is located at.
      *
      * @schema BucketSpec#endpoint
      */
-    readonly endpoint: string
+    endpoint: string
 
     /**
-     * Ignore overrides the set of excluded patterns in the .sourceignore format (which is the same as
-     * .gitignore). If not provided, a default will be used, consult the documentation for your
+     * Ignore overrides the set of excluded patterns in the .sourceignore format (which is the same
+     * as .gitignore). If not provided, a default will be used, consult the documentation for your
      * version to find out what those are.
      *
      * @schema BucketSpec#ignore
      */
-    readonly ignore?: string
+    ignore?: string
 
     /**
      * Insecure allows connecting to a non-TLS HTTP Endpoint.
      *
      * @schema BucketSpec#insecure
      */
-    readonly insecure?: boolean
+    insecure?: boolean
 
     /**
-     * Interval at which the Bucket Endpoint is checked for updates. This interval is approximate and
-     * may be subject to jitter to ensure efficient use of resources.
+     * Interval at which the Bucket Endpoint is checked for updates. This interval is approximate
+     * and may be subject to jitter to ensure efficient use of resources.
      *
      * @schema BucketSpec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
      * Prefix to use for server-side filtering of files in the Bucket.
      *
      * @schema BucketSpec#prefix
      */
-    readonly prefix?: string
+    prefix?: string
 
     /**
      * Provider of the object storage bucket. Defaults to 'generic', which expects an S3 (API)
@@ -164,7 +165,7 @@ export interface BucketSpec {
      * @default generic', which expects an S3 (API) compatible object
      * @schema BucketSpec#provider
      */
-    readonly provider?: BucketSpecProvider
+    provider?: BucketSpecProvider
 
     /**
      * ProxySecretRef specifies the Secret containing the proxy configuration to use while
@@ -172,45 +173,45 @@ export interface BucketSpec {
      *
      * @schema BucketSpec#proxySecretRef
      */
-    readonly proxySecretRef?: BucketSpecProxySecretRef
+    proxySecretRef?: BucketSpecProxySecretRef
 
     /**
      * Region of the Endpoint where the BucketName is located in.
      *
      * @schema BucketSpec#region
      */
-    readonly region?: string
+    region?: string
 
     /**
      * SecretRef specifies the Secret containing authentication credentials for the Bucket.
      *
      * @schema BucketSpec#secretRef
      */
-    readonly secretRef?: BucketSpecSecretRef
+    secretRef?: BucketSpecSecretRef
 
     /**
-     * STS specifies the required configuration to use a Security Token Service for fetching temporary
-     * credentials to authenticate in a Bucket provider.
+     * STS specifies the required configuration to use a Security Token Service for fetching
+     * temporary credentials to authenticate in a Bucket provider.
      *
      * This field is only supported for the `aws` and `generic` providers.
      *
      * @schema BucketSpec#sts
      */
-    readonly sts?: BucketSpecSts
+    sts?: BucketSpecSts
 
     /**
      * Suspend tells the controller to suspend the reconciliation of this Bucket.
      *
      * @schema BucketSpec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * Timeout for fetch operations, defaults to 60s.
      *
      * @schema BucketSpec#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'BucketSpec' to JSON representation. */
@@ -263,7 +264,7 @@ export interface BucketSpecCertSecretRef {
      *
      * @schema BucketSpecCertSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'BucketSpecCertSecretRef' to JSON representation. */
@@ -315,7 +316,7 @@ export interface BucketSpecProxySecretRef {
      *
      * @schema BucketSpecProxySecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'BucketSpecProxySecretRef' to JSON representation. */
@@ -348,7 +349,7 @@ export interface BucketSpecSecretRef {
      *
      * @schema BucketSpecSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'BucketSpecSecretRef' to JSON representation. */
@@ -394,31 +395,31 @@ export interface BucketSpecSts {
      *
      * @schema BucketSpecSts#certSecretRef
      */
-    readonly certSecretRef?: BucketSpecStsCertSecretRef
+    certSecretRef?: BucketSpecStsCertSecretRef
 
     /**
-     * Endpoint is the HTTP/S endpoint of the Security Token Service from where temporary credentials
-     * will be fetched.
+     * Endpoint is the HTTP/S endpoint of the Security Token Service from where temporary
+     * credentials will be fetched.
      *
      * @schema BucketSpecSts#endpoint
      */
-    readonly endpoint: string
+    endpoint: string
 
     /**
      * Provider of the Security Token Service.
      *
      * @schema BucketSpecSts#provider
      */
-    readonly provider: BucketSpecStsProvider
+    provider: BucketSpecStsProvider
 
     /**
-     * SecretRef specifies the Secret containing authentication credentials for the STS endpoint. This
-     * Secret must contain the fields `username` and `password` and is supported only for the `ldap`
-     * provider.
+     * SecretRef specifies the Secret containing authentication credentials for the STS endpoint.
+     * This Secret must contain the fields `username` and `password` and is supported only for the
+     * `ldap` provider.
      *
      * @schema BucketSpecSts#secretRef
      */
-    readonly secretRef?: BucketSpecStsSecretRef
+    secretRef?: BucketSpecStsSecretRef
 }
 
 /** Converts an object of type 'BucketSpecSts' to JSON representation. */
@@ -464,7 +465,7 @@ export interface BucketSpecStsCertSecretRef {
      *
      * @schema BucketSpecStsCertSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'BucketSpecStsCertSecretRef' to JSON representation. */
@@ -511,7 +512,7 @@ export interface BucketSpecStsSecretRef {
      *
      * @schema BucketSpecStsSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'BucketSpecStsSecretRef' to JSON representation. */
@@ -540,7 +541,7 @@ export function toJson_BucketSpecStsSecretRef(
  */
 export class BucketV1Beta1 extends ApiObject {
     /** Returns the apiVersion and kind for "BucketV1Beta1" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "source.toolkit.fluxcd.io/v1beta1",
         kind: "Bucket"
     }
@@ -591,14 +592,14 @@ export class BucketV1Beta1 extends ApiObject {
  */
 export interface BucketV1Beta1Props {
     /** @schema BucketV1Beta1#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * BucketSpec defines the desired state of an S3 compatible bucket
      *
      * @schema BucketV1Beta1#spec
      */
-    readonly spec?: BucketV1Beta1Spec
+    spec?: BucketV1Beta1Spec
 }
 
 /** Converts an object of type 'BucketV1Beta1Props' to JSON representation. */
@@ -633,79 +634,79 @@ export interface BucketV1Beta1Spec {
      *
      * @schema BucketV1Beta1Spec#accessFrom
      */
-    readonly accessFrom?: BucketV1Beta1SpecAccessFrom
+    accessFrom?: BucketV1Beta1SpecAccessFrom
 
     /**
      * The bucket name.
      *
      * @schema BucketV1Beta1Spec#bucketName
      */
-    readonly bucketName: string
+    bucketName: string
 
     /**
      * The bucket endpoint address.
      *
      * @schema BucketV1Beta1Spec#endpoint
      */
-    readonly endpoint: string
+    endpoint: string
 
     /**
-     * Ignore overrides the set of excluded patterns in the .sourceignore format (which is the same as
-     * .gitignore). If not provided, a default will be used, consult the documentation for your
+     * Ignore overrides the set of excluded patterns in the .sourceignore format (which is the same
+     * as .gitignore). If not provided, a default will be used, consult the documentation for your
      * version to find out what those are.
      *
      * @schema BucketV1Beta1Spec#ignore
      */
-    readonly ignore?: string
+    ignore?: string
 
     /**
      * Insecure allows connecting to a non-TLS S3 HTTP endpoint.
      *
      * @schema BucketV1Beta1Spec#insecure
      */
-    readonly insecure?: boolean
+    insecure?: boolean
 
     /**
      * The interval at which to check for bucket updates.
      *
      * @schema BucketV1Beta1Spec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
      * The S3 compatible storage provider name, default ('generic').
      *
      * @schema BucketV1Beta1Spec#provider
      */
-    readonly provider?: BucketV1Beta1SpecProvider
+    provider?: BucketV1Beta1SpecProvider
 
     /**
      * The bucket region.
      *
      * @schema BucketV1Beta1Spec#region
      */
-    readonly region?: string
+    region?: string
 
     /**
      * The name of the secret containing authentication credentials for the Bucket.
      *
      * @schema BucketV1Beta1Spec#secretRef
      */
-    readonly secretRef?: BucketV1Beta1SpecSecretRef
+    secretRef?: BucketV1Beta1SpecSecretRef
 
     /**
      * This flag tells the controller to suspend the reconciliation of this source.
      *
      * @schema BucketV1Beta1Spec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * The timeout for download operations, defaults to 60s.
      *
      * @schema BucketV1Beta1Spec#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'BucketV1Beta1Spec' to JSON representation. */
@@ -744,12 +745,12 @@ export function toJson_BucketV1Beta1Spec(
  */
 export interface BucketV1Beta1SpecAccessFrom {
     /**
-     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in this
-     * list are evaluated using a logical OR operation.
+     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in
+     * this list are evaluated using a logical OR operation.
      *
      * @schema BucketV1Beta1SpecAccessFrom#namespaceSelectors
      */
-    readonly namespaceSelectors: BucketV1Beta1SpecAccessFromNamespaceSelectors[]
+    namespaceSelectors: BucketV1Beta1SpecAccessFromNamespaceSelectors[]
 }
 
 /** Converts an object of type 'BucketV1Beta1SpecAccessFrom' to JSON representation. */
@@ -798,7 +799,7 @@ export interface BucketV1Beta1SpecSecretRef {
      *
      * @schema BucketV1Beta1SpecSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'BucketV1Beta1SpecSecretRef' to JSON representation. */
@@ -834,7 +835,7 @@ export interface BucketV1Beta1SpecAccessFromNamespaceSelectors {
      *
      * @schema BucketV1Beta1SpecAccessFromNamespaceSelectors#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -872,7 +873,7 @@ export function toJson_BucketV1Beta1SpecAccessFromNamespaceSelectors(
  */
 export class BucketV1Beta2 extends ApiObject {
     /** Returns the apiVersion and kind for "BucketV1Beta2" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "source.toolkit.fluxcd.io/v1beta2",
         kind: "Bucket"
     }
@@ -923,7 +924,7 @@ export class BucketV1Beta2 extends ApiObject {
  */
 export interface BucketV1Beta2Props {
     /** @schema BucketV1Beta2#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * BucketSpec specifies the required configuration to produce an Artifact for an object storage
@@ -931,7 +932,7 @@ export interface BucketV1Beta2Props {
      *
      * @schema BucketV1Beta2#spec
      */
-    readonly spec?: BucketV1Beta2Spec
+    spec?: BucketV1Beta2Spec
 }
 
 /** Converts an object of type 'BucketV1Beta2Props' to JSON representation. */
@@ -967,14 +968,14 @@ export interface BucketV1Beta2Spec {
      *
      * @schema BucketV1Beta2Spec#accessFrom
      */
-    readonly accessFrom?: BucketV1Beta2SpecAccessFrom
+    accessFrom?: BucketV1Beta2SpecAccessFrom
 
     /**
      * BucketName is the name of the object storage bucket.
      *
      * @schema BucketV1Beta2Spec#bucketName
      */
-    readonly bucketName: string
+    bucketName: string
 
     /**
      * CertSecretRef can be given the name of a Secret containing either or both of
@@ -982,53 +983,54 @@ export interface BucketV1Beta2Spec {
      * - A PEM-encoded client certificate (`tls.crt`) and private key (`tls.key`);
      * - A PEM-encoded CA certificate (`ca.crt`)
      *
-     * And whichever are supplied, will be used for connecting to the bucket. The client cert and key
-     * are useful if you are authenticating with a certificate; the CA cert is useful if you are using
-     * a self-signed server certificate. The Secret must be of type `Opaque` or `kubernetes.io/tls`.
+     * And whichever are supplied, will be used for connecting to the bucket. The client cert and
+     * key are useful if you are authenticating with a certificate; the CA cert is useful if you are
+     * using a self-signed server certificate. The Secret must be of type `Opaque` or
+     * `kubernetes.io/tls`.
      *
      * This field is only supported for the `generic` provider.
      *
      * @schema BucketV1Beta2Spec#certSecretRef
      */
-    readonly certSecretRef?: BucketV1Beta2SpecCertSecretRef
+    certSecretRef?: BucketV1Beta2SpecCertSecretRef
 
     /**
      * Endpoint is the object storage address the BucketName is located at.
      *
      * @schema BucketV1Beta2Spec#endpoint
      */
-    readonly endpoint: string
+    endpoint: string
 
     /**
-     * Ignore overrides the set of excluded patterns in the .sourceignore format (which is the same as
-     * .gitignore). If not provided, a default will be used, consult the documentation for your
+     * Ignore overrides the set of excluded patterns in the .sourceignore format (which is the same
+     * as .gitignore). If not provided, a default will be used, consult the documentation for your
      * version to find out what those are.
      *
      * @schema BucketV1Beta2Spec#ignore
      */
-    readonly ignore?: string
+    ignore?: string
 
     /**
      * Insecure allows connecting to a non-TLS HTTP Endpoint.
      *
      * @schema BucketV1Beta2Spec#insecure
      */
-    readonly insecure?: boolean
+    insecure?: boolean
 
     /**
-     * Interval at which the Bucket Endpoint is checked for updates. This interval is approximate and
-     * may be subject to jitter to ensure efficient use of resources.
+     * Interval at which the Bucket Endpoint is checked for updates. This interval is approximate
+     * and may be subject to jitter to ensure efficient use of resources.
      *
      * @schema BucketV1Beta2Spec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
      * Prefix to use for server-side filtering of files in the Bucket.
      *
      * @schema BucketV1Beta2Spec#prefix
      */
-    readonly prefix?: string
+    prefix?: string
 
     /**
      * Provider of the object storage bucket. Defaults to 'generic', which expects an S3 (API)
@@ -1037,7 +1039,7 @@ export interface BucketV1Beta2Spec {
      * @default generic', which expects an S3 (API) compatible object
      * @schema BucketV1Beta2Spec#provider
      */
-    readonly provider?: BucketV1Beta2SpecProvider
+    provider?: BucketV1Beta2SpecProvider
 
     /**
      * ProxySecretRef specifies the Secret containing the proxy configuration to use while
@@ -1045,45 +1047,45 @@ export interface BucketV1Beta2Spec {
      *
      * @schema BucketV1Beta2Spec#proxySecretRef
      */
-    readonly proxySecretRef?: BucketV1Beta2SpecProxySecretRef
+    proxySecretRef?: BucketV1Beta2SpecProxySecretRef
 
     /**
      * Region of the Endpoint where the BucketName is located in.
      *
      * @schema BucketV1Beta2Spec#region
      */
-    readonly region?: string
+    region?: string
 
     /**
      * SecretRef specifies the Secret containing authentication credentials for the Bucket.
      *
      * @schema BucketV1Beta2Spec#secretRef
      */
-    readonly secretRef?: BucketV1Beta2SpecSecretRef
+    secretRef?: BucketV1Beta2SpecSecretRef
 
     /**
-     * STS specifies the required configuration to use a Security Token Service for fetching temporary
-     * credentials to authenticate in a Bucket provider.
+     * STS specifies the required configuration to use a Security Token Service for fetching
+     * temporary credentials to authenticate in a Bucket provider.
      *
      * This field is only supported for the `aws` and `generic` providers.
      *
      * @schema BucketV1Beta2Spec#sts
      */
-    readonly sts?: BucketV1Beta2SpecSts
+    sts?: BucketV1Beta2SpecSts
 
     /**
      * Suspend tells the controller to suspend the reconciliation of this Bucket.
      *
      * @schema BucketV1Beta2Spec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * Timeout for fetch operations, defaults to 60s.
      *
      * @schema BucketV1Beta2Spec#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'BucketV1Beta2Spec' to JSON representation. */
@@ -1127,12 +1129,12 @@ export function toJson_BucketV1Beta2Spec(
  */
 export interface BucketV1Beta2SpecAccessFrom {
     /**
-     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in this
-     * list are evaluated using a logical OR operation.
+     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in
+     * this list are evaluated using a logical OR operation.
      *
      * @schema BucketV1Beta2SpecAccessFrom#namespaceSelectors
      */
-    readonly namespaceSelectors: BucketV1Beta2SpecAccessFromNamespaceSelectors[]
+    namespaceSelectors: BucketV1Beta2SpecAccessFromNamespaceSelectors[]
 }
 
 /** Converts an object of type 'BucketV1Beta2SpecAccessFrom' to JSON representation. */
@@ -1176,7 +1178,7 @@ export interface BucketV1Beta2SpecCertSecretRef {
      *
      * @schema BucketV1Beta2SpecCertSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'BucketV1Beta2SpecCertSecretRef' to JSON representation. */
@@ -1228,7 +1230,7 @@ export interface BucketV1Beta2SpecProxySecretRef {
      *
      * @schema BucketV1Beta2SpecProxySecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'BucketV1Beta2SpecProxySecretRef' to JSON representation. */
@@ -1261,7 +1263,7 @@ export interface BucketV1Beta2SpecSecretRef {
      *
      * @schema BucketV1Beta2SpecSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'BucketV1Beta2SpecSecretRef' to JSON representation. */
@@ -1307,31 +1309,31 @@ export interface BucketV1Beta2SpecSts {
      *
      * @schema BucketV1Beta2SpecSts#certSecretRef
      */
-    readonly certSecretRef?: BucketV1Beta2SpecStsCertSecretRef
+    certSecretRef?: BucketV1Beta2SpecStsCertSecretRef
 
     /**
-     * Endpoint is the HTTP/S endpoint of the Security Token Service from where temporary credentials
-     * will be fetched.
+     * Endpoint is the HTTP/S endpoint of the Security Token Service from where temporary
+     * credentials will be fetched.
      *
      * @schema BucketV1Beta2SpecSts#endpoint
      */
-    readonly endpoint: string
+    endpoint: string
 
     /**
      * Provider of the Security Token Service.
      *
      * @schema BucketV1Beta2SpecSts#provider
      */
-    readonly provider: BucketV1Beta2SpecStsProvider
+    provider: BucketV1Beta2SpecStsProvider
 
     /**
-     * SecretRef specifies the Secret containing authentication credentials for the STS endpoint. This
-     * Secret must contain the fields `username` and `password` and is supported only for the `ldap`
-     * provider.
+     * SecretRef specifies the Secret containing authentication credentials for the STS endpoint.
+     * This Secret must contain the fields `username` and `password` and is supported only for the
+     * `ldap` provider.
      *
      * @schema BucketV1Beta2SpecSts#secretRef
      */
-    readonly secretRef?: BucketV1Beta2SpecStsSecretRef
+    secretRef?: BucketV1Beta2SpecStsSecretRef
 }
 
 /** Converts an object of type 'BucketV1Beta2SpecSts' to JSON representation. */
@@ -1370,7 +1372,7 @@ export interface BucketV1Beta2SpecAccessFromNamespaceSelectors {
      *
      * @schema BucketV1Beta2SpecAccessFromNamespaceSelectors#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -1422,7 +1424,7 @@ export interface BucketV1Beta2SpecStsCertSecretRef {
      *
      * @schema BucketV1Beta2SpecStsCertSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'BucketV1Beta2SpecStsCertSecretRef' to JSON representation. */
@@ -1469,7 +1471,7 @@ export interface BucketV1Beta2SpecStsSecretRef {
      *
      * @schema BucketV1Beta2SpecStsSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'BucketV1Beta2SpecStsSecretRef' to JSON representation. */
@@ -1498,7 +1500,7 @@ export function toJson_BucketV1Beta2SpecStsSecretRef(
  */
 export class GitRepository extends ApiObject {
     /** Returns the apiVersion and kind for "GitRepository" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "source.toolkit.fluxcd.io/v1",
         kind: "GitRepository"
     }
@@ -1549,7 +1551,7 @@ export class GitRepository extends ApiObject {
  */
 export interface GitRepositoryProps {
     /** @schema GitRepository#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * GitRepositorySpec specifies the required configuration to produce an Artifact for a Git
@@ -1557,7 +1559,7 @@ export interface GitRepositoryProps {
      *
      * @schema GitRepository#spec
      */
-    readonly spec?: GitRepositorySpec
+    spec?: GitRepositorySpec
 }
 
 /** Converts an object of type 'GitRepositoryProps' to JSON representation. */
@@ -1588,13 +1590,13 @@ export function toJson_GitRepositoryProps(
  */
 export interface GitRepositorySpec {
     /**
-     * Ignore overrides the set of excluded patterns in the .sourceignore format (which is the same as
-     * .gitignore). If not provided, a default will be used, consult the documentation for your
+     * Ignore overrides the set of excluded patterns in the .sourceignore format (which is the same
+     * as .gitignore). If not provided, a default will be used, consult the documentation for your
      * version to find out what those are.
      *
      * @schema GitRepositorySpec#ignore
      */
-    readonly ignore?: string
+    ignore?: string
 
     /**
      * Include specifies a list of GitRepository resources which Artifacts should be included in the
@@ -1602,7 +1604,7 @@ export interface GitRepositorySpec {
      *
      * @schema GitRepositorySpec#include
      */
-    readonly include?: GitRepositorySpecInclude[]
+    include?: GitRepositorySpecInclude[]
 
     /**
      * Interval at which the GitRepository URL is checked for updates. This interval is approximate
@@ -1610,7 +1612,7 @@ export interface GitRepositorySpec {
      *
      * @schema GitRepositorySpec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
      * Provider used for authentication, can be 'azure', 'github', 'generic'. When not specified,
@@ -1618,7 +1620,7 @@ export interface GitRepositorySpec {
      *
      * @schema GitRepositorySpec#provider
      */
-    readonly provider?: GitRepositorySpecProvider
+    provider?: GitRepositorySpecProvider
 
     /**
      * ProxySecretRef specifies the Secret containing the proxy configuration to use while
@@ -1626,7 +1628,7 @@ export interface GitRepositorySpec {
      *
      * @schema GitRepositorySpec#proxySecretRef
      */
-    readonly proxySecretRef?: GitRepositorySpecProxySecretRef
+    proxySecretRef?: GitRepositorySpecProxySecretRef
 
     /**
      * RecurseSubmodules enables the initialization of all submodules within the GitRepository as
@@ -1634,7 +1636,7 @@ export interface GitRepositorySpec {
      *
      * @schema GitRepositorySpec#recurseSubmodules
      */
-    readonly recurseSubmodules?: boolean
+    recurseSubmodules?: boolean
 
     /**
      * Reference specifies the Git reference to resolve and monitor for changes, defaults to the
@@ -1642,45 +1644,45 @@ export interface GitRepositorySpec {
      *
      * @schema GitRepositorySpec#ref
      */
-    readonly ref?: GitRepositorySpecRef
+    ref?: GitRepositorySpecRef
 
     /**
-     * SecretRef specifies the Secret containing authentication credentials for the GitRepository. For
-     * HTTPS repositories the Secret must contain 'username' and 'password' fields for basic auth or
-     * 'bearerToken' field for token auth. For SSH repositories the Secret must contain 'identity' and
-     * 'known_hosts' fields.
+     * SecretRef specifies the Secret containing authentication credentials for the GitRepository.
+     * For HTTPS repositories the Secret must contain 'username' and 'password' fields for basic
+     * auth or 'bearerToken' field for token auth. For SSH repositories the Secret must contain
+     * 'identity' and 'known_hosts' fields.
      *
      * @schema GitRepositorySpec#secretRef
      */
-    readonly secretRef?: GitRepositorySpecSecretRef
+    secretRef?: GitRepositorySpecSecretRef
 
     /**
      * Suspend tells the controller to suspend the reconciliation of this GitRepository.
      *
      * @schema GitRepositorySpec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * Timeout for Git operations like cloning, defaults to 60s.
      *
      * @schema GitRepositorySpec#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 
     /**
      * URL specifies the Git repository URL, it can be an HTTP/S or SSH address.
      *
      * @schema GitRepositorySpec#url
      */
-    readonly url: string
+    url: string
 
     /**
      * Verification specifies the configuration to verify the Git commit signature(s).
      *
      * @schema GitRepositorySpec#verify
      */
-    readonly verify?: GitRepositorySpecVerify
+    verify?: GitRepositorySpecVerify
 }
 
 /** Converts an object of type 'GitRepositorySpec' to JSON representation. */
@@ -1725,21 +1727,21 @@ export interface GitRepositorySpecInclude {
      *
      * @schema GitRepositorySpecInclude#fromPath
      */
-    readonly fromPath?: string
+    fromPath?: string
 
     /**
      * GitRepositoryRef specifies the GitRepository which Artifact contents must be included.
      *
      * @schema GitRepositorySpecInclude#repository
      */
-    readonly repository: GitRepositorySpecIncludeRepository
+    repository: GitRepositorySpecIncludeRepository
 
     /**
      * ToPath specifies the path to copy contents to, defaults to the name of the GitRepositoryRef.
      *
      * @schema GitRepositorySpecInclude#toPath
      */
-    readonly toPath?: string
+    toPath?: string
 }
 
 /** Converts an object of type 'GitRepositorySpecInclude' to JSON representation. */
@@ -1790,7 +1792,7 @@ export interface GitRepositorySpecProxySecretRef {
      *
      * @schema GitRepositorySpecProxySecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'GitRepositorySpecProxySecretRef' to JSON representation. */
@@ -1824,7 +1826,7 @@ export interface GitRepositorySpecRef {
      *
      * @schema GitRepositorySpecRef#branch
      */
-    readonly branch?: string
+    branch?: string
 
     /**
      * Commit SHA to check out, takes precedence over all reference fields.
@@ -1834,7 +1836,7 @@ export interface GitRepositorySpecRef {
      *
      * @schema GitRepositorySpecRef#commit
      */
-    readonly commit?: string
+    commit?: string
 
     /**
      * Name of the reference to check out; takes precedence over Branch, Tag and SemVer.
@@ -1845,21 +1847,21 @@ export interface GitRepositorySpecRef {
      *
      * @schema GitRepositorySpecRef#name
      */
-    readonly name?: string
+    name?: string
 
     /**
      * SemVer tag expression to check out, takes precedence over Tag.
      *
      * @schema GitRepositorySpecRef#semver
      */
-    readonly semver?: string
+    semver?: string
 
     /**
      * Tag to check out, takes precedence over Branch.
      *
      * @schema GitRepositorySpecRef#tag
      */
-    readonly tag?: string
+    tag?: string
 }
 
 /** Converts an object of type 'GitRepositorySpecRef' to JSON representation. */
@@ -1899,7 +1901,7 @@ export interface GitRepositorySpecSecretRef {
      *
      * @schema GitRepositorySpecSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'GitRepositorySpecSecretRef' to JSON representation. */
@@ -1930,20 +1932,20 @@ export interface GitRepositorySpecVerify {
     /**
      * Mode specifies which Git object(s) should be verified.
      *
-     * The variants "head" and "HEAD" both imply the same thing, i.e. verify the commit that the HEAD
-     * of the Git repository points to. The variant "head" solely exists to ensure backwards
+     * The variants "head" and "HEAD" both imply the same thing, i.e. verify the commit that the
+     * HEAD of the Git repository points to. The variant "head" solely exists to ensure backwards
      * compatibility.
      *
      * @schema GitRepositorySpecVerify#mode
      */
-    readonly mode?: GitRepositorySpecVerifyMode
+    mode?: GitRepositorySpecVerifyMode
 
     /**
      * SecretRef specifies the Secret containing the public keys of trusted Git authors.
      *
      * @schema GitRepositorySpecVerify#secretRef
      */
-    readonly secretRef: GitRepositorySpecVerifySecretRef
+    secretRef: GitRepositorySpecVerifySecretRef
 }
 
 /** Converts an object of type 'GitRepositorySpecVerify' to JSON representation. */
@@ -1977,7 +1979,7 @@ export interface GitRepositorySpecIncludeRepository {
      *
      * @schema GitRepositorySpecIncludeRepository#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'GitRepositorySpecIncludeRepository' to JSON representation. */
@@ -2028,7 +2030,7 @@ export interface GitRepositorySpecVerifySecretRef {
      *
      * @schema GitRepositorySpecVerifySecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'GitRepositorySpecVerifySecretRef' to JSON representation. */
@@ -2057,7 +2059,7 @@ export function toJson_GitRepositorySpecVerifySecretRef(
  */
 export class GitRepositoryV1Beta1 extends ApiObject {
     /** Returns the apiVersion and kind for "GitRepositoryV1Beta1" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "source.toolkit.fluxcd.io/v1beta1",
         kind: "GitRepository"
     }
@@ -2108,14 +2110,14 @@ export class GitRepositoryV1Beta1 extends ApiObject {
  */
 export interface GitRepositoryV1Beta1Props {
     /** @schema GitRepositoryV1Beta1#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * GitRepositorySpec defines the desired state of a Git repository.
      *
      * @schema GitRepositoryV1Beta1#spec
      */
-    readonly spec?: GitRepositoryV1Beta1Spec
+    spec?: GitRepositoryV1Beta1Spec
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta1Props' to JSON representation. */
@@ -2150,7 +2152,7 @@ export interface GitRepositoryV1Beta1Spec {
      *
      * @schema GitRepositoryV1Beta1Spec#accessFrom
      */
-    readonly accessFrom?: GitRepositoryV1Beta1SpecAccessFrom
+    accessFrom?: GitRepositoryV1Beta1SpecAccessFrom
 
     /**
      * Determines which git client library to use. Defaults to go-git, valid values are ('go-git',
@@ -2159,30 +2161,30 @@ export interface GitRepositoryV1Beta1Spec {
      * @default go-git, valid values are ('go-git', 'libgit2').
      * @schema GitRepositoryV1Beta1Spec#gitImplementation
      */
-    readonly gitImplementation?: GitRepositoryV1Beta1SpecGitImplementation
+    gitImplementation?: GitRepositoryV1Beta1SpecGitImplementation
 
     /**
-     * Ignore overrides the set of excluded patterns in the .sourceignore format (which is the same as
-     * .gitignore). If not provided, a default will be used, consult the documentation for your
+     * Ignore overrides the set of excluded patterns in the .sourceignore format (which is the same
+     * as .gitignore). If not provided, a default will be used, consult the documentation for your
      * version to find out what those are.
      *
      * @schema GitRepositoryV1Beta1Spec#ignore
      */
-    readonly ignore?: string
+    ignore?: string
 
     /**
      * Extra git repositories to map into the repository
      *
      * @schema GitRepositoryV1Beta1Spec#include
      */
-    readonly include?: GitRepositoryV1Beta1SpecInclude[]
+    include?: GitRepositoryV1Beta1SpecInclude[]
 
     /**
      * The interval at which to check for repository updates.
      *
      * @schema GitRepositoryV1Beta1Spec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
      * When enabled, after the clone is created, initializes all submodules within, using their
@@ -2190,51 +2192,51 @@ export interface GitRepositoryV1Beta1Spec {
      *
      * @schema GitRepositoryV1Beta1Spec#recurseSubmodules
      */
-    readonly recurseSubmodules?: boolean
+    recurseSubmodules?: boolean
 
     /**
      * The Git reference to checkout and monitor for changes, defaults to master branch.
      *
      * @schema GitRepositoryV1Beta1Spec#ref
      */
-    readonly ref?: GitRepositoryV1Beta1SpecRef
+    ref?: GitRepositoryV1Beta1SpecRef
 
     /**
-     * The secret name containing the Git credentials. For HTTPS repositories the secret must contain
-     * username and password fields. For SSH repositories the secret must contain identity and
-     * known_hosts fields.
+     * The secret name containing the Git credentials. For HTTPS repositories the secret must
+     * contain username and password fields. For SSH repositories the secret must contain identity
+     * and known_hosts fields.
      *
      * @schema GitRepositoryV1Beta1Spec#secretRef
      */
-    readonly secretRef?: GitRepositoryV1Beta1SpecSecretRef
+    secretRef?: GitRepositoryV1Beta1SpecSecretRef
 
     /**
      * This flag tells the controller to suspend the reconciliation of this source.
      *
      * @schema GitRepositoryV1Beta1Spec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * The timeout for remote Git operations like cloning, defaults to 60s.
      *
      * @schema GitRepositoryV1Beta1Spec#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 
     /**
      * The repository URL, can be a HTTP/S or SSH address.
      *
      * @schema GitRepositoryV1Beta1Spec#url
      */
-    readonly url: string
+    url: string
 
     /**
      * Verify OpenPGP signature for the Git commit HEAD points to.
      *
      * @schema GitRepositoryV1Beta1Spec#verify
      */
-    readonly verify?: GitRepositoryV1Beta1SpecVerify
+    verify?: GitRepositoryV1Beta1SpecVerify
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta1Spec' to JSON representation. */
@@ -2274,12 +2276,12 @@ export function toJson_GitRepositoryV1Beta1Spec(
  */
 export interface GitRepositoryV1Beta1SpecAccessFrom {
     /**
-     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in this
-     * list are evaluated using a logical OR operation.
+     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in
+     * this list are evaluated using a logical OR operation.
      *
      * @schema GitRepositoryV1Beta1SpecAccessFrom#namespaceSelectors
      */
-    readonly namespaceSelectors: GitRepositoryV1Beta1SpecAccessFromNamespaceSelectors[]
+    namespaceSelectors: GitRepositoryV1Beta1SpecAccessFromNamespaceSelectors[]
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta1SpecAccessFrom' to JSON representation. */
@@ -2328,21 +2330,21 @@ export interface GitRepositoryV1Beta1SpecInclude {
      *
      * @schema GitRepositoryV1Beta1SpecInclude#fromPath
      */
-    readonly fromPath?: string
+    fromPath?: string
 
     /**
      * Reference to a GitRepository to include.
      *
      * @schema GitRepositoryV1Beta1SpecInclude#repository
      */
-    readonly repository: GitRepositoryV1Beta1SpecIncludeRepository
+    repository: GitRepositoryV1Beta1SpecIncludeRepository
 
     /**
      * The path to copy contents to, defaults to the name of the source ref.
      *
      * @schema GitRepositoryV1Beta1SpecInclude#toPath
      */
-    readonly toPath?: string
+    toPath?: string
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta1SpecInclude' to JSON representation. */
@@ -2377,28 +2379,28 @@ export interface GitRepositoryV1Beta1SpecRef {
      *
      * @schema GitRepositoryV1Beta1SpecRef#branch
      */
-    readonly branch?: string
+    branch?: string
 
     /**
      * The Git commit SHA to checkout, if specified Tag filters will be ignored.
      *
      * @schema GitRepositoryV1Beta1SpecRef#commit
      */
-    readonly commit?: string
+    commit?: string
 
     /**
      * The Git tag semver expression, takes precedence over Tag.
      *
      * @schema GitRepositoryV1Beta1SpecRef#semver
      */
-    readonly semver?: string
+    semver?: string
 
     /**
      * The Git tag to checkout, takes precedence over Branch.
      *
      * @schema GitRepositoryV1Beta1SpecRef#tag
      */
-    readonly tag?: string
+    tag?: string
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta1SpecRef' to JSON representation. */
@@ -2436,7 +2438,7 @@ export interface GitRepositoryV1Beta1SpecSecretRef {
      *
      * @schema GitRepositoryV1Beta1SpecSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta1SpecSecretRef' to JSON representation. */
@@ -2469,14 +2471,14 @@ export interface GitRepositoryV1Beta1SpecVerify {
      *
      * @schema GitRepositoryV1Beta1SpecVerify#mode
      */
-    readonly mode: GitRepositoryV1Beta1SpecVerifyMode
+    mode: GitRepositoryV1Beta1SpecVerifyMode
 
     /**
      * The secret name containing the public keys of all trusted Git authors.
      *
      * @schema GitRepositoryV1Beta1SpecVerify#secretRef
      */
-    readonly secretRef?: GitRepositoryV1Beta1SpecVerifySecretRef
+    secretRef?: GitRepositoryV1Beta1SpecVerifySecretRef
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta1SpecVerify' to JSON representation. */
@@ -2513,7 +2515,7 @@ export interface GitRepositoryV1Beta1SpecAccessFromNamespaceSelectors {
      *
      * @schema GitRepositoryV1Beta1SpecAccessFromNamespaceSelectors#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -2555,7 +2557,7 @@ export interface GitRepositoryV1Beta1SpecIncludeRepository {
      *
      * @schema GitRepositoryV1Beta1SpecIncludeRepository#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta1SpecIncludeRepository' to JSON representation. */
@@ -2598,7 +2600,7 @@ export interface GitRepositoryV1Beta1SpecVerifySecretRef {
      *
      * @schema GitRepositoryV1Beta1SpecVerifySecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta1SpecVerifySecretRef' to JSON representation. */
@@ -2627,7 +2629,7 @@ export function toJson_GitRepositoryV1Beta1SpecVerifySecretRef(
  */
 export class GitRepositoryV1Beta2 extends ApiObject {
     /** Returns the apiVersion and kind for "GitRepositoryV1Beta2" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "source.toolkit.fluxcd.io/v1beta2",
         kind: "GitRepository"
     }
@@ -2678,7 +2680,7 @@ export class GitRepositoryV1Beta2 extends ApiObject {
  */
 export interface GitRepositoryV1Beta2Props {
     /** @schema GitRepositoryV1Beta2#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * GitRepositorySpec specifies the required configuration to produce an Artifact for a Git
@@ -2686,7 +2688,7 @@ export interface GitRepositoryV1Beta2Props {
      *
      * @schema GitRepositoryV1Beta2#spec
      */
-    readonly spec?: GitRepositoryV1Beta2Spec
+    spec?: GitRepositoryV1Beta2Spec
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta2Props' to JSON representation. */
@@ -2722,7 +2724,7 @@ export interface GitRepositoryV1Beta2Spec {
      *
      * @schema GitRepositoryV1Beta2Spec#accessFrom
      */
-    readonly accessFrom?: GitRepositoryV1Beta2SpecAccessFrom
+    accessFrom?: GitRepositoryV1Beta2SpecAccessFrom
 
     /**
      * GitImplementation specifies which Git client library implementation to use. Defaults to
@@ -2732,16 +2734,16 @@ export interface GitRepositoryV1Beta2Spec {
      * @default go-git', valid values are ('go-git', 'libgit2').
      * @schema GitRepositoryV1Beta2Spec#gitImplementation
      */
-    readonly gitImplementation?: GitRepositoryV1Beta2SpecGitImplementation
+    gitImplementation?: GitRepositoryV1Beta2SpecGitImplementation
 
     /**
-     * Ignore overrides the set of excluded patterns in the .sourceignore format (which is the same as
-     * .gitignore). If not provided, a default will be used, consult the documentation for your
+     * Ignore overrides the set of excluded patterns in the .sourceignore format (which is the same
+     * as .gitignore). If not provided, a default will be used, consult the documentation for your
      * version to find out what those are.
      *
      * @schema GitRepositoryV1Beta2Spec#ignore
      */
-    readonly ignore?: string
+    ignore?: string
 
     /**
      * Include specifies a list of GitRepository resources which Artifacts should be included in the
@@ -2749,14 +2751,14 @@ export interface GitRepositoryV1Beta2Spec {
      *
      * @schema GitRepositoryV1Beta2Spec#include
      */
-    readonly include?: GitRepositoryV1Beta2SpecInclude[]
+    include?: GitRepositoryV1Beta2SpecInclude[]
 
     /**
      * Interval at which to check the GitRepository for updates.
      *
      * @schema GitRepositoryV1Beta2Spec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
      * RecurseSubmodules enables the initialization of all submodules within the GitRepository as
@@ -2764,7 +2766,7 @@ export interface GitRepositoryV1Beta2Spec {
      *
      * @schema GitRepositoryV1Beta2Spec#recurseSubmodules
      */
-    readonly recurseSubmodules?: boolean
+    recurseSubmodules?: boolean
 
     /**
      * Reference specifies the Git reference to resolve and monitor for changes, defaults to the
@@ -2772,45 +2774,45 @@ export interface GitRepositoryV1Beta2Spec {
      *
      * @schema GitRepositoryV1Beta2Spec#ref
      */
-    readonly ref?: GitRepositoryV1Beta2SpecRef
+    ref?: GitRepositoryV1Beta2SpecRef
 
     /**
-     * SecretRef specifies the Secret containing authentication credentials for the GitRepository. For
-     * HTTPS repositories the Secret must contain 'username' and 'password' fields for basic auth or
-     * 'bearerToken' field for token auth. For SSH repositories the Secret must contain 'identity' and
-     * 'known_hosts' fields.
+     * SecretRef specifies the Secret containing authentication credentials for the GitRepository.
+     * For HTTPS repositories the Secret must contain 'username' and 'password' fields for basic
+     * auth or 'bearerToken' field for token auth. For SSH repositories the Secret must contain
+     * 'identity' and 'known_hosts' fields.
      *
      * @schema GitRepositoryV1Beta2Spec#secretRef
      */
-    readonly secretRef?: GitRepositoryV1Beta2SpecSecretRef
+    secretRef?: GitRepositoryV1Beta2SpecSecretRef
 
     /**
      * Suspend tells the controller to suspend the reconciliation of this GitRepository.
      *
      * @schema GitRepositoryV1Beta2Spec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * Timeout for Git operations like cloning, defaults to 60s.
      *
      * @schema GitRepositoryV1Beta2Spec#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 
     /**
      * URL specifies the Git repository URL, it can be an HTTP/S or SSH address.
      *
      * @schema GitRepositoryV1Beta2Spec#url
      */
-    readonly url: string
+    url: string
 
     /**
      * Verification specifies the configuration to verify the Git commit signature(s).
      *
      * @schema GitRepositoryV1Beta2Spec#verify
      */
-    readonly verify?: GitRepositoryV1Beta2SpecVerify
+    verify?: GitRepositoryV1Beta2SpecVerify
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta2Spec' to JSON representation. */
@@ -2851,12 +2853,12 @@ export function toJson_GitRepositoryV1Beta2Spec(
  */
 export interface GitRepositoryV1Beta2SpecAccessFrom {
     /**
-     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in this
-     * list are evaluated using a logical OR operation.
+     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in
+     * this list are evaluated using a logical OR operation.
      *
      * @schema GitRepositoryV1Beta2SpecAccessFrom#namespaceSelectors
      */
-    readonly namespaceSelectors: GitRepositoryV1Beta2SpecAccessFromNamespaceSelectors[]
+    namespaceSelectors: GitRepositoryV1Beta2SpecAccessFromNamespaceSelectors[]
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta2SpecAccessFrom' to JSON representation. */
@@ -2907,21 +2909,21 @@ export interface GitRepositoryV1Beta2SpecInclude {
      *
      * @schema GitRepositoryV1Beta2SpecInclude#fromPath
      */
-    readonly fromPath?: string
+    fromPath?: string
 
     /**
      * GitRepositoryRef specifies the GitRepository which Artifact contents must be included.
      *
      * @schema GitRepositoryV1Beta2SpecInclude#repository
      */
-    readonly repository: GitRepositoryV1Beta2SpecIncludeRepository
+    repository: GitRepositoryV1Beta2SpecIncludeRepository
 
     /**
      * ToPath specifies the path to copy contents to, defaults to the name of the GitRepositoryRef.
      *
      * @schema GitRepositoryV1Beta2SpecInclude#toPath
      */
-    readonly toPath?: string
+    toPath?: string
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta2SpecInclude' to JSON representation. */
@@ -2957,7 +2959,7 @@ export interface GitRepositoryV1Beta2SpecRef {
      *
      * @schema GitRepositoryV1Beta2SpecRef#branch
      */
-    readonly branch?: string
+    branch?: string
 
     /**
      * Commit SHA to check out, takes precedence over all reference fields.
@@ -2967,7 +2969,7 @@ export interface GitRepositoryV1Beta2SpecRef {
      *
      * @schema GitRepositoryV1Beta2SpecRef#commit
      */
-    readonly commit?: string
+    commit?: string
 
     /**
      * Name of the reference to check out; takes precedence over Branch, Tag and SemVer.
@@ -2978,21 +2980,21 @@ export interface GitRepositoryV1Beta2SpecRef {
      *
      * @schema GitRepositoryV1Beta2SpecRef#name
      */
-    readonly name?: string
+    name?: string
 
     /**
      * SemVer tag expression to check out, takes precedence over Tag.
      *
      * @schema GitRepositoryV1Beta2SpecRef#semver
      */
-    readonly semver?: string
+    semver?: string
 
     /**
      * Tag to check out, takes precedence over Branch.
      *
      * @schema GitRepositoryV1Beta2SpecRef#tag
      */
-    readonly tag?: string
+    tag?: string
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta2SpecRef' to JSON representation. */
@@ -3032,7 +3034,7 @@ export interface GitRepositoryV1Beta2SpecSecretRef {
      *
      * @schema GitRepositoryV1Beta2SpecSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta2SpecSecretRef' to JSON representation. */
@@ -3065,14 +3067,14 @@ export interface GitRepositoryV1Beta2SpecVerify {
      *
      * @schema GitRepositoryV1Beta2SpecVerify#mode
      */
-    readonly mode: GitRepositoryV1Beta2SpecVerifyMode
+    mode: GitRepositoryV1Beta2SpecVerifyMode
 
     /**
      * SecretRef specifies the Secret containing the public keys of trusted Git authors.
      *
      * @schema GitRepositoryV1Beta2SpecVerify#secretRef
      */
-    readonly secretRef: GitRepositoryV1Beta2SpecVerifySecretRef
+    secretRef: GitRepositoryV1Beta2SpecVerifySecretRef
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta2SpecVerify' to JSON representation. */
@@ -3109,7 +3111,7 @@ export interface GitRepositoryV1Beta2SpecAccessFromNamespaceSelectors {
      *
      * @schema GitRepositoryV1Beta2SpecAccessFromNamespaceSelectors#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -3151,7 +3153,7 @@ export interface GitRepositoryV1Beta2SpecIncludeRepository {
      *
      * @schema GitRepositoryV1Beta2SpecIncludeRepository#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta2SpecIncludeRepository' to JSON representation. */
@@ -3194,7 +3196,7 @@ export interface GitRepositoryV1Beta2SpecVerifySecretRef {
      *
      * @schema GitRepositoryV1Beta2SpecVerifySecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'GitRepositoryV1Beta2SpecVerifySecretRef' to JSON representation. */
@@ -3223,7 +3225,7 @@ export function toJson_GitRepositoryV1Beta2SpecVerifySecretRef(
  */
 export class HelmChart extends ApiObject {
     /** Returns the apiVersion and kind for "HelmChart" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "source.toolkit.fluxcd.io/v1",
         kind: "HelmChart"
     }
@@ -3274,14 +3276,14 @@ export class HelmChart extends ApiObject {
  */
 export interface HelmChartProps {
     /** @schema HelmChart#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * HelmChartSpec specifies the desired state of a Helm chart.
      *
      * @schema HelmChart#spec
      */
-    readonly spec?: HelmChartSpec
+    spec?: HelmChartSpec
 }
 
 /** Converts an object of type 'HelmChartProps' to JSON representation. */
@@ -3315,7 +3317,7 @@ export interface HelmChartSpec {
      *
      * @schema HelmChartSpec#chart
      */
-    readonly chart: string
+    chart: string
 
     /**
      * IgnoreMissingValuesFiles controls whether to silently ignore missing values files rather than
@@ -3323,15 +3325,15 @@ export interface HelmChartSpec {
      *
      * @schema HelmChartSpec#ignoreMissingValuesFiles
      */
-    readonly ignoreMissingValuesFiles?: boolean
+    ignoreMissingValuesFiles?: boolean
 
     /**
-     * Interval at which the HelmChart SourceRef is checked for updates. This interval is approximate
-     * and may be subject to jitter to ensure efficient use of resources.
+     * Interval at which the HelmChart SourceRef is checked for updates. This interval is
+     * approximate and may be subject to jitter to ensure efficient use of resources.
      *
      * @schema HelmChartSpec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
      * ReconcileStrategy determines what enables the creation of a new artifact. Valid values are
@@ -3341,21 +3343,21 @@ export interface HelmChartSpec {
      * @default ChartVersion when omitted.
      * @schema HelmChartSpec#reconcileStrategy
      */
-    readonly reconcileStrategy?: HelmChartSpecReconcileStrategy
+    reconcileStrategy?: HelmChartSpecReconcileStrategy
 
     /**
      * SourceRef is the reference to the Source the chart is available at.
      *
      * @schema HelmChartSpec#sourceRef
      */
-    readonly sourceRef: HelmChartSpecSourceRef
+    sourceRef: HelmChartSpecSourceRef
 
     /**
      * Suspend tells the controller to suspend the reconciliation of this source.
      *
      * @schema HelmChartSpec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * ValuesFiles is an alternative list of values files to use as the chart values (values.yaml is
@@ -3365,17 +3367,17 @@ export interface HelmChartSpec {
      *
      * @schema HelmChartSpec#valuesFiles
      */
-    readonly valuesFiles?: string[]
+    valuesFiles?: string[]
 
     /**
-     * Verify contains the secret name containing the trusted public keys used to verify the signature
-     * and specifies which provider to use to check whether OCI image is authentic. This field is only
-     * supported when using HelmRepository source with spec.type 'oci'. Chart dependencies, which are
-     * not bundled in the umbrella chart artifact, are not verified.
+     * Verify contains the secret name containing the trusted public keys used to verify the
+     * signature and specifies which provider to use to check whether OCI image is authentic. This
+     * field is only supported when using HelmRepository source with spec.type 'oci'. Chart
+     * dependencies, which are not bundled in the umbrella chart artifact, are not verified.
      *
      * @schema HelmChartSpec#verify
      */
-    readonly verify?: HelmChartSpecVerify
+    verify?: HelmChartSpecVerify
 
     /**
      * Version is the chart version semver expression, ignored for charts from GitRepository and
@@ -3384,7 +3386,7 @@ export interface HelmChartSpec {
      * @default latest when omitted.
      * @schema HelmChartSpec#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /** Converts an object of type 'HelmChartSpec' to JSON representation. */
@@ -3440,21 +3442,21 @@ export interface HelmChartSpecSourceRef {
      *
      * @schema HelmChartSpecSourceRef#apiVersion
      */
-    readonly apiVersion?: string
+    apiVersion?: string
 
     /**
      * Kind of the referent, valid values are ('HelmRepository', 'GitRepository', 'Bucket').
      *
      * @schema HelmChartSpecSourceRef#kind
      */
-    readonly kind: HelmChartSpecSourceRefKind
+    kind: HelmChartSpecSourceRefKind
 
     /**
      * Name of the referent.
      *
      * @schema HelmChartSpecSourceRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HelmChartSpecSourceRef' to JSON representation. */
@@ -3489,26 +3491,26 @@ export function toJson_HelmChartSpecSourceRef(
 export interface HelmChartSpecVerify {
     /**
      * MatchOIDCIdentity specifies the identity matching criteria to use while verifying an OCI
-     * artifact which was signed using Cosign keyless signing. The artifact's identity is deemed to be
-     * verified if any of the specified matchers match against the identity.
+     * artifact which was signed using Cosign keyless signing. The artifact's identity is deemed to
+     * be verified if any of the specified matchers match against the identity.
      *
      * @schema HelmChartSpecVerify#matchOIDCIdentity
      */
-    readonly matchOidcIdentity?: HelmChartSpecVerifyMatchOidcIdentity[]
+    matchOidcIdentity?: HelmChartSpecVerifyMatchOidcIdentity[]
 
     /**
      * Provider specifies the technology used to sign the OCI Artifact.
      *
      * @schema HelmChartSpecVerify#provider
      */
-    readonly provider: HelmChartSpecVerifyProvider
+    provider: HelmChartSpecVerifyProvider
 
     /**
      * SecretRef specifies the Kubernetes Secret containing the trusted public keys.
      *
      * @schema HelmChartSpecVerify#secretRef
      */
-    readonly secretRef?: HelmChartSpecVerifySecretRef
+    secretRef?: HelmChartSpecVerifySecretRef
 }
 
 /** Converts an object of type 'HelmChartSpecVerify' to JSON representation. */
@@ -3561,7 +3563,7 @@ export interface HelmChartSpecVerifyMatchOidcIdentity {
      *
      * @schema HelmChartSpecVerifyMatchOidcIdentity#issuer
      */
-    readonly issuer: string
+    issuer: string
 
     /**
      * Subject specifies the regex pattern to match against to verify the identity subject in the
@@ -3569,7 +3571,7 @@ export interface HelmChartSpecVerifyMatchOidcIdentity {
      *
      * @schema HelmChartSpecVerifyMatchOidcIdentity#subject
      */
-    readonly subject: string
+    subject: string
 }
 
 /** Converts an object of type 'HelmChartSpecVerifyMatchOidcIdentity' to JSON representation. */
@@ -3615,7 +3617,7 @@ export interface HelmChartSpecVerifySecretRef {
      *
      * @schema HelmChartSpecVerifySecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HelmChartSpecVerifySecretRef' to JSON representation. */
@@ -3644,7 +3646,7 @@ export function toJson_HelmChartSpecVerifySecretRef(
  */
 export class HelmChartV1Beta1 extends ApiObject {
     /** Returns the apiVersion and kind for "HelmChartV1Beta1" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "source.toolkit.fluxcd.io/v1beta1",
         kind: "HelmChart"
     }
@@ -3695,14 +3697,14 @@ export class HelmChartV1Beta1 extends ApiObject {
  */
 export interface HelmChartV1Beta1Props {
     /** @schema HelmChartV1Beta1#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * HelmChartSpec defines the desired state of a Helm chart.
      *
      * @schema HelmChartV1Beta1#spec
      */
-    readonly spec?: HelmChartV1Beta1Spec
+    spec?: HelmChartV1Beta1Spec
 }
 
 /** Converts an object of type 'HelmChartV1Beta1Props' to JSON representation. */
@@ -3737,72 +3739,72 @@ export interface HelmChartV1Beta1Spec {
      *
      * @schema HelmChartV1Beta1Spec#accessFrom
      */
-    readonly accessFrom?: HelmChartV1Beta1SpecAccessFrom
+    accessFrom?: HelmChartV1Beta1SpecAccessFrom
 
     /**
      * The name or path the Helm chart is available at in the SourceRef.
      *
      * @schema HelmChartV1Beta1Spec#chart
      */
-    readonly chart: string
+    chart: string
 
     /**
      * The interval at which to check the Source for updates.
      *
      * @schema HelmChartV1Beta1Spec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
      * Determines what enables the creation of a new artifact. Valid values are ('ChartVersion',
-     * 'Revision'). See the documentation of the values for an explanation on their behavior. Defaults
-     * to ChartVersion when omitted.
+     * 'Revision'). See the documentation of the values for an explanation on their behavior.
+     * Defaults to ChartVersion when omitted.
      *
      * @default ChartVersion when omitted.
      * @schema HelmChartV1Beta1Spec#reconcileStrategy
      */
-    readonly reconcileStrategy?: HelmChartV1Beta1SpecReconcileStrategy
+    reconcileStrategy?: HelmChartV1Beta1SpecReconcileStrategy
 
     /**
      * The reference to the Source the chart is available at.
      *
      * @schema HelmChartV1Beta1Spec#sourceRef
      */
-    readonly sourceRef: HelmChartV1Beta1SpecSourceRef
+    sourceRef: HelmChartV1Beta1SpecSourceRef
 
     /**
      * This flag tells the controller to suspend the reconciliation of this source.
      *
      * @schema HelmChartV1Beta1Spec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * Alternative values file to use as the default chart values, expected to be a relative path in
-     * the SourceRef. Deprecated in favor of ValuesFiles, for backwards compatibility the file defined
-     * here is merged before the ValuesFiles items. Ignored when omitted.
+     * the SourceRef. Deprecated in favor of ValuesFiles, for backwards compatibility the file
+     * defined here is merged before the ValuesFiles items. Ignored when omitted.
      *
      * @schema HelmChartV1Beta1Spec#valuesFile
      */
-    readonly valuesFile?: string
+    valuesFile?: string
 
     /**
      * Alternative list of values files to use as the chart values (values.yaml is not included by
-     * default), expected to be a relative path in the SourceRef. Values files are merged in the order
-     * of this list with the last file overriding the first. Ignored when omitted.
+     * default), expected to be a relative path in the SourceRef. Values files are merged in the
+     * order of this list with the last file overriding the first. Ignored when omitted.
      *
      * @schema HelmChartV1Beta1Spec#valuesFiles
      */
-    readonly valuesFiles?: string[]
+    valuesFiles?: string[]
 
     /**
-     * The chart version semver expression, ignored for charts from GitRepository and Bucket sources.
-     * Defaults to latest when omitted.
+     * The chart version semver expression, ignored for charts from GitRepository and Bucket
+     * sources. Defaults to latest when omitted.
      *
      * @default latest when omitted.
      * @schema HelmChartV1Beta1Spec#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /** Converts an object of type 'HelmChartV1Beta1Spec' to JSON representation. */
@@ -3839,12 +3841,12 @@ export function toJson_HelmChartV1Beta1Spec(
  */
 export interface HelmChartV1Beta1SpecAccessFrom {
     /**
-     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in this
-     * list are evaluated using a logical OR operation.
+     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in
+     * this list are evaluated using a logical OR operation.
      *
      * @schema HelmChartV1Beta1SpecAccessFrom#namespaceSelectors
      */
-    readonly namespaceSelectors: HelmChartV1Beta1SpecAccessFromNamespaceSelectors[]
+    namespaceSelectors: HelmChartV1Beta1SpecAccessFromNamespaceSelectors[]
 }
 
 /** Converts an object of type 'HelmChartV1Beta1SpecAccessFrom' to JSON representation. */
@@ -3894,21 +3896,21 @@ export interface HelmChartV1Beta1SpecSourceRef {
      *
      * @schema HelmChartV1Beta1SpecSourceRef#apiVersion
      */
-    readonly apiVersion?: string
+    apiVersion?: string
 
     /**
      * Kind of the referent, valid values are ('HelmRepository', 'GitRepository', 'Bucket').
      *
      * @schema HelmChartV1Beta1SpecSourceRef#kind
      */
-    readonly kind: HelmChartV1Beta1SpecSourceRefKind
+    kind: HelmChartV1Beta1SpecSourceRefKind
 
     /**
      * Name of the referent.
      *
      * @schema HelmChartV1Beta1SpecSourceRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HelmChartV1Beta1SpecSourceRef' to JSON representation. */
@@ -3946,7 +3948,7 @@ export interface HelmChartV1Beta1SpecAccessFromNamespaceSelectors {
      *
      * @schema HelmChartV1Beta1SpecAccessFromNamespaceSelectors#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -3998,7 +4000,7 @@ export enum HelmChartV1Beta1SpecSourceRefKind {
  */
 export class HelmChartV1Beta2 extends ApiObject {
     /** Returns the apiVersion and kind for "HelmChartV1Beta2" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "source.toolkit.fluxcd.io/v1beta2",
         kind: "HelmChart"
     }
@@ -4049,14 +4051,14 @@ export class HelmChartV1Beta2 extends ApiObject {
  */
 export interface HelmChartV1Beta2Props {
     /** @schema HelmChartV1Beta2#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * HelmChartSpec specifies the desired state of a Helm chart.
      *
      * @schema HelmChartV1Beta2#spec
      */
-    readonly spec?: HelmChartV1Beta2Spec
+    spec?: HelmChartV1Beta2Spec
 }
 
 /** Converts an object of type 'HelmChartV1Beta2Props' to JSON representation. */
@@ -4091,14 +4093,14 @@ export interface HelmChartV1Beta2Spec {
      *
      * @schema HelmChartV1Beta2Spec#accessFrom
      */
-    readonly accessFrom?: HelmChartV1Beta2SpecAccessFrom
+    accessFrom?: HelmChartV1Beta2SpecAccessFrom
 
     /**
      * Chart is the name or path the Helm chart is available at in the SourceRef.
      *
      * @schema HelmChartV1Beta2Spec#chart
      */
-    readonly chart: string
+    chart: string
 
     /**
      * IgnoreMissingValuesFiles controls whether to silently ignore missing values files rather than
@@ -4106,15 +4108,15 @@ export interface HelmChartV1Beta2Spec {
      *
      * @schema HelmChartV1Beta2Spec#ignoreMissingValuesFiles
      */
-    readonly ignoreMissingValuesFiles?: boolean
+    ignoreMissingValuesFiles?: boolean
 
     /**
-     * Interval at which the HelmChart SourceRef is checked for updates. This interval is approximate
-     * and may be subject to jitter to ensure efficient use of resources.
+     * Interval at which the HelmChart SourceRef is checked for updates. This interval is
+     * approximate and may be subject to jitter to ensure efficient use of resources.
      *
      * @schema HelmChartV1Beta2Spec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
      * ReconcileStrategy determines what enables the creation of a new artifact. Valid values are
@@ -4124,30 +4126,31 @@ export interface HelmChartV1Beta2Spec {
      * @default ChartVersion when omitted.
      * @schema HelmChartV1Beta2Spec#reconcileStrategy
      */
-    readonly reconcileStrategy?: HelmChartV1Beta2SpecReconcileStrategy
+    reconcileStrategy?: HelmChartV1Beta2SpecReconcileStrategy
 
     /**
      * SourceRef is the reference to the Source the chart is available at.
      *
      * @schema HelmChartV1Beta2Spec#sourceRef
      */
-    readonly sourceRef: HelmChartV1Beta2SpecSourceRef
+    sourceRef: HelmChartV1Beta2SpecSourceRef
 
     /**
      * Suspend tells the controller to suspend the reconciliation of this source.
      *
      * @schema HelmChartV1Beta2Spec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * ValuesFile is an alternative values file to use as the default chart values, expected to be a
-     * relative path in the SourceRef. Deprecated in favor of ValuesFiles, for backwards compatibility
-     * the file specified here is merged before the ValuesFiles items. Ignored when omitted.
+     * relative path in the SourceRef. Deprecated in favor of ValuesFiles, for backwards
+     * compatibility the file specified here is merged before the ValuesFiles items. Ignored when
+     * omitted.
      *
      * @schema HelmChartV1Beta2Spec#valuesFile
      */
-    readonly valuesFile?: string
+    valuesFile?: string
 
     /**
      * ValuesFiles is an alternative list of values files to use as the chart values (values.yaml is
@@ -4157,17 +4160,17 @@ export interface HelmChartV1Beta2Spec {
      *
      * @schema HelmChartV1Beta2Spec#valuesFiles
      */
-    readonly valuesFiles?: string[]
+    valuesFiles?: string[]
 
     /**
-     * Verify contains the secret name containing the trusted public keys used to verify the signature
-     * and specifies which provider to use to check whether OCI image is authentic. This field is only
-     * supported when using HelmRepository source with spec.type 'oci'. Chart dependencies, which are
-     * not bundled in the umbrella chart artifact, are not verified.
+     * Verify contains the secret name containing the trusted public keys used to verify the
+     * signature and specifies which provider to use to check whether OCI image is authentic. This
+     * field is only supported when using HelmRepository source with spec.type 'oci'. Chart
+     * dependencies, which are not bundled in the umbrella chart artifact, are not verified.
      *
      * @schema HelmChartV1Beta2Spec#verify
      */
-    readonly verify?: HelmChartV1Beta2SpecVerify
+    verify?: HelmChartV1Beta2SpecVerify
 
     /**
      * Version is the chart version semver expression, ignored for charts from GitRepository and
@@ -4176,7 +4179,7 @@ export interface HelmChartV1Beta2Spec {
      * @default latest when omitted.
      * @schema HelmChartV1Beta2Spec#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /** Converts an object of type 'HelmChartV1Beta2Spec' to JSON representation. */
@@ -4216,12 +4219,12 @@ export function toJson_HelmChartV1Beta2Spec(
  */
 export interface HelmChartV1Beta2SpecAccessFrom {
     /**
-     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in this
-     * list are evaluated using a logical OR operation.
+     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in
+     * this list are evaluated using a logical OR operation.
      *
      * @schema HelmChartV1Beta2SpecAccessFrom#namespaceSelectors
      */
-    readonly namespaceSelectors: HelmChartV1Beta2SpecAccessFromNamespaceSelectors[]
+    namespaceSelectors: HelmChartV1Beta2SpecAccessFromNamespaceSelectors[]
 }
 
 /** Converts an object of type 'HelmChartV1Beta2SpecAccessFrom' to JSON representation. */
@@ -4271,21 +4274,21 @@ export interface HelmChartV1Beta2SpecSourceRef {
      *
      * @schema HelmChartV1Beta2SpecSourceRef#apiVersion
      */
-    readonly apiVersion?: string
+    apiVersion?: string
 
     /**
      * Kind of the referent, valid values are ('HelmRepository', 'GitRepository', 'Bucket').
      *
      * @schema HelmChartV1Beta2SpecSourceRef#kind
      */
-    readonly kind: HelmChartV1Beta2SpecSourceRefKind
+    kind: HelmChartV1Beta2SpecSourceRefKind
 
     /**
      * Name of the referent.
      *
      * @schema HelmChartV1Beta2SpecSourceRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HelmChartV1Beta2SpecSourceRef' to JSON representation. */
@@ -4320,26 +4323,26 @@ export function toJson_HelmChartV1Beta2SpecSourceRef(
 export interface HelmChartV1Beta2SpecVerify {
     /**
      * MatchOIDCIdentity specifies the identity matching criteria to use while verifying an OCI
-     * artifact which was signed using Cosign keyless signing. The artifact's identity is deemed to be
-     * verified if any of the specified matchers match against the identity.
+     * artifact which was signed using Cosign keyless signing. The artifact's identity is deemed to
+     * be verified if any of the specified matchers match against the identity.
      *
      * @schema HelmChartV1Beta2SpecVerify#matchOIDCIdentity
      */
-    readonly matchOidcIdentity?: HelmChartV1Beta2SpecVerifyMatchOidcIdentity[]
+    matchOidcIdentity?: HelmChartV1Beta2SpecVerifyMatchOidcIdentity[]
 
     /**
      * Provider specifies the technology used to sign the OCI Artifact.
      *
      * @schema HelmChartV1Beta2SpecVerify#provider
      */
-    readonly provider: HelmChartV1Beta2SpecVerifyProvider
+    provider: HelmChartV1Beta2SpecVerifyProvider
 
     /**
      * SecretRef specifies the Kubernetes Secret containing the trusted public keys.
      *
      * @schema HelmChartV1Beta2SpecVerify#secretRef
      */
-    readonly secretRef?: HelmChartV1Beta2SpecVerifySecretRef
+    secretRef?: HelmChartV1Beta2SpecVerifySecretRef
 }
 
 /** Converts an object of type 'HelmChartV1Beta2SpecVerify' to JSON representation. */
@@ -4379,7 +4382,7 @@ export interface HelmChartV1Beta2SpecAccessFromNamespaceSelectors {
      *
      * @schema HelmChartV1Beta2SpecAccessFromNamespaceSelectors#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -4437,7 +4440,7 @@ export interface HelmChartV1Beta2SpecVerifyMatchOidcIdentity {
      *
      * @schema HelmChartV1Beta2SpecVerifyMatchOidcIdentity#issuer
      */
-    readonly issuer: string
+    issuer: string
 
     /**
      * Subject specifies the regex pattern to match against to verify the identity subject in the
@@ -4445,7 +4448,7 @@ export interface HelmChartV1Beta2SpecVerifyMatchOidcIdentity {
      *
      * @schema HelmChartV1Beta2SpecVerifyMatchOidcIdentity#subject
      */
-    readonly subject: string
+    subject: string
 }
 
 /** Converts an object of type 'HelmChartV1Beta2SpecVerifyMatchOidcIdentity' to JSON representation. */
@@ -4491,7 +4494,7 @@ export interface HelmChartV1Beta2SpecVerifySecretRef {
      *
      * @schema HelmChartV1Beta2SpecVerifySecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HelmChartV1Beta2SpecVerifySecretRef' to JSON representation. */
@@ -4520,7 +4523,7 @@ export function toJson_HelmChartV1Beta2SpecVerifySecretRef(
  */
 export class HelmRepository extends ApiObject {
     /** Returns the apiVersion and kind for "HelmRepository" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "source.toolkit.fluxcd.io/v1",
         kind: "HelmRepository"
     }
@@ -4571,7 +4574,7 @@ export class HelmRepository extends ApiObject {
  */
 export interface HelmRepositoryProps {
     /** @schema HelmRepository#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * HelmRepositorySpec specifies the required configuration to produce an Artifact for a Helm
@@ -4579,7 +4582,7 @@ export interface HelmRepositoryProps {
      *
      * @schema HelmRepository#spec
      */
-    readonly spec?: HelmRepositorySpec
+    spec?: HelmRepositorySpec
 }
 
 /** Converts an object of type 'HelmRepositoryProps' to JSON representation. */
@@ -4615,7 +4618,7 @@ export interface HelmRepositorySpec {
      *
      * @schema HelmRepositorySpec#accessFrom
      */
-    readonly accessFrom?: HelmRepositorySpecAccessFrom
+    accessFrom?: HelmRepositorySpecAccessFrom
 
     /**
      * CertSecretRef can be given the name of a Secret containing either or both of
@@ -4632,15 +4635,15 @@ export interface HelmRepositorySpec {
      *
      * @schema HelmRepositorySpec#certSecretRef
      */
-    readonly certSecretRef?: HelmRepositorySpecCertSecretRef
+    certSecretRef?: HelmRepositorySpecCertSecretRef
 
     /**
-     * Insecure allows connecting to a non-TLS HTTP container registry. This field is only taken into
-     * account if the .spec.type field is set to 'oci'.
+     * Insecure allows connecting to a non-TLS HTTP container registry. This field is only taken
+     * into account if the .spec.type field is set to 'oci'.
      *
      * @schema HelmRepositorySpec#insecure
      */
-    readonly insecure?: boolean
+    insecure?: boolean
 
     /**
      * Interval at which the HelmRepository URL is checked for updates. This interval is approximate
@@ -4648,17 +4651,17 @@ export interface HelmRepositorySpec {
      *
      * @schema HelmRepositorySpec#interval
      */
-    readonly interval?: string
+    interval?: string
 
     /**
      * PassCredentials allows the credentials from the SecretRef to be passed on to a host that does
-     * not match the host as defined in URL. This may be required if the host of the advertised chart
-     * URLs in the index differ from the defined URL. Enabling this should be done with caution, as it
-     * can potentially result in credentials getting stolen in a MITM-attack.
+     * not match the host as defined in URL. This may be required if the host of the advertised
+     * chart URLs in the index differ from the defined URL. Enabling this should be done with
+     * caution, as it can potentially result in credentials getting stolen in a MITM-attack.
      *
      * @schema HelmRepositorySpec#passCredentials
      */
-    readonly passCredentials?: boolean
+    passCredentials?: boolean
 
     /**
      * Provider used for authentication, can be 'aws', 'azure', 'gcp' or 'generic'. This field is
@@ -4667,33 +4670,33 @@ export interface HelmRepositorySpec {
      *
      * @schema HelmRepositorySpec#provider
      */
-    readonly provider?: HelmRepositorySpecProvider
+    provider?: HelmRepositorySpecProvider
 
     /**
      * SecretRef specifies the Secret containing authentication credentials for the HelmRepository.
-     * For HTTP/S basic auth the secret must contain 'username' and 'password' fields. Support for TLS
-     * auth using the 'certFile' and 'keyFile', and/or 'caFile' keys is deprecated. Please use
+     * For HTTP/S basic auth the secret must contain 'username' and 'password' fields. Support for
+     * TLS auth using the 'certFile' and 'keyFile', and/or 'caFile' keys is deprecated. Please use
      * `.spec.certSecretRef` instead.
      *
      * @schema HelmRepositorySpec#secretRef
      */
-    readonly secretRef?: HelmRepositorySpecSecretRef
+    secretRef?: HelmRepositorySpecSecretRef
 
     /**
      * Suspend tells the controller to suspend the reconciliation of this HelmRepository.
      *
      * @schema HelmRepositorySpec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
-     * Timeout is used for the index fetch operation for an HTTPS helm repository, and for remote OCI
-     * Repository operations like pulling for an OCI helm chart by the associated HelmChart. Its
+     * Timeout is used for the index fetch operation for an HTTPS helm repository, and for remote
+     * OCI Repository operations like pulling for an OCI helm chart by the associated HelmChart. Its
      * default value is 60s.
      *
      * @schema HelmRepositorySpec#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 
     /**
      * Type of the HelmRepository. When this field is set to "oci", the URL field value must be
@@ -4701,14 +4704,14 @@ export interface HelmRepositorySpec {
      *
      * @schema HelmRepositorySpec#type
      */
-    readonly type?: HelmRepositorySpecType
+    type?: HelmRepositorySpecType
 
     /**
      * URL of the Helm repository, a valid URL contains at least a protocol and host.
      *
      * @schema HelmRepositorySpec#url
      */
-    readonly url: string
+    url: string
 }
 
 /** Converts an object of type 'HelmRepositorySpec' to JSON representation. */
@@ -4748,12 +4751,12 @@ export function toJson_HelmRepositorySpec(
  */
 export interface HelmRepositorySpecAccessFrom {
     /**
-     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in this
-     * list are evaluated using a logical OR operation.
+     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in
+     * this list are evaluated using a logical OR operation.
      *
      * @schema HelmRepositorySpecAccessFrom#namespaceSelectors
      */
-    readonly namespaceSelectors: HelmRepositorySpecAccessFromNamespaceSelectors[]
+    namespaceSelectors: HelmRepositorySpecAccessFromNamespaceSelectors[]
 }
 
 /** Converts an object of type 'HelmRepositorySpecAccessFrom' to JSON representation. */
@@ -4797,7 +4800,7 @@ export interface HelmRepositorySpecCertSecretRef {
      *
      * @schema HelmRepositorySpecCertSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HelmRepositorySpecCertSecretRef' to JSON representation. */
@@ -4851,7 +4854,7 @@ export interface HelmRepositorySpecSecretRef {
      *
      * @schema HelmRepositorySpecSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HelmRepositorySpecSecretRef' to JSON representation. */
@@ -4900,7 +4903,7 @@ export interface HelmRepositorySpecAccessFromNamespaceSelectors {
      *
      * @schema HelmRepositorySpecAccessFromNamespaceSelectors#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -4938,7 +4941,7 @@ export function toJson_HelmRepositorySpecAccessFromNamespaceSelectors(
  */
 export class HelmRepositoryV1Beta1 extends ApiObject {
     /** Returns the apiVersion and kind for "HelmRepositoryV1Beta1" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "source.toolkit.fluxcd.io/v1beta1",
         kind: "HelmRepository"
     }
@@ -4989,14 +4992,14 @@ export class HelmRepositoryV1Beta1 extends ApiObject {
  */
 export interface HelmRepositoryV1Beta1Props {
     /** @schema HelmRepositoryV1Beta1#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * HelmRepositorySpec defines the reference to a Helm repository.
      *
      * @schema HelmRepositoryV1Beta1#spec
      */
-    readonly spec?: HelmRepositoryV1Beta1Spec
+    spec?: HelmRepositoryV1Beta1Spec
 }
 
 /** Converts an object of type 'HelmRepositoryV1Beta1Props' to JSON representation. */
@@ -5031,54 +5034,54 @@ export interface HelmRepositoryV1Beta1Spec {
      *
      * @schema HelmRepositoryV1Beta1Spec#accessFrom
      */
-    readonly accessFrom?: HelmRepositoryV1Beta1SpecAccessFrom
+    accessFrom?: HelmRepositoryV1Beta1SpecAccessFrom
 
     /**
      * The interval at which to check the upstream for updates.
      *
      * @schema HelmRepositoryV1Beta1Spec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
      * PassCredentials allows the credentials from the SecretRef to be passed on to a host that does
-     * not match the host as defined in URL. This may be required if the host of the advertised chart
-     * URLs in the index differ from the defined URL. Enabling this should be done with caution, as it
-     * can potentially result in credentials getting stolen in a MITM-attack.
+     * not match the host as defined in URL. This may be required if the host of the advertised
+     * chart URLs in the index differ from the defined URL. Enabling this should be done with
+     * caution, as it can potentially result in credentials getting stolen in a MITM-attack.
      *
      * @schema HelmRepositoryV1Beta1Spec#passCredentials
      */
-    readonly passCredentials?: boolean
+    passCredentials?: boolean
 
     /**
      * The name of the secret containing authentication credentials for the Helm repository. For
-     * HTTP/S basic auth the secret must contain username and password fields. For TLS the secret must
-     * contain a certFile and keyFile, and/or caFile fields.
+     * HTTP/S basic auth the secret must contain username and password fields. For TLS the secret
+     * must contain a certFile and keyFile, and/or caFile fields.
      *
      * @schema HelmRepositoryV1Beta1Spec#secretRef
      */
-    readonly secretRef?: HelmRepositoryV1Beta1SpecSecretRef
+    secretRef?: HelmRepositoryV1Beta1SpecSecretRef
 
     /**
      * This flag tells the controller to suspend the reconciliation of this source.
      *
      * @schema HelmRepositoryV1Beta1Spec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * The timeout of index downloading, defaults to 60s.
      *
      * @schema HelmRepositoryV1Beta1Spec#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 
     /**
      * The Helm repository URL, a valid URL contains at least a protocol and host.
      *
      * @schema HelmRepositoryV1Beta1Spec#url
      */
-    readonly url: string
+    url: string
 }
 
 /** Converts an object of type 'HelmRepositoryV1Beta1Spec' to JSON representation. */
@@ -5113,12 +5116,12 @@ export function toJson_HelmRepositoryV1Beta1Spec(
  */
 export interface HelmRepositoryV1Beta1SpecAccessFrom {
     /**
-     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in this
-     * list are evaluated using a logical OR operation.
+     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in
+     * this list are evaluated using a logical OR operation.
      *
      * @schema HelmRepositoryV1Beta1SpecAccessFrom#namespaceSelectors
      */
-    readonly namespaceSelectors: HelmRepositoryV1Beta1SpecAccessFromNamespaceSelectors[]
+    namespaceSelectors: HelmRepositoryV1Beta1SpecAccessFromNamespaceSelectors[]
 }
 
 /** Converts an object of type 'HelmRepositoryV1Beta1SpecAccessFrom' to JSON representation. */
@@ -5155,7 +5158,7 @@ export interface HelmRepositoryV1Beta1SpecSecretRef {
      *
      * @schema HelmRepositoryV1Beta1SpecSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HelmRepositoryV1Beta1SpecSecretRef' to JSON representation. */
@@ -5191,7 +5194,7 @@ export interface HelmRepositoryV1Beta1SpecAccessFromNamespaceSelectors {
      *
      * @schema HelmRepositoryV1Beta1SpecAccessFromNamespaceSelectors#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -5229,7 +5232,7 @@ export function toJson_HelmRepositoryV1Beta1SpecAccessFromNamespaceSelectors(
  */
 export class HelmRepositoryV1Beta2 extends ApiObject {
     /** Returns the apiVersion and kind for "HelmRepositoryV1Beta2" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "source.toolkit.fluxcd.io/v1beta2",
         kind: "HelmRepository"
     }
@@ -5280,7 +5283,7 @@ export class HelmRepositoryV1Beta2 extends ApiObject {
  */
 export interface HelmRepositoryV1Beta2Props {
     /** @schema HelmRepositoryV1Beta2#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * HelmRepositorySpec specifies the required configuration to produce an Artifact for a Helm
@@ -5288,7 +5291,7 @@ export interface HelmRepositoryV1Beta2Props {
      *
      * @schema HelmRepositoryV1Beta2#spec
      */
-    readonly spec?: HelmRepositoryV1Beta2Spec
+    spec?: HelmRepositoryV1Beta2Spec
 }
 
 /** Converts an object of type 'HelmRepositoryV1Beta2Props' to JSON representation. */
@@ -5324,7 +5327,7 @@ export interface HelmRepositoryV1Beta2Spec {
      *
      * @schema HelmRepositoryV1Beta2Spec#accessFrom
      */
-    readonly accessFrom?: HelmRepositoryV1Beta2SpecAccessFrom
+    accessFrom?: HelmRepositoryV1Beta2SpecAccessFrom
 
     /**
      * CertSecretRef can be given the name of a Secret containing either or both of
@@ -5341,15 +5344,15 @@ export interface HelmRepositoryV1Beta2Spec {
      *
      * @schema HelmRepositoryV1Beta2Spec#certSecretRef
      */
-    readonly certSecretRef?: HelmRepositoryV1Beta2SpecCertSecretRef
+    certSecretRef?: HelmRepositoryV1Beta2SpecCertSecretRef
 
     /**
-     * Insecure allows connecting to a non-TLS HTTP container registry. This field is only taken into
-     * account if the .spec.type field is set to 'oci'.
+     * Insecure allows connecting to a non-TLS HTTP container registry. This field is only taken
+     * into account if the .spec.type field is set to 'oci'.
      *
      * @schema HelmRepositoryV1Beta2Spec#insecure
      */
-    readonly insecure?: boolean
+    insecure?: boolean
 
     /**
      * Interval at which the HelmRepository URL is checked for updates. This interval is approximate
@@ -5357,17 +5360,17 @@ export interface HelmRepositoryV1Beta2Spec {
      *
      * @schema HelmRepositoryV1Beta2Spec#interval
      */
-    readonly interval?: string
+    interval?: string
 
     /**
      * PassCredentials allows the credentials from the SecretRef to be passed on to a host that does
-     * not match the host as defined in URL. This may be required if the host of the advertised chart
-     * URLs in the index differ from the defined URL. Enabling this should be done with caution, as it
-     * can potentially result in credentials getting stolen in a MITM-attack.
+     * not match the host as defined in URL. This may be required if the host of the advertised
+     * chart URLs in the index differ from the defined URL. Enabling this should be done with
+     * caution, as it can potentially result in credentials getting stolen in a MITM-attack.
      *
      * @schema HelmRepositoryV1Beta2Spec#passCredentials
      */
-    readonly passCredentials?: boolean
+    passCredentials?: boolean
 
     /**
      * Provider used for authentication, can be 'aws', 'azure', 'gcp' or 'generic'. This field is
@@ -5376,33 +5379,33 @@ export interface HelmRepositoryV1Beta2Spec {
      *
      * @schema HelmRepositoryV1Beta2Spec#provider
      */
-    readonly provider?: HelmRepositoryV1Beta2SpecProvider
+    provider?: HelmRepositoryV1Beta2SpecProvider
 
     /**
      * SecretRef specifies the Secret containing authentication credentials for the HelmRepository.
-     * For HTTP/S basic auth the secret must contain 'username' and 'password' fields. Support for TLS
-     * auth using the 'certFile' and 'keyFile', and/or 'caFile' keys is deprecated. Please use
+     * For HTTP/S basic auth the secret must contain 'username' and 'password' fields. Support for
+     * TLS auth using the 'certFile' and 'keyFile', and/or 'caFile' keys is deprecated. Please use
      * `.spec.certSecretRef` instead.
      *
      * @schema HelmRepositoryV1Beta2Spec#secretRef
      */
-    readonly secretRef?: HelmRepositoryV1Beta2SpecSecretRef
+    secretRef?: HelmRepositoryV1Beta2SpecSecretRef
 
     /**
      * Suspend tells the controller to suspend the reconciliation of this HelmRepository.
      *
      * @schema HelmRepositoryV1Beta2Spec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
-     * Timeout is used for the index fetch operation for an HTTPS helm repository, and for remote OCI
-     * Repository operations like pulling for an OCI helm chart by the associated HelmChart. Its
+     * Timeout is used for the index fetch operation for an HTTPS helm repository, and for remote
+     * OCI Repository operations like pulling for an OCI helm chart by the associated HelmChart. Its
      * default value is 60s.
      *
      * @schema HelmRepositoryV1Beta2Spec#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 
     /**
      * Type of the HelmRepository. When this field is set to "oci", the URL field value must be
@@ -5410,14 +5413,14 @@ export interface HelmRepositoryV1Beta2Spec {
      *
      * @schema HelmRepositoryV1Beta2Spec#type
      */
-    readonly type?: HelmRepositoryV1Beta2SpecType
+    type?: HelmRepositoryV1Beta2SpecType
 
     /**
      * URL of the Helm repository, a valid URL contains at least a protocol and host.
      *
      * @schema HelmRepositoryV1Beta2Spec#url
      */
-    readonly url: string
+    url: string
 }
 
 /** Converts an object of type 'HelmRepositoryV1Beta2Spec' to JSON representation. */
@@ -5457,12 +5460,12 @@ export function toJson_HelmRepositoryV1Beta2Spec(
  */
 export interface HelmRepositoryV1Beta2SpecAccessFrom {
     /**
-     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in this
-     * list are evaluated using a logical OR operation.
+     * NamespaceSelectors is the list of namespace selectors to which this ACL applies. Items in
+     * this list are evaluated using a logical OR operation.
      *
      * @schema HelmRepositoryV1Beta2SpecAccessFrom#namespaceSelectors
      */
-    readonly namespaceSelectors: HelmRepositoryV1Beta2SpecAccessFromNamespaceSelectors[]
+    namespaceSelectors: HelmRepositoryV1Beta2SpecAccessFromNamespaceSelectors[]
 }
 
 /** Converts an object of type 'HelmRepositoryV1Beta2SpecAccessFrom' to JSON representation. */
@@ -5506,7 +5509,7 @@ export interface HelmRepositoryV1Beta2SpecCertSecretRef {
      *
      * @schema HelmRepositoryV1Beta2SpecCertSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HelmRepositoryV1Beta2SpecCertSecretRef' to JSON representation. */
@@ -5560,7 +5563,7 @@ export interface HelmRepositoryV1Beta2SpecSecretRef {
      *
      * @schema HelmRepositoryV1Beta2SpecSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HelmRepositoryV1Beta2SpecSecretRef' to JSON representation. */
@@ -5609,7 +5612,7 @@ export interface HelmRepositoryV1Beta2SpecAccessFromNamespaceSelectors {
      *
      * @schema HelmRepositoryV1Beta2SpecAccessFromNamespaceSelectors#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -5647,7 +5650,7 @@ export function toJson_HelmRepositoryV1Beta2SpecAccessFromNamespaceSelectors(
  */
 export class OciRepository extends ApiObject {
     /** Returns the apiVersion and kind for "OCIRepository" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "source.toolkit.fluxcd.io/v1beta2",
         kind: "OCIRepository"
     }
@@ -5698,14 +5701,14 @@ export class OciRepository extends ApiObject {
  */
 export interface OciRepositoryProps {
     /** @schema OCIRepository#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * OCIRepositorySpec defines the desired state of OCIRepository
      *
      * @schema OCIRepository#spec
      */
-    readonly spec?: OciRepositorySpec
+    spec?: OciRepositorySpec
 }
 
 /** Converts an object of type 'OciRepositoryProps' to JSON representation. */
@@ -5749,23 +5752,23 @@ export interface OciRepositorySpec {
      *
      * @schema OciRepositorySpec#certSecretRef
      */
-    readonly certSecretRef?: OciRepositorySpecCertSecretRef
+    certSecretRef?: OciRepositorySpecCertSecretRef
 
     /**
-     * Ignore overrides the set of excluded patterns in the .sourceignore format (which is the same as
-     * .gitignore). If not provided, a default will be used, consult the documentation for your
+     * Ignore overrides the set of excluded patterns in the .sourceignore format (which is the same
+     * as .gitignore). If not provided, a default will be used, consult the documentation for your
      * version to find out what those are.
      *
      * @schema OciRepositorySpec#ignore
      */
-    readonly ignore?: string
+    ignore?: string
 
     /**
      * Insecure allows connecting to a non-TLS HTTP container registry.
      *
      * @schema OciRepositorySpec#insecure
      */
-    readonly insecure?: boolean
+    insecure?: boolean
 
     /**
      * Interval at which the OCIRepository URL is checked for updates. This interval is approximate
@@ -5773,7 +5776,7 @@ export interface OciRepositorySpec {
      *
      * @schema OciRepositorySpec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
      * LayerSelector specifies which layer should be extracted from the OCI artifact. When not
@@ -5781,7 +5784,7 @@ export interface OciRepositorySpec {
      *
      * @schema OciRepositorySpec#layerSelector
      */
-    readonly layerSelector?: OciRepositorySpecLayerSelector
+    layerSelector?: OciRepositorySpecLayerSelector
 
     /**
      * The provider used for authentication, can be 'aws', 'azure', 'gcp' or 'generic'. When not
@@ -5789,7 +5792,7 @@ export interface OciRepositorySpec {
      *
      * @schema OciRepositorySpec#provider
      */
-    readonly provider?: OciRepositorySpecProvider
+    provider?: OciRepositorySpecProvider
 
     /**
      * ProxySecretRef specifies the Secret containing the proxy configuration to use while
@@ -5797,14 +5800,14 @@ export interface OciRepositorySpec {
      *
      * @schema OciRepositorySpec#proxySecretRef
      */
-    readonly proxySecretRef?: OciRepositorySpecProxySecretRef
+    proxySecretRef?: OciRepositorySpecProxySecretRef
 
     /**
      * The OCI reference to pull and monitor for changes, defaults to the latest tag.
      *
      * @schema OciRepositorySpec#ref
      */
-    readonly ref?: OciRepositorySpecRef
+    ref?: OciRepositorySpecRef
 
     /**
      * SecretRef contains the secret name containing the registry login credentials to resolve image
@@ -5812,45 +5815,45 @@ export interface OciRepositorySpec {
      *
      * @schema OciRepositorySpec#secretRef
      */
-    readonly secretRef?: OciRepositorySpecSecretRef
+    secretRef?: OciRepositorySpecSecretRef
 
     /**
-     * ServiceAccountName is the name of the Kubernetes ServiceAccount used to authenticate the image
-     * pull if the service account has attached pull secrets. For more information:
+     * ServiceAccountName is the name of the Kubernetes ServiceAccount used to authenticate the
+     * image pull if the service account has attached pull secrets. For more information:
      * https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#add-imagepullsecrets-to-a-service-account
      *
      * @schema OciRepositorySpec#serviceAccountName
      */
-    readonly serviceAccountName?: string
+    serviceAccountName?: string
 
     /**
      * This flag tells the controller to suspend the reconciliation of this source.
      *
      * @schema OciRepositorySpec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * The timeout for remote OCI Repository operations like pulling, defaults to 60s.
      *
      * @schema OciRepositorySpec#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 
     /**
      * URL is a reference to an OCI artifact repository hosted on a remote container registry.
      *
      * @schema OciRepositorySpec#url
      */
-    readonly url: string
+    url: string
 
     /**
-     * Verify contains the secret name containing the trusted public keys used to verify the signature
-     * and specifies which provider to use to check whether OCI image is authentic.
+     * Verify contains the secret name containing the trusted public keys used to verify the
+     * signature and specifies which provider to use to check whether OCI image is authentic.
      *
      * @schema OciRepositorySpec#verify
      */
-    readonly verify?: OciRepositorySpecVerify
+    verify?: OciRepositorySpecVerify
 }
 
 /** Converts an object of type 'OciRepositorySpec' to JSON representation. */
@@ -5905,7 +5908,7 @@ export interface OciRepositorySpecCertSecretRef {
      *
      * @schema OciRepositorySpecCertSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'OciRepositorySpecCertSecretRef' to JSON representation. */
@@ -5940,7 +5943,7 @@ export interface OciRepositorySpecLayerSelector {
      *
      * @schema OciRepositorySpecLayerSelector#mediaType
      */
-    readonly mediaType?: string
+    mediaType?: string
 
     /**
      * Operation specifies how the selected layer should be processed. By default, the layer
@@ -5949,7 +5952,7 @@ export interface OciRepositorySpecLayerSelector {
      *
      * @schema OciRepositorySpecLayerSelector#operation
      */
-    readonly operation?: OciRepositorySpecLayerSelectorOperation
+    operation?: OciRepositorySpecLayerSelectorOperation
 }
 
 /** Converts an object of type 'OciRepositorySpecLayerSelector' to JSON representation. */
@@ -6001,7 +6004,7 @@ export interface OciRepositorySpecProxySecretRef {
      *
      * @schema OciRepositorySpecProxySecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'OciRepositorySpecProxySecretRef' to JSON representation. */
@@ -6035,7 +6038,7 @@ export interface OciRepositorySpecRef {
      *
      * @schema OciRepositorySpecRef#digest
      */
-    readonly digest?: string
+    digest?: string
 
     /**
      * SemVer is the range of tags to pull selecting the latest within the range, takes precedence
@@ -6043,21 +6046,21 @@ export interface OciRepositorySpecRef {
      *
      * @schema OciRepositorySpecRef#semver
      */
-    readonly semver?: string
+    semver?: string
 
     /**
      * SemverFilter is a regex pattern to filter the tags within the SemVer range.
      *
      * @schema OciRepositorySpecRef#semverFilter
      */
-    readonly semverFilter?: string
+    semverFilter?: string
 
     /**
      * Tag is the image tag to pull, defaults to latest.
      *
      * @schema OciRepositorySpecRef#tag
      */
-    readonly tag?: string
+    tag?: string
 }
 
 /** Converts an object of type 'OciRepositorySpecRef' to JSON representation. */
@@ -6094,7 +6097,7 @@ export interface OciRepositorySpecSecretRef {
      *
      * @schema OciRepositorySpecSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'OciRepositorySpecSecretRef' to JSON representation. */
@@ -6125,26 +6128,26 @@ export function toJson_OciRepositorySpecSecretRef(
 export interface OciRepositorySpecVerify {
     /**
      * MatchOIDCIdentity specifies the identity matching criteria to use while verifying an OCI
-     * artifact which was signed using Cosign keyless signing. The artifact's identity is deemed to be
-     * verified if any of the specified matchers match against the identity.
+     * artifact which was signed using Cosign keyless signing. The artifact's identity is deemed to
+     * be verified if any of the specified matchers match against the identity.
      *
      * @schema OciRepositorySpecVerify#matchOIDCIdentity
      */
-    readonly matchOidcIdentity?: OciRepositorySpecVerifyMatchOidcIdentity[]
+    matchOidcIdentity?: OciRepositorySpecVerifyMatchOidcIdentity[]
 
     /**
      * Provider specifies the technology used to sign the OCI Artifact.
      *
      * @schema OciRepositorySpecVerify#provider
      */
-    readonly provider: OciRepositorySpecVerifyProvider
+    provider: OciRepositorySpecVerifyProvider
 
     /**
      * SecretRef specifies the Kubernetes Secret containing the trusted public keys.
      *
      * @schema OciRepositorySpecVerify#secretRef
      */
-    readonly secretRef?: OciRepositorySpecVerifySecretRef
+    secretRef?: OciRepositorySpecVerifySecretRef
 }
 
 /** Converts an object of type 'OciRepositorySpecVerify' to JSON representation. */
@@ -6197,7 +6200,7 @@ export interface OciRepositorySpecVerifyMatchOidcIdentity {
      *
      * @schema OciRepositorySpecVerifyMatchOidcIdentity#issuer
      */
-    readonly issuer: string
+    issuer: string
 
     /**
      * Subject specifies the regex pattern to match against to verify the identity subject in the
@@ -6205,7 +6208,7 @@ export interface OciRepositorySpecVerifyMatchOidcIdentity {
      *
      * @schema OciRepositorySpecVerifyMatchOidcIdentity#subject
      */
-    readonly subject: string
+    subject: string
 }
 
 /** Converts an object of type 'OciRepositorySpecVerifyMatchOidcIdentity' to JSON representation. */
@@ -6251,7 +6254,7 @@ export interface OciRepositorySpecVerifySecretRef {
      *
      * @schema OciRepositorySpecVerifySecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'OciRepositorySpecVerifySecretRef' to JSON representation. */

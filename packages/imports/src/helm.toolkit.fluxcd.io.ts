@@ -9,7 +9,7 @@ import { Construct } from "constructs"
  */
 export class HelmRelease extends ApiObject {
     /** Returns the apiVersion and kind for "HelmRelease" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "helm.toolkit.fluxcd.io/v2",
         kind: "HelmRelease"
     }
@@ -60,14 +60,14 @@ export class HelmRelease extends ApiObject {
  */
 export interface HelmReleaseProps {
     /** @schema HelmRelease#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * HelmReleaseSpec defines the desired state of a Helm release.
      *
      * @schema HelmRelease#spec
      */
-    readonly spec?: HelmReleaseSpec
+    spec?: HelmReleaseSpec
 }
 
 /** Converts an object of type 'HelmReleaseProps' to JSON representation. */
@@ -101,14 +101,15 @@ export interface HelmReleaseSpec {
      *
      * @schema HelmReleaseSpec#chart
      */
-    readonly chart?: HelmReleaseSpecChart
+    chart?: HelmReleaseSpecChart
 
     /**
-     * ChartRef holds a reference to a source controller resource containing the Helm chart artifact.
+     * ChartRef holds a reference to a source controller resource containing the Helm chart
+     * artifact.
      *
      * @schema HelmReleaseSpec#chartRef
      */
-    readonly chartRef?: HelmReleaseSpecChartRef
+    chartRef?: HelmReleaseSpecChartRef
 
     /**
      * DependsOn may contain a meta.NamespacedObjectReference slice with references to HelmRelease
@@ -116,7 +117,7 @@ export interface HelmReleaseSpec {
      *
      * @schema HelmReleaseSpec#dependsOn
      */
-    readonly dependsOn?: HelmReleaseSpecDependsOn[]
+    dependsOn?: HelmReleaseSpecDependsOn[]
 
     /**
      * DriftDetection holds the configuration for detecting and handling differences between the
@@ -124,31 +125,31 @@ export interface HelmReleaseSpec {
      *
      * @schema HelmReleaseSpec#driftDetection
      */
-    readonly driftDetection?: HelmReleaseSpecDriftDetection
+    driftDetection?: HelmReleaseSpecDriftDetection
 
     /**
      * Install holds the configuration for Helm install actions for this HelmRelease.
      *
      * @schema HelmReleaseSpec#install
      */
-    readonly install?: HelmReleaseSpecInstall
+    install?: HelmReleaseSpecInstall
 
     /**
      * Interval at which to reconcile the Helm release.
      *
      * @schema HelmReleaseSpec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
      * KubeConfig for reconciling the HelmRelease on a remote cluster. When used in combination with
      * HelmReleaseSpec.ServiceAccountName, forces the controller to act on behalf of that Service
-     * Account at the target cluster. If the --default-service-account flag is set, its value will be
-     * used as a controller level fallback for when HelmReleaseSpec.ServiceAccountName is empty.
+     * Account at the target cluster. If the --default-service-account flag is set, its value will
+     * be used as a controller level fallback for when HelmReleaseSpec.ServiceAccountName is empty.
      *
      * @schema HelmReleaseSpec#kubeConfig
      */
-    readonly kubeConfig?: HelmReleaseSpecKubeConfig
+    kubeConfig?: HelmReleaseSpecKubeConfig
 
     /**
      * MaxHistory is the number of revisions saved by Helm for this HelmRelease. Use '0' for an
@@ -156,7 +157,7 @@ export interface HelmReleaseSpec {
      *
      * @schema HelmReleaseSpec#maxHistory
      */
-    readonly maxHistory?: number
+    maxHistory?: number
 
     /**
      * PersistentClient tells the controller to use a persistent Kubernetes client for this release.
@@ -171,7 +172,7 @@ export interface HelmReleaseSpec {
      *
      * @schema HelmReleaseSpec#persistentClient
      */
-    readonly persistentClient?: boolean
+    persistentClient?: boolean
 
     /**
      * PostRenderers holds an array of Helm PostRenderers, which will be applied in order of their
@@ -179,7 +180,7 @@ export interface HelmReleaseSpec {
      *
      * @schema HelmReleaseSpec#postRenderers
      */
-    readonly postRenderers?: HelmReleaseSpecPostRenderers[]
+    postRenderers?: HelmReleaseSpecPostRenderers[]
 
     /**
      * ReleaseName used for the Helm release. Defaults to a composition of '[TargetNamespace-]Name'.
@@ -187,21 +188,21 @@ export interface HelmReleaseSpec {
      * @default a composition of
      * @schema HelmReleaseSpec#releaseName
      */
-    readonly releaseName?: string
+    releaseName?: string
 
     /**
      * Rollback holds the configuration for Helm rollback actions for this HelmRelease.
      *
      * @schema HelmReleaseSpec#rollback
      */
-    readonly rollback?: HelmReleaseSpecRollback
+    rollback?: HelmReleaseSpecRollback
 
     /**
      * The name of the Kubernetes service account to impersonate when reconciling this HelmRelease.
      *
      * @schema HelmReleaseSpec#serviceAccountName
      */
-    readonly serviceAccountName?: string
+    serviceAccountName?: string
 
     /**
      * StorageNamespace used for the Helm storage. Defaults to the namespace of the HelmRelease.
@@ -209,16 +210,16 @@ export interface HelmReleaseSpec {
      * @default the namespace of the HelmRelease.
      * @schema HelmReleaseSpec#storageNamespace
      */
-    readonly storageNamespace?: string
+    storageNamespace?: string
 
     /**
-     * Suspend tells the controller to suspend reconciliation for this HelmRelease, it does not apply
-     * to already started reconciliations. Defaults to false.
+     * Suspend tells the controller to suspend reconciliation for this HelmRelease, it does not
+     * apply to already started reconciliations. Defaults to false.
      *
      * @default false.
      * @schema HelmReleaseSpec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * TargetNamespace to target when performing operations for the HelmRelease. Defaults to the
@@ -227,14 +228,14 @@ export interface HelmReleaseSpec {
      * @default the namespace of the HelmRelease.
      * @schema HelmReleaseSpec#targetNamespace
      */
-    readonly targetNamespace?: string
+    targetNamespace?: string
 
     /**
      * Test holds the configuration for Helm test actions for this HelmRelease.
      *
      * @schema HelmReleaseSpec#test
      */
-    readonly test?: HelmReleaseSpecTest
+    test?: HelmReleaseSpecTest
 
     /**
      * Timeout is the time to wait for any individual Kubernetes operation (like Jobs for hooks)
@@ -243,28 +244,28 @@ export interface HelmReleaseSpec {
      * @default 5m0s'.
      * @schema HelmReleaseSpec#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 
     /**
      * Uninstall holds the configuration for Helm uninstall actions for this HelmRelease.
      *
      * @schema HelmReleaseSpec#uninstall
      */
-    readonly uninstall?: HelmReleaseSpecUninstall
+    uninstall?: HelmReleaseSpecUninstall
 
     /**
      * Upgrade holds the configuration for Helm upgrade actions for this HelmRelease.
      *
      * @schema HelmReleaseSpec#upgrade
      */
-    readonly upgrade?: HelmReleaseSpecUpgrade
+    upgrade?: HelmReleaseSpecUpgrade
 
     /**
      * Values holds the values for this Helm release.
      *
      * @schema HelmReleaseSpec#values
      */
-    readonly values?: any
+    values?: any
 
     /**
      * ValuesFrom holds references to resources containing Helm values for this HelmRelease, and
@@ -272,7 +273,7 @@ export interface HelmReleaseSpec {
      *
      * @schema HelmReleaseSpec#valuesFrom
      */
-    readonly valuesFrom?: HelmReleaseSpecValuesFrom[]
+    valuesFrom?: HelmReleaseSpecValuesFrom[]
 }
 
 /** Converts an object of type 'HelmReleaseSpec' to JSON representation. */
@@ -326,14 +327,14 @@ export interface HelmReleaseSpecChart {
      *
      * @schema HelmReleaseSpecChart#metadata
      */
-    readonly metadata?: HelmReleaseSpecChartMetadata
+    metadata?: HelmReleaseSpecChartMetadata
 
     /**
      * Spec holds the template for the v1.HelmChartSpec for this HelmRelease.
      *
      * @schema HelmReleaseSpecChart#spec
      */
-    readonly spec: HelmReleaseSpecChartSpec
+    spec: HelmReleaseSpecChartSpec
 }
 
 /** Converts an object of type 'HelmReleaseSpecChart' to JSON representation. */
@@ -367,21 +368,21 @@ export interface HelmReleaseSpecChartRef {
      *
      * @schema HelmReleaseSpecChartRef#apiVersion
      */
-    readonly apiVersion?: string
+    apiVersion?: string
 
     /**
      * Kind of the referent.
      *
      * @schema HelmReleaseSpecChartRef#kind
      */
-    readonly kind: HelmReleaseSpecChartRefKind
+    kind: HelmReleaseSpecChartRefKind
 
     /**
      * Name of the referent.
      *
      * @schema HelmReleaseSpecChartRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent, defaults to the namespace of the Kubernetes resource object that
@@ -389,7 +390,7 @@ export interface HelmReleaseSpecChartRef {
      *
      * @schema HelmReleaseSpecChartRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'HelmReleaseSpecChartRef' to JSON representation. */
@@ -426,14 +427,14 @@ export interface HelmReleaseSpecDependsOn {
      *
      * @schema HelmReleaseSpecDependsOn#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent, when not specified it acts as LocalObjectReference.
      *
      * @schema HelmReleaseSpecDependsOn#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'HelmReleaseSpecDependsOn' to JSON representation. */
@@ -468,7 +469,7 @@ export interface HelmReleaseSpecDriftDetection {
      *
      * @schema HelmReleaseSpecDriftDetection#ignore
      */
-    readonly ignore?: HelmReleaseSpecDriftDetectionIgnore[]
+    ignore?: HelmReleaseSpecDriftDetectionIgnore[]
 
     /**
      * Mode defines how differences should be handled between the Helm manifest and the manifest
@@ -476,7 +477,7 @@ export interface HelmReleaseSpecDriftDetection {
      *
      * @schema HelmReleaseSpecDriftDetection#mode
      */
-    readonly mode?: HelmReleaseSpecDriftDetectionMode
+    mode?: HelmReleaseSpecDriftDetectionMode
 }
 
 /** Converts an object of type 'HelmReleaseSpecDriftDetection' to JSON representation. */
@@ -507,8 +508,8 @@ export function toJson_HelmReleaseSpecDriftDetection(
 export interface HelmReleaseSpecInstall {
     /**
      * CRDs upgrade CRDs from the Helm Chart's crds directory according to the CRD upgrade policy
-     * provided here. Valid values are `Skip`, `Create` or `CreateReplace`. Default is `Create` and if
-     * omitted CRDs are installed but not updated.
+     * provided here. Valid values are `Skip`, `Create` or `CreateReplace`. Default is `Create` and
+     * if omitted CRDs are installed but not updated.
      *
      * Skip: do neither install nor replace (update) any CRDs.
      *
@@ -516,29 +517,29 @@ export interface HelmReleaseSpecInstall {
      *
      * CreateReplace: new CRDs are created, existing CRDs are updated (replaced) but not deleted.
      *
-     * By default, CRDs are applied (installed) during Helm install action. With this option users can
-     * opt in to CRD replace existing CRDs on Helm install actions, which is not (yet) natively
+     * By default, CRDs are applied (installed) during Helm install action. With this option users
+     * can opt in to CRD replace existing CRDs on Helm install actions, which is not (yet) natively
      * supported by Helm. https://helm.sh/docs/chart_best_practices/custom_resource_definitions.
      *
      * @default Create` and if omitted
      * @schema HelmReleaseSpecInstall#crds
      */
-    readonly crds?: HelmReleaseSpecInstallCrds
+    crds?: HelmReleaseSpecInstallCrds
 
     /**
-     * CreateNamespace tells the Helm install action to create the HelmReleaseSpec.TargetNamespace if
-     * it does not exist yet. On uninstall, the namespace will not be garbage collected.
+     * CreateNamespace tells the Helm install action to create the HelmReleaseSpec.TargetNamespace
+     * if it does not exist yet. On uninstall, the namespace will not be garbage collected.
      *
      * @schema HelmReleaseSpecInstall#createNamespace
      */
-    readonly createNamespace?: boolean
+    createNamespace?: boolean
 
     /**
      * DisableHooks prevents hooks from running during the Helm install action.
      *
      * @schema HelmReleaseSpecInstall#disableHooks
      */
-    readonly disableHooks?: boolean
+    disableHooks?: boolean
 
     /**
      * DisableOpenAPIValidation prevents the Helm install action from validating rendered templates
@@ -546,15 +547,15 @@ export interface HelmReleaseSpecInstall {
      *
      * @schema HelmReleaseSpecInstall#disableOpenAPIValidation
      */
-    readonly disableOpenApiValidation?: boolean
+    disableOpenApiValidation?: boolean
 
     /**
-     * DisableSchemaValidation prevents the Helm install action from validating the values against the
-     * JSON Schema.
+     * DisableSchemaValidation prevents the Helm install action from validating the values against
+     * the JSON Schema.
      *
      * @schema HelmReleaseSpecInstall#disableSchemaValidation
      */
-    readonly disableSchemaValidation?: boolean
+    disableSchemaValidation?: boolean
 
     /**
      * DisableTakeOwnership disables taking ownership of existing resources during the Helm install
@@ -563,7 +564,7 @@ export interface HelmReleaseSpecInstall {
      * @default false.
      * @schema HelmReleaseSpecInstall#disableTakeOwnership
      */
-    readonly disableTakeOwnership?: boolean
+    disableTakeOwnership?: boolean
 
     /**
      * DisableWait disables the waiting for resources to be ready after a Helm install has been
@@ -571,7 +572,7 @@ export interface HelmReleaseSpecInstall {
      *
      * @schema HelmReleaseSpecInstall#disableWait
      */
-    readonly disableWait?: boolean
+    disableWait?: boolean
 
     /**
      * DisableWaitForJobs disables waiting for jobs to complete after a Helm install has been
@@ -579,7 +580,7 @@ export interface HelmReleaseSpecInstall {
      *
      * @schema HelmReleaseSpecInstall#disableWaitForJobs
      */
-    readonly disableWaitForJobs?: boolean
+    disableWaitForJobs?: boolean
 
     /**
      * Remediation holds the remediation configuration for when the Helm install action for the
@@ -587,7 +588,7 @@ export interface HelmReleaseSpecInstall {
      *
      * @schema HelmReleaseSpecInstall#remediation
      */
-    readonly remediation?: HelmReleaseSpecInstallRemediation
+    remediation?: HelmReleaseSpecInstallRemediation
 
     /**
      * Replace tells the Helm install action to re-use the 'ReleaseName', but only if that name is a
@@ -595,17 +596,17 @@ export interface HelmReleaseSpecInstall {
      *
      * @schema HelmReleaseSpecInstall#replace
      */
-    readonly replace?: boolean
+    replace?: boolean
 
     /**
-     * SkipCRDs tells the Helm install action to not install any CRDs. By default, CRDs are installed
-     * if not already present.
+     * SkipCRDs tells the Helm install action to not install any CRDs. By default, CRDs are
+     * installed if not already present.
      *
      * Deprecated use CRD policy (`crds`) attribute with value `Skip` instead.
      *
      * @schema HelmReleaseSpecInstall#skipCRDs
      */
-    readonly skipCrDs?: boolean
+    skipCrDs?: boolean
 
     /**
      * Timeout is the time to wait for any individual Kubernetes operation (like Jobs for hooks)
@@ -614,7 +615,7 @@ export interface HelmReleaseSpecInstall {
      * @default HelmReleaseSpec.Timeout'.
      * @schema HelmReleaseSpecInstall#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'HelmReleaseSpecInstall' to JSON representation. */
@@ -657,15 +658,16 @@ export function toJson_HelmReleaseSpecInstall(
  */
 export interface HelmReleaseSpecKubeConfig {
     /**
-     * SecretRef holds the name of a secret that contains a key with the kubeconfig file as the value.
-     * If no key is set, the key will default to 'value'. It is recommended that the kubeconfig is
-     * self-contained, and the secret is regularly updated if credentials such as a cloud-access-token
-     * expire. Cloud specific `cmd-path` auth helpers will not function without adding binaries and
-     * credentials to the Pod that is responsible for reconciling Kubernetes resources.
+     * SecretRef holds the name of a secret that contains a key with the kubeconfig file as the
+     * value. If no key is set, the key will default to 'value'. It is recommended that the
+     * kubeconfig is self-contained, and the secret is regularly updated if credentials such as a
+     * cloud-access-token expire. Cloud specific `cmd-path` auth helpers will not function without
+     * adding binaries and credentials to the Pod that is responsible for reconciling Kubernetes
+     * resources.
      *
      * @schema HelmReleaseSpecKubeConfig#secretRef
      */
-    readonly secretRef: HelmReleaseSpecKubeConfigSecretRef
+    secretRef: HelmReleaseSpecKubeConfigSecretRef
 }
 
 /** Converts an object of type 'HelmReleaseSpecKubeConfig' to JSON representation. */
@@ -698,7 +700,7 @@ export interface HelmReleaseSpecPostRenderers {
      *
      * @schema HelmReleaseSpecPostRenderers#kustomize
      */
-    readonly kustomize?: HelmReleaseSpecPostRenderersKustomize
+    kustomize?: HelmReleaseSpecPostRenderersKustomize
 }
 
 /** Converts an object of type 'HelmReleaseSpecPostRenderers' to JSON representation. */
@@ -727,19 +729,19 @@ export function toJson_HelmReleaseSpecPostRenderers(
  */
 export interface HelmReleaseSpecRollback {
     /**
-     * CleanupOnFail allows deletion of new resources created during the Helm rollback action when it
-     * fails.
+     * CleanupOnFail allows deletion of new resources created during the Helm rollback action when
+     * it fails.
      *
      * @schema HelmReleaseSpecRollback#cleanupOnFail
      */
-    readonly cleanupOnFail?: boolean
+    cleanupOnFail?: boolean
 
     /**
      * DisableHooks prevents hooks from running during the Helm rollback action.
      *
      * @schema HelmReleaseSpecRollback#disableHooks
      */
-    readonly disableHooks?: boolean
+    disableHooks?: boolean
 
     /**
      * DisableWait disables the waiting for resources to be ready after a Helm rollback has been
@@ -747,7 +749,7 @@ export interface HelmReleaseSpecRollback {
      *
      * @schema HelmReleaseSpecRollback#disableWait
      */
-    readonly disableWait?: boolean
+    disableWait?: boolean
 
     /**
      * DisableWaitForJobs disables waiting for jobs to complete after a Helm rollback has been
@@ -755,21 +757,21 @@ export interface HelmReleaseSpecRollback {
      *
      * @schema HelmReleaseSpecRollback#disableWaitForJobs
      */
-    readonly disableWaitForJobs?: boolean
+    disableWaitForJobs?: boolean
 
     /**
      * Force forces resource updates through a replacement strategy.
      *
      * @schema HelmReleaseSpecRollback#force
      */
-    readonly force?: boolean
+    force?: boolean
 
     /**
      * Recreate performs pod restarts for the resource if applicable.
      *
      * @schema HelmReleaseSpecRollback#recreate
      */
-    readonly recreate?: boolean
+    recreate?: boolean
 
     /**
      * Timeout is the time to wait for any individual Kubernetes operation (like Jobs for hooks)
@@ -778,7 +780,7 @@ export interface HelmReleaseSpecRollback {
      * @default HelmReleaseSpec.Timeout'.
      * @schema HelmReleaseSpecRollback#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'HelmReleaseSpecRollback' to JSON representation. */
@@ -818,14 +820,14 @@ export interface HelmReleaseSpecTest {
      *
      * @schema HelmReleaseSpecTest#enable
      */
-    readonly enable?: boolean
+    enable?: boolean
 
     /**
      * Filters is a list of tests to run or exclude from running.
      *
      * @schema HelmReleaseSpecTest#filters
      */
-    readonly filters?: HelmReleaseSpecTestFilters[]
+    filters?: HelmReleaseSpecTestFilters[]
 
     /**
      * IgnoreFailures tells the controller to skip remediation when the Helm tests are run but fail.
@@ -834,16 +836,16 @@ export interface HelmReleaseSpecTest {
      *
      * @schema HelmReleaseSpecTest#ignoreFailures
      */
-    readonly ignoreFailures?: boolean
+    ignoreFailures?: boolean
 
     /**
-     * Timeout is the time to wait for any individual Kubernetes operation during the performance of a
-     * Helm test action. Defaults to 'HelmReleaseSpec.Timeout'.
+     * Timeout is the time to wait for any individual Kubernetes operation during the performance of
+     * a Helm test action. Defaults to 'HelmReleaseSpec.Timeout'.
      *
      * @default HelmReleaseSpec.Timeout'.
      * @schema HelmReleaseSpecTest#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'HelmReleaseSpecTest' to JSON representation. */
@@ -880,14 +882,14 @@ export interface HelmReleaseSpecUninstall {
      *
      * @schema HelmReleaseSpecUninstall#deletionPropagation
      */
-    readonly deletionPropagation?: HelmReleaseSpecUninstallDeletionPropagation
+    deletionPropagation?: HelmReleaseSpecUninstallDeletionPropagation
 
     /**
      * DisableHooks prevents hooks from running during the Helm rollback action.
      *
      * @schema HelmReleaseSpecUninstall#disableHooks
      */
-    readonly disableHooks?: boolean
+    disableHooks?: boolean
 
     /**
      * DisableWait disables waiting for all the resources to be deleted after a Helm uninstall is
@@ -895,15 +897,15 @@ export interface HelmReleaseSpecUninstall {
      *
      * @schema HelmReleaseSpecUninstall#disableWait
      */
-    readonly disableWait?: boolean
+    disableWait?: boolean
 
     /**
-     * KeepHistory tells Helm to remove all associated resources and mark the release as deleted, but
-     * retain the release history.
+     * KeepHistory tells Helm to remove all associated resources and mark the release as deleted,
+     * but retain the release history.
      *
      * @schema HelmReleaseSpecUninstall#keepHistory
      */
-    readonly keepHistory?: boolean
+    keepHistory?: boolean
 
     /**
      * Timeout is the time to wait for any individual Kubernetes operation (like Jobs for hooks)
@@ -912,7 +914,7 @@ export interface HelmReleaseSpecUninstall {
      * @default HelmReleaseSpec.Timeout'.
      * @schema HelmReleaseSpecUninstall#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'HelmReleaseSpecUninstall' to JSON representation. */
@@ -950,7 +952,7 @@ export interface HelmReleaseSpecUpgrade {
      *
      * @schema HelmReleaseSpecUpgrade#cleanupOnFail
      */
-    readonly cleanupOnFail?: boolean
+    cleanupOnFail?: boolean
 
     /**
      * CRDs upgrade CRDs from the Helm Chart's crds directory according to the CRD upgrade policy
@@ -963,21 +965,21 @@ export interface HelmReleaseSpecUpgrade {
      *
      * CreateReplace: new CRDs are created, existing CRDs are updated (replaced) but not deleted.
      *
-     * By default, CRDs are not applied during Helm upgrade action. With this option users can opt-in
-     * to CRD upgrade, which is not (yet) natively supported by Helm.
+     * By default, CRDs are not applied during Helm upgrade action. With this option users can
+     * opt-in to CRD upgrade, which is not (yet) natively supported by Helm.
      * https://helm.sh/docs/chart_best_practices/custom_resource_definitions.
      *
      * @default Skip` and if omitted
      * @schema HelmReleaseSpecUpgrade#crds
      */
-    readonly crds?: HelmReleaseSpecUpgradeCrds
+    crds?: HelmReleaseSpecUpgradeCrds
 
     /**
      * DisableHooks prevents hooks from running during the Helm upgrade action.
      *
      * @schema HelmReleaseSpecUpgrade#disableHooks
      */
-    readonly disableHooks?: boolean
+    disableHooks?: boolean
 
     /**
      * DisableOpenAPIValidation prevents the Helm upgrade action from validating rendered templates
@@ -985,15 +987,15 @@ export interface HelmReleaseSpecUpgrade {
      *
      * @schema HelmReleaseSpecUpgrade#disableOpenAPIValidation
      */
-    readonly disableOpenApiValidation?: boolean
+    disableOpenApiValidation?: boolean
 
     /**
-     * DisableSchemaValidation prevents the Helm upgrade action from validating the values against the
-     * JSON Schema.
+     * DisableSchemaValidation prevents the Helm upgrade action from validating the values against
+     * the JSON Schema.
      *
      * @schema HelmReleaseSpecUpgrade#disableSchemaValidation
      */
-    readonly disableSchemaValidation?: boolean
+    disableSchemaValidation?: boolean
 
     /**
      * DisableTakeOwnership disables taking ownership of existing resources during the Helm upgrade
@@ -1002,7 +1004,7 @@ export interface HelmReleaseSpecUpgrade {
      * @default false.
      * @schema HelmReleaseSpecUpgrade#disableTakeOwnership
      */
-    readonly disableTakeOwnership?: boolean
+    disableTakeOwnership?: boolean
 
     /**
      * DisableWait disables the waiting for resources to be ready after a Helm upgrade has been
@@ -1010,7 +1012,7 @@ export interface HelmReleaseSpecUpgrade {
      *
      * @schema HelmReleaseSpecUpgrade#disableWait
      */
-    readonly disableWait?: boolean
+    disableWait?: boolean
 
     /**
      * DisableWaitForJobs disables waiting for jobs to complete after a Helm upgrade has been
@@ -1018,14 +1020,14 @@ export interface HelmReleaseSpecUpgrade {
      *
      * @schema HelmReleaseSpecUpgrade#disableWaitForJobs
      */
-    readonly disableWaitForJobs?: boolean
+    disableWaitForJobs?: boolean
 
     /**
      * Force forces resource updates through a replacement strategy.
      *
      * @schema HelmReleaseSpecUpgrade#force
      */
-    readonly force?: boolean
+    force?: boolean
 
     /**
      * PreserveValues will make Helm reuse the last release's values and merge in overrides from
@@ -1033,7 +1035,7 @@ export interface HelmReleaseSpecUpgrade {
      *
      * @schema HelmReleaseSpecUpgrade#preserveValues
      */
-    readonly preserveValues?: boolean
+    preserveValues?: boolean
 
     /**
      * Remediation holds the remediation configuration for when the Helm upgrade action for the
@@ -1041,7 +1043,7 @@ export interface HelmReleaseSpecUpgrade {
      *
      * @schema HelmReleaseSpecUpgrade#remediation
      */
-    readonly remediation?: HelmReleaseSpecUpgradeRemediation
+    remediation?: HelmReleaseSpecUpgradeRemediation
 
     /**
      * Timeout is the time to wait for any individual Kubernetes operation (like Jobs for hooks)
@@ -1050,7 +1052,7 @@ export interface HelmReleaseSpecUpgrade {
      * @default HelmReleaseSpec.Timeout'.
      * @schema HelmReleaseSpecUpgrade#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'HelmReleaseSpecUpgrade' to JSON representation. */
@@ -1095,14 +1097,14 @@ export interface HelmReleaseSpecValuesFrom {
      *
      * @schema HelmReleaseSpecValuesFrom#kind
      */
-    readonly kind: HelmReleaseSpecValuesFromKind
+    kind: HelmReleaseSpecValuesFromKind
 
     /**
      * Name of the values referent. Should reside in the same namespace as the referring resource.
      *
      * @schema HelmReleaseSpecValuesFrom#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Optional marks this ValuesReference as optional. When set, a not found error for the values
@@ -1111,17 +1113,17 @@ export interface HelmReleaseSpecValuesFrom {
      *
      * @schema HelmReleaseSpecValuesFrom#optional
      */
-    readonly optional?: boolean
+    optional?: boolean
 
     /**
-     * TargetPath is the YAML dot notation path the value should be merged at. When set, the ValuesKey
-     * is expected to be a single flat value. Defaults to 'None', which results in the values getting
-     * merged at the root.
+     * TargetPath is the YAML dot notation path the value should be merged at. When set, the
+     * ValuesKey is expected to be a single flat value. Defaults to 'None', which results in the
+     * values getting merged at the root.
      *
      * @default None',
      * @schema HelmReleaseSpecValuesFrom#targetPath
      */
-    readonly targetPath?: string
+    targetPath?: string
 
     /**
      * ValuesKey is the data key where the values.yaml or a specific value can be found at. Defaults
@@ -1130,7 +1132,7 @@ export interface HelmReleaseSpecValuesFrom {
      * @default values.yaml'.
      * @schema HelmReleaseSpecValuesFrom#valuesKey
      */
-    readonly valuesKey?: string
+    valuesKey?: string
 }
 
 /** Converts an object of type 'HelmReleaseSpecValuesFrom' to JSON representation. */
@@ -1163,22 +1165,23 @@ export function toJson_HelmReleaseSpecValuesFrom(
  */
 export interface HelmReleaseSpecChartMetadata {
     /**
-     * Annotations is an unstructured key value map stored with a resource that may be set by external
-     * tools to store and retrieve arbitrary metadata. They are not queryable and should be preserved
-     * when modifying objects. More info:
+     * Annotations is an unstructured key value map stored with a resource that may be set by
+     * external tools to store and retrieve arbitrary metadata. They are not queryable and should be
+     * preserved when modifying objects. More info:
      * https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
      *
      * @schema HelmReleaseSpecChartMetadata#annotations
      */
-    readonly annotations?: { [key: string]: string }
+    annotations?: { [key: string]: string }
 
     /**
      * Map of string keys and values that can be used to organize and categorize (scope and select)
-     * objects. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+     * objects. More info:
+     * https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
      *
      * @schema HelmReleaseSpecChartMetadata#labels
      */
-    readonly labels?: { [key: string]: string }
+    labels?: { [key: string]: string }
 }
 
 /** Converts an object of type 'HelmReleaseSpecChartMetadata' to JSON representation. */
@@ -1224,7 +1227,7 @@ export interface HelmReleaseSpecChartSpec {
      *
      * @schema HelmReleaseSpecChartSpec#chart
      */
-    readonly chart: string
+    chart: string
 
     /**
      * IgnoreMissingValuesFiles controls whether to silently ignore missing values files rather than
@@ -1232,7 +1235,7 @@ export interface HelmReleaseSpecChartSpec {
      *
      * @schema HelmReleaseSpecChartSpec#ignoreMissingValuesFiles
      */
-    readonly ignoreMissingValuesFiles?: boolean
+    ignoreMissingValuesFiles?: boolean
 
     /**
      * Interval at which to check the v1.Source for updates. Defaults to 'HelmReleaseSpec.Interval'.
@@ -1240,52 +1243,52 @@ export interface HelmReleaseSpecChartSpec {
      * @default HelmReleaseSpec.Interval'.
      * @schema HelmReleaseSpecChartSpec#interval
      */
-    readonly interval?: string
+    interval?: string
 
     /**
      * Determines what enables the creation of a new artifact. Valid values are ('ChartVersion',
-     * 'Revision'). See the documentation of the values for an explanation on their behavior. Defaults
-     * to ChartVersion when omitted.
+     * 'Revision'). See the documentation of the values for an explanation on their behavior.
+     * Defaults to ChartVersion when omitted.
      *
      * @default ChartVersion when omitted.
      * @schema HelmReleaseSpecChartSpec#reconcileStrategy
      */
-    readonly reconcileStrategy?: HelmReleaseSpecChartSpecReconcileStrategy
+    reconcileStrategy?: HelmReleaseSpecChartSpecReconcileStrategy
 
     /**
      * The name and namespace of the v1.Source the chart is available at.
      *
      * @schema HelmReleaseSpecChartSpec#sourceRef
      */
-    readonly sourceRef: HelmReleaseSpecChartSpecSourceRef
+    sourceRef: HelmReleaseSpecChartSpecSourceRef
 
     /**
      * Alternative list of values files to use as the chart values (values.yaml is not included by
-     * default), expected to be a relative path in the SourceRef. Values files are merged in the order
-     * of this list with the last file overriding the first. Ignored when omitted.
+     * default), expected to be a relative path in the SourceRef. Values files are merged in the
+     * order of this list with the last file overriding the first. Ignored when omitted.
      *
      * @schema HelmReleaseSpecChartSpec#valuesFiles
      */
-    readonly valuesFiles?: string[]
+    valuesFiles?: string[]
 
     /**
-     * Verify contains the secret name containing the trusted public keys used to verify the signature
-     * and specifies which provider to use to check whether OCI image is authentic. This field is only
-     * supported for OCI sources. Chart dependencies, which are not bundled in the umbrella chart
-     * artifact, are not verified.
+     * Verify contains the secret name containing the trusted public keys used to verify the
+     * signature and specifies which provider to use to check whether OCI image is authentic. This
+     * field is only supported for OCI sources. Chart dependencies, which are not bundled in the
+     * umbrella chart artifact, are not verified.
      *
      * @schema HelmReleaseSpecChartSpec#verify
      */
-    readonly verify?: HelmReleaseSpecChartSpecVerify
+    verify?: HelmReleaseSpecChartSpecVerify
 
     /**
-     * Version semver expression, ignored for charts from v1.GitRepository and v1beta2.Bucket sources.
-     * Defaults to latest when omitted.
+     * Version semver expression, ignored for charts from v1.GitRepository and v1beta2.Bucket
+     * sources. Defaults to latest when omitted.
      *
      * @default latest when omitted.
      * @schema HelmReleaseSpecChartSpec#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /** Converts an object of type 'HelmReleaseSpecChartSpec' to JSON representation. */
@@ -1339,16 +1342,16 @@ export interface HelmReleaseSpecDriftDetectionIgnore {
      *
      * @schema HelmReleaseSpecDriftDetectionIgnore#paths
      */
-    readonly paths: string[]
+    paths: string[]
 
     /**
-     * Target is a selector for specifying Kubernetes objects to which this rule applies. If Target is
-     * not set, the Paths will be ignored for all Kubernetes objects within the manifest of the Helm
-     * release.
+     * Target is a selector for specifying Kubernetes objects to which this rule applies. If Target
+     * is not set, the Paths will be ignored for all Kubernetes objects within the manifest of the
+     * Helm release.
      *
      * @schema HelmReleaseSpecDriftDetectionIgnore#target
      */
-    readonly target?: HelmReleaseSpecDriftDetectionIgnoreTarget
+    target?: HelmReleaseSpecDriftDetectionIgnoreTarget
 }
 
 /** Converts an object of type 'HelmReleaseSpecDriftDetectionIgnore' to JSON representation. */
@@ -1427,7 +1430,7 @@ export interface HelmReleaseSpecInstallRemediation {
      * @default Test.IgnoreFailures'.
      * @schema HelmReleaseSpecInstallRemediation#ignoreTestFailures
      */
-    readonly ignoreTestFailures?: boolean
+    ignoreTestFailures?: boolean
 
     /**
      * RemediateLastFailure tells the controller to remediate the last failure, when no retries
@@ -1436,17 +1439,17 @@ export interface HelmReleaseSpecInstallRemediation {
      * @default false'.
      * @schema HelmReleaseSpecInstallRemediation#remediateLastFailure
      */
-    readonly remediateLastFailure?: boolean
+    remediateLastFailure?: boolean
 
     /**
      * Retries is the number of retries that should be attempted on failures before bailing.
-     * Remediation, using an uninstall, is performed between each attempt. Defaults to '0', a negative
-     * integer equals to unlimited retries.
+     * Remediation, using an uninstall, is performed between each attempt. Defaults to '0', a
+     * negative integer equals to unlimited retries.
      *
      * @default 0', a negative integer equals to unlimited retries.
      * @schema HelmReleaseSpecInstallRemediation#retries
      */
-    readonly retries?: number
+    retries?: number
 }
 
 /** Converts an object of type 'HelmReleaseSpecInstallRemediation' to JSON representation. */
@@ -1485,14 +1488,14 @@ export interface HelmReleaseSpecKubeConfigSecretRef {
      *
      * @schema HelmReleaseSpecKubeConfigSecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the Secret.
      *
      * @schema HelmReleaseSpecKubeConfigSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HelmReleaseSpecKubeConfigSecretRef' to JSON representation. */
@@ -1522,20 +1525,20 @@ export function toJson_HelmReleaseSpecKubeConfigSecretRef(
  */
 export interface HelmReleaseSpecPostRenderersKustomize {
     /**
-     * Images is a list of (image name, new name, new tag or digest) for changing image names, tags or
-     * digests. This can also be achieved with a patch, but this operator is simpler to specify.
+     * Images is a list of (image name, new name, new tag or digest) for changing image names, tags
+     * or digests. This can also be achieved with a patch, but this operator is simpler to specify.
      *
      * @schema HelmReleaseSpecPostRenderersKustomize#images
      */
-    readonly images?: HelmReleaseSpecPostRenderersKustomizeImages[]
+    images?: HelmReleaseSpecPostRenderersKustomizeImages[]
 
     /**
-     * Strategic merge and JSON patches, defined as inline YAML objects, capable of targeting objects
-     * based on kind, label and annotation selectors.
+     * Strategic merge and JSON patches, defined as inline YAML objects, capable of targeting
+     * objects based on kind, label and annotation selectors.
      *
      * @schema HelmReleaseSpecPostRenderersKustomize#patches
      */
-    readonly patches?: HelmReleaseSpecPostRenderersKustomizePatches[]
+    patches?: HelmReleaseSpecPostRenderersKustomizePatches[]
 }
 
 /** Converts an object of type 'HelmReleaseSpecPostRenderersKustomize' to JSON representation. */
@@ -1569,14 +1572,14 @@ export interface HelmReleaseSpecTestFilters {
      *
      * @schema HelmReleaseSpecTestFilters#exclude
      */
-    readonly exclude?: boolean
+    exclude?: boolean
 
     /**
      * Name is the name of the test.
      *
      * @schema HelmReleaseSpecTestFilters#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HelmReleaseSpecTestFilters' to JSON representation. */
@@ -1654,7 +1657,7 @@ export interface HelmReleaseSpecUpgradeRemediation {
      * @default Test.IgnoreFailures'.
      * @schema HelmReleaseSpecUpgradeRemediation#ignoreTestFailures
      */
-    readonly ignoreTestFailures?: boolean
+    ignoreTestFailures?: boolean
 
     /**
      * RemediateLastFailure tells the controller to remediate the last failure, when no retries
@@ -1663,7 +1666,7 @@ export interface HelmReleaseSpecUpgradeRemediation {
      * @default false' unless 'Retries' is greater than 0.
      * @schema HelmReleaseSpecUpgradeRemediation#remediateLastFailure
      */
-    readonly remediateLastFailure?: boolean
+    remediateLastFailure?: boolean
 
     /**
      * Retries is the number of retries that should be attempted on failures before bailing.
@@ -1673,7 +1676,7 @@ export interface HelmReleaseSpecUpgradeRemediation {
      * @default 0', a negative integer equals to unlimited retries.
      * @schema HelmReleaseSpecUpgradeRemediation#retries
      */
-    readonly retries?: number
+    retries?: number
 
     /**
      * Strategy to use for failure remediation. Defaults to 'rollback'.
@@ -1681,7 +1684,7 @@ export interface HelmReleaseSpecUpgradeRemediation {
      * @default rollback'.
      * @schema HelmReleaseSpecUpgradeRemediation#strategy
      */
-    readonly strategy?: HelmReleaseSpecUpgradeRemediationStrategy
+    strategy?: HelmReleaseSpecUpgradeRemediationStrategy
 }
 
 /** Converts an object of type 'HelmReleaseSpecUpgradeRemediation' to JSON representation. */
@@ -1744,28 +1747,28 @@ export interface HelmReleaseSpecChartSpecSourceRef {
      *
      * @schema HelmReleaseSpecChartSpecSourceRef#apiVersion
      */
-    readonly apiVersion?: string
+    apiVersion?: string
 
     /**
      * Kind of the referent.
      *
      * @schema HelmReleaseSpecChartSpecSourceRef#kind
      */
-    readonly kind: HelmReleaseSpecChartSpecSourceRefKind
+    kind: HelmReleaseSpecChartSpecSourceRefKind
 
     /**
      * Name of the referent.
      *
      * @schema HelmReleaseSpecChartSpecSourceRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent.
      *
      * @schema HelmReleaseSpecChartSpecSourceRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'HelmReleaseSpecChartSpecSourceRef' to JSON representation. */
@@ -1804,14 +1807,14 @@ export interface HelmReleaseSpecChartSpecVerify {
      *
      * @schema HelmReleaseSpecChartSpecVerify#provider
      */
-    readonly provider: HelmReleaseSpecChartSpecVerifyProvider
+    provider: HelmReleaseSpecChartSpecVerifyProvider
 
     /**
      * SecretRef specifies the Kubernetes Secret containing the trusted public keys.
      *
      * @schema HelmReleaseSpecChartSpecVerify#secretRef
      */
-    readonly secretRef?: HelmReleaseSpecChartSpecVerifySecretRef
+    secretRef?: HelmReleaseSpecChartSpecVerifySecretRef
 }
 
 /** Converts an object of type 'HelmReleaseSpecChartSpecVerify' to JSON representation. */
@@ -1849,7 +1852,7 @@ export interface HelmReleaseSpecDriftDetectionIgnoreTarget {
      *
      * @schema HelmReleaseSpecDriftDetectionIgnoreTarget#annotationSelector
      */
-    readonly annotationSelector?: string
+    annotationSelector?: string
 
     /**
      * Group is the API group to select resources from. Together with Version and Kind it is capable
@@ -1858,7 +1861,7 @@ export interface HelmReleaseSpecDriftDetectionIgnoreTarget {
      *
      * @schema HelmReleaseSpecDriftDetectionIgnoreTarget#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind of the API Group to select resources from. Together with Group and Version it is capable
@@ -1867,7 +1870,7 @@ export interface HelmReleaseSpecDriftDetectionIgnoreTarget {
      *
      * @schema HelmReleaseSpecDriftDetectionIgnoreTarget#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * LabelSelector is a string that follows the label selection expression
@@ -1876,21 +1879,21 @@ export interface HelmReleaseSpecDriftDetectionIgnoreTarget {
      *
      * @schema HelmReleaseSpecDriftDetectionIgnoreTarget#labelSelector
      */
-    readonly labelSelector?: string
+    labelSelector?: string
 
     /**
      * Name to match resources with.
      *
      * @schema HelmReleaseSpecDriftDetectionIgnoreTarget#name
      */
-    readonly name?: string
+    name?: string
 
     /**
      * Namespace to select resources from.
      *
      * @schema HelmReleaseSpecDriftDetectionIgnoreTarget#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Version of the API Group to select resources from. Together with Group and Kind it is capable
@@ -1899,7 +1902,7 @@ export interface HelmReleaseSpecDriftDetectionIgnoreTarget {
      *
      * @schema HelmReleaseSpecDriftDetectionIgnoreTarget#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /** Converts an object of type 'HelmReleaseSpecDriftDetectionIgnoreTarget' to JSON representation. */
@@ -1940,28 +1943,28 @@ export interface HelmReleaseSpecPostRenderersKustomizeImages {
      *
      * @schema HelmReleaseSpecPostRenderersKustomizeImages#digest
      */
-    readonly digest?: string
+    digest?: string
 
     /**
      * Name is a tag-less image name.
      *
      * @schema HelmReleaseSpecPostRenderersKustomizeImages#name
      */
-    readonly name: string
+    name: string
 
     /**
      * NewName is the value used to replace the original name.
      *
      * @schema HelmReleaseSpecPostRenderersKustomizeImages#newName
      */
-    readonly newName?: string
+    newName?: string
 
     /**
      * NewTag is the value used to replace the original tag.
      *
      * @schema HelmReleaseSpecPostRenderersKustomizeImages#newTag
      */
-    readonly newTag?: string
+    newTag?: string
 }
 
 /** Converts an object of type 'HelmReleaseSpecPostRenderersKustomizeImages' to JSON representation. */
@@ -1999,14 +2002,14 @@ export interface HelmReleaseSpecPostRenderersKustomizePatches {
      *
      * @schema HelmReleaseSpecPostRenderersKustomizePatches#patch
      */
-    readonly patch: string
+    patch: string
 
     /**
      * Target points to the resources that the patch document should be applied to.
      *
      * @schema HelmReleaseSpecPostRenderersKustomizePatches#target
      */
-    readonly target?: HelmReleaseSpecPostRenderersKustomizePatchesTarget
+    target?: HelmReleaseSpecPostRenderersKustomizePatchesTarget
 }
 
 /** Converts an object of type 'HelmReleaseSpecPostRenderersKustomizePatches' to JSON representation. */
@@ -2079,7 +2082,7 @@ export interface HelmReleaseSpecChartSpecVerifySecretRef {
      *
      * @schema HelmReleaseSpecChartSpecVerifySecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HelmReleaseSpecChartSpecVerifySecretRef' to JSON representation. */
@@ -2114,7 +2117,7 @@ export interface HelmReleaseSpecPostRenderersKustomizePatchesTarget {
      *
      * @schema HelmReleaseSpecPostRenderersKustomizePatchesTarget#annotationSelector
      */
-    readonly annotationSelector?: string
+    annotationSelector?: string
 
     /**
      * Group is the API group to select resources from. Together with Version and Kind it is capable
@@ -2123,7 +2126,7 @@ export interface HelmReleaseSpecPostRenderersKustomizePatchesTarget {
      *
      * @schema HelmReleaseSpecPostRenderersKustomizePatchesTarget#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind of the API Group to select resources from. Together with Group and Version it is capable
@@ -2132,7 +2135,7 @@ export interface HelmReleaseSpecPostRenderersKustomizePatchesTarget {
      *
      * @schema HelmReleaseSpecPostRenderersKustomizePatchesTarget#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * LabelSelector is a string that follows the label selection expression
@@ -2141,21 +2144,21 @@ export interface HelmReleaseSpecPostRenderersKustomizePatchesTarget {
      *
      * @schema HelmReleaseSpecPostRenderersKustomizePatchesTarget#labelSelector
      */
-    readonly labelSelector?: string
+    labelSelector?: string
 
     /**
      * Name to match resources with.
      *
      * @schema HelmReleaseSpecPostRenderersKustomizePatchesTarget#name
      */
-    readonly name?: string
+    name?: string
 
     /**
      * Namespace to select resources from.
      *
      * @schema HelmReleaseSpecPostRenderersKustomizePatchesTarget#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Version of the API Group to select resources from. Together with Group and Kind it is capable
@@ -2164,7 +2167,7 @@ export interface HelmReleaseSpecPostRenderersKustomizePatchesTarget {
      *
      * @schema HelmReleaseSpecPostRenderersKustomizePatchesTarget#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /**
@@ -2202,7 +2205,7 @@ export function toJson_HelmReleaseSpecPostRenderersKustomizePatchesTarget(
  */
 export class HelmReleaseV2Beta1 extends ApiObject {
     /** Returns the apiVersion and kind for "HelmReleaseV2Beta1" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "helm.toolkit.fluxcd.io/v2beta1",
         kind: "HelmRelease"
     }
@@ -2253,14 +2256,14 @@ export class HelmReleaseV2Beta1 extends ApiObject {
  */
 export interface HelmReleaseV2Beta1Props {
     /** @schema HelmReleaseV2Beta1#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * HelmReleaseSpec defines the desired state of a Helm release.
      *
      * @schema HelmReleaseV2Beta1#spec
      */
-    readonly spec?: HelmReleaseV2Beta1Spec
+    spec?: HelmReleaseV2Beta1Spec
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1Props' to JSON representation. */
@@ -2295,16 +2298,17 @@ export interface HelmReleaseV2Beta1Spec {
      *
      * @schema HelmReleaseV2Beta1Spec#chart
      */
-    readonly chart: HelmReleaseV2Beta1SpecChart
+    chart: HelmReleaseV2Beta1SpecChart
 
     /**
-     * ChartRef holds a reference to a source controller resource containing the Helm chart artifact.
+     * ChartRef holds a reference to a source controller resource containing the Helm chart
+     * artifact.
      *
      * Note: this field is provisional to the v2 API, and not actively used by v2beta1 HelmReleases.
      *
      * @schema HelmReleaseV2Beta1Spec#chartRef
      */
-    readonly chartRef?: HelmReleaseV2Beta1SpecChartRef
+    chartRef?: HelmReleaseV2Beta1SpecChartRef
 
     /**
      * DependsOn may contain a meta.NamespacedObjectReference slice with references to HelmRelease
@@ -2312,7 +2316,7 @@ export interface HelmReleaseV2Beta1Spec {
      *
      * @schema HelmReleaseV2Beta1Spec#dependsOn
      */
-    readonly dependsOn?: HelmReleaseV2Beta1SpecDependsOn[]
+    dependsOn?: HelmReleaseV2Beta1SpecDependsOn[]
 
     /**
      * DriftDetection holds the configuration for detecting and handling differences between the
@@ -2323,14 +2327,14 @@ export interface HelmReleaseV2Beta1Spec {
      *
      * @schema HelmReleaseV2Beta1Spec#driftDetection
      */
-    readonly driftDetection?: HelmReleaseV2Beta1SpecDriftDetection
+    driftDetection?: HelmReleaseV2Beta1SpecDriftDetection
 
     /**
      * Install holds the configuration for Helm install actions for this HelmRelease.
      *
      * @schema HelmReleaseV2Beta1Spec#install
      */
-    readonly install?: HelmReleaseV2Beta1SpecInstall
+    install?: HelmReleaseV2Beta1SpecInstall
 
     /**
      * Interval at which to reconcile the Helm release. This interval is approximate and may be
@@ -2338,17 +2342,17 @@ export interface HelmReleaseV2Beta1Spec {
      *
      * @schema HelmReleaseV2Beta1Spec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
      * KubeConfig for reconciling the HelmRelease on a remote cluster. When used in combination with
      * HelmReleaseSpec.ServiceAccountName, forces the controller to act on behalf of that Service
-     * Account at the target cluster. If the --default-service-account flag is set, its value will be
-     * used as a controller level fallback for when HelmReleaseSpec.ServiceAccountName is empty.
+     * Account at the target cluster. If the --default-service-account flag is set, its value will
+     * be used as a controller level fallback for when HelmReleaseSpec.ServiceAccountName is empty.
      *
      * @schema HelmReleaseV2Beta1Spec#kubeConfig
      */
-    readonly kubeConfig?: HelmReleaseV2Beta1SpecKubeConfig
+    kubeConfig?: HelmReleaseV2Beta1SpecKubeConfig
 
     /**
      * MaxHistory is the number of revisions saved by Helm for this HelmRelease. Use '0' for an
@@ -2356,7 +2360,7 @@ export interface HelmReleaseV2Beta1Spec {
      *
      * @schema HelmReleaseV2Beta1Spec#maxHistory
      */
-    readonly maxHistory?: number
+    maxHistory?: number
 
     /**
      * PersistentClient tells the controller to use a persistent Kubernetes client for this release.
@@ -2371,7 +2375,7 @@ export interface HelmReleaseV2Beta1Spec {
      *
      * @schema HelmReleaseV2Beta1Spec#persistentClient
      */
-    readonly persistentClient?: boolean
+    persistentClient?: boolean
 
     /**
      * PostRenderers holds an array of Helm PostRenderers, which will be applied in order of their
@@ -2379,7 +2383,7 @@ export interface HelmReleaseV2Beta1Spec {
      *
      * @schema HelmReleaseV2Beta1Spec#postRenderers
      */
-    readonly postRenderers?: HelmReleaseV2Beta1SpecPostRenderers[]
+    postRenderers?: HelmReleaseV2Beta1SpecPostRenderers[]
 
     /**
      * ReleaseName used for the Helm release. Defaults to a composition of '[TargetNamespace-]Name'.
@@ -2387,21 +2391,21 @@ export interface HelmReleaseV2Beta1Spec {
      * @default a composition of
      * @schema HelmReleaseV2Beta1Spec#releaseName
      */
-    readonly releaseName?: string
+    releaseName?: string
 
     /**
      * Rollback holds the configuration for Helm rollback actions for this HelmRelease.
      *
      * @schema HelmReleaseV2Beta1Spec#rollback
      */
-    readonly rollback?: HelmReleaseV2Beta1SpecRollback
+    rollback?: HelmReleaseV2Beta1SpecRollback
 
     /**
      * The name of the Kubernetes service account to impersonate when reconciling this HelmRelease.
      *
      * @schema HelmReleaseV2Beta1Spec#serviceAccountName
      */
-    readonly serviceAccountName?: string
+    serviceAccountName?: string
 
     /**
      * StorageNamespace used for the Helm storage. Defaults to the namespace of the HelmRelease.
@@ -2409,16 +2413,16 @@ export interface HelmReleaseV2Beta1Spec {
      * @default the namespace of the HelmRelease.
      * @schema HelmReleaseV2Beta1Spec#storageNamespace
      */
-    readonly storageNamespace?: string
+    storageNamespace?: string
 
     /**
-     * Suspend tells the controller to suspend reconciliation for this HelmRelease, it does not apply
-     * to already started reconciliations. Defaults to false.
+     * Suspend tells the controller to suspend reconciliation for this HelmRelease, it does not
+     * apply to already started reconciliations. Defaults to false.
      *
      * @default false.
      * @schema HelmReleaseV2Beta1Spec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * TargetNamespace to target when performing operations for the HelmRelease. Defaults to the
@@ -2427,14 +2431,14 @@ export interface HelmReleaseV2Beta1Spec {
      * @default the namespace of the HelmRelease.
      * @schema HelmReleaseV2Beta1Spec#targetNamespace
      */
-    readonly targetNamespace?: string
+    targetNamespace?: string
 
     /**
      * Test holds the configuration for Helm test actions for this HelmRelease.
      *
      * @schema HelmReleaseV2Beta1Spec#test
      */
-    readonly test?: HelmReleaseV2Beta1SpecTest
+    test?: HelmReleaseV2Beta1SpecTest
 
     /**
      * Timeout is the time to wait for any individual Kubernetes operation (like Jobs for hooks)
@@ -2443,28 +2447,28 @@ export interface HelmReleaseV2Beta1Spec {
      * @default 5m0s'.
      * @schema HelmReleaseV2Beta1Spec#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 
     /**
      * Uninstall holds the configuration for Helm uninstall actions for this HelmRelease.
      *
      * @schema HelmReleaseV2Beta1Spec#uninstall
      */
-    readonly uninstall?: HelmReleaseV2Beta1SpecUninstall
+    uninstall?: HelmReleaseV2Beta1SpecUninstall
 
     /**
      * Upgrade holds the configuration for Helm upgrade actions for this HelmRelease.
      *
      * @schema HelmReleaseV2Beta1Spec#upgrade
      */
-    readonly upgrade?: HelmReleaseV2Beta1SpecUpgrade
+    upgrade?: HelmReleaseV2Beta1SpecUpgrade
 
     /**
      * Values holds the values for this Helm release.
      *
      * @schema HelmReleaseV2Beta1Spec#values
      */
-    readonly values?: any
+    values?: any
 
     /**
      * ValuesFrom holds references to resources containing Helm values for this HelmRelease, and
@@ -2472,7 +2476,7 @@ export interface HelmReleaseV2Beta1Spec {
      *
      * @schema HelmReleaseV2Beta1Spec#valuesFrom
      */
-    readonly valuesFrom?: HelmReleaseV2Beta1SpecValuesFrom[]
+    valuesFrom?: HelmReleaseV2Beta1SpecValuesFrom[]
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1Spec' to JSON representation. */
@@ -2526,14 +2530,14 @@ export interface HelmReleaseV2Beta1SpecChart {
      *
      * @schema HelmReleaseV2Beta1SpecChart#metadata
      */
-    readonly metadata?: HelmReleaseV2Beta1SpecChartMetadata
+    metadata?: HelmReleaseV2Beta1SpecChartMetadata
 
     /**
      * Spec holds the template for the v1beta2.HelmChartSpec for this HelmRelease.
      *
      * @schema HelmReleaseV2Beta1SpecChart#spec
      */
-    readonly spec: HelmReleaseV2Beta1SpecChartSpec
+    spec: HelmReleaseV2Beta1SpecChartSpec
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecChart' to JSON representation. */
@@ -2569,21 +2573,21 @@ export interface HelmReleaseV2Beta1SpecChartRef {
      *
      * @schema HelmReleaseV2Beta1SpecChartRef#apiVersion
      */
-    readonly apiVersion?: string
+    apiVersion?: string
 
     /**
      * Kind of the referent.
      *
      * @schema HelmReleaseV2Beta1SpecChartRef#kind
      */
-    readonly kind: HelmReleaseV2Beta1SpecChartRefKind
+    kind: HelmReleaseV2Beta1SpecChartRefKind
 
     /**
      * Name of the referent.
      *
      * @schema HelmReleaseV2Beta1SpecChartRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent, defaults to the namespace of the Kubernetes resource object that
@@ -2591,7 +2595,7 @@ export interface HelmReleaseV2Beta1SpecChartRef {
      *
      * @schema HelmReleaseV2Beta1SpecChartRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecChartRef' to JSON representation. */
@@ -2628,14 +2632,14 @@ export interface HelmReleaseV2Beta1SpecDependsOn {
      *
      * @schema HelmReleaseV2Beta1SpecDependsOn#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent, when not specified it acts as LocalObjectReference.
      *
      * @schema HelmReleaseV2Beta1SpecDependsOn#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecDependsOn' to JSON representation. */
@@ -2673,7 +2677,7 @@ export interface HelmReleaseV2Beta1SpecDriftDetection {
      *
      * @schema HelmReleaseV2Beta1SpecDriftDetection#ignore
      */
-    readonly ignore?: HelmReleaseV2Beta1SpecDriftDetectionIgnore[]
+    ignore?: HelmReleaseV2Beta1SpecDriftDetectionIgnore[]
 
     /**
      * Mode defines how differences should be handled between the Helm manifest and the manifest
@@ -2681,7 +2685,7 @@ export interface HelmReleaseV2Beta1SpecDriftDetection {
      *
      * @schema HelmReleaseV2Beta1SpecDriftDetection#mode
      */
-    readonly mode?: HelmReleaseV2Beta1SpecDriftDetectionMode
+    mode?: HelmReleaseV2Beta1SpecDriftDetectionMode
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecDriftDetection' to JSON representation. */
@@ -2712,8 +2716,8 @@ export function toJson_HelmReleaseV2Beta1SpecDriftDetection(
 export interface HelmReleaseV2Beta1SpecInstall {
     /**
      * CRDs upgrade CRDs from the Helm Chart's crds directory according to the CRD upgrade policy
-     * provided here. Valid values are `Skip`, `Create` or `CreateReplace`. Default is `Create` and if
-     * omitted CRDs are installed but not updated.
+     * provided here. Valid values are `Skip`, `Create` or `CreateReplace`. Default is `Create` and
+     * if omitted CRDs are installed but not updated.
      *
      * Skip: do neither install nor replace (update) any CRDs.
      *
@@ -2721,29 +2725,29 @@ export interface HelmReleaseV2Beta1SpecInstall {
      *
      * CreateReplace: new CRDs are created, existing CRDs are updated (replaced) but not deleted.
      *
-     * By default, CRDs are applied (installed) during Helm install action. With this option users can
-     * opt-in to CRD replace existing CRDs on Helm install actions, which is not (yet) natively
+     * By default, CRDs are applied (installed) during Helm install action. With this option users
+     * can opt-in to CRD replace existing CRDs on Helm install actions, which is not (yet) natively
      * supported by Helm. https://helm.sh/docs/chart_best_practices/custom_resource_definitions.
      *
      * @default Create` and if omitted
      * @schema HelmReleaseV2Beta1SpecInstall#crds
      */
-    readonly crds?: HelmReleaseV2Beta1SpecInstallCrds
+    crds?: HelmReleaseV2Beta1SpecInstallCrds
 
     /**
-     * CreateNamespace tells the Helm install action to create the HelmReleaseSpec.TargetNamespace if
-     * it does not exist yet. On uninstall, the namespace will not be garbage collected.
+     * CreateNamespace tells the Helm install action to create the HelmReleaseSpec.TargetNamespace
+     * if it does not exist yet. On uninstall, the namespace will not be garbage collected.
      *
      * @schema HelmReleaseV2Beta1SpecInstall#createNamespace
      */
-    readonly createNamespace?: boolean
+    createNamespace?: boolean
 
     /**
      * DisableHooks prevents hooks from running during the Helm install action.
      *
      * @schema HelmReleaseV2Beta1SpecInstall#disableHooks
      */
-    readonly disableHooks?: boolean
+    disableHooks?: boolean
 
     /**
      * DisableOpenAPIValidation prevents the Helm install action from validating rendered templates
@@ -2751,7 +2755,7 @@ export interface HelmReleaseV2Beta1SpecInstall {
      *
      * @schema HelmReleaseV2Beta1SpecInstall#disableOpenAPIValidation
      */
-    readonly disableOpenApiValidation?: boolean
+    disableOpenApiValidation?: boolean
 
     /**
      * DisableWait disables the waiting for resources to be ready after a Helm install has been
@@ -2759,7 +2763,7 @@ export interface HelmReleaseV2Beta1SpecInstall {
      *
      * @schema HelmReleaseV2Beta1SpecInstall#disableWait
      */
-    readonly disableWait?: boolean
+    disableWait?: boolean
 
     /**
      * DisableWaitForJobs disables waiting for jobs to complete after a Helm install has been
@@ -2767,7 +2771,7 @@ export interface HelmReleaseV2Beta1SpecInstall {
      *
      * @schema HelmReleaseV2Beta1SpecInstall#disableWaitForJobs
      */
-    readonly disableWaitForJobs?: boolean
+    disableWaitForJobs?: boolean
 
     /**
      * Remediation holds the remediation configuration for when the Helm install action for the
@@ -2775,7 +2779,7 @@ export interface HelmReleaseV2Beta1SpecInstall {
      *
      * @schema HelmReleaseV2Beta1SpecInstall#remediation
      */
-    readonly remediation?: HelmReleaseV2Beta1SpecInstallRemediation
+    remediation?: HelmReleaseV2Beta1SpecInstallRemediation
 
     /**
      * Replace tells the Helm install action to re-use the 'ReleaseName', but only if that name is a
@@ -2783,17 +2787,17 @@ export interface HelmReleaseV2Beta1SpecInstall {
      *
      * @schema HelmReleaseV2Beta1SpecInstall#replace
      */
-    readonly replace?: boolean
+    replace?: boolean
 
     /**
-     * SkipCRDs tells the Helm install action to not install any CRDs. By default, CRDs are installed
-     * if not already present.
+     * SkipCRDs tells the Helm install action to not install any CRDs. By default, CRDs are
+     * installed if not already present.
      *
      * Deprecated use CRD policy (`crds`) attribute with value `Skip` instead.
      *
      * @schema HelmReleaseV2Beta1SpecInstall#skipCRDs
      */
-    readonly skipCrDs?: boolean
+    skipCrDs?: boolean
 
     /**
      * Timeout is the time to wait for any individual Kubernetes operation (like Jobs for hooks)
@@ -2802,7 +2806,7 @@ export interface HelmReleaseV2Beta1SpecInstall {
      * @default HelmReleaseSpec.Timeout'.
      * @schema HelmReleaseV2Beta1SpecInstall#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecInstall' to JSON representation. */
@@ -2843,15 +2847,16 @@ export function toJson_HelmReleaseV2Beta1SpecInstall(
  */
 export interface HelmReleaseV2Beta1SpecKubeConfig {
     /**
-     * SecretRef holds the name of a secret that contains a key with the kubeconfig file as the value.
-     * If no key is set, the key will default to 'value'. It is recommended that the kubeconfig is
-     * self-contained, and the secret is regularly updated if credentials such as a cloud-access-token
-     * expire. Cloud specific `cmd-path` auth helpers will not function without adding binaries and
-     * credentials to the Pod that is responsible for reconciling Kubernetes resources.
+     * SecretRef holds the name of a secret that contains a key with the kubeconfig file as the
+     * value. If no key is set, the key will default to 'value'. It is recommended that the
+     * kubeconfig is self-contained, and the secret is regularly updated if credentials such as a
+     * cloud-access-token expire. Cloud specific `cmd-path` auth helpers will not function without
+     * adding binaries and credentials to the Pod that is responsible for reconciling Kubernetes
+     * resources.
      *
      * @schema HelmReleaseV2Beta1SpecKubeConfig#secretRef
      */
-    readonly secretRef: HelmReleaseV2Beta1SpecKubeConfigSecretRef
+    secretRef: HelmReleaseV2Beta1SpecKubeConfigSecretRef
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecKubeConfig' to JSON representation. */
@@ -2884,7 +2889,7 @@ export interface HelmReleaseV2Beta1SpecPostRenderers {
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderers#kustomize
      */
-    readonly kustomize?: HelmReleaseV2Beta1SpecPostRenderersKustomize
+    kustomize?: HelmReleaseV2Beta1SpecPostRenderersKustomize
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecPostRenderers' to JSON representation. */
@@ -2913,19 +2918,19 @@ export function toJson_HelmReleaseV2Beta1SpecPostRenderers(
  */
 export interface HelmReleaseV2Beta1SpecRollback {
     /**
-     * CleanupOnFail allows deletion of new resources created during the Helm rollback action when it
-     * fails.
+     * CleanupOnFail allows deletion of new resources created during the Helm rollback action when
+     * it fails.
      *
      * @schema HelmReleaseV2Beta1SpecRollback#cleanupOnFail
      */
-    readonly cleanupOnFail?: boolean
+    cleanupOnFail?: boolean
 
     /**
      * DisableHooks prevents hooks from running during the Helm rollback action.
      *
      * @schema HelmReleaseV2Beta1SpecRollback#disableHooks
      */
-    readonly disableHooks?: boolean
+    disableHooks?: boolean
 
     /**
      * DisableWait disables the waiting for resources to be ready after a Helm rollback has been
@@ -2933,7 +2938,7 @@ export interface HelmReleaseV2Beta1SpecRollback {
      *
      * @schema HelmReleaseV2Beta1SpecRollback#disableWait
      */
-    readonly disableWait?: boolean
+    disableWait?: boolean
 
     /**
      * DisableWaitForJobs disables waiting for jobs to complete after a Helm rollback has been
@@ -2941,21 +2946,21 @@ export interface HelmReleaseV2Beta1SpecRollback {
      *
      * @schema HelmReleaseV2Beta1SpecRollback#disableWaitForJobs
      */
-    readonly disableWaitForJobs?: boolean
+    disableWaitForJobs?: boolean
 
     /**
      * Force forces resource updates through a replacement strategy.
      *
      * @schema HelmReleaseV2Beta1SpecRollback#force
      */
-    readonly force?: boolean
+    force?: boolean
 
     /**
      * Recreate performs pod restarts for the resource if applicable.
      *
      * @schema HelmReleaseV2Beta1SpecRollback#recreate
      */
-    readonly recreate?: boolean
+    recreate?: boolean
 
     /**
      * Timeout is the time to wait for any individual Kubernetes operation (like Jobs for hooks)
@@ -2964,7 +2969,7 @@ export interface HelmReleaseV2Beta1SpecRollback {
      * @default HelmReleaseSpec.Timeout'.
      * @schema HelmReleaseV2Beta1SpecRollback#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecRollback' to JSON representation. */
@@ -3004,7 +3009,7 @@ export interface HelmReleaseV2Beta1SpecTest {
      *
      * @schema HelmReleaseV2Beta1SpecTest#enable
      */
-    readonly enable?: boolean
+    enable?: boolean
 
     /**
      * IgnoreFailures tells the controller to skip remediation when the Helm tests are run but fail.
@@ -3013,16 +3018,16 @@ export interface HelmReleaseV2Beta1SpecTest {
      *
      * @schema HelmReleaseV2Beta1SpecTest#ignoreFailures
      */
-    readonly ignoreFailures?: boolean
+    ignoreFailures?: boolean
 
     /**
-     * Timeout is the time to wait for any individual Kubernetes operation during the performance of a
-     * Helm test action. Defaults to 'HelmReleaseSpec.Timeout'.
+     * Timeout is the time to wait for any individual Kubernetes operation during the performance of
+     * a Helm test action. Defaults to 'HelmReleaseSpec.Timeout'.
      *
      * @default HelmReleaseSpec.Timeout'.
      * @schema HelmReleaseV2Beta1SpecTest#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecTest' to JSON representation. */
@@ -3058,14 +3063,14 @@ export interface HelmReleaseV2Beta1SpecUninstall {
      *
      * @schema HelmReleaseV2Beta1SpecUninstall#deletionPropagation
      */
-    readonly deletionPropagation?: HelmReleaseV2Beta1SpecUninstallDeletionPropagation
+    deletionPropagation?: HelmReleaseV2Beta1SpecUninstallDeletionPropagation
 
     /**
      * DisableHooks prevents hooks from running during the Helm rollback action.
      *
      * @schema HelmReleaseV2Beta1SpecUninstall#disableHooks
      */
-    readonly disableHooks?: boolean
+    disableHooks?: boolean
 
     /**
      * DisableWait disables waiting for all the resources to be deleted after a Helm uninstall is
@@ -3073,15 +3078,15 @@ export interface HelmReleaseV2Beta1SpecUninstall {
      *
      * @schema HelmReleaseV2Beta1SpecUninstall#disableWait
      */
-    readonly disableWait?: boolean
+    disableWait?: boolean
 
     /**
-     * KeepHistory tells Helm to remove all associated resources and mark the release as deleted, but
-     * retain the release history.
+     * KeepHistory tells Helm to remove all associated resources and mark the release as deleted,
+     * but retain the release history.
      *
      * @schema HelmReleaseV2Beta1SpecUninstall#keepHistory
      */
-    readonly keepHistory?: boolean
+    keepHistory?: boolean
 
     /**
      * Timeout is the time to wait for any individual Kubernetes operation (like Jobs for hooks)
@@ -3090,7 +3095,7 @@ export interface HelmReleaseV2Beta1SpecUninstall {
      * @default HelmReleaseSpec.Timeout'.
      * @schema HelmReleaseV2Beta1SpecUninstall#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecUninstall' to JSON representation. */
@@ -3128,7 +3133,7 @@ export interface HelmReleaseV2Beta1SpecUpgrade {
      *
      * @schema HelmReleaseV2Beta1SpecUpgrade#cleanupOnFail
      */
-    readonly cleanupOnFail?: boolean
+    cleanupOnFail?: boolean
 
     /**
      * CRDs upgrade CRDs from the Helm Chart's crds directory according to the CRD upgrade policy
@@ -3141,21 +3146,21 @@ export interface HelmReleaseV2Beta1SpecUpgrade {
      *
      * CreateReplace: new CRDs are created, existing CRDs are updated (replaced) but not deleted.
      *
-     * By default, CRDs are not applied during Helm upgrade action. With this option users can opt-in
-     * to CRD upgrade, which is not (yet) natively supported by Helm.
+     * By default, CRDs are not applied during Helm upgrade action. With this option users can
+     * opt-in to CRD upgrade, which is not (yet) natively supported by Helm.
      * https://helm.sh/docs/chart_best_practices/custom_resource_definitions.
      *
      * @default Skip` and if omitted
      * @schema HelmReleaseV2Beta1SpecUpgrade#crds
      */
-    readonly crds?: HelmReleaseV2Beta1SpecUpgradeCrds
+    crds?: HelmReleaseV2Beta1SpecUpgradeCrds
 
     /**
      * DisableHooks prevents hooks from running during the Helm upgrade action.
      *
      * @schema HelmReleaseV2Beta1SpecUpgrade#disableHooks
      */
-    readonly disableHooks?: boolean
+    disableHooks?: boolean
 
     /**
      * DisableOpenAPIValidation prevents the Helm upgrade action from validating rendered templates
@@ -3163,7 +3168,7 @@ export interface HelmReleaseV2Beta1SpecUpgrade {
      *
      * @schema HelmReleaseV2Beta1SpecUpgrade#disableOpenAPIValidation
      */
-    readonly disableOpenApiValidation?: boolean
+    disableOpenApiValidation?: boolean
 
     /**
      * DisableWait disables the waiting for resources to be ready after a Helm upgrade has been
@@ -3171,7 +3176,7 @@ export interface HelmReleaseV2Beta1SpecUpgrade {
      *
      * @schema HelmReleaseV2Beta1SpecUpgrade#disableWait
      */
-    readonly disableWait?: boolean
+    disableWait?: boolean
 
     /**
      * DisableWaitForJobs disables waiting for jobs to complete after a Helm upgrade has been
@@ -3179,14 +3184,14 @@ export interface HelmReleaseV2Beta1SpecUpgrade {
      *
      * @schema HelmReleaseV2Beta1SpecUpgrade#disableWaitForJobs
      */
-    readonly disableWaitForJobs?: boolean
+    disableWaitForJobs?: boolean
 
     /**
      * Force forces resource updates through a replacement strategy.
      *
      * @schema HelmReleaseV2Beta1SpecUpgrade#force
      */
-    readonly force?: boolean
+    force?: boolean
 
     /**
      * PreserveValues will make Helm reuse the last release's values and merge in overrides from
@@ -3194,7 +3199,7 @@ export interface HelmReleaseV2Beta1SpecUpgrade {
      *
      * @schema HelmReleaseV2Beta1SpecUpgrade#preserveValues
      */
-    readonly preserveValues?: boolean
+    preserveValues?: boolean
 
     /**
      * Remediation holds the remediation configuration for when the Helm upgrade action for the
@@ -3202,7 +3207,7 @@ export interface HelmReleaseV2Beta1SpecUpgrade {
      *
      * @schema HelmReleaseV2Beta1SpecUpgrade#remediation
      */
-    readonly remediation?: HelmReleaseV2Beta1SpecUpgradeRemediation
+    remediation?: HelmReleaseV2Beta1SpecUpgradeRemediation
 
     /**
      * Timeout is the time to wait for any individual Kubernetes operation (like Jobs for hooks)
@@ -3211,7 +3216,7 @@ export interface HelmReleaseV2Beta1SpecUpgrade {
      * @default HelmReleaseSpec.Timeout'.
      * @schema HelmReleaseV2Beta1SpecUpgrade#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecUpgrade' to JSON representation. */
@@ -3254,14 +3259,14 @@ export interface HelmReleaseV2Beta1SpecValuesFrom {
      *
      * @schema HelmReleaseV2Beta1SpecValuesFrom#kind
      */
-    readonly kind: HelmReleaseV2Beta1SpecValuesFromKind
+    kind: HelmReleaseV2Beta1SpecValuesFromKind
 
     /**
      * Name of the values referent. Should reside in the same namespace as the referring resource.
      *
      * @schema HelmReleaseV2Beta1SpecValuesFrom#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Optional marks this ValuesReference as optional. When set, a not found error for the values
@@ -3270,17 +3275,17 @@ export interface HelmReleaseV2Beta1SpecValuesFrom {
      *
      * @schema HelmReleaseV2Beta1SpecValuesFrom#optional
      */
-    readonly optional?: boolean
+    optional?: boolean
 
     /**
-     * TargetPath is the YAML dot notation path the value should be merged at. When set, the ValuesKey
-     * is expected to be a single flat value. Defaults to 'None', which results in the values getting
-     * merged at the root.
+     * TargetPath is the YAML dot notation path the value should be merged at. When set, the
+     * ValuesKey is expected to be a single flat value. Defaults to 'None', which results in the
+     * values getting merged at the root.
      *
      * @default None',
      * @schema HelmReleaseV2Beta1SpecValuesFrom#targetPath
      */
-    readonly targetPath?: string
+    targetPath?: string
 
     /**
      * ValuesKey is the data key where the values.yaml or a specific value can be found at. Defaults
@@ -3290,7 +3295,7 @@ export interface HelmReleaseV2Beta1SpecValuesFrom {
      * @default values.yaml'.
      * @schema HelmReleaseV2Beta1SpecValuesFrom#valuesKey
      */
-    readonly valuesKey?: string
+    valuesKey?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecValuesFrom' to JSON representation. */
@@ -3323,22 +3328,23 @@ export function toJson_HelmReleaseV2Beta1SpecValuesFrom(
  */
 export interface HelmReleaseV2Beta1SpecChartMetadata {
     /**
-     * Annotations is an unstructured key value map stored with a resource that may be set by external
-     * tools to store and retrieve arbitrary metadata. They are not queryable and should be preserved
-     * when modifying objects. More info:
+     * Annotations is an unstructured key value map stored with a resource that may be set by
+     * external tools to store and retrieve arbitrary metadata. They are not queryable and should be
+     * preserved when modifying objects. More info:
      * https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
      *
      * @schema HelmReleaseV2Beta1SpecChartMetadata#annotations
      */
-    readonly annotations?: { [key: string]: string }
+    annotations?: { [key: string]: string }
 
     /**
      * Map of string keys and values that can be used to organize and categorize (scope and select)
-     * objects. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+     * objects. More info:
+     * https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
      *
      * @schema HelmReleaseV2Beta1SpecChartMetadata#labels
      */
-    readonly labels?: { [key: string]: string }
+    labels?: { [key: string]: string }
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecChartMetadata' to JSON representation. */
@@ -3384,7 +3390,7 @@ export interface HelmReleaseV2Beta1SpecChartSpec {
      *
      * @schema HelmReleaseV2Beta1SpecChartSpec#chart
      */
-    readonly chart: string
+    chart: string
 
     /**
      * Interval at which to check the v1beta2.Source for updates. Defaults to
@@ -3393,52 +3399,52 @@ export interface HelmReleaseV2Beta1SpecChartSpec {
      * @default HelmReleaseSpec.Interval'.
      * @schema HelmReleaseV2Beta1SpecChartSpec#interval
      */
-    readonly interval?: string
+    interval?: string
 
     /**
      * Determines what enables the creation of a new artifact. Valid values are ('ChartVersion',
-     * 'Revision'). See the documentation of the values for an explanation on their behavior. Defaults
-     * to ChartVersion when omitted.
+     * 'Revision'). See the documentation of the values for an explanation on their behavior.
+     * Defaults to ChartVersion when omitted.
      *
      * @default ChartVersion when omitted.
      * @schema HelmReleaseV2Beta1SpecChartSpec#reconcileStrategy
      */
-    readonly reconcileStrategy?: HelmReleaseV2Beta1SpecChartSpecReconcileStrategy
+    reconcileStrategy?: HelmReleaseV2Beta1SpecChartSpecReconcileStrategy
 
     /**
      * The name and namespace of the v1beta2.Source the chart is available at.
      *
      * @schema HelmReleaseV2Beta1SpecChartSpec#sourceRef
      */
-    readonly sourceRef: HelmReleaseV2Beta1SpecChartSpecSourceRef
+    sourceRef: HelmReleaseV2Beta1SpecChartSpecSourceRef
 
     /**
      * Alternative values file to use as the default chart values, expected to be a relative path in
-     * the SourceRef. Deprecated in favor of ValuesFiles, for backwards compatibility the file defined
-     * here is merged before the ValuesFiles items. Ignored when omitted.
+     * the SourceRef. Deprecated in favor of ValuesFiles, for backwards compatibility the file
+     * defined here is merged before the ValuesFiles items. Ignored when omitted.
      *
      * @schema HelmReleaseV2Beta1SpecChartSpec#valuesFile
      */
-    readonly valuesFile?: string
+    valuesFile?: string
 
     /**
      * Alternative list of values files to use as the chart values (values.yaml is not included by
-     * default), expected to be a relative path in the SourceRef. Values files are merged in the order
-     * of this list with the last file overriding the first. Ignored when omitted.
+     * default), expected to be a relative path in the SourceRef. Values files are merged in the
+     * order of this list with the last file overriding the first. Ignored when omitted.
      *
      * @schema HelmReleaseV2Beta1SpecChartSpec#valuesFiles
      */
-    readonly valuesFiles?: string[]
+    valuesFiles?: string[]
 
     /**
-     * Verify contains the secret name containing the trusted public keys used to verify the signature
-     * and specifies which provider to use to check whether OCI image is authentic. This field is only
-     * supported for OCI sources. Chart dependencies, which are not bundled in the umbrella chart
-     * artifact, are not verified.
+     * Verify contains the secret name containing the trusted public keys used to verify the
+     * signature and specifies which provider to use to check whether OCI image is authentic. This
+     * field is only supported for OCI sources. Chart dependencies, which are not bundled in the
+     * umbrella chart artifact, are not verified.
      *
      * @schema HelmReleaseV2Beta1SpecChartSpec#verify
      */
-    readonly verify?: HelmReleaseV2Beta1SpecChartSpecVerify
+    verify?: HelmReleaseV2Beta1SpecChartSpecVerify
 
     /**
      * Version semver expression, ignored for charts from v1beta2.GitRepository and v1beta2.Bucket
@@ -3447,7 +3453,7 @@ export interface HelmReleaseV2Beta1SpecChartSpec {
      * @default latest when omitted.
      * @schema HelmReleaseV2Beta1SpecChartSpec#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecChartSpec' to JSON representation. */
@@ -3501,16 +3507,16 @@ export interface HelmReleaseV2Beta1SpecDriftDetectionIgnore {
      *
      * @schema HelmReleaseV2Beta1SpecDriftDetectionIgnore#paths
      */
-    readonly paths: string[]
+    paths: string[]
 
     /**
-     * Target is a selector for specifying Kubernetes objects to which this rule applies. If Target is
-     * not set, the Paths will be ignored for all Kubernetes objects within the manifest of the Helm
-     * release.
+     * Target is a selector for specifying Kubernetes objects to which this rule applies. If Target
+     * is not set, the Paths will be ignored for all Kubernetes objects within the manifest of the
+     * Helm release.
      *
      * @schema HelmReleaseV2Beta1SpecDriftDetectionIgnore#target
      */
-    readonly target?: HelmReleaseV2Beta1SpecDriftDetectionIgnoreTarget
+    target?: HelmReleaseV2Beta1SpecDriftDetectionIgnoreTarget
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecDriftDetectionIgnore' to JSON representation. */
@@ -3589,7 +3595,7 @@ export interface HelmReleaseV2Beta1SpecInstallRemediation {
      * @default Test.IgnoreFailures'.
      * @schema HelmReleaseV2Beta1SpecInstallRemediation#ignoreTestFailures
      */
-    readonly ignoreTestFailures?: boolean
+    ignoreTestFailures?: boolean
 
     /**
      * RemediateLastFailure tells the controller to remediate the last failure, when no retries
@@ -3598,17 +3604,17 @@ export interface HelmReleaseV2Beta1SpecInstallRemediation {
      * @default false'.
      * @schema HelmReleaseV2Beta1SpecInstallRemediation#remediateLastFailure
      */
-    readonly remediateLastFailure?: boolean
+    remediateLastFailure?: boolean
 
     /**
      * Retries is the number of retries that should be attempted on failures before bailing.
-     * Remediation, using an uninstall, is performed between each attempt. Defaults to '0', a negative
-     * integer equals to unlimited retries.
+     * Remediation, using an uninstall, is performed between each attempt. Defaults to '0', a
+     * negative integer equals to unlimited retries.
      *
      * @default 0', a negative integer equals to unlimited retries.
      * @schema HelmReleaseV2Beta1SpecInstallRemediation#retries
      */
-    readonly retries?: number
+    retries?: number
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecInstallRemediation' to JSON representation. */
@@ -3647,14 +3653,14 @@ export interface HelmReleaseV2Beta1SpecKubeConfigSecretRef {
      *
      * @schema HelmReleaseV2Beta1SpecKubeConfigSecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the Secret.
      *
      * @schema HelmReleaseV2Beta1SpecKubeConfigSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecKubeConfigSecretRef' to JSON representation. */
@@ -3684,34 +3690,34 @@ export function toJson_HelmReleaseV2Beta1SpecKubeConfigSecretRef(
  */
 export interface HelmReleaseV2Beta1SpecPostRenderersKustomize {
     /**
-     * Images is a list of (image name, new name, new tag or digest) for changing image names, tags or
-     * digests. This can also be achieved with a patch, but this operator is simpler to specify.
+     * Images is a list of (image name, new name, new tag or digest) for changing image names, tags
+     * or digests. This can also be achieved with a patch, but this operator is simpler to specify.
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomize#images
      */
-    readonly images?: HelmReleaseV2Beta1SpecPostRenderersKustomizeImages[]
+    images?: HelmReleaseV2Beta1SpecPostRenderersKustomizeImages[]
 
     /**
-     * Strategic merge and JSON patches, defined as inline YAML objects, capable of targeting objects
-     * based on kind, label and annotation selectors.
+     * Strategic merge and JSON patches, defined as inline YAML objects, capable of targeting
+     * objects based on kind, label and annotation selectors.
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomize#patches
      */
-    readonly patches?: HelmReleaseV2Beta1SpecPostRenderersKustomizePatches[]
+    patches?: HelmReleaseV2Beta1SpecPostRenderersKustomizePatches[]
 
     /**
      * JSON 6902 patches, defined as inline YAML objects.
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomize#patchesJson6902
      */
-    readonly patchesJson6902?: HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902[]
+    patchesJson6902?: HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902[]
 
     /**
      * Strategic merge patches, defined as inline YAML objects.
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomize#patchesStrategicMerge
      */
-    readonly patchesStrategicMerge?: any[]
+    patchesStrategicMerge?: any[]
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecPostRenderersKustomize' to JSON representation. */
@@ -3795,7 +3801,7 @@ export interface HelmReleaseV2Beta1SpecUpgradeRemediation {
      * @default Test.IgnoreFailures'.
      * @schema HelmReleaseV2Beta1SpecUpgradeRemediation#ignoreTestFailures
      */
-    readonly ignoreTestFailures?: boolean
+    ignoreTestFailures?: boolean
 
     /**
      * RemediateLastFailure tells the controller to remediate the last failure, when no retries
@@ -3804,7 +3810,7 @@ export interface HelmReleaseV2Beta1SpecUpgradeRemediation {
      * @default false' unless 'Retries' is greater than 0.
      * @schema HelmReleaseV2Beta1SpecUpgradeRemediation#remediateLastFailure
      */
-    readonly remediateLastFailure?: boolean
+    remediateLastFailure?: boolean
 
     /**
      * Retries is the number of retries that should be attempted on failures before bailing.
@@ -3814,7 +3820,7 @@ export interface HelmReleaseV2Beta1SpecUpgradeRemediation {
      * @default 0', a negative integer equals to unlimited retries.
      * @schema HelmReleaseV2Beta1SpecUpgradeRemediation#retries
      */
-    readonly retries?: number
+    retries?: number
 
     /**
      * Strategy to use for failure remediation. Defaults to 'rollback'.
@@ -3822,7 +3828,7 @@ export interface HelmReleaseV2Beta1SpecUpgradeRemediation {
      * @default rollback'.
      * @schema HelmReleaseV2Beta1SpecUpgradeRemediation#strategy
      */
-    readonly strategy?: HelmReleaseV2Beta1SpecUpgradeRemediationStrategy
+    strategy?: HelmReleaseV2Beta1SpecUpgradeRemediationStrategy
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecUpgradeRemediation' to JSON representation. */
@@ -3885,28 +3891,28 @@ export interface HelmReleaseV2Beta1SpecChartSpecSourceRef {
      *
      * @schema HelmReleaseV2Beta1SpecChartSpecSourceRef#apiVersion
      */
-    readonly apiVersion?: string
+    apiVersion?: string
 
     /**
      * Kind of the referent.
      *
      * @schema HelmReleaseV2Beta1SpecChartSpecSourceRef#kind
      */
-    readonly kind: HelmReleaseV2Beta1SpecChartSpecSourceRefKind
+    kind: HelmReleaseV2Beta1SpecChartSpecSourceRefKind
 
     /**
      * Name of the referent.
      *
      * @schema HelmReleaseV2Beta1SpecChartSpecSourceRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent.
      *
      * @schema HelmReleaseV2Beta1SpecChartSpecSourceRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecChartSpecSourceRef' to JSON representation. */
@@ -3945,14 +3951,14 @@ export interface HelmReleaseV2Beta1SpecChartSpecVerify {
      *
      * @schema HelmReleaseV2Beta1SpecChartSpecVerify#provider
      */
-    readonly provider: HelmReleaseV2Beta1SpecChartSpecVerifyProvider
+    provider: HelmReleaseV2Beta1SpecChartSpecVerifyProvider
 
     /**
      * SecretRef specifies the Kubernetes Secret containing the trusted public keys.
      *
      * @schema HelmReleaseV2Beta1SpecChartSpecVerify#secretRef
      */
-    readonly secretRef?: HelmReleaseV2Beta1SpecChartSpecVerifySecretRef
+    secretRef?: HelmReleaseV2Beta1SpecChartSpecVerifySecretRef
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta1SpecChartSpecVerify' to JSON representation. */
@@ -3990,7 +3996,7 @@ export interface HelmReleaseV2Beta1SpecDriftDetectionIgnoreTarget {
      *
      * @schema HelmReleaseV2Beta1SpecDriftDetectionIgnoreTarget#annotationSelector
      */
-    readonly annotationSelector?: string
+    annotationSelector?: string
 
     /**
      * Group is the API group to select resources from. Together with Version and Kind it is capable
@@ -3999,7 +4005,7 @@ export interface HelmReleaseV2Beta1SpecDriftDetectionIgnoreTarget {
      *
      * @schema HelmReleaseV2Beta1SpecDriftDetectionIgnoreTarget#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind of the API Group to select resources from. Together with Group and Version it is capable
@@ -4008,7 +4014,7 @@ export interface HelmReleaseV2Beta1SpecDriftDetectionIgnoreTarget {
      *
      * @schema HelmReleaseV2Beta1SpecDriftDetectionIgnoreTarget#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * LabelSelector is a string that follows the label selection expression
@@ -4017,21 +4023,21 @@ export interface HelmReleaseV2Beta1SpecDriftDetectionIgnoreTarget {
      *
      * @schema HelmReleaseV2Beta1SpecDriftDetectionIgnoreTarget#labelSelector
      */
-    readonly labelSelector?: string
+    labelSelector?: string
 
     /**
      * Name to match resources with.
      *
      * @schema HelmReleaseV2Beta1SpecDriftDetectionIgnoreTarget#name
      */
-    readonly name?: string
+    name?: string
 
     /**
      * Namespace to select resources from.
      *
      * @schema HelmReleaseV2Beta1SpecDriftDetectionIgnoreTarget#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Version of the API Group to select resources from. Together with Group and Kind it is capable
@@ -4040,7 +4046,7 @@ export interface HelmReleaseV2Beta1SpecDriftDetectionIgnoreTarget {
      *
      * @schema HelmReleaseV2Beta1SpecDriftDetectionIgnoreTarget#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /**
@@ -4084,28 +4090,28 @@ export interface HelmReleaseV2Beta1SpecPostRenderersKustomizeImages {
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizeImages#digest
      */
-    readonly digest?: string
+    digest?: string
 
     /**
      * Name is a tag-less image name.
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizeImages#name
      */
-    readonly name: string
+    name: string
 
     /**
      * NewName is the value used to replace the original name.
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizeImages#newName
      */
-    readonly newName?: string
+    newName?: string
 
     /**
      * NewTag is the value used to replace the original tag.
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizeImages#newTag
      */
-    readonly newTag?: string
+    newTag?: string
 }
 
 /**
@@ -4146,14 +4152,14 @@ export interface HelmReleaseV2Beta1SpecPostRenderersKustomizePatches {
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatches#patch
      */
-    readonly patch: string
+    patch: string
 
     /**
      * Target points to the resources that the patch document should be applied to.
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatches#target
      */
-    readonly target?: HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesTarget
+    target?: HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesTarget
 }
 
 /**
@@ -4190,14 +4196,14 @@ export interface HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902 {
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902#patch
      */
-    readonly patch: HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Patch[]
+    patch: HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Patch[]
 
     /**
      * Target points to the resources that the patch document should be applied to.
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902#target
      */
-    readonly target: HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Target
+    target: HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Target
 }
 
 /**
@@ -4273,7 +4279,7 @@ export interface HelmReleaseV2Beta1SpecChartSpecVerifySecretRef {
      *
      * @schema HelmReleaseV2Beta1SpecChartSpecVerifySecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -4311,7 +4317,7 @@ export interface HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesTarget {
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesTarget#annotationSelector
      */
-    readonly annotationSelector?: string
+    annotationSelector?: string
 
     /**
      * Group is the API group to select resources from. Together with Version and Kind it is capable
@@ -4320,7 +4326,7 @@ export interface HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesTarget {
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesTarget#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind of the API Group to select resources from. Together with Group and Version it is capable
@@ -4329,7 +4335,7 @@ export interface HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesTarget {
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesTarget#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * LabelSelector is a string that follows the label selection expression
@@ -4338,21 +4344,21 @@ export interface HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesTarget {
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesTarget#labelSelector
      */
-    readonly labelSelector?: string
+    labelSelector?: string
 
     /**
      * Name to match resources with.
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesTarget#name
      */
-    readonly name?: string
+    name?: string
 
     /**
      * Namespace to select resources from.
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesTarget#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Version of the API Group to select resources from. Together with Group and Kind it is capable
@@ -4361,7 +4367,7 @@ export interface HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesTarget {
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesTarget#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /**
@@ -4399,13 +4405,13 @@ export function toJson_HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesTarget
  */
 export interface HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Patch {
     /**
-     * From contains a JSON-pointer value that references a location within the target document where
-     * the operation is performed. The meaning of the value depends on the value of Op, and is NOT
-     * taken into account by all operations.
+     * From contains a JSON-pointer value that references a location within the target document
+     * where the operation is performed. The meaning of the value depends on the value of Op, and is
+     * NOT taken into account by all operations.
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Patch#from
      */
-    readonly from?: string
+    from?: string
 
     /**
      * Op indicates the operation to perform. Its value MUST be one of "add", "remove", "replace",
@@ -4413,7 +4419,7 @@ export interface HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Patc
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Patch#op
      */
-    readonly op: HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902PatchOp
+    op: HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902PatchOp
 
     /**
      * Path contains the JSON-pointer value that references a location within the target document
@@ -4421,15 +4427,15 @@ export interface HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Patc
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Patch#path
      */
-    readonly path: string
+    path: string
 
     /**
-     * Value contains a valid JSON structure. The meaning of the value depends on the value of Op, and
-     * is NOT taken into account by all operations.
+     * Value contains a valid JSON structure. The meaning of the value depends on the value of Op,
+     * and is NOT taken into account by all operations.
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Patch#value
      */
-    readonly value?: any
+    value?: any
 }
 
 /**
@@ -4470,7 +4476,7 @@ export interface HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Targ
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Target#annotationSelector
      */
-    readonly annotationSelector?: string
+    annotationSelector?: string
 
     /**
      * Group is the API group to select resources from. Together with Version and Kind it is capable
@@ -4479,7 +4485,7 @@ export interface HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Targ
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Target#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind of the API Group to select resources from. Together with Group and Version it is capable
@@ -4488,7 +4494,7 @@ export interface HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Targ
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Target#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * LabelSelector is a string that follows the label selection expression
@@ -4497,21 +4503,21 @@ export interface HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Targ
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Target#labelSelector
      */
-    readonly labelSelector?: string
+    labelSelector?: string
 
     /**
      * Name to match resources with.
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Target#name
      */
-    readonly name?: string
+    name?: string
 
     /**
      * Namespace to select resources from.
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Target#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Version of the API Group to select resources from. Together with Group and Kind it is capable
@@ -4520,7 +4526,7 @@ export interface HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Targ
      *
      * @schema HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902Target#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /**
@@ -4579,7 +4585,7 @@ export enum HelmReleaseV2Beta1SpecPostRenderersKustomizePatchesJson6902PatchOp {
  */
 export class HelmReleaseV2Beta2 extends ApiObject {
     /** Returns the apiVersion and kind for "HelmReleaseV2Beta2" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "helm.toolkit.fluxcd.io/v2beta2",
         kind: "HelmRelease"
     }
@@ -4630,14 +4636,14 @@ export class HelmReleaseV2Beta2 extends ApiObject {
  */
 export interface HelmReleaseV2Beta2Props {
     /** @schema HelmReleaseV2Beta2#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * HelmReleaseSpec defines the desired state of a Helm release.
      *
      * @schema HelmReleaseV2Beta2#spec
      */
-    readonly spec?: HelmReleaseV2Beta2Spec
+    spec?: HelmReleaseV2Beta2Spec
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2Props' to JSON representation. */
@@ -4672,16 +4678,17 @@ export interface HelmReleaseV2Beta2Spec {
      *
      * @schema HelmReleaseV2Beta2Spec#chart
      */
-    readonly chart?: HelmReleaseV2Beta2SpecChart
+    chart?: HelmReleaseV2Beta2SpecChart
 
     /**
-     * ChartRef holds a reference to a source controller resource containing the Helm chart artifact.
+     * ChartRef holds a reference to a source controller resource containing the Helm chart
+     * artifact.
      *
      * Note: this field is provisional to the v2 API, and not actively used by v2beta2 HelmReleases.
      *
      * @schema HelmReleaseV2Beta2Spec#chartRef
      */
-    readonly chartRef?: HelmReleaseV2Beta2SpecChartRef
+    chartRef?: HelmReleaseV2Beta2SpecChartRef
 
     /**
      * DependsOn may contain a meta.NamespacedObjectReference slice with references to HelmRelease
@@ -4689,7 +4696,7 @@ export interface HelmReleaseV2Beta2Spec {
      *
      * @schema HelmReleaseV2Beta2Spec#dependsOn
      */
-    readonly dependsOn?: HelmReleaseV2Beta2SpecDependsOn[]
+    dependsOn?: HelmReleaseV2Beta2SpecDependsOn[]
 
     /**
      * DriftDetection holds the configuration for detecting and handling differences between the
@@ -4697,31 +4704,31 @@ export interface HelmReleaseV2Beta2Spec {
      *
      * @schema HelmReleaseV2Beta2Spec#driftDetection
      */
-    readonly driftDetection?: HelmReleaseV2Beta2SpecDriftDetection
+    driftDetection?: HelmReleaseV2Beta2SpecDriftDetection
 
     /**
      * Install holds the configuration for Helm install actions for this HelmRelease.
      *
      * @schema HelmReleaseV2Beta2Spec#install
      */
-    readonly install?: HelmReleaseV2Beta2SpecInstall
+    install?: HelmReleaseV2Beta2SpecInstall
 
     /**
      * Interval at which to reconcile the Helm release.
      *
      * @schema HelmReleaseV2Beta2Spec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
      * KubeConfig for reconciling the HelmRelease on a remote cluster. When used in combination with
      * HelmReleaseSpec.ServiceAccountName, forces the controller to act on behalf of that Service
-     * Account at the target cluster. If the --default-service-account flag is set, its value will be
-     * used as a controller level fallback for when HelmReleaseSpec.ServiceAccountName is empty.
+     * Account at the target cluster. If the --default-service-account flag is set, its value will
+     * be used as a controller level fallback for when HelmReleaseSpec.ServiceAccountName is empty.
      *
      * @schema HelmReleaseV2Beta2Spec#kubeConfig
      */
-    readonly kubeConfig?: HelmReleaseV2Beta2SpecKubeConfig
+    kubeConfig?: HelmReleaseV2Beta2SpecKubeConfig
 
     /**
      * MaxHistory is the number of revisions saved by Helm for this HelmRelease. Use '0' for an
@@ -4729,7 +4736,7 @@ export interface HelmReleaseV2Beta2Spec {
      *
      * @schema HelmReleaseV2Beta2Spec#maxHistory
      */
-    readonly maxHistory?: number
+    maxHistory?: number
 
     /**
      * PersistentClient tells the controller to use a persistent Kubernetes client for this release.
@@ -4744,7 +4751,7 @@ export interface HelmReleaseV2Beta2Spec {
      *
      * @schema HelmReleaseV2Beta2Spec#persistentClient
      */
-    readonly persistentClient?: boolean
+    persistentClient?: boolean
 
     /**
      * PostRenderers holds an array of Helm PostRenderers, which will be applied in order of their
@@ -4752,7 +4759,7 @@ export interface HelmReleaseV2Beta2Spec {
      *
      * @schema HelmReleaseV2Beta2Spec#postRenderers
      */
-    readonly postRenderers?: HelmReleaseV2Beta2SpecPostRenderers[]
+    postRenderers?: HelmReleaseV2Beta2SpecPostRenderers[]
 
     /**
      * ReleaseName used for the Helm release. Defaults to a composition of '[TargetNamespace-]Name'.
@@ -4760,21 +4767,21 @@ export interface HelmReleaseV2Beta2Spec {
      * @default a composition of
      * @schema HelmReleaseV2Beta2Spec#releaseName
      */
-    readonly releaseName?: string
+    releaseName?: string
 
     /**
      * Rollback holds the configuration for Helm rollback actions for this HelmRelease.
      *
      * @schema HelmReleaseV2Beta2Spec#rollback
      */
-    readonly rollback?: HelmReleaseV2Beta2SpecRollback
+    rollback?: HelmReleaseV2Beta2SpecRollback
 
     /**
      * The name of the Kubernetes service account to impersonate when reconciling this HelmRelease.
      *
      * @schema HelmReleaseV2Beta2Spec#serviceAccountName
      */
-    readonly serviceAccountName?: string
+    serviceAccountName?: string
 
     /**
      * StorageNamespace used for the Helm storage. Defaults to the namespace of the HelmRelease.
@@ -4782,16 +4789,16 @@ export interface HelmReleaseV2Beta2Spec {
      * @default the namespace of the HelmRelease.
      * @schema HelmReleaseV2Beta2Spec#storageNamespace
      */
-    readonly storageNamespace?: string
+    storageNamespace?: string
 
     /**
-     * Suspend tells the controller to suspend reconciliation for this HelmRelease, it does not apply
-     * to already started reconciliations. Defaults to false.
+     * Suspend tells the controller to suspend reconciliation for this HelmRelease, it does not
+     * apply to already started reconciliations. Defaults to false.
      *
      * @default false.
      * @schema HelmReleaseV2Beta2Spec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * TargetNamespace to target when performing operations for the HelmRelease. Defaults to the
@@ -4800,14 +4807,14 @@ export interface HelmReleaseV2Beta2Spec {
      * @default the namespace of the HelmRelease.
      * @schema HelmReleaseV2Beta2Spec#targetNamespace
      */
-    readonly targetNamespace?: string
+    targetNamespace?: string
 
     /**
      * Test holds the configuration for Helm test actions for this HelmRelease.
      *
      * @schema HelmReleaseV2Beta2Spec#test
      */
-    readonly test?: HelmReleaseV2Beta2SpecTest
+    test?: HelmReleaseV2Beta2SpecTest
 
     /**
      * Timeout is the time to wait for any individual Kubernetes operation (like Jobs for hooks)
@@ -4816,28 +4823,28 @@ export interface HelmReleaseV2Beta2Spec {
      * @default 5m0s'.
      * @schema HelmReleaseV2Beta2Spec#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 
     /**
      * Uninstall holds the configuration for Helm uninstall actions for this HelmRelease.
      *
      * @schema HelmReleaseV2Beta2Spec#uninstall
      */
-    readonly uninstall?: HelmReleaseV2Beta2SpecUninstall
+    uninstall?: HelmReleaseV2Beta2SpecUninstall
 
     /**
      * Upgrade holds the configuration for Helm upgrade actions for this HelmRelease.
      *
      * @schema HelmReleaseV2Beta2Spec#upgrade
      */
-    readonly upgrade?: HelmReleaseV2Beta2SpecUpgrade
+    upgrade?: HelmReleaseV2Beta2SpecUpgrade
 
     /**
      * Values holds the values for this Helm release.
      *
      * @schema HelmReleaseV2Beta2Spec#values
      */
-    readonly values?: any
+    values?: any
 
     /**
      * ValuesFrom holds references to resources containing Helm values for this HelmRelease, and
@@ -4845,7 +4852,7 @@ export interface HelmReleaseV2Beta2Spec {
      *
      * @schema HelmReleaseV2Beta2Spec#valuesFrom
      */
-    readonly valuesFrom?: HelmReleaseV2Beta2SpecValuesFrom[]
+    valuesFrom?: HelmReleaseV2Beta2SpecValuesFrom[]
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2Spec' to JSON representation. */
@@ -4899,14 +4906,14 @@ export interface HelmReleaseV2Beta2SpecChart {
      *
      * @schema HelmReleaseV2Beta2SpecChart#metadata
      */
-    readonly metadata?: HelmReleaseV2Beta2SpecChartMetadata
+    metadata?: HelmReleaseV2Beta2SpecChartMetadata
 
     /**
      * Spec holds the template for the v1beta2.HelmChartSpec for this HelmRelease.
      *
      * @schema HelmReleaseV2Beta2SpecChart#spec
      */
-    readonly spec: HelmReleaseV2Beta2SpecChartSpec
+    spec: HelmReleaseV2Beta2SpecChartSpec
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecChart' to JSON representation. */
@@ -4942,21 +4949,21 @@ export interface HelmReleaseV2Beta2SpecChartRef {
      *
      * @schema HelmReleaseV2Beta2SpecChartRef#apiVersion
      */
-    readonly apiVersion?: string
+    apiVersion?: string
 
     /**
      * Kind of the referent.
      *
      * @schema HelmReleaseV2Beta2SpecChartRef#kind
      */
-    readonly kind: HelmReleaseV2Beta2SpecChartRefKind
+    kind: HelmReleaseV2Beta2SpecChartRefKind
 
     /**
      * Name of the referent.
      *
      * @schema HelmReleaseV2Beta2SpecChartRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent, defaults to the namespace of the Kubernetes resource object that
@@ -4964,7 +4971,7 @@ export interface HelmReleaseV2Beta2SpecChartRef {
      *
      * @schema HelmReleaseV2Beta2SpecChartRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecChartRef' to JSON representation. */
@@ -5001,14 +5008,14 @@ export interface HelmReleaseV2Beta2SpecDependsOn {
      *
      * @schema HelmReleaseV2Beta2SpecDependsOn#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent, when not specified it acts as LocalObjectReference.
      *
      * @schema HelmReleaseV2Beta2SpecDependsOn#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecDependsOn' to JSON representation. */
@@ -5043,7 +5050,7 @@ export interface HelmReleaseV2Beta2SpecDriftDetection {
      *
      * @schema HelmReleaseV2Beta2SpecDriftDetection#ignore
      */
-    readonly ignore?: HelmReleaseV2Beta2SpecDriftDetectionIgnore[]
+    ignore?: HelmReleaseV2Beta2SpecDriftDetectionIgnore[]
 
     /**
      * Mode defines how differences should be handled between the Helm manifest and the manifest
@@ -5051,7 +5058,7 @@ export interface HelmReleaseV2Beta2SpecDriftDetection {
      *
      * @schema HelmReleaseV2Beta2SpecDriftDetection#mode
      */
-    readonly mode?: HelmReleaseV2Beta2SpecDriftDetectionMode
+    mode?: HelmReleaseV2Beta2SpecDriftDetectionMode
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecDriftDetection' to JSON representation. */
@@ -5082,8 +5089,8 @@ export function toJson_HelmReleaseV2Beta2SpecDriftDetection(
 export interface HelmReleaseV2Beta2SpecInstall {
     /**
      * CRDs upgrade CRDs from the Helm Chart's crds directory according to the CRD upgrade policy
-     * provided here. Valid values are `Skip`, `Create` or `CreateReplace`. Default is `Create` and if
-     * omitted CRDs are installed but not updated.
+     * provided here. Valid values are `Skip`, `Create` or `CreateReplace`. Default is `Create` and
+     * if omitted CRDs are installed but not updated.
      *
      * Skip: do neither install nor replace (update) any CRDs.
      *
@@ -5091,29 +5098,29 @@ export interface HelmReleaseV2Beta2SpecInstall {
      *
      * CreateReplace: new CRDs are created, existing CRDs are updated (replaced) but not deleted.
      *
-     * By default, CRDs are applied (installed) during Helm install action. With this option users can
-     * opt in to CRD replace existing CRDs on Helm install actions, which is not (yet) natively
+     * By default, CRDs are applied (installed) during Helm install action. With this option users
+     * can opt in to CRD replace existing CRDs on Helm install actions, which is not (yet) natively
      * supported by Helm. https://helm.sh/docs/chart_best_practices/custom_resource_definitions.
      *
      * @default Create` and if omitted
      * @schema HelmReleaseV2Beta2SpecInstall#crds
      */
-    readonly crds?: HelmReleaseV2Beta2SpecInstallCrds
+    crds?: HelmReleaseV2Beta2SpecInstallCrds
 
     /**
-     * CreateNamespace tells the Helm install action to create the HelmReleaseSpec.TargetNamespace if
-     * it does not exist yet. On uninstall, the namespace will not be garbage collected.
+     * CreateNamespace tells the Helm install action to create the HelmReleaseSpec.TargetNamespace
+     * if it does not exist yet. On uninstall, the namespace will not be garbage collected.
      *
      * @schema HelmReleaseV2Beta2SpecInstall#createNamespace
      */
-    readonly createNamespace?: boolean
+    createNamespace?: boolean
 
     /**
      * DisableHooks prevents hooks from running during the Helm install action.
      *
      * @schema HelmReleaseV2Beta2SpecInstall#disableHooks
      */
-    readonly disableHooks?: boolean
+    disableHooks?: boolean
 
     /**
      * DisableOpenAPIValidation prevents the Helm install action from validating rendered templates
@@ -5121,7 +5128,7 @@ export interface HelmReleaseV2Beta2SpecInstall {
      *
      * @schema HelmReleaseV2Beta2SpecInstall#disableOpenAPIValidation
      */
-    readonly disableOpenApiValidation?: boolean
+    disableOpenApiValidation?: boolean
 
     /**
      * DisableWait disables the waiting for resources to be ready after a Helm install has been
@@ -5129,7 +5136,7 @@ export interface HelmReleaseV2Beta2SpecInstall {
      *
      * @schema HelmReleaseV2Beta2SpecInstall#disableWait
      */
-    readonly disableWait?: boolean
+    disableWait?: boolean
 
     /**
      * DisableWaitForJobs disables waiting for jobs to complete after a Helm install has been
@@ -5137,7 +5144,7 @@ export interface HelmReleaseV2Beta2SpecInstall {
      *
      * @schema HelmReleaseV2Beta2SpecInstall#disableWaitForJobs
      */
-    readonly disableWaitForJobs?: boolean
+    disableWaitForJobs?: boolean
 
     /**
      * Remediation holds the remediation configuration for when the Helm install action for the
@@ -5145,7 +5152,7 @@ export interface HelmReleaseV2Beta2SpecInstall {
      *
      * @schema HelmReleaseV2Beta2SpecInstall#remediation
      */
-    readonly remediation?: HelmReleaseV2Beta2SpecInstallRemediation
+    remediation?: HelmReleaseV2Beta2SpecInstallRemediation
 
     /**
      * Replace tells the Helm install action to re-use the 'ReleaseName', but only if that name is a
@@ -5153,17 +5160,17 @@ export interface HelmReleaseV2Beta2SpecInstall {
      *
      * @schema HelmReleaseV2Beta2SpecInstall#replace
      */
-    readonly replace?: boolean
+    replace?: boolean
 
     /**
-     * SkipCRDs tells the Helm install action to not install any CRDs. By default, CRDs are installed
-     * if not already present.
+     * SkipCRDs tells the Helm install action to not install any CRDs. By default, CRDs are
+     * installed if not already present.
      *
      * Deprecated use CRD policy (`crds`) attribute with value `Skip` instead.
      *
      * @schema HelmReleaseV2Beta2SpecInstall#skipCRDs
      */
-    readonly skipCrDs?: boolean
+    skipCrDs?: boolean
 
     /**
      * Timeout is the time to wait for any individual Kubernetes operation (like Jobs for hooks)
@@ -5172,7 +5179,7 @@ export interface HelmReleaseV2Beta2SpecInstall {
      * @default HelmReleaseSpec.Timeout'.
      * @schema HelmReleaseV2Beta2SpecInstall#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecInstall' to JSON representation. */
@@ -5213,15 +5220,16 @@ export function toJson_HelmReleaseV2Beta2SpecInstall(
  */
 export interface HelmReleaseV2Beta2SpecKubeConfig {
     /**
-     * SecretRef holds the name of a secret that contains a key with the kubeconfig file as the value.
-     * If no key is set, the key will default to 'value'. It is recommended that the kubeconfig is
-     * self-contained, and the secret is regularly updated if credentials such as a cloud-access-token
-     * expire. Cloud specific `cmd-path` auth helpers will not function without adding binaries and
-     * credentials to the Pod that is responsible for reconciling Kubernetes resources.
+     * SecretRef holds the name of a secret that contains a key with the kubeconfig file as the
+     * value. If no key is set, the key will default to 'value'. It is recommended that the
+     * kubeconfig is self-contained, and the secret is regularly updated if credentials such as a
+     * cloud-access-token expire. Cloud specific `cmd-path` auth helpers will not function without
+     * adding binaries and credentials to the Pod that is responsible for reconciling Kubernetes
+     * resources.
      *
      * @schema HelmReleaseV2Beta2SpecKubeConfig#secretRef
      */
-    readonly secretRef: HelmReleaseV2Beta2SpecKubeConfigSecretRef
+    secretRef: HelmReleaseV2Beta2SpecKubeConfigSecretRef
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecKubeConfig' to JSON representation. */
@@ -5254,7 +5262,7 @@ export interface HelmReleaseV2Beta2SpecPostRenderers {
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderers#kustomize
      */
-    readonly kustomize?: HelmReleaseV2Beta2SpecPostRenderersKustomize
+    kustomize?: HelmReleaseV2Beta2SpecPostRenderersKustomize
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecPostRenderers' to JSON representation. */
@@ -5283,19 +5291,19 @@ export function toJson_HelmReleaseV2Beta2SpecPostRenderers(
  */
 export interface HelmReleaseV2Beta2SpecRollback {
     /**
-     * CleanupOnFail allows deletion of new resources created during the Helm rollback action when it
-     * fails.
+     * CleanupOnFail allows deletion of new resources created during the Helm rollback action when
+     * it fails.
      *
      * @schema HelmReleaseV2Beta2SpecRollback#cleanupOnFail
      */
-    readonly cleanupOnFail?: boolean
+    cleanupOnFail?: boolean
 
     /**
      * DisableHooks prevents hooks from running during the Helm rollback action.
      *
      * @schema HelmReleaseV2Beta2SpecRollback#disableHooks
      */
-    readonly disableHooks?: boolean
+    disableHooks?: boolean
 
     /**
      * DisableWait disables the waiting for resources to be ready after a Helm rollback has been
@@ -5303,7 +5311,7 @@ export interface HelmReleaseV2Beta2SpecRollback {
      *
      * @schema HelmReleaseV2Beta2SpecRollback#disableWait
      */
-    readonly disableWait?: boolean
+    disableWait?: boolean
 
     /**
      * DisableWaitForJobs disables waiting for jobs to complete after a Helm rollback has been
@@ -5311,21 +5319,21 @@ export interface HelmReleaseV2Beta2SpecRollback {
      *
      * @schema HelmReleaseV2Beta2SpecRollback#disableWaitForJobs
      */
-    readonly disableWaitForJobs?: boolean
+    disableWaitForJobs?: boolean
 
     /**
      * Force forces resource updates through a replacement strategy.
      *
      * @schema HelmReleaseV2Beta2SpecRollback#force
      */
-    readonly force?: boolean
+    force?: boolean
 
     /**
      * Recreate performs pod restarts for the resource if applicable.
      *
      * @schema HelmReleaseV2Beta2SpecRollback#recreate
      */
-    readonly recreate?: boolean
+    recreate?: boolean
 
     /**
      * Timeout is the time to wait for any individual Kubernetes operation (like Jobs for hooks)
@@ -5334,7 +5342,7 @@ export interface HelmReleaseV2Beta2SpecRollback {
      * @default HelmReleaseSpec.Timeout'.
      * @schema HelmReleaseV2Beta2SpecRollback#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecRollback' to JSON representation. */
@@ -5374,14 +5382,14 @@ export interface HelmReleaseV2Beta2SpecTest {
      *
      * @schema HelmReleaseV2Beta2SpecTest#enable
      */
-    readonly enable?: boolean
+    enable?: boolean
 
     /**
      * Filters is a list of tests to run or exclude from running.
      *
      * @schema HelmReleaseV2Beta2SpecTest#filters
      */
-    readonly filters?: HelmReleaseV2Beta2SpecTestFilters[]
+    filters?: HelmReleaseV2Beta2SpecTestFilters[]
 
     /**
      * IgnoreFailures tells the controller to skip remediation when the Helm tests are run but fail.
@@ -5390,16 +5398,16 @@ export interface HelmReleaseV2Beta2SpecTest {
      *
      * @schema HelmReleaseV2Beta2SpecTest#ignoreFailures
      */
-    readonly ignoreFailures?: boolean
+    ignoreFailures?: boolean
 
     /**
-     * Timeout is the time to wait for any individual Kubernetes operation during the performance of a
-     * Helm test action. Defaults to 'HelmReleaseSpec.Timeout'.
+     * Timeout is the time to wait for any individual Kubernetes operation during the performance of
+     * a Helm test action. Defaults to 'HelmReleaseSpec.Timeout'.
      *
      * @default HelmReleaseSpec.Timeout'.
      * @schema HelmReleaseV2Beta2SpecTest#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecTest' to JSON representation. */
@@ -5436,14 +5444,14 @@ export interface HelmReleaseV2Beta2SpecUninstall {
      *
      * @schema HelmReleaseV2Beta2SpecUninstall#deletionPropagation
      */
-    readonly deletionPropagation?: HelmReleaseV2Beta2SpecUninstallDeletionPropagation
+    deletionPropagation?: HelmReleaseV2Beta2SpecUninstallDeletionPropagation
 
     /**
      * DisableHooks prevents hooks from running during the Helm rollback action.
      *
      * @schema HelmReleaseV2Beta2SpecUninstall#disableHooks
      */
-    readonly disableHooks?: boolean
+    disableHooks?: boolean
 
     /**
      * DisableWait disables waiting for all the resources to be deleted after a Helm uninstall is
@@ -5451,15 +5459,15 @@ export interface HelmReleaseV2Beta2SpecUninstall {
      *
      * @schema HelmReleaseV2Beta2SpecUninstall#disableWait
      */
-    readonly disableWait?: boolean
+    disableWait?: boolean
 
     /**
-     * KeepHistory tells Helm to remove all associated resources and mark the release as deleted, but
-     * retain the release history.
+     * KeepHistory tells Helm to remove all associated resources and mark the release as deleted,
+     * but retain the release history.
      *
      * @schema HelmReleaseV2Beta2SpecUninstall#keepHistory
      */
-    readonly keepHistory?: boolean
+    keepHistory?: boolean
 
     /**
      * Timeout is the time to wait for any individual Kubernetes operation (like Jobs for hooks)
@@ -5468,7 +5476,7 @@ export interface HelmReleaseV2Beta2SpecUninstall {
      * @default HelmReleaseSpec.Timeout'.
      * @schema HelmReleaseV2Beta2SpecUninstall#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecUninstall' to JSON representation. */
@@ -5506,7 +5514,7 @@ export interface HelmReleaseV2Beta2SpecUpgrade {
      *
      * @schema HelmReleaseV2Beta2SpecUpgrade#cleanupOnFail
      */
-    readonly cleanupOnFail?: boolean
+    cleanupOnFail?: boolean
 
     /**
      * CRDs upgrade CRDs from the Helm Chart's crds directory according to the CRD upgrade policy
@@ -5519,21 +5527,21 @@ export interface HelmReleaseV2Beta2SpecUpgrade {
      *
      * CreateReplace: new CRDs are created, existing CRDs are updated (replaced) but not deleted.
      *
-     * By default, CRDs are not applied during Helm upgrade action. With this option users can opt-in
-     * to CRD upgrade, which is not (yet) natively supported by Helm.
+     * By default, CRDs are not applied during Helm upgrade action. With this option users can
+     * opt-in to CRD upgrade, which is not (yet) natively supported by Helm.
      * https://helm.sh/docs/chart_best_practices/custom_resource_definitions.
      *
      * @default Skip` and if omitted
      * @schema HelmReleaseV2Beta2SpecUpgrade#crds
      */
-    readonly crds?: HelmReleaseV2Beta2SpecUpgradeCrds
+    crds?: HelmReleaseV2Beta2SpecUpgradeCrds
 
     /**
      * DisableHooks prevents hooks from running during the Helm upgrade action.
      *
      * @schema HelmReleaseV2Beta2SpecUpgrade#disableHooks
      */
-    readonly disableHooks?: boolean
+    disableHooks?: boolean
 
     /**
      * DisableOpenAPIValidation prevents the Helm upgrade action from validating rendered templates
@@ -5541,7 +5549,7 @@ export interface HelmReleaseV2Beta2SpecUpgrade {
      *
      * @schema HelmReleaseV2Beta2SpecUpgrade#disableOpenAPIValidation
      */
-    readonly disableOpenApiValidation?: boolean
+    disableOpenApiValidation?: boolean
 
     /**
      * DisableWait disables the waiting for resources to be ready after a Helm upgrade has been
@@ -5549,7 +5557,7 @@ export interface HelmReleaseV2Beta2SpecUpgrade {
      *
      * @schema HelmReleaseV2Beta2SpecUpgrade#disableWait
      */
-    readonly disableWait?: boolean
+    disableWait?: boolean
 
     /**
      * DisableWaitForJobs disables waiting for jobs to complete after a Helm upgrade has been
@@ -5557,14 +5565,14 @@ export interface HelmReleaseV2Beta2SpecUpgrade {
      *
      * @schema HelmReleaseV2Beta2SpecUpgrade#disableWaitForJobs
      */
-    readonly disableWaitForJobs?: boolean
+    disableWaitForJobs?: boolean
 
     /**
      * Force forces resource updates through a replacement strategy.
      *
      * @schema HelmReleaseV2Beta2SpecUpgrade#force
      */
-    readonly force?: boolean
+    force?: boolean
 
     /**
      * PreserveValues will make Helm reuse the last release's values and merge in overrides from
@@ -5572,7 +5580,7 @@ export interface HelmReleaseV2Beta2SpecUpgrade {
      *
      * @schema HelmReleaseV2Beta2SpecUpgrade#preserveValues
      */
-    readonly preserveValues?: boolean
+    preserveValues?: boolean
 
     /**
      * Remediation holds the remediation configuration for when the Helm upgrade action for the
@@ -5580,7 +5588,7 @@ export interface HelmReleaseV2Beta2SpecUpgrade {
      *
      * @schema HelmReleaseV2Beta2SpecUpgrade#remediation
      */
-    readonly remediation?: HelmReleaseV2Beta2SpecUpgradeRemediation
+    remediation?: HelmReleaseV2Beta2SpecUpgradeRemediation
 
     /**
      * Timeout is the time to wait for any individual Kubernetes operation (like Jobs for hooks)
@@ -5589,7 +5597,7 @@ export interface HelmReleaseV2Beta2SpecUpgrade {
      * @default HelmReleaseSpec.Timeout'.
      * @schema HelmReleaseV2Beta2SpecUpgrade#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecUpgrade' to JSON representation. */
@@ -5632,14 +5640,14 @@ export interface HelmReleaseV2Beta2SpecValuesFrom {
      *
      * @schema HelmReleaseV2Beta2SpecValuesFrom#kind
      */
-    readonly kind: HelmReleaseV2Beta2SpecValuesFromKind
+    kind: HelmReleaseV2Beta2SpecValuesFromKind
 
     /**
      * Name of the values referent. Should reside in the same namespace as the referring resource.
      *
      * @schema HelmReleaseV2Beta2SpecValuesFrom#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Optional marks this ValuesReference as optional. When set, a not found error for the values
@@ -5648,17 +5656,17 @@ export interface HelmReleaseV2Beta2SpecValuesFrom {
      *
      * @schema HelmReleaseV2Beta2SpecValuesFrom#optional
      */
-    readonly optional?: boolean
+    optional?: boolean
 
     /**
-     * TargetPath is the YAML dot notation path the value should be merged at. When set, the ValuesKey
-     * is expected to be a single flat value. Defaults to 'None', which results in the values getting
-     * merged at the root.
+     * TargetPath is the YAML dot notation path the value should be merged at. When set, the
+     * ValuesKey is expected to be a single flat value. Defaults to 'None', which results in the
+     * values getting merged at the root.
      *
      * @default None',
      * @schema HelmReleaseV2Beta2SpecValuesFrom#targetPath
      */
-    readonly targetPath?: string
+    targetPath?: string
 
     /**
      * ValuesKey is the data key where the values.yaml or a specific value can be found at. Defaults
@@ -5667,7 +5675,7 @@ export interface HelmReleaseV2Beta2SpecValuesFrom {
      * @default values.yaml'.
      * @schema HelmReleaseV2Beta2SpecValuesFrom#valuesKey
      */
-    readonly valuesKey?: string
+    valuesKey?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecValuesFrom' to JSON representation. */
@@ -5700,22 +5708,23 @@ export function toJson_HelmReleaseV2Beta2SpecValuesFrom(
  */
 export interface HelmReleaseV2Beta2SpecChartMetadata {
     /**
-     * Annotations is an unstructured key value map stored with a resource that may be set by external
-     * tools to store and retrieve arbitrary metadata. They are not queryable and should be preserved
-     * when modifying objects. More info:
+     * Annotations is an unstructured key value map stored with a resource that may be set by
+     * external tools to store and retrieve arbitrary metadata. They are not queryable and should be
+     * preserved when modifying objects. More info:
      * https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
      *
      * @schema HelmReleaseV2Beta2SpecChartMetadata#annotations
      */
-    readonly annotations?: { [key: string]: string }
+    annotations?: { [key: string]: string }
 
     /**
      * Map of string keys and values that can be used to organize and categorize (scope and select)
-     * objects. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+     * objects. More info:
+     * https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
      *
      * @schema HelmReleaseV2Beta2SpecChartMetadata#labels
      */
-    readonly labels?: { [key: string]: string }
+    labels?: { [key: string]: string }
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecChartMetadata' to JSON representation. */
@@ -5761,7 +5770,7 @@ export interface HelmReleaseV2Beta2SpecChartSpec {
      *
      * @schema HelmReleaseV2Beta2SpecChartSpec#chart
      */
-    readonly chart: string
+    chart: string
 
     /**
      * IgnoreMissingValuesFiles controls whether to silently ignore missing values files rather than
@@ -5769,7 +5778,7 @@ export interface HelmReleaseV2Beta2SpecChartSpec {
      *
      * @schema HelmReleaseV2Beta2SpecChartSpec#ignoreMissingValuesFiles
      */
-    readonly ignoreMissingValuesFiles?: boolean
+    ignoreMissingValuesFiles?: boolean
 
     /**
      * Interval at which to check the v1.Source for updates. Defaults to 'HelmReleaseSpec.Interval'.
@@ -5777,52 +5786,52 @@ export interface HelmReleaseV2Beta2SpecChartSpec {
      * @default HelmReleaseSpec.Interval'.
      * @schema HelmReleaseV2Beta2SpecChartSpec#interval
      */
-    readonly interval?: string
+    interval?: string
 
     /**
      * Determines what enables the creation of a new artifact. Valid values are ('ChartVersion',
-     * 'Revision'). See the documentation of the values for an explanation on their behavior. Defaults
-     * to ChartVersion when omitted.
+     * 'Revision'). See the documentation of the values for an explanation on their behavior.
+     * Defaults to ChartVersion when omitted.
      *
      * @default ChartVersion when omitted.
      * @schema HelmReleaseV2Beta2SpecChartSpec#reconcileStrategy
      */
-    readonly reconcileStrategy?: HelmReleaseV2Beta2SpecChartSpecReconcileStrategy
+    reconcileStrategy?: HelmReleaseV2Beta2SpecChartSpecReconcileStrategy
 
     /**
      * The name and namespace of the v1.Source the chart is available at.
      *
      * @schema HelmReleaseV2Beta2SpecChartSpec#sourceRef
      */
-    readonly sourceRef: HelmReleaseV2Beta2SpecChartSpecSourceRef
+    sourceRef: HelmReleaseV2Beta2SpecChartSpecSourceRef
 
     /**
      * Alternative values file to use as the default chart values, expected to be a relative path in
-     * the SourceRef. Deprecated in favor of ValuesFiles, for backwards compatibility the file defined
-     * here is merged before the ValuesFiles items. Ignored when omitted.
+     * the SourceRef. Deprecated in favor of ValuesFiles, for backwards compatibility the file
+     * defined here is merged before the ValuesFiles items. Ignored when omitted.
      *
      * @schema HelmReleaseV2Beta2SpecChartSpec#valuesFile
      */
-    readonly valuesFile?: string
+    valuesFile?: string
 
     /**
      * Alternative list of values files to use as the chart values (values.yaml is not included by
-     * default), expected to be a relative path in the SourceRef. Values files are merged in the order
-     * of this list with the last file overriding the first. Ignored when omitted.
+     * default), expected to be a relative path in the SourceRef. Values files are merged in the
+     * order of this list with the last file overriding the first. Ignored when omitted.
      *
      * @schema HelmReleaseV2Beta2SpecChartSpec#valuesFiles
      */
-    readonly valuesFiles?: string[]
+    valuesFiles?: string[]
 
     /**
-     * Verify contains the secret name containing the trusted public keys used to verify the signature
-     * and specifies which provider to use to check whether OCI image is authentic. This field is only
-     * supported for OCI sources. Chart dependencies, which are not bundled in the umbrella chart
-     * artifact, are not verified.
+     * Verify contains the secret name containing the trusted public keys used to verify the
+     * signature and specifies which provider to use to check whether OCI image is authentic. This
+     * field is only supported for OCI sources. Chart dependencies, which are not bundled in the
+     * umbrella chart artifact, are not verified.
      *
      * @schema HelmReleaseV2Beta2SpecChartSpec#verify
      */
-    readonly verify?: HelmReleaseV2Beta2SpecChartSpecVerify
+    verify?: HelmReleaseV2Beta2SpecChartSpecVerify
 
     /**
      * Version semver expression, ignored for charts from v1beta2.GitRepository and v1beta2.Bucket
@@ -5831,7 +5840,7 @@ export interface HelmReleaseV2Beta2SpecChartSpec {
      * @default latest when omitted.
      * @schema HelmReleaseV2Beta2SpecChartSpec#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecChartSpec' to JSON representation. */
@@ -5886,16 +5895,16 @@ export interface HelmReleaseV2Beta2SpecDriftDetectionIgnore {
      *
      * @schema HelmReleaseV2Beta2SpecDriftDetectionIgnore#paths
      */
-    readonly paths: string[]
+    paths: string[]
 
     /**
-     * Target is a selector for specifying Kubernetes objects to which this rule applies. If Target is
-     * not set, the Paths will be ignored for all Kubernetes objects within the manifest of the Helm
-     * release.
+     * Target is a selector for specifying Kubernetes objects to which this rule applies. If Target
+     * is not set, the Paths will be ignored for all Kubernetes objects within the manifest of the
+     * Helm release.
      *
      * @schema HelmReleaseV2Beta2SpecDriftDetectionIgnore#target
      */
-    readonly target?: HelmReleaseV2Beta2SpecDriftDetectionIgnoreTarget
+    target?: HelmReleaseV2Beta2SpecDriftDetectionIgnoreTarget
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecDriftDetectionIgnore' to JSON representation. */
@@ -5974,7 +5983,7 @@ export interface HelmReleaseV2Beta2SpecInstallRemediation {
      * @default Test.IgnoreFailures'.
      * @schema HelmReleaseV2Beta2SpecInstallRemediation#ignoreTestFailures
      */
-    readonly ignoreTestFailures?: boolean
+    ignoreTestFailures?: boolean
 
     /**
      * RemediateLastFailure tells the controller to remediate the last failure, when no retries
@@ -5983,17 +5992,17 @@ export interface HelmReleaseV2Beta2SpecInstallRemediation {
      * @default false'.
      * @schema HelmReleaseV2Beta2SpecInstallRemediation#remediateLastFailure
      */
-    readonly remediateLastFailure?: boolean
+    remediateLastFailure?: boolean
 
     /**
      * Retries is the number of retries that should be attempted on failures before bailing.
-     * Remediation, using an uninstall, is performed between each attempt. Defaults to '0', a negative
-     * integer equals to unlimited retries.
+     * Remediation, using an uninstall, is performed between each attempt. Defaults to '0', a
+     * negative integer equals to unlimited retries.
      *
      * @default 0', a negative integer equals to unlimited retries.
      * @schema HelmReleaseV2Beta2SpecInstallRemediation#retries
      */
-    readonly retries?: number
+    retries?: number
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecInstallRemediation' to JSON representation. */
@@ -6032,14 +6041,14 @@ export interface HelmReleaseV2Beta2SpecKubeConfigSecretRef {
      *
      * @schema HelmReleaseV2Beta2SpecKubeConfigSecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the Secret.
      *
      * @schema HelmReleaseV2Beta2SpecKubeConfigSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecKubeConfigSecretRef' to JSON representation. */
@@ -6069,34 +6078,34 @@ export function toJson_HelmReleaseV2Beta2SpecKubeConfigSecretRef(
  */
 export interface HelmReleaseV2Beta2SpecPostRenderersKustomize {
     /**
-     * Images is a list of (image name, new name, new tag or digest) for changing image names, tags or
-     * digests. This can also be achieved with a patch, but this operator is simpler to specify.
+     * Images is a list of (image name, new name, new tag or digest) for changing image names, tags
+     * or digests. This can also be achieved with a patch, but this operator is simpler to specify.
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomize#images
      */
-    readonly images?: HelmReleaseV2Beta2SpecPostRenderersKustomizeImages[]
+    images?: HelmReleaseV2Beta2SpecPostRenderersKustomizeImages[]
 
     /**
-     * Strategic merge and JSON patches, defined as inline YAML objects, capable of targeting objects
-     * based on kind, label and annotation selectors.
+     * Strategic merge and JSON patches, defined as inline YAML objects, capable of targeting
+     * objects based on kind, label and annotation selectors.
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomize#patches
      */
-    readonly patches?: HelmReleaseV2Beta2SpecPostRenderersKustomizePatches[]
+    patches?: HelmReleaseV2Beta2SpecPostRenderersKustomizePatches[]
 
     /**
      * JSON 6902 patches, defined as inline YAML objects. Deprecated: use Patches instead.
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomize#patchesJson6902
      */
-    readonly patchesJson6902?: HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902[]
+    patchesJson6902?: HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902[]
 
     /**
      * Strategic merge patches, defined as inline YAML objects. Deprecated: use Patches instead.
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomize#patchesStrategicMerge
      */
-    readonly patchesStrategicMerge?: any[]
+    patchesStrategicMerge?: any[]
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecPostRenderersKustomize' to JSON representation. */
@@ -6136,14 +6145,14 @@ export interface HelmReleaseV2Beta2SpecTestFilters {
      *
      * @schema HelmReleaseV2Beta2SpecTestFilters#exclude
      */
-    readonly exclude?: boolean
+    exclude?: boolean
 
     /**
      * Name is the name of the test.
      *
      * @schema HelmReleaseV2Beta2SpecTestFilters#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecTestFilters' to JSON representation. */
@@ -6221,7 +6230,7 @@ export interface HelmReleaseV2Beta2SpecUpgradeRemediation {
      * @default Test.IgnoreFailures'.
      * @schema HelmReleaseV2Beta2SpecUpgradeRemediation#ignoreTestFailures
      */
-    readonly ignoreTestFailures?: boolean
+    ignoreTestFailures?: boolean
 
     /**
      * RemediateLastFailure tells the controller to remediate the last failure, when no retries
@@ -6230,7 +6239,7 @@ export interface HelmReleaseV2Beta2SpecUpgradeRemediation {
      * @default false' unless 'Retries' is greater than 0.
      * @schema HelmReleaseV2Beta2SpecUpgradeRemediation#remediateLastFailure
      */
-    readonly remediateLastFailure?: boolean
+    remediateLastFailure?: boolean
 
     /**
      * Retries is the number of retries that should be attempted on failures before bailing.
@@ -6240,7 +6249,7 @@ export interface HelmReleaseV2Beta2SpecUpgradeRemediation {
      * @default 0', a negative integer equals to unlimited retries.
      * @schema HelmReleaseV2Beta2SpecUpgradeRemediation#retries
      */
-    readonly retries?: number
+    retries?: number
 
     /**
      * Strategy to use for failure remediation. Defaults to 'rollback'.
@@ -6248,7 +6257,7 @@ export interface HelmReleaseV2Beta2SpecUpgradeRemediation {
      * @default rollback'.
      * @schema HelmReleaseV2Beta2SpecUpgradeRemediation#strategy
      */
-    readonly strategy?: HelmReleaseV2Beta2SpecUpgradeRemediationStrategy
+    strategy?: HelmReleaseV2Beta2SpecUpgradeRemediationStrategy
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecUpgradeRemediation' to JSON representation. */
@@ -6311,28 +6320,28 @@ export interface HelmReleaseV2Beta2SpecChartSpecSourceRef {
      *
      * @schema HelmReleaseV2Beta2SpecChartSpecSourceRef#apiVersion
      */
-    readonly apiVersion?: string
+    apiVersion?: string
 
     /**
      * Kind of the referent.
      *
      * @schema HelmReleaseV2Beta2SpecChartSpecSourceRef#kind
      */
-    readonly kind: HelmReleaseV2Beta2SpecChartSpecSourceRefKind
+    kind: HelmReleaseV2Beta2SpecChartSpecSourceRefKind
 
     /**
      * Name of the referent.
      *
      * @schema HelmReleaseV2Beta2SpecChartSpecSourceRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent.
      *
      * @schema HelmReleaseV2Beta2SpecChartSpecSourceRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecChartSpecSourceRef' to JSON representation. */
@@ -6371,14 +6380,14 @@ export interface HelmReleaseV2Beta2SpecChartSpecVerify {
      *
      * @schema HelmReleaseV2Beta2SpecChartSpecVerify#provider
      */
-    readonly provider: HelmReleaseV2Beta2SpecChartSpecVerifyProvider
+    provider: HelmReleaseV2Beta2SpecChartSpecVerifyProvider
 
     /**
      * SecretRef specifies the Kubernetes Secret containing the trusted public keys.
      *
      * @schema HelmReleaseV2Beta2SpecChartSpecVerify#secretRef
      */
-    readonly secretRef?: HelmReleaseV2Beta2SpecChartSpecVerifySecretRef
+    secretRef?: HelmReleaseV2Beta2SpecChartSpecVerifySecretRef
 }
 
 /** Converts an object of type 'HelmReleaseV2Beta2SpecChartSpecVerify' to JSON representation. */
@@ -6416,7 +6425,7 @@ export interface HelmReleaseV2Beta2SpecDriftDetectionIgnoreTarget {
      *
      * @schema HelmReleaseV2Beta2SpecDriftDetectionIgnoreTarget#annotationSelector
      */
-    readonly annotationSelector?: string
+    annotationSelector?: string
 
     /**
      * Group is the API group to select resources from. Together with Version and Kind it is capable
@@ -6425,7 +6434,7 @@ export interface HelmReleaseV2Beta2SpecDriftDetectionIgnoreTarget {
      *
      * @schema HelmReleaseV2Beta2SpecDriftDetectionIgnoreTarget#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind of the API Group to select resources from. Together with Group and Version it is capable
@@ -6434,7 +6443,7 @@ export interface HelmReleaseV2Beta2SpecDriftDetectionIgnoreTarget {
      *
      * @schema HelmReleaseV2Beta2SpecDriftDetectionIgnoreTarget#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * LabelSelector is a string that follows the label selection expression
@@ -6443,21 +6452,21 @@ export interface HelmReleaseV2Beta2SpecDriftDetectionIgnoreTarget {
      *
      * @schema HelmReleaseV2Beta2SpecDriftDetectionIgnoreTarget#labelSelector
      */
-    readonly labelSelector?: string
+    labelSelector?: string
 
     /**
      * Name to match resources with.
      *
      * @schema HelmReleaseV2Beta2SpecDriftDetectionIgnoreTarget#name
      */
-    readonly name?: string
+    name?: string
 
     /**
      * Namespace to select resources from.
      *
      * @schema HelmReleaseV2Beta2SpecDriftDetectionIgnoreTarget#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Version of the API Group to select resources from. Together with Group and Kind it is capable
@@ -6466,7 +6475,7 @@ export interface HelmReleaseV2Beta2SpecDriftDetectionIgnoreTarget {
      *
      * @schema HelmReleaseV2Beta2SpecDriftDetectionIgnoreTarget#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /**
@@ -6510,28 +6519,28 @@ export interface HelmReleaseV2Beta2SpecPostRenderersKustomizeImages {
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizeImages#digest
      */
-    readonly digest?: string
+    digest?: string
 
     /**
      * Name is a tag-less image name.
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizeImages#name
      */
-    readonly name: string
+    name: string
 
     /**
      * NewName is the value used to replace the original name.
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizeImages#newName
      */
-    readonly newName?: string
+    newName?: string
 
     /**
      * NewTag is the value used to replace the original tag.
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizeImages#newTag
      */
-    readonly newTag?: string
+    newTag?: string
 }
 
 /**
@@ -6572,14 +6581,14 @@ export interface HelmReleaseV2Beta2SpecPostRenderersKustomizePatches {
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatches#patch
      */
-    readonly patch: string
+    patch: string
 
     /**
      * Target points to the resources that the patch document should be applied to.
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatches#target
      */
-    readonly target?: HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesTarget
+    target?: HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesTarget
 }
 
 /**
@@ -6616,14 +6625,14 @@ export interface HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902 {
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902#patch
      */
-    readonly patch: HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Patch[]
+    patch: HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Patch[]
 
     /**
      * Target points to the resources that the patch document should be applied to.
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902#target
      */
-    readonly target: HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Target
+    target: HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Target
 }
 
 /**
@@ -6701,7 +6710,7 @@ export interface HelmReleaseV2Beta2SpecChartSpecVerifySecretRef {
      *
      * @schema HelmReleaseV2Beta2SpecChartSpecVerifySecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -6739,7 +6748,7 @@ export interface HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesTarget {
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesTarget#annotationSelector
      */
-    readonly annotationSelector?: string
+    annotationSelector?: string
 
     /**
      * Group is the API group to select resources from. Together with Version and Kind it is capable
@@ -6748,7 +6757,7 @@ export interface HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesTarget {
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesTarget#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind of the API Group to select resources from. Together with Group and Version it is capable
@@ -6757,7 +6766,7 @@ export interface HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesTarget {
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesTarget#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * LabelSelector is a string that follows the label selection expression
@@ -6766,21 +6775,21 @@ export interface HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesTarget {
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesTarget#labelSelector
      */
-    readonly labelSelector?: string
+    labelSelector?: string
 
     /**
      * Name to match resources with.
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesTarget#name
      */
-    readonly name?: string
+    name?: string
 
     /**
      * Namespace to select resources from.
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesTarget#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Version of the API Group to select resources from. Together with Group and Kind it is capable
@@ -6789,7 +6798,7 @@ export interface HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesTarget {
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesTarget#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /**
@@ -6827,13 +6836,13 @@ export function toJson_HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesTarget
  */
 export interface HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Patch {
     /**
-     * From contains a JSON-pointer value that references a location within the target document where
-     * the operation is performed. The meaning of the value depends on the value of Op, and is NOT
-     * taken into account by all operations.
+     * From contains a JSON-pointer value that references a location within the target document
+     * where the operation is performed. The meaning of the value depends on the value of Op, and is
+     * NOT taken into account by all operations.
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Patch#from
      */
-    readonly from?: string
+    from?: string
 
     /**
      * Op indicates the operation to perform. Its value MUST be one of "add", "remove", "replace",
@@ -6841,7 +6850,7 @@ export interface HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Patc
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Patch#op
      */
-    readonly op: HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902PatchOp
+    op: HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902PatchOp
 
     /**
      * Path contains the JSON-pointer value that references a location within the target document
@@ -6849,15 +6858,15 @@ export interface HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Patc
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Patch#path
      */
-    readonly path: string
+    path: string
 
     /**
-     * Value contains a valid JSON structure. The meaning of the value depends on the value of Op, and
-     * is NOT taken into account by all operations.
+     * Value contains a valid JSON structure. The meaning of the value depends on the value of Op,
+     * and is NOT taken into account by all operations.
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Patch#value
      */
-    readonly value?: any
+    value?: any
 }
 
 /**
@@ -6898,7 +6907,7 @@ export interface HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Targ
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Target#annotationSelector
      */
-    readonly annotationSelector?: string
+    annotationSelector?: string
 
     /**
      * Group is the API group to select resources from. Together with Version and Kind it is capable
@@ -6907,7 +6916,7 @@ export interface HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Targ
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Target#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind of the API Group to select resources from. Together with Group and Version it is capable
@@ -6916,7 +6925,7 @@ export interface HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Targ
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Target#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * LabelSelector is a string that follows the label selection expression
@@ -6925,21 +6934,21 @@ export interface HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Targ
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Target#labelSelector
      */
-    readonly labelSelector?: string
+    labelSelector?: string
 
     /**
      * Name to match resources with.
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Target#name
      */
-    readonly name?: string
+    name?: string
 
     /**
      * Namespace to select resources from.
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Target#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Version of the API Group to select resources from. Together with Group and Kind it is capable
@@ -6948,7 +6957,7 @@ export interface HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Targ
      *
      * @schema HelmReleaseV2Beta2SpecPostRenderersKustomizePatchesJson6902Target#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /**

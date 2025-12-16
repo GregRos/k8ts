@@ -9,7 +9,7 @@ import { Construct } from "constructs"
  */
 export class Challenge extends ApiObject {
     /** Returns the apiVersion and kind for "Challenge" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "acme.cert-manager.io/v1",
         kind: "Challenge"
     }
@@ -60,10 +60,10 @@ export class Challenge extends ApiObject {
  */
 export interface ChallengeProps {
     /** @schema Challenge#metadata */
-    readonly metadata: ApiObjectMetadata
+    metadata: ApiObjectMetadata
 
     /** @schema Challenge#spec */
-    readonly spec: ChallengeSpec
+    spec: ChallengeSpec
 }
 
 /** Converts an object of type 'ChallengeProps' to JSON representation. */
@@ -93,7 +93,7 @@ export interface ChallengeSpec {
      *
      * @schema ChallengeSpec#authorizationURL
      */
-    readonly authorizationUrl: string
+    authorizationUrl: string
 
     /**
      * DnsName is the identifier that this challenge is for, e.g. example.com. If the requested
@@ -102,7 +102,7 @@ export interface ChallengeSpec {
      *
      * @schema ChallengeSpec#dnsName
      */
-    readonly dnsName: string
+    dnsName: string
 
     /**
      * References a properly configured ACME-type Issuer which should be used to create this
@@ -111,7 +111,7 @@ export interface ChallengeSpec {
      *
      * @schema ChallengeSpec#issuerRef
      */
-    readonly issuerRef: ChallengeSpecIssuerRef
+    issuerRef: ChallengeSpecIssuerRef
 
     /**
      * The ACME challenge key for this challenge For HTTP01 challenges, this is the value that must
@@ -122,7 +122,7 @@ export interface ChallengeSpec {
      *
      * @schema ChallengeSpec#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Contains the domain solving configuration that should be used to solve this challenge
@@ -130,7 +130,7 @@ export interface ChallengeSpec {
      *
      * @schema ChallengeSpec#solver
      */
-    readonly solver: ChallengeSpecSolver
+    solver: ChallengeSpecSolver
 
     /**
      * The ACME challenge token for this challenge. This is the raw value returned from the ACME
@@ -138,14 +138,14 @@ export interface ChallengeSpec {
      *
      * @schema ChallengeSpec#token
      */
-    readonly token: string
+    token: string
 
     /**
      * The type of ACME challenge this resource represents. One of "HTTP-01" or "DNS-01".
      *
      * @schema ChallengeSpec#type
      */
-    readonly type: ChallengeSpecType
+    type: ChallengeSpecType
 
     /**
      * The URL of the ACME Challenge resource for this challenge. This can be used to lookup details
@@ -153,7 +153,7 @@ export interface ChallengeSpec {
      *
      * @schema ChallengeSpec#url
      */
-    readonly url: string
+    url: string
 
     /**
      * Wildcard will be true if this challenge is for a wildcard identifier, for example
@@ -161,7 +161,7 @@ export interface ChallengeSpec {
      *
      * @schema ChallengeSpec#wildcard
      */
-    readonly wildcard?: boolean
+    wildcard?: boolean
 }
 
 /** Converts an object of type 'ChallengeSpec' to JSON representation. */
@@ -204,21 +204,21 @@ export interface ChallengeSpecIssuerRef {
      *
      * @schema ChallengeSpecIssuerRef#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind of the resource being referred to.
      *
      * @schema ChallengeSpecIssuerRef#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name of the resource being referred to.
      *
      * @schema ChallengeSpecIssuerRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'ChallengeSpecIssuerRef' to JSON representation. */
@@ -254,7 +254,7 @@ export interface ChallengeSpecSolver {
      *
      * @schema ChallengeSpecSolver#dns01
      */
-    readonly dns01?: ChallengeSpecSolverDns01
+    dns01?: ChallengeSpecSolverDns01
 
     /**
      * Configures cert-manager to attempt to complete authorizations by performing the HTTP01
@@ -263,7 +263,7 @@ export interface ChallengeSpecSolver {
      *
      * @schema ChallengeSpecSolver#http01
      */
-    readonly http01?: ChallengeSpecSolverHttp01
+    http01?: ChallengeSpecSolverHttp01
 
     /**
      * Selector selects a set of DNSNames on the Certificate resource that should be solved using
@@ -273,7 +273,7 @@ export interface ChallengeSpecSolver {
      *
      * @schema ChallengeSpecSolver#selector
      */
-    readonly selector?: ChallengeSpecSolverSelector
+    selector?: ChallengeSpecSolverSelector
 }
 
 /** Converts an object of type 'ChallengeSpecSolver' to JSON representation. */
@@ -322,35 +322,35 @@ export interface ChallengeSpecSolverDns01 {
      *
      * @schema ChallengeSpecSolverDns01#acmeDNS
      */
-    readonly acmeDns?: ChallengeSpecSolverDns01AcmeDns
+    acmeDns?: ChallengeSpecSolverDns01AcmeDns
 
     /**
      * Use the Akamai DNS zone management API to manage DNS01 challenge records.
      *
      * @schema ChallengeSpecSolverDns01#akamai
      */
-    readonly akamai?: ChallengeSpecSolverDns01Akamai
+    akamai?: ChallengeSpecSolverDns01Akamai
 
     /**
      * Use the Microsoft Azure DNS API to manage DNS01 challenge records.
      *
      * @schema ChallengeSpecSolverDns01#azureDNS
      */
-    readonly azureDns?: ChallengeSpecSolverDns01AzureDns
+    azureDns?: ChallengeSpecSolverDns01AzureDns
 
     /**
      * Use the Google Cloud DNS API to manage DNS01 challenge records.
      *
      * @schema ChallengeSpecSolverDns01#cloudDNS
      */
-    readonly cloudDns?: ChallengeSpecSolverDns01CloudDns
+    cloudDns?: ChallengeSpecSolverDns01CloudDns
 
     /**
      * Use the Cloudflare API to manage DNS01 challenge records.
      *
      * @schema ChallengeSpecSolverDns01#cloudflare
      */
-    readonly cloudflare?: ChallengeSpecSolverDns01Cloudflare
+    cloudflare?: ChallengeSpecSolverDns01Cloudflare
 
     /**
      * CNAMEStrategy configures how the DNS01 provider should handle CNAME records when found in DNS
@@ -358,14 +358,14 @@ export interface ChallengeSpecSolverDns01 {
      *
      * @schema ChallengeSpecSolverDns01#cnameStrategy
      */
-    readonly cnameStrategy?: ChallengeSpecSolverDns01CnameStrategy
+    cnameStrategy?: ChallengeSpecSolverDns01CnameStrategy
 
     /**
      * Use the DigitalOcean DNS API to manage DNS01 challenge records.
      *
      * @schema ChallengeSpecSolverDns01#digitalocean
      */
-    readonly digitalocean?: ChallengeSpecSolverDns01Digitalocean
+    digitalocean?: ChallengeSpecSolverDns01Digitalocean
 
     /**
      * Use RFC2136 ("Dynamic Updates in the Domain Name System")
@@ -373,21 +373,21 @@ export interface ChallengeSpecSolverDns01 {
      *
      * @schema ChallengeSpecSolverDns01#rfc2136
      */
-    readonly rfc2136?: ChallengeSpecSolverDns01Rfc2136
+    rfc2136?: ChallengeSpecSolverDns01Rfc2136
 
     /**
      * Use the AWS Route53 API to manage DNS01 challenge records.
      *
      * @schema ChallengeSpecSolverDns01#route53
      */
-    readonly route53?: ChallengeSpecSolverDns01Route53
+    route53?: ChallengeSpecSolverDns01Route53
 
     /**
      * Configure an external webhook based DNS01 challenge solver to manage DNS01 challenge records.
      *
      * @schema ChallengeSpecSolverDns01#webhook
      */
-    readonly webhook?: ChallengeSpecSolverDns01Webhook
+    webhook?: ChallengeSpecSolverDns01Webhook
 }
 
 /** Converts an object of type 'ChallengeSpecSolverDns01' to JSON representation. */
@@ -434,7 +434,7 @@ export interface ChallengeSpecSolverHttp01 {
      *
      * @schema ChallengeSpecSolverHttp01#gatewayHTTPRoute
      */
-    readonly gatewayHttpRoute?: ChallengeSpecSolverHttp01GatewayHttpRoute
+    gatewayHttpRoute?: ChallengeSpecSolverHttp01GatewayHttpRoute
 
     /**
      * The ingress based HTTP01 challenge solver will solve challenges by creating or modifying
@@ -444,7 +444,7 @@ export interface ChallengeSpecSolverHttp01 {
      *
      * @schema ChallengeSpecSolverHttp01#ingress
      */
-    readonly ingress?: ChallengeSpecSolverHttp01Ingress
+    ingress?: ChallengeSpecSolverHttp01Ingress
 }
 
 /** Converts an object of type 'ChallengeSpecSolverHttp01' to JSON representation. */
@@ -484,7 +484,7 @@ export interface ChallengeSpecSolverSelector {
      *
      * @schema ChallengeSpecSolverSelector#dnsNames
      */
-    readonly dnsNames?: string[]
+    dnsNames?: string[]
 
     /**
      * List of DNSZones that this solver will be used to solve. The most specific DNS zone match
@@ -496,7 +496,7 @@ export interface ChallengeSpecSolverSelector {
      *
      * @schema ChallengeSpecSolverSelector#dnsZones
      */
-    readonly dnsZones?: string[]
+    dnsZones?: string[]
 
     /**
      * A label selector that is used to refine the set of certificate's that this challenge solver
@@ -504,7 +504,7 @@ export interface ChallengeSpecSolverSelector {
      *
      * @schema ChallengeSpecSolverSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /** Converts an object of type 'ChallengeSpecSolverSelector' to JSON representation. */
@@ -546,10 +546,10 @@ export interface ChallengeSpecSolverDns01AcmeDns {
      *
      * @schema ChallengeSpecSolverDns01AcmeDns#accountSecretRef
      */
-    readonly accountSecretRef: ChallengeSpecSolverDns01AcmeDnsAccountSecretRef
+    accountSecretRef: ChallengeSpecSolverDns01AcmeDnsAccountSecretRef
 
     /** @schema ChallengeSpecSolverDns01AcmeDns#host */
-    readonly host: string
+    host: string
 }
 
 /** Converts an object of type 'ChallengeSpecSolverDns01AcmeDns' to JSON representation. */
@@ -586,7 +586,7 @@ export interface ChallengeSpecSolverDns01Akamai {
      *
      * @schema ChallengeSpecSolverDns01Akamai#accessTokenSecretRef
      */
-    readonly accessTokenSecretRef: ChallengeSpecSolverDns01AkamaiAccessTokenSecretRef
+    accessTokenSecretRef: ChallengeSpecSolverDns01AkamaiAccessTokenSecretRef
 
     /**
      * A reference to a specific 'key' within a Secret resource. In some instances, `key` is a
@@ -594,7 +594,7 @@ export interface ChallengeSpecSolverDns01Akamai {
      *
      * @schema ChallengeSpecSolverDns01Akamai#clientSecretSecretRef
      */
-    readonly clientSecretSecretRef: ChallengeSpecSolverDns01AkamaiClientSecretSecretRef
+    clientSecretSecretRef: ChallengeSpecSolverDns01AkamaiClientSecretSecretRef
 
     /**
      * A reference to a specific 'key' within a Secret resource. In some instances, `key` is a
@@ -602,10 +602,10 @@ export interface ChallengeSpecSolverDns01Akamai {
      *
      * @schema ChallengeSpecSolverDns01Akamai#clientTokenSecretRef
      */
-    readonly clientTokenSecretRef: ChallengeSpecSolverDns01AkamaiClientTokenSecretRef
+    clientTokenSecretRef: ChallengeSpecSolverDns01AkamaiClientTokenSecretRef
 
     /** @schema ChallengeSpecSolverDns01Akamai#serviceConsumerDomain */
-    readonly serviceConsumerDomain: string
+    serviceConsumerDomain: string
 }
 
 /** Converts an object of type 'ChallengeSpecSolverDns01Akamai' to JSON representation. */
@@ -648,7 +648,7 @@ export interface ChallengeSpecSolverDns01AzureDns {
      *
      * @schema ChallengeSpecSolverDns01AzureDns#clientID
      */
-    readonly clientId?: string
+    clientId?: string
 
     /**
      * Auth: Azure Service Principal: A reference to a Secret containing the password associated
@@ -656,21 +656,21 @@ export interface ChallengeSpecSolverDns01AzureDns {
      *
      * @schema ChallengeSpecSolverDns01AzureDns#clientSecretSecretRef
      */
-    readonly clientSecretSecretRef?: ChallengeSpecSolverDns01AzureDnsClientSecretSecretRef
+    clientSecretSecretRef?: ChallengeSpecSolverDns01AzureDnsClientSecretSecretRef
 
     /**
      * Name of the Azure environment (default AzurePublicCloud)
      *
      * @schema ChallengeSpecSolverDns01AzureDns#environment
      */
-    readonly environment?: ChallengeSpecSolverDns01AzureDnsEnvironment
+    environment?: ChallengeSpecSolverDns01AzureDnsEnvironment
 
     /**
      * Name of the DNS zone that should be used
      *
      * @schema ChallengeSpecSolverDns01AzureDns#hostedZoneName
      */
-    readonly hostedZoneName?: string
+    hostedZoneName?: string
 
     /**
      * Auth: Azure Workload Identity or Azure Managed Service Identity: Settings to enable Azure
@@ -679,21 +679,21 @@ export interface ChallengeSpecSolverDns01AzureDns {
      *
      * @schema ChallengeSpecSolverDns01AzureDns#managedIdentity
      */
-    readonly managedIdentity?: ChallengeSpecSolverDns01AzureDnsManagedIdentity
+    managedIdentity?: ChallengeSpecSolverDns01AzureDnsManagedIdentity
 
     /**
      * Resource group the DNS zone is located in
      *
      * @schema ChallengeSpecSolverDns01AzureDns#resourceGroupName
      */
-    readonly resourceGroupName: string
+    resourceGroupName: string
 
     /**
      * ID of the Azure subscription
      *
      * @schema ChallengeSpecSolverDns01AzureDns#subscriptionID
      */
-    readonly subscriptionId: string
+    subscriptionId: string
 
     /**
      * Auth: Azure Service Principal: The TenantID of the Azure Service Principal used to
@@ -701,7 +701,7 @@ export interface ChallengeSpecSolverDns01AzureDns {
      *
      * @schema ChallengeSpecSolverDns01AzureDns#tenantID
      */
-    readonly tenantId?: string
+    tenantId?: string
 }
 
 /** Converts an object of type 'ChallengeSpecSolverDns01AzureDns' to JSON representation. */
@@ -747,10 +747,10 @@ export interface ChallengeSpecSolverDns01CloudDns {
      *
      * @schema ChallengeSpecSolverDns01CloudDns#hostedZoneName
      */
-    readonly hostedZoneName?: string
+    hostedZoneName?: string
 
     /** @schema ChallengeSpecSolverDns01CloudDns#project */
-    readonly project: string
+    project: string
 
     /**
      * A reference to a specific 'key' within a Secret resource. In some instances, `key` is a
@@ -758,7 +758,7 @@ export interface ChallengeSpecSolverDns01CloudDns {
      *
      * @schema ChallengeSpecSolverDns01CloudDns#serviceAccountSecretRef
      */
-    readonly serviceAccountSecretRef?: ChallengeSpecSolverDns01CloudDnsServiceAccountSecretRef
+    serviceAccountSecretRef?: ChallengeSpecSolverDns01CloudDnsServiceAccountSecretRef
 }
 
 /** Converts an object of type 'ChallengeSpecSolverDns01CloudDns' to JSON representation. */
@@ -796,21 +796,21 @@ export interface ChallengeSpecSolverDns01Cloudflare {
      *
      * @schema ChallengeSpecSolverDns01Cloudflare#apiKeySecretRef
      */
-    readonly apiKeySecretRef?: ChallengeSpecSolverDns01CloudflareApiKeySecretRef
+    apiKeySecretRef?: ChallengeSpecSolverDns01CloudflareApiKeySecretRef
 
     /**
      * API token used to authenticate with Cloudflare.
      *
      * @schema ChallengeSpecSolverDns01Cloudflare#apiTokenSecretRef
      */
-    readonly apiTokenSecretRef?: ChallengeSpecSolverDns01CloudflareApiTokenSecretRef
+    apiTokenSecretRef?: ChallengeSpecSolverDns01CloudflareApiTokenSecretRef
 
     /**
      * Email of the account, only required when using API key based authentication.
      *
      * @schema ChallengeSpecSolverDns01Cloudflare#email
      */
-    readonly email?: string
+    email?: string
 }
 
 /** Converts an object of type 'ChallengeSpecSolverDns01Cloudflare' to JSON representation. */
@@ -863,7 +863,7 @@ export interface ChallengeSpecSolverDns01Digitalocean {
      *
      * @schema ChallengeSpecSolverDns01Digitalocean#tokenSecretRef
      */
-    readonly tokenSecretRef: ChallengeSpecSolverDns01DigitaloceanTokenSecretRef
+    tokenSecretRef: ChallengeSpecSolverDns01DigitaloceanTokenSecretRef
 }
 
 /** Converts an object of type 'ChallengeSpecSolverDns01Digitalocean' to JSON representation. */
@@ -901,7 +901,7 @@ export interface ChallengeSpecSolverDns01Rfc2136 {
      *
      * @schema ChallengeSpecSolverDns01Rfc2136#nameserver
      */
-    readonly nameserver: string
+    nameserver: string
 
     /**
      * The TSIG Algorithm configured in the DNS supporting RFC2136. Used only when
@@ -910,7 +910,7 @@ export interface ChallengeSpecSolverDns01Rfc2136 {
      *
      * @schema ChallengeSpecSolverDns01Rfc2136#tsigAlgorithm
      */
-    readonly tsigAlgorithm?: string
+    tsigAlgorithm?: string
 
     /**
      * The TSIG Key name configured in the DNS. If `tsigSecretSecretRef` is defined, this field is
@@ -918,7 +918,7 @@ export interface ChallengeSpecSolverDns01Rfc2136 {
      *
      * @schema ChallengeSpecSolverDns01Rfc2136#tsigKeyName
      */
-    readonly tsigKeyName?: string
+    tsigKeyName?: string
 
     /**
      * The name of the secret containing the TSIG value. If `tsigKeyName` is defined, this field is
@@ -926,7 +926,7 @@ export interface ChallengeSpecSolverDns01Rfc2136 {
      *
      * @schema ChallengeSpecSolverDns01Rfc2136#tsigSecretSecretRef
      */
-    readonly tsigSecretSecretRef?: ChallengeSpecSolverDns01Rfc2136TsigSecretSecretRef
+    tsigSecretSecretRef?: ChallengeSpecSolverDns01Rfc2136TsigSecretSecretRef
 }
 
 /** Converts an object of type 'ChallengeSpecSolverDns01Rfc2136' to JSON representation. */
@@ -967,7 +967,7 @@ export interface ChallengeSpecSolverDns01Route53 {
      *
      * @schema ChallengeSpecSolverDns01Route53#accessKeyID
      */
-    readonly accessKeyId?: string
+    accessKeyId?: string
 
     /**
      * The SecretAccessKey is used for authentication. If set, pull the AWS access key ID from a key
@@ -978,14 +978,14 @@ export interface ChallengeSpecSolverDns01Route53 {
      *
      * @schema ChallengeSpecSolverDns01Route53#accessKeyIDSecretRef
      */
-    readonly accessKeyIdSecretRef?: ChallengeSpecSolverDns01Route53AccessKeyIdSecretRef
+    accessKeyIdSecretRef?: ChallengeSpecSolverDns01Route53AccessKeyIdSecretRef
 
     /**
      * Auth configures how cert-manager authenticates.
      *
      * @schema ChallengeSpecSolverDns01Route53#auth
      */
-    readonly auth?: ChallengeSpecSolverDns01Route53Auth
+    auth?: ChallengeSpecSolverDns01Route53Auth
 
     /**
      * If set, the provider will manage only this zone in Route53 and will not do a lookup using the
@@ -993,7 +993,7 @@ export interface ChallengeSpecSolverDns01Route53 {
      *
      * @schema ChallengeSpecSolverDns01Route53#hostedZoneID
      */
-    readonly hostedZoneId?: string
+    hostedZoneId?: string
 
     /**
      * Override the AWS region.
@@ -1025,7 +1025,7 @@ export interface ChallengeSpecSolverDns01Route53 {
      *
      * @schema ChallengeSpecSolverDns01Route53#region
      */
-    readonly region?: string
+    region?: string
 
     /**
      * Role is a Role ARN which the Route53 provider will assume using either the explicit
@@ -1034,7 +1034,7 @@ export interface ChallengeSpecSolverDns01Route53 {
      *
      * @schema ChallengeSpecSolverDns01Route53#role
      */
-    readonly role?: string
+    role?: string
 
     /**
      * The SecretAccessKey is used for authentication. If neither the Access Key nor Key ID are set,
@@ -1043,7 +1043,7 @@ export interface ChallengeSpecSolverDns01Route53 {
      *
      * @schema ChallengeSpecSolverDns01Route53#secretAccessKeySecretRef
      */
-    readonly secretAccessKeySecretRef?: ChallengeSpecSolverDns01Route53SecretAccessKeySecretRef
+    secretAccessKeySecretRef?: ChallengeSpecSolverDns01Route53SecretAccessKeySecretRef
 }
 
 /** Converts an object of type 'ChallengeSpecSolverDns01Route53' to JSON representation. */
@@ -1090,7 +1090,7 @@ export interface ChallengeSpecSolverDns01Webhook {
      *
      * @schema ChallengeSpecSolverDns01Webhook#config
      */
-    readonly config?: any
+    config?: any
 
     /**
      * The API group name that should be used when POSTing ChallengePayload resources to the webhook
@@ -1099,7 +1099,7 @@ export interface ChallengeSpecSolverDns01Webhook {
      *
      * @schema ChallengeSpecSolverDns01Webhook#groupName
      */
-    readonly groupName: string
+    groupName: string
 
     /**
      * The name of the solver to use, as defined in the webhook provider implementation. This will
@@ -1107,7 +1107,7 @@ export interface ChallengeSpecSolverDns01Webhook {
      *
      * @schema ChallengeSpecSolverDns01Webhook#solverName
      */
-    readonly solverName: string
+    solverName: string
 }
 
 /** Converts an object of type 'ChallengeSpecSolverDns01Webhook' to JSON representation. */
@@ -1146,7 +1146,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoute {
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoute#labels
      */
-    readonly labels?: { [key: string]: string }
+    labels?: { [key: string]: string }
 
     /**
      * When solving an HTTP-01 challenge, cert-manager creates an HTTPRoute. cert-manager needs to
@@ -1156,7 +1156,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoute {
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoute#parentRefs
      */
-    readonly parentRefs?: ChallengeSpecSolverHttp01GatewayHttpRouteParentRefs[]
+    parentRefs?: ChallengeSpecSolverHttp01GatewayHttpRouteParentRefs[]
 
     /**
      * Optional pod template used to configure the ACME challenge solver pods used for HTTP01
@@ -1164,7 +1164,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoute {
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoute#podTemplate
      */
-    readonly podTemplate?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplate
+    podTemplate?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplate
 
     /**
      * Optional service type for Kubernetes solver service. Supported values are NodePort or
@@ -1172,7 +1172,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoute {
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoute#serviceType
      */
-    readonly serviceType?: string
+    serviceType?: string
 }
 
 /** Converts an object of type 'ChallengeSpecSolverHttp01GatewayHttpRoute' to JSON representation. */
@@ -1220,7 +1220,7 @@ export interface ChallengeSpecSolverHttp01Ingress {
      *
      * @schema ChallengeSpecSolverHttp01Ingress#class
      */
-    readonly class?: string
+    class?: string
 
     /**
      * This field configures the field `ingressClassName` on the created Ingress resources used to
@@ -1230,7 +1230,7 @@ export interface ChallengeSpecSolverHttp01Ingress {
      *
      * @schema ChallengeSpecSolverHttp01Ingress#ingressClassName
      */
-    readonly ingressClassName?: string
+    ingressClassName?: string
 
     /**
      * Optional ingress template used to configure the ACME challenge solver ingress used for HTTP01
@@ -1238,7 +1238,7 @@ export interface ChallengeSpecSolverHttp01Ingress {
      *
      * @schema ChallengeSpecSolverHttp01Ingress#ingressTemplate
      */
-    readonly ingressTemplate?: ChallengeSpecSolverHttp01IngressIngressTemplate
+    ingressTemplate?: ChallengeSpecSolverHttp01IngressIngressTemplate
 
     /**
      * The name of the ingress resource that should have ACME challenge solving routes inserted into
@@ -1248,7 +1248,7 @@ export interface ChallengeSpecSolverHttp01Ingress {
      *
      * @schema ChallengeSpecSolverHttp01Ingress#name
      */
-    readonly name?: string
+    name?: string
 
     /**
      * Optional pod template used to configure the ACME challenge solver pods used for HTTP01
@@ -1256,7 +1256,7 @@ export interface ChallengeSpecSolverHttp01Ingress {
      *
      * @schema ChallengeSpecSolverHttp01Ingress#podTemplate
      */
-    readonly podTemplate?: ChallengeSpecSolverHttp01IngressPodTemplate
+    podTemplate?: ChallengeSpecSolverHttp01IngressPodTemplate
 
     /**
      * Optional service type for Kubernetes solver service. Supported values are NodePort or
@@ -1264,7 +1264,7 @@ export interface ChallengeSpecSolverHttp01Ingress {
      *
      * @schema ChallengeSpecSolverHttp01Ingress#serviceType
      */
-    readonly serviceType?: string
+    serviceType?: string
 }
 
 /** Converts an object of type 'ChallengeSpecSolverHttp01Ingress' to JSON representation. */
@@ -1306,7 +1306,7 @@ export interface ChallengeSpecSolverDns01AcmeDnsAccountSecretRef {
      *
      * @schema ChallengeSpecSolverDns01AcmeDnsAccountSecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the resource being referred to. More info:
@@ -1314,7 +1314,7 @@ export interface ChallengeSpecSolverDns01AcmeDnsAccountSecretRef {
      *
      * @schema ChallengeSpecSolverDns01AcmeDnsAccountSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -1353,7 +1353,7 @@ export interface ChallengeSpecSolverDns01AkamaiAccessTokenSecretRef {
      *
      * @schema ChallengeSpecSolverDns01AkamaiAccessTokenSecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the resource being referred to. More info:
@@ -1361,7 +1361,7 @@ export interface ChallengeSpecSolverDns01AkamaiAccessTokenSecretRef {
      *
      * @schema ChallengeSpecSolverDns01AkamaiAccessTokenSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -1400,7 +1400,7 @@ export interface ChallengeSpecSolverDns01AkamaiClientSecretSecretRef {
      *
      * @schema ChallengeSpecSolverDns01AkamaiClientSecretSecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the resource being referred to. More info:
@@ -1408,7 +1408,7 @@ export interface ChallengeSpecSolverDns01AkamaiClientSecretSecretRef {
      *
      * @schema ChallengeSpecSolverDns01AkamaiClientSecretSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -1447,7 +1447,7 @@ export interface ChallengeSpecSolverDns01AkamaiClientTokenSecretRef {
      *
      * @schema ChallengeSpecSolverDns01AkamaiClientTokenSecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the resource being referred to. More info:
@@ -1455,7 +1455,7 @@ export interface ChallengeSpecSolverDns01AkamaiClientTokenSecretRef {
      *
      * @schema ChallengeSpecSolverDns01AkamaiClientTokenSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -1494,7 +1494,7 @@ export interface ChallengeSpecSolverDns01AzureDnsClientSecretSecretRef {
      *
      * @schema ChallengeSpecSolverDns01AzureDnsClientSecretSecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the resource being referred to. More info:
@@ -1502,7 +1502,7 @@ export interface ChallengeSpecSolverDns01AzureDnsClientSecretSecretRef {
      *
      * @schema ChallengeSpecSolverDns01AzureDnsClientSecretSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -1557,7 +1557,7 @@ export interface ChallengeSpecSolverDns01AzureDnsManagedIdentity {
      *
      * @schema ChallengeSpecSolverDns01AzureDnsManagedIdentity#clientID
      */
-    readonly clientId?: string
+    clientId?: string
 
     /**
      * Resource ID of the managed identity, can not be used at the same time as clientID Cannot be
@@ -1565,7 +1565,7 @@ export interface ChallengeSpecSolverDns01AzureDnsManagedIdentity {
      *
      * @schema ChallengeSpecSolverDns01AzureDnsManagedIdentity#resourceID
      */
-    readonly resourceId?: string
+    resourceId?: string
 }
 
 /**
@@ -1604,7 +1604,7 @@ export interface ChallengeSpecSolverDns01CloudDnsServiceAccountSecretRef {
      *
      * @schema ChallengeSpecSolverDns01CloudDnsServiceAccountSecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the resource being referred to. More info:
@@ -1612,7 +1612,7 @@ export interface ChallengeSpecSolverDns01CloudDnsServiceAccountSecretRef {
      *
      * @schema ChallengeSpecSolverDns01CloudDnsServiceAccountSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -1651,7 +1651,7 @@ export interface ChallengeSpecSolverDns01CloudflareApiKeySecretRef {
      *
      * @schema ChallengeSpecSolverDns01CloudflareApiKeySecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the resource being referred to. More info:
@@ -1659,7 +1659,7 @@ export interface ChallengeSpecSolverDns01CloudflareApiKeySecretRef {
      *
      * @schema ChallengeSpecSolverDns01CloudflareApiKeySecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -1697,7 +1697,7 @@ export interface ChallengeSpecSolverDns01CloudflareApiTokenSecretRef {
      *
      * @schema ChallengeSpecSolverDns01CloudflareApiTokenSecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the resource being referred to. More info:
@@ -1705,7 +1705,7 @@ export interface ChallengeSpecSolverDns01CloudflareApiTokenSecretRef {
      *
      * @schema ChallengeSpecSolverDns01CloudflareApiTokenSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -1744,7 +1744,7 @@ export interface ChallengeSpecSolverDns01DigitaloceanTokenSecretRef {
      *
      * @schema ChallengeSpecSolverDns01DigitaloceanTokenSecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the resource being referred to. More info:
@@ -1752,7 +1752,7 @@ export interface ChallengeSpecSolverDns01DigitaloceanTokenSecretRef {
      *
      * @schema ChallengeSpecSolverDns01DigitaloceanTokenSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -1791,7 +1791,7 @@ export interface ChallengeSpecSolverDns01Rfc2136TsigSecretSecretRef {
      *
      * @schema ChallengeSpecSolverDns01Rfc2136TsigSecretSecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the resource being referred to. More info:
@@ -1799,7 +1799,7 @@ export interface ChallengeSpecSolverDns01Rfc2136TsigSecretSecretRef {
      *
      * @schema ChallengeSpecSolverDns01Rfc2136TsigSecretSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -1841,7 +1841,7 @@ export interface ChallengeSpecSolverDns01Route53AccessKeyIdSecretRef {
      *
      * @schema ChallengeSpecSolverDns01Route53AccessKeyIdSecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the resource being referred to. More info:
@@ -1849,7 +1849,7 @@ export interface ChallengeSpecSolverDns01Route53AccessKeyIdSecretRef {
      *
      * @schema ChallengeSpecSolverDns01Route53AccessKeyIdSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -1887,7 +1887,7 @@ export interface ChallengeSpecSolverDns01Route53Auth {
      *
      * @schema ChallengeSpecSolverDns01Route53Auth#kubernetes
      */
-    readonly kubernetes: ChallengeSpecSolverDns01Route53AuthKubernetes
+    kubernetes: ChallengeSpecSolverDns01Route53AuthKubernetes
 }
 
 /** Converts an object of type 'ChallengeSpecSolverDns01Route53Auth' to JSON representation. */
@@ -1923,7 +1923,7 @@ export interface ChallengeSpecSolverDns01Route53SecretAccessKeySecretRef {
      *
      * @schema ChallengeSpecSolverDns01Route53SecretAccessKeySecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the resource being referred to. More info:
@@ -1931,7 +1931,7 @@ export interface ChallengeSpecSolverDns01Route53SecretAccessKeySecretRef {
      *
      * @schema ChallengeSpecSolverDns01Route53SecretAccessKeySecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -1981,7 +1981,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRouteParentRefs {
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRouteParentRefs#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is kind of the referent.
@@ -1995,7 +1995,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRouteParentRefs {
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRouteParentRefs#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name is the name of the referent.
@@ -2004,7 +2004,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRouteParentRefs {
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRouteParentRefs#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the referent. When unspecified, this refers to the local
@@ -2028,7 +2028,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRouteParentRefs {
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRouteParentRefs#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Port is the network port this Route targets. It can be interpreted differently based on the
@@ -2059,7 +2059,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRouteParentRefs {
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRouteParentRefs#port
      */
-    readonly port?: number
+    port?: number
 
     /**
      * SectionName is the name of a section within the target resource. In the following resources,
@@ -2085,7 +2085,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRouteParentRefs {
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRouteParentRefs#sectionName
      */
-    readonly sectionName?: string
+    sectionName?: string
 }
 
 /**
@@ -2129,7 +2129,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplate {
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplate#metadata
      */
-    readonly metadata?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateMetadata
+    metadata?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateMetadata
 
     /**
      * PodSpec defines overrides for the HTTP01 challenge solver pod. Check
@@ -2138,7 +2138,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplate {
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplate#spec
      */
-    readonly spec?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpec
+    spec?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpec
 }
 
 /**
@@ -2178,7 +2178,7 @@ export interface ChallengeSpecSolverHttp01IngressIngressTemplate {
      *
      * @schema ChallengeSpecSolverHttp01IngressIngressTemplate#metadata
      */
-    readonly metadata?: ChallengeSpecSolverHttp01IngressIngressTemplateMetadata
+    metadata?: ChallengeSpecSolverHttp01IngressIngressTemplateMetadata
 }
 
 /**
@@ -2217,7 +2217,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplate {
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplate#metadata
      */
-    readonly metadata?: ChallengeSpecSolverHttp01IngressPodTemplateMetadata
+    metadata?: ChallengeSpecSolverHttp01IngressPodTemplateMetadata
 
     /**
      * PodSpec defines overrides for the HTTP01 challenge solver pod. Check
@@ -2226,7 +2226,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplate {
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplate#spec
      */
-    readonly spec?: ChallengeSpecSolverHttp01IngressPodTemplateSpec
+    spec?: ChallengeSpecSolverHttp01IngressPodTemplateSpec
 }
 
 /** Converts an object of type 'ChallengeSpecSolverHttp01IngressPodTemplate' to JSON representation. */
@@ -2263,7 +2263,7 @@ export interface ChallengeSpecSolverDns01Route53AuthKubernetes {
      *
      * @schema ChallengeSpecSolverDns01Route53AuthKubernetes#serviceAccountRef
      */
-    readonly serviceAccountRef: ChallengeSpecSolverDns01Route53AuthKubernetesServiceAccountRef
+    serviceAccountRef: ChallengeSpecSolverDns01Route53AuthKubernetesServiceAccountRef
 }
 
 /**
@@ -2303,14 +2303,14 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateMetadata {
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateMetadata#annotations
      */
-    readonly annotations?: { [key: string]: string }
+    annotations?: { [key: string]: string }
 
     /**
      * Labels that should be added to the created ACME HTTP01 solver pods.
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateMetadata#labels
      */
-    readonly labels?: { [key: string]: string }
+    labels?: { [key: string]: string }
 }
 
 /**
@@ -2361,14 +2361,14 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpec {
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpec#affinity
      */
-    readonly affinity?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinity
+    affinity?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinity
 
     /**
      * If specified, the pod's imagePullSecrets
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpec#imagePullSecrets
      */
-    readonly imagePullSecrets?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecImagePullSecrets[]
+    imagePullSecrets?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecImagePullSecrets[]
 
     /**
      * NodeSelector is a selector which must be true for the pod to fit on a node. Selector which
@@ -2377,35 +2377,35 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpec {
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpec#nodeSelector
      */
-    readonly nodeSelector?: { [key: string]: string }
+    nodeSelector?: { [key: string]: string }
 
     /**
      * If specified, the pod's priorityClassName.
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpec#priorityClassName
      */
-    readonly priorityClassName?: string
+    priorityClassName?: string
 
     /**
      * If specified, the pod's security context
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpec#securityContext
      */
-    readonly securityContext?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContext
+    securityContext?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContext
 
     /**
      * If specified, the pod's service account
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpec#serviceAccountName
      */
-    readonly serviceAccountName?: string
+    serviceAccountName?: string
 
     /**
      * If specified, the pod's tolerations.
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpec#tolerations
      */
-    readonly tolerations?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecTolerations[]
+    tolerations?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecTolerations[]
 }
 
 /**
@@ -2464,14 +2464,14 @@ export interface ChallengeSpecSolverHttp01IngressIngressTemplateMetadata {
      *
      * @schema ChallengeSpecSolverHttp01IngressIngressTemplateMetadata#annotations
      */
-    readonly annotations?: { [key: string]: string }
+    annotations?: { [key: string]: string }
 
     /**
      * Labels that should be added to the created ACME HTTP01 solver ingress.
      *
      * @schema ChallengeSpecSolverHttp01IngressIngressTemplateMetadata#labels
      */
-    readonly labels?: { [key: string]: string }
+    labels?: { [key: string]: string }
 }
 
 /**
@@ -2522,14 +2522,14 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateMetadata {
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateMetadata#annotations
      */
-    readonly annotations?: { [key: string]: string }
+    annotations?: { [key: string]: string }
 
     /**
      * Labels that should be added to the created ACME HTTP01 solver pods.
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateMetadata#labels
      */
-    readonly labels?: { [key: string]: string }
+    labels?: { [key: string]: string }
 }
 
 /**
@@ -2580,14 +2580,14 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpec {
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpec#affinity
      */
-    readonly affinity?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinity
+    affinity?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinity
 
     /**
      * If specified, the pod's imagePullSecrets
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpec#imagePullSecrets
      */
-    readonly imagePullSecrets?: ChallengeSpecSolverHttp01IngressPodTemplateSpecImagePullSecrets[]
+    imagePullSecrets?: ChallengeSpecSolverHttp01IngressPodTemplateSpecImagePullSecrets[]
 
     /**
      * NodeSelector is a selector which must be true for the pod to fit on a node. Selector which
@@ -2596,35 +2596,35 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpec {
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpec#nodeSelector
      */
-    readonly nodeSelector?: { [key: string]: string }
+    nodeSelector?: { [key: string]: string }
 
     /**
      * If specified, the pod's priorityClassName.
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpec#priorityClassName
      */
-    readonly priorityClassName?: string
+    priorityClassName?: string
 
     /**
      * If specified, the pod's security context
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpec#securityContext
      */
-    readonly securityContext?: ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext
+    securityContext?: ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext
 
     /**
      * If specified, the pod's service account
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpec#serviceAccountName
      */
-    readonly serviceAccountName?: string
+    serviceAccountName?: string
 
     /**
      * If specified, the pod's tolerations.
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpec#tolerations
      */
-    readonly tolerations?: ChallengeSpecSolverHttp01IngressPodTemplateSpecTolerations[]
+    tolerations?: ChallengeSpecSolverHttp01IngressPodTemplateSpecTolerations[]
 }
 
 /**
@@ -2682,14 +2682,14 @@ export interface ChallengeSpecSolverDns01Route53AuthKubernetesServiceAccountRef 
      *
      * @schema ChallengeSpecSolverDns01Route53AuthKubernetesServiceAccountRef#audiences
      */
-    readonly audiences?: string[]
+    audiences?: string[]
 
     /**
      * Name of the ServiceAccount used to request a token.
      *
      * @schema ChallengeSpecSolverDns01Route53AuthKubernetesServiceAccountRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -2726,7 +2726,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinity#nodeAffinity
      */
-    readonly nodeAffinity?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinity
+    nodeAffinity?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinity
 
     /**
      * Describes pod affinity scheduling rules (e.g. co-locate this pod in the same node, zone, etc.
@@ -2734,7 +2734,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinity#podAffinity
      */
-    readonly podAffinity?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinity
+    podAffinity?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinity
 
     /**
      * Describes pod anti-affinity scheduling rules (e.g. avoid putting this pod in the same node,
@@ -2742,7 +2742,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinity#podAntiAffinity
      */
-    readonly podAntiAffinity?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinity
+    podAntiAffinity?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinity
 }
 
 /**
@@ -2793,7 +2793,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecImagePu
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecImagePullSecrets#name
      */
-    readonly name?: string
+    name?: string
 }
 
 /**
@@ -2838,7 +2838,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContext#fsGroup
      */
-    readonly fsGroup?: number
+    fsGroup?: number
 
     /**
      * FsGroupChangePolicy defines behavior of changing ownership and permission of the volume
@@ -2850,7 +2850,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContext#fsGroupChangePolicy
      */
-    readonly fsGroupChangePolicy?: string
+    fsGroupChangePolicy?: string
 
     /**
      * The GID to run the entrypoint of the container process. Uses runtime default if unset. May
@@ -2860,7 +2860,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContext#runAsGroup
      */
-    readonly runAsGroup?: number
+    runAsGroup?: number
 
     /**
      * Indicates that the container must run as a non-root user. If true, the Kubelet will validate
@@ -2871,7 +2871,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContext#runAsNonRoot
      */
-    readonly runAsNonRoot?: boolean
+    runAsNonRoot?: boolean
 
     /**
      * The UID to run the entrypoint of the container process. Defaults to user specified in image
@@ -2882,7 +2882,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurit
      * @default user specified in image metadata if unspecified.
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContext#runAsUser
      */
-    readonly runAsUser?: number
+    runAsUser?: number
 
     /**
      * The SELinux context to be applied to all containers. If unspecified, the container runtime
@@ -2893,7 +2893,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContext#seLinuxOptions
      */
-    readonly seLinuxOptions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContextSeLinuxOptions
+    seLinuxOptions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContextSeLinuxOptions
 
     /**
      * The seccomp options to use by the containers in this pod. Note that this field cannot be set
@@ -2901,7 +2901,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContext#seccompProfile
      */
-    readonly seccompProfile?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContextSeccompProfile
+    seccompProfile?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContextSeccompProfile
 
     /**
      * A list of groups applied to the first process run in each container, in addition to the
@@ -2913,7 +2913,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContext#supplementalGroups
      */
-    readonly supplementalGroups?: number[]
+    supplementalGroups?: number[]
 
     /**
      * Sysctls hold a list of namespaced sysctls used for the pod. Pods with unsupported sysctls (by
@@ -2922,7 +2922,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContext#sysctls
      */
-    readonly sysctls?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContextSysctls[]
+    sysctls?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContextSysctls[]
 }
 
 /**
@@ -2977,7 +2977,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecTolerat
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecTolerations#effect
      */
-    readonly effect?: string
+    effect?: string
 
     /**
      * Key is the taint key that the toleration applies to. Empty means match all taint keys. If the
@@ -2986,7 +2986,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecTolerat
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecTolerations#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Operator represents a key's relationship to the value. Valid operators are Exists and Equal.
@@ -2996,7 +2996,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecTolerat
      * @default Equal.
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecTolerations#operator
      */
-    readonly operator?: string
+    operator?: string
 
     /**
      * TolerationSeconds represents the period of time the toleration (which must be of effect
@@ -3006,7 +3006,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecTolerat
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecTolerations#tolerationSeconds
      */
-    readonly tolerationSeconds?: number
+    tolerationSeconds?: number
 
     /**
      * Value is the taint value the toleration matches to. If the operator is Exists, the value
@@ -3014,7 +3014,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecTolerat
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecTolerations#value
      */
-    readonly value?: string
+    value?: string
 }
 
 /**
@@ -3054,7 +3054,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinity {
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinity#nodeAffinity
      */
-    readonly nodeAffinity?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinity
+    nodeAffinity?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinity
 
     /**
      * Describes pod affinity scheduling rules (e.g. co-locate this pod in the same node, zone, etc.
@@ -3062,7 +3062,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinity {
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinity#podAffinity
      */
-    readonly podAffinity?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinity
+    podAffinity?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinity
 
     /**
      * Describes pod anti-affinity scheduling rules (e.g. avoid putting this pod in the same node,
@@ -3070,7 +3070,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinity {
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinity#podAntiAffinity
      */
-    readonly podAntiAffinity?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinity
+    podAntiAffinity?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinity
 }
 
 /**
@@ -3119,7 +3119,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecImagePullSecrets
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecImagePullSecrets#name
      */
-    readonly name?: string
+    name?: string
 }
 
 /**
@@ -3163,7 +3163,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext 
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext#fsGroup
      */
-    readonly fsGroup?: number
+    fsGroup?: number
 
     /**
      * FsGroupChangePolicy defines behavior of changing ownership and permission of the volume
@@ -3175,7 +3175,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext 
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext#fsGroupChangePolicy
      */
-    readonly fsGroupChangePolicy?: string
+    fsGroupChangePolicy?: string
 
     /**
      * The GID to run the entrypoint of the container process. Uses runtime default if unset. May
@@ -3185,7 +3185,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext 
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext#runAsGroup
      */
-    readonly runAsGroup?: number
+    runAsGroup?: number
 
     /**
      * Indicates that the container must run as a non-root user. If true, the Kubelet will validate
@@ -3196,7 +3196,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext 
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext#runAsNonRoot
      */
-    readonly runAsNonRoot?: boolean
+    runAsNonRoot?: boolean
 
     /**
      * The UID to run the entrypoint of the container process. Defaults to user specified in image
@@ -3207,7 +3207,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext 
      * @default user specified in image metadata if unspecified.
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext#runAsUser
      */
-    readonly runAsUser?: number
+    runAsUser?: number
 
     /**
      * The SELinux context to be applied to all containers. If unspecified, the container runtime
@@ -3218,7 +3218,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext 
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext#seLinuxOptions
      */
-    readonly seLinuxOptions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextSeLinuxOptions
+    seLinuxOptions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextSeLinuxOptions
 
     /**
      * The seccomp options to use by the containers in this pod. Note that this field cannot be set
@@ -3226,7 +3226,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext 
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext#seccompProfile
      */
-    readonly seccompProfile?: ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextSeccompProfile
+    seccompProfile?: ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextSeccompProfile
 
     /**
      * A list of groups applied to the first process run in each container, in addition to the
@@ -3238,7 +3238,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext 
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext#supplementalGroups
      */
-    readonly supplementalGroups?: number[]
+    supplementalGroups?: number[]
 
     /**
      * Sysctls hold a list of namespaced sysctls used for the pod. Pods with unsupported sysctls (by
@@ -3247,7 +3247,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext 
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContext#sysctls
      */
-    readonly sysctls?: ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextSysctls[]
+    sysctls?: ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextSysctls[]
 }
 
 /**
@@ -3301,7 +3301,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecTolerations {
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecTolerations#effect
      */
-    readonly effect?: string
+    effect?: string
 
     /**
      * Key is the taint key that the toleration applies to. Empty means match all taint keys. If the
@@ -3310,7 +3310,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecTolerations {
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecTolerations#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Operator represents a key's relationship to the value. Valid operators are Exists and Equal.
@@ -3320,7 +3320,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecTolerations {
      * @default Equal.
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecTolerations#operator
      */
-    readonly operator?: string
+    operator?: string
 
     /**
      * TolerationSeconds represents the period of time the toleration (which must be of effect
@@ -3330,7 +3330,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecTolerations {
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecTolerations#tolerationSeconds
      */
-    readonly tolerationSeconds?: number
+    tolerationSeconds?: number
 
     /**
      * Value is the taint value the toleration matches to. If the operator is Exists, the value
@@ -3338,7 +3338,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecTolerations {
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecTolerations#value
      */
-    readonly value?: string
+    value?: string
 }
 
 /**
@@ -3384,7 +3384,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinity#preferredDuringSchedulingIgnoredDuringExecution
      */
-    readonly preferredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecution[]
+    preferredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecution[]
 
     /**
      * If the affinity requirements specified by this field are not met at scheduling time, the pod
@@ -3394,7 +3394,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinity#requiredDuringSchedulingIgnoredDuringExecution
      */
-    readonly requiredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecution
+    requiredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecution
 }
 
 /**
@@ -3447,7 +3447,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinity#preferredDuringSchedulingIgnoredDuringExecution
      */
-    readonly preferredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecution[]
+    preferredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecution[]
 
     /**
      * If the affinity requirements specified by this field are not met at scheduling time, the pod
@@ -3459,7 +3459,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinity#requiredDuringSchedulingIgnoredDuringExecution
      */
-    readonly requiredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecution[]
+    requiredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecution[]
 }
 
 /**
@@ -3514,7 +3514,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinity#preferredDuringSchedulingIgnoredDuringExecution
      */
-    readonly preferredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecution[]
+    preferredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecution[]
 
     /**
      * If the anti-affinity requirements specified by this field are not met at scheduling time, the
@@ -3526,7 +3526,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinity#requiredDuringSchedulingIgnoredDuringExecution
      */
-    readonly requiredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution[]
+    requiredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution[]
 }
 
 /**
@@ -3577,28 +3577,28 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContextSeLinuxOptions#level
      */
-    readonly level?: string
+    level?: string
 
     /**
      * Role is a SELinux role label that applies to the container.
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContextSeLinuxOptions#role
      */
-    readonly role?: string
+    role?: string
 
     /**
      * Type is a SELinux type label that applies to the container.
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContextSeLinuxOptions#type
      */
-    readonly type?: string
+    type?: string
 
     /**
      * User is a SELinux user label that applies to the container.
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContextSeLinuxOptions#user
      */
-    readonly user?: string
+    user?: string
 }
 
 /**
@@ -3644,7 +3644,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContextSeccompProfile#localhostProfile
      */
-    readonly localhostProfile?: string
+    localhostProfile?: string
 
     /**
      * Type indicates which kind of seccomp profile will be applied. Valid options are:
@@ -3654,7 +3654,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContextSeccompProfile#type
      */
-    readonly type: string
+    type: string
 }
 
 /**
@@ -3694,14 +3694,14 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContextSysctls#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value of a property to set
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecSecurityContextSysctls#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -3745,7 +3745,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinity#preferredDuringSchedulingIgnoredDuringExecution
      */
-    readonly preferredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecution[]
+    preferredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecution[]
 
     /**
      * If the affinity requirements specified by this field are not met at scheduling time, the pod
@@ -3755,7 +3755,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinity#requiredDuringSchedulingIgnoredDuringExecution
      */
-    readonly requiredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecution
+    requiredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecution
 }
 
 /**
@@ -3807,7 +3807,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinity#preferredDuringSchedulingIgnoredDuringExecution
      */
-    readonly preferredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecution[]
+    preferredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecution[]
 
     /**
      * If the affinity requirements specified by this field are not met at scheduling time, the pod
@@ -3819,7 +3819,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinity#requiredDuringSchedulingIgnoredDuringExecution
      */
-    readonly requiredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecution[]
+    requiredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecution[]
 }
 
 /**
@@ -3873,7 +3873,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinity#preferredDuringSchedulingIgnoredDuringExecution
      */
-    readonly preferredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecution[]
+    preferredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecution[]
 
     /**
      * If the anti-affinity requirements specified by this field are not met at scheduling time, the
@@ -3885,7 +3885,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinity#requiredDuringSchedulingIgnoredDuringExecution
      */
-    readonly requiredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution[]
+    requiredDuringSchedulingIgnoredDuringExecution?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution[]
 }
 
 /**
@@ -3935,28 +3935,28 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextS
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextSeLinuxOptions#level
      */
-    readonly level?: string
+    level?: string
 
     /**
      * Role is a SELinux role label that applies to the container.
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextSeLinuxOptions#role
      */
-    readonly role?: string
+    role?: string
 
     /**
      * Type is a SELinux type label that applies to the container.
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextSeLinuxOptions#type
      */
-    readonly type?: string
+    type?: string
 
     /**
      * User is a SELinux user label that applies to the container.
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextSeLinuxOptions#user
      */
-    readonly user?: string
+    user?: string
 }
 
 /**
@@ -4000,7 +4000,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextS
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextSeccompProfile#localhostProfile
      */
-    readonly localhostProfile?: string
+    localhostProfile?: string
 
     /**
      * Type indicates which kind of seccomp profile will be applied. Valid options are:
@@ -4010,7 +4010,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextS
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextSeccompProfile#type
      */
-    readonly type: string
+    type: string
 }
 
 /**
@@ -4048,14 +4048,14 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextS
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextSysctls#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value of a property to set
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecSecurityContextSysctls#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -4093,14 +4093,14 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecution#preference
      */
-    readonly preference: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreference
+    preference: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreference
 
     /**
      * Weight associated with matching the corresponding nodeSelectorTerm, in the range 1-100.
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecution#weight
      */
-    readonly weight: number
+    weight: number
 }
 
 /**
@@ -4146,7 +4146,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecution#nodeSelectorTerms
      */
-    readonly nodeSelectorTerms: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTerms[]
+    nodeSelectorTerms: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTerms[]
 }
 
 /**
@@ -4190,14 +4190,14 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecution#podAffinityTerm
      */
-    readonly podAffinityTerm: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm
+    podAffinityTerm: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm
 
     /**
      * Weight associated with matching the corresponding podAffinityTerm, in the range 1-100.
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecution#weight
      */
-    readonly weight: number
+    weight: number
 }
 
 /**
@@ -4244,7 +4244,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecution#labelSelector
      */
-    readonly labelSelector?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector
+    labelSelector?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector
 
     /**
      * MatchLabelKeys is a set of pod label keys to select which pods will be taken into
@@ -4258,7 +4258,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecution#matchLabelKeys
      */
-    readonly matchLabelKeys?: string[]
+    matchLabelKeys?: string[]
 
     /**
      * MismatchLabelKeys is a set of pod label keys to select which pods will be taken into
@@ -4273,7 +4273,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecution#mismatchLabelKeys
      */
-    readonly mismatchLabelKeys?: string[]
+    mismatchLabelKeys?: string[]
 
     /**
      * A label query over the set of namespaces that the term applies to. The term is applied to the
@@ -4283,7 +4283,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecution#namespaceSelector
      */
-    readonly namespaceSelector?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector
+    namespaceSelector?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector
 
     /**
      * Namespaces specifies a static list of namespace names that the term applies to. The term is
@@ -4293,7 +4293,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecution#namespaces
      */
-    readonly namespaces?: string[]
+    namespaces?: string[]
 
     /**
      * This pod should be co-located (affinity) or not co-located (anti-affinity) with the pods
@@ -4303,7 +4303,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecution#topologyKey
      */
-    readonly topologyKey: string
+    topologyKey: string
 }
 
 /**
@@ -4354,14 +4354,14 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecution#podAffinityTerm
      */
-    readonly podAffinityTerm: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm
+    podAffinityTerm: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm
 
     /**
      * Weight associated with matching the corresponding podAffinityTerm, in the range 1-100.
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecution#weight
      */
-    readonly weight: number
+    weight: number
 }
 
 /**
@@ -4408,7 +4408,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution#labelSelector
      */
-    readonly labelSelector?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector
+    labelSelector?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector
 
     /**
      * MatchLabelKeys is a set of pod label keys to select which pods will be taken into
@@ -4422,7 +4422,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution#matchLabelKeys
      */
-    readonly matchLabelKeys?: string[]
+    matchLabelKeys?: string[]
 
     /**
      * MismatchLabelKeys is a set of pod label keys to select which pods will be taken into
@@ -4437,7 +4437,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution#mismatchLabelKeys
      */
-    readonly mismatchLabelKeys?: string[]
+    mismatchLabelKeys?: string[]
 
     /**
      * A label query over the set of namespaces that the term applies to. The term is applied to the
@@ -4447,7 +4447,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution#namespaceSelector
      */
-    readonly namespaceSelector?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector
+    namespaceSelector?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector
 
     /**
      * Namespaces specifies a static list of namespace names that the term applies to. The term is
@@ -4457,7 +4457,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution#namespaces
      */
-    readonly namespaces?: string[]
+    namespaces?: string[]
 
     /**
      * This pod should be co-located (affinity) or not co-located (anti-affinity) with the pods
@@ -4467,7 +4467,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution#topologyKey
      */
-    readonly topologyKey: string
+    topologyKey: string
 }
 
 /**
@@ -4518,14 +4518,14 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecution#preference
      */
-    readonly preference: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreference
+    preference: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreference
 
     /**
      * Weight associated with matching the corresponding nodeSelectorTerm, in the range 1-100.
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecution#weight
      */
-    readonly weight: number
+    weight: number
 }
 
 /**
@@ -4571,7 +4571,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecution#nodeSelectorTerms
      */
-    readonly nodeSelectorTerms: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTerms[]
+    nodeSelectorTerms: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTerms[]
 }
 
 /**
@@ -4615,14 +4615,14 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecution#podAffinityTerm
      */
-    readonly podAffinityTerm: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm
+    podAffinityTerm: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm
 
     /**
      * Weight associated with matching the corresponding podAffinityTerm, in the range 1-100.
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecution#weight
      */
-    readonly weight: number
+    weight: number
 }
 
 /**
@@ -4669,7 +4669,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecution#labelSelector
      */
-    readonly labelSelector?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector
+    labelSelector?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector
 
     /**
      * MatchLabelKeys is a set of pod label keys to select which pods will be taken into
@@ -4683,7 +4683,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecution#matchLabelKeys
      */
-    readonly matchLabelKeys?: string[]
+    matchLabelKeys?: string[]
 
     /**
      * MismatchLabelKeys is a set of pod label keys to select which pods will be taken into
@@ -4698,7 +4698,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecution#mismatchLabelKeys
      */
-    readonly mismatchLabelKeys?: string[]
+    mismatchLabelKeys?: string[]
 
     /**
      * A label query over the set of namespaces that the term applies to. The term is applied to the
@@ -4708,7 +4708,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecution#namespaceSelector
      */
-    readonly namespaceSelector?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector
+    namespaceSelector?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector
 
     /**
      * Namespaces specifies a static list of namespace names that the term applies to. The term is
@@ -4718,7 +4718,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecution#namespaces
      */
-    readonly namespaces?: string[]
+    namespaces?: string[]
 
     /**
      * This pod should be co-located (affinity) or not co-located (anti-affinity) with the pods
@@ -4728,7 +4728,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecution#topologyKey
      */
-    readonly topologyKey: string
+    topologyKey: string
 }
 
 /**
@@ -4779,14 +4779,14 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecution#podAffinityTerm
      */
-    readonly podAffinityTerm: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm
+    podAffinityTerm: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm
 
     /**
      * Weight associated with matching the corresponding podAffinityTerm, in the range 1-100.
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecution#weight
      */
-    readonly weight: number
+    weight: number
 }
 
 /**
@@ -4833,7 +4833,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution#labelSelector
      */
-    readonly labelSelector?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector
+    labelSelector?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector
 
     /**
      * MatchLabelKeys is a set of pod label keys to select which pods will be taken into
@@ -4847,7 +4847,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution#matchLabelKeys
      */
-    readonly matchLabelKeys?: string[]
+    matchLabelKeys?: string[]
 
     /**
      * MismatchLabelKeys is a set of pod label keys to select which pods will be taken into
@@ -4862,7 +4862,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution#mismatchLabelKeys
      */
-    readonly mismatchLabelKeys?: string[]
+    mismatchLabelKeys?: string[]
 
     /**
      * A label query over the set of namespaces that the term applies to. The term is applied to the
@@ -4872,7 +4872,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution#namespaceSelector
      */
-    readonly namespaceSelector?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector
+    namespaceSelector?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector
 
     /**
      * Namespaces specifies a static list of namespace names that the term applies to. The term is
@@ -4882,7 +4882,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution#namespaces
      */
-    readonly namespaces?: string[]
+    namespaces?: string[]
 
     /**
      * This pod should be co-located (affinity) or not co-located (anti-affinity) with the pods
@@ -4892,7 +4892,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution#topologyKey
      */
-    readonly topologyKey: string
+    topologyKey: string
 }
 
 /**
@@ -4942,14 +4942,14 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreference#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchExpressions[]
 
     /**
      * A list of node selector requirements by node's fields.
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreference#matchFields
      */
-    readonly matchFields?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchFields[]
+    matchFields?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchFields[]
 }
 
 /**
@@ -4998,14 +4998,14 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTerms#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchExpressions[]
 
     /**
      * A list of node selector requirements by node's fields.
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTerms#matchFields
      */
-    readonly matchFields?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchFields[]
+    matchFields?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchFields[]
 }
 
 /**
@@ -5054,7 +5054,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#labelSelector
      */
-    readonly labelSelector?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector
+    labelSelector?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector
 
     /**
      * MatchLabelKeys is a set of pod label keys to select which pods will be taken into
@@ -5068,7 +5068,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#matchLabelKeys
      */
-    readonly matchLabelKeys?: string[]
+    matchLabelKeys?: string[]
 
     /**
      * MismatchLabelKeys is a set of pod label keys to select which pods will be taken into
@@ -5083,7 +5083,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#mismatchLabelKeys
      */
-    readonly mismatchLabelKeys?: string[]
+    mismatchLabelKeys?: string[]
 
     /**
      * A label query over the set of namespaces that the term applies to. The term is applied to the
@@ -5093,7 +5093,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#namespaceSelector
      */
-    readonly namespaceSelector?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector
+    namespaceSelector?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector
 
     /**
      * Namespaces specifies a static list of namespace names that the term applies to. The term is
@@ -5103,7 +5103,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#namespaces
      */
-    readonly namespaces?: string[]
+    namespaces?: string[]
 
     /**
      * This pod should be co-located (affinity) or not co-located (anti-affinity) with the pods
@@ -5113,7 +5113,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#topologyKey
      */
-    readonly topologyKey: string
+    topologyKey: string
 }
 
 /**
@@ -5164,7 +5164,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -5173,7 +5173,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -5226,7 +5226,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -5235,7 +5235,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -5286,7 +5286,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#labelSelector
      */
-    readonly labelSelector?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector
+    labelSelector?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector
 
     /**
      * MatchLabelKeys is a set of pod label keys to select which pods will be taken into
@@ -5300,7 +5300,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#matchLabelKeys
      */
-    readonly matchLabelKeys?: string[]
+    matchLabelKeys?: string[]
 
     /**
      * MismatchLabelKeys is a set of pod label keys to select which pods will be taken into
@@ -5315,7 +5315,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#mismatchLabelKeys
      */
-    readonly mismatchLabelKeys?: string[]
+    mismatchLabelKeys?: string[]
 
     /**
      * A label query over the set of namespaces that the term applies to. The term is applied to the
@@ -5325,7 +5325,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#namespaceSelector
      */
-    readonly namespaceSelector?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector
+    namespaceSelector?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector
 
     /**
      * Namespaces specifies a static list of namespace names that the term applies to. The term is
@@ -5335,7 +5335,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#namespaces
      */
-    readonly namespaces?: string[]
+    namespaces?: string[]
 
     /**
      * This pod should be co-located (affinity) or not co-located (anti-affinity) with the pods
@@ -5345,7 +5345,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#topologyKey
      */
-    readonly topologyKey: string
+    topologyKey: string
 }
 
 /**
@@ -5396,7 +5396,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -5405,7 +5405,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -5458,7 +5458,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -5467,7 +5467,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -5517,14 +5517,14 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreference#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchExpressions[]
 
     /**
      * A list of node selector requirements by node's fields.
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreference#matchFields
      */
-    readonly matchFields?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchFields[]
+    matchFields?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchFields[]
 }
 
 /**
@@ -5573,14 +5573,14 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTerms#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchExpressions[]
 
     /**
      * A list of node selector requirements by node's fields.
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTerms#matchFields
      */
-    readonly matchFields?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchFields[]
+    matchFields?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchFields[]
 }
 
 /**
@@ -5629,7 +5629,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#labelSelector
      */
-    readonly labelSelector?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector
+    labelSelector?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector
 
     /**
      * MatchLabelKeys is a set of pod label keys to select which pods will be taken into
@@ -5643,7 +5643,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#matchLabelKeys
      */
-    readonly matchLabelKeys?: string[]
+    matchLabelKeys?: string[]
 
     /**
      * MismatchLabelKeys is a set of pod label keys to select which pods will be taken into
@@ -5658,7 +5658,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#mismatchLabelKeys
      */
-    readonly mismatchLabelKeys?: string[]
+    mismatchLabelKeys?: string[]
 
     /**
      * A label query over the set of namespaces that the term applies to. The term is applied to the
@@ -5668,7 +5668,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#namespaceSelector
      */
-    readonly namespaceSelector?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector
+    namespaceSelector?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector
 
     /**
      * Namespaces specifies a static list of namespace names that the term applies to. The term is
@@ -5678,7 +5678,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#namespaces
      */
-    readonly namespaces?: string[]
+    namespaces?: string[]
 
     /**
      * This pod should be co-located (affinity) or not co-located (anti-affinity) with the pods
@@ -5688,7 +5688,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#topologyKey
      */
-    readonly topologyKey: string
+    topologyKey: string
 }
 
 /**
@@ -5739,7 +5739,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -5748,7 +5748,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -5801,7 +5801,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -5810,7 +5810,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -5861,7 +5861,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#labelSelector
      */
-    readonly labelSelector?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector
+    labelSelector?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector
 
     /**
      * MatchLabelKeys is a set of pod label keys to select which pods will be taken into
@@ -5875,7 +5875,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#matchLabelKeys
      */
-    readonly matchLabelKeys?: string[]
+    matchLabelKeys?: string[]
 
     /**
      * MismatchLabelKeys is a set of pod label keys to select which pods will be taken into
@@ -5890,7 +5890,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#mismatchLabelKeys
      */
-    readonly mismatchLabelKeys?: string[]
+    mismatchLabelKeys?: string[]
 
     /**
      * A label query over the set of namespaces that the term applies to. The term is applied to the
@@ -5900,7 +5900,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#namespaceSelector
      */
-    readonly namespaceSelector?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector
+    namespaceSelector?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector
 
     /**
      * Namespaces specifies a static list of namespace names that the term applies to. The term is
@@ -5910,7 +5910,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#namespaces
      */
-    readonly namespaces?: string[]
+    namespaces?: string[]
 
     /**
      * This pod should be co-located (affinity) or not co-located (anti-affinity) with the pods
@@ -5920,7 +5920,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#topologyKey
      */
-    readonly topologyKey: string
+    topologyKey: string
 }
 
 /**
@@ -5971,7 +5971,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -5980,7 +5980,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -6033,7 +6033,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -6042,7 +6042,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -6093,7 +6093,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists,
@@ -6101,7 +6101,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * An array of string values. If the operator is In or NotIn, the values array must be
@@ -6111,7 +6111,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -6153,7 +6153,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchFields#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists,
@@ -6161,7 +6161,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchFields#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * An array of string values. If the operator is In or NotIn, the values array must be
@@ -6171,7 +6171,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchFields#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -6213,7 +6213,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists,
@@ -6221,7 +6221,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * An array of string values. If the operator is In or NotIn, the values array must be
@@ -6231,7 +6231,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -6273,7 +6273,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchFields#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists,
@@ -6281,7 +6281,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchFields#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * An array of string values. If the operator is In or NotIn, the values array must be
@@ -6291,7 +6291,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchFields#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -6333,7 +6333,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -6342,7 +6342,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -6395,7 +6395,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -6404,7 +6404,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -6455,7 +6455,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -6463,7 +6463,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -6472,7 +6472,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -6514,7 +6514,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -6522,7 +6522,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -6531,7 +6531,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -6573,7 +6573,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -6582,7 +6582,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -6635,7 +6635,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -6644,7 +6644,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -6695,7 +6695,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -6703,7 +6703,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -6712,7 +6712,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -6754,7 +6754,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -6762,7 +6762,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -6771,7 +6771,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -6813,7 +6813,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists,
@@ -6821,7 +6821,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * An array of string values. If the operator is In or NotIn, the values array must be
@@ -6831,7 +6831,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -6873,7 +6873,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchFields#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists,
@@ -6881,7 +6881,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchFields#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * An array of string values. If the operator is In or NotIn, the values array must be
@@ -6891,7 +6891,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchFields#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -6933,7 +6933,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists,
@@ -6941,7 +6941,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * An array of string values. If the operator is In or NotIn, the values array must be
@@ -6951,7 +6951,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -6993,7 +6993,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchFields#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists,
@@ -7001,7 +7001,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchFields#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * An array of string values. If the operator is In or NotIn, the values array must be
@@ -7011,7 +7011,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffi
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchFields#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -7053,7 +7053,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -7062,7 +7062,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -7115,7 +7115,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -7124,7 +7124,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -7175,7 +7175,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -7183,7 +7183,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -7192,7 +7192,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -7234,7 +7234,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -7242,7 +7242,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -7251,7 +7251,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -7293,7 +7293,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -7302,7 +7302,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -7355,7 +7355,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector#matchExpressions
      */
-    readonly matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions[]
+    matchExpressions?: ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -7364,7 +7364,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -7415,7 +7415,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -7423,7 +7423,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -7432,7 +7432,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -7474,7 +7474,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -7482,7 +7482,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -7491,7 +7491,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -7533,7 +7533,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -7541,7 +7541,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -7550,7 +7550,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -7592,7 +7592,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -7600,7 +7600,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -7609,7 +7609,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -7651,7 +7651,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -7659,7 +7659,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -7668,7 +7668,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -7710,7 +7710,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -7718,7 +7718,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -7727,7 +7727,7 @@ export interface ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinit
      *
      * @schema ChallengeSpecSolverHttp01GatewayHttpRoutePodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -7769,7 +7769,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -7777,7 +7777,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -7786,7 +7786,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -7828,7 +7828,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -7836,7 +7836,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -7845,7 +7845,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffin
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -7887,7 +7887,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -7895,7 +7895,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -7904,7 +7904,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -7946,7 +7946,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -7954,7 +7954,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -7963,7 +7963,7 @@ export interface ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiA
      *
      * @schema ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -8000,7 +8000,7 @@ export function toJson_ChallengeSpecSolverHttp01IngressPodTemplateSpecAffinityPo
  */
 export class Order extends ApiObject {
     /** Returns the apiVersion and kind for "Order" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "acme.cert-manager.io/v1",
         kind: "Order"
     }
@@ -8051,10 +8051,10 @@ export class Order extends ApiObject {
  */
 export interface OrderProps {
     /** @schema Order#metadata */
-    readonly metadata: ApiObjectMetadata
+    metadata: ApiObjectMetadata
 
     /** @schema Order#spec */
-    readonly spec: OrderSpec
+    spec: OrderSpec
 }
 
 /** Converts an object of type 'OrderProps' to JSON representation. */
@@ -8084,7 +8084,7 @@ export interface OrderSpec {
      *
      * @schema OrderSpec#commonName
      */
-    readonly commonName?: string
+    commonName?: string
 
     /**
      * DNSNames is a list of DNS names that should be included as part of the Order validation
@@ -8092,7 +8092,7 @@ export interface OrderSpec {
      *
      * @schema OrderSpec#dnsNames
      */
-    readonly dnsNames?: string[]
+    dnsNames?: string[]
 
     /**
      * Duration is the duration for the not after date for the requested certificate. this is set on
@@ -8100,7 +8100,7 @@ export interface OrderSpec {
      *
      * @schema OrderSpec#duration
      */
-    readonly duration?: string
+    duration?: string
 
     /**
      * IPAddresses is a list of IP addresses that should be included as part of the Order validation
@@ -8108,7 +8108,7 @@ export interface OrderSpec {
      *
      * @schema OrderSpec#ipAddresses
      */
-    readonly ipAddresses?: string[]
+    ipAddresses?: string[]
 
     /**
      * IssuerRef references a properly configured ACME-type Issuer which should be used to create
@@ -8117,7 +8117,7 @@ export interface OrderSpec {
      *
      * @schema OrderSpec#issuerRef
      */
-    readonly issuerRef: OrderSpecIssuerRef
+    issuerRef: OrderSpecIssuerRef
 
     /**
      * Certificate signing request bytes in DER encoding. This will be used when finalizing the
@@ -8125,7 +8125,7 @@ export interface OrderSpec {
      *
      * @schema OrderSpec#request
      */
-    readonly request: string
+    request: string
 }
 
 /** Converts an object of type 'OrderSpec' to JSON representation. */
@@ -8163,21 +8163,21 @@ export interface OrderSpecIssuerRef {
      *
      * @schema OrderSpecIssuerRef#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind of the resource being referred to.
      *
      * @schema OrderSpecIssuerRef#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name of the resource being referred to.
      *
      * @schema OrderSpecIssuerRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'OrderSpecIssuerRef' to JSON representation. */

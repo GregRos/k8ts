@@ -10,7 +10,7 @@ import { Construct } from "constructs"
  */
 export class Gateway extends ApiObject {
     /** Returns the apiVersion and kind for "Gateway" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "gateway.networking.k8s.io/v1",
         kind: "Gateway"
     }
@@ -62,14 +62,14 @@ export class Gateway extends ApiObject {
  */
 export interface GatewayProps {
     /** @schema Gateway#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * Spec defines the desired state of Gateway.
      *
      * @schema Gateway#spec
      */
-    readonly spec: GatewaySpec
+    spec: GatewaySpec
 }
 
 /** Converts an object of type 'GatewayProps' to JSON representation. */
@@ -119,14 +119,14 @@ export interface GatewaySpec {
      *
      * @schema GatewaySpec#addresses
      */
-    readonly addresses?: GatewaySpecAddresses[]
+    addresses?: GatewaySpecAddresses[]
 
     /**
      * GatewayClassName used for this Gateway. This is the name of a GatewayClass resource.
      *
      * @schema GatewaySpec#gatewayClassName
      */
-    readonly gatewayClassName: string
+    gatewayClassName: string
 
     /**
      * Infrastructure defines infrastructure level attributes about this Gateway instance.
@@ -135,7 +135,7 @@ export interface GatewaySpec {
      *
      * @schema GatewaySpec#infrastructure
      */
-    readonly infrastructure?: GatewaySpecInfrastructure
+    infrastructure?: GatewaySpecInfrastructure
 
     /**
      * Listeners associated with this Gateway. Listeners define logical endpoints that are bound on
@@ -242,7 +242,7 @@ export interface GatewaySpec {
      *
      * @schema GatewaySpec#listeners
      */
-    readonly listeners: GatewaySpecListeners[]
+    listeners: GatewaySpecListeners[]
 }
 
 /** Converts an object of type 'GatewaySpec' to JSON representation. */
@@ -276,7 +276,7 @@ export interface GatewaySpecAddresses {
      *
      * @schema GatewaySpecAddresses#type
      */
-    readonly type?: string
+    type?: string
 
     /**
      * Value of the address. The validity of the values will depend on the type and support by the
@@ -286,7 +286,7 @@ export interface GatewaySpecAddresses {
      *
      * @schema GatewaySpecAddresses#value
      */
-    readonly value: string
+    value: string
 }
 
 /** Converts an object of type 'GatewaySpecAddresses' to JSON representation. */
@@ -331,7 +331,7 @@ export interface GatewaySpecInfrastructure {
      *
      * @schema GatewaySpecInfrastructure#annotations
      */
-    readonly annotations?: { [key: string]: string }
+    annotations?: { [key: string]: string }
 
     /**
      * Labels that SHOULD be applied to any resources created in response to this Gateway.
@@ -349,7 +349,7 @@ export interface GatewaySpecInfrastructure {
      *
      * @schema GatewaySpecInfrastructure#labels
      */
-    readonly labels?: { [key: string]: string }
+    labels?: { [key: string]: string }
 
     /**
      * ParametersRef is a reference to a resource that contains the configuration parameters
@@ -366,7 +366,7 @@ export interface GatewaySpecInfrastructure {
      *
      * @schema GatewaySpecInfrastructure#parametersRef
      */
-    readonly parametersRef?: GatewaySpecInfrastructureParametersRef
+    parametersRef?: GatewaySpecInfrastructureParametersRef
 }
 
 /** Converts an object of type 'GatewaySpecInfrastructure' to JSON representation. */
@@ -434,7 +434,7 @@ export interface GatewaySpecListeners {
      *
      * @schema GatewaySpecListeners#allowedRoutes
      */
-    readonly allowedRoutes?: GatewaySpecListenersAllowedRoutes
+    allowedRoutes?: GatewaySpecListenersAllowedRoutes
 
     /**
      * Hostname specifies the virtual hostname to match for protocol types that define this concept.
@@ -463,7 +463,7 @@ export interface GatewaySpecListeners {
      *
      * @schema GatewaySpecListeners#hostname
      */
-    readonly hostname?: string
+    hostname?: string
 
     /**
      * Name is the name of the Listener. This name MUST be unique within a Gateway.
@@ -472,7 +472,7 @@ export interface GatewaySpecListeners {
      *
      * @schema GatewaySpecListeners#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Port is the network port. Multiple listeners may use the same port, subject to the Listener
@@ -482,7 +482,7 @@ export interface GatewaySpecListeners {
      *
      * @schema GatewaySpecListeners#port
      */
-    readonly port: number
+    port: number
 
     /**
      * Protocol specifies the network protocol this listener expects to receive.
@@ -491,7 +491,7 @@ export interface GatewaySpecListeners {
      *
      * @schema GatewaySpecListeners#protocol
      */
-    readonly protocol: string
+    protocol: string
 
     /**
      * TLS is the TLS configuration for the Listener. This field is required if the Protocol field
@@ -508,7 +508,7 @@ export interface GatewaySpecListeners {
      *
      * @schema GatewaySpecListeners#tls
      */
-    readonly tls?: GatewaySpecListenersTls
+    tls?: GatewaySpecListenersTls
 }
 
 /** Converts an object of type 'GatewaySpecListeners' to JSON representation. */
@@ -556,21 +556,21 @@ export interface GatewaySpecInfrastructureParametersRef {
      *
      * @schema GatewaySpecInfrastructureParametersRef#group
      */
-    readonly group: string
+    group: string
 
     /**
      * Kind is kind of the referent.
      *
      * @schema GatewaySpecInfrastructureParametersRef#kind
      */
-    readonly kind: string
+    kind: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema GatewaySpecInfrastructureParametersRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'GatewaySpecInfrastructureParametersRef' to JSON representation. */
@@ -634,7 +634,7 @@ export interface GatewaySpecListenersAllowedRoutes {
      *
      * @schema GatewaySpecListenersAllowedRoutes#kinds
      */
-    readonly kinds?: GatewaySpecListenersAllowedRoutesKinds[]
+    kinds?: GatewaySpecListenersAllowedRoutesKinds[]
 
     /**
      * Namespaces indicates namespaces from which Routes may be attached to this Listener. This is
@@ -644,7 +644,7 @@ export interface GatewaySpecListenersAllowedRoutes {
      *
      * @schema GatewaySpecListenersAllowedRoutes#namespaces
      */
-    readonly namespaces?: GatewaySpecListenersAllowedRoutesNamespaces
+    namespaces?: GatewaySpecListenersAllowedRoutesNamespaces
 }
 
 /** Converts an object of type 'GatewaySpecListenersAllowedRoutes' to JSON representation. */
@@ -709,7 +709,7 @@ export interface GatewaySpecListenersTls {
      *
      * @schema GatewaySpecListenersTls#certificateRefs
      */
-    readonly certificateRefs?: GatewaySpecListenersTlsCertificateRefs[]
+    certificateRefs?: GatewaySpecListenersTlsCertificateRefs[]
 
     /**
      * Mode defines the TLS behavior for the TLS session initiated by the client. There are two
@@ -726,7 +726,7 @@ export interface GatewaySpecListenersTls {
      *
      * @schema GatewaySpecListenersTls#mode
      */
-    readonly mode?: GatewaySpecListenersTlsMode
+    mode?: GatewaySpecListenersTlsMode
 
     /**
      * Options are a list of key/value pairs to enable extended TLS configuration for each
@@ -741,7 +741,7 @@ export interface GatewaySpecListenersTls {
      *
      * @schema GatewaySpecListenersTls#options
      */
-    readonly options?: { [key: string]: string }
+    options?: { [key: string]: string }
 }
 
 /** Converts an object of type 'GatewaySpecListenersTls' to JSON representation. */
@@ -784,14 +784,14 @@ export interface GatewaySpecListenersAllowedRoutesKinds {
      *
      * @schema GatewaySpecListenersAllowedRoutesKinds#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is the kind of the Route.
      *
      * @schema GatewaySpecListenersAllowedRoutesKinds#kind
      */
-    readonly kind: string
+    kind: string
 }
 
 /** Converts an object of type 'GatewaySpecListenersAllowedRoutesKinds' to JSON representation. */
@@ -834,7 +834,7 @@ export interface GatewaySpecListenersAllowedRoutesNamespaces {
      *
      * @schema GatewaySpecListenersAllowedRoutesNamespaces#from
      */
-    readonly from?: GatewaySpecListenersAllowedRoutesNamespacesFrom
+    from?: GatewaySpecListenersAllowedRoutesNamespacesFrom
 
     /**
      * Selector must be specified when From is set to "Selector". In that case, only Routes in
@@ -845,7 +845,7 @@ export interface GatewaySpecListenersAllowedRoutesNamespaces {
      *
      * @schema GatewaySpecListenersAllowedRoutesNamespaces#selector
      */
-    readonly selector?: GatewaySpecListenersAllowedRoutesNamespacesSelector
+    selector?: GatewaySpecListenersAllowedRoutesNamespacesSelector
 }
 
 /** Converts an object of type 'GatewaySpecListenersAllowedRoutesNamespaces' to JSON representation. */
@@ -886,21 +886,21 @@ export interface GatewaySpecListenersTlsCertificateRefs {
      *
      * @schema GatewaySpecListenersTlsCertificateRefs#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is kind of the referent. For example "Secret".
      *
      * @schema GatewaySpecListenersTlsCertificateRefs#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema GatewaySpecListenersTlsCertificateRefs#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the referenced object. When unspecified, the local namespace is
@@ -914,7 +914,7 @@ export interface GatewaySpecListenersTlsCertificateRefs {
      *
      * @schema GatewaySpecListenersTlsCertificateRefs#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'GatewaySpecListenersTlsCertificateRefs' to JSON representation. */
@@ -996,7 +996,7 @@ export interface GatewaySpecListenersAllowedRoutesNamespacesSelector {
      *
      * @schema GatewaySpecListenersAllowedRoutesNamespacesSelector#matchExpressions
      */
-    readonly matchExpressions?: GatewaySpecListenersAllowedRoutesNamespacesSelectorMatchExpressions[]
+    matchExpressions?: GatewaySpecListenersAllowedRoutesNamespacesSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -1005,7 +1005,7 @@ export interface GatewaySpecListenersAllowedRoutesNamespacesSelector {
      *
      * @schema GatewaySpecListenersAllowedRoutesNamespacesSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -1051,7 +1051,7 @@ export interface GatewaySpecListenersAllowedRoutesNamespacesSelectorMatchExpress
      *
      * @schema GatewaySpecListenersAllowedRoutesNamespacesSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -1059,7 +1059,7 @@ export interface GatewaySpecListenersAllowedRoutesNamespacesSelectorMatchExpress
      *
      * @schema GatewaySpecListenersAllowedRoutesNamespacesSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -1068,7 +1068,7 @@ export interface GatewaySpecListenersAllowedRoutesNamespacesSelectorMatchExpress
      *
      * @schema GatewaySpecListenersAllowedRoutesNamespacesSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -1103,7 +1103,7 @@ export function toJson_GatewaySpecListenersAllowedRoutesNamespacesSelectorMatchE
  */
 export class GatewayV1Beta1 extends ApiObject {
     /** Returns the apiVersion and kind for "GatewayV1Beta1" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "gateway.networking.k8s.io/v1beta1",
         kind: "Gateway"
     }
@@ -1155,14 +1155,14 @@ export class GatewayV1Beta1 extends ApiObject {
  */
 export interface GatewayV1Beta1Props {
     /** @schema GatewayV1Beta1#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * Spec defines the desired state of Gateway.
      *
      * @schema GatewayV1Beta1#spec
      */
-    readonly spec: GatewayV1Beta1Spec
+    spec: GatewayV1Beta1Spec
 }
 
 /** Converts an object of type 'GatewayV1Beta1Props' to JSON representation. */
@@ -1212,14 +1212,14 @@ export interface GatewayV1Beta1Spec {
      *
      * @schema GatewayV1Beta1Spec#addresses
      */
-    readonly addresses?: GatewayV1Beta1SpecAddresses[]
+    addresses?: GatewayV1Beta1SpecAddresses[]
 
     /**
      * GatewayClassName used for this Gateway. This is the name of a GatewayClass resource.
      *
      * @schema GatewayV1Beta1Spec#gatewayClassName
      */
-    readonly gatewayClassName: string
+    gatewayClassName: string
 
     /**
      * Infrastructure defines infrastructure level attributes about this Gateway instance.
@@ -1228,7 +1228,7 @@ export interface GatewayV1Beta1Spec {
      *
      * @schema GatewayV1Beta1Spec#infrastructure
      */
-    readonly infrastructure?: GatewayV1Beta1SpecInfrastructure
+    infrastructure?: GatewayV1Beta1SpecInfrastructure
 
     /**
      * Listeners associated with this Gateway. Listeners define logical endpoints that are bound on
@@ -1335,7 +1335,7 @@ export interface GatewayV1Beta1Spec {
      *
      * @schema GatewayV1Beta1Spec#listeners
      */
-    readonly listeners: GatewayV1Beta1SpecListeners[]
+    listeners: GatewayV1Beta1SpecListeners[]
 }
 
 /** Converts an object of type 'GatewayV1Beta1Spec' to JSON representation. */
@@ -1371,7 +1371,7 @@ export interface GatewayV1Beta1SpecAddresses {
      *
      * @schema GatewayV1Beta1SpecAddresses#type
      */
-    readonly type?: string
+    type?: string
 
     /**
      * Value of the address. The validity of the values will depend on the type and support by the
@@ -1381,7 +1381,7 @@ export interface GatewayV1Beta1SpecAddresses {
      *
      * @schema GatewayV1Beta1SpecAddresses#value
      */
-    readonly value: string
+    value: string
 }
 
 /** Converts an object of type 'GatewayV1Beta1SpecAddresses' to JSON representation. */
@@ -1426,7 +1426,7 @@ export interface GatewayV1Beta1SpecInfrastructure {
      *
      * @schema GatewayV1Beta1SpecInfrastructure#annotations
      */
-    readonly annotations?: { [key: string]: string }
+    annotations?: { [key: string]: string }
 
     /**
      * Labels that SHOULD be applied to any resources created in response to this Gateway.
@@ -1444,7 +1444,7 @@ export interface GatewayV1Beta1SpecInfrastructure {
      *
      * @schema GatewayV1Beta1SpecInfrastructure#labels
      */
-    readonly labels?: { [key: string]: string }
+    labels?: { [key: string]: string }
 
     /**
      * ParametersRef is a reference to a resource that contains the configuration parameters
@@ -1461,7 +1461,7 @@ export interface GatewayV1Beta1SpecInfrastructure {
      *
      * @schema GatewayV1Beta1SpecInfrastructure#parametersRef
      */
-    readonly parametersRef?: GatewayV1Beta1SpecInfrastructureParametersRef
+    parametersRef?: GatewayV1Beta1SpecInfrastructureParametersRef
 }
 
 /** Converts an object of type 'GatewayV1Beta1SpecInfrastructure' to JSON representation. */
@@ -1529,7 +1529,7 @@ export interface GatewayV1Beta1SpecListeners {
      *
      * @schema GatewayV1Beta1SpecListeners#allowedRoutes
      */
-    readonly allowedRoutes?: GatewayV1Beta1SpecListenersAllowedRoutes
+    allowedRoutes?: GatewayV1Beta1SpecListenersAllowedRoutes
 
     /**
      * Hostname specifies the virtual hostname to match for protocol types that define this concept.
@@ -1558,7 +1558,7 @@ export interface GatewayV1Beta1SpecListeners {
      *
      * @schema GatewayV1Beta1SpecListeners#hostname
      */
-    readonly hostname?: string
+    hostname?: string
 
     /**
      * Name is the name of the Listener. This name MUST be unique within a Gateway.
@@ -1567,7 +1567,7 @@ export interface GatewayV1Beta1SpecListeners {
      *
      * @schema GatewayV1Beta1SpecListeners#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Port is the network port. Multiple listeners may use the same port, subject to the Listener
@@ -1577,7 +1577,7 @@ export interface GatewayV1Beta1SpecListeners {
      *
      * @schema GatewayV1Beta1SpecListeners#port
      */
-    readonly port: number
+    port: number
 
     /**
      * Protocol specifies the network protocol this listener expects to receive.
@@ -1586,7 +1586,7 @@ export interface GatewayV1Beta1SpecListeners {
      *
      * @schema GatewayV1Beta1SpecListeners#protocol
      */
-    readonly protocol: string
+    protocol: string
 
     /**
      * TLS is the TLS configuration for the Listener. This field is required if the Protocol field
@@ -1603,7 +1603,7 @@ export interface GatewayV1Beta1SpecListeners {
      *
      * @schema GatewayV1Beta1SpecListeners#tls
      */
-    readonly tls?: GatewayV1Beta1SpecListenersTls
+    tls?: GatewayV1Beta1SpecListenersTls
 }
 
 /** Converts an object of type 'GatewayV1Beta1SpecListeners' to JSON representation. */
@@ -1651,21 +1651,21 @@ export interface GatewayV1Beta1SpecInfrastructureParametersRef {
      *
      * @schema GatewayV1Beta1SpecInfrastructureParametersRef#group
      */
-    readonly group: string
+    group: string
 
     /**
      * Kind is kind of the referent.
      *
      * @schema GatewayV1Beta1SpecInfrastructureParametersRef#kind
      */
-    readonly kind: string
+    kind: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema GatewayV1Beta1SpecInfrastructureParametersRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -1732,7 +1732,7 @@ export interface GatewayV1Beta1SpecListenersAllowedRoutes {
      *
      * @schema GatewayV1Beta1SpecListenersAllowedRoutes#kinds
      */
-    readonly kinds?: GatewayV1Beta1SpecListenersAllowedRoutesKinds[]
+    kinds?: GatewayV1Beta1SpecListenersAllowedRoutesKinds[]
 
     /**
      * Namespaces indicates namespaces from which Routes may be attached to this Listener. This is
@@ -1742,7 +1742,7 @@ export interface GatewayV1Beta1SpecListenersAllowedRoutes {
      *
      * @schema GatewayV1Beta1SpecListenersAllowedRoutes#namespaces
      */
-    readonly namespaces?: GatewayV1Beta1SpecListenersAllowedRoutesNamespaces
+    namespaces?: GatewayV1Beta1SpecListenersAllowedRoutesNamespaces
 }
 
 /** Converts an object of type 'GatewayV1Beta1SpecListenersAllowedRoutes' to JSON representation. */
@@ -1807,7 +1807,7 @@ export interface GatewayV1Beta1SpecListenersTls {
      *
      * @schema GatewayV1Beta1SpecListenersTls#certificateRefs
      */
-    readonly certificateRefs?: GatewayV1Beta1SpecListenersTlsCertificateRefs[]
+    certificateRefs?: GatewayV1Beta1SpecListenersTlsCertificateRefs[]
 
     /**
      * Mode defines the TLS behavior for the TLS session initiated by the client. There are two
@@ -1824,7 +1824,7 @@ export interface GatewayV1Beta1SpecListenersTls {
      *
      * @schema GatewayV1Beta1SpecListenersTls#mode
      */
-    readonly mode?: GatewayV1Beta1SpecListenersTlsMode
+    mode?: GatewayV1Beta1SpecListenersTlsMode
 
     /**
      * Options are a list of key/value pairs to enable extended TLS configuration for each
@@ -1839,7 +1839,7 @@ export interface GatewayV1Beta1SpecListenersTls {
      *
      * @schema GatewayV1Beta1SpecListenersTls#options
      */
-    readonly options?: { [key: string]: string }
+    options?: { [key: string]: string }
 }
 
 /** Converts an object of type 'GatewayV1Beta1SpecListenersTls' to JSON representation. */
@@ -1882,14 +1882,14 @@ export interface GatewayV1Beta1SpecListenersAllowedRoutesKinds {
      *
      * @schema GatewayV1Beta1SpecListenersAllowedRoutesKinds#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is the kind of the Route.
      *
      * @schema GatewayV1Beta1SpecListenersAllowedRoutesKinds#kind
      */
-    readonly kind: string
+    kind: string
 }
 
 /**
@@ -1935,7 +1935,7 @@ export interface GatewayV1Beta1SpecListenersAllowedRoutesNamespaces {
      *
      * @schema GatewayV1Beta1SpecListenersAllowedRoutesNamespaces#from
      */
-    readonly from?: GatewayV1Beta1SpecListenersAllowedRoutesNamespacesFrom
+    from?: GatewayV1Beta1SpecListenersAllowedRoutesNamespacesFrom
 
     /**
      * Selector must be specified when From is set to "Selector". In that case, only Routes in
@@ -1946,7 +1946,7 @@ export interface GatewayV1Beta1SpecListenersAllowedRoutesNamespaces {
      *
      * @schema GatewayV1Beta1SpecListenersAllowedRoutesNamespaces#selector
      */
-    readonly selector?: GatewayV1Beta1SpecListenersAllowedRoutesNamespacesSelector
+    selector?: GatewayV1Beta1SpecListenersAllowedRoutesNamespacesSelector
 }
 
 /**
@@ -1990,21 +1990,21 @@ export interface GatewayV1Beta1SpecListenersTlsCertificateRefs {
      *
      * @schema GatewayV1Beta1SpecListenersTlsCertificateRefs#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is kind of the referent. For example "Secret".
      *
      * @schema GatewayV1Beta1SpecListenersTlsCertificateRefs#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema GatewayV1Beta1SpecListenersTlsCertificateRefs#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the referenced object. When unspecified, the local namespace is
@@ -2018,7 +2018,7 @@ export interface GatewayV1Beta1SpecListenersTlsCertificateRefs {
      *
      * @schema GatewayV1Beta1SpecListenersTlsCertificateRefs#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /**
@@ -2103,7 +2103,7 @@ export interface GatewayV1Beta1SpecListenersAllowedRoutesNamespacesSelector {
      *
      * @schema GatewayV1Beta1SpecListenersAllowedRoutesNamespacesSelector#matchExpressions
      */
-    readonly matchExpressions?: GatewayV1Beta1SpecListenersAllowedRoutesNamespacesSelectorMatchExpressions[]
+    matchExpressions?: GatewayV1Beta1SpecListenersAllowedRoutesNamespacesSelectorMatchExpressions[]
 
     /**
      * MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is
@@ -2112,7 +2112,7 @@ export interface GatewayV1Beta1SpecListenersAllowedRoutesNamespacesSelector {
      *
      * @schema GatewayV1Beta1SpecListenersAllowedRoutesNamespacesSelector#matchLabels
      */
-    readonly matchLabels?: { [key: string]: string }
+    matchLabels?: { [key: string]: string }
 }
 
 /**
@@ -2158,7 +2158,7 @@ export interface GatewayV1Beta1SpecListenersAllowedRoutesNamespacesSelectorMatch
      *
      * @schema GatewayV1Beta1SpecListenersAllowedRoutesNamespacesSelectorMatchExpressions#key
      */
-    readonly key: string
+    key: string
 
     /**
      * Operator represents a key's relationship to a set of values. Valid operators are In, NotIn,
@@ -2166,7 +2166,7 @@ export interface GatewayV1Beta1SpecListenersAllowedRoutesNamespacesSelectorMatch
      *
      * @schema GatewayV1Beta1SpecListenersAllowedRoutesNamespacesSelectorMatchExpressions#operator
      */
-    readonly operator: string
+    operator: string
 
     /**
      * Values is an array of string values. If the operator is In or NotIn, the values array must be
@@ -2175,7 +2175,7 @@ export interface GatewayV1Beta1SpecListenersAllowedRoutesNamespacesSelectorMatch
      *
      * @schema GatewayV1Beta1SpecListenersAllowedRoutesNamespacesSelectorMatchExpressions#values
      */
-    readonly values?: string[]
+    values?: string[]
 }
 
 /**
@@ -2223,7 +2223,7 @@ export function toJson_GatewayV1Beta1SpecListenersAllowedRoutesNamespacesSelecto
  */
 export class GatewayClass extends ApiObject {
     /** Returns the apiVersion and kind for "GatewayClass" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "gateway.networking.k8s.io/v1",
         kind: "GatewayClass"
     }
@@ -2287,14 +2287,14 @@ export class GatewayClass extends ApiObject {
  */
 export interface GatewayClassProps {
     /** @schema GatewayClass#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * Spec defines the desired state of GatewayClass.
      *
      * @schema GatewayClass#spec
      */
-    readonly spec: GatewayClassSpec
+    spec: GatewayClassSpec
 }
 
 /** Converts an object of type 'GatewayClassProps' to JSON representation. */
@@ -2335,14 +2335,14 @@ export interface GatewayClassSpec {
      *
      * @schema GatewayClassSpec#controllerName
      */
-    readonly controllerName: string
+    controllerName: string
 
     /**
      * Description helps describe a GatewayClass with more details.
      *
      * @schema GatewayClassSpec#description
      */
-    readonly description?: string
+    description?: string
 
     /**
      * ParametersRef is a reference to a resource that contains the configuration parameters
@@ -2365,7 +2365,7 @@ export interface GatewayClassSpec {
      *
      * @schema GatewayClassSpec#parametersRef
      */
-    readonly parametersRef?: GatewayClassSpecParametersRef
+    parametersRef?: GatewayClassSpecParametersRef
 }
 
 /** Converts an object of type 'GatewayClassSpec' to JSON representation. */
@@ -2415,21 +2415,21 @@ export interface GatewayClassSpecParametersRef {
      *
      * @schema GatewayClassSpecParametersRef#group
      */
-    readonly group: string
+    group: string
 
     /**
      * Kind is kind of the referent.
      *
      * @schema GatewayClassSpecParametersRef#kind
      */
-    readonly kind: string
+    kind: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema GatewayClassSpecParametersRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the referent. This field is required when referring to a
@@ -2437,7 +2437,7 @@ export interface GatewayClassSpecParametersRef {
      *
      * @schema GatewayClassSpecParametersRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'GatewayClassSpecParametersRef' to JSON representation. */
@@ -2482,7 +2482,7 @@ export function toJson_GatewayClassSpecParametersRef(
  */
 export class GatewayClassV1Beta1 extends ApiObject {
     /** Returns the apiVersion and kind for "GatewayClassV1Beta1" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "gateway.networking.k8s.io/v1beta1",
         kind: "GatewayClass"
     }
@@ -2546,14 +2546,14 @@ export class GatewayClassV1Beta1 extends ApiObject {
  */
 export interface GatewayClassV1Beta1Props {
     /** @schema GatewayClassV1Beta1#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * Spec defines the desired state of GatewayClass.
      *
      * @schema GatewayClassV1Beta1#spec
      */
-    readonly spec: GatewayClassV1Beta1Spec
+    spec: GatewayClassV1Beta1Spec
 }
 
 /** Converts an object of type 'GatewayClassV1Beta1Props' to JSON representation. */
@@ -2594,14 +2594,14 @@ export interface GatewayClassV1Beta1Spec {
      *
      * @schema GatewayClassV1Beta1Spec#controllerName
      */
-    readonly controllerName: string
+    controllerName: string
 
     /**
      * Description helps describe a GatewayClass with more details.
      *
      * @schema GatewayClassV1Beta1Spec#description
      */
-    readonly description?: string
+    description?: string
 
     /**
      * ParametersRef is a reference to a resource that contains the configuration parameters
@@ -2624,7 +2624,7 @@ export interface GatewayClassV1Beta1Spec {
      *
      * @schema GatewayClassV1Beta1Spec#parametersRef
      */
-    readonly parametersRef?: GatewayClassV1Beta1SpecParametersRef
+    parametersRef?: GatewayClassV1Beta1SpecParametersRef
 }
 
 /** Converts an object of type 'GatewayClassV1Beta1Spec' to JSON representation. */
@@ -2674,21 +2674,21 @@ export interface GatewayClassV1Beta1SpecParametersRef {
      *
      * @schema GatewayClassV1Beta1SpecParametersRef#group
      */
-    readonly group: string
+    group: string
 
     /**
      * Kind is kind of the referent.
      *
      * @schema GatewayClassV1Beta1SpecParametersRef#kind
      */
-    readonly kind: string
+    kind: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema GatewayClassV1Beta1SpecParametersRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the referent. This field is required when referring to a
@@ -2696,7 +2696,7 @@ export interface GatewayClassV1Beta1SpecParametersRef {
      *
      * @schema GatewayClassV1Beta1SpecParametersRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'GatewayClassV1Beta1SpecParametersRef' to JSON representation. */
@@ -2749,7 +2749,7 @@ export function toJson_GatewayClassV1Beta1SpecParametersRef(
  */
 export class GrpcRoute extends ApiObject {
     /** Returns the apiVersion and kind for "GRPCRoute" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "gateway.networking.k8s.io/v1",
         kind: "GRPCRoute"
     }
@@ -2821,14 +2821,14 @@ export class GrpcRoute extends ApiObject {
  */
 export interface GrpcRouteProps {
     /** @schema GRPCRoute#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * Spec defines the desired state of GRPCRoute.
      *
      * @schema GRPCRoute#spec
      */
-    readonly spec?: GrpcRouteSpec
+    spec?: GrpcRouteSpec
 }
 
 /** Converts an object of type 'GrpcRouteProps' to JSON representation. */
@@ -2906,7 +2906,7 @@ export interface GrpcRouteSpec {
      *
      * @schema GrpcRouteSpec#hostnames
      */
-    readonly hostnames?: string[]
+    hostnames?: string[]
 
     /**
      * ParentRefs references the resources (usually Gateways) that a Route wants to be attached to.
@@ -2955,14 +2955,14 @@ export interface GrpcRouteSpec {
      *
      * @schema GrpcRouteSpec#parentRefs
      */
-    readonly parentRefs?: GrpcRouteSpecParentRefs[]
+    parentRefs?: GrpcRouteSpecParentRefs[]
 
     /**
      * Rules are a list of GRPC matchers, filters and actions.
      *
      * @schema GrpcRouteSpec#rules
      */
-    readonly rules?: GrpcRouteSpecRules[]
+    rules?: GrpcRouteSpecRules[]
 }
 
 /** Converts an object of type 'GrpcRouteSpec' to JSON representation. */
@@ -3010,7 +3010,7 @@ export interface GrpcRouteSpecParentRefs {
      *
      * @schema GrpcRouteSpecParentRefs#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is kind of the referent.
@@ -3024,7 +3024,7 @@ export interface GrpcRouteSpecParentRefs {
      *
      * @schema GrpcRouteSpecParentRefs#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name is the name of the referent.
@@ -3033,7 +3033,7 @@ export interface GrpcRouteSpecParentRefs {
      *
      * @schema GrpcRouteSpecParentRefs#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the referent. When unspecified, this refers to the local
@@ -3048,7 +3048,7 @@ export interface GrpcRouteSpecParentRefs {
      *
      * @schema GrpcRouteSpecParentRefs#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Port is the network port this Route targets. It can be interpreted differently based on the
@@ -3074,7 +3074,7 @@ export interface GrpcRouteSpecParentRefs {
      *
      * @schema GrpcRouteSpecParentRefs#port
      */
-    readonly port?: number
+    port?: number
 
     /**
      * SectionName is the name of a section within the target resource. In the following resources,
@@ -3100,7 +3100,7 @@ export interface GrpcRouteSpecParentRefs {
      *
      * @schema GrpcRouteSpecParentRefs#sectionName
      */
-    readonly sectionName?: string
+    sectionName?: string
 }
 
 /** Converts an object of type 'GrpcRouteSpecParentRefs' to JSON representation. */
@@ -3162,7 +3162,7 @@ export interface GrpcRouteSpecRules {
      *
      * @schema GrpcRouteSpecRules#backendRefs
      */
-    readonly backendRefs?: GrpcRouteSpecRulesBackendRefs[]
+    backendRefs?: GrpcRouteSpecRulesBackendRefs[]
 
     /**
      * Filters define the filters that are applied to requests that match this rule.
@@ -3188,7 +3188,7 @@ export interface GrpcRouteSpecRules {
      *
      * @schema GrpcRouteSpecRules#filters
      */
-    readonly filters?: GrpcRouteSpecRulesFilters[]
+    filters?: GrpcRouteSpecRulesFilters[]
 
     /**
      * Matches define conditions used for matching the rule against incoming gRPC requests. Each
@@ -3237,7 +3237,7 @@ export interface GrpcRouteSpecRules {
      *
      * @schema GrpcRouteSpecRules#matches
      */
-    readonly matches?: GrpcRouteSpecRulesMatches[]
+    matches?: GrpcRouteSpecRulesMatches[]
 }
 
 /** Converts an object of type 'GrpcRouteSpecRules' to JSON representation. */
@@ -3298,7 +3298,7 @@ export interface GrpcRouteSpecRulesBackendRefs {
      *
      * @schema GrpcRouteSpecRulesBackendRefs#filters
      */
-    readonly filters?: GrpcRouteSpecRulesBackendRefsFilters[]
+    filters?: GrpcRouteSpecRulesBackendRefsFilters[]
 
     /**
      * Group is the group of the referent. For example, "gateway.networking.k8s.io". When
@@ -3306,7 +3306,7 @@ export interface GrpcRouteSpecRulesBackendRefs {
      *
      * @schema GrpcRouteSpecRulesBackendRefs#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is the Kubernetes resource kind of the referent. For example "Service".
@@ -3325,14 +3325,14 @@ export interface GrpcRouteSpecRulesBackendRefs {
      * @default Service" when not specified.
      * @schema GrpcRouteSpecRulesBackendRefs#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema GrpcRouteSpecRulesBackendRefs#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the backend. When unspecified, the local namespace is inferred.
@@ -3345,7 +3345,7 @@ export interface GrpcRouteSpecRulesBackendRefs {
      *
      * @schema GrpcRouteSpecRulesBackendRefs#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Port specifies the destination port number to use for this resource. Port is required when
@@ -3355,7 +3355,7 @@ export interface GrpcRouteSpecRulesBackendRefs {
      *
      * @schema GrpcRouteSpecRulesBackendRefs#port
      */
-    readonly port?: number
+    port?: number
 
     /**
      * Weight specifies the proportion of requests forwarded to the referenced backend. This is
@@ -3372,7 +3372,7 @@ export interface GrpcRouteSpecRulesBackendRefs {
      *
      * @schema GrpcRouteSpecRulesBackendRefs#weight
      */
-    readonly weight?: number
+    weight?: number
 }
 
 /** Converts an object of type 'GrpcRouteSpecRulesBackendRefs' to JSON representation. */
@@ -3421,7 +3421,7 @@ export interface GrpcRouteSpecRulesFilters {
      *
      * @schema GrpcRouteSpecRulesFilters#extensionRef
      */
-    readonly extensionRef?: GrpcRouteSpecRulesFiltersExtensionRef
+    extensionRef?: GrpcRouteSpecRulesFiltersExtensionRef
 
     /**
      * RequestHeaderModifier defines a schema for a filter that modifies request headers.
@@ -3430,7 +3430,7 @@ export interface GrpcRouteSpecRulesFilters {
      *
      * @schema GrpcRouteSpecRulesFilters#requestHeaderModifier
      */
-    readonly requestHeaderModifier?: GrpcRouteSpecRulesFiltersRequestHeaderModifier
+    requestHeaderModifier?: GrpcRouteSpecRulesFiltersRequestHeaderModifier
 
     /**
      * RequestMirror defines a schema for a filter that mirrors requests. Requests are sent to the
@@ -3443,7 +3443,7 @@ export interface GrpcRouteSpecRulesFilters {
      *
      * @schema GrpcRouteSpecRulesFilters#requestMirror
      */
-    readonly requestMirror?: GrpcRouteSpecRulesFiltersRequestMirror
+    requestMirror?: GrpcRouteSpecRulesFiltersRequestMirror
 
     /**
      * ResponseHeaderModifier defines a schema for a filter that modifies response headers.
@@ -3452,7 +3452,7 @@ export interface GrpcRouteSpecRulesFilters {
      *
      * @schema GrpcRouteSpecRulesFilters#responseHeaderModifier
      */
-    readonly responseHeaderModifier?: GrpcRouteSpecRulesFiltersResponseHeaderModifier
+    responseHeaderModifier?: GrpcRouteSpecRulesFiltersResponseHeaderModifier
 
     /**
      * Type identifies the type of filter to apply. As with other API fields, types are classified
@@ -3479,7 +3479,7 @@ export interface GrpcRouteSpecRulesFilters {
      *
      * @schema GrpcRouteSpecRulesFilters#type
      */
-    readonly type: GrpcRouteSpecRulesFiltersType
+    type: GrpcRouteSpecRulesFiltersType
 }
 
 /** Converts an object of type 'GrpcRouteSpecRulesFilters' to JSON representation. */
@@ -3534,7 +3534,7 @@ export interface GrpcRouteSpecRulesMatches {
      *
      * @schema GrpcRouteSpecRulesMatches#headers
      */
-    readonly headers?: GrpcRouteSpecRulesMatchesHeaders[]
+    headers?: GrpcRouteSpecRulesMatchesHeaders[]
 
     /**
      * Method specifies a gRPC request service/method matcher. If this field is not specified, all
@@ -3542,7 +3542,7 @@ export interface GrpcRouteSpecRulesMatches {
      *
      * @schema GrpcRouteSpecRulesMatches#method
      */
-    readonly method?: GrpcRouteSpecRulesMatchesMethod
+    method?: GrpcRouteSpecRulesMatchesMethod
 }
 
 /** Converts an object of type 'GrpcRouteSpecRulesMatches' to JSON representation. */
@@ -3586,7 +3586,7 @@ export interface GrpcRouteSpecRulesBackendRefsFilters {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFilters#extensionRef
      */
-    readonly extensionRef?: GrpcRouteSpecRulesBackendRefsFiltersExtensionRef
+    extensionRef?: GrpcRouteSpecRulesBackendRefsFiltersExtensionRef
 
     /**
      * RequestHeaderModifier defines a schema for a filter that modifies request headers.
@@ -3595,7 +3595,7 @@ export interface GrpcRouteSpecRulesBackendRefsFilters {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFilters#requestHeaderModifier
      */
-    readonly requestHeaderModifier?: GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifier
+    requestHeaderModifier?: GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifier
 
     /**
      * RequestMirror defines a schema for a filter that mirrors requests. Requests are sent to the
@@ -3608,7 +3608,7 @@ export interface GrpcRouteSpecRulesBackendRefsFilters {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFilters#requestMirror
      */
-    readonly requestMirror?: GrpcRouteSpecRulesBackendRefsFiltersRequestMirror
+    requestMirror?: GrpcRouteSpecRulesBackendRefsFiltersRequestMirror
 
     /**
      * ResponseHeaderModifier defines a schema for a filter that modifies response headers.
@@ -3617,7 +3617,7 @@ export interface GrpcRouteSpecRulesBackendRefsFilters {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFilters#responseHeaderModifier
      */
-    readonly responseHeaderModifier?: GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifier
+    responseHeaderModifier?: GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifier
 
     /**
      * Type identifies the type of filter to apply. As with other API fields, types are classified
@@ -3644,7 +3644,7 @@ export interface GrpcRouteSpecRulesBackendRefsFilters {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFilters#type
      */
-    readonly type: GrpcRouteSpecRulesBackendRefsFiltersType
+    type: GrpcRouteSpecRulesBackendRefsFiltersType
 }
 
 /** Converts an object of type 'GrpcRouteSpecRulesBackendRefsFilters' to JSON representation. */
@@ -3692,21 +3692,21 @@ export interface GrpcRouteSpecRulesFiltersExtensionRef {
      *
      * @schema GrpcRouteSpecRulesFiltersExtensionRef#group
      */
-    readonly group: string
+    group: string
 
     /**
      * Kind is kind of the referent. For example "HTTPRoute" or "Service".
      *
      * @schema GrpcRouteSpecRulesFiltersExtensionRef#kind
      */
-    readonly kind: string
+    kind: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema GrpcRouteSpecRulesFiltersExtensionRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'GrpcRouteSpecRulesFiltersExtensionRef' to JSON representation. */
@@ -3752,7 +3752,7 @@ export interface GrpcRouteSpecRulesFiltersRequestHeaderModifier {
      *
      * @schema GrpcRouteSpecRulesFiltersRequestHeaderModifier#add
      */
-    readonly add?: GrpcRouteSpecRulesFiltersRequestHeaderModifierAdd[]
+    add?: GrpcRouteSpecRulesFiltersRequestHeaderModifierAdd[]
 
     /**
      * Remove the given header(s) from the HTTP request before the action. The value of Remove is a
@@ -3767,7 +3767,7 @@ export interface GrpcRouteSpecRulesFiltersRequestHeaderModifier {
      *
      * @schema GrpcRouteSpecRulesFiltersRequestHeaderModifier#remove
      */
-    readonly remove?: string[]
+    remove?: string[]
 
     /**
      * Set overwrites the request with the given header (name, value) before the action.
@@ -3782,7 +3782,7 @@ export interface GrpcRouteSpecRulesFiltersRequestHeaderModifier {
      *
      * @schema GrpcRouteSpecRulesFiltersRequestHeaderModifier#set
      */
-    readonly set?: GrpcRouteSpecRulesFiltersRequestHeaderModifierSet[]
+    set?: GrpcRouteSpecRulesFiltersRequestHeaderModifierSet[]
 }
 
 /**
@@ -3845,7 +3845,7 @@ export interface GrpcRouteSpecRulesFiltersRequestMirror {
      *
      * @schema GrpcRouteSpecRulesFiltersRequestMirror#backendRef
      */
-    readonly backendRef: GrpcRouteSpecRulesFiltersRequestMirrorBackendRef
+    backendRef: GrpcRouteSpecRulesFiltersRequestMirrorBackendRef
 }
 
 /** Converts an object of type 'GrpcRouteSpecRulesFiltersRequestMirror' to JSON representation. */
@@ -3889,7 +3889,7 @@ export interface GrpcRouteSpecRulesFiltersResponseHeaderModifier {
      *
      * @schema GrpcRouteSpecRulesFiltersResponseHeaderModifier#add
      */
-    readonly add?: GrpcRouteSpecRulesFiltersResponseHeaderModifierAdd[]
+    add?: GrpcRouteSpecRulesFiltersResponseHeaderModifierAdd[]
 
     /**
      * Remove the given header(s) from the HTTP request before the action. The value of Remove is a
@@ -3904,7 +3904,7 @@ export interface GrpcRouteSpecRulesFiltersResponseHeaderModifier {
      *
      * @schema GrpcRouteSpecRulesFiltersResponseHeaderModifier#remove
      */
-    readonly remove?: string[]
+    remove?: string[]
 
     /**
      * Set overwrites the request with the given header (name, value) before the action.
@@ -3919,7 +3919,7 @@ export interface GrpcRouteSpecRulesFiltersResponseHeaderModifier {
      *
      * @schema GrpcRouteSpecRulesFiltersResponseHeaderModifier#set
      */
-    readonly set?: GrpcRouteSpecRulesFiltersResponseHeaderModifierSet[]
+    set?: GrpcRouteSpecRulesFiltersResponseHeaderModifierSet[]
 }
 
 /**
@@ -3997,21 +3997,21 @@ export interface GrpcRouteSpecRulesMatchesHeaders {
      *
      * @schema GrpcRouteSpecRulesMatchesHeaders#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Type specifies how to match against the value of the header.
      *
      * @schema GrpcRouteSpecRulesMatchesHeaders#type
      */
-    readonly type?: GrpcRouteSpecRulesMatchesHeadersType
+    type?: GrpcRouteSpecRulesMatchesHeadersType
 
     /**
      * Value is the value of the gRPC Header to be matched.
      *
      * @schema GrpcRouteSpecRulesMatchesHeaders#value
      */
-    readonly value: string
+    value: string
 }
 
 /** Converts an object of type 'GrpcRouteSpecRulesMatchesHeaders' to JSON representation. */
@@ -4049,7 +4049,7 @@ export interface GrpcRouteSpecRulesMatchesMethod {
      *
      * @schema GrpcRouteSpecRulesMatchesMethod#method
      */
-    readonly method?: string
+    method?: string
 
     /**
      * Value of the service to match against. If left empty or omitted, will match any service.
@@ -4058,7 +4058,7 @@ export interface GrpcRouteSpecRulesMatchesMethod {
      *
      * @schema GrpcRouteSpecRulesMatchesMethod#service
      */
-    readonly service?: string
+    service?: string
 
     /**
      * Type specifies how to match against the service and/or method. Support: Core (Exact with
@@ -4070,7 +4070,7 @@ export interface GrpcRouteSpecRulesMatchesMethod {
      *
      * @schema GrpcRouteSpecRulesMatchesMethod#type
      */
-    readonly type?: GrpcRouteSpecRulesMatchesMethodType
+    type?: GrpcRouteSpecRulesMatchesMethodType
 }
 
 /** Converts an object of type 'GrpcRouteSpecRulesMatchesMethod' to JSON representation. */
@@ -4112,21 +4112,21 @@ export interface GrpcRouteSpecRulesBackendRefsFiltersExtensionRef {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersExtensionRef#group
      */
-    readonly group: string
+    group: string
 
     /**
      * Kind is kind of the referent. For example "HTTPRoute" or "Service".
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersExtensionRef#kind
      */
-    readonly kind: string
+    kind: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersExtensionRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -4175,7 +4175,7 @@ export interface GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifier {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifier#add
      */
-    readonly add?: GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifierAdd[]
+    add?: GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifierAdd[]
 
     /**
      * Remove the given header(s) from the HTTP request before the action. The value of Remove is a
@@ -4190,7 +4190,7 @@ export interface GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifier {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifier#remove
      */
-    readonly remove?: string[]
+    remove?: string[]
 
     /**
      * Set overwrites the request with the given header (name, value) before the action.
@@ -4205,7 +4205,7 @@ export interface GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifier {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifier#set
      */
-    readonly set?: GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifierSet[]
+    set?: GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifierSet[]
 }
 
 /**
@@ -4272,7 +4272,7 @@ export interface GrpcRouteSpecRulesBackendRefsFiltersRequestMirror {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersRequestMirror#backendRef
      */
-    readonly backendRef: GrpcRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef
+    backendRef: GrpcRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef
 }
 
 /**
@@ -4321,7 +4321,7 @@ export interface GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifier {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifier#add
      */
-    readonly add?: GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifierAdd[]
+    add?: GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifierAdd[]
 
     /**
      * Remove the given header(s) from the HTTP request before the action. The value of Remove is a
@@ -4336,7 +4336,7 @@ export interface GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifier {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifier#remove
      */
-    readonly remove?: string[]
+    remove?: string[]
 
     /**
      * Set overwrites the request with the given header (name, value) before the action.
@@ -4351,7 +4351,7 @@ export interface GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifier {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifier#set
      */
-    readonly set?: GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifierSet[]
+    set?: GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifierSet[]
 }
 
 /**
@@ -4434,14 +4434,14 @@ export interface GrpcRouteSpecRulesFiltersRequestHeaderModifierAdd {
      *
      * @schema GrpcRouteSpecRulesFiltersRequestHeaderModifierAdd#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema GrpcRouteSpecRulesFiltersRequestHeaderModifierAdd#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -4484,14 +4484,14 @@ export interface GrpcRouteSpecRulesFiltersRequestHeaderModifierSet {
      *
      * @schema GrpcRouteSpecRulesFiltersRequestHeaderModifierSet#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema GrpcRouteSpecRulesFiltersRequestHeaderModifierSet#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -4548,7 +4548,7 @@ export interface GrpcRouteSpecRulesFiltersRequestMirrorBackendRef {
      *
      * @schema GrpcRouteSpecRulesFiltersRequestMirrorBackendRef#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is the Kubernetes resource kind of the referent. For example "Service".
@@ -4567,14 +4567,14 @@ export interface GrpcRouteSpecRulesFiltersRequestMirrorBackendRef {
      * @default Service" when not specified.
      * @schema GrpcRouteSpecRulesFiltersRequestMirrorBackendRef#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema GrpcRouteSpecRulesFiltersRequestMirrorBackendRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the backend. When unspecified, the local namespace is inferred.
@@ -4587,7 +4587,7 @@ export interface GrpcRouteSpecRulesFiltersRequestMirrorBackendRef {
      *
      * @schema GrpcRouteSpecRulesFiltersRequestMirrorBackendRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Port specifies the destination port number to use for this resource. Port is required when
@@ -4597,7 +4597,7 @@ export interface GrpcRouteSpecRulesFiltersRequestMirrorBackendRef {
      *
      * @schema GrpcRouteSpecRulesFiltersRequestMirrorBackendRef#port
      */
-    readonly port?: number
+    port?: number
 }
 
 /**
@@ -4643,14 +4643,14 @@ export interface GrpcRouteSpecRulesFiltersResponseHeaderModifierAdd {
      *
      * @schema GrpcRouteSpecRulesFiltersResponseHeaderModifierAdd#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema GrpcRouteSpecRulesFiltersResponseHeaderModifierAdd#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -4693,14 +4693,14 @@ export interface GrpcRouteSpecRulesFiltersResponseHeaderModifierSet {
      *
      * @schema GrpcRouteSpecRulesFiltersResponseHeaderModifierSet#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema GrpcRouteSpecRulesFiltersResponseHeaderModifierSet#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -4772,14 +4772,14 @@ export interface GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifierAdd {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifierAdd#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifierAdd#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -4822,14 +4822,14 @@ export interface GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifierSet {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifierSet#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersRequestHeaderModifierSet#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -4886,7 +4886,7 @@ export interface GrpcRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is the Kubernetes resource kind of the referent. For example "Service".
@@ -4905,14 +4905,14 @@ export interface GrpcRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef {
      * @default Service" when not specified.
      * @schema GrpcRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the backend. When unspecified, the local namespace is inferred.
@@ -4925,7 +4925,7 @@ export interface GrpcRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Port specifies the destination port number to use for this resource. Port is required when
@@ -4935,7 +4935,7 @@ export interface GrpcRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef#port
      */
-    readonly port?: number
+    port?: number
 }
 
 /**
@@ -4981,14 +4981,14 @@ export interface GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifierAdd {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifierAdd#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifierAdd#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -5031,14 +5031,14 @@ export interface GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifierSet {
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifierSet#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifierSet#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -5073,7 +5073,7 @@ export function toJson_GrpcRouteSpecRulesBackendRefsFiltersResponseHeaderModifie
  */
 export class HttpRoute extends ApiObject {
     /** Returns the apiVersion and kind for "HTTPRoute" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "gateway.networking.k8s.io/v1",
         kind: "HTTPRoute"
     }
@@ -5126,14 +5126,14 @@ export class HttpRoute extends ApiObject {
  */
 export interface HttpRouteProps {
     /** @schema HTTPRoute#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * Spec defines the desired state of HTTPRoute.
      *
      * @schema HTTPRoute#spec
      */
-    readonly spec: HttpRouteSpec
+    spec: HttpRouteSpec
 }
 
 /** Converts an object of type 'HttpRouteProps' to JSON representation. */
@@ -5213,7 +5213,7 @@ export interface HttpRouteSpec {
      *
      * @schema HttpRouteSpec#hostnames
      */
-    readonly hostnames?: string[]
+    hostnames?: string[]
 
     /**
      * ParentRefs references the resources (usually Gateways) that a Route wants to be attached to.
@@ -5262,14 +5262,14 @@ export interface HttpRouteSpec {
      *
      * @schema HttpRouteSpec#parentRefs
      */
-    readonly parentRefs?: HttpRouteSpecParentRefs[]
+    parentRefs?: HttpRouteSpecParentRefs[]
 
     /**
      * Rules are a list of HTTP matchers, filters and actions.
      *
      * @schema HttpRouteSpec#rules
      */
-    readonly rules?: HttpRouteSpecRules[]
+    rules?: HttpRouteSpecRules[]
 }
 
 /** Converts an object of type 'HttpRouteSpec' to JSON representation. */
@@ -5317,7 +5317,7 @@ export interface HttpRouteSpecParentRefs {
      *
      * @schema HttpRouteSpecParentRefs#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is kind of the referent.
@@ -5331,7 +5331,7 @@ export interface HttpRouteSpecParentRefs {
      *
      * @schema HttpRouteSpecParentRefs#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name is the name of the referent.
@@ -5340,7 +5340,7 @@ export interface HttpRouteSpecParentRefs {
      *
      * @schema HttpRouteSpecParentRefs#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the referent. When unspecified, this refers to the local
@@ -5355,7 +5355,7 @@ export interface HttpRouteSpecParentRefs {
      *
      * @schema HttpRouteSpecParentRefs#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Port is the network port this Route targets. It can be interpreted differently based on the
@@ -5381,7 +5381,7 @@ export interface HttpRouteSpecParentRefs {
      *
      * @schema HttpRouteSpecParentRefs#port
      */
-    readonly port?: number
+    port?: number
 
     /**
      * SectionName is the name of a section within the target resource. In the following resources,
@@ -5407,7 +5407,7 @@ export interface HttpRouteSpecParentRefs {
      *
      * @schema HttpRouteSpecParentRefs#sectionName
      */
-    readonly sectionName?: string
+    sectionName?: string
 }
 
 /** Converts an object of type 'HttpRouteSpecParentRefs' to JSON representation. */
@@ -5474,7 +5474,7 @@ export interface HttpRouteSpecRules {
      *
      * @schema HttpRouteSpecRules#backendRefs
      */
-    readonly backendRefs?: HttpRouteSpecRulesBackendRefs[]
+    backendRefs?: HttpRouteSpecRulesBackendRefs[]
 
     /**
      * Filters define the filters that are applied to requests that match this rule.
@@ -5510,7 +5510,7 @@ export interface HttpRouteSpecRules {
      *
      * @schema HttpRouteSpecRules#filters
      */
-    readonly filters?: HttpRouteSpecRulesFilters[]
+    filters?: HttpRouteSpecRulesFilters[]
 
     /**
      * Matches define conditions used for matching the rule against incoming HTTP requests. Each
@@ -5566,7 +5566,7 @@ export interface HttpRouteSpecRules {
      *
      * @schema HttpRouteSpecRules#matches
      */
-    readonly matches?: HttpRouteSpecRulesMatches[]
+    matches?: HttpRouteSpecRulesMatches[]
 
     /**
      * Timeouts defines the timeouts that can be configured for an HTTP request.
@@ -5575,7 +5575,7 @@ export interface HttpRouteSpecRules {
      *
      * @schema HttpRouteSpecRules#timeouts
      */
-    readonly timeouts?: HttpRouteSpecRulesTimeouts
+    timeouts?: HttpRouteSpecRulesTimeouts
 }
 
 /** Converts an object of type 'HttpRouteSpecRules' to JSON representation. */
@@ -5637,7 +5637,7 @@ export interface HttpRouteSpecRulesBackendRefs {
      *
      * @schema HttpRouteSpecRulesBackendRefs#filters
      */
-    readonly filters?: HttpRouteSpecRulesBackendRefsFilters[]
+    filters?: HttpRouteSpecRulesBackendRefsFilters[]
 
     /**
      * Group is the group of the referent. For example, "gateway.networking.k8s.io". When
@@ -5645,7 +5645,7 @@ export interface HttpRouteSpecRulesBackendRefs {
      *
      * @schema HttpRouteSpecRulesBackendRefs#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is the Kubernetes resource kind of the referent. For example "Service".
@@ -5664,14 +5664,14 @@ export interface HttpRouteSpecRulesBackendRefs {
      * @default Service" when not specified.
      * @schema HttpRouteSpecRulesBackendRefs#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema HttpRouteSpecRulesBackendRefs#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the backend. When unspecified, the local namespace is inferred.
@@ -5684,7 +5684,7 @@ export interface HttpRouteSpecRulesBackendRefs {
      *
      * @schema HttpRouteSpecRulesBackendRefs#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Port specifies the destination port number to use for this resource. Port is required when
@@ -5694,7 +5694,7 @@ export interface HttpRouteSpecRulesBackendRefs {
      *
      * @schema HttpRouteSpecRulesBackendRefs#port
      */
-    readonly port?: number
+    port?: number
 
     /**
      * Weight specifies the proportion of requests forwarded to the referenced backend. This is
@@ -5711,7 +5711,7 @@ export interface HttpRouteSpecRulesBackendRefs {
      *
      * @schema HttpRouteSpecRulesBackendRefs#weight
      */
-    readonly weight?: number
+    weight?: number
 }
 
 /** Converts an object of type 'HttpRouteSpecRulesBackendRefs' to JSON representation. */
@@ -5760,7 +5760,7 @@ export interface HttpRouteSpecRulesFilters {
      *
      * @schema HttpRouteSpecRulesFilters#extensionRef
      */
-    readonly extensionRef?: HttpRouteSpecRulesFiltersExtensionRef
+    extensionRef?: HttpRouteSpecRulesFiltersExtensionRef
 
     /**
      * RequestHeaderModifier defines a schema for a filter that modifies request headers.
@@ -5769,7 +5769,7 @@ export interface HttpRouteSpecRulesFilters {
      *
      * @schema HttpRouteSpecRulesFilters#requestHeaderModifier
      */
-    readonly requestHeaderModifier?: HttpRouteSpecRulesFiltersRequestHeaderModifier
+    requestHeaderModifier?: HttpRouteSpecRulesFiltersRequestHeaderModifier
 
     /**
      * RequestMirror defines a schema for a filter that mirrors requests. Requests are sent to the
@@ -5782,7 +5782,7 @@ export interface HttpRouteSpecRulesFilters {
      *
      * @schema HttpRouteSpecRulesFilters#requestMirror
      */
-    readonly requestMirror?: HttpRouteSpecRulesFiltersRequestMirror
+    requestMirror?: HttpRouteSpecRulesFiltersRequestMirror
 
     /**
      * RequestRedirect defines a schema for a filter that responds to the request with an HTTP
@@ -5792,7 +5792,7 @@ export interface HttpRouteSpecRulesFilters {
      *
      * @schema HttpRouteSpecRulesFilters#requestRedirect
      */
-    readonly requestRedirect?: HttpRouteSpecRulesFiltersRequestRedirect
+    requestRedirect?: HttpRouteSpecRulesFiltersRequestRedirect
 
     /**
      * ResponseHeaderModifier defines a schema for a filter that modifies response headers.
@@ -5801,7 +5801,7 @@ export interface HttpRouteSpecRulesFilters {
      *
      * @schema HttpRouteSpecRulesFilters#responseHeaderModifier
      */
-    readonly responseHeaderModifier?: HttpRouteSpecRulesFiltersResponseHeaderModifier
+    responseHeaderModifier?: HttpRouteSpecRulesFiltersResponseHeaderModifier
 
     /**
      * Type identifies the type of filter to apply. As with other API fields, types are classified
@@ -5833,7 +5833,7 @@ export interface HttpRouteSpecRulesFilters {
      *
      * @schema HttpRouteSpecRulesFilters#type
      */
-    readonly type: HttpRouteSpecRulesFiltersType
+    type: HttpRouteSpecRulesFiltersType
 
     /**
      * URLRewrite defines a schema for a filter that modifies a request during forwarding.
@@ -5842,7 +5842,7 @@ export interface HttpRouteSpecRulesFilters {
      *
      * @schema HttpRouteSpecRulesFilters#urlRewrite
      */
-    readonly urlRewrite?: HttpRouteSpecRulesFiltersUrlRewrite
+    urlRewrite?: HttpRouteSpecRulesFiltersUrlRewrite
 }
 
 /** Converts an object of type 'HttpRouteSpecRulesFilters' to JSON representation. */
@@ -5899,7 +5899,7 @@ export interface HttpRouteSpecRulesMatches {
      *
      * @schema HttpRouteSpecRulesMatches#headers
      */
-    readonly headers?: HttpRouteSpecRulesMatchesHeaders[]
+    headers?: HttpRouteSpecRulesMatchesHeaders[]
 
     /**
      * Method specifies HTTP method matcher. When specified, this route will be matched only if the
@@ -5909,7 +5909,7 @@ export interface HttpRouteSpecRulesMatches {
      *
      * @schema HttpRouteSpecRulesMatches#method
      */
-    readonly method?: HttpRouteSpecRulesMatchesMethod
+    method?: HttpRouteSpecRulesMatchesMethod
 
     /**
      * Path specifies a HTTP request path matcher. If this field is not specified, a default prefix
@@ -5917,7 +5917,7 @@ export interface HttpRouteSpecRulesMatches {
      *
      * @schema HttpRouteSpecRulesMatches#path
      */
-    readonly path?: HttpRouteSpecRulesMatchesPath
+    path?: HttpRouteSpecRulesMatchesPath
 
     /**
      * QueryParams specifies HTTP query parameter matchers. Multiple match values are ANDed
@@ -5928,7 +5928,7 @@ export interface HttpRouteSpecRulesMatches {
      *
      * @schema HttpRouteSpecRulesMatches#queryParams
      */
-    readonly queryParams?: HttpRouteSpecRulesMatchesQueryParams[]
+    queryParams?: HttpRouteSpecRulesMatchesQueryParams[]
 }
 
 /** Converts an object of type 'HttpRouteSpecRulesMatches' to JSON representation. */
@@ -5983,7 +5983,7 @@ export interface HttpRouteSpecRulesTimeouts {
      *
      * @schema HttpRouteSpecRulesTimeouts#backendRequest
      */
-    readonly backendRequest?: string
+    backendRequest?: string
 
     /**
      * Request specifies the maximum duration for a gateway to respond to an HTTP request. If the
@@ -6009,7 +6009,7 @@ export interface HttpRouteSpecRulesTimeouts {
      *
      * @schema HttpRouteSpecRulesTimeouts#request
      */
-    readonly request?: string
+    request?: string
 }
 
 /** Converts an object of type 'HttpRouteSpecRulesTimeouts' to JSON representation. */
@@ -6053,7 +6053,7 @@ export interface HttpRouteSpecRulesBackendRefsFilters {
      *
      * @schema HttpRouteSpecRulesBackendRefsFilters#extensionRef
      */
-    readonly extensionRef?: HttpRouteSpecRulesBackendRefsFiltersExtensionRef
+    extensionRef?: HttpRouteSpecRulesBackendRefsFiltersExtensionRef
 
     /**
      * RequestHeaderModifier defines a schema for a filter that modifies request headers.
@@ -6062,7 +6062,7 @@ export interface HttpRouteSpecRulesBackendRefsFilters {
      *
      * @schema HttpRouteSpecRulesBackendRefsFilters#requestHeaderModifier
      */
-    readonly requestHeaderModifier?: HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifier
+    requestHeaderModifier?: HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifier
 
     /**
      * RequestMirror defines a schema for a filter that mirrors requests. Requests are sent to the
@@ -6075,7 +6075,7 @@ export interface HttpRouteSpecRulesBackendRefsFilters {
      *
      * @schema HttpRouteSpecRulesBackendRefsFilters#requestMirror
      */
-    readonly requestMirror?: HttpRouteSpecRulesBackendRefsFiltersRequestMirror
+    requestMirror?: HttpRouteSpecRulesBackendRefsFiltersRequestMirror
 
     /**
      * RequestRedirect defines a schema for a filter that responds to the request with an HTTP
@@ -6085,7 +6085,7 @@ export interface HttpRouteSpecRulesBackendRefsFilters {
      *
      * @schema HttpRouteSpecRulesBackendRefsFilters#requestRedirect
      */
-    readonly requestRedirect?: HttpRouteSpecRulesBackendRefsFiltersRequestRedirect
+    requestRedirect?: HttpRouteSpecRulesBackendRefsFiltersRequestRedirect
 
     /**
      * ResponseHeaderModifier defines a schema for a filter that modifies response headers.
@@ -6094,7 +6094,7 @@ export interface HttpRouteSpecRulesBackendRefsFilters {
      *
      * @schema HttpRouteSpecRulesBackendRefsFilters#responseHeaderModifier
      */
-    readonly responseHeaderModifier?: HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifier
+    responseHeaderModifier?: HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifier
 
     /**
      * Type identifies the type of filter to apply. As with other API fields, types are classified
@@ -6126,7 +6126,7 @@ export interface HttpRouteSpecRulesBackendRefsFilters {
      *
      * @schema HttpRouteSpecRulesBackendRefsFilters#type
      */
-    readonly type: HttpRouteSpecRulesBackendRefsFiltersType
+    type: HttpRouteSpecRulesBackendRefsFiltersType
 
     /**
      * URLRewrite defines a schema for a filter that modifies a request during forwarding.
@@ -6135,7 +6135,7 @@ export interface HttpRouteSpecRulesBackendRefsFilters {
      *
      * @schema HttpRouteSpecRulesBackendRefsFilters#urlRewrite
      */
-    readonly urlRewrite?: HttpRouteSpecRulesBackendRefsFiltersUrlRewrite
+    urlRewrite?: HttpRouteSpecRulesBackendRefsFiltersUrlRewrite
 }
 
 /** Converts an object of type 'HttpRouteSpecRulesBackendRefsFilters' to JSON representation. */
@@ -6187,21 +6187,21 @@ export interface HttpRouteSpecRulesFiltersExtensionRef {
      *
      * @schema HttpRouteSpecRulesFiltersExtensionRef#group
      */
-    readonly group: string
+    group: string
 
     /**
      * Kind is kind of the referent. For example "HTTPRoute" or "Service".
      *
      * @schema HttpRouteSpecRulesFiltersExtensionRef#kind
      */
-    readonly kind: string
+    kind: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema HttpRouteSpecRulesFiltersExtensionRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HttpRouteSpecRulesFiltersExtensionRef' to JSON representation. */
@@ -6247,7 +6247,7 @@ export interface HttpRouteSpecRulesFiltersRequestHeaderModifier {
      *
      * @schema HttpRouteSpecRulesFiltersRequestHeaderModifier#add
      */
-    readonly add?: HttpRouteSpecRulesFiltersRequestHeaderModifierAdd[]
+    add?: HttpRouteSpecRulesFiltersRequestHeaderModifierAdd[]
 
     /**
      * Remove the given header(s) from the HTTP request before the action. The value of Remove is a
@@ -6262,7 +6262,7 @@ export interface HttpRouteSpecRulesFiltersRequestHeaderModifier {
      *
      * @schema HttpRouteSpecRulesFiltersRequestHeaderModifier#remove
      */
-    readonly remove?: string[]
+    remove?: string[]
 
     /**
      * Set overwrites the request with the given header (name, value) before the action.
@@ -6277,7 +6277,7 @@ export interface HttpRouteSpecRulesFiltersRequestHeaderModifier {
      *
      * @schema HttpRouteSpecRulesFiltersRequestHeaderModifier#set
      */
-    readonly set?: HttpRouteSpecRulesFiltersRequestHeaderModifierSet[]
+    set?: HttpRouteSpecRulesFiltersRequestHeaderModifierSet[]
 }
 
 /**
@@ -6340,7 +6340,7 @@ export interface HttpRouteSpecRulesFiltersRequestMirror {
      *
      * @schema HttpRouteSpecRulesFiltersRequestMirror#backendRef
      */
-    readonly backendRef: HttpRouteSpecRulesFiltersRequestMirrorBackendRef
+    backendRef: HttpRouteSpecRulesFiltersRequestMirrorBackendRef
 }
 
 /** Converts an object of type 'HttpRouteSpecRulesFiltersRequestMirror' to JSON representation. */
@@ -6379,7 +6379,7 @@ export interface HttpRouteSpecRulesFiltersRequestRedirect {
      *
      * @schema HttpRouteSpecRulesFiltersRequestRedirect#hostname
      */
-    readonly hostname?: string
+    hostname?: string
 
     /**
      * Path defines parameters used to modify the path of the incoming request. The modified path is
@@ -6389,7 +6389,7 @@ export interface HttpRouteSpecRulesFiltersRequestRedirect {
      *
      * @schema HttpRouteSpecRulesFiltersRequestRedirect#path
      */
-    readonly path?: HttpRouteSpecRulesFiltersRequestRedirectPath
+    path?: HttpRouteSpecRulesFiltersRequestRedirectPath
 
     /**
      * Port is the port to be used in the value of the `Location` header in the response.
@@ -6414,7 +6414,7 @@ export interface HttpRouteSpecRulesFiltersRequestRedirect {
      *
      * @schema HttpRouteSpecRulesFiltersRequestRedirect#port
      */
-    readonly port?: number
+    port?: number
 
     /**
      * Scheme is the scheme to be used in the value of the `Location` header in the response. When
@@ -6433,7 +6433,7 @@ export interface HttpRouteSpecRulesFiltersRequestRedirect {
      *
      * @schema HttpRouteSpecRulesFiltersRequestRedirect#scheme
      */
-    readonly scheme?: HttpRouteSpecRulesFiltersRequestRedirectScheme
+    scheme?: HttpRouteSpecRulesFiltersRequestRedirectScheme
 
     /**
      * StatusCode is the HTTP status code to be used in response.
@@ -6448,7 +6448,7 @@ export interface HttpRouteSpecRulesFiltersRequestRedirect {
      *
      * @schema HttpRouteSpecRulesFiltersRequestRedirect#statusCode
      */
-    readonly statusCode?: HttpRouteSpecRulesFiltersRequestRedirectStatusCode
+    statusCode?: HttpRouteSpecRulesFiltersRequestRedirectStatusCode
 }
 
 /** Converts an object of type 'HttpRouteSpecRulesFiltersRequestRedirect' to JSON representation. */
@@ -6496,7 +6496,7 @@ export interface HttpRouteSpecRulesFiltersResponseHeaderModifier {
      *
      * @schema HttpRouteSpecRulesFiltersResponseHeaderModifier#add
      */
-    readonly add?: HttpRouteSpecRulesFiltersResponseHeaderModifierAdd[]
+    add?: HttpRouteSpecRulesFiltersResponseHeaderModifierAdd[]
 
     /**
      * Remove the given header(s) from the HTTP request before the action. The value of Remove is a
@@ -6511,7 +6511,7 @@ export interface HttpRouteSpecRulesFiltersResponseHeaderModifier {
      *
      * @schema HttpRouteSpecRulesFiltersResponseHeaderModifier#remove
      */
-    readonly remove?: string[]
+    remove?: string[]
 
     /**
      * Set overwrites the request with the given header (name, value) before the action.
@@ -6526,7 +6526,7 @@ export interface HttpRouteSpecRulesFiltersResponseHeaderModifier {
      *
      * @schema HttpRouteSpecRulesFiltersResponseHeaderModifier#set
      */
-    readonly set?: HttpRouteSpecRulesFiltersResponseHeaderModifierSet[]
+    set?: HttpRouteSpecRulesFiltersResponseHeaderModifierSet[]
 }
 
 /**
@@ -6612,7 +6612,7 @@ export interface HttpRouteSpecRulesFiltersUrlRewrite {
      *
      * @schema HttpRouteSpecRulesFiltersUrlRewrite#hostname
      */
-    readonly hostname?: string
+    hostname?: string
 
     /**
      * Path defines a path rewrite.
@@ -6621,7 +6621,7 @@ export interface HttpRouteSpecRulesFiltersUrlRewrite {
      *
      * @schema HttpRouteSpecRulesFiltersUrlRewrite#path
      */
-    readonly path?: HttpRouteSpecRulesFiltersUrlRewritePath
+    path?: HttpRouteSpecRulesFiltersUrlRewritePath
 }
 
 /** Converts an object of type 'HttpRouteSpecRulesFiltersUrlRewrite' to JSON representation. */
@@ -6666,7 +6666,7 @@ export interface HttpRouteSpecRulesMatchesHeaders {
      *
      * @schema HttpRouteSpecRulesMatchesHeaders#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Type specifies how to match against the value of the header.
@@ -6681,14 +6681,14 @@ export interface HttpRouteSpecRulesMatchesHeaders {
      *
      * @schema HttpRouteSpecRulesMatchesHeaders#type
      */
-    readonly type?: HttpRouteSpecRulesMatchesHeadersType
+    type?: HttpRouteSpecRulesMatchesHeadersType
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteSpecRulesMatchesHeaders#value
      */
-    readonly value: string
+    value: string
 }
 
 /** Converts an object of type 'HttpRouteSpecRulesMatchesHeaders' to JSON representation. */
@@ -6757,14 +6757,14 @@ export interface HttpRouteSpecRulesMatchesPath {
      *
      * @schema HttpRouteSpecRulesMatchesPath#type
      */
-    readonly type?: HttpRouteSpecRulesMatchesPathType
+    type?: HttpRouteSpecRulesMatchesPathType
 
     /**
      * Value of the HTTP path to match against.
      *
      * @schema HttpRouteSpecRulesMatchesPath#value
      */
-    readonly value?: string
+    value?: string
 }
 
 /** Converts an object of type 'HttpRouteSpecRulesMatchesPath' to JSON representation. */
@@ -6812,7 +6812,7 @@ export interface HttpRouteSpecRulesMatchesQueryParams {
      *
      * @schema HttpRouteSpecRulesMatchesQueryParams#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Type specifies how to match against the value of the query parameter.
@@ -6827,14 +6827,14 @@ export interface HttpRouteSpecRulesMatchesQueryParams {
      *
      * @schema HttpRouteSpecRulesMatchesQueryParams#type
      */
-    readonly type?: HttpRouteSpecRulesMatchesQueryParamsType
+    type?: HttpRouteSpecRulesMatchesQueryParamsType
 
     /**
      * Value is the value of HTTP query param to be matched.
      *
      * @schema HttpRouteSpecRulesMatchesQueryParams#value
      */
-    readonly value: string
+    value: string
 }
 
 /** Converts an object of type 'HttpRouteSpecRulesMatchesQueryParams' to JSON representation. */
@@ -6876,21 +6876,21 @@ export interface HttpRouteSpecRulesBackendRefsFiltersExtensionRef {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersExtensionRef#group
      */
-    readonly group: string
+    group: string
 
     /**
      * Kind is kind of the referent. For example "HTTPRoute" or "Service".
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersExtensionRef#kind
      */
-    readonly kind: string
+    kind: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersExtensionRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -6939,7 +6939,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifier {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifier#add
      */
-    readonly add?: HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifierAdd[]
+    add?: HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifierAdd[]
 
     /**
      * Remove the given header(s) from the HTTP request before the action. The value of Remove is a
@@ -6954,7 +6954,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifier {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifier#remove
      */
-    readonly remove?: string[]
+    remove?: string[]
 
     /**
      * Set overwrites the request with the given header (name, value) before the action.
@@ -6969,7 +6969,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifier {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifier#set
      */
-    readonly set?: HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifierSet[]
+    set?: HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifierSet[]
 }
 
 /**
@@ -7036,7 +7036,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestMirror {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestMirror#backendRef
      */
-    readonly backendRef: HttpRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef
+    backendRef: HttpRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef
 }
 
 /**
@@ -7080,7 +7080,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestRedirect {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestRedirect#hostname
      */
-    readonly hostname?: string
+    hostname?: string
 
     /**
      * Path defines parameters used to modify the path of the incoming request. The modified path is
@@ -7090,7 +7090,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestRedirect {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestRedirect#path
      */
-    readonly path?: HttpRouteSpecRulesBackendRefsFiltersRequestRedirectPath
+    path?: HttpRouteSpecRulesBackendRefsFiltersRequestRedirectPath
 
     /**
      * Port is the port to be used in the value of the `Location` header in the response.
@@ -7115,7 +7115,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestRedirect {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestRedirect#port
      */
-    readonly port?: number
+    port?: number
 
     /**
      * Scheme is the scheme to be used in the value of the `Location` header in the response. When
@@ -7134,7 +7134,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestRedirect {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestRedirect#scheme
      */
-    readonly scheme?: HttpRouteSpecRulesBackendRefsFiltersRequestRedirectScheme
+    scheme?: HttpRouteSpecRulesBackendRefsFiltersRequestRedirectScheme
 
     /**
      * StatusCode is the HTTP status code to be used in response.
@@ -7149,7 +7149,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestRedirect {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestRedirect#statusCode
      */
-    readonly statusCode?: HttpRouteSpecRulesBackendRefsFiltersRequestRedirectStatusCode
+    statusCode?: HttpRouteSpecRulesBackendRefsFiltersRequestRedirectStatusCode
 }
 
 /**
@@ -7200,7 +7200,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifier {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifier#add
      */
-    readonly add?: HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifierAdd[]
+    add?: HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifierAdd[]
 
     /**
      * Remove the given header(s) from the HTTP request before the action. The value of Remove is a
@@ -7215,7 +7215,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifier {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifier#remove
      */
-    readonly remove?: string[]
+    remove?: string[]
 
     /**
      * Set overwrites the request with the given header (name, value) before the action.
@@ -7230,7 +7230,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifier {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifier#set
      */
-    readonly set?: HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifierSet[]
+    set?: HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifierSet[]
 }
 
 /**
@@ -7320,7 +7320,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersUrlRewrite {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersUrlRewrite#hostname
      */
-    readonly hostname?: string
+    hostname?: string
 
     /**
      * Path defines a path rewrite.
@@ -7329,7 +7329,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersUrlRewrite {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersUrlRewrite#path
      */
-    readonly path?: HttpRouteSpecRulesBackendRefsFiltersUrlRewritePath
+    path?: HttpRouteSpecRulesBackendRefsFiltersUrlRewritePath
 }
 
 /**
@@ -7372,14 +7372,14 @@ export interface HttpRouteSpecRulesFiltersRequestHeaderModifierAdd {
      *
      * @schema HttpRouteSpecRulesFiltersRequestHeaderModifierAdd#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteSpecRulesFiltersRequestHeaderModifierAdd#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -7422,14 +7422,14 @@ export interface HttpRouteSpecRulesFiltersRequestHeaderModifierSet {
      *
      * @schema HttpRouteSpecRulesFiltersRequestHeaderModifierSet#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteSpecRulesFiltersRequestHeaderModifierSet#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -7486,7 +7486,7 @@ export interface HttpRouteSpecRulesFiltersRequestMirrorBackendRef {
      *
      * @schema HttpRouteSpecRulesFiltersRequestMirrorBackendRef#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is the Kubernetes resource kind of the referent. For example "Service".
@@ -7505,14 +7505,14 @@ export interface HttpRouteSpecRulesFiltersRequestMirrorBackendRef {
      * @default Service" when not specified.
      * @schema HttpRouteSpecRulesFiltersRequestMirrorBackendRef#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema HttpRouteSpecRulesFiltersRequestMirrorBackendRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the backend. When unspecified, the local namespace is inferred.
@@ -7525,7 +7525,7 @@ export interface HttpRouteSpecRulesFiltersRequestMirrorBackendRef {
      *
      * @schema HttpRouteSpecRulesFiltersRequestMirrorBackendRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Port specifies the destination port number to use for this resource. Port is required when
@@ -7535,7 +7535,7 @@ export interface HttpRouteSpecRulesFiltersRequestMirrorBackendRef {
      *
      * @schema HttpRouteSpecRulesFiltersRequestMirrorBackendRef#port
      */
-    readonly port?: number
+    port?: number
 }
 
 /**
@@ -7579,7 +7579,7 @@ export interface HttpRouteSpecRulesFiltersRequestRedirectPath {
      *
      * @schema HttpRouteSpecRulesFiltersRequestRedirectPath#replaceFullPath
      */
-    readonly replaceFullPath?: string
+    replaceFullPath?: string
 
     /**
      * ReplacePrefixMatch specifies the value with which to replace the prefix match of a request
@@ -7599,7 +7599,7 @@ export interface HttpRouteSpecRulesFiltersRequestRedirectPath {
      *
      * @schema HttpRouteSpecRulesFiltersRequestRedirectPath#replacePrefixMatch
      */
-    readonly replacePrefixMatch?: string
+    replacePrefixMatch?: string
 
     /**
      * Type defines the type of path modifier. Additional types may be added in a future release of
@@ -7613,7 +7613,7 @@ export interface HttpRouteSpecRulesFiltersRequestRedirectPath {
      *
      * @schema HttpRouteSpecRulesFiltersRequestRedirectPath#type
      */
-    readonly type: HttpRouteSpecRulesFiltersRequestRedirectPathType
+    type: HttpRouteSpecRulesFiltersRequestRedirectPathType
 }
 
 /** Converts an object of type 'HttpRouteSpecRulesFiltersRequestRedirectPath' to JSON representation. */
@@ -7698,14 +7698,14 @@ export interface HttpRouteSpecRulesFiltersResponseHeaderModifierAdd {
      *
      * @schema HttpRouteSpecRulesFiltersResponseHeaderModifierAdd#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteSpecRulesFiltersResponseHeaderModifierAdd#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -7748,14 +7748,14 @@ export interface HttpRouteSpecRulesFiltersResponseHeaderModifierSet {
      *
      * @schema HttpRouteSpecRulesFiltersResponseHeaderModifierSet#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteSpecRulesFiltersResponseHeaderModifierSet#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -7795,7 +7795,7 @@ export interface HttpRouteSpecRulesFiltersUrlRewritePath {
      *
      * @schema HttpRouteSpecRulesFiltersUrlRewritePath#replaceFullPath
      */
-    readonly replaceFullPath?: string
+    replaceFullPath?: string
 
     /**
      * ReplacePrefixMatch specifies the value with which to replace the prefix match of a request
@@ -7815,7 +7815,7 @@ export interface HttpRouteSpecRulesFiltersUrlRewritePath {
      *
      * @schema HttpRouteSpecRulesFiltersUrlRewritePath#replacePrefixMatch
      */
-    readonly replacePrefixMatch?: string
+    replacePrefixMatch?: string
 
     /**
      * Type defines the type of path modifier. Additional types may be added in a future release of
@@ -7829,7 +7829,7 @@ export interface HttpRouteSpecRulesFiltersUrlRewritePath {
      *
      * @schema HttpRouteSpecRulesFiltersUrlRewritePath#type
      */
-    readonly type: HttpRouteSpecRulesFiltersUrlRewritePathType
+    type: HttpRouteSpecRulesFiltersUrlRewritePathType
 }
 
 /** Converts an object of type 'HttpRouteSpecRulesFiltersUrlRewritePath' to JSON representation. */
@@ -7928,14 +7928,14 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifierAdd {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifierAdd#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifierAdd#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -7978,14 +7978,14 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifierSet {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifierSet#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestHeaderModifierSet#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -8042,7 +8042,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is the Kubernetes resource kind of the referent. For example "Service".
@@ -8061,14 +8061,14 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef {
      * @default Service" when not specified.
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the backend. When unspecified, the local namespace is inferred.
@@ -8081,7 +8081,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Port specifies the destination port number to use for this resource. Port is required when
@@ -8091,7 +8091,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestMirrorBackendRef#port
      */
-    readonly port?: number
+    port?: number
 }
 
 /**
@@ -8135,7 +8135,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestRedirectPath {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestRedirectPath#replaceFullPath
      */
-    readonly replaceFullPath?: string
+    replaceFullPath?: string
 
     /**
      * ReplacePrefixMatch specifies the value with which to replace the prefix match of a request
@@ -8155,7 +8155,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestRedirectPath {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestRedirectPath#replacePrefixMatch
      */
-    readonly replacePrefixMatch?: string
+    replacePrefixMatch?: string
 
     /**
      * Type defines the type of path modifier. Additional types may be added in a future release of
@@ -8169,7 +8169,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersRequestRedirectPath {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersRequestRedirectPath#type
      */
-    readonly type: HttpRouteSpecRulesBackendRefsFiltersRequestRedirectPathType
+    type: HttpRouteSpecRulesBackendRefsFiltersRequestRedirectPathType
 }
 
 /**
@@ -8257,14 +8257,14 @@ export interface HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifierAdd {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifierAdd#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifierAdd#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -8307,14 +8307,14 @@ export interface HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifierSet {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifierSet#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersResponseHeaderModifierSet#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -8354,7 +8354,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersUrlRewritePath {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersUrlRewritePath#replaceFullPath
      */
-    readonly replaceFullPath?: string
+    replaceFullPath?: string
 
     /**
      * ReplacePrefixMatch specifies the value with which to replace the prefix match of a request
@@ -8374,7 +8374,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersUrlRewritePath {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersUrlRewritePath#replacePrefixMatch
      */
-    readonly replacePrefixMatch?: string
+    replacePrefixMatch?: string
 
     /**
      * Type defines the type of path modifier. Additional types may be added in a future release of
@@ -8388,7 +8388,7 @@ export interface HttpRouteSpecRulesBackendRefsFiltersUrlRewritePath {
      *
      * @schema HttpRouteSpecRulesBackendRefsFiltersUrlRewritePath#type
      */
-    readonly type: HttpRouteSpecRulesBackendRefsFiltersUrlRewritePathType
+    type: HttpRouteSpecRulesBackendRefsFiltersUrlRewritePathType
 }
 
 /**
@@ -8500,7 +8500,7 @@ export enum HttpRouteSpecRulesBackendRefsFiltersUrlRewritePathType {
  */
 export class HttpRouteV1Beta1 extends ApiObject {
     /** Returns the apiVersion and kind for "HTTPRouteV1Beta1" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "gateway.networking.k8s.io/v1beta1",
         kind: "HTTPRoute"
     }
@@ -8553,14 +8553,14 @@ export class HttpRouteV1Beta1 extends ApiObject {
  */
 export interface HttpRouteV1Beta1Props {
     /** @schema HTTPRouteV1Beta1#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * Spec defines the desired state of HTTPRoute.
      *
      * @schema HTTPRouteV1Beta1#spec
      */
-    readonly spec: HttpRouteV1Beta1Spec
+    spec: HttpRouteV1Beta1Spec
 }
 
 /** Converts an object of type 'HttpRouteV1Beta1Props' to JSON representation. */
@@ -8640,7 +8640,7 @@ export interface HttpRouteV1Beta1Spec {
      *
      * @schema HttpRouteV1Beta1Spec#hostnames
      */
-    readonly hostnames?: string[]
+    hostnames?: string[]
 
     /**
      * ParentRefs references the resources (usually Gateways) that a Route wants to be attached to.
@@ -8689,14 +8689,14 @@ export interface HttpRouteV1Beta1Spec {
      *
      * @schema HttpRouteV1Beta1Spec#parentRefs
      */
-    readonly parentRefs?: HttpRouteV1Beta1SpecParentRefs[]
+    parentRefs?: HttpRouteV1Beta1SpecParentRefs[]
 
     /**
      * Rules are a list of HTTP matchers, filters and actions.
      *
      * @schema HttpRouteV1Beta1Spec#rules
      */
-    readonly rules?: HttpRouteV1Beta1SpecRules[]
+    rules?: HttpRouteV1Beta1SpecRules[]
 }
 
 /** Converts an object of type 'HttpRouteV1Beta1Spec' to JSON representation. */
@@ -8744,7 +8744,7 @@ export interface HttpRouteV1Beta1SpecParentRefs {
      *
      * @schema HttpRouteV1Beta1SpecParentRefs#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is kind of the referent.
@@ -8758,7 +8758,7 @@ export interface HttpRouteV1Beta1SpecParentRefs {
      *
      * @schema HttpRouteV1Beta1SpecParentRefs#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name is the name of the referent.
@@ -8767,7 +8767,7 @@ export interface HttpRouteV1Beta1SpecParentRefs {
      *
      * @schema HttpRouteV1Beta1SpecParentRefs#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the referent. When unspecified, this refers to the local
@@ -8782,7 +8782,7 @@ export interface HttpRouteV1Beta1SpecParentRefs {
      *
      * @schema HttpRouteV1Beta1SpecParentRefs#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Port is the network port this Route targets. It can be interpreted differently based on the
@@ -8808,7 +8808,7 @@ export interface HttpRouteV1Beta1SpecParentRefs {
      *
      * @schema HttpRouteV1Beta1SpecParentRefs#port
      */
-    readonly port?: number
+    port?: number
 
     /**
      * SectionName is the name of a section within the target resource. In the following resources,
@@ -8834,7 +8834,7 @@ export interface HttpRouteV1Beta1SpecParentRefs {
      *
      * @schema HttpRouteV1Beta1SpecParentRefs#sectionName
      */
-    readonly sectionName?: string
+    sectionName?: string
 }
 
 /** Converts an object of type 'HttpRouteV1Beta1SpecParentRefs' to JSON representation. */
@@ -8901,7 +8901,7 @@ export interface HttpRouteV1Beta1SpecRules {
      *
      * @schema HttpRouteV1Beta1SpecRules#backendRefs
      */
-    readonly backendRefs?: HttpRouteV1Beta1SpecRulesBackendRefs[]
+    backendRefs?: HttpRouteV1Beta1SpecRulesBackendRefs[]
 
     /**
      * Filters define the filters that are applied to requests that match this rule.
@@ -8937,7 +8937,7 @@ export interface HttpRouteV1Beta1SpecRules {
      *
      * @schema HttpRouteV1Beta1SpecRules#filters
      */
-    readonly filters?: HttpRouteV1Beta1SpecRulesFilters[]
+    filters?: HttpRouteV1Beta1SpecRulesFilters[]
 
     /**
      * Matches define conditions used for matching the rule against incoming HTTP requests. Each
@@ -8993,7 +8993,7 @@ export interface HttpRouteV1Beta1SpecRules {
      *
      * @schema HttpRouteV1Beta1SpecRules#matches
      */
-    readonly matches?: HttpRouteV1Beta1SpecRulesMatches[]
+    matches?: HttpRouteV1Beta1SpecRulesMatches[]
 
     /**
      * Timeouts defines the timeouts that can be configured for an HTTP request.
@@ -9002,7 +9002,7 @@ export interface HttpRouteV1Beta1SpecRules {
      *
      * @schema HttpRouteV1Beta1SpecRules#timeouts
      */
-    readonly timeouts?: HttpRouteV1Beta1SpecRulesTimeouts
+    timeouts?: HttpRouteV1Beta1SpecRulesTimeouts
 }
 
 /** Converts an object of type 'HttpRouteV1Beta1SpecRules' to JSON representation. */
@@ -9064,7 +9064,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefs {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefs#filters
      */
-    readonly filters?: HttpRouteV1Beta1SpecRulesBackendRefsFilters[]
+    filters?: HttpRouteV1Beta1SpecRulesBackendRefsFilters[]
 
     /**
      * Group is the group of the referent. For example, "gateway.networking.k8s.io". When
@@ -9072,7 +9072,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefs {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefs#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is the Kubernetes resource kind of the referent. For example "Service".
@@ -9091,14 +9091,14 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefs {
      * @default Service" when not specified.
      * @schema HttpRouteV1Beta1SpecRulesBackendRefs#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefs#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the backend. When unspecified, the local namespace is inferred.
@@ -9111,7 +9111,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefs {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefs#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Port specifies the destination port number to use for this resource. Port is required when
@@ -9121,7 +9121,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefs {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefs#port
      */
-    readonly port?: number
+    port?: number
 
     /**
      * Weight specifies the proportion of requests forwarded to the referenced backend. This is
@@ -9138,7 +9138,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefs {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefs#weight
      */
-    readonly weight?: number
+    weight?: number
 }
 
 /** Converts an object of type 'HttpRouteV1Beta1SpecRulesBackendRefs' to JSON representation. */
@@ -9187,7 +9187,7 @@ export interface HttpRouteV1Beta1SpecRulesFilters {
      *
      * @schema HttpRouteV1Beta1SpecRulesFilters#extensionRef
      */
-    readonly extensionRef?: HttpRouteV1Beta1SpecRulesFiltersExtensionRef
+    extensionRef?: HttpRouteV1Beta1SpecRulesFiltersExtensionRef
 
     /**
      * RequestHeaderModifier defines a schema for a filter that modifies request headers.
@@ -9196,7 +9196,7 @@ export interface HttpRouteV1Beta1SpecRulesFilters {
      *
      * @schema HttpRouteV1Beta1SpecRulesFilters#requestHeaderModifier
      */
-    readonly requestHeaderModifier?: HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifier
+    requestHeaderModifier?: HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifier
 
     /**
      * RequestMirror defines a schema for a filter that mirrors requests. Requests are sent to the
@@ -9209,7 +9209,7 @@ export interface HttpRouteV1Beta1SpecRulesFilters {
      *
      * @schema HttpRouteV1Beta1SpecRulesFilters#requestMirror
      */
-    readonly requestMirror?: HttpRouteV1Beta1SpecRulesFiltersRequestMirror
+    requestMirror?: HttpRouteV1Beta1SpecRulesFiltersRequestMirror
 
     /**
      * RequestRedirect defines a schema for a filter that responds to the request with an HTTP
@@ -9219,7 +9219,7 @@ export interface HttpRouteV1Beta1SpecRulesFilters {
      *
      * @schema HttpRouteV1Beta1SpecRulesFilters#requestRedirect
      */
-    readonly requestRedirect?: HttpRouteV1Beta1SpecRulesFiltersRequestRedirect
+    requestRedirect?: HttpRouteV1Beta1SpecRulesFiltersRequestRedirect
 
     /**
      * ResponseHeaderModifier defines a schema for a filter that modifies response headers.
@@ -9228,7 +9228,7 @@ export interface HttpRouteV1Beta1SpecRulesFilters {
      *
      * @schema HttpRouteV1Beta1SpecRulesFilters#responseHeaderModifier
      */
-    readonly responseHeaderModifier?: HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifier
+    responseHeaderModifier?: HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifier
 
     /**
      * Type identifies the type of filter to apply. As with other API fields, types are classified
@@ -9260,7 +9260,7 @@ export interface HttpRouteV1Beta1SpecRulesFilters {
      *
      * @schema HttpRouteV1Beta1SpecRulesFilters#type
      */
-    readonly type: HttpRouteV1Beta1SpecRulesFiltersType
+    type: HttpRouteV1Beta1SpecRulesFiltersType
 
     /**
      * URLRewrite defines a schema for a filter that modifies a request during forwarding.
@@ -9269,7 +9269,7 @@ export interface HttpRouteV1Beta1SpecRulesFilters {
      *
      * @schema HttpRouteV1Beta1SpecRulesFilters#urlRewrite
      */
-    readonly urlRewrite?: HttpRouteV1Beta1SpecRulesFiltersUrlRewrite
+    urlRewrite?: HttpRouteV1Beta1SpecRulesFiltersUrlRewrite
 }
 
 /** Converts an object of type 'HttpRouteV1Beta1SpecRulesFilters' to JSON representation. */
@@ -9328,7 +9328,7 @@ export interface HttpRouteV1Beta1SpecRulesMatches {
      *
      * @schema HttpRouteV1Beta1SpecRulesMatches#headers
      */
-    readonly headers?: HttpRouteV1Beta1SpecRulesMatchesHeaders[]
+    headers?: HttpRouteV1Beta1SpecRulesMatchesHeaders[]
 
     /**
      * Method specifies HTTP method matcher. When specified, this route will be matched only if the
@@ -9338,7 +9338,7 @@ export interface HttpRouteV1Beta1SpecRulesMatches {
      *
      * @schema HttpRouteV1Beta1SpecRulesMatches#method
      */
-    readonly method?: HttpRouteV1Beta1SpecRulesMatchesMethod
+    method?: HttpRouteV1Beta1SpecRulesMatchesMethod
 
     /**
      * Path specifies a HTTP request path matcher. If this field is not specified, a default prefix
@@ -9346,7 +9346,7 @@ export interface HttpRouteV1Beta1SpecRulesMatches {
      *
      * @schema HttpRouteV1Beta1SpecRulesMatches#path
      */
-    readonly path?: HttpRouteV1Beta1SpecRulesMatchesPath
+    path?: HttpRouteV1Beta1SpecRulesMatchesPath
 
     /**
      * QueryParams specifies HTTP query parameter matchers. Multiple match values are ANDed
@@ -9357,7 +9357,7 @@ export interface HttpRouteV1Beta1SpecRulesMatches {
      *
      * @schema HttpRouteV1Beta1SpecRulesMatches#queryParams
      */
-    readonly queryParams?: HttpRouteV1Beta1SpecRulesMatchesQueryParams[]
+    queryParams?: HttpRouteV1Beta1SpecRulesMatchesQueryParams[]
 }
 
 /** Converts an object of type 'HttpRouteV1Beta1SpecRulesMatches' to JSON representation. */
@@ -9414,7 +9414,7 @@ export interface HttpRouteV1Beta1SpecRulesTimeouts {
      *
      * @schema HttpRouteV1Beta1SpecRulesTimeouts#backendRequest
      */
-    readonly backendRequest?: string
+    backendRequest?: string
 
     /**
      * Request specifies the maximum duration for a gateway to respond to an HTTP request. If the
@@ -9440,7 +9440,7 @@ export interface HttpRouteV1Beta1SpecRulesTimeouts {
      *
      * @schema HttpRouteV1Beta1SpecRulesTimeouts#request
      */
-    readonly request?: string
+    request?: string
 }
 
 /** Converts an object of type 'HttpRouteV1Beta1SpecRulesTimeouts' to JSON representation. */
@@ -9484,7 +9484,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFilters {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFilters#extensionRef
      */
-    readonly extensionRef?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersExtensionRef
+    extensionRef?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersExtensionRef
 
     /**
      * RequestHeaderModifier defines a schema for a filter that modifies request headers.
@@ -9493,7 +9493,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFilters {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFilters#requestHeaderModifier
      */
-    readonly requestHeaderModifier?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifier
+    requestHeaderModifier?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifier
 
     /**
      * RequestMirror defines a schema for a filter that mirrors requests. Requests are sent to the
@@ -9506,7 +9506,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFilters {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFilters#requestMirror
      */
-    readonly requestMirror?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestMirror
+    requestMirror?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestMirror
 
     /**
      * RequestRedirect defines a schema for a filter that responds to the request with an HTTP
@@ -9516,7 +9516,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFilters {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFilters#requestRedirect
      */
-    readonly requestRedirect?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirect
+    requestRedirect?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirect
 
     /**
      * ResponseHeaderModifier defines a schema for a filter that modifies response headers.
@@ -9525,7 +9525,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFilters {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFilters#responseHeaderModifier
      */
-    readonly responseHeaderModifier?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifier
+    responseHeaderModifier?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifier
 
     /**
      * Type identifies the type of filter to apply. As with other API fields, types are classified
@@ -9557,7 +9557,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFilters {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFilters#type
      */
-    readonly type: HttpRouteV1Beta1SpecRulesBackendRefsFiltersType
+    type: HttpRouteV1Beta1SpecRulesBackendRefsFiltersType
 
     /**
      * URLRewrite defines a schema for a filter that modifies a request during forwarding.
@@ -9566,7 +9566,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFilters {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFilters#urlRewrite
      */
-    readonly urlRewrite?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewrite
+    urlRewrite?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewrite
 }
 
 /** Converts an object of type 'HttpRouteV1Beta1SpecRulesBackendRefsFilters' to JSON representation. */
@@ -9624,21 +9624,21 @@ export interface HttpRouteV1Beta1SpecRulesFiltersExtensionRef {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersExtensionRef#group
      */
-    readonly group: string
+    group: string
 
     /**
      * Kind is kind of the referent. For example "HTTPRoute" or "Service".
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersExtensionRef#kind
      */
-    readonly kind: string
+    kind: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersExtensionRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'HttpRouteV1Beta1SpecRulesFiltersExtensionRef' to JSON representation. */
@@ -9684,7 +9684,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifier {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifier#add
      */
-    readonly add?: HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifierAdd[]
+    add?: HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifierAdd[]
 
     /**
      * Remove the given header(s) from the HTTP request before the action. The value of Remove is a
@@ -9699,7 +9699,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifier {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifier#remove
      */
-    readonly remove?: string[]
+    remove?: string[]
 
     /**
      * Set overwrites the request with the given header (name, value) before the action.
@@ -9714,7 +9714,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifier {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifier#set
      */
-    readonly set?: HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifierSet[]
+    set?: HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifierSet[]
 }
 
 /**
@@ -9777,7 +9777,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestMirror {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestMirror#backendRef
      */
-    readonly backendRef: HttpRouteV1Beta1SpecRulesFiltersRequestMirrorBackendRef
+    backendRef: HttpRouteV1Beta1SpecRulesFiltersRequestMirrorBackendRef
 }
 
 /**
@@ -9819,7 +9819,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestRedirect {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestRedirect#hostname
      */
-    readonly hostname?: string
+    hostname?: string
 
     /**
      * Path defines parameters used to modify the path of the incoming request. The modified path is
@@ -9829,7 +9829,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestRedirect {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestRedirect#path
      */
-    readonly path?: HttpRouteV1Beta1SpecRulesFiltersRequestRedirectPath
+    path?: HttpRouteV1Beta1SpecRulesFiltersRequestRedirectPath
 
     /**
      * Port is the port to be used in the value of the `Location` header in the response.
@@ -9854,7 +9854,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestRedirect {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestRedirect#port
      */
-    readonly port?: number
+    port?: number
 
     /**
      * Scheme is the scheme to be used in the value of the `Location` header in the response. When
@@ -9873,7 +9873,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestRedirect {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestRedirect#scheme
      */
-    readonly scheme?: HttpRouteV1Beta1SpecRulesFiltersRequestRedirectScheme
+    scheme?: HttpRouteV1Beta1SpecRulesFiltersRequestRedirectScheme
 
     /**
      * StatusCode is the HTTP status code to be used in response.
@@ -9888,7 +9888,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestRedirect {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestRedirect#statusCode
      */
-    readonly statusCode?: HttpRouteV1Beta1SpecRulesFiltersRequestRedirectStatusCode
+    statusCode?: HttpRouteV1Beta1SpecRulesFiltersRequestRedirectStatusCode
 }
 
 /**
@@ -9939,7 +9939,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifier {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifier#add
      */
-    readonly add?: HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifierAdd[]
+    add?: HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifierAdd[]
 
     /**
      * Remove the given header(s) from the HTTP request before the action. The value of Remove is a
@@ -9954,7 +9954,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifier {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifier#remove
      */
-    readonly remove?: string[]
+    remove?: string[]
 
     /**
      * Set overwrites the request with the given header (name, value) before the action.
@@ -9969,7 +9969,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifier {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifier#set
      */
-    readonly set?: HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifierSet[]
+    set?: HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifierSet[]
 }
 
 /**
@@ -10055,7 +10055,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersUrlRewrite {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersUrlRewrite#hostname
      */
-    readonly hostname?: string
+    hostname?: string
 
     /**
      * Path defines a path rewrite.
@@ -10064,7 +10064,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersUrlRewrite {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersUrlRewrite#path
      */
-    readonly path?: HttpRouteV1Beta1SpecRulesFiltersUrlRewritePath
+    path?: HttpRouteV1Beta1SpecRulesFiltersUrlRewritePath
 }
 
 /** Converts an object of type 'HttpRouteV1Beta1SpecRulesFiltersUrlRewrite' to JSON representation. */
@@ -10109,7 +10109,7 @@ export interface HttpRouteV1Beta1SpecRulesMatchesHeaders {
      *
      * @schema HttpRouteV1Beta1SpecRulesMatchesHeaders#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Type specifies how to match against the value of the header.
@@ -10124,14 +10124,14 @@ export interface HttpRouteV1Beta1SpecRulesMatchesHeaders {
      *
      * @schema HttpRouteV1Beta1SpecRulesMatchesHeaders#type
      */
-    readonly type?: HttpRouteV1Beta1SpecRulesMatchesHeadersType
+    type?: HttpRouteV1Beta1SpecRulesMatchesHeadersType
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteV1Beta1SpecRulesMatchesHeaders#value
      */
-    readonly value: string
+    value: string
 }
 
 /** Converts an object of type 'HttpRouteV1Beta1SpecRulesMatchesHeaders' to JSON representation. */
@@ -10200,14 +10200,14 @@ export interface HttpRouteV1Beta1SpecRulesMatchesPath {
      *
      * @schema HttpRouteV1Beta1SpecRulesMatchesPath#type
      */
-    readonly type?: HttpRouteV1Beta1SpecRulesMatchesPathType
+    type?: HttpRouteV1Beta1SpecRulesMatchesPathType
 
     /**
      * Value of the HTTP path to match against.
      *
      * @schema HttpRouteV1Beta1SpecRulesMatchesPath#value
      */
-    readonly value?: string
+    value?: string
 }
 
 /** Converts an object of type 'HttpRouteV1Beta1SpecRulesMatchesPath' to JSON representation. */
@@ -10255,7 +10255,7 @@ export interface HttpRouteV1Beta1SpecRulesMatchesQueryParams {
      *
      * @schema HttpRouteV1Beta1SpecRulesMatchesQueryParams#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Type specifies how to match against the value of the query parameter.
@@ -10270,14 +10270,14 @@ export interface HttpRouteV1Beta1SpecRulesMatchesQueryParams {
      *
      * @schema HttpRouteV1Beta1SpecRulesMatchesQueryParams#type
      */
-    readonly type?: HttpRouteV1Beta1SpecRulesMatchesQueryParamsType
+    type?: HttpRouteV1Beta1SpecRulesMatchesQueryParamsType
 
     /**
      * Value is the value of HTTP query param to be matched.
      *
      * @schema HttpRouteV1Beta1SpecRulesMatchesQueryParams#value
      */
-    readonly value: string
+    value: string
 }
 
 /** Converts an object of type 'HttpRouteV1Beta1SpecRulesMatchesQueryParams' to JSON representation. */
@@ -10319,21 +10319,21 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersExtensionRef {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersExtensionRef#group
      */
-    readonly group: string
+    group: string
 
     /**
      * Kind is kind of the referent. For example "HTTPRoute" or "Service".
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersExtensionRef#kind
      */
-    readonly kind: string
+    kind: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersExtensionRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -10382,7 +10382,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifie
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifier#add
      */
-    readonly add?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifierAdd[]
+    add?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifierAdd[]
 
     /**
      * Remove the given header(s) from the HTTP request before the action. The value of Remove is a
@@ -10397,7 +10397,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifie
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifier#remove
      */
-    readonly remove?: string[]
+    remove?: string[]
 
     /**
      * Set overwrites the request with the given header (name, value) before the action.
@@ -10412,7 +10412,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifie
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifier#set
      */
-    readonly set?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifierSet[]
+    set?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifierSet[]
 }
 
 /**
@@ -10479,7 +10479,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestMirror {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestMirror#backendRef
      */
-    readonly backendRef: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestMirrorBackendRef
+    backendRef: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestMirrorBackendRef
 }
 
 /**
@@ -10523,7 +10523,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirect {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirect#hostname
      */
-    readonly hostname?: string
+    hostname?: string
 
     /**
      * Path defines parameters used to modify the path of the incoming request. The modified path is
@@ -10533,7 +10533,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirect {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirect#path
      */
-    readonly path?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirectPath
+    path?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirectPath
 
     /**
      * Port is the port to be used in the value of the `Location` header in the response.
@@ -10558,7 +10558,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirect {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirect#port
      */
-    readonly port?: number
+    port?: number
 
     /**
      * Scheme is the scheme to be used in the value of the `Location` header in the response. When
@@ -10577,7 +10577,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirect {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirect#scheme
      */
-    readonly scheme?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirectScheme
+    scheme?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirectScheme
 
     /**
      * StatusCode is the HTTP status code to be used in response.
@@ -10592,7 +10592,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirect {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirect#statusCode
      */
-    readonly statusCode?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirectStatusCode
+    statusCode?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirectStatusCode
 }
 
 /**
@@ -10643,7 +10643,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifi
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifier#add
      */
-    readonly add?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifierAdd[]
+    add?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifierAdd[]
 
     /**
      * Remove the given header(s) from the HTTP request before the action. The value of Remove is a
@@ -10658,7 +10658,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifi
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifier#remove
      */
-    readonly remove?: string[]
+    remove?: string[]
 
     /**
      * Set overwrites the request with the given header (name, value) before the action.
@@ -10673,7 +10673,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifi
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifier#set
      */
-    readonly set?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifierSet[]
+    set?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifierSet[]
 }
 
 /**
@@ -10763,7 +10763,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewrite {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewrite#hostname
      */
-    readonly hostname?: string
+    hostname?: string
 
     /**
      * Path defines a path rewrite.
@@ -10772,7 +10772,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewrite {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewrite#path
      */
-    readonly path?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewritePath
+    path?: HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewritePath
 }
 
 /**
@@ -10815,14 +10815,14 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifierAdd {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifierAdd#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifierAdd#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -10865,14 +10865,14 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifierSet {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifierSet#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestHeaderModifierSet#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -10929,7 +10929,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestMirrorBackendRef {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestMirrorBackendRef#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is the Kubernetes resource kind of the referent. For example "Service".
@@ -10948,14 +10948,14 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestMirrorBackendRef {
      * @default Service" when not specified.
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestMirrorBackendRef#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestMirrorBackendRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the backend. When unspecified, the local namespace is inferred.
@@ -10968,7 +10968,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestMirrorBackendRef {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestMirrorBackendRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Port specifies the destination port number to use for this resource. Port is required when
@@ -10978,7 +10978,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestMirrorBackendRef {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestMirrorBackendRef#port
      */
-    readonly port?: number
+    port?: number
 }
 
 /**
@@ -11022,7 +11022,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestRedirectPath {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestRedirectPath#replaceFullPath
      */
-    readonly replaceFullPath?: string
+    replaceFullPath?: string
 
     /**
      * ReplacePrefixMatch specifies the value with which to replace the prefix match of a request
@@ -11042,7 +11042,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestRedirectPath {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestRedirectPath#replacePrefixMatch
      */
-    readonly replacePrefixMatch?: string
+    replacePrefixMatch?: string
 
     /**
      * Type defines the type of path modifier. Additional types may be added in a future release of
@@ -11056,7 +11056,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersRequestRedirectPath {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersRequestRedirectPath#type
      */
-    readonly type: HttpRouteV1Beta1SpecRulesFiltersRequestRedirectPathType
+    type: HttpRouteV1Beta1SpecRulesFiltersRequestRedirectPathType
 }
 
 /**
@@ -11144,14 +11144,14 @@ export interface HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifierAdd {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifierAdd#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifierAdd#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -11194,14 +11194,14 @@ export interface HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifierSet {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifierSet#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersResponseHeaderModifierSet#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -11241,7 +11241,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersUrlRewritePath {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersUrlRewritePath#replaceFullPath
      */
-    readonly replaceFullPath?: string
+    replaceFullPath?: string
 
     /**
      * ReplacePrefixMatch specifies the value with which to replace the prefix match of a request
@@ -11261,7 +11261,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersUrlRewritePath {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersUrlRewritePath#replacePrefixMatch
      */
-    readonly replacePrefixMatch?: string
+    replacePrefixMatch?: string
 
     /**
      * Type defines the type of path modifier. Additional types may be added in a future release of
@@ -11275,7 +11275,7 @@ export interface HttpRouteV1Beta1SpecRulesFiltersUrlRewritePath {
      *
      * @schema HttpRouteV1Beta1SpecRulesFiltersUrlRewritePath#type
      */
-    readonly type: HttpRouteV1Beta1SpecRulesFiltersUrlRewritePathType
+    type: HttpRouteV1Beta1SpecRulesFiltersUrlRewritePathType
 }
 
 /**
@@ -11377,14 +11377,14 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifie
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifierAdd#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifierAdd#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -11427,14 +11427,14 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifie
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifierSet#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestHeaderModifierSet#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -11491,7 +11491,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestMirrorBackend
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestMirrorBackendRef#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind is the Kubernetes resource kind of the referent. For example "Service".
@@ -11510,14 +11510,14 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestMirrorBackend
      * @default Service" when not specified.
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestMirrorBackendRef#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * Name is the name of the referent.
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestMirrorBackendRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace is the namespace of the backend. When unspecified, the local namespace is inferred.
@@ -11530,7 +11530,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestMirrorBackend
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestMirrorBackendRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Port specifies the destination port number to use for this resource. Port is required when
@@ -11540,7 +11540,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestMirrorBackend
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestMirrorBackendRef#port
      */
-    readonly port?: number
+    port?: number
 }
 
 /**
@@ -11584,7 +11584,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirectPath 
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirectPath#replaceFullPath
      */
-    readonly replaceFullPath?: string
+    replaceFullPath?: string
 
     /**
      * ReplacePrefixMatch specifies the value with which to replace the prefix match of a request
@@ -11604,7 +11604,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirectPath 
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirectPath#replacePrefixMatch
      */
-    readonly replacePrefixMatch?: string
+    replacePrefixMatch?: string
 
     /**
      * Type defines the type of path modifier. Additional types may be added in a future release of
@@ -11618,7 +11618,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirectPath 
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirectPath#type
      */
-    readonly type: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirectPathType
+    type: HttpRouteV1Beta1SpecRulesBackendRefsFiltersRequestRedirectPathType
 }
 
 /**
@@ -11706,14 +11706,14 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifi
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifierAdd#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifierAdd#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -11756,14 +11756,14 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifi
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifierSet#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Value is the value of HTTP Header to be matched.
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersResponseHeaderModifierSet#value
      */
-    readonly value: string
+    value: string
 }
 
 /**
@@ -11803,7 +11803,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewritePath {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewritePath#replaceFullPath
      */
-    readonly replaceFullPath?: string
+    replaceFullPath?: string
 
     /**
      * ReplacePrefixMatch specifies the value with which to replace the prefix match of a request
@@ -11823,7 +11823,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewritePath {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewritePath#replacePrefixMatch
      */
-    readonly replacePrefixMatch?: string
+    replacePrefixMatch?: string
 
     /**
      * Type defines the type of path modifier. Additional types may be added in a future release of
@@ -11837,7 +11837,7 @@ export interface HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewritePath {
      *
      * @schema HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewritePath#type
      */
-    readonly type: HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewritePathType
+    type: HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewritePathType
 }
 
 /**
@@ -11960,7 +11960,7 @@ export enum HttpRouteV1Beta1SpecRulesBackendRefsFiltersUrlRewritePathType {
  */
 export class ReferenceGrant extends ApiObject {
     /** Returns the apiVersion and kind for "ReferenceGrant" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "gateway.networking.k8s.io/v1beta1",
         kind: "ReferenceGrant"
     }
@@ -12024,14 +12024,14 @@ export class ReferenceGrant extends ApiObject {
  */
 export interface ReferenceGrantProps {
     /** @schema ReferenceGrant#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * Spec defines the desired state of ReferenceGrant.
      *
      * @schema ReferenceGrant#spec
      */
-    readonly spec?: ReferenceGrantSpec
+    spec?: ReferenceGrantSpec
 }
 
 /** Converts an object of type 'ReferenceGrantProps' to JSON representation. */
@@ -12069,7 +12069,7 @@ export interface ReferenceGrantSpec {
      *
      * @schema ReferenceGrantSpec#from
      */
-    readonly from: ReferenceGrantSpecFrom[]
+    from: ReferenceGrantSpecFrom[]
 
     /**
      * To describes the resources that may be referenced by the resources described in "From". Each
@@ -12080,7 +12080,7 @@ export interface ReferenceGrantSpec {
      *
      * @schema ReferenceGrantSpec#to
      */
-    readonly to: ReferenceGrantSpecTo[]
+    to: ReferenceGrantSpecTo[]
 }
 
 /** Converts an object of type 'ReferenceGrantSpec' to JSON representation. */
@@ -12116,7 +12116,7 @@ export interface ReferenceGrantSpecFrom {
      *
      * @schema ReferenceGrantSpecFrom#group
      */
-    readonly group: string
+    group: string
 
     /**
      * Kind is the kind of the referent. Although implementations may support additional resources,
@@ -12136,7 +12136,7 @@ export interface ReferenceGrantSpecFrom {
      *
      * @schema ReferenceGrantSpecFrom#kind
      */
-    readonly kind: string
+    kind: string
 
     /**
      * Namespace is the namespace of the referent.
@@ -12145,7 +12145,7 @@ export interface ReferenceGrantSpecFrom {
      *
      * @schema ReferenceGrantSpecFrom#namespace
      */
-    readonly namespace: string
+    namespace: string
 }
 
 /** Converts an object of type 'ReferenceGrantSpecFrom' to JSON representation. */
@@ -12182,7 +12182,7 @@ export interface ReferenceGrantSpecTo {
      *
      * @schema ReferenceGrantSpecTo#group
      */
-    readonly group: string
+    group: string
 
     /**
      * Kind is the kind of the referent. Although implementations may support additional resources,
@@ -12193,7 +12193,7 @@ export interface ReferenceGrantSpecTo {
      *
      * @schema ReferenceGrantSpecTo#kind
      */
-    readonly kind: string
+    kind: string
 
     /**
      * Name is the name of the referent. When unspecified, this policy refers to all resources of
@@ -12201,7 +12201,7 @@ export interface ReferenceGrantSpecTo {
      *
      * @schema ReferenceGrantSpecTo#name
      */
-    readonly name?: string
+    name?: string
 }
 
 /** Converts an object of type 'ReferenceGrantSpecTo' to JSON representation. */

@@ -9,7 +9,7 @@ import { Construct } from "constructs"
  */
 export class Kustomization extends ApiObject {
     /** Returns the apiVersion and kind for "Kustomization" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "kustomize.toolkit.fluxcd.io/v1",
         kind: "Kustomization"
     }
@@ -60,15 +60,15 @@ export class Kustomization extends ApiObject {
  */
 export interface KustomizationProps {
     /** @schema Kustomization#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
-     * KustomizationSpec defines the configuration to calculate the desired state from a Source using
-     * Kustomize.
+     * KustomizationSpec defines the configuration to calculate the desired state from a Source
+     * using Kustomize.
      *
      * @schema Kustomization#spec
      */
-    readonly spec?: KustomizationSpec
+    spec?: KustomizationSpec
 }
 
 /** Converts an object of type 'KustomizationProps' to JSON representation. */
@@ -104,21 +104,21 @@ export interface KustomizationSpec {
      *
      * @schema KustomizationSpec#commonMetadata
      */
-    readonly commonMetadata?: KustomizationSpecCommonMetadata
+    commonMetadata?: KustomizationSpecCommonMetadata
 
     /**
      * Components specifies relative paths to specifications of other Components.
      *
      * @schema KustomizationSpec#components
      */
-    readonly components?: string[]
+    components?: string[]
 
     /**
      * Decrypt Kubernetes secrets before applying them on the cluster.
      *
      * @schema KustomizationSpec#decryption
      */
-    readonly decryption?: KustomizationSpecDecryption
+    decryption?: KustomizationSpecDecryption
 
     /**
      * DeletionPolicy can be used to control garbage collection when this Kustomization is deleted.
@@ -128,7 +128,7 @@ export interface KustomizationSpec {
      * @default MirrorPrune'.
      * @schema KustomizationSpec#deletionPolicy
      */
-    readonly deletionPolicy?: KustomizationSpecDeletionPolicy
+    deletionPolicy?: KustomizationSpecDeletionPolicy
 
     /**
      * DependsOn may contain a meta.NamespacedObjectReference slice with references to Kustomization
@@ -136,7 +136,7 @@ export interface KustomizationSpec {
      *
      * @schema KustomizationSpec#dependsOn
      */
-    readonly dependsOn?: KustomizationSpecDependsOn[]
+    dependsOn?: KustomizationSpecDependsOn[]
 
     /**
      * Force instructs the controller to recreate resources when patching fails due to an immutable
@@ -144,31 +144,31 @@ export interface KustomizationSpec {
      *
      * @schema KustomizationSpec#force
      */
-    readonly force?: boolean
+    force?: boolean
 
     /**
      * HealthCheckExprs is a list of healthcheck expressions for evaluating the health of custom
-     * resources using Common Expression Language (CEL). The expressions are evaluated only when Wait
-     * or HealthChecks are specified.
+     * resources using Common Expression Language (CEL). The expressions are evaluated only when
+     * Wait or HealthChecks are specified.
      *
      * @schema KustomizationSpec#healthCheckExprs
      */
-    readonly healthCheckExprs?: KustomizationSpecHealthCheckExprs[]
+    healthCheckExprs?: KustomizationSpecHealthCheckExprs[]
 
     /**
      * A list of resources to be included in the health assessment.
      *
      * @schema KustomizationSpec#healthChecks
      */
-    readonly healthChecks?: KustomizationSpecHealthChecks[]
+    healthChecks?: KustomizationSpecHealthChecks[]
 
     /**
-     * Images is a list of (image name, new name, new tag or digest) for changing image names, tags or
-     * digests. This can also be achieved with a patch, but this operator is simpler to specify.
+     * Images is a list of (image name, new name, new tag or digest) for changing image names, tags
+     * or digests. This can also be achieved with a patch, but this operator is simpler to specify.
      *
      * @schema KustomizationSpec#images
      */
-    readonly images?: KustomizationSpecImages[]
+    images?: KustomizationSpecImages[]
 
     /**
      * The interval at which to reconcile the Kustomization. This interval is approximate and may be
@@ -176,40 +176,40 @@ export interface KustomizationSpec {
      *
      * @schema KustomizationSpec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
-     * The KubeConfig for reconciling the Kustomization on a remote cluster. When used in combination
-     * with KustomizationSpec.ServiceAccountName, forces the controller to act on behalf of that
-     * Service Account at the target cluster. If the --default-service-account flag is set, its value
-     * will be used as a controller level fallback for when KustomizationSpec.ServiceAccountName is
-     * empty.
+     * The KubeConfig for reconciling the Kustomization on a remote cluster. When used in
+     * combination with KustomizationSpec.ServiceAccountName, forces the controller to act on behalf
+     * of that Service Account at the target cluster. If the --default-service-account flag is set,
+     * its value will be used as a controller level fallback for when
+     * KustomizationSpec.ServiceAccountName is empty.
      *
      * @schema KustomizationSpec#kubeConfig
      */
-    readonly kubeConfig?: KustomizationSpecKubeConfig
+    kubeConfig?: KustomizationSpecKubeConfig
 
     /**
      * NamePrefix will prefix the names of all managed resources.
      *
      * @schema KustomizationSpec#namePrefix
      */
-    readonly namePrefix?: string
+    namePrefix?: string
 
     /**
      * NameSuffix will suffix the names of all managed resources.
      *
      * @schema KustomizationSpec#nameSuffix
      */
-    readonly nameSuffix?: string
+    nameSuffix?: string
 
     /**
-     * Strategic merge and JSON patches, defined as inline YAML objects, capable of targeting objects
-     * based on kind, label and annotation selectors.
+     * Strategic merge and JSON patches, defined as inline YAML objects, capable of targeting
+     * objects based on kind, label and annotation selectors.
      *
      * @schema KustomizationSpec#patches
      */
-    readonly patches?: KustomizationSpecPatches[]
+    patches?: KustomizationSpecPatches[]
 
     /**
      * Path to the directory containing the kustomization.yaml file, or the set of plain YAMLs a
@@ -219,7 +219,7 @@ export interface KustomizationSpec {
      * @default None', which translates to the root path of the SourceRef.
      * @schema KustomizationSpec#path
      */
-    readonly path?: string
+    path?: string
 
     /**
      * PostBuild describes which actions to perform on the YAML manifest generated by building the
@@ -227,14 +227,14 @@ export interface KustomizationSpec {
      *
      * @schema KustomizationSpec#postBuild
      */
-    readonly postBuild?: KustomizationSpecPostBuild
+    postBuild?: KustomizationSpecPostBuild
 
     /**
      * Prune enables garbage collection.
      *
      * @schema KustomizationSpec#prune
      */
-    readonly prune: boolean
+    prune: boolean
 
     /**
      * The interval at which to retry a previously failed reconciliation. When not specified, the
@@ -242,45 +242,47 @@ export interface KustomizationSpec {
      *
      * @schema KustomizationSpec#retryInterval
      */
-    readonly retryInterval?: string
+    retryInterval?: string
 
     /**
-     * The name of the Kubernetes service account to impersonate when reconciling this Kustomization.
+     * The name of the Kubernetes service account to impersonate when reconciling this
+     * Kustomization.
      *
      * @schema KustomizationSpec#serviceAccountName
      */
-    readonly serviceAccountName?: string
+    serviceAccountName?: string
 
     /**
      * Reference of the source where the kustomization file is.
      *
      * @schema KustomizationSpec#sourceRef
      */
-    readonly sourceRef: KustomizationSpecSourceRef
+    sourceRef: KustomizationSpecSourceRef
 
     /**
-     * This flag tells the controller to suspend subsequent kustomize executions, it does not apply to
-     * already started executions. Defaults to false.
+     * This flag tells the controller to suspend subsequent kustomize executions, it does not apply
+     * to already started executions. Defaults to false.
      *
      * @default false.
      * @schema KustomizationSpec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * TargetNamespace sets or overrides the namespace in the kustomization.yaml file.
      *
      * @schema KustomizationSpec#targetNamespace
      */
-    readonly targetNamespace?: string
+    targetNamespace?: string
 
     /**
-     * Timeout for validation, apply and health checking operations. Defaults to 'Interval' duration.
+     * Timeout for validation, apply and health checking operations. Defaults to 'Interval'
+     * duration.
      *
      * @default Interval' duration.
      * @schema KustomizationSpec#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 
     /**
      * Wait instructs the controller to check the health of all the reconciled resources. When
@@ -289,7 +291,7 @@ export interface KustomizationSpec {
      * @default false.
      * @schema KustomizationSpec#wait
      */
-    readonly wait?: boolean
+    wait?: boolean
 }
 
 /** Converts an object of type 'KustomizationSpec' to JSON representation. */
@@ -348,14 +350,14 @@ export interface KustomizationSpecCommonMetadata {
      *
      * @schema KustomizationSpecCommonMetadata#annotations
      */
-    readonly annotations?: { [key: string]: string }
+    annotations?: { [key: string]: string }
 
     /**
      * Labels to be added to the object's metadata.
      *
      * @schema KustomizationSpecCommonMetadata#labels
      */
-    readonly labels?: { [key: string]: string }
+    labels?: { [key: string]: string }
 }
 
 /** Converts an object of type 'KustomizationSpecCommonMetadata' to JSON representation. */
@@ -401,14 +403,14 @@ export interface KustomizationSpecDecryption {
      *
      * @schema KustomizationSpecDecryption#provider
      */
-    readonly provider: KustomizationSpecDecryptionProvider
+    provider: KustomizationSpecDecryptionProvider
 
     /**
      * The secret name containing the private OpenPGP keys used for decryption.
      *
      * @schema KustomizationSpecDecryption#secretRef
      */
-    readonly secretRef?: KustomizationSpecDecryptionSecretRef
+    secretRef?: KustomizationSpecDecryptionSecretRef
 }
 
 /** Converts an object of type 'KustomizationSpecDecryption' to JSON representation. */
@@ -460,14 +462,14 @@ export interface KustomizationSpecDependsOn {
      *
      * @schema KustomizationSpecDependsOn#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent, when not specified it acts as LocalObjectReference.
      *
      * @schema KustomizationSpecDependsOn#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'KustomizationSpecDependsOn' to JSON representation. */
@@ -501,23 +503,23 @@ export interface KustomizationSpecHealthCheckExprs {
      *
      * @schema KustomizationSpecHealthCheckExprs#apiVersion
      */
-    readonly apiVersion: string
+    apiVersion: string
 
     /**
-     * Current is the CEL expression that determines if the status of the custom resource has reached
-     * the desired state.
+     * Current is the CEL expression that determines if the status of the custom resource has
+     * reached the desired state.
      *
      * @schema KustomizationSpecHealthCheckExprs#current
      */
-    readonly current: string
+    current: string
 
     /**
-     * Failed is the CEL expression that determines if the status of the custom resource has failed to
-     * reach the desired state.
+     * Failed is the CEL expression that determines if the status of the custom resource has failed
+     * to reach the desired state.
      *
      * @schema KustomizationSpecHealthCheckExprs#failed
      */
-    readonly failed?: string
+    failed?: string
 
     /**
      * InProgress is the CEL expression that determines if the status of the custom resource has not
@@ -525,14 +527,14 @@ export interface KustomizationSpecHealthCheckExprs {
      *
      * @schema KustomizationSpecHealthCheckExprs#inProgress
      */
-    readonly inProgress?: string
+    inProgress?: string
 
     /**
      * Kind of the custom resource under evaluation.
      *
      * @schema KustomizationSpecHealthCheckExprs#kind
      */
-    readonly kind: string
+    kind: string
 }
 
 /** Converts an object of type 'KustomizationSpecHealthCheckExprs' to JSON representation. */
@@ -570,28 +572,28 @@ export interface KustomizationSpecHealthChecks {
      *
      * @schema KustomizationSpecHealthChecks#apiVersion
      */
-    readonly apiVersion?: string
+    apiVersion?: string
 
     /**
      * Kind of the referent.
      *
      * @schema KustomizationSpecHealthChecks#kind
      */
-    readonly kind: string
+    kind: string
 
     /**
      * Name of the referent.
      *
      * @schema KustomizationSpecHealthChecks#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent, when not specified it acts as LocalObjectReference.
      *
      * @schema KustomizationSpecHealthChecks#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'KustomizationSpecHealthChecks' to JSON representation. */
@@ -629,28 +631,28 @@ export interface KustomizationSpecImages {
      *
      * @schema KustomizationSpecImages#digest
      */
-    readonly digest?: string
+    digest?: string
 
     /**
      * Name is a tag-less image name.
      *
      * @schema KustomizationSpecImages#name
      */
-    readonly name: string
+    name: string
 
     /**
      * NewName is the value used to replace the original name.
      *
      * @schema KustomizationSpecImages#newName
      */
-    readonly newName?: string
+    newName?: string
 
     /**
      * NewTag is the value used to replace the original tag.
      *
      * @schema KustomizationSpecImages#newTag
      */
-    readonly newTag?: string
+    newTag?: string
 }
 
 /** Converts an object of type 'KustomizationSpecImages' to JSON representation. */
@@ -685,15 +687,16 @@ export function toJson_KustomizationSpecImages(
  */
 export interface KustomizationSpecKubeConfig {
     /**
-     * SecretRef holds the name of a secret that contains a key with the kubeconfig file as the value.
-     * If no key is set, the key will default to 'value'. It is recommended that the kubeconfig is
-     * self-contained, and the secret is regularly updated if credentials such as a cloud-access-token
-     * expire. Cloud specific `cmd-path` auth helpers will not function without adding binaries and
-     * credentials to the Pod that is responsible for reconciling Kubernetes resources.
+     * SecretRef holds the name of a secret that contains a key with the kubeconfig file as the
+     * value. If no key is set, the key will default to 'value'. It is recommended that the
+     * kubeconfig is self-contained, and the secret is regularly updated if credentials such as a
+     * cloud-access-token expire. Cloud specific `cmd-path` auth helpers will not function without
+     * adding binaries and credentials to the Pod that is responsible for reconciling Kubernetes
+     * resources.
      *
      * @schema KustomizationSpecKubeConfig#secretRef
      */
-    readonly secretRef: KustomizationSpecKubeConfigSecretRef
+    secretRef: KustomizationSpecKubeConfigSecretRef
 }
 
 /** Converts an object of type 'KustomizationSpecKubeConfig' to JSON representation. */
@@ -728,14 +731,14 @@ export interface KustomizationSpecPatches {
      *
      * @schema KustomizationSpecPatches#patch
      */
-    readonly patch: string
+    patch: string
 
     /**
      * Target points to the resources that the patch document should be applied to.
      *
      * @schema KustomizationSpecPatches#target
      */
-    readonly target?: KustomizationSpecPatchesTarget
+    target?: KustomizationSpecPatchesTarget
 }
 
 /** Converts an object of type 'KustomizationSpecPatches' to JSON representation. */
@@ -773,7 +776,7 @@ export interface KustomizationSpecPostBuild {
      *
      * @schema KustomizationSpecPostBuild#substitute
      */
-    readonly substitute?: { [key: string]: string }
+    substitute?: { [key: string]: string }
 
     /**
      * SubstituteFrom holds references to ConfigMaps and Secrets containing the variables and their
@@ -783,7 +786,7 @@ export interface KustomizationSpecPostBuild {
      *
      * @schema KustomizationSpecPostBuild#substituteFrom
      */
-    readonly substituteFrom?: KustomizationSpecPostBuildSubstituteFrom[]
+    substituteFrom?: KustomizationSpecPostBuildSubstituteFrom[]
 }
 
 /** Converts an object of type 'KustomizationSpecPostBuild' to JSON representation. */
@@ -825,21 +828,21 @@ export interface KustomizationSpecSourceRef {
      *
      * @schema KustomizationSpecSourceRef#apiVersion
      */
-    readonly apiVersion?: string
+    apiVersion?: string
 
     /**
      * Kind of the referent.
      *
      * @schema KustomizationSpecSourceRef#kind
      */
-    readonly kind: KustomizationSpecSourceRefKind
+    kind: KustomizationSpecSourceRefKind
 
     /**
      * Name of the referent.
      *
      * @schema KustomizationSpecSourceRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent, defaults to the namespace of the Kubernetes resource object that
@@ -847,7 +850,7 @@ export interface KustomizationSpecSourceRef {
      *
      * @schema KustomizationSpecSourceRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'KustomizationSpecSourceRef' to JSON representation. */
@@ -893,7 +896,7 @@ export interface KustomizationSpecDecryptionSecretRef {
      *
      * @schema KustomizationSpecDecryptionSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'KustomizationSpecDecryptionSecretRef' to JSON representation. */
@@ -930,14 +933,14 @@ export interface KustomizationSpecKubeConfigSecretRef {
      *
      * @schema KustomizationSpecKubeConfigSecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the Secret.
      *
      * @schema KustomizationSpecKubeConfigSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'KustomizationSpecKubeConfigSecretRef' to JSON representation. */
@@ -973,7 +976,7 @@ export interface KustomizationSpecPatchesTarget {
      *
      * @schema KustomizationSpecPatchesTarget#annotationSelector
      */
-    readonly annotationSelector?: string
+    annotationSelector?: string
 
     /**
      * Group is the API group to select resources from. Together with Version and Kind it is capable
@@ -982,7 +985,7 @@ export interface KustomizationSpecPatchesTarget {
      *
      * @schema KustomizationSpecPatchesTarget#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind of the API Group to select resources from. Together with Group and Version it is capable
@@ -991,7 +994,7 @@ export interface KustomizationSpecPatchesTarget {
      *
      * @schema KustomizationSpecPatchesTarget#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * LabelSelector is a string that follows the label selection expression
@@ -1000,21 +1003,21 @@ export interface KustomizationSpecPatchesTarget {
      *
      * @schema KustomizationSpecPatchesTarget#labelSelector
      */
-    readonly labelSelector?: string
+    labelSelector?: string
 
     /**
      * Name to match resources with.
      *
      * @schema KustomizationSpecPatchesTarget#name
      */
-    readonly name?: string
+    name?: string
 
     /**
      * Namespace to select resources from.
      *
      * @schema KustomizationSpecPatchesTarget#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Version of the API Group to select resources from. Together with Group and Kind it is capable
@@ -1023,7 +1026,7 @@ export interface KustomizationSpecPatchesTarget {
      *
      * @schema KustomizationSpecPatchesTarget#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /** Converts an object of type 'KustomizationSpecPatchesTarget' to JSON representation. */
@@ -1062,23 +1065,23 @@ export interface KustomizationSpecPostBuildSubstituteFrom {
      *
      * @schema KustomizationSpecPostBuildSubstituteFrom#kind
      */
-    readonly kind: KustomizationSpecPostBuildSubstituteFromKind
+    kind: KustomizationSpecPostBuildSubstituteFromKind
 
     /**
      * Name of the values referent. Should reside in the same namespace as the referring resource.
      *
      * @schema KustomizationSpecPostBuildSubstituteFrom#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Optional indicates whether the referenced resource must exist, or whether to tolerate its
-     * absence. If true and the referenced resource is absent, proceed as if the resource was present
-     * but empty, without any variables defined.
+     * absence. If true and the referenced resource is absent, proceed as if the resource was
+     * present but empty, without any variables defined.
      *
      * @schema KustomizationSpecPostBuildSubstituteFrom#optional
      */
-    readonly optional?: boolean
+    optional?: boolean
 }
 
 /** Converts an object of type 'KustomizationSpecPostBuildSubstituteFrom' to JSON representation. */
@@ -1135,7 +1138,7 @@ export enum KustomizationSpecPostBuildSubstituteFromKind {
  */
 export class KustomizationV1Beta1 extends ApiObject {
     /** Returns the apiVersion and kind for "KustomizationV1Beta1" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "kustomize.toolkit.fluxcd.io/v1beta1",
         kind: "Kustomization"
     }
@@ -1186,14 +1189,14 @@ export class KustomizationV1Beta1 extends ApiObject {
  */
 export interface KustomizationV1Beta1Props {
     /** @schema KustomizationV1Beta1#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
      * KustomizationSpec defines the desired state of a kustomization.
      *
      * @schema KustomizationV1Beta1#spec
      */
-    readonly spec?: KustomizationV1Beta1Spec
+    spec?: KustomizationV1Beta1Spec
 }
 
 /** Converts an object of type 'KustomizationV1Beta1Props' to JSON representation. */
@@ -1227,7 +1230,7 @@ export interface KustomizationV1Beta1Spec {
      *
      * @schema KustomizationV1Beta1Spec#decryption
      */
-    readonly decryption?: KustomizationV1Beta1SpecDecryption
+    decryption?: KustomizationV1Beta1SpecDecryption
 
     /**
      * DependsOn may contain a meta.NamespacedObjectReference slice with references to Kustomization
@@ -1235,7 +1238,7 @@ export interface KustomizationV1Beta1Spec {
      *
      * @schema KustomizationV1Beta1Spec#dependsOn
      */
-    readonly dependsOn?: KustomizationV1Beta1SpecDependsOn[]
+    dependsOn?: KustomizationV1Beta1SpecDependsOn[]
 
     /**
      * Force instructs the controller to recreate resources when patching fails due to an immutable
@@ -1243,29 +1246,29 @@ export interface KustomizationV1Beta1Spec {
      *
      * @schema KustomizationV1Beta1Spec#force
      */
-    readonly force?: boolean
+    force?: boolean
 
     /**
      * A list of resources to be included in the health assessment.
      *
      * @schema KustomizationV1Beta1Spec#healthChecks
      */
-    readonly healthChecks?: KustomizationV1Beta1SpecHealthChecks[]
+    healthChecks?: KustomizationV1Beta1SpecHealthChecks[]
 
     /**
-     * Images is a list of (image name, new name, new tag or digest) for changing image names, tags or
-     * digests. This can also be achieved with a patch, but this operator is simpler to specify.
+     * Images is a list of (image name, new name, new tag or digest) for changing image names, tags
+     * or digests. This can also be achieved with a patch, but this operator is simpler to specify.
      *
      * @schema KustomizationV1Beta1Spec#images
      */
-    readonly images?: KustomizationV1Beta1SpecImages[]
+    images?: KustomizationV1Beta1SpecImages[]
 
     /**
      * The interval at which to reconcile the Kustomization.
      *
      * @schema KustomizationV1Beta1Spec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
      * The KubeConfig for reconciling the Kustomization on a remote cluster. When specified,
@@ -1273,29 +1276,29 @@ export interface KustomizationV1Beta1Spec {
      *
      * @schema KustomizationV1Beta1Spec#kubeConfig
      */
-    readonly kubeConfig?: KustomizationV1Beta1SpecKubeConfig
+    kubeConfig?: KustomizationV1Beta1SpecKubeConfig
 
     /**
-     * Strategic merge and JSON patches, defined as inline YAML objects, capable of targeting objects
-     * based on kind, label and annotation selectors.
+     * Strategic merge and JSON patches, defined as inline YAML objects, capable of targeting
+     * objects based on kind, label and annotation selectors.
      *
      * @schema KustomizationV1Beta1Spec#patches
      */
-    readonly patches?: KustomizationV1Beta1SpecPatches[]
+    patches?: KustomizationV1Beta1SpecPatches[]
 
     /**
      * JSON 6902 patches, defined as inline YAML objects.
      *
      * @schema KustomizationV1Beta1Spec#patchesJson6902
      */
-    readonly patchesJson6902?: KustomizationV1Beta1SpecPatchesJson6902[]
+    patchesJson6902?: KustomizationV1Beta1SpecPatchesJson6902[]
 
     /**
      * Strategic merge patches, defined as inline YAML objects.
      *
      * @schema KustomizationV1Beta1Spec#patchesStrategicMerge
      */
-    readonly patchesStrategicMerge?: any[]
+    patchesStrategicMerge?: any[]
 
     /**
      * Path to the directory containing the kustomization.yaml file, or the set of plain YAMLs a
@@ -1305,7 +1308,7 @@ export interface KustomizationV1Beta1Spec {
      * @default None', which translates to the root path of the SourceRef.
      * @schema KustomizationV1Beta1Spec#path
      */
-    readonly path?: string
+    path?: string
 
     /**
      * PostBuild describes which actions to perform on the YAML manifest generated by building the
@@ -1313,14 +1316,14 @@ export interface KustomizationV1Beta1Spec {
      *
      * @schema KustomizationV1Beta1Spec#postBuild
      */
-    readonly postBuild?: KustomizationV1Beta1SpecPostBuild
+    postBuild?: KustomizationV1Beta1SpecPostBuild
 
     /**
      * Prune enables garbage collection.
      *
      * @schema KustomizationV1Beta1Spec#prune
      */
-    readonly prune: boolean
+    prune: boolean
 
     /**
      * The interval at which to retry a previously failed reconciliation. When not specified, the
@@ -1328,55 +1331,57 @@ export interface KustomizationV1Beta1Spec {
      *
      * @schema KustomizationV1Beta1Spec#retryInterval
      */
-    readonly retryInterval?: string
+    retryInterval?: string
 
     /**
-     * The name of the Kubernetes service account to impersonate when reconciling this Kustomization.
+     * The name of the Kubernetes service account to impersonate when reconciling this
+     * Kustomization.
      *
      * @schema KustomizationV1Beta1Spec#serviceAccountName
      */
-    readonly serviceAccountName?: string
+    serviceAccountName?: string
 
     /**
      * Reference of the source where the kustomization file is.
      *
      * @schema KustomizationV1Beta1Spec#sourceRef
      */
-    readonly sourceRef: KustomizationV1Beta1SpecSourceRef
+    sourceRef: KustomizationV1Beta1SpecSourceRef
 
     /**
-     * This flag tells the controller to suspend subsequent kustomize executions, it does not apply to
-     * already started executions. Defaults to false.
+     * This flag tells the controller to suspend subsequent kustomize executions, it does not apply
+     * to already started executions. Defaults to false.
      *
      * @default false.
      * @schema KustomizationV1Beta1Spec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * TargetNamespace sets or overrides the namespace in the kustomization.yaml file.
      *
      * @schema KustomizationV1Beta1Spec#targetNamespace
      */
-    readonly targetNamespace?: string
+    targetNamespace?: string
 
     /**
-     * Timeout for validation, apply and health checking operations. Defaults to 'Interval' duration.
+     * Timeout for validation, apply and health checking operations. Defaults to 'Interval'
+     * duration.
      *
      * @default Interval' duration.
      * @schema KustomizationV1Beta1Spec#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 
     /**
      * Validate the Kubernetes objects before applying them on the cluster. The validation strategy
      * can be 'client' (local dry-run), 'server' (APIServer dry-run) or 'none'. When 'Force' is
-     * 'true', validation will fallback to 'client' if set to 'server' because server-side validation
-     * is not supported in this scenario.
+     * 'true', validation will fallback to 'client' if set to 'server' because server-side
+     * validation is not supported in this scenario.
      *
      * @schema KustomizationV1Beta1Spec#validation
      */
-    readonly validation?: KustomizationV1Beta1SpecValidation
+    validation?: KustomizationV1Beta1SpecValidation
 }
 
 /** Converts an object of type 'KustomizationV1Beta1Spec' to JSON representation. */
@@ -1430,14 +1435,14 @@ export interface KustomizationV1Beta1SpecDecryption {
      *
      * @schema KustomizationV1Beta1SpecDecryption#provider
      */
-    readonly provider: KustomizationV1Beta1SpecDecryptionProvider
+    provider: KustomizationV1Beta1SpecDecryptionProvider
 
     /**
      * The secret name containing the private OpenPGP keys used for decryption.
      *
      * @schema KustomizationV1Beta1SpecDecryption#secretRef
      */
-    readonly secretRef?: KustomizationV1Beta1SpecDecryptionSecretRef
+    secretRef?: KustomizationV1Beta1SpecDecryptionSecretRef
 }
 
 /** Converts an object of type 'KustomizationV1Beta1SpecDecryption' to JSON representation. */
@@ -1472,14 +1477,14 @@ export interface KustomizationV1Beta1SpecDependsOn {
      *
      * @schema KustomizationV1Beta1SpecDependsOn#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent, when not specified it acts as LocalObjectReference.
      *
      * @schema KustomizationV1Beta1SpecDependsOn#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'KustomizationV1Beta1SpecDependsOn' to JSON representation. */
@@ -1514,28 +1519,28 @@ export interface KustomizationV1Beta1SpecHealthChecks {
      *
      * @schema KustomizationV1Beta1SpecHealthChecks#apiVersion
      */
-    readonly apiVersion?: string
+    apiVersion?: string
 
     /**
      * Kind of the referent.
      *
      * @schema KustomizationV1Beta1SpecHealthChecks#kind
      */
-    readonly kind: string
+    kind: string
 
     /**
      * Name of the referent.
      *
      * @schema KustomizationV1Beta1SpecHealthChecks#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent, when not specified it acts as LocalObjectReference.
      *
      * @schema KustomizationV1Beta1SpecHealthChecks#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'KustomizationV1Beta1SpecHealthChecks' to JSON representation. */
@@ -1573,28 +1578,28 @@ export interface KustomizationV1Beta1SpecImages {
      *
      * @schema KustomizationV1Beta1SpecImages#digest
      */
-    readonly digest?: string
+    digest?: string
 
     /**
      * Name is a tag-less image name.
      *
      * @schema KustomizationV1Beta1SpecImages#name
      */
-    readonly name: string
+    name: string
 
     /**
      * NewName is the value used to replace the original name.
      *
      * @schema KustomizationV1Beta1SpecImages#newName
      */
-    readonly newName?: string
+    newName?: string
 
     /**
      * NewTag is the value used to replace the original tag.
      *
      * @schema KustomizationV1Beta1SpecImages#newTag
      */
-    readonly newTag?: string
+    newTag?: string
 }
 
 /** Converts an object of type 'KustomizationV1Beta1SpecImages' to JSON representation. */
@@ -1636,7 +1641,7 @@ export interface KustomizationV1Beta1SpecKubeConfig {
      *
      * @schema KustomizationV1Beta1SpecKubeConfig#secretRef
      */
-    readonly secretRef: KustomizationV1Beta1SpecKubeConfigSecretRef
+    secretRef: KustomizationV1Beta1SpecKubeConfigSecretRef
 }
 
 /** Converts an object of type 'KustomizationV1Beta1SpecKubeConfig' to JSON representation. */
@@ -1671,14 +1676,14 @@ export interface KustomizationV1Beta1SpecPatches {
      *
      * @schema KustomizationV1Beta1SpecPatches#patch
      */
-    readonly patch: string
+    patch: string
 
     /**
      * Target points to the resources that the patch document should be applied to.
      *
      * @schema KustomizationV1Beta1SpecPatches#target
      */
-    readonly target?: KustomizationV1Beta1SpecPatchesTarget
+    target?: KustomizationV1Beta1SpecPatchesTarget
 }
 
 /** Converts an object of type 'KustomizationV1Beta1SpecPatches' to JSON representation. */
@@ -1712,14 +1717,14 @@ export interface KustomizationV1Beta1SpecPatchesJson6902 {
      *
      * @schema KustomizationV1Beta1SpecPatchesJson6902#patch
      */
-    readonly patch: KustomizationV1Beta1SpecPatchesJson6902Patch[]
+    patch: KustomizationV1Beta1SpecPatchesJson6902Patch[]
 
     /**
      * Target points to the resources that the patch document should be applied to.
      *
      * @schema KustomizationV1Beta1SpecPatchesJson6902#target
      */
-    readonly target: KustomizationV1Beta1SpecPatchesJson6902Target
+    target: KustomizationV1Beta1SpecPatchesJson6902Target
 }
 
 /** Converts an object of type 'KustomizationV1Beta1SpecPatchesJson6902' to JSON representation. */
@@ -1757,7 +1762,7 @@ export interface KustomizationV1Beta1SpecPostBuild {
      *
      * @schema KustomizationV1Beta1SpecPostBuild#substitute
      */
-    readonly substitute?: { [key: string]: string }
+    substitute?: { [key: string]: string }
 
     /**
      * SubstituteFrom holds references to ConfigMaps and Secrets containing the variables and their
@@ -1767,7 +1772,7 @@ export interface KustomizationV1Beta1SpecPostBuild {
      *
      * @schema KustomizationV1Beta1SpecPostBuild#substituteFrom
      */
-    readonly substituteFrom?: KustomizationV1Beta1SpecPostBuildSubstituteFrom[]
+    substituteFrom?: KustomizationV1Beta1SpecPostBuildSubstituteFrom[]
 }
 
 /** Converts an object of type 'KustomizationV1Beta1SpecPostBuild' to JSON representation. */
@@ -1809,28 +1814,28 @@ export interface KustomizationV1Beta1SpecSourceRef {
      *
      * @schema KustomizationV1Beta1SpecSourceRef#apiVersion
      */
-    readonly apiVersion?: string
+    apiVersion?: string
 
     /**
      * Kind of the referent
      *
      * @schema KustomizationV1Beta1SpecSourceRef#kind
      */
-    readonly kind: KustomizationV1Beta1SpecSourceRefKind
+    kind: KustomizationV1Beta1SpecSourceRefKind
 
     /**
      * Name of the referent
      *
      * @schema KustomizationV1Beta1SpecSourceRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent, defaults to the Kustomization namespace
      *
      * @schema KustomizationV1Beta1SpecSourceRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'KustomizationV1Beta1SpecSourceRef' to JSON representation. */
@@ -1893,7 +1898,7 @@ export interface KustomizationV1Beta1SpecDecryptionSecretRef {
      *
      * @schema KustomizationV1Beta1SpecDecryptionSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'KustomizationV1Beta1SpecDecryptionSecretRef' to JSON representation. */
@@ -1931,7 +1936,7 @@ export interface KustomizationV1Beta1SpecKubeConfigSecretRef {
      *
      * @schema KustomizationV1Beta1SpecKubeConfigSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'KustomizationV1Beta1SpecKubeConfigSecretRef' to JSON representation. */
@@ -1966,7 +1971,7 @@ export interface KustomizationV1Beta1SpecPatchesTarget {
      *
      * @schema KustomizationV1Beta1SpecPatchesTarget#annotationSelector
      */
-    readonly annotationSelector?: string
+    annotationSelector?: string
 
     /**
      * Group is the API group to select resources from. Together with Version and Kind it is capable
@@ -1975,7 +1980,7 @@ export interface KustomizationV1Beta1SpecPatchesTarget {
      *
      * @schema KustomizationV1Beta1SpecPatchesTarget#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind of the API Group to select resources from. Together with Group and Version it is capable
@@ -1984,7 +1989,7 @@ export interface KustomizationV1Beta1SpecPatchesTarget {
      *
      * @schema KustomizationV1Beta1SpecPatchesTarget#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * LabelSelector is a string that follows the label selection expression
@@ -1993,21 +1998,21 @@ export interface KustomizationV1Beta1SpecPatchesTarget {
      *
      * @schema KustomizationV1Beta1SpecPatchesTarget#labelSelector
      */
-    readonly labelSelector?: string
+    labelSelector?: string
 
     /**
      * Name to match resources with.
      *
      * @schema KustomizationV1Beta1SpecPatchesTarget#name
      */
-    readonly name?: string
+    name?: string
 
     /**
      * Namespace to select resources from.
      *
      * @schema KustomizationV1Beta1SpecPatchesTarget#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Version of the API Group to select resources from. Together with Group and Kind it is capable
@@ -2016,7 +2021,7 @@ export interface KustomizationV1Beta1SpecPatchesTarget {
      *
      * @schema KustomizationV1Beta1SpecPatchesTarget#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /** Converts an object of type 'KustomizationV1Beta1SpecPatchesTarget' to JSON representation. */
@@ -2051,13 +2056,13 @@ export function toJson_KustomizationV1Beta1SpecPatchesTarget(
  */
 export interface KustomizationV1Beta1SpecPatchesJson6902Patch {
     /**
-     * From contains a JSON-pointer value that references a location within the target document where
-     * the operation is performed. The meaning of the value depends on the value of Op, and is NOT
-     * taken into account by all operations.
+     * From contains a JSON-pointer value that references a location within the target document
+     * where the operation is performed. The meaning of the value depends on the value of Op, and is
+     * NOT taken into account by all operations.
      *
      * @schema KustomizationV1Beta1SpecPatchesJson6902Patch#from
      */
-    readonly from?: string
+    from?: string
 
     /**
      * Op indicates the operation to perform. Its value MUST be one of "add", "remove", "replace",
@@ -2065,7 +2070,7 @@ export interface KustomizationV1Beta1SpecPatchesJson6902Patch {
      *
      * @schema KustomizationV1Beta1SpecPatchesJson6902Patch#op
      */
-    readonly op: KustomizationV1Beta1SpecPatchesJson6902PatchOp
+    op: KustomizationV1Beta1SpecPatchesJson6902PatchOp
 
     /**
      * Path contains the JSON-pointer value that references a location within the target document
@@ -2073,15 +2078,15 @@ export interface KustomizationV1Beta1SpecPatchesJson6902Patch {
      *
      * @schema KustomizationV1Beta1SpecPatchesJson6902Patch#path
      */
-    readonly path: string
+    path: string
 
     /**
-     * Value contains a valid JSON structure. The meaning of the value depends on the value of Op, and
-     * is NOT taken into account by all operations.
+     * Value contains a valid JSON structure. The meaning of the value depends on the value of Op,
+     * and is NOT taken into account by all operations.
      *
      * @schema KustomizationV1Beta1SpecPatchesJson6902Patch#value
      */
-    readonly value?: any
+    value?: any
 }
 
 /** Converts an object of type 'KustomizationV1Beta1SpecPatchesJson6902Patch' to JSON representation. */
@@ -2119,7 +2124,7 @@ export interface KustomizationV1Beta1SpecPatchesJson6902Target {
      *
      * @schema KustomizationV1Beta1SpecPatchesJson6902Target#annotationSelector
      */
-    readonly annotationSelector?: string
+    annotationSelector?: string
 
     /**
      * Group is the API group to select resources from. Together with Version and Kind it is capable
@@ -2128,7 +2133,7 @@ export interface KustomizationV1Beta1SpecPatchesJson6902Target {
      *
      * @schema KustomizationV1Beta1SpecPatchesJson6902Target#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind of the API Group to select resources from. Together with Group and Version it is capable
@@ -2137,7 +2142,7 @@ export interface KustomizationV1Beta1SpecPatchesJson6902Target {
      *
      * @schema KustomizationV1Beta1SpecPatchesJson6902Target#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * LabelSelector is a string that follows the label selection expression
@@ -2146,21 +2151,21 @@ export interface KustomizationV1Beta1SpecPatchesJson6902Target {
      *
      * @schema KustomizationV1Beta1SpecPatchesJson6902Target#labelSelector
      */
-    readonly labelSelector?: string
+    labelSelector?: string
 
     /**
      * Name to match resources with.
      *
      * @schema KustomizationV1Beta1SpecPatchesJson6902Target#name
      */
-    readonly name?: string
+    name?: string
 
     /**
      * Namespace to select resources from.
      *
      * @schema KustomizationV1Beta1SpecPatchesJson6902Target#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Version of the API Group to select resources from. Together with Group and Kind it is capable
@@ -2169,7 +2174,7 @@ export interface KustomizationV1Beta1SpecPatchesJson6902Target {
      *
      * @schema KustomizationV1Beta1SpecPatchesJson6902Target#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /**
@@ -2211,14 +2216,14 @@ export interface KustomizationV1Beta1SpecPostBuildSubstituteFrom {
      *
      * @schema KustomizationV1Beta1SpecPostBuildSubstituteFrom#kind
      */
-    readonly kind: KustomizationV1Beta1SpecPostBuildSubstituteFromKind
+    kind: KustomizationV1Beta1SpecPostBuildSubstituteFromKind
 
     /**
      * Name of the values referent. Should reside in the same namespace as the referring resource.
      *
      * @schema KustomizationV1Beta1SpecPostBuildSubstituteFrom#name
      */
-    readonly name: string
+    name: string
 }
 
 /**
@@ -2296,7 +2301,7 @@ export enum KustomizationV1Beta1SpecPostBuildSubstituteFromKind {
  */
 export class KustomizationV1Beta2 extends ApiObject {
     /** Returns the apiVersion and kind for "KustomizationV1Beta2" */
-    public static readonly GVK: GroupVersionKind = {
+    public static GVK: GroupVersionKind = {
         apiVersion: "kustomize.toolkit.fluxcd.io/v1beta2",
         kind: "Kustomization"
     }
@@ -2347,15 +2352,15 @@ export class KustomizationV1Beta2 extends ApiObject {
  */
 export interface KustomizationV1Beta2Props {
     /** @schema KustomizationV1Beta2#metadata */
-    readonly metadata?: ApiObjectMetadata
+    metadata?: ApiObjectMetadata
 
     /**
-     * KustomizationSpec defines the configuration to calculate the desired state from a Source using
-     * Kustomize.
+     * KustomizationSpec defines the configuration to calculate the desired state from a Source
+     * using Kustomize.
      *
      * @schema KustomizationV1Beta2#spec
      */
-    readonly spec?: KustomizationV1Beta2Spec
+    spec?: KustomizationV1Beta2Spec
 }
 
 /** Converts an object of type 'KustomizationV1Beta2Props' to JSON representation. */
@@ -2391,21 +2396,21 @@ export interface KustomizationV1Beta2Spec {
      *
      * @schema KustomizationV1Beta2Spec#commonMetadata
      */
-    readonly commonMetadata?: KustomizationV1Beta2SpecCommonMetadata
+    commonMetadata?: KustomizationV1Beta2SpecCommonMetadata
 
     /**
      * Components specifies relative paths to specifications of other Components.
      *
      * @schema KustomizationV1Beta2Spec#components
      */
-    readonly components?: string[]
+    components?: string[]
 
     /**
      * Decrypt Kubernetes secrets before applying them on the cluster.
      *
      * @schema KustomizationV1Beta2Spec#decryption
      */
-    readonly decryption?: KustomizationV1Beta2SpecDecryption
+    decryption?: KustomizationV1Beta2SpecDecryption
 
     /**
      * DependsOn may contain a meta.NamespacedObjectReference slice with references to Kustomization
@@ -2413,7 +2418,7 @@ export interface KustomizationV1Beta2Spec {
      *
      * @schema KustomizationV1Beta2Spec#dependsOn
      */
-    readonly dependsOn?: KustomizationV1Beta2SpecDependsOn[]
+    dependsOn?: KustomizationV1Beta2SpecDependsOn[]
 
     /**
      * Force instructs the controller to recreate resources when patching fails due to an immutable
@@ -2421,62 +2426,62 @@ export interface KustomizationV1Beta2Spec {
      *
      * @schema KustomizationV1Beta2Spec#force
      */
-    readonly force?: boolean
+    force?: boolean
 
     /**
      * A list of resources to be included in the health assessment.
      *
      * @schema KustomizationV1Beta2Spec#healthChecks
      */
-    readonly healthChecks?: KustomizationV1Beta2SpecHealthChecks[]
+    healthChecks?: KustomizationV1Beta2SpecHealthChecks[]
 
     /**
-     * Images is a list of (image name, new name, new tag or digest) for changing image names, tags or
-     * digests. This can also be achieved with a patch, but this operator is simpler to specify.
+     * Images is a list of (image name, new name, new tag or digest) for changing image names, tags
+     * or digests. This can also be achieved with a patch, but this operator is simpler to specify.
      *
      * @schema KustomizationV1Beta2Spec#images
      */
-    readonly images?: KustomizationV1Beta2SpecImages[]
+    images?: KustomizationV1Beta2SpecImages[]
 
     /**
      * The interval at which to reconcile the Kustomization.
      *
      * @schema KustomizationV1Beta2Spec#interval
      */
-    readonly interval: string
+    interval: string
 
     /**
-     * The KubeConfig for reconciling the Kustomization on a remote cluster. When used in combination
-     * with KustomizationSpec.ServiceAccountName, forces the controller to act on behalf of that
-     * Service Account at the target cluster. If the --default-service-account flag is set, its value
-     * will be used as a controller level fallback for when KustomizationSpec.ServiceAccountName is
-     * empty.
+     * The KubeConfig for reconciling the Kustomization on a remote cluster. When used in
+     * combination with KustomizationSpec.ServiceAccountName, forces the controller to act on behalf
+     * of that Service Account at the target cluster. If the --default-service-account flag is set,
+     * its value will be used as a controller level fallback for when
+     * KustomizationSpec.ServiceAccountName is empty.
      *
      * @schema KustomizationV1Beta2Spec#kubeConfig
      */
-    readonly kubeConfig?: KustomizationV1Beta2SpecKubeConfig
+    kubeConfig?: KustomizationV1Beta2SpecKubeConfig
 
     /**
-     * Strategic merge and JSON patches, defined as inline YAML objects, capable of targeting objects
-     * based on kind, label and annotation selectors.
+     * Strategic merge and JSON patches, defined as inline YAML objects, capable of targeting
+     * objects based on kind, label and annotation selectors.
      *
      * @schema KustomizationV1Beta2Spec#patches
      */
-    readonly patches?: KustomizationV1Beta2SpecPatches[]
+    patches?: KustomizationV1Beta2SpecPatches[]
 
     /**
      * JSON 6902 patches, defined as inline YAML objects. Deprecated: Use Patches instead.
      *
      * @schema KustomizationV1Beta2Spec#patchesJson6902
      */
-    readonly patchesJson6902?: KustomizationV1Beta2SpecPatchesJson6902[]
+    patchesJson6902?: KustomizationV1Beta2SpecPatchesJson6902[]
 
     /**
      * Strategic merge patches, defined as inline YAML objects. Deprecated: Use Patches instead.
      *
      * @schema KustomizationV1Beta2Spec#patchesStrategicMerge
      */
-    readonly patchesStrategicMerge?: any[]
+    patchesStrategicMerge?: any[]
 
     /**
      * Path to the directory containing the kustomization.yaml file, or the set of plain YAMLs a
@@ -2486,7 +2491,7 @@ export interface KustomizationV1Beta2Spec {
      * @default None', which translates to the root path of the SourceRef.
      * @schema KustomizationV1Beta2Spec#path
      */
-    readonly path?: string
+    path?: string
 
     /**
      * PostBuild describes which actions to perform on the YAML manifest generated by building the
@@ -2494,14 +2499,14 @@ export interface KustomizationV1Beta2Spec {
      *
      * @schema KustomizationV1Beta2Spec#postBuild
      */
-    readonly postBuild?: KustomizationV1Beta2SpecPostBuild
+    postBuild?: KustomizationV1Beta2SpecPostBuild
 
     /**
      * Prune enables garbage collection.
      *
      * @schema KustomizationV1Beta2Spec#prune
      */
-    readonly prune: boolean
+    prune: boolean
 
     /**
      * The interval at which to retry a previously failed reconciliation. When not specified, the
@@ -2509,52 +2514,54 @@ export interface KustomizationV1Beta2Spec {
      *
      * @schema KustomizationV1Beta2Spec#retryInterval
      */
-    readonly retryInterval?: string
+    retryInterval?: string
 
     /**
-     * The name of the Kubernetes service account to impersonate when reconciling this Kustomization.
+     * The name of the Kubernetes service account to impersonate when reconciling this
+     * Kustomization.
      *
      * @schema KustomizationV1Beta2Spec#serviceAccountName
      */
-    readonly serviceAccountName?: string
+    serviceAccountName?: string
 
     /**
      * Reference of the source where the kustomization file is.
      *
      * @schema KustomizationV1Beta2Spec#sourceRef
      */
-    readonly sourceRef: KustomizationV1Beta2SpecSourceRef
+    sourceRef: KustomizationV1Beta2SpecSourceRef
 
     /**
-     * This flag tells the controller to suspend subsequent kustomize executions, it does not apply to
-     * already started executions. Defaults to false.
+     * This flag tells the controller to suspend subsequent kustomize executions, it does not apply
+     * to already started executions. Defaults to false.
      *
      * @default false.
      * @schema KustomizationV1Beta2Spec#suspend
      */
-    readonly suspend?: boolean
+    suspend?: boolean
 
     /**
      * TargetNamespace sets or overrides the namespace in the kustomization.yaml file.
      *
      * @schema KustomizationV1Beta2Spec#targetNamespace
      */
-    readonly targetNamespace?: string
+    targetNamespace?: string
 
     /**
-     * Timeout for validation, apply and health checking operations. Defaults to 'Interval' duration.
+     * Timeout for validation, apply and health checking operations. Defaults to 'Interval'
+     * duration.
      *
      * @default Interval' duration.
      * @schema KustomizationV1Beta2Spec#timeout
      */
-    readonly timeout?: string
+    timeout?: string
 
     /**
      * Deprecated: Not used in v1beta2.
      *
      * @schema KustomizationV1Beta2Spec#validation
      */
-    readonly validation?: KustomizationV1Beta2SpecValidation
+    validation?: KustomizationV1Beta2SpecValidation
 
     /**
      * Wait instructs the controller to check the health of all the reconciled resources. When
@@ -2563,7 +2570,7 @@ export interface KustomizationV1Beta2Spec {
      * @default false.
      * @schema KustomizationV1Beta2Spec#wait
      */
-    readonly wait?: boolean
+    wait?: boolean
 }
 
 /** Converts an object of type 'KustomizationV1Beta2Spec' to JSON representation. */
@@ -2621,14 +2628,14 @@ export interface KustomizationV1Beta2SpecCommonMetadata {
      *
      * @schema KustomizationV1Beta2SpecCommonMetadata#annotations
      */
-    readonly annotations?: { [key: string]: string }
+    annotations?: { [key: string]: string }
 
     /**
      * Labels to be added to the object's metadata.
      *
      * @schema KustomizationV1Beta2SpecCommonMetadata#labels
      */
-    readonly labels?: { [key: string]: string }
+    labels?: { [key: string]: string }
 }
 
 /** Converts an object of type 'KustomizationV1Beta2SpecCommonMetadata' to JSON representation. */
@@ -2674,14 +2681,14 @@ export interface KustomizationV1Beta2SpecDecryption {
      *
      * @schema KustomizationV1Beta2SpecDecryption#provider
      */
-    readonly provider: KustomizationV1Beta2SpecDecryptionProvider
+    provider: KustomizationV1Beta2SpecDecryptionProvider
 
     /**
      * The secret name containing the private OpenPGP keys used for decryption.
      *
      * @schema KustomizationV1Beta2SpecDecryption#secretRef
      */
-    readonly secretRef?: KustomizationV1Beta2SpecDecryptionSecretRef
+    secretRef?: KustomizationV1Beta2SpecDecryptionSecretRef
 }
 
 /** Converts an object of type 'KustomizationV1Beta2SpecDecryption' to JSON representation. */
@@ -2716,14 +2723,14 @@ export interface KustomizationV1Beta2SpecDependsOn {
      *
      * @schema KustomizationV1Beta2SpecDependsOn#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent, when not specified it acts as LocalObjectReference.
      *
      * @schema KustomizationV1Beta2SpecDependsOn#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'KustomizationV1Beta2SpecDependsOn' to JSON representation. */
@@ -2758,28 +2765,28 @@ export interface KustomizationV1Beta2SpecHealthChecks {
      *
      * @schema KustomizationV1Beta2SpecHealthChecks#apiVersion
      */
-    readonly apiVersion?: string
+    apiVersion?: string
 
     /**
      * Kind of the referent.
      *
      * @schema KustomizationV1Beta2SpecHealthChecks#kind
      */
-    readonly kind: string
+    kind: string
 
     /**
      * Name of the referent.
      *
      * @schema KustomizationV1Beta2SpecHealthChecks#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent, when not specified it acts as LocalObjectReference.
      *
      * @schema KustomizationV1Beta2SpecHealthChecks#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'KustomizationV1Beta2SpecHealthChecks' to JSON representation. */
@@ -2817,28 +2824,28 @@ export interface KustomizationV1Beta2SpecImages {
      *
      * @schema KustomizationV1Beta2SpecImages#digest
      */
-    readonly digest?: string
+    digest?: string
 
     /**
      * Name is a tag-less image name.
      *
      * @schema KustomizationV1Beta2SpecImages#name
      */
-    readonly name: string
+    name: string
 
     /**
      * NewName is the value used to replace the original name.
      *
      * @schema KustomizationV1Beta2SpecImages#newName
      */
-    readonly newName?: string
+    newName?: string
 
     /**
      * NewTag is the value used to replace the original tag.
      *
      * @schema KustomizationV1Beta2SpecImages#newTag
      */
-    readonly newTag?: string
+    newTag?: string
 }
 
 /** Converts an object of type 'KustomizationV1Beta2SpecImages' to JSON representation. */
@@ -2873,15 +2880,16 @@ export function toJson_KustomizationV1Beta2SpecImages(
  */
 export interface KustomizationV1Beta2SpecKubeConfig {
     /**
-     * SecretRef holds the name of a secret that contains a key with the kubeconfig file as the value.
-     * If no key is set, the key will default to 'value'. It is recommended that the kubeconfig is
-     * self-contained, and the secret is regularly updated if credentials such as a cloud-access-token
-     * expire. Cloud specific `cmd-path` auth helpers will not function without adding binaries and
-     * credentials to the Pod that is responsible for reconciling Kubernetes resources.
+     * SecretRef holds the name of a secret that contains a key with the kubeconfig file as the
+     * value. If no key is set, the key will default to 'value'. It is recommended that the
+     * kubeconfig is self-contained, and the secret is regularly updated if credentials such as a
+     * cloud-access-token expire. Cloud specific `cmd-path` auth helpers will not function without
+     * adding binaries and credentials to the Pod that is responsible for reconciling Kubernetes
+     * resources.
      *
      * @schema KustomizationV1Beta2SpecKubeConfig#secretRef
      */
-    readonly secretRef: KustomizationV1Beta2SpecKubeConfigSecretRef
+    secretRef: KustomizationV1Beta2SpecKubeConfigSecretRef
 }
 
 /** Converts an object of type 'KustomizationV1Beta2SpecKubeConfig' to JSON representation. */
@@ -2916,14 +2924,14 @@ export interface KustomizationV1Beta2SpecPatches {
      *
      * @schema KustomizationV1Beta2SpecPatches#patch
      */
-    readonly patch: string
+    patch: string
 
     /**
      * Target points to the resources that the patch document should be applied to.
      *
      * @schema KustomizationV1Beta2SpecPatches#target
      */
-    readonly target?: KustomizationV1Beta2SpecPatchesTarget
+    target?: KustomizationV1Beta2SpecPatchesTarget
 }
 
 /** Converts an object of type 'KustomizationV1Beta2SpecPatches' to JSON representation. */
@@ -2957,14 +2965,14 @@ export interface KustomizationV1Beta2SpecPatchesJson6902 {
      *
      * @schema KustomizationV1Beta2SpecPatchesJson6902#patch
      */
-    readonly patch: KustomizationV1Beta2SpecPatchesJson6902Patch[]
+    patch: KustomizationV1Beta2SpecPatchesJson6902Patch[]
 
     /**
      * Target points to the resources that the patch document should be applied to.
      *
      * @schema KustomizationV1Beta2SpecPatchesJson6902#target
      */
-    readonly target: KustomizationV1Beta2SpecPatchesJson6902Target
+    target: KustomizationV1Beta2SpecPatchesJson6902Target
 }
 
 /** Converts an object of type 'KustomizationV1Beta2SpecPatchesJson6902' to JSON representation. */
@@ -3002,7 +3010,7 @@ export interface KustomizationV1Beta2SpecPostBuild {
      *
      * @schema KustomizationV1Beta2SpecPostBuild#substitute
      */
-    readonly substitute?: { [key: string]: string }
+    substitute?: { [key: string]: string }
 
     /**
      * SubstituteFrom holds references to ConfigMaps and Secrets containing the variables and their
@@ -3012,7 +3020,7 @@ export interface KustomizationV1Beta2SpecPostBuild {
      *
      * @schema KustomizationV1Beta2SpecPostBuild#substituteFrom
      */
-    readonly substituteFrom?: KustomizationV1Beta2SpecPostBuildSubstituteFrom[]
+    substituteFrom?: KustomizationV1Beta2SpecPostBuildSubstituteFrom[]
 }
 
 /** Converts an object of type 'KustomizationV1Beta2SpecPostBuild' to JSON representation. */
@@ -3054,21 +3062,21 @@ export interface KustomizationV1Beta2SpecSourceRef {
      *
      * @schema KustomizationV1Beta2SpecSourceRef#apiVersion
      */
-    readonly apiVersion?: string
+    apiVersion?: string
 
     /**
      * Kind of the referent.
      *
      * @schema KustomizationV1Beta2SpecSourceRef#kind
      */
-    readonly kind: KustomizationV1Beta2SpecSourceRefKind
+    kind: KustomizationV1Beta2SpecSourceRefKind
 
     /**
      * Name of the referent.
      *
      * @schema KustomizationV1Beta2SpecSourceRef#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Namespace of the referent, defaults to the namespace of the Kubernetes resource object that
@@ -3076,7 +3084,7 @@ export interface KustomizationV1Beta2SpecSourceRef {
      *
      * @schema KustomizationV1Beta2SpecSourceRef#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 }
 
 /** Converts an object of type 'KustomizationV1Beta2SpecSourceRef' to JSON representation. */
@@ -3136,7 +3144,7 @@ export interface KustomizationV1Beta2SpecDecryptionSecretRef {
      *
      * @schema KustomizationV1Beta2SpecDecryptionSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'KustomizationV1Beta2SpecDecryptionSecretRef' to JSON representation. */
@@ -3173,14 +3181,14 @@ export interface KustomizationV1Beta2SpecKubeConfigSecretRef {
      *
      * @schema KustomizationV1Beta2SpecKubeConfigSecretRef#key
      */
-    readonly key?: string
+    key?: string
 
     /**
      * Name of the Secret.
      *
      * @schema KustomizationV1Beta2SpecKubeConfigSecretRef#name
      */
-    readonly name: string
+    name: string
 }
 
 /** Converts an object of type 'KustomizationV1Beta2SpecKubeConfigSecretRef' to JSON representation. */
@@ -3216,7 +3224,7 @@ export interface KustomizationV1Beta2SpecPatchesTarget {
      *
      * @schema KustomizationV1Beta2SpecPatchesTarget#annotationSelector
      */
-    readonly annotationSelector?: string
+    annotationSelector?: string
 
     /**
      * Group is the API group to select resources from. Together with Version and Kind it is capable
@@ -3225,7 +3233,7 @@ export interface KustomizationV1Beta2SpecPatchesTarget {
      *
      * @schema KustomizationV1Beta2SpecPatchesTarget#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind of the API Group to select resources from. Together with Group and Version it is capable
@@ -3234,7 +3242,7 @@ export interface KustomizationV1Beta2SpecPatchesTarget {
      *
      * @schema KustomizationV1Beta2SpecPatchesTarget#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * LabelSelector is a string that follows the label selection expression
@@ -3243,21 +3251,21 @@ export interface KustomizationV1Beta2SpecPatchesTarget {
      *
      * @schema KustomizationV1Beta2SpecPatchesTarget#labelSelector
      */
-    readonly labelSelector?: string
+    labelSelector?: string
 
     /**
      * Name to match resources with.
      *
      * @schema KustomizationV1Beta2SpecPatchesTarget#name
      */
-    readonly name?: string
+    name?: string
 
     /**
      * Namespace to select resources from.
      *
      * @schema KustomizationV1Beta2SpecPatchesTarget#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Version of the API Group to select resources from. Together with Group and Kind it is capable
@@ -3266,7 +3274,7 @@ export interface KustomizationV1Beta2SpecPatchesTarget {
      *
      * @schema KustomizationV1Beta2SpecPatchesTarget#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /** Converts an object of type 'KustomizationV1Beta2SpecPatchesTarget' to JSON representation. */
@@ -3301,13 +3309,13 @@ export function toJson_KustomizationV1Beta2SpecPatchesTarget(
  */
 export interface KustomizationV1Beta2SpecPatchesJson6902Patch {
     /**
-     * From contains a JSON-pointer value that references a location within the target document where
-     * the operation is performed. The meaning of the value depends on the value of Op, and is NOT
-     * taken into account by all operations.
+     * From contains a JSON-pointer value that references a location within the target document
+     * where the operation is performed. The meaning of the value depends on the value of Op, and is
+     * NOT taken into account by all operations.
      *
      * @schema KustomizationV1Beta2SpecPatchesJson6902Patch#from
      */
-    readonly from?: string
+    from?: string
 
     /**
      * Op indicates the operation to perform. Its value MUST be one of "add", "remove", "replace",
@@ -3315,7 +3323,7 @@ export interface KustomizationV1Beta2SpecPatchesJson6902Patch {
      *
      * @schema KustomizationV1Beta2SpecPatchesJson6902Patch#op
      */
-    readonly op: KustomizationV1Beta2SpecPatchesJson6902PatchOp
+    op: KustomizationV1Beta2SpecPatchesJson6902PatchOp
 
     /**
      * Path contains the JSON-pointer value that references a location within the target document
@@ -3323,15 +3331,15 @@ export interface KustomizationV1Beta2SpecPatchesJson6902Patch {
      *
      * @schema KustomizationV1Beta2SpecPatchesJson6902Patch#path
      */
-    readonly path: string
+    path: string
 
     /**
-     * Value contains a valid JSON structure. The meaning of the value depends on the value of Op, and
-     * is NOT taken into account by all operations.
+     * Value contains a valid JSON structure. The meaning of the value depends on the value of Op,
+     * and is NOT taken into account by all operations.
      *
      * @schema KustomizationV1Beta2SpecPatchesJson6902Patch#value
      */
-    readonly value?: any
+    value?: any
 }
 
 /** Converts an object of type 'KustomizationV1Beta2SpecPatchesJson6902Patch' to JSON representation. */
@@ -3369,7 +3377,7 @@ export interface KustomizationV1Beta2SpecPatchesJson6902Target {
      *
      * @schema KustomizationV1Beta2SpecPatchesJson6902Target#annotationSelector
      */
-    readonly annotationSelector?: string
+    annotationSelector?: string
 
     /**
      * Group is the API group to select resources from. Together with Version and Kind it is capable
@@ -3378,7 +3386,7 @@ export interface KustomizationV1Beta2SpecPatchesJson6902Target {
      *
      * @schema KustomizationV1Beta2SpecPatchesJson6902Target#group
      */
-    readonly group?: string
+    group?: string
 
     /**
      * Kind of the API Group to select resources from. Together with Group and Version it is capable
@@ -3387,7 +3395,7 @@ export interface KustomizationV1Beta2SpecPatchesJson6902Target {
      *
      * @schema KustomizationV1Beta2SpecPatchesJson6902Target#kind
      */
-    readonly kind?: string
+    kind?: string
 
     /**
      * LabelSelector is a string that follows the label selection expression
@@ -3396,21 +3404,21 @@ export interface KustomizationV1Beta2SpecPatchesJson6902Target {
      *
      * @schema KustomizationV1Beta2SpecPatchesJson6902Target#labelSelector
      */
-    readonly labelSelector?: string
+    labelSelector?: string
 
     /**
      * Name to match resources with.
      *
      * @schema KustomizationV1Beta2SpecPatchesJson6902Target#name
      */
-    readonly name?: string
+    name?: string
 
     /**
      * Namespace to select resources from.
      *
      * @schema KustomizationV1Beta2SpecPatchesJson6902Target#namespace
      */
-    readonly namespace?: string
+    namespace?: string
 
     /**
      * Version of the API Group to select resources from. Together with Group and Kind it is capable
@@ -3419,7 +3427,7 @@ export interface KustomizationV1Beta2SpecPatchesJson6902Target {
      *
      * @schema KustomizationV1Beta2SpecPatchesJson6902Target#version
      */
-    readonly version?: string
+    version?: string
 }
 
 /**
@@ -3461,23 +3469,23 @@ export interface KustomizationV1Beta2SpecPostBuildSubstituteFrom {
      *
      * @schema KustomizationV1Beta2SpecPostBuildSubstituteFrom#kind
      */
-    readonly kind: KustomizationV1Beta2SpecPostBuildSubstituteFromKind
+    kind: KustomizationV1Beta2SpecPostBuildSubstituteFromKind
 
     /**
      * Name of the values referent. Should reside in the same namespace as the referring resource.
      *
      * @schema KustomizationV1Beta2SpecPostBuildSubstituteFrom#name
      */
-    readonly name: string
+    name: string
 
     /**
      * Optional indicates whether the referenced resource must exist, or whether to tolerate its
-     * absence. If true and the referenced resource is absent, proceed as if the resource was present
-     * but empty, without any variables defined.
+     * absence. If true and the referenced resource is absent, proceed as if the resource was
+     * present but empty, without any variables defined.
      *
      * @schema KustomizationV1Beta2SpecPostBuildSubstituteFrom#optional
      */
-    readonly optional?: boolean
+    optional?: boolean
 }
 
 /**
