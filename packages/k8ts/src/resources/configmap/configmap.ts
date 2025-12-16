@@ -14,8 +14,8 @@ import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { ManifestResource } from "../../node/manifest-resource"
 export type ConfigMap = ConfigMap.ConfigMap
 export namespace ConfigMap {
-    export type ConfigMapEntrySource = LocalFileSource | string
-    export interface Props {
+    export type ConfigMap_Entry_Source = LocalFileSource | string
+    export interface ConfigMap_Props {
         data: DataSourceRecord_Text
         binaryData?: DataSourceRecord_Binary
     }
@@ -35,7 +35,7 @@ export namespace ConfigMap {
             }
         }
     })
-    export class ConfigMap extends ManifestResource<Props> {
+    export class ConfigMap extends ManifestResource<ConfigMap_Props> {
         override kind = api_.v1_.ConfigMap
     }
 }

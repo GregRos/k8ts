@@ -7,21 +7,19 @@ import { api_ } from "../../kinds"
 import { ManifestResource } from "../../node/manifest-resource"
 import { Container } from "./container"
 import { Device, Volume } from "./volume"
-export type PodTemplate<Ports extends string = string> = PodTemplate.PodTemplate<Ports>
+export type PodTemplate<Ports extends string = string> = PodTemplate.Pod_Template<Ports>
 export namespace PodTemplate {
-    export type PodProps = Omit<CDK.PodSpec, "containers" | "initContainers" | "volumes">
-    type AbsContainer<Ports extends string> = Kinded<api_.v1_.Pod_.Container> & {
+    export type Pod_Props_Original = Omit<CDK.PodSpec, "containers" | "initContainers" | "volumes">
+    type Container_Ref<Ports extends string> = Kinded<api_.v1_.Pod_.Container> & {
         __PORTS__: Ports
     }
-    export type PodContainerProducer<Ports extends string> = Producer<PodScope, AbsContainer<Ports>>
-    export type Props<Ports extends string> = PodProps & {
-        $POD: PodContainerProducer<Ports>
-    }
-    export type HostPortSpec<Ports extends string> = {
-        [port in Ports]?: {
-            ip?: string
-            port?: number
-        }
+    export type Pod_Container_Producer<Ports extends string> = Producer<
+        PodScope,
+        Container_Ref<Ports>
+    >
+
+    export interface Pod_Props<Ports extends string> extends Pod_Props_Original {
+        $POD: Pod_Container_Producer<Ports>
     }
 
     @k8ts(api_.v1_.PodTemplate)
@@ -52,7 +50,9 @@ export namespace PodTemplate {
             }
         }
     })
-    export class PodTemplate<Ports extends string = string> extends ManifestResource<Props<Ports>> {
+    export class Pod_Template<Ports extends string = string> extends ManifestResource<
+        Pod_Props<Ports>
+    > {
         readonly kind = api_.v1_.PodTemplate
         readonly containers = seq(() => this.props.$POD(new PodScope(this)))
             .map(x => {
@@ -65,14 +65,14 @@ export namespace PodTemplate {
     }
 
     export class PodScope {
-        constructor(private readonly _parent: PodTemplate) {}
-        Container<Ports extends string>(name: string, options: Container.Props<Ports>) {
+        constructor(private readonly _parent: Pod_Template) {}
+        Container<Ports extends string>(name: string, options: Container.Container_Props<Ports>) {
             return new Container.Container(this._parent, name, "main", options)
         }
-        InitContainer(name: string, options: Container.K8tsProps<never>) {
+        InitContainer(name: string, options: Container.Container_Props<never>) {
             return new Container.Container(this._parent, name, "init", options)
         }
-        Volume(name: string, options: Volume.Backend) {
+        Volume(name: string, options: Volume.Pod_Volume_Backend) {
             return Volume.make(this._parent, name, options)
         }
         Device(name: string, options: Device.Backend) {

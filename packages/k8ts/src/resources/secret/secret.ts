@@ -5,7 +5,7 @@ import { api_ } from "../../kinds"
 import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { ManifestResource } from "../../node/manifest-resource"
 
-export interface Props {
+export interface Secret_Props {
     data?: Record<string, string>
     stringData?: Record<string, string>
 }
@@ -21,6 +21,6 @@ export interface Props {
         }
     }
 })
-export class Secret extends ManifestResource<Props> {
+export class Secret extends ManifestResource<Secret_Props> {
     readonly kind = api_.v1_.Secret
 }

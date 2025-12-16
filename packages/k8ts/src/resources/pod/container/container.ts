@@ -28,24 +28,22 @@ export namespace Container {
         memory: Unit.Data
     })
 
-    type Resources = (typeof container_ResourcesSpec)["__INPUT__"]
-    type SomeMount = Kinded<api_.v1_.Pod_.DeviceMount | api_.v1_.Pod_.VolumeMount>
-    export type Mounts = {
-        [key: string]: SomeMount
+    type Container_Resources = (typeof container_ResourcesSpec)["__INPUT__"]
+    type Container_Mount_Some = Kinded<api_.v1_.Pod_.DeviceMount | api_.v1_.Pod_.VolumeMount>
+    export type Container_Mounts = {
+        [key: string]: Container_Mount_Some
     }
-    interface K8tsPropsClean<Ports extends string = never> {
-        image: TaggedImage
-        ports?: InputPortSetRecord<Ports>
-        command?: CmdBuilder
-        mounts?: Mounts
-        env?: InputEnvMapping
-        resources?: Resources
+    interface Container_Props_K8ts<Ports extends string = never> {
+        $image: TaggedImage
+        $ports?: InputPortSetRecord<Ports>
+        $command?: CmdBuilder
+        $mounts?: Container_Mounts
+        $env?: InputEnvMapping
+        $resources?: Container_Resources
     }
-    export type K8tsProps<Ports extends string = never> = {
-        [key in keyof K8tsPropsClean<Ports> as `$${key}`]: K8tsPropsClean<Ports>[key]
-    }
-    export type Props<Ports extends string = never> = K8tsProps<Ports> &
-        Omit<CDK.Container, keyof K8tsPropsClean | "name">
+
+    export type Container_Props<Ports extends string = never> = Container_Props_K8ts<Ports> &
+        Omit<CDK.Container, keyof Container_Props_K8ts | "name">
 
     @k8ts(api_.v1_.Pod_.Container)
     @relations({
@@ -57,7 +55,9 @@ export namespace Container {
             )
         }
     })
-    export class Container<Ports extends string = string> extends SubResource<Props<Ports>> {
+    export class Container<Ports extends string = string> extends SubResource<
+        Container_Props<Ports>
+    > {
         __PORTS__!: Ports
         readonly kind = api_.v1_.Pod_.Container
 
@@ -67,7 +67,9 @@ export namespace Container {
                     return [
                         mount,
                         {
-                            mount: mount as Mount.ContainerVolumeMount | Mount.ContainerDeviceMount,
+                            mount: mount as
+                                | Mount.Container_Mount_Volume
+                                | Mount.Container_Mount_Device,
                             path: path as string
                         }
                     ]
@@ -107,7 +109,7 @@ export namespace Container {
             parent: ManifestResource,
             name: string,
             readonly subtype: "init" | "main",
-            override readonly props: Props<Ports>
+            override readonly props: Container_Props<Ports>
         ) {
             super(parent, name, props)
         }
@@ -119,7 +121,7 @@ export namespace Container {
             } as Pick<CDK.Container, "volumeMounts" | "volumeDevices">
             for (const mnt of this.mounts) {
                 const { mount, path } = mnt
-                if (mount instanceof Mount.ContainerDeviceMount) {
+                if (mount instanceof Mount.Container_Mount_Device) {
                     x.volumeDevices!.push(mount.submanifest(path))
                 } else {
                     x.volumeMounts!.push(mount.submanifest(path))
@@ -140,7 +142,7 @@ export namespace Container {
         parent: ManifestResource,
         name: string,
         subtype: "init" | "main",
-        props: Props<Ports>
+        props: Container_Props<Ports>
     ) {
         return new Container(parent, name, subtype, props)
     }

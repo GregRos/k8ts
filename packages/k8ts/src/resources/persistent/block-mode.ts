@@ -1,1 +1,1 @@
-export type DataMode = "Block" | "Filesystem"
+export type Pv_VolumeMode = "Block" | "Filesystem"

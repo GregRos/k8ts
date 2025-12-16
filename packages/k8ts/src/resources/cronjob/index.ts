@@ -8,10 +8,10 @@ import { api_ } from "../../kinds"
 import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { ManifestResource } from "../../node/manifest-resource"
 import { PodTemplate } from "../pod/pod-template"
-export interface K8tsCronJobProps<CronSpec extends Cron.Record>
+export interface CronJob_Props<CronSpec extends Cron.Record>
     extends Omit<CDK.CronJobSpec, "jobTemplate" | "schedule" | "timeZone"> {
     $schedule: CronStanza<CronSpec>
-    $template: PodTemplate.Props<never> & {
+    $template: PodTemplate.Pod_Props<never> & {
         restartPolicy: "Always" | "OnFailure" | "Never"
     }
     $meta?: Meta.Input
@@ -41,14 +41,12 @@ export interface K8tsCronJobProps<CronSpec extends Cron.Record>
         }
     }
 })
-export class K8tsCronJob<Cron extends Cron.Record> extends ManifestResource<
-    K8tsCronJobProps<Cron>
-> {
+export class CronJob<Cron extends Cron.Record> extends ManifestResource<CronJob_Props<Cron>> {
     kind = api_.batch_.v1_.CronJob
-    template: PodTemplate.PodTemplate<never>
-    constructor(origin: Origin, meta: Meta | MutableMeta, props: K8tsCronJobProps<Cron>) {
+    template: PodTemplate.Pod_Template<never>
+    constructor(origin: Origin, meta: Meta | MutableMeta, props: CronJob_Props<Cron>) {
         super(origin, meta, props)
-        this.template = new PodTemplate.PodTemplate(
+        this.template = new PodTemplate.Pod_Template(
             origin,
             Meta.make({
                 name: this.name

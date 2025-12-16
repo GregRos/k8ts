@@ -10,7 +10,7 @@ import type { ServiceAccount } from "./service-account"
 
 export type ClusterRoleBinding = ClusterRoleBinding.ClusterRoleBinding
 export namespace ClusterRoleBinding {
-    export interface Props {
+    export interface ClusterRoleBoding_Props {
         $role: ClusterRole
         $subjects: ServiceAccount[]
     }
@@ -39,10 +39,10 @@ export namespace ClusterRoleBinding {
             }
         }
     })
-    export class ClusterRoleBinding extends ManifestResource<Props> {
+    export class ClusterRoleBinding extends ManifestResource<ClusterRoleBoding_Props> {
         override kind = api_.rbac_.v1_.ClusterRoleBinding
 
-        constructor(origin: Origin, meta: Meta | MutableMeta, props: Props) {
+        constructor(origin: Origin, meta: Meta | MutableMeta, props: ClusterRoleBoding_Props) {
             super(origin, meta.toMutable(), props)
         }
     }

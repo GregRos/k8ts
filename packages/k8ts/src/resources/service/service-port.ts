@@ -3,13 +3,13 @@ import type { Service } from "./service"
 
 export type Port<Port extends string> = Port.Port<Port>
 export namespace Port {
-    export interface Props<Port extends string> {
-        service: Service.AbsService<Port>
+    export interface Service_Port_Props<Port extends string> {
+        service: Service.Service_Ref<Port>
         name: Port
     }
 
     export class Port<Port extends string> {
-        constructor(readonly props: Props<Port>) {}
+        constructor(readonly props: Service_Port_Props<Port>) {}
 
         get service() {
             return this.props.service as Service<Port>

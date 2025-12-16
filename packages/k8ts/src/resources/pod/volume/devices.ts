@@ -6,26 +6,26 @@ import type { ManifestResource } from "../../../node"
 import { SubResource } from "../../../node/sub-resource"
 import { Pvc } from "../../persistent"
 import { Mount } from "../container/mounts"
-export type Device = Device.PodDevice
+export type Device = Device.Pod_Device
 export namespace Device {
-    interface PodDevice_Backend_Pvc {
+    interface Pod_Device_Backend_Pvc {
         $backend: Pvc.Pvc<"Block">
         readOnly?: boolean
     }
 
-    export type Backend = PodDevice_Backend_Pvc
+    export type Backend = Pod_Device_Backend_Pvc
     @k8ts(api_.v1_.Pod_.Device)
     @relations({
         needs: self => ({
             backend: self.backend.$backend
         })
     })
-    export class PodDevice extends SubResource<PodDevice_Backend_Pvc> {
+    export class Pod_Device extends SubResource<Pod_Device_Backend_Pvc> {
         readonly kind = api_.v1_.Pod_.Device
         constructor(
             parent: ManifestResource,
             name: string,
-            readonly backend: PodDevice_Backend_Pvc
+            readonly backend: Pod_Device_Backend_Pvc
         ) {
             super(parent, name, backend)
         }
@@ -41,13 +41,13 @@ export namespace Device {
         }
 
         Mount() {
-            return new Mount.ContainerDeviceMount({
+            return new Mount.Container_Mount_Device({
                 device: this
             })
         }
     }
 
     export function make(parent: ManifestResource, name: string, input: Backend) {
-        return new PodDevice(parent, name, input)
+        return new Pod_Device(parent, name, input)
     }
 }

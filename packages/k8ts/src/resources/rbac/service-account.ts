@@ -8,7 +8,7 @@ import { ManifestResource } from "../../node/manifest-resource"
 
 export type ServiceAccount = ServiceAccount.ServiceAccount
 export namespace ServiceAccount {
-    export interface Props {
+    export interface ServiceAccount_Props {
         automountToken?: boolean
         imagePullSecrets?: string[]
     }
@@ -24,10 +24,10 @@ export namespace ServiceAccount {
             }
         }
     })
-    export class ServiceAccount extends ManifestResource<Props> {
+    export class ServiceAccount extends ManifestResource<ServiceAccount_Props> {
         override kind = api_.v1_.ServiceAccount
 
-        constructor(origin: Origin, meta: Meta | MutableMeta, props?: Props) {
+        constructor(origin: Origin, meta: Meta | MutableMeta, props?: ServiceAccount_Props) {
             super(origin, meta.toMutable(), props ?? {})
         }
     }

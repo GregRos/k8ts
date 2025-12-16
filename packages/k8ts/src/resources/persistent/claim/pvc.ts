@@ -8,21 +8,20 @@ import { api_ } from "../../../kinds"
 import { ManifestResource } from "../../../node"
 import { equiv_cdk8s } from "../../../node/equiv-cdk8s"
 import { Access } from "../access-mode"
-import type { DataMode } from "../block-mode"
+import type { Pv_VolumeMode } from "../block-mode"
 import { Pv } from "../volume"
 
-export type Pvc<T extends DataMode = DataMode> = Pvc.Pvc<T>
+export type Pvc<T extends Pv_VolumeMode = Pv_VolumeMode> = Pvc.Pvc<T>
 export namespace Pvc {
     const pvc_ResourcesSpec = ResourcesSpec.make({
         storage: Unit.Data
     })
-    type PvcResourceSpec = typeof pvc_ResourcesSpec
-    type PvcResources = Prefix$<PvcResourceSpec["__INPUT__"]>
-    export interface Props<Mode extends DataMode> extends PvcResources {
+    type Pvc_Resources = Prefix$<(typeof pvc_ResourcesSpec)["__INPUT__"]>
+    export interface Pvc_Props<Mode extends Pv_VolumeMode> extends Pvc_Resources {
         $accessModes: Access
         $mode?: Mode
         $storageClass?: External<api_.storage_.v1_.StorageClass>
-        $bind?: Pv.AbsPv<Mode>
+        $bind?: Pv.Pv_Ref<Mode>
     }
 
     @k8ts(api_.v1_.PersistentVolumeClaim)
@@ -36,7 +35,7 @@ export namespace Pvc {
     @manifest({
         body(self): CDK.KubePersistentVolumeClaimProps {
             const { $storage, $accessModes, $mode, $storageClass, $bind } = self.props
-            const nAccessModes = Access.parse($accessModes)
+            const nAccessModes = Access.pv_parseAccessMode($accessModes)
             if (!$bind && !$storageClass) {
                 throw new MakeError(
                     `While manifesting ${self.node.format("source")}, PVC that doesn't have a $bind must have a $storageClass.`
@@ -57,7 +56,9 @@ export namespace Pvc {
             }
         }
     })
-    export class Pvc<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
+    export class Pvc<Mode extends Pv_VolumeMode = Pv_VolumeMode> extends ManifestResource<
+        Pvc_Props<Mode>
+    > {
         kind = api_.v1_.PersistentVolumeClaim
 
         get bound() {

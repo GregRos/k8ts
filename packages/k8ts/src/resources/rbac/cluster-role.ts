@@ -8,15 +8,18 @@ import { equiv_cdk8s } from "../../node/equiv-cdk8s"
 import { ManifestResource } from "../../node/manifest-resource"
 export type ClusterRole = ClusterRole.ClusterRole
 export namespace ClusterRole {
-    export interface RoleRule<
+    export interface ClusterRole_Rule<
         Groups extends Kind.Group[] = Kind.Group[],
         Resources extends Kind.Kind<string, Kind.Version<string, Groups[number]>>[] = Kind.Kind[]
     > {
         resources: Resources
         verbs: Verbs[]
     }
-    export type ApiGroupProducer<Rules extends RoleRule> = Producer<ClusterRoleScope, Rules>
-    class ClusterRoleScope {
+    export type ClusterRole_RuleProducer<Rules extends ClusterRole_Rule> = Producer<
+        ClusterRole_Scope,
+        Rules
+    >
+    class ClusterRole_Scope {
         Resources<const R extends Kind[]>(...resources: R) {
             return {
                 verbs(...verbs: Verbs[]) {
@@ -28,14 +31,14 @@ export namespace ClusterRole {
             }
         }
     }
-    export interface Props<Rules extends RoleRule = RoleRule> {
-        rules: ApiGroupProducer<Rules>
+    export interface ClusterRole_Props<Rules extends ClusterRole_Rule = ClusterRole_Rule> {
+        rules: ClusterRole_RuleProducer<Rules>
     }
     @k8ts(api_.rbac_.v1_.ClusterRole)
     @relations("none")
     @equiv_cdk8s(CDK.KubeClusterRole)
     @manifest({
-        _fromObject(self, rule: RoleRule) {
+        _fromObject(self, rule: ClusterRole_Rule) {
             return {
                 apiGroups: rule.resources.map(x => x.parent.parent.name),
                 resources: rule.resources.map(r => r.plural),
@@ -43,7 +46,7 @@ export namespace ClusterRole {
             }
         },
         body(self): CDK.KubeClusterRoleProps {
-            const rules = seq(self.props.rules(new ClusterRoleScope()))
+            const rules = seq(self.props.rules(new ClusterRole_Scope()))
                 .map(rule => {
                     return this._fromObject(self, rule)
                 })
@@ -54,9 +57,9 @@ export namespace ClusterRole {
             }
         }
     })
-    export class ClusterRole extends ManifestResource<Props> {
+    export class ClusterRole extends ManifestResource<ClusterRole_Props> {
         override kind = api_.rbac_.v1_.ClusterRole
-        constructor(origin: Origin, meta: Meta | MutableMeta, props: Props) {
+        constructor(origin: Origin, meta: Meta | MutableMeta, props: ClusterRole_Props) {
             super(origin, meta.toMutable(), props)
         }
     }

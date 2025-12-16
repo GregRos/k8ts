@@ -7,14 +7,14 @@ import { api_ } from "../../../kinds"
 import { equiv_cdk8s } from "../../../node/equiv-cdk8s"
 import { ManifestResource } from "../../../node/manifest-resource"
 import { Access } from "../access-mode"
-import type { DataMode } from "../block-mode"
+import type { Pv_VolumeMode } from "../block-mode"
 import { Backend as Backend_ } from "./backend"
 import { parseBackend } from "./parse-backend"
 
-export type Pv<T extends DataMode = DataMode> = Pv.Pv<T>
+export type Pv<T extends Pv_VolumeMode = Pv_VolumeMode> = Pv.Pv<T>
 export namespace Pv {
     export import Backend = Backend_
-    export interface Props<Mode extends DataMode = DataMode> {
+    export interface Pv_Props_K8ts<Mode extends Pv_VolumeMode = Pv_VolumeMode> {
         $accessModes: Access
         $storageClass?: External<api_.storage_.v1_.StorageClass>
         $mode?: Mode
@@ -25,14 +25,15 @@ export namespace Pv {
         nodeAffinity?: CDK.VolumeNodeAffinity
     }
     export type Reclaim = "Retain" | "Delete" | "Recycle"
-    export type AbsPv<Mode extends DataMode = DataMode> = Refable<api_.v1_.PersistentVolume> & {
-        __MODE__: Mode
-    }
+    export type Pv_Ref<Mode extends Pv_VolumeMode = Pv_VolumeMode> =
+        Refable<api_.v1_.PersistentVolume> & {
+            __MODE__: Mode
+        }
     @equiv_cdk8s(CDK.KubePersistentVolume)
     @manifest({
         body(self) {
             const pvProps = self.props
-            const accessModes = Access.parse(pvProps.$accessModes)
+            const accessModes = Access.pv_parseAccessMode(pvProps.$accessModes)
             if (self.props.$backend?.type === "Local") {
                 if (!pvProps.nodeAffinity) {
                     throw new MakeError(
@@ -75,7 +76,9 @@ export namespace Pv {
             }
         }
     })
-    export class Pv<Mode extends DataMode = DataMode> extends ManifestResource<Props<Mode>> {
+    export class Pv<Mode extends Pv_VolumeMode = Pv_VolumeMode> extends ManifestResource<
+        Pv_Props_K8ts<Mode>
+    > {
         __MODE__!: Mode
         readonly kind = api_.v1_.PersistentVolume
     }

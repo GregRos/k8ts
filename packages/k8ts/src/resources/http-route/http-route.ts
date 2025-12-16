@@ -10,7 +10,7 @@ import type { Service } from "../service"
 export type HttpRoute<Ports extends string> = HttpRoute.HttpRoute<Ports>
 
 export namespace HttpRoute {
-    export interface Props<Ports extends string> {
+    export interface HttpRoute_Props<Ports extends string> {
         $gateway: External<api_.gateway_.v1_.Gateway>
         $hostname: string
         $backend: Service.Port<Ports>
@@ -41,7 +41,7 @@ export namespace HttpRoute {
             }
         }
     })
-    export class HttpRoute<Ports extends string> extends ManifestResource<Props<Ports>> {
+    export class HttpRoute<Ports extends string> extends ManifestResource<HttpRoute_Props<Ports>> {
         kind = api_.gateway_.v1_.HttpRoute
     }
 }

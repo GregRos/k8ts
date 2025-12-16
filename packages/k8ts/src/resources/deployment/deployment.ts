@@ -11,18 +11,25 @@ import { PodTemplate } from "../pod/pod-template"
 
 export type Deployment<Ports extends string> = Deployment.Deployment<Ports>
 export namespace Deployment {
-    export type DeploymentStrategy =
-        | { type: "Recreate" }
-        | ({
-              type: "RollingUpdate"
-          } & CDK.RollingUpdateDeployment)
-    export type NormalProps = Omit<CDK.DeploymentSpec, "selector" | "template" | "strategy">
-
-    export type Props<Ports extends string> = NormalProps & {
-        $template: PodTemplate.Props<Ports>
-        $strategy?: DeploymentStrategy
+    export interface Deployment_Strategy_RollingUpdate extends CDK.RollingUpdateDeployment {
+        type: "RollingUpdate"
     }
-    export type AbsDeployment<Ports extends string> = Refable<api_.apps_.v1_.Deployment> & {
+    export interface Deployment_Strategy_Recreate {
+        type: "Recreate"
+    }
+    export type Deployment_Strategy =
+        | Deployment_Strategy_RollingUpdate
+        | Deployment_Strategy_Recreate
+    export type Deployment_Props_Original = Omit<
+        CDK.DeploymentSpec,
+        "selector" | "template" | "strategy"
+    >
+
+    export type Deployment_Props<Ports extends string> = Deployment_Props_Original & {
+        $template: PodTemplate.Pod_Props<Ports>
+        $strategy?: Deployment_Strategy
+    }
+    export type Deployment_Ref<Ports extends string> = Refable<api_.apps_.v1_.Deployment> & {
         __PORTS__: Ports
     }
 
@@ -49,7 +56,9 @@ export namespace Deployment {
             }
         }
     })
-    export class Deployment<Ports extends string = string> extends ManifestResource<Props<Ports>> {
+    export class Deployment<Ports extends string = string> extends ManifestResource<
+        Deployment_Props<Ports>
+    > {
         __PORTS__!: Ports
         kind = api_.apps_.v1_.Deployment
         template: PodTemplate<Ports>
@@ -70,9 +79,9 @@ export namespace Deployment {
             }
             throw new MakeError(`Invalid strategy type: ${strat}`)
         }
-        constructor(origin: Origin, meta: Meta | MutableMeta, props: Props<Ports>) {
+        constructor(origin: Origin, meta: Meta | MutableMeta, props: Deployment_Props<Ports>) {
             super(origin, meta, props)
-            this.template = new PodTemplate.PodTemplate(
+            this.template = new PodTemplate.Pod_Template(
                 origin,
                 Meta.make({
                     name: this.name,

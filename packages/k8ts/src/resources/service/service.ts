@@ -20,14 +20,15 @@ export type Service<ExposedPorts extends string = string> = Service.Service<Expo
 export namespace Service {
     export import Port = Port_
     export import Frontend = Frontend_
-    export interface Props<DeployPorts extends string, ExposedPorts extends DeployPorts> {
+    export interface Service_Props<DeployPorts extends string, ExposedPorts extends DeployPorts> {
         $ports: InputPortMapping<ExposedPorts>
-        $backend: Deployment.AbsDeployment<DeployPorts>
+        $backend: Deployment.Deployment_Ref<DeployPorts>
         $frontend: Frontend
     }
-    export type AbsService<ExposedPorts extends string> = Refable<api_.v1_.Service> & {
+    export interface Service_Ref<ExposedPorts extends string> extends Refable<api_.v1_.Service> {
         __PORTS__: ExposedPorts
     }
+
     @k8ts(api_.v1_.Service)
     @relations({
         needs: self => ({
@@ -56,7 +57,7 @@ export namespace Service {
         }
     })
     export class Service<ExposedPorts extends string = string> extends ManifestResource<
-        Props<string, ExposedPorts>
+        Service_Props<string, ExposedPorts>
     > {
         __PORTS__!: ExposedPorts
         kind = api_.v1_.Service
