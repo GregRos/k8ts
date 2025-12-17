@@ -2,14 +2,14 @@ import { CDK } from "@k8ts/imports"
 import { Kinded, manifest, ManifestResource, Producer, relations } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { omitBy } from "lodash"
-import { k8ts } from "../../kind-map"
-import { api2 } from "../../kinds"
+import { v1 } from "../../kinds/default"
+import { k8ts } from "../../world/kind-map"
 import { Container } from "./container"
 import { Device, Volume } from "./volume"
 export type PodTemplate<Ports extends string = string> = PodTemplate.Pod_Template<Ports>
 export namespace PodTemplate {
     export type Pod_Props_Original = Omit<CDK.PodSpec, "containers" | "initContainers" | "volumes">
-    type Container_Ref<Ports extends string> = Kinded<api2.v1.Pod.Container._> & {
+    type Container_Ref<Ports extends string> = Kinded<v1.Pod.Container._> & {
         __PORTS__: Ports
     }
     export type Pod_Container_Producer<Ports extends string> = Producer<
@@ -21,7 +21,7 @@ export namespace PodTemplate {
         $POD: Pod_Container_Producer<Ports>
     }
 
-    @k8ts(api2.v1.PodTemplate._)
+    @k8ts(v1.PodTemplate._)
     @relations({
         kids: s => [...s.containers, ...s.volumes]
     })
@@ -52,7 +52,7 @@ export namespace PodTemplate {
     export class Pod_Template<Ports extends string = string> extends ManifestResource<
         Pod_Props<Ports>
     > {
-        readonly kind = api2.v1.PodTemplate._
+        readonly kind = v1.PodTemplate._
         readonly containers = seq(() => this.props.$POD(new PodScope(this)))
             .map(x => {
                 return x as Container<Ports>

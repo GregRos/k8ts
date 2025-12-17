@@ -3,8 +3,8 @@ import { Cron, CronStanza, manifest, ManifestResource, Origin, relations } from 
 import { Timezone } from "@k8ts/instruments/timezone"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { omit, omitBy } from "lodash"
-import { k8ts } from "../../kind-map"
 import { batch } from "../../kinds/batch"
+import { k8ts } from "../../world/kind-map"
 import { PodTemplate } from "../pod/pod-template"
 export interface CronJob_Props<CronSpec extends Cron.Record>
     extends Omit<CDK.CronJobSpec, "jobTemplate" | "schedule" | "timeZone"> {

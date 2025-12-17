@@ -2,11 +2,11 @@ import { BaseOriginEntity, KindMap, LiveRefable, Origin, type Kind } from "@k8ts
 import { Meta } from "@k8ts/metadata"
 import { assign } from "lodash"
 import { External } from "../external"
-import { K8tsKinds } from "../k8ts-sys-kind"
-import { K8tsRootOrigin } from "../kind-map"
 import { File } from "./file"
 import { FileExports } from "./file/exports"
 import { FileOrigin } from "./file/origin"
+import { build } from "./k8ts-sys-kind"
+import { K8tsRootOrigin } from "./kind-map"
 export type ManifestFileName = `${string}.yaml`
 export namespace World {
     export interface Props {
@@ -22,7 +22,7 @@ export namespace World {
         ): File<Produced>
     }
     export class Builder extends BaseOriginEntity<Props> {
-        readonly kind = K8tsKinds.build_.current_.World
+        readonly kind = build.current.World._
         private readonly _ExternalOrigin: ExternalOriginEntity
         constructor(props: Props) {
             super("World", props, K8tsRootOrigin.node)
@@ -75,7 +75,7 @@ export namespace World {
     }
 }
 export class ExternalOriginEntity extends BaseOriginEntity {
-    kind = K8tsKinds.build_.current_.External
+    kind = build.current.External._
     constructor(parent: Origin) {
         super(
             "EXTERNAL",

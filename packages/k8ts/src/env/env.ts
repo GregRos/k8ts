@@ -3,7 +3,7 @@ import { merge } from "@k8ts/metadata/util"
 import { seq } from "doddle"
 import { isObject } from "what-are-you"
 import { MakeError } from "../error"
-import { api2 } from "../kinds"
+import { v1 } from "../kinds/index"
 import {
     toInputEnv,
     type EnvVarFrom,
@@ -28,7 +28,7 @@ export class EnvBuilder {
         return this._env
     }
 
-    private _envFromSecret(value: EnvVarFrom<api2.v1.Secret._>): CDK.EnvVarSource {
+    private _envFromSecret(value: EnvVarFrom<v1.Secret._>): CDK.EnvVarSource {
         return {
             secretKeyRef: {
                 name: value.$ref.name,
@@ -38,7 +38,7 @@ export class EnvBuilder {
         }
     }
 
-    private _envFromConfigMap(value: EnvVarFrom<api2.v1.ConfigMap._>): CDK.EnvVarSource {
+    private _envFromConfigMap(value: EnvVarFrom<v1.ConfigMap._>): CDK.EnvVarSource {
         return {
             configMapKeyRef: {
                 name: value.$ref.name,
@@ -63,14 +63,14 @@ export class EnvBuilder {
                         value: `${value}`
                     }
                 }
-                const resourceValue = value as EnvVarFrom<api2.v1.Secret._ | api2.v1.ConfigMap._>
+                const resourceValue = value as EnvVarFrom<v1.Secret._ | v1.ConfigMap._>
                 switch (resourceValue.$ref.kind) {
-                    case api2.v1.Secret._:
+                    case v1.Secret._:
                         return {
                             name: key,
                             valueFrom: this._envFromSecret(resourceValue as any)
                         }
-                    case api2.v1.ConfigMap._:
+                    case v1.ConfigMap._:
                         return {
                             name: key,
                             valueFrom: this._envFromConfigMap(resourceValue as any)

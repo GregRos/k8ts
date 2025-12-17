@@ -9,8 +9,8 @@ import {
 } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { MakeError } from "../../error"
-import { k8ts } from "../../kind-map"
-import { api2 } from "../../kinds"
+import { v1 } from "../../kinds/index"
+import { k8ts } from "../../world/kind-map"
 import { Deployment } from "../deployment"
 import { toServicePorts } from "../utils/adapters"
 import { Port as Port_ } from "./service-port"
@@ -31,11 +31,11 @@ export namespace Service {
         $backend: Deployment.Deployment_Ref<DeployPorts>
         $frontend: Service_Frontend
     }
-    export interface Service_Ref<ExposedPorts extends string> extends Refable<api2.v1.Service._> {
+    export interface Service_Ref<ExposedPorts extends string> extends Refable<v1.Service._> {
         __PORTS__: ExposedPorts
     }
 
-    @k8ts(api2.v1.Service._)
+    @k8ts(v1.Service._)
     @relations({
         needs: self => ({
             backend: self.backend as ResourceEntity
@@ -65,7 +65,7 @@ export namespace Service {
         Service_Props<string, ExposedPorts>
     > {
         __PORTS__!: ExposedPorts
-        kind = api2.v1.Service._
+        kind = v1.Service._
 
         private get backend() {
             return this.props.$backend as Deployment<ExposedPorts>

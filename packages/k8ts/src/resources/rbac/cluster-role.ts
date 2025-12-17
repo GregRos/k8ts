@@ -9,8 +9,8 @@ import {
 } from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { seq } from "doddle"
-import { k8ts } from "../../kind-map"
 import { rbac } from "../../kinds/rbac"
+import { k8ts } from "../../world/kind-map"
 export type ClusterRole = ClusterRole.ClusterRole
 export namespace ClusterRole {
     export interface ClusterRole_Rule<

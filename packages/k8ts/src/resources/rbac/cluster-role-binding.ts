@@ -1,8 +1,8 @@
 import { CDK } from "@k8ts/imports"
 import { manifest, ManifestResource, relations, type Origin } from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
-import { k8ts } from "../../kind-map"
 import { rbac } from "../../kinds/rbac"
+import { k8ts } from "../../world/kind-map"
 import type { ClusterRole } from "./cluster-role"
 import type { ServiceAccount } from "./service-account"
 

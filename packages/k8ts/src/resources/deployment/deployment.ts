@@ -3,8 +3,8 @@ import { manifest, ManifestResource, Origin, Refable, relations } from "@k8ts/in
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { omit, omitBy } from "lodash"
 import { MakeError } from "../../error"
-import { k8ts } from "../../kind-map"
 import { apps } from "../../kinds/apps"
+import { k8ts } from "../../world/kind-map"
 import { PodTemplate } from "../pod/pod-template"
 
 export type Deployment<Ports extends string> = Deployment.Deployment<Ports>

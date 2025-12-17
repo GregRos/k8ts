@@ -35,10 +35,10 @@
       "types": "./dist/index.d.ts"
     },
     "./kinds": {
-      "require": "./dist/kinds.js",
-      "import": "./dist/kinds.js",
-      "default": "./dist/kinds.js",
-      "types": "./dist/kinds.d.ts"
+      "require": "./dist/kinds/index.js",
+      "import": "./dist/kinds/index.js",
+      "default": "./dist/kinds/index.js",
+      "types": "./dist/kinds/index.d.ts"
     }
   },
   "main": "dist/index.js",

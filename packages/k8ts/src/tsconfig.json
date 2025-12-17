@@ -18,6 +18,5 @@
     "outDir": "../dist",
     "tsBuildInfoFile": "../dist/src.tsbuildinfo"
   },
-  "include": ["**/*.ts", "../../instruments/src/api-kind/pluralize.ts"],
-  "exclude": ["_imports/**/*.ts"]
+  "include": ["**/*.ts"]
 }

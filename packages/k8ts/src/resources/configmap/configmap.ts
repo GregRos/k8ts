@@ -11,8 +11,8 @@ import {
 } from "@k8ts/instruments"
 import { toObject } from "@k8ts/metadata/util"
 import { seq } from "doddle"
-import { k8ts } from "../../kind-map"
-import { api2 } from "../../kinds"
+import { v1 } from "../../kinds/default"
+import { k8ts } from "../../world/kind-map"
 export type ConfigMap = ConfigMap.ConfigMap
 export namespace ConfigMap {
     export type ConfigMap_Entry_Source = LocalFileSource | string
@@ -21,7 +21,7 @@ export namespace ConfigMap {
         binaryData?: DataSourceRecord_Binary
     }
 
-    @k8ts(api2.v1.ConfigMap._)
+    @k8ts(v1.ConfigMap._)
     @relations("none")
     @manifest({
         async body(self): Promise<CDK.KubeConfigMapProps> {
@@ -38,6 +38,6 @@ export namespace ConfigMap {
         }
     })
     export class ConfigMap extends ManifestResource<ConfigMap_Props> {
-        override kind = api2.v1.ConfigMap._
+        override kind = v1.ConfigMap._
     }
 }
