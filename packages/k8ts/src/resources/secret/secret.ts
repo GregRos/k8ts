@@ -1,7 +1,7 @@
 import { CDK } from "@k8ts/imports"
 import { manifest, relations } from "@k8ts/instruments"
 import { k8ts } from "../../kind-map"
-import { api_ } from "../../kinds"
+import { api2 } from "../../kinds"
 import { ManifestResource } from "../../node/manifest-resource"
 
 export interface Secret_Props {
@@ -9,7 +9,7 @@ export interface Secret_Props {
     stringData?: Record<string, string>
 }
 
-@k8ts(api_.v1_.Secret)
+@k8ts(api2.v1.Secret._)
 @relations("none")
 @manifest({
     body(self): CDK.KubeSecretProps {
@@ -20,5 +20,5 @@ export interface Secret_Props {
     }
 })
 export class Secret extends ManifestResource<Secret_Props> {
-    readonly kind = api_.v1_.Secret
+    readonly kind = api2.v1.Secret._
 }

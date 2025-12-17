@@ -1,11 +1,11 @@
 import { Cmd, Cron, Image, localFile } from "@k8ts/instruments"
-import { api_ } from "@lib/kinds"
+import { api2 } from "@lib/kinds"
 import k8tsFile from "./cluster-scoped.k8"
 import { W } from "./world"
 const k8sNamespace = k8tsFile["Namespace/namespace"]
 const k8sPv = k8tsFile["PersistentVolume/dev-sda"]
 const cool = k8tsFile["PersistentVolume/pv-cool"]
-const gwKind = api_.gateway_.v1_.Gateway
+const gwKind = api2.gateway.v1.Gateway._
 export default W.Scope(k8sNamespace)
     .File("deployment2.yaml")
     .metadata({
@@ -19,12 +19,12 @@ export default W.Scope(k8sNamespace)
         })
 
         const claim2 = FILE.Claim("claim2", {
-            $storageClass: W.External(api_.storage_.v1_.StorageClass, "topolvm"),
+            $storageClass: W.External(api2.storage.v1.StorageClass._, "topolvm"),
             $accessModes: ["ReadWriteOnce"],
             $storage: "1Gi->5Gi"
         })
         const claim3 = FILE.Claim("claim3", {
-            $storageClass: W.External(api_.storage_.v1_.StorageClass, "topolvm"),
+            $storageClass: W.External(api2.storage.v1.StorageClass._, "topolvm"),
             $accessModes: ["ReadWriteOnce"],
             $storage: "=1Gi"
         })
@@ -96,11 +96,11 @@ export default W.Scope(k8sNamespace)
                     $env: {
                         abc: "a",
                         xyz: {
-                            $ref: W.External(api_.v1_.ConfigMap, "config"),
+                            $ref: W.External(api2.v1.ConfigMap._, "config"),
                             key: "abc"
                         },
                         a123: {
-                            $ref: W.External(api_.v1_.Secret, "config"),
+                            $ref: W.External(api2.v1.Secret._, "config"),
                             key: "a123"
                         }
                     }

@@ -31,8 +31,7 @@ export namespace Service {
         $backend: Deployment.Deployment_Ref<DeployPorts>
         $frontend: Service_Frontend
     }
-    export interface Service_Ref<ExposedPorts extends string>
-        extends Refable<typeof api2.v1.Service._> {
+    export interface Service_Ref<ExposedPorts extends string> extends Refable<api2.v1.Service._> {
         __PORTS__: ExposedPorts
     }
 

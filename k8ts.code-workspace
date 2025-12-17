@@ -23,6 +23,7 @@
         }
     ],
     "settings": {
+        "jest.runMode": "on-demand",
         "python.analysis.ignore": ["**/node_modules/**", "**/.git/**"],
         "jest.disabledWorkspaceFolders": ["root"],
         "[css]": {

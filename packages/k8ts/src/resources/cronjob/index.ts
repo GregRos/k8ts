@@ -4,7 +4,7 @@ import { Timezone } from "@k8ts/instruments/timezone"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { omit, omitBy } from "lodash"
 import { k8ts } from "../../kind-map"
-import { api_ } from "../../kinds"
+import { api2 } from "../../kinds"
 import { ManifestResource } from "../../node/manifest-resource"
 import { PodTemplate } from "../pod/pod-template"
 export interface CronJob_Props<CronSpec extends Cron.Record>
@@ -17,7 +17,7 @@ export interface CronJob_Props<CronSpec extends Cron.Record>
     timeZone: Timezone
 }
 
-@k8ts(api_.batch_.v1_.CronJob)
+@k8ts(api2.batch.v1.CronJob._)
 @relations({
     kids: s => [s.template]
 })
@@ -40,7 +40,7 @@ export interface CronJob_Props<CronSpec extends Cron.Record>
     }
 })
 export class CronJob<Cron extends Cron.Record> extends ManifestResource<CronJob_Props<Cron>> {
-    kind = api_.batch_.v1_.CronJob
+    kind = api2.batch.v1.CronJob._
     template: PodTemplate.Pod_Template<never>
     constructor(origin: Origin, meta: Meta | MutableMeta, props: CronJob_Props<Cron>) {
         super(origin, meta, props)

@@ -3,14 +3,14 @@ import { Kinded, manifest, Producer, relations } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { omitBy } from "lodash"
 import { k8ts } from "../../kind-map"
-import { api_ } from "../../kinds"
+import { api2 } from "../../kinds"
 import { ManifestResource } from "../../node/manifest-resource"
 import { Container } from "./container"
 import { Device, Volume } from "./volume"
 export type PodTemplate<Ports extends string = string> = PodTemplate.Pod_Template<Ports>
 export namespace PodTemplate {
     export type Pod_Props_Original = Omit<CDK.PodSpec, "containers" | "initContainers" | "volumes">
-    type Container_Ref<Ports extends string> = Kinded<api_.v1_.Pod_.Container> & {
+    type Container_Ref<Ports extends string> = Kinded<api2.v1.Pod.Container._> & {
         __PORTS__: Ports
     }
     export type Pod_Container_Producer<Ports extends string> = Producer<
@@ -22,7 +22,7 @@ export namespace PodTemplate {
         $POD: Pod_Container_Producer<Ports>
     }
 
-    @k8ts(api_.v1_.PodTemplate)
+    @k8ts(api2.v1.PodTemplate._)
     @relations({
         kids: s => [...s.containers, ...s.volumes]
     })
@@ -32,14 +32,14 @@ export namespace PodTemplate {
             const containers = self.containers
             const initContainers = containers
                 .filter(c => c.subtype === "init")
-                .map(x => x.submanifest())
+                .map(x => x["submanifest"]())
                 .toArray()
             const mainContainers = containers
                 .filter(c => c.subtype === "main")
-                .map(x => x.submanifest())
+                .map(x => x["submanifest"]())
                 .toArray()
 
-            const volumes = self.volumes.map(x => x.submanifest()).toArray()
+            const volumes = self.volumes.map(x => x["submanifest"]()).toArray()
             return {
                 spec: {
                     ...omitBy(props, (x, k) => k.startsWith("$")),
@@ -53,7 +53,7 @@ export namespace PodTemplate {
     export class Pod_Template<Ports extends string = string> extends ManifestResource<
         Pod_Props<Ports>
     > {
-        readonly kind = api_.v1_.PodTemplate
+        readonly kind = api2.v1.PodTemplate._
         readonly containers = seq(() => this.props.$POD(new PodScope(this)))
             .map(x => {
                 return x as Container<Ports>

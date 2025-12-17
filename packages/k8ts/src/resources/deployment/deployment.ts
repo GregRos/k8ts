@@ -28,7 +28,7 @@ export namespace Deployment {
         $template: PodTemplate.Pod_Props<Ports>
         $strategy?: Deployment_Strategy
     }
-    export type Deployment_Ref<Ports extends string> = Refable<typeof api2.apps.v1.Deployment._> & {
+    export type Deployment_Ref<Ports extends string> = Refable<api2.apps.v1.Deployment._> & {
         __PORTS__: Ports
     }
 

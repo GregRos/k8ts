@@ -28,7 +28,7 @@ export class EnvBuilder {
         return this._env
     }
 
-    private _envFromSecret(value: EnvVarFrom<typeof api2.v1.Secret._>): CDK.EnvVarSource {
+    private _envFromSecret(value: EnvVarFrom<api2.v1.Secret._>): CDK.EnvVarSource {
         return {
             secretKeyRef: {
                 name: value.$ref.name,
@@ -38,7 +38,7 @@ export class EnvBuilder {
         }
     }
 
-    private _envFromConfigMap(value: EnvVarFrom<typeof api2.v1.ConfigMap._>): CDK.EnvVarSource {
+    private _envFromConfigMap(value: EnvVarFrom<api2.v1.ConfigMap._>): CDK.EnvVarSource {
         return {
             configMapKeyRef: {
                 name: value.$ref.name,
@@ -63,9 +63,7 @@ export class EnvBuilder {
                         value: `${value}`
                     }
                 }
-                const resourceValue = value as EnvVarFrom<
-                    typeof api2.v1.Secret._ | typeof api2.v1.ConfigMap._
-                >
+                const resourceValue = value as EnvVarFrom<api2.v1.Secret._ | api2.v1.ConfigMap._>
                 switch (resourceValue.$ref.kind) {
                     case api2.v1.Secret._:
                         return {

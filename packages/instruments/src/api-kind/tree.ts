@@ -59,7 +59,7 @@ function fromKindTree(parent: Kind.Identifier, kindTree: KindTreeRest): any {
     return result
 }
 
-export function From_Groups<G extends KindTreeGroups>(groups: G): SimplifyDeep<From_Groups<G>> {
+export function From_Groups<G extends KindTreeGroups>(groups: G): From_Groups<G> {
     let obj = {} as any
     for (const groupName in groups) {
         const x = Kind.group(groupName)

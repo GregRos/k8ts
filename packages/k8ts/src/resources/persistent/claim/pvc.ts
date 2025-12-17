@@ -4,11 +4,13 @@ import { Prefix$ } from "../../../_type/prefix$"
 import { MakeError } from "../../../error"
 import { External } from "../../../external"
 import { k8ts } from "../../../kind-map"
-import { api_ } from "../../../kinds"
+import { api2 } from "../../../kinds"
 import { ManifestResource } from "../../../node"
 import { Access } from "../access-mode"
 import type { Pv_VolumeMode } from "../block-mode"
 import { Pv } from "../volume"
+
+const StorageClassKind = api2.storage.v1.StorageClass._
 
 export type Pvc<T extends Pv_VolumeMode = Pv_VolumeMode> = Pvc.Pvc<T>
 export namespace Pvc {
@@ -19,11 +21,11 @@ export namespace Pvc {
     export interface Pvc_Props<Mode extends Pv_VolumeMode> extends Pvc_Resources {
         $accessModes: Access
         $mode?: Mode
-        $storageClass?: External<api_.storage_.v1_.StorageClass>
+        $storageClass?: External<api2.storage.v1.StorageClass._>
         $bind?: Pv.Pv_Ref<Mode>
     }
 
-    @k8ts(api_.v1_.PersistentVolumeClaim)
+    @k8ts(api2.v1.PersistentVolumeClaim._)
     @relations({
         needs: self => ({
             bind: self.bound,
@@ -57,7 +59,7 @@ export namespace Pvc {
     export class Pvc<Mode extends Pv_VolumeMode = Pv_VolumeMode> extends ManifestResource<
         Pvc_Props<Mode>
     > {
-        kind = api_.v1_.PersistentVolumeClaim
+        kind = api2.v1.PersistentVolumeClaim._
 
         get bound() {
             return this.props.$bind as Pv<Mode>

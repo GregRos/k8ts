@@ -10,7 +10,6 @@ export namespace Port {
 
     export class Port<Port extends string> {
         constructor(readonly props: Service_Port_Props<Port>) {}
-
         get service() {
             return this.props.service as Service<Port>
         }

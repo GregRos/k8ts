@@ -14,7 +14,7 @@ export namespace ClusterRoleBinding {
         $subjects: ServiceAccount[]
     }
 
-    @k8ts(api2["rbac.authorization.k8s.io"].v1.ClusterRoleBinding._)
+    @k8ts(api2.rbac.v1.ClusterRoleBinding._)
     @relations({
         needs: self => ({
             role: self.props.$role,
@@ -38,7 +38,7 @@ export namespace ClusterRoleBinding {
         }
     })
     export class ClusterRoleBinding extends ManifestResource<ClusterRoleBoding_Props> {
-        override kind = api2["rbac.authorization.k8s.io"].v1.ClusterRoleBinding._
+        override kind = api2.rbac.v1.ClusterRoleBinding._
 
         constructor(origin: Origin, meta: Meta | MutableMeta, props: ClusterRoleBoding_Props) {
             super(origin, meta.toMutable(), props)

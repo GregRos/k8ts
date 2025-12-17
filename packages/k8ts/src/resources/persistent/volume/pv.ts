@@ -3,11 +3,13 @@ import { manifest, Refable, relations, type Unit } from "@k8ts/instruments"
 import { MakeError } from "../../../error"
 import { External } from "../../../external"
 import { k8ts } from "../../../kind-map"
-import { api_ } from "../../../kinds"
+import { api2 } from "../../../kinds"
 import { ManifestResource } from "../../../node/manifest-resource"
 import { Access } from "../access-mode"
 import type { Pv_VolumeMode } from "../block-mode"
 import { parseBackend } from "./parse-backend"
+
+const StorageClassKind = api2.storage.v1.StorageClass._
 
 export type Pv<T extends Pv_VolumeMode = Pv_VolumeMode> = Pv.Pv<T>
 export namespace Pv {
@@ -29,7 +31,7 @@ export namespace Pv {
     export type Backend = Pv_Backend_HostPath | Pv_Backend_Local | Pv_Backend_Nfs
     export interface Pv_Props_K8ts<Mode extends Pv_VolumeMode = Pv_VolumeMode> {
         $accessModes: Access
-        $storageClass?: External<api_.storage_.v1_.StorageClass>
+        $storageClass?: External<api2.storage.v1.StorageClass._>
         $mode?: Mode
         reclaimPolicy?: Reclaim
         $capacity: Unit.Data
@@ -39,7 +41,7 @@ export namespace Pv {
     }
     export type Reclaim = "Retain" | "Delete" | "Recycle"
     export type Pv_Ref<Mode extends Pv_VolumeMode = Pv_VolumeMode> =
-        Refable<api_.v1_.PersistentVolume> & {
+        Refable<api2.v1.PersistentVolume._> & {
             __MODE__: Mode
         }
     @manifest({
@@ -80,7 +82,7 @@ export namespace Pv {
             }
         }
     })
-    @k8ts(api_.v1_.PersistentVolume)
+    @k8ts(api2.v1.PersistentVolume._)
     @relations({
         needs(self) {
             return {
@@ -92,6 +94,6 @@ export namespace Pv {
         Pv_Props_K8ts<Mode>
     > {
         __MODE__!: Mode
-        readonly kind = api_.v1_.PersistentVolume
+        readonly kind = api2.v1.PersistentVolume._
     }
 }

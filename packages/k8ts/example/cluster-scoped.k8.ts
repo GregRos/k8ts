@@ -1,10 +1,10 @@
-import { api_ } from "@lib/kinds"
+import { api2 } from "@lib/kinds"
 import { W } from "./world"
 
 export default W.Scope("cluster")
     .File("namespace.yaml")
     .Resources(function* FILE(FILE) {
-        const ref = W.External(api_.storage_.v1_.StorageClass, "topolvm")
+        const ref = W.External(api2.storage.v1.StorageClass._, "topolvm")
         yield FILE.Namespace("namespace")
         yield FILE.PersistentVolume("pv-cool", {
             $capacity: "1Gi",
