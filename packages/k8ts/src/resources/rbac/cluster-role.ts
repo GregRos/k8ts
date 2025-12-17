@@ -10,7 +10,7 @@ import {
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { seq } from "doddle"
 import { k8ts } from "../../kind-map"
-import { api2 } from "../../kinds"
+import { rbac } from "../../kinds/rbac"
 export type ClusterRole = ClusterRole.ClusterRole
 export namespace ClusterRole {
     export interface ClusterRole_Rule<
@@ -39,7 +39,7 @@ export namespace ClusterRole {
     export interface ClusterRole_Props<Rules extends ClusterRole_Rule = ClusterRole_Rule> {
         rules: ClusterRole_RuleProducer<Rules>
     }
-    @k8ts(api2.rbac.v1.ClusterRole._)
+    @k8ts(rbac.v1.ClusterRole._)
     @relations("none")
     @manifest({
         _fromObject(self, rule: ClusterRole_Rule) {
@@ -62,7 +62,7 @@ export namespace ClusterRole {
         }
     })
     export class ClusterRole extends ManifestResource<ClusterRole_Props> {
-        override kind = api2.rbac.v1.ClusterRole._
+        override kind = rbac.v1.ClusterRole._
         constructor(origin: Origin, meta: Meta | MutableMeta, props: ClusterRole_Props) {
             super(origin, meta.toMutable(), props)
         }

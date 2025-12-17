@@ -3,8 +3,8 @@ import { seq } from "doddle"
 import Emittery from "emittery"
 import { Map, Set } from "immutable"
 import { MakeError } from "../../error"
-import type { File } from "../../file"
-import { k8ts_namespace } from "./meta"
+import type { File } from "../../world/file"
+import { k8ts_namespace } from "../../world/world"
 export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
     constructor(private readonly _options: ResourceLoaderOptions) {
         super()

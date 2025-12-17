@@ -1,4 +1,5 @@
 import type { CDK } from "@k8ts/imports"
+import { Kind } from "@k8ts/instruments"
 import { api2 } from "../../../kinds"
 import { Volume } from "../volume"
 import type { Device } from "../volume/devices"
@@ -35,7 +36,7 @@ export namespace Mount {
     }
 
     export class Container_Mount_Device {
-        kind = api2.v1.Pod.Container.DeviceMount._
+        kind = api2.v1.Pod.Container.DeviceMount._ satisfies Kind.SubKind
         get volume() {
             return this.props.device
         }

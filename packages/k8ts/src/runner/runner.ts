@@ -3,8 +3,9 @@ import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
 import Emittery from "emittery"
 import StackTracey from "stacktracey"
-import { File } from "../file"
 import { proverbsPath } from "../paths"
+import { File } from "../world/file"
+import { k8ts_namespace } from "../world/world"
 import {
     Assembler,
     AssemblerEventsTable,
@@ -12,7 +13,6 @@ import {
     ProgressOptions,
     ProgressShower
 } from "./exporter"
-import { k8ts_namespace } from "./exporter/meta"
 import { Proverbs } from "./silly/proverbs"
 import { Summarizer } from "./summarizer"
 

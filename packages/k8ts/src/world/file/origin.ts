@@ -1,7 +1,7 @@
 import { BaseOriginEntity, Origin, OriginEntityProps, Refable } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
-import { K8tsKinds } from "../k8ts-sys-kind"
-import { api2 } from "../kinds"
+import { K8tsKinds } from "../../k8ts-sys-kind"
+import { api2 } from "../../kinds"
 export type FileOrigin<FScope extends FileOrigin.Scope = FileOrigin.Scope> =
     FileOrigin.FileEntity<FScope>
 export namespace FileOrigin {

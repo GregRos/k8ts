@@ -21,11 +21,11 @@ import {
     Secret,
     Service,
     ServiceAccount
-} from "../resources"
-import { CronJob, CronJob_Props } from "../resources/cronjob"
-import { ClusterRole } from "../resources/rbac/cluster-role"
-import { ClusterRoleBinding } from "../resources/rbac/cluster-role-binding"
-import { AssemblyStage } from "../runner/exporter"
+} from "../../resources"
+import { CronJob, CronJob_Props } from "../../resources/cronjob"
+import { ClusterRole } from "../../resources/rbac/cluster-role"
+import { ClusterRoleBinding } from "../../resources/rbac/cluster-role-binding"
+import { AssemblyStage } from "../../runner/exporter"
 import type { FileOrigin } from "./origin"
 
 export type Factory = Factory.Factory

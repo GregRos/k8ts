@@ -1,6 +1,5 @@
 import { FutureExports, LiveRefable, ManifestResource, Producer } from "@k8ts/instruments"
 import { seq, type Seq } from "doddle"
-import { k8ts_namespace } from "../runner/exporter/meta"
 import { Factory } from "./factory"
 import type { FileOrigin } from "./origin"
 
@@ -32,7 +31,7 @@ export namespace FileExports {
             this.#produced = seq(() => producer(props.origin))
                 .as<ManifestResource>()
                 .each(x => {
-                    x.meta.add(k8ts_namespace, {
+                    x.meta.add("k8ts.org/", {
                         "#is-exported": "true"
                     })
                 })

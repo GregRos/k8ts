@@ -2,7 +2,7 @@ import { CDK } from "@k8ts/imports"
 import { manifest, ManifestResource, relations, type Origin } from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { k8ts } from "../../kind-map"
-import { api2 } from "../../kinds"
+import { rbac } from "../../kinds/rbac"
 import type { ClusterRole } from "./cluster-role"
 import type { ServiceAccount } from "./service-account"
 
@@ -13,7 +13,7 @@ export namespace ClusterRoleBinding {
         $subjects: ServiceAccount[]
     }
 
-    @k8ts(api2.rbac.v1.ClusterRoleBinding._)
+    @k8ts(rbac.v1.ClusterRoleBinding._)
     @relations({
         needs: self => ({
             role: self.props.$role,
@@ -37,7 +37,7 @@ export namespace ClusterRoleBinding {
         }
     })
     export class ClusterRoleBinding extends ManifestResource<ClusterRoleBoding_Props> {
-        override kind = api2.rbac.v1.ClusterRoleBinding._
+        override kind = rbac.v1.ClusterRoleBinding._
 
         constructor(origin: Origin, meta: Meta | MutableMeta, props: ClusterRoleBoding_Props) {
             super(origin, meta.toMutable(), props)

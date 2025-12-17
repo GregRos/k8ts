@@ -2,17 +2,17 @@ import { CDK } from "@k8ts/imports"
 import { manifest, ManifestResource, relations } from "@k8ts/instruments"
 import type { External } from "../../external"
 import { k8ts } from "../../kind-map"
-import { api2 } from "../../kinds"
+import { gateway } from "../../kinds/gateway"
 import type { Service } from "../service"
 
-const GatewayKind = api2.gateway.v1.Gateway._
-const HttpRouteKind = api2.gateway.v1.HttpRoute._
+const GatewayKind = gateway.v1.Gateway._
+const HttpRouteKind = gateway.v1.HttpRoute._
 
 export type HttpRoute<Ports extends string> = HttpRoute.HttpRoute<Ports>
 
 export namespace HttpRoute {
     export interface HttpRoute_Props<Ports extends string> {
-        $gateway: External<api2.gateway.v1.Gateway._>
+        $gateway: External<gateway.v1.Gateway._>
         $hostname: string
         $backend: Service.Port<Ports>
         _filters?: CDK.HttpRouteSpecRulesFilters[]
