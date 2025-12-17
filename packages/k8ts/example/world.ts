@@ -1,4 +1,2 @@
-import { World } from "@lib"
-export const W = World.make({
-    name: "xyz"
-})
+import { K8ts } from "@lib"
+export const W = K8ts()

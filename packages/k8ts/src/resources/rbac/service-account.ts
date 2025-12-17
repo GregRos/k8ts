@@ -2,7 +2,6 @@ import { CDK } from "@k8ts/imports"
 import { manifest, ManifestResource, relations, type Origin } from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { v1 } from "../../kinds/default"
-import { k8ts } from "../../world/kind-map"
 
 export type ServiceAccount = ServiceAccount.ServiceAccount
 export namespace ServiceAccount {
@@ -11,7 +10,6 @@ export namespace ServiceAccount {
         imagePullSecrets?: string[]
     }
 
-    @k8ts(v1.ServiceAccount._)
     @relations("none")
     @manifest({
         body(self): CDK.KubeServiceAccountProps {

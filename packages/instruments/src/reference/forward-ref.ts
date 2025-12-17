@@ -1,5 +1,6 @@
 import type { Doddle } from "doddle"
 import { hash, List } from "immutable"
+import { ManifestResource } from "../entities"
 import { ProxyOperationError } from "../error"
 import { RefKey } from "../ref-key/ref-key"
 
@@ -17,7 +18,6 @@ export namespace ForwardRef {
         readonly namespace?: string
         readonly origin: object
         readonly resolver: Doddle<Referenced>
-        readonly class: Function
     }
 
     export class Core<T extends object> {
@@ -65,8 +65,7 @@ export namespace ForwardRef {
             return result
         }
         getPrototypeOf(target: T) {
-            const { _props } = this
-            return _props.class.prototype
+            return ManifestResource.prototype
         }
         has(target: T, prop: PropertyKey) {
             const { _props, _core } = this

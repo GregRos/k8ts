@@ -12,7 +12,6 @@ import {
 import { toObject } from "@k8ts/metadata/util"
 import { seq } from "doddle"
 import { v1 } from "../../kinds/default"
-import { k8ts } from "../../world/kind-map"
 export type ConfigMap = ConfigMap.ConfigMap
 export namespace ConfigMap {
     export type ConfigMap_Entry_Source = LocalFileSource | string
@@ -21,7 +20,6 @@ export namespace ConfigMap {
         binaryData?: DataSourceRecord_Binary
     }
 
-    @k8ts(v1.ConfigMap._)
     @relations("none")
     @manifest({
         async body(self): Promise<CDK.KubeConfigMapProps> {

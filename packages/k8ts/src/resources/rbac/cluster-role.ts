@@ -10,7 +10,6 @@ import {
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { seq } from "doddle"
 import { rbac } from "../../kinds/rbac"
-import { k8ts } from "../../world/kind-map"
 export type ClusterRole = ClusterRole.ClusterRole
 export namespace ClusterRole {
     export interface ClusterRole_Rule<
@@ -39,7 +38,7 @@ export namespace ClusterRole {
     export interface ClusterRole_Props<Rules extends ClusterRole_Rule = ClusterRole_Rule> {
         rules: ClusterRole_RuleProducer<Rules>
     }
-    @k8ts(rbac.v1.ClusterRole._)
+
     @relations("none")
     @manifest({
         _fromObject(self, rule: ClusterRole_Rule) {

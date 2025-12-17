@@ -10,7 +10,6 @@ import {
 import { seq } from "doddle"
 import { MakeError } from "../../error"
 import { v1 } from "../../kinds/index"
-import { k8ts } from "../../world/kind-map"
 import { Deployment } from "../deployment"
 import { toServicePorts } from "../utils/adapters"
 import { Port as Port_ } from "./service-port"
@@ -35,7 +34,6 @@ export namespace Service {
         __PORTS__: ExposedPorts
     }
 
-    @k8ts(v1.Service._)
     @relations({
         needs: self => ({
             backend: self.backend as ResourceEntity

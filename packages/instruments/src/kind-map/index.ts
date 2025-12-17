@@ -10,35 +10,18 @@ interface NodeEntry {
     ident: Kind.IdentParent
 }
 
-export class KindMap {
+export class KindMap<Kinds extends Kind.Kind = Kind.Kind> {
     constructor(
         private _entryMap: Map<LookupKey, NodeEntry> = Map([]) as any,
         private _parent: KindMap | undefined = undefined
     ) {}
 
-    refKey<Kind extends Kind.IdentParent, Name extends string>(
-        kind: Kind,
-        name: Name
-    ): RefKey<Kind, Name> {
+    refKey<Kind extends Kinds, Name extends string>(kind: Kind, name: Name): RefKey<Kind, Name> {
         const trueKind = this.getKind(kind)
         return new RefKey.RefKey(trueKind, name) as any
     }
 
-    private _bindEntry(entry: NodeEntry) {
-        for (const key of [entry.kind, entry.class, entry.ident]) {
-            this._entryMap = this._entryMap.set(key, entry)
-        }
-    }
-
-    add(kind: Kind.Identifier, klass: Function) {
-        this._bindEntry({
-            kind: kind.name,
-            class: klass,
-            ident: kind
-        })
-    }
-
-    parse(ref: string | RefKey) {
+    parse(ref: string | RefKey<Kinds>): RefKey<Kinds> {
         const result = this.tryParse(ref)
         if (!result) {
             throw new InstrumentsError(`Could not parse reference key: ${ref}`)
@@ -46,7 +29,7 @@ export class KindMap {
         return result
     }
 
-    tryParse(ref: unknown): RefKey.RefKey | undefined {
+    tryParse(ref: unknown): RefKey.RefKey<Kinds> | undefined {
         if (typeof ref !== "string" && typeof ref !== "object") {
             return undefined
         }
@@ -122,34 +105,34 @@ export class KindMap {
         refKey: RefKey.RefKey<Kind.Identifier<Name>>
     ): Kind.Identifier<Name> | undefined
     tryGetKind<F extends Kind.Identifier>(klass: F): F
-    tryGetKind<Name extends string>(kind: Name): Kind.Identifier<Name> | undefined
-    tryGetKind(key: LookupKey): Kind.Identifier | undefined
-    tryGetKind(kindOrIdent: LookupKey | RefKey.RefKey): Kind.Identifier | undefined {
-        return this._tryGetEntry(kindOrIdent)?.ident as Kind.Identifier | undefined
+    tryGetKind<Name extends string>(kind: Name): (Kinds & { name: Name }) | undefined
+    tryGetKind(key: LookupKey): Kinds | undefined
+    tryGetKind(kindOrIdent: LookupKey | RefKey.RefKey): Kinds | undefined {
+        return this._tryGetEntry(kindOrIdent)?.ident as Kinds | undefined
     }
 
     getKind<K extends Kind.Identifier>(kind: K): K
-    getKind<Name extends string>(kind: Name): Kind.Identifier<Name>
-    getKind(kindOrClass: LookupKey): Kind.Identifier
-    getKind(kindOrClass: string | Function): Kind.Identifier {
-        return this._getEntry(kindOrClass).ident as Kind.Identifier
+    getKind<Name extends string>(kind: Name): Kinds & { name: Name }
+    getKind(kindOrClass: LookupKey): Kinds
+    getKind(kindOrClass: string | Function): Kinds {
+        return this._getEntry(kindOrClass).ident as Kinds
     }
 
-    tryGetClass(refKey: RefKey.RefKey): Function | undefined
-    tryGetClass<F extends Function>(klass: F): F
-    tryGetClass(kind: string): Function | undefined
-    tryGetClass(ident: Kind.Identifier): Function | undefined
-    tryGetClass(kindOrIdent: LookupKey | RefKey.RefKey): Function | undefined {
-        return this._tryGetEntry(kindOrIdent)?.class
-    }
+    // tryGetClass(refKey: RefKey.RefKey): Function | undefined
+    // tryGetClass<F extends Function>(klass: F): F
+    // tryGetClass(kind: string): Function | undefined
+    // tryGetClass(ident: Kind.Identifier): Function | undefined
+    // tryGetClass(kindOrIdent: LookupKey | RefKey.RefKey): Function | undefined {
+    //     return this._tryGetEntry(kindOrIdent)?.class
+    // }
 
-    getClass(refKey: RefKey.RefKey): Function
-    getClass<F extends Function>(klass: F): F
-    getClass(kind: string): Function
-    getClass<T extends Function | string>(kindOrClass: T): T extends Function ? string : Function
-    getClass(kindOrClass: string | Function | RefKey.RefKey): Function | string {
-        return this._getEntry(kindOrClass).class
-    }
+    // getClass(refKey: RefKey.RefKey): Function
+    // getClass<F extends Function>(klass: F): F
+    // getClass(kind: string): Function
+    // getClass<T extends Function | string>(kindOrClass: T): T extends Function ? string : Function
+    // getClass(kindOrClass: string | Function | RefKey.RefKey): Function | string {
+    //     return this._getEntry(kindOrClass).class
+    // }
 
     has(kindOrClass: LookupKey): boolean {
         return this._entryMap.has(kindOrClass as any)

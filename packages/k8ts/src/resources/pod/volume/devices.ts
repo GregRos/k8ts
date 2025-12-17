@@ -2,7 +2,6 @@ import type { CDK } from "@k8ts/imports"
 import type { ManifestResource } from "@k8ts/instruments"
 import { relations, SubResource } from "@k8ts/instruments"
 import { v1 } from "../../../kinds/default"
-import { k8ts } from "../../../world/kind-map"
 import { Pvc } from "../../persistent"
 import { Mount } from "../container/mounts"
 export type Device = Device.Pod_Device
@@ -13,7 +12,7 @@ export namespace Device {
     }
 
     export type Backend = Pod_Device_Backend_Pvc
-    @k8ts(v1.Pod.Device._)
+
     @relations({
         needs: self => ({
             backend: self.backend.$backend

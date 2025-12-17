@@ -4,7 +4,6 @@ import { Timezone } from "@k8ts/instruments/timezone"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { omit, omitBy } from "lodash"
 import { batch } from "../../kinds/batch"
-import { k8ts } from "../../world/kind-map"
 import { PodTemplate } from "../pod/pod-template"
 export interface CronJob_Props<CronSpec extends Cron.Record>
     extends Omit<CDK.CronJobSpec, "jobTemplate" | "schedule" | "timeZone"> {
@@ -16,7 +15,6 @@ export interface CronJob_Props<CronSpec extends Cron.Record>
     timeZone: Timezone
 }
 
-@k8ts(batch.v1.CronJob._)
 @relations({
     kids: s => [s.template]
 })

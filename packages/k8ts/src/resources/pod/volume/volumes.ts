@@ -3,7 +3,6 @@ import type { CDK } from "@k8ts/imports"
 import type { ManifestResource } from "@k8ts/instruments"
 import { relations, SubResource } from "@k8ts/instruments"
 import { v1 } from "../../../kinds/default"
-import { k8ts } from "../../../world/kind-map"
 import type { ConfigMap } from "../../configmap"
 import { Pvc } from "../../persistent"
 import type { Secret } from "../../secret"
@@ -27,7 +26,6 @@ export namespace Volume {
         | Pod_Volume_Backend_ConfigMap
         | Pod_Volume_Backend_Secret
 
-    @k8ts(v1.Pod.Volume._)
     @relations({
         needs: self => ({
             backend: self.props.$backend

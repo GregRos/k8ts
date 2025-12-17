@@ -3,7 +3,6 @@ import { Kinded, manifest, ManifestResource, Producer, relations } from "@k8ts/i
 import { seq } from "doddle"
 import { omitBy } from "lodash"
 import { v1 } from "../../kinds/default"
-import { k8ts } from "../../world/kind-map"
 import { Container } from "./container"
 import { Device, Volume } from "./volume"
 export type PodTemplate<Ports extends string = string> = PodTemplate.Pod_Template<Ports>
@@ -21,7 +20,6 @@ export namespace PodTemplate {
         $POD: Pod_Container_Producer<Ports>
     }
 
-    @k8ts(v1.PodTemplate._)
     @relations({
         kids: s => [...s.containers, ...s.volumes]
     })

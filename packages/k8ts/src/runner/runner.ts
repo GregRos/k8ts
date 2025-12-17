@@ -3,7 +3,6 @@ import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
 import Emittery from "emittery"
 import StackTracey from "stacktracey"
-import { proverbsPath } from "../paths"
 import { File } from "../world/file"
 import { k8ts_namespace } from "../world/world"
 import {
@@ -13,6 +12,7 @@ import {
     ProgressOptions,
     ProgressShower
 } from "./exporter"
+import { proverbsPath } from "./paths"
 import { Proverbs } from "./silly/proverbs"
 import { Summarizer } from "./summarizer"
 

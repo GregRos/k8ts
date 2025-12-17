@@ -17,7 +17,6 @@ import { seq } from "doddle"
 import { mapKeys, mapValues, omitBy } from "lodash"
 import { Env, type InputEnvMapping } from "../../../env"
 import { v1 } from "../../../kinds/default"
-import { k8ts } from "../../../world/kind-map"
 import { Mount as Mount_ } from "./mounts"
 export type Container<Ports extends string = string> = Container.Container<Ports>
 export namespace Container {
@@ -46,7 +45,6 @@ export namespace Container {
     export type Container_Props<Ports extends string = never> = Container_Props_K8ts<Ports> &
         Omit<CDK.Container, keyof Container_Props_K8ts | "name">
 
-    @k8ts(v1.Pod.Container._)
     @relations({
         needs: self => {
             const a = self.mounts

@@ -2,7 +2,6 @@ import { CDK } from "@k8ts/imports"
 import { manifest, ManifestResource, relations } from "@k8ts/instruments"
 import type { External } from "../../external"
 import { gateway } from "../../kinds/gateway"
-import { k8ts } from "../../world/kind-map"
 import type { Service } from "../service"
 
 const GatewayKind = gateway.v1.Gateway._
@@ -18,7 +17,6 @@ export namespace HttpRoute {
         _filters?: CDK.HttpRouteSpecRulesFilters[]
     }
 
-    @k8ts(HttpRouteKind)
     @relations({
         needs: self => ({
             gateway: self.props.$gateway,

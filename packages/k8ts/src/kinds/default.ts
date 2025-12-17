@@ -2,7 +2,7 @@ import { Kind } from "@k8ts/instruments"
 
 const root = Kind.group("")
 type root = typeof root
-export { root as _ }
+
 export namespace v1 {
     export const _ = root.version("v1")
     export type _ = typeof _

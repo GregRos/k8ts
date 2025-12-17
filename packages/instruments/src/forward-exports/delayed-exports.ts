@@ -73,9 +73,7 @@ export namespace FutureExports {
             if (refKey == null) {
                 return undefined
             }
-            const cls = this._props.origin.resourceKinds.getClass(refKey)
             return ForwardRef.make({
-                class: cls,
                 key: refKey,
                 origin: this._props.origin,
                 namespace: this._props.origin.meta.tryGet("namespace"),

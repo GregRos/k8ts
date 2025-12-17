@@ -1,4 +1,4 @@
-import { BaseOriginEntity, KindMap, LiveRefable, Origin, type Kind } from "@k8ts/instruments"
+import { BaseOriginEntity, LiveRefable, Origin, type Kind, type Kinded } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { assign } from "lodash"
 import { External } from "../external"
@@ -6,26 +6,26 @@ import { File } from "./file"
 import { FileExports } from "./file/exports"
 import { FileOrigin } from "./file/origin"
 import { build } from "./k8ts-sys-kind"
-import { K8tsRootOrigin } from "./kind-map"
 export type ManifestFileName = `${string}.yaml`
+
 export namespace World {
-    export interface Props {
+    export interface Props<Kinds extends Kind.Kind> {
+        kinds: readonly Kinds[]
         name: string
         meta?: Meta.Input
-        kinds?: KindMap
     }
 
-    export type DefineScopedFile<Scope extends FileOrigin.Scope> = {
-        metadata(input: Meta.Input): DefineScopedFile<Scope>
-        Resources<const Produced extends LiveRefable>(
+    export type DefineScopedFile<Kinds extends Kind.Kind, Scope extends FileOrigin.Scope> = {
+        metadata(input: Meta.Input): DefineScopedFile<Kinds, Scope>
+        Resources<const Produced extends LiveRefable<Kinded<Kinds>>>(
             producer: FileExports.Producer<Scope, Produced>
         ): File<Produced>
     }
-    export class Builder extends BaseOriginEntity<Props> {
+    export class Builder<Kinds extends Kind.Kind> extends BaseOriginEntity<Props<Kinds>> {
         readonly kind = build.current.World._
         private readonly _ExternalOrigin: ExternalOriginEntity
-        constructor(props: Props) {
-            super("World", props, K8tsRootOrigin.node)
+        constructor(props: Props<Kinds>) {
+            super("World", props, null)
             this._ExternalOrigin = new ExternalOriginEntity(this.node)
         }
 
@@ -40,14 +40,14 @@ export namespace World {
                 File(name: ManifestFileName, props?: FileOrigin.SmallerProps) {
                     props ??= {}
 
-                    const self: DefineScopedFile<Scope> = {
+                    const self: DefineScopedFile<Kinds, Scope> = {
                         metadata(input: Meta.Input) {
                             props = assign({}, props!, {
                                 meta: Meta.splat(props?.meta, input)
                             })
                             return self
                         },
-                        Resources<const Produced extends LiveRefable>(
+                        Resources<const Produced extends LiveRefable<Kinded<Kinds>>>(
                             producer: FileExports.Producer<Scope, Produced>
                         ): File<Produced> {
                             return builder._File(name, {
@@ -68,10 +68,6 @@ export namespace World {
         ): File<T> {
             return File.make(name, props, this.node)
         }
-    }
-
-    export function make(props: Props) {
-        return new Builder(props)
     }
 }
 export class ExternalOriginEntity extends BaseOriginEntity {

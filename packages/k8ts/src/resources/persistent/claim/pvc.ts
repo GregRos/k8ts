@@ -5,7 +5,6 @@ import { MakeError } from "../../../error"
 import { External } from "../../../external"
 import { v1 } from "../../../kinds/default"
 import { storage } from "../../../kinds/storage"
-import { k8ts } from "../../../world/kind-map"
 import { Access } from "../access-mode"
 import type { Pv_VolumeMode } from "../block-mode"
 import { Pv } from "../volume"
@@ -25,7 +24,6 @@ export namespace Pvc {
         $bind?: Pv.Pv_Ref<Mode>
     }
 
-    @k8ts(v1.PersistentVolumeClaim._)
     @relations({
         needs: self => ({
             bind: self.bound,
