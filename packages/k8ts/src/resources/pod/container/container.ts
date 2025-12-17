@@ -11,13 +11,13 @@ import {
 } from "@k8ts/instruments"
 import { toContainerPorts } from "../../utils/adapters"
 
+import type { ManifestResource } from "@k8ts/instruments"
+import { SubResource } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { mapKeys, mapValues, omitBy } from "lodash"
 import { Env, type InputEnvMapping } from "../../../env"
 import { k8ts } from "../../../kind-map"
 import { api2 } from "../../../kinds"
-import type { ManifestResource } from "../../../node"
-import { SubResource } from "../../../node/sub-resource"
 import { Mount as Mount_ } from "./mounts"
 export type Container<Ports extends string = string> = Container.Container<Ports>
 export namespace Container {

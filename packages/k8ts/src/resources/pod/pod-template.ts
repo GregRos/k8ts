@@ -1,10 +1,9 @@
 import { CDK } from "@k8ts/imports"
-import { Kinded, manifest, Producer, relations } from "@k8ts/instruments"
+import { Kinded, manifest, ManifestResource, Producer, relations } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { omitBy } from "lodash"
 import { k8ts } from "../../kind-map"
 import { api2 } from "../../kinds"
-import { ManifestResource } from "../../node/manifest-resource"
 import { Container } from "./container"
 import { Device, Volume } from "./volume"
 export type PodTemplate<Ports extends string = string> = PodTemplate.Pod_Template<Ports>

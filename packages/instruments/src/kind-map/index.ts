@@ -7,16 +7,17 @@ export type LookupKey = NodeEntry[keyof NodeEntry]
 interface NodeEntry {
     kind: string
     class: Function
-    ident: Kind.Identifier
+    ident: Kind.IdentParent
 }
+
 export class KindMap {
     constructor(
         private _entryMap: Map<LookupKey, NodeEntry> = Map([]) as any,
         private _parent: KindMap | undefined = undefined
     ) {}
 
-    refKey<Kind extends string, Name extends string>(
-        kind: Kind | Kind.Identifier<Kind>,
+    refKey<Kind extends Kind.IdentParent, Name extends string>(
+        kind: Kind,
         name: Name
     ): RefKey<Kind, Name> {
         const trueKind = this.getKind(kind)
@@ -62,7 +63,11 @@ export class KindMap {
         if (!kind || !name) {
             return undefined
         }
-        return this.refKey(kind, name)
+        const ident = this.tryGetKind(kind)
+        if (!ident) {
+            return undefined
+        }
+        return this.refKey(ident, name)
     }
 
     get kinds(): Set<string> {
@@ -113,19 +118,21 @@ export class KindMap {
         return this._entryMap.get(converted) ?? this._parent?._tryGetEntry(converted) ?? undefined
     }
 
-    tryGetKind<Name extends string>(refKey: RefKey.RefKey<Name>): Kind.Identifier<Name> | undefined
+    tryGetKind<Name extends string>(
+        refKey: RefKey.RefKey<Kind.Identifier<Name>>
+    ): Kind.Identifier<Name> | undefined
     tryGetKind<F extends Kind.Identifier>(klass: F): F
     tryGetKind<Name extends string>(kind: Name): Kind.Identifier<Name> | undefined
     tryGetKind(key: LookupKey): Kind.Identifier | undefined
     tryGetKind(kindOrIdent: LookupKey | RefKey.RefKey): Kind.Identifier | undefined {
-        return this._tryGetEntry(kindOrIdent)?.ident
+        return this._tryGetEntry(kindOrIdent)?.ident as Kind.Identifier | undefined
     }
 
     getKind<K extends Kind.Identifier>(kind: K): K
     getKind<Name extends string>(kind: Name): Kind.Identifier<Name>
     getKind(kindOrClass: LookupKey): Kind.Identifier
     getKind(kindOrClass: string | Function): Kind.Identifier {
-        return this._getEntry(kindOrClass).ident
+        return this._getEntry(kindOrClass).ident as Kind.Identifier
     }
 
     tryGetClass(refKey: RefKey.RefKey): Function | undefined

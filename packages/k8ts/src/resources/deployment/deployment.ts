@@ -1,11 +1,10 @@
 import { CDK } from "@k8ts/imports"
-import { manifest, Origin, Refable, relations } from "@k8ts/instruments"
+import { manifest, ManifestResource, Origin, Refable, relations } from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { omit, omitBy } from "lodash"
 import { MakeError } from "../../error"
 import { k8ts } from "../../kind-map"
 import { api2 } from "../../kinds"
-import { ManifestResource } from "../../node/manifest-resource"
 import { PodTemplate } from "../pod/pod-template"
 
 export type Deployment<Ports extends string> = Deployment.Deployment<Ports>

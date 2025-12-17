@@ -1,6 +1,7 @@
 import { CDK } from "@k8ts/imports"
 import {
     manifest,
+    ManifestResource,
     Refable,
     relations,
     ResourceEntity,
@@ -10,7 +11,6 @@ import { seq } from "doddle"
 import { MakeError } from "../../error"
 import { k8ts } from "../../kind-map"
 import { api2 } from "../../kinds"
-import { ManifestResource } from "../../node"
 import { Deployment } from "../deployment"
 import { toServicePorts } from "../utils/adapters"
 import { Port as Port_ } from "./service-port"

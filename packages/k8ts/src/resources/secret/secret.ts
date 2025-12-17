@@ -1,8 +1,7 @@
 import { CDK } from "@k8ts/imports"
-import { manifest, relations } from "@k8ts/instruments"
+import { manifest, ManifestResource, relations } from "@k8ts/instruments"
 import { k8ts } from "../../kind-map"
 import { api2 } from "../../kinds"
-import { ManifestResource } from "../../node/manifest-resource"
 
 export interface Secret_Props {
     data?: Record<string, string>

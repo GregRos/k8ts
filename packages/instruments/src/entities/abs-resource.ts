@@ -1,28 +1,29 @@
 import { displayers, Kind, Origin, RefKey, ResourceEntity, ResourceNode } from "@k8ts/instruments"
-import { Doddle, doddle } from "doddle"
 
 @displayers({
     simple: s => s.node,
     pretty: s => s.node
 })
 export abstract class AbsResource<Props extends object = object> implements ResourceEntity {
+    #origin: Origin
     abstract readonly kind: Kind.Identifier<string, Kind.Identifier>
-
-    private _node: Doddle<ResourceNode>
 
     with(callback: (self: this) => void) {
         callback(this)
         return this
     }
-    get node() {
-        return this._node.pull()
-    }
+
     protected constructor(
         origin: Origin,
-        public name: string,
+        readonly name: string,
         readonly props: Props
     ) {
-        this._node = doddle(() => new ResourceNode(origin, this, RefKey.make(this.kind, this.name)))
+        this.#origin = origin
+        this.name = name
+    }
+
+    get node(): ResourceNode {
+        return new ResourceNode(this.#origin, this, RefKey.make(this.kind, this.name))
     }
 
     get shortFqn() {

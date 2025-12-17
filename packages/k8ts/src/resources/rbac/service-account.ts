@@ -1,9 +1,8 @@
 import { CDK } from "@k8ts/imports"
-import { manifest, relations, type Origin } from "@k8ts/instruments"
+import { manifest, ManifestResource, relations, type Origin } from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { k8ts } from "../../kind-map"
 import { api2 } from "../../kinds"
-import { ManifestResource } from "../../node/manifest-resource"
 
 export type ServiceAccount = ServiceAccount.ServiceAccount
 export namespace ServiceAccount {

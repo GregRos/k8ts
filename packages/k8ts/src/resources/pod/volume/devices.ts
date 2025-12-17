@@ -1,9 +1,8 @@
 import type { CDK } from "@k8ts/imports"
-import { relations } from "@k8ts/instruments"
+import type { ManifestResource } from "@k8ts/instruments"
+import { relations, SubResource } from "@k8ts/instruments"
 import { k8ts } from "../../../kind-map"
 import { api2 } from "../../../kinds"
-import type { ManifestResource } from "../../../node"
-import { SubResource } from "../../../node/sub-resource"
 import { Pvc } from "../../persistent"
 import { Mount } from "../container/mounts"
 export type Device = Device.Pod_Device

@@ -1,13 +1,13 @@
 import { hash } from "immutable"
 import { Kind } from "../api-kind"
 import { InstrumentsError } from "../error"
-export type RefKey<Kind extends string = string, Name extends string = string> = RefKey.RefKey<
-    Kind,
-    Name
->
+export type RefKey<
+    Kind extends Kind.IdentParent = Kind.IdentParent,
+    Name extends string = string
+> = RefKey.RefKey<Kind, Name>
 export namespace RefKey {
-    export function make<K extends string, Name extends string>(
-        kind: Kind.Identifier<K>,
+    export function make<K extends Kind.IdentParent, Name extends string>(
+        kind: K,
         name: Name
     ): RefKey<K, Name> {
         return new RefKey(kind, name)
@@ -47,14 +47,17 @@ export namespace RefKey {
             name
         }
     }
-    export class RefKey<K extends string = string, Name extends string = string> {
+    export class RefKey<
+        K extends Kind.IdentParent = Kind.IdentParent,
+        Name extends string = string
+    > {
         constructor(
-            readonly kind: Kind.Identifier<K>,
+            readonly kind: K,
             readonly name: Name
         ) {}
 
-        get string(): Format<K, Name> {
-            return [this.kind.name, this.name].join(separator) as Format<K, Name>
+        get string(): Format<K["name"], Name> {
+            return [this.kind.name, this.name].join(separator) as Format<K["name"], Name>
         }
 
         equals(other: RefKey): boolean {

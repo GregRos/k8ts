@@ -1,6 +1,5 @@
-import { FutureExports, LiveRefable, Producer } from "@k8ts/instruments"
+import { FutureExports, LiveRefable, ManifestResource, Producer } from "@k8ts/instruments"
 import { seq, type Seq } from "doddle"
-import { ManifestResource } from "../node"
 import { k8ts_namespace } from "../runner/exporter/meta"
 import { Factory } from "./factory"
 import type { FileOrigin } from "./origin"

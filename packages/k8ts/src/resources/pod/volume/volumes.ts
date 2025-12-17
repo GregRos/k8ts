@@ -1,10 +1,9 @@
 import type { CDK } from "@k8ts/imports"
 
-import { relations } from "@k8ts/instruments"
+import type { ManifestResource } from "@k8ts/instruments"
+import { relations, SubResource } from "@k8ts/instruments"
 import { k8ts } from "../../../kind-map"
 import { api2 } from "../../../kinds"
-import type { ManifestResource } from "../../../node"
-import { SubResource } from "../../../node/sub-resource"
 import type { ConfigMap } from "../../configmap"
 import { Pvc } from "../../persistent"
 import type { Secret } from "../../secret"

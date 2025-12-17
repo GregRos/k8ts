@@ -1,7 +1,6 @@
-import { BaseManifest, ResourceNode } from "@k8ts/instruments"
+import { BaseManifest, ManifestResource, ResourceNode } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { cloneDeep, cloneDeepWith, isEmpty, unset } from "lodash"
-import { ManifestResource } from "../../node"
 import { version } from "../../version"
 import { k8ts_namespace } from "./meta"
 export interface ManifesterOptions {

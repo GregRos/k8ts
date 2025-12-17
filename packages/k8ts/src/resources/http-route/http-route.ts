@@ -1,9 +1,8 @@
 import { CDK } from "@k8ts/imports"
-import { manifest, relations } from "@k8ts/instruments"
+import { manifest, ManifestResource, relations } from "@k8ts/instruments"
 import type { External } from "../../external"
 import { k8ts } from "../../kind-map"
 import { api2 } from "../../kinds"
-import { ManifestResource } from "../../node"
 import type { Service } from "../service"
 
 const GatewayKind = api2.gateway.v1.Gateway._

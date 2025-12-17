@@ -12,7 +12,9 @@ export namespace Kind {
     export interface IdentParent {
         text: string
         name: string
+        dns: string
         parent: IdentParent | null
+        equals(other: any): boolean
     }
     type _alphabeta = "alpha" | "beta" | ""
     type _subversion = `${_alphabeta}${number}` | ""

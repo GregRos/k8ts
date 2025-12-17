@@ -1,10 +1,16 @@
 import { CDK } from "@k8ts/imports"
-import { Kind, manifest, relations, type Origin, type Producer } from "@k8ts/instruments"
+import {
+    Kind,
+    manifest,
+    ManifestResource,
+    relations,
+    type Origin,
+    type Producer
+} from "@k8ts/instruments"
 import { Meta, MutableMeta } from "@k8ts/metadata"
 import { seq } from "doddle"
 import { k8ts } from "../../kind-map"
 import { api2 } from "../../kinds"
-import { ManifestResource } from "../../node/manifest-resource"
 export type ClusterRole = ClusterRole.ClusterRole
 export namespace ClusterRole {
     export interface ClusterRole_Rule<

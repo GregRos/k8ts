@@ -4,6 +4,7 @@ import {
     DataSourceRecord_Text,
     LocalFileSource,
     manifest,
+    ManifestResource,
     relations,
     resolveBinary,
     resolveText
@@ -12,7 +13,6 @@ import { toObject } from "@k8ts/metadata/util"
 import { seq } from "doddle"
 import { k8ts } from "../../kind-map"
 import { api2 } from "../../kinds"
-import { ManifestResource } from "../../node/manifest-resource"
 export type ConfigMap = ConfigMap.ConfigMap
 export namespace ConfigMap {
     export type ConfigMap_Entry_Source = LocalFileSource | string
