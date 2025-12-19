@@ -1,9 +1,9 @@
 import { CDK } from "@k8ts/imports"
-import { manifest, ManifestResource, Refable, relations, type Unit } from "@k8ts/instruments"
+import { ManifestResource, Refable, type Unit } from "@k8ts/instruments"
 import { MakeError } from "../../../error"
-import { External } from "../../../external"
 import { v1 } from "../../../kinds/default"
 import { storage } from "../../../kinds/storage"
+import { External } from "../../../world/external"
 import { Access } from "../access-mode"
 import type { Pv_VolumeMode } from "../block-mode"
 import { parseBackend } from "./parse-backend"
@@ -43,8 +43,20 @@ export namespace Pv {
         Refable<v1.PersistentVolume._> & {
             __MODE__: Mode
         }
-    @manifest({
-        body(self) {
+
+    export class Pv<Mode extends Pv_VolumeMode = Pv_VolumeMode> extends ManifestResource<
+        Pv_Props_K8ts<Mode>
+    > {
+        __MODE__!: Mode
+        readonly kind = v1.PersistentVolume._
+
+        protected __needs__() {
+            return {
+                storageClass: this.props.$storageClass
+            }
+        }
+        protected body() {
+            const self = this
             const pvProps = self.props
             const accessModes = Access.pv_parseAccessMode(pvProps.$accessModes)
             if (self.props.$backend?.type === "Local") {
@@ -80,18 +92,5 @@ export namespace Pv {
                 spec: base
             }
         }
-    })
-    @relations({
-        needs(self) {
-            return {
-                storageClass: self.props.$storageClass
-            }
-        }
-    })
-    export class Pv<Mode extends Pv_VolumeMode = Pv_VolumeMode> extends ManifestResource<
-        Pv_Props_K8ts<Mode>
-    > {
-        __MODE__!: Mode
-        readonly kind = v1.PersistentVolume._
     }
 }

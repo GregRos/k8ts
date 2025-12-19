@@ -33,7 +33,6 @@ export interface PreManifest {
     }
 }
 export interface BaseManifest {
-    [key: string]: JsonSerializable
     [key: number]: never
     apiVersion: string
     kind: string
@@ -50,4 +49,3 @@ export interface SpecManifest<T extends JsonSerializable> extends BaseManifest {
 }
 
 export const ManifestSourceEmbedder = new Embedder<object, ResourceEntity>("ManifestSource")
-export * from "./manifest-builder"

@@ -1,6 +1,6 @@
 import type { CDK } from "@k8ts/imports"
-import type { ManifestResource } from "@k8ts/instruments"
-import { relations, SubResource } from "@k8ts/instruments"
+import type { ResourceEntity } from "@k8ts/instruments"
+import { SubResource } from "@k8ts/instruments"
 import { v1 } from "../../../kinds/default"
 import { Pvc } from "../../persistent"
 import { Mount } from "../container/mounts"
@@ -13,22 +13,27 @@ export namespace Device {
 
     export type Backend = Pod_Device_Backend_Pvc
 
-    @relations({
-        needs: self => ({
-            backend: self.backend.$backend
-        })
-    })
     export class Pod_Device extends SubResource<Pod_Device_Backend_Pvc> {
         readonly kind = v1.Pod.Device._
+
         constructor(
-            parent: ManifestResource,
+            parent: ResourceEntity,
             name: string,
             readonly backend: Pod_Device_Backend_Pvc
         ) {
             super(parent, name, backend)
         }
 
-        submanifest(): CDK.Volume {
+        protected __needs__(): Record<
+            string,
+            ResourceEntity<object> | ResourceEntity<object>[] | undefined
+        > {
+            return {
+                backend: this.backend.$backend
+            }
+        }
+
+        protected __submanifest__(): CDK.Volume {
             return {
                 name: this.name,
                 persistentVolumeClaim: {
@@ -45,7 +50,7 @@ export namespace Device {
         }
     }
 
-    export function make(parent: ManifestResource, name: string, input: Backend) {
+    export function make(parent: ResourceEntity, name: string, input: Backend) {
         return new Pod_Device(parent, name, input)
     }
 }

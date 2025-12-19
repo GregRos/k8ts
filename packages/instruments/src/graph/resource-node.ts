@@ -3,11 +3,9 @@ import chalk from "chalk"
 import { seq } from "doddle"
 import { Kind } from "../api-kind"
 import { Displayers, displayers, PrivateCtor } from "../displayers"
-import { RefKey } from "../ref-key"
 import { TraceEmbedder } from "../tracing"
 import { BaseEntity, BaseNode, Formats } from "./base-node"
-import { Origin } from "./origin-node"
-import { Relations } from "./relations"
+import { Origin, type OriginEntity } from "./origin-node"
 
 @displayers({
     simple: s => `[${s.shortFqn}]`,
@@ -34,10 +32,6 @@ import { Relations } from "./relations"
     }
 })
 export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
-    get relations() {
-        return seq(this._relations.needs)
-    }
-
     get fullFqn() {
         return [this.kind.dns, this.namespace, this.name].filter(Boolean).join("/")
     }
@@ -93,14 +87,6 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
         })
     }
 
-    get kids() {
-        return seq(this._relations.kids)
-    }
-
-    get parent() {
-        return this._relations.parent()
-    }
-
     override get shortFqn() {
         return `${this.origin.name}:${this.key}`
     }
@@ -112,22 +98,52 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
     format(format: Formats) {
         return Displayers.get(this).pretty(format)
     }
-    private get _relations() {
-        return Relations.get(this._entity)
-    }
 
     hasKind(kind: Kind.Identifier) {
         return this.kind.equals(kind)
     }
     constructor(
         readonly origin: Origin,
-        readonly entity: ResourceEntity,
-        readonly key: RefKey
+        readonly entity: ResourceEntity
     ) {
         super(entity)
     }
 }
-export interface MetadataEntity extends BaseEntity<ResourceNode> {
-    meta: MutableMeta
+
+@displayers({
+    simple: s => s.node,
+    pretty: s => s.node
+})
+export abstract class ResourceEntity<Props extends object = object> extends BaseEntity<
+    ResourceNode,
+    ResourceEntity
+> {
+    abstract readonly kind: Kind.IdentParent
+
+    with(callback: (self: this) => void) {
+        callback(this)
+        return this
+    }
+
+    abstract readonly namespace: string | undefined
+
+    protected constructor(
+        readonly name: string,
+        readonly props: Props
+    ) {
+        super()
+
+        this.name = name
+    }
+
+    protected abstract __origin__(): OriginEntity
+    get node(): ResourceNode {
+        return new ResourceNode(this.__origin__().node, this)
+    }
+
+    get shortFqn() {
+        return [this.node.origin.name, [this.kind.name, this.name].filter(Boolean).join("/")].join(
+            ":"
+        )
+    }
 }
-export interface ResourceEntity extends BaseEntity<ResourceNode> {}

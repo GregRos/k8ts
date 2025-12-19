@@ -1,4 +1,4 @@
-import type { FutureExports, LiveRefable, Origin } from "@k8ts/instruments"
+import type { FutureExports, LiveRefable, OriginEntity } from "@k8ts/instruments"
 import { FileExports as Exports_ } from "./exports"
 import { Factory as Factory_ } from "./factory"
 import { FileOrigin } from "./origin"
@@ -21,9 +21,9 @@ export namespace File {
     export function make<Scope extends FileOrigin.Scope, Produced extends LiveRefable>(
         name: string,
         props: Props<Scope, Produced>,
-        parent: Origin
+        parent: OriginEntity
     ) {
-        const origin = FileOrigin.make(name, props, parent)
+        const origin = new FileOrigin.FileEntity<Scope>(parent, name, props)
         const exports = Exports.make({
             origin,
             FILE: props.FILE

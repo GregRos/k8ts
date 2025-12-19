@@ -1,6 +1,6 @@
 import { CDK } from "@k8ts/imports"
-import { manifest, ManifestResource, Origin, Refable, relations } from "@k8ts/instruments"
-import { Meta, MutableMeta } from "@k8ts/metadata"
+import { ManifestResource, Refable } from "@k8ts/instruments"
+import { doddle } from "doddle"
 import { omit, omitBy } from "lodash"
 import { MakeError } from "../../error"
 import { apps } from "../../kinds/apps"
@@ -30,12 +30,18 @@ export namespace Deployment {
         __PORTS__: Ports
     }
 
-    @relations({
-        kids: s => [s.template]
-    })
-    @manifest({
-        async body(self): Promise<CDK.KubeDeploymentProps> {
-            const template = await self.template["manifest"]()
+    export class Deployment<Ports extends string = string> extends ManifestResource<
+        Deployment_Props<Ports>
+    > {
+        __PORTS__!: Ports
+        kind = apps.v1.Deployment._
+
+        protected __kids__() {
+            return [this._template.pull()]
+        }
+        protected body(): CDK.KubeDeploymentProps {
+            const self = this
+            const template = self._template.pull()["__submanifest__"]()
             const noKindFields = omit(template, ["kind", "apiVersion"])
             return {
                 spec: {
@@ -50,14 +56,6 @@ export namespace Deployment {
                 }
             }
         }
-    })
-    export class Deployment<Ports extends string = string> extends ManifestResource<
-        Deployment_Props<Ports>
-    > {
-        __PORTS__!: Ports
-        kind = apps.v1.Deployment._
-        template: PodTemplate<Ports>
-
         private get _strategy() {
             const strat = this.props.$strategy
             if (!strat) {
@@ -74,19 +72,14 @@ export namespace Deployment {
             }
             throw new MakeError(`Invalid strategy type: ${strat}`)
         }
-        constructor(origin: Origin, meta: Meta | MutableMeta, props: Deployment_Props<Ports>) {
-            super(origin, meta, props)
-            this.template = new PodTemplate.Pod_Template(
-                origin,
-                Meta.make({
-                    name: this.name,
-                    "%app": this.name
-                }),
-                props.$template
-            )
-        }
+        private readonly _template = doddle(() => {
+            const podTemplate = new PodTemplate.Pod_Template(this, this.name, this.props.$template)
+            podTemplate.meta.add("%app", this.name)
+            return podTemplate
+        })
+
         get ports() {
-            return this.template.ports
+            return this._template.pull().ports
         }
     }
 }

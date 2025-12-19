@@ -1,5 +1,6 @@
 import { CDK } from "@k8ts/imports"
-import { Kinded, manifest, ManifestResource, Producer, relations } from "@k8ts/instruments"
+import { Kinded, Producer, SubResource } from "@k8ts/instruments"
+import { Meta } from "@k8ts/metadata"
 import { seq } from "doddle"
 import { omitBy } from "lodash"
 import { v1 } from "../../kinds/default"
@@ -20,36 +21,8 @@ export namespace PodTemplate {
         $POD: Pod_Container_Producer<Ports>
     }
 
-    @relations({
-        kids: s => [...s.containers, ...s.volumes]
-    })
-    @manifest({
-        body(self): CDK.PodTemplateSpec {
-            const { meta, props } = self
-            const containers = self.containers
-            const initContainers = containers
-                .filter(c => c.subtype === "init")
-                .map(x => x["submanifest"]())
-                .toArray()
-            const mainContainers = containers
-                .filter(c => c.subtype === "main")
-                .map(x => x["submanifest"]())
-                .toArray()
-
-            const volumes = self.volumes.map(x => x["submanifest"]()).toArray()
-            return {
-                spec: {
-                    ...omitBy(props, (x, k) => k.startsWith("$")),
-                    containers: mainContainers.pull(),
-                    initContainers: initContainers.pull(),
-                    volumes: volumes.pull()
-                }
-            }
-        }
-    })
-    export class Pod_Template<Ports extends string = string> extends ManifestResource<
-        Pod_Props<Ports>
-    > {
+    export class Pod_Template<Ports extends string = string> extends SubResource<Pod_Props<Ports>> {
+        readonly meta = Meta.make()
         readonly kind = v1.PodTemplate._
         readonly containers = seq(() => this.props.$POD(new PodScope(this)))
             .map(x => {
@@ -59,6 +32,50 @@ export namespace PodTemplate {
         readonly mounts = seq(() => this.containers.concatMap(x => x.mounts)).cache()
         readonly volumes = seq(() => this.containers.concatMap(x => x.volumes)).uniq()
         readonly ports = seq(() => this.containers.map(x => x.ports)).reduce((a, b) => a.union(b))
+
+        protected __kids__() {
+            return [...this.containers, ...this.volumes]
+        }
+        protected __metadata__() {
+            return {
+                name: this.name
+            }
+        }
+        protected __post_construct__(): void {
+            this.meta.overwrite({
+                name: this.name
+            })
+        }
+        protected __submanifest__(): CDK.PodTemplateSpec {
+            const self = this
+            const { props } = self
+            const containers = self.containers
+            const initContainers = containers
+                .filter(c => c.subtype === "init")
+                .map(x => x["__submanifest__"]())
+                .toArray()
+            const mainContainers = containers
+                .filter(c => c.subtype === "main")
+                .map(x => x["__submanifest__"]())
+                .toArray()
+
+            const volumes = self.volumes
+                .map(x => {
+                    if (x instanceof Volume.Pod_Volume) {
+                        return x["__submanifest__"]()
+                    }
+                    return x["__submanifest__"]()
+                })
+                .toArray()
+            return {
+                spec: {
+                    ...omitBy(props, (x, k) => k.startsWith("$")),
+                    containers: mainContainers.pull(),
+                    initContainers: initContainers.pull(),
+                    volumes: volumes.pull()
+                }
+            }
+        }
     }
 
     export class PodScope {

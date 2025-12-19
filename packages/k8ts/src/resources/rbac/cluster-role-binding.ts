@@ -1,6 +1,5 @@
 import { CDK } from "@k8ts/imports"
-import { manifest, ManifestResource, relations, type Origin } from "@k8ts/instruments"
-import { Meta, MutableMeta } from "@k8ts/metadata"
+import { ManifestResource } from "@k8ts/instruments"
 import { rbac } from "../../kinds/rbac"
 import type { ClusterRole } from "./cluster-role"
 import type { ServiceAccount } from "./service-account"
@@ -12,33 +11,28 @@ export namespace ClusterRoleBinding {
         $subjects: ServiceAccount[]
     }
 
-    @relations({
-        needs: self => ({
-            role: self.props.$role,
-            subjects: self.props.$subjects
-        })
-    })
-    @manifest({
-        body(self): CDK.KubeClusterRoleBindingProps {
-            return {
-                roleRef: {
-                    apiGroup: "rbac.authorization.k8s.io",
-                    kind: "ClusterRole",
-                    name: self.props.$role.name
-                },
-                subjects: self.props.$subjects.map(sa => ({
-                    kind: "ServiceAccount",
-                    name: sa.name,
-                    namespace: sa.namespace
-                }))
-            }
-        }
-    })
     export class ClusterRoleBinding extends ManifestResource<ClusterRoleBoding_Props> {
         override kind = rbac.v1.ClusterRoleBinding._
 
-        constructor(origin: Origin, meta: Meta | MutableMeta, props: ClusterRoleBoding_Props) {
-            super(origin, meta.toMutable(), props)
+        protected __needs__() {
+            return {
+                role: this.props.$role,
+                subjects: this.props.$subjects
+            }
+        }
+        protected body(): CDK.KubeClusterRoleBindingProps {
+            return {
+                roleRef: {
+                    apiGroup: this.props.$role.kind.parent!.text,
+                    kind: this.props.$role.kind.name,
+                    name: this.props.$role.name
+                },
+                subjects: this.props.$subjects.map(sa => ({
+                    kind: sa.kind.name,
+                    name: sa.name,
+                    namespace: sa.namespace!
+                }))
+            }
         }
     }
 }

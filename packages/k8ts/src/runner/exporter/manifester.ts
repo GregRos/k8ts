@@ -42,7 +42,7 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
         return cloneDeepWith(clone, _cleanKeys)
     }
     private async _generate(resource: ManifestResource): Promise<BaseManifest> {
-        const manifest = await resource["manifest"]()
+        const manifest = await resource["__manifest__"]()
         const noNullish = this._cleanNullishValues(manifest)
         const noEmpty = this._cleanSpecificEmptyObjects(noNullish)
         return noEmpty

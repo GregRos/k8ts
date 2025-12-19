@@ -1,10 +1,10 @@
 import { CDK } from "@k8ts/imports"
-import { manifest, ManifestResource, relations, ResourcesSpec, Unit } from "@k8ts/instruments"
+import { ManifestResource, ResourcesSpec, Unit } from "@k8ts/instruments"
 import { Prefix$ } from "../../../_type/prefix$"
 import { MakeError } from "../../../error"
-import { External } from "../../../external"
 import { v1 } from "../../../kinds/default"
 import { storage } from "../../../kinds/storage"
+import { External } from "../../../world/external"
 import { Access } from "../access-mode"
 import type { Pv_VolumeMode } from "../block-mode"
 import { Pv } from "../volume"
@@ -24,14 +24,20 @@ export namespace Pvc {
         $bind?: Pv.Pv_Ref<Mode>
     }
 
-    @relations({
-        needs: self => ({
-            bind: self.bound,
-            storageClass: self.props.$storageClass
-        })
-    })
-    @manifest({
-        body(self): CDK.KubePersistentVolumeClaimProps {
+    export class Pvc<Mode extends Pv_VolumeMode = Pv_VolumeMode> extends ManifestResource<
+        Pvc_Props<Mode>
+    > {
+        kind = v1.PersistentVolumeClaim._
+
+        protected __needs__() {
+            const self = this
+            return {
+                bind: self.bound,
+                storageClass: self.props.$storageClass
+            }
+        }
+        protected body(): CDK.KubePersistentVolumeClaimProps {
+            const self = this
             const { $storage, $accessModes, $mode, $storageClass, $bind } = self.props
             const nAccessModes = Access.pv_parseAccessMode($accessModes)
             if (!$bind && !$storageClass) {
@@ -53,12 +59,6 @@ export namespace Pvc {
                 }
             }
         }
-    })
-    export class Pvc<Mode extends Pv_VolumeMode = Pv_VolumeMode> extends ManifestResource<
-        Pvc_Props<Mode>
-    > {
-        kind = v1.PersistentVolumeClaim._
-
         get bound() {
             return this.props.$bind as Pv<Mode>
         }

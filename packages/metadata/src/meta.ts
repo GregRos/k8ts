@@ -211,10 +211,6 @@ export namespace Meta {
                 annotations
             }
         }
-
-        toMutable() {
-            return new MutableMeta(this._dict)
-        }
     }
 
     export function make(key: Key.Value, value: string): Meta
@@ -235,9 +231,6 @@ export namespace Meta {
     }
     function _pairToMap(pair: [string | ValueKey, string | object] | [object]) {
         return parseMetaInput(_pairToObject(pair))
-    }
-    export function makeMutable(input: InputMeta = {}) {
-        return make(input).toMutable()
     }
 
     export function splat(...input: InputMeta[]) {

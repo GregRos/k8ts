@@ -2,7 +2,6 @@ import type { CDK } from "@k8ts/imports"
 import {
     Kinded,
     PortSet,
-    relations,
     ResourcesSpec,
     Unit,
     type CmdBuilder,
@@ -11,7 +10,7 @@ import {
 } from "@k8ts/instruments"
 import { toContainerPorts } from "../../utils/adapters"
 
-import type { ManifestResource } from "@k8ts/instruments"
+import type { ManifestResource, ResourceEntity } from "@k8ts/instruments"
 import { SubResource } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { mapKeys, mapValues, omitBy } from "lodash"
@@ -45,21 +44,22 @@ export namespace Container {
     export type Container_Props<Ports extends string = never> = Container_Props_K8ts<Ports> &
         Omit<CDK.Container, keyof Container_Props_K8ts | "name">
 
-    @relations({
-        needs: self => {
-            const a = self.mounts
-            return mapValues(
-                mapKeys(a, x => x.path),
-                x => x.mount.volume
-            )
-        }
-    })
     export class Container<Ports extends string = string> extends SubResource<
         Container_Props<Ports>
     > {
         __PORTS__!: Ports
         readonly kind = v1.Pod.Container._
 
+        protected __needs__(): Record<
+            string,
+            ResourceEntity<object> | ResourceEntity<object>[] | undefined
+        > {
+            const a = this.mounts
+            return mapValues(
+                mapKeys(a, x => x.path),
+                x => x.mount.volume
+            )
+        }
         get mounts() {
             return seq(Object.entries(this.props.$mounts ?? {}))
                 .map(([path, mount]) => {
@@ -81,7 +81,7 @@ export namespace Container {
         get ports() {
             return PortSet.make(this.props.$ports)
         }
-        private submanifest(): CDK.Container {
+        protected __submanifest__(): CDK.Container {
             const self = this
             const { $image, $ports, $command, $env } = self.props
             const untaggedProps = omitBy(self.props, (_, k) => k.startsWith("$"))
@@ -104,7 +104,7 @@ export namespace Container {
             return container
         }
         constructor(
-            parent: ManifestResource,
+            parent: ResourceEntity,
             name: string,
             readonly subtype: "init" | "main",
             override readonly props: Container_Props<Ports>
@@ -120,9 +120,9 @@ export namespace Container {
             for (const mnt of this.mounts) {
                 const { mount, path } = mnt
                 if (mount instanceof Mount.Container_Mount_Device) {
-                    x.volumeDevices!.push(mount.submanifest(path))
+                    x.volumeDevices!.push(mount["__submanifest__"](path))
                 } else {
-                    x.volumeMounts!.push(mount.submanifest(path))
+                    x.volumeMounts!.push(mount["__submanifest__"](path))
                 }
             }
             return x

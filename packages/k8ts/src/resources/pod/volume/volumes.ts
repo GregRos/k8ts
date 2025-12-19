@@ -1,7 +1,7 @@
 import type { CDK } from "@k8ts/imports"
 
-import type { ManifestResource } from "@k8ts/instruments"
-import { relations, SubResource } from "@k8ts/instruments"
+import type { ResourceEntity } from "@k8ts/instruments"
+import { SubResource } from "@k8ts/instruments"
 import { v1 } from "../../../kinds/default"
 import type { ConfigMap } from "../../configmap"
 import { Pvc } from "../../persistent"
@@ -26,28 +26,31 @@ export namespace Volume {
         | Pod_Volume_Backend_ConfigMap
         | Pod_Volume_Backend_Secret
 
-    @relations({
-        needs: self => ({
-            backend: self.props.$backend
-        })
-    })
     export abstract class Pod_Volume<
         Props extends Pod_Volume_Backend = Pod_Volume_Backend
     > extends SubResource<Props> {
         readonly kind = v1.Pod.Volume._
 
-        abstract submanifest(): CDK.Volume
-
+        protected __needs__(): Record<
+            string,
+            ResourceEntity<object> | ResourceEntity<object>[] | undefined
+        > {
+            return {
+                backend: this.props.$backend
+            }
+        }
         Mount(options?: Omit<Mount.Container_Mount_Props, "volume">) {
             return new Mount.Container_Mount_Volume({
                 volume: this,
                 ...options
             })
         }
+
+        protected abstract __submanifest__(): CDK.Volume
     }
 
     class Pod_Volume_Pvc extends Pod_Volume<Pod_Volume_Backend_Pvc> {
-        override submanifest(): CDK.Volume {
+        protected __submanifest__(): CDK.Volume {
             return {
                 name: this.name,
                 persistentVolumeClaim: {
@@ -59,7 +62,7 @@ export namespace Volume {
     }
 
     class Pod_Volume_ConfigMap extends Pod_Volume<Pod_Volume_Backend_ConfigMap> {
-        override submanifest(): CDK.Volume {
+        protected __submanifest__(): CDK.Volume {
             return {
                 name: this.name,
                 configMap: {
@@ -70,7 +73,7 @@ export namespace Volume {
     }
 
     class Pod_Volume_Secret extends Pod_Volume<Pod_Volume_Backend_Secret> {
-        override submanifest(): CDK.Volume {
+        protected __submanifest__(): CDK.Volume {
             return {
                 name: this.name,
                 secret: {
@@ -81,7 +84,7 @@ export namespace Volume {
     }
 
     export function make(
-        parent: ManifestResource,
+        parent: ResourceEntity,
         name: string,
         input: Pod_Volume_Backend
     ): Pod_Volume {

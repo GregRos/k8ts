@@ -1,6 +1,7 @@
 import { displayers } from "../displayers"
 import { bind_own_methods } from "../displayers/bind"
 import { InstrumentsError } from "../error"
+import { RefKey } from "../ref-key"
 import { pluralize } from "./pluralize"
 export { From_Groups } from "./tree"
 export type Kind<
@@ -116,6 +117,10 @@ export namespace Kind {
     > extends Identifier<_Kind, Version<_Group, _Version>> {
         constructor(name: _Kind, parent: Version<_Group, _Version>) {
             super(name, parent)
+        }
+
+        refKey<Name extends string>(name: Name) {
+            return new RefKey.RefKey<this, Name>(this as any, name)
         }
 
         get plural() {

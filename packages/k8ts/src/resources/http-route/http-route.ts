@@ -1,7 +1,7 @@
 import { CDK } from "@k8ts/imports"
-import { manifest, ManifestResource, relations } from "@k8ts/instruments"
-import type { External } from "../../external"
+import { ManifestResource } from "@k8ts/instruments"
 import { gateway } from "../../kinds/gateway"
+import type { External } from "../../world/external"
 import type { Service } from "../service"
 
 const GatewayKind = gateway.v1.Gateway._
@@ -17,14 +17,11 @@ export namespace HttpRoute {
         _filters?: CDK.HttpRouteSpecRulesFilters[]
     }
 
-    @relations({
-        needs: self => ({
-            gateway: self.props.$gateway,
-            service: self.props.$backend.service
-        })
-    })
-    @manifest({
-        body(self): CDK.HttpRouteProps {
+    export class HttpRoute<Ports extends string> extends ManifestResource<HttpRoute_Props<Ports>> {
+        kind = HttpRouteKind
+
+        protected body() {
+            const self = this
             return {
                 spec: {
                     parentRefs: [self.props.$gateway.ref()],
@@ -38,8 +35,12 @@ export namespace HttpRoute {
                 }
             }
         }
-    })
-    export class HttpRoute<Ports extends string> extends ManifestResource<HttpRoute_Props<Ports>> {
-        kind = HttpRouteKind
+
+        protected __needs__() {
+            return {
+                gateway: this.props.$gateway,
+                service: this.props.$backend.service
+            }
+        }
     }
 }

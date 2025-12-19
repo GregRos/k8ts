@@ -3,9 +3,7 @@ import {
     DataSourceRecord_Binary,
     DataSourceRecord_Text,
     LocalFileSource,
-    manifest,
     ManifestResource,
-    relations,
     resolveBinary,
     resolveText
 } from "@k8ts/instruments"
@@ -20,9 +18,10 @@ export namespace ConfigMap {
         binaryData?: DataSourceRecord_Binary
     }
 
-    @relations("none")
-    @manifest({
-        async body(self): Promise<CDK.KubeConfigMapProps> {
+    export class ConfigMap extends ManifestResource<ConfigMap_Props> {
+        override kind = v1.ConfigMap._
+        protected async body(): Promise<CDK.KubeConfigMapProps> {
+            const self = this
             const binaryData = await resolveBinary(self.props.binaryData ?? {})
             const data = await resolveText(self.props.data)
             const encodedBinaryData = seq(binaryData)
@@ -34,8 +33,5 @@ export namespace ConfigMap {
                 binaryData: binaryData.size === 0 ? undefined : encodedBinaryData
             }
         }
-    })
-    export class ConfigMap extends ManifestResource<ConfigMap_Props> {
-        override kind = v1.ConfigMap._
     }
 }

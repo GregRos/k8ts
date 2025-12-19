@@ -1,20 +1,56 @@
-import { Map, type Set } from "immutable"
+import { doddlify, seq, type Seq } from "doddle"
 import { Kind } from "../api-kind"
 import { InstrumentsError } from "../error"
 import { RefKey } from "../ref-key"
+import type { Kinded } from "../reference"
+import type { CtorOfKinded } from "../reference/refable"
 const separator = "/"
-export type LookupKey = NodeEntry[keyof NodeEntry]
 interface NodeEntry {
-    kind: string
+    kindName: string
     class: Function
     ident: Kind.IdentParent
 }
-
-export class KindMap<Kinds extends Kind.Kind = Kind.Kind> {
+export type KindMapInput<Ks extends Kind.IdentParent = Kind.IdentParent> = readonly CtorOfKinded<
+    Kinded<Ks>
+>[]
+type LookupKey = string | RefKey.RefKey | Function | Kind.IdentParent
+export class KindMap<Kinds extends Kind.IdentParent = Kind.IdentParent> {
     constructor(
-        private _entryMap: Map<LookupKey, NodeEntry> = Map([]) as any,
+        private _ownKinds: KindMapInput<Kinds>,
         private _parent: KindMap | undefined = undefined
     ) {}
+
+    child<Ks extends Kind.IdentParent = Kind.IdentParent>(
+        kinds: KindMapInput<Ks> | KindMap<Ks>
+    ): KindMap<Kinds | Ks> {
+        const ownKinds = kinds instanceof KindMap ? kinds._ownKinds : kinds
+        return new KindMap<Kinds | Ks>(ownKinds, this)
+    }
+
+    private get _entriesSeq(): Seq<NodeEntry> {
+        return seq(this._ownKinds).map(klass => {
+            const kind = klass.prototype.kind
+            const entry: NodeEntry = {
+                kindName: kind.name,
+                class: klass,
+                ident: kind
+            }
+            return entry
+        })
+    }
+    @doddlify
+    private get _entriesMap(): Map<LookupKey, NodeEntry> {
+        return seq(this._entriesSeq)
+            .flatMap(entry => {
+                return [
+                    [entry.kindName, entry],
+                    [entry.class, entry],
+                    [entry.ident.text, entry]
+                ] as const
+            })
+            .toMap(x => x)
+            .pull()
+    }
 
     refKey<Kind extends Kinds, Name extends string>(kind: Kind, name: Name): RefKey<Kind, Name> {
         const trueKind = this.getKind(kind)
@@ -54,10 +90,10 @@ export class KindMap<Kinds extends Kind.Kind = Kind.Kind> {
     }
 
     get kinds(): Set<string> {
-        return this._entryMap
-            .keySeq()
-            .filter(k => typeof k === "string")
+        return this._entriesSeq
+            .map(x => x.kindName)
             .toSet()
+            .pull()
     }
 
     private _unknownNameError(kind: string) {
@@ -69,20 +105,22 @@ export class KindMap<Kinds extends Kind.Kind = Kind.Kind> {
     private _unknownClassError(klass: Function) {
         return new InstrumentsError(`The class ${klass.name} is not registered`)
     }
-    private _convert(something: LookupKey | RefKey.RefKey) {
+    private _convert(something: LookupKey | RefKey.RefKey | Function | Kind.IdentParent) {
         if (typeof something === "string") {
             if (something.includes("/")) {
                 return this.parse(something).kind
             }
             return something
-        } else if (typeof something === "function" || something instanceof Kind.Identifier) {
+        } else if (typeof something === "function") {
             return something
+        } else if (something instanceof Kind.Identifier) {
+            return something.text
         } else if (something instanceof RefKey.RefKey) {
-            return something.kind
+            return something.kind.text
         }
         throw new InstrumentsError(`Invalid argument ${something}`)
     }
-    private _getEntry(key: LookupKey | RefKey.RefKey) {
+    private _getEntry(key: LookupKey) {
         const converted = this._convert(key)
         const entry = this._tryGetEntry(key)
         if (!entry) {
@@ -96,45 +134,48 @@ export class KindMap<Kinds extends Kind.Kind = Kind.Kind> {
         }
         return entry!
     }
-    private _tryGetEntry(key: LookupKey | RefKey.RefKey): NodeEntry | undefined {
+    private _tryGetEntry(key: LookupKey): NodeEntry | undefined {
         const converted = this._convert(key)
-        return this._entryMap.get(converted) ?? this._parent?._tryGetEntry(converted) ?? undefined
+        return this._entriesMap.get(converted) ?? this._parent?._tryGetEntry(converted) ?? undefined
     }
 
-    tryGetKind<Name extends string>(
-        refKey: RefKey.RefKey<Kind.Identifier<Name>>
-    ): Kind.Identifier<Name> | undefined
-    tryGetKind<F extends Kind.Identifier>(klass: F): F
+    tryGetKind<P extends Kind.IdentParent>(
+        refKey: RefKey.RefKey<P>
+    ): Kind.Identifier<P["name"]> | undefined
+    tryGetKind<F extends Kind.IdentParent>(klass: F): F
+    tryGetKind(kind: Function): Kinds | undefined
     tryGetKind<Name extends string>(kind: Name): (Kinds & { name: Name }) | undefined
     tryGetKind(key: LookupKey): Kinds | undefined
-    tryGetKind(kindOrIdent: LookupKey | RefKey.RefKey): Kinds | undefined {
+    tryGetKind(kindOrIdent: LookupKey): any {
         return this._tryGetEntry(kindOrIdent)?.ident as Kinds | undefined
     }
 
-    getKind<K extends Kind.Identifier>(kind: K): K
+    getKind<K extends Kind.IdentParent>(kind: K): K
     getKind<Name extends string>(kind: Name): Kinds & { name: Name }
+    getKind(key: Function): Kinds
     getKind(kindOrClass: LookupKey): Kinds
-    getKind(kindOrClass: string | Function): Kinds {
+    getKind(kindOrClass: LookupKey): Kinds {
         return this._getEntry(kindOrClass).ident as Kinds
     }
 
-    // tryGetClass(refKey: RefKey.RefKey): Function | undefined
-    // tryGetClass<F extends Function>(klass: F): F
-    // tryGetClass(kind: string): Function | undefined
-    // tryGetClass(ident: Kind.Identifier): Function | undefined
-    // tryGetClass(kindOrIdent: LookupKey | RefKey.RefKey): Function | undefined {
-    //     return this._tryGetEntry(kindOrIdent)?.class
-    // }
+    tryGetClass(refKey: RefKey.RefKey): Function | undefined
+    tryGetClass<F extends Function>(klass: F): F
+    tryGetClass(kind: string): Function | undefined
+    tryGetClass(ident: Kind.IdentParent): Function | undefined
+    tryGetClass(kindOrIdent: LookupKey): Function | undefined {
+        return this._tryGetEntry(kindOrIdent)?.class
+    }
 
-    // getClass(refKey: RefKey.RefKey): Function
-    // getClass<F extends Function>(klass: F): F
-    // getClass(kind: string): Function
-    // getClass<T extends Function | string>(kindOrClass: T): T extends Function ? string : Function
-    // getClass(kindOrClass: string | Function | RefKey.RefKey): Function | string {
-    //     return this._getEntry(kindOrClass).class
-    // }
+    getClass(refKey: RefKey.RefKey): Function
+    getClass<F extends Function>(klass: F): F
+    getClass(kind: string): Function
+    getClass(ident: Kind.IdentParent): Function
+    getClass<T extends Function | string>(kindOrClass: T): T extends Function ? string : Function
+    getClass(kindOrClass: LookupKey): Function | string {
+        return this._getEntry(kindOrClass).class
+    }
 
     has(kindOrClass: LookupKey): boolean {
-        return this._entryMap.has(kindOrClass as any)
+        return this._entriesMap.has(kindOrClass as any)
     }
 }

@@ -1,12 +1,14 @@
 import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
-import { doddle, Doddle } from "doddle"
-import { Kind } from "../api-kind"
+import { doddlify } from "doddle"
+import type { Kind } from "../api-kind"
 import { displayers } from "../displayers"
-import { RefKey } from "../ref-key"
+import { KindMap, type KindMapInput } from "../kind-map"
 import { Origin, OriginEntity } from "./origin-node"
-export interface OriginEntityProps {
+import type { ResourceEntity } from "./resource-node"
+export interface OriginEntityProps<Kinds extends Kind.IdentParent[] = Kind.IdentParent[]> {
     meta?: Meta.Input
+    kinds?: KindMapInput<Kinds[number]>
     alias?: string
 }
 @displayers({
@@ -17,28 +19,43 @@ export interface OriginEntityProps {
         return `${kindPart}/${originName}`
     }
 })
-export abstract class BaseOriginEntity<Props extends OriginEntityProps = OriginEntityProps>
-    implements OriginEntity
-{
-    abstract readonly kind: Kind.Kind
-    #node: Doddle<Origin>
-
+export abstract class BaseOriginEntity<
+    Props extends OriginEntityProps = OriginEntityProps
+> extends OriginEntity {
+    readonly _resources: ResourceEntity[] = []
+    readonly _kids: OriginEntity[] = []
     meta: Meta
     get alias() {
         return this.props.alias ?? undefined
     }
-    get node() {
-        return this.#node.pull()
+
+    get node(): Origin {
+        return new Origin(this)
     }
     constructor(
         readonly name: string,
-        readonly props: Props,
-        parent: Origin | null
+        readonly props: Props
     ) {
-        this.#node = doddle(() => new Origin(parent, this, RefKey.make(this.kind, name)))
-        this.meta = Meta.make(props.meta)
+        super()
+
+        this.meta = Meta.make(props.meta ?? {})
+    }
+    @doddlify
+    get resourceKinds() {
+        return new KindMap(this.props.kinds ?? [])
     }
     get shortFqn() {
         return this.node.shortFqn
+    }
+
+    protected __attach_kid__(kid: OriginEntity) {
+        this._kids.push(kid)
+    }
+
+    protected __attach_resource__(resources: ResourceEntity | Iterable<ResourceEntity>) {
+        resources = Symbol.iterator in resources ? resources : [resources]
+        for (const resource of resources) {
+            this._resources.push(resource)
+        }
     }
 }

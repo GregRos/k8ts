@@ -1,20 +1,26 @@
-import { relations } from "@k8ts/instruments"
-import { AbsResource } from "./abs-resource"
-import type { ManifestResource } from "./manifest-resource"
+import { ResourceEntity } from "../graph"
 
-@relations({
-    parent: self => self.parent
-})
-export abstract class SubResource<Props extends object = object> extends AbsResource<Props> {
-    constructor(
-        readonly parent: SubResource | ManifestResource,
-        name: string,
-        props: Props
-    ) {
-        super(parent.node.origin, name, props)
+export abstract class SubResource<Props extends object = object> extends ResourceEntity<Props> {
+    #parent: ResourceEntity
+    constructor(parent: ResourceEntity, name: string, props: Props) {
+        super(name, props)
+        this.#parent = parent
+        this.__post_construct__()
     }
 
+    protected __post_construct__() {}
+
+    protected __parent__(): ResourceEntity<object> {
+        return this.#parent
+    }
+
+    protected __origin__() {
+        return this.__parent__()["__origin__"]()
+    }
+
+    protected abstract __submanifest__(): object
+
     get namespace(): string | undefined {
-        return this.parent.namespace
+        return this.__parent__()?.namespace
     }
 }

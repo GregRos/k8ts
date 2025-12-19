@@ -1,6 +1,7 @@
-import { BaseOriginEntity, Origin, OriginEntityProps, Refable } from "@k8ts/instruments"
+import { OriginEntityProps, Refable } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { v1 } from "../../kinds/default"
+import { ChildOriginEntity } from "../child-origin"
 import { build } from "../k8ts-sys-kind"
 export type FileOrigin<FScope extends FileOrigin.Scope = FileOrigin.Scope> =
     FileOrigin.FileEntity<FScope>
@@ -15,26 +16,18 @@ export namespace FileOrigin {
         scope: FScope
     }
 
-    export class FileEntity<FScope extends Scope> extends BaseOriginEntity<Props<FScope>> {
+    export class FileEntity<FScope extends Scope> extends ChildOriginEntity<Props<FScope>> {
         kind = build.current.File._
-
-        constructor(name: string, props: Props<FScope>, parent: Origin) {
-            super(name, props, parent)
-            this.meta = this.meta.add({
-                namespace: props.scope === "cluster" ? undefined : props.scope.name
-            })
-        }
-
         get scope() {
             return this.props.scope
         }
+
+        protected __post_construct__(): void {
+            this.meta = this.meta.add({
+                namespace: this.props.scope === "cluster" ? undefined : this.props.scope.name
+            })
+        }
     }
 
-    export function make<FScope extends Scope>(
-        name: string,
-        props: Props<FScope>,
-        parent: Origin
-    ): FileEntity<FScope> {
-        return new FileEntity(name, props, parent)
-    }
+    export const File = FileEntity
 }

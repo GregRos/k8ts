@@ -1,11 +1,8 @@
 export type { CDK } from "@k8ts/imports"
-export * from "@k8ts/instruments"
 export { K8ts } from "./default-world"
-export * from "./external"
 export * from "./resources"
 export * from "./runner"
 export * from "./runner/exporter"
 export * from "./world"
+export * from "./world/external"
 export * from "./world/file"
-
-export * as ScopedFactory from "./world/file/factory"

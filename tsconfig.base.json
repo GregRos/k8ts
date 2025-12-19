@@ -2,7 +2,6 @@
   "compilerOptions": {
     "composite": true,
     "module": "node16",
-    "noImplicitOverride": true,
     "target": "ES2024",
     "lib": ["ES2023"],
     "allowSyntheticDefaultImports": true,

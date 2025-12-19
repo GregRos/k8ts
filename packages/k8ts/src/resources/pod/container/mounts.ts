@@ -21,7 +21,7 @@ export namespace Mount {
         get volume() {
             return this.props.volume
         }
-        submanifest(mountPath: string): CDK.VolumeMount {
+        protected __submanifest__(mountPath: string): CDK.VolumeMount {
             return {
                 name: this.props.volume.name,
                 mountPath: mountPath,
@@ -41,7 +41,7 @@ export namespace Mount {
             return this.props.device
         }
         constructor(readonly props: Container_Mount_Device_Props) {}
-        submanifest(devicePath: string): CDK.VolumeDevice {
+        protected __submanifest__(devicePath: string): CDK.VolumeDevice {
             return {
                 devicePath: devicePath,
                 name: this.props.device.name

@@ -21,6 +21,9 @@
     "lint:fix": "run-s prettier:fix",
     "tidy": "yarn install && run-s lint:fix build:clean test"
   },
+  "resolutions": {
+    "doddle": "portal:/C:/codegr/doddle"
+  },
   "dependencies": {
     "@types/node": "^25.0.2",
     "immutable": "^5.1.4"

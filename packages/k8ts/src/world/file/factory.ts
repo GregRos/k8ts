@@ -1,12 +1,4 @@
-import {
-    Cron,
-    Origin,
-    Trace,
-    TraceEmbedder,
-    auto_register,
-    displayers,
-    type LiveRefable
-} from "@k8ts/instruments"
+import { Cron, Origin, Trace, TraceEmbedder, displayers, type LiveRefable } from "@k8ts/instruments"
 import chalk from "chalk"
 import StackTracey from "stacktracey"
 import {
@@ -44,102 +36,70 @@ export namespace Factory {
             })
         }
     }
-    @auto_register
     export class Cluster extends Base {
         ClusterRole<Name extends string>(name: Name, props: ClusterRole.ClusterRole_Props) {
-            return new ClusterRole.ClusterRole(
-                this.origin,
-                this._metaWithName(name),
-                props
-            ) as LiveRefable<ClusterRole.ClusterRole, Name>
+            return new ClusterRole.ClusterRole(name, props) as LiveRefable<
+                ClusterRole.ClusterRole,
+                Name
+            >
         }
         ClusterRoleBinding<Name extends string>(
             name: Name,
             props: ClusterRoleBinding.ClusterRoleBoding_Props
         ) {
-            return new ClusterRoleBinding.ClusterRoleBinding(
-                this.origin,
-                this._metaWithName(name),
-                props
-            ) as LiveRefable<ClusterRoleBinding.ClusterRoleBinding, Name>
+            return new ClusterRoleBinding.ClusterRoleBinding(name, props) as LiveRefable<
+                ClusterRoleBinding.ClusterRoleBinding,
+                Name
+            >
         }
         PersistentVolume<Name extends string, Mode extends Pv_VolumeMode = "Filesystem">(
             name: Name,
             props: Pv.Pv_Props_K8ts<Mode>
         ) {
-            return new Pv.Pv(this.origin, this._metaWithName(name), props) as LiveRefable<
-                Pv.Pv<Mode>,
-                Name
-            >
+            return new Pv.Pv(name, props) as LiveRefable<Pv.Pv<Mode>, Name>
         }
         Namespace<Name extends string>(name: Name, props?: Namespace.Namespace_Props) {
-            return new Namespace.Namespace(
-                this.origin,
-                this._metaWithName(name),
-                props
-            ) as LiveRefable<Namespace, Name>
+            return new Namespace.Namespace(name, props ?? {}) as LiveRefable<Namespace, Name>
         }
     }
 
-    @auto_register
     export class Namespaced extends Base {
         Claim<Name extends string, Mode extends Pv_VolumeMode = "Filesystem">(
             name: Name,
             mode: Pvc.Pvc_Props<Mode>
         ) {
-            return new Pvc.Pvc(this.origin, this._metaWithName(name), mode) as LiveRefable<
-                Pvc.Pvc<Mode>,
-                Name
-            >
+            return new Pvc.Pvc(name, mode) as LiveRefable<Pvc.Pvc<Mode>, Name>
         }
         CronJob<Name extends string, Cr extends Cron.Record>(name: Name, props: CronJob_Props<Cr>) {
-            return new CronJob(this.origin, this._metaWithName(name), props) as LiveRefable<
-                CronJob<Cr>,
-                Name
-            >
+            return new CronJob(name, props) as LiveRefable<CronJob<Cr>, Name>
         }
 
         ConfigMap<Name extends string>(name: Name, props: ConfigMap.ConfigMap_Props) {
-            return new ConfigMap.ConfigMap(
-                this.origin,
-                this._metaWithName(name),
-                props
-            ) as LiveRefable<ConfigMap, Name>
+            return new ConfigMap.ConfigMap(name, props) as LiveRefable<ConfigMap, Name>
         }
         HttpRoute<Name extends string, Ports extends string>(
             name: Name,
             props: HttpRoute.HttpRoute_Props<Ports>
         ) {
-            return new HttpRoute.HttpRoute(
-                this.origin,
-                this._metaWithName(name),
-                props
-            ) as LiveRefable<HttpRoute<Ports>, Name>
+            return new HttpRoute.HttpRoute(name, props) as LiveRefable<HttpRoute<Ports>, Name>
         }
         Secret<Name extends string>(name: Name, props: Secret.Secret_Props) {
-            return new Secret.Secret(this.origin, this._metaWithName(name), props) as LiveRefable<
-                Secret,
-                Name
-            >
+            return new Secret.Secret(name, props) as LiveRefable<Secret, Name>
         }
         ServiceAccount<Name extends string>(
             name: Name,
             props?: ServiceAccount.ServiceAccount_Props
         ) {
-            return new ServiceAccount.ServiceAccount(
-                this.origin,
-                this._metaWithName(name),
-                props
-            ) as LiveRefable<ServiceAccount, Name>
+            return new ServiceAccount.ServiceAccount(name, props ?? {}) as LiveRefable<
+                ServiceAccount,
+                Name
+            >
         }
         Service<Name extends string, DeployPorts extends string, ExposedPorts extends DeployPorts>(
             name: Name,
             props: Service.Service_Props<DeployPorts, ExposedPorts>
         ) {
-            return new Service.Service(this.origin, this._metaWithName(name), props) as LiveRefable<
-                Service<ExposedPorts>,
-                Name
-            >
+            return new Service.Service(name, props) as LiveRefable<Service<ExposedPorts>, Name>
         }
 
         Deployment<Name extends string>(name: Name, props: Deployment.Deployment_Props_Original) {
@@ -152,19 +112,14 @@ export namespace Factory {
                         POD<Ports extends string>(
                             producer: PodTemplate.Pod_Container_Producer<Ports>
                         ) {
-                            const dep = new Deployment.Deployment(
-                                builder.origin,
-                                builder._metaWithName(name),
-                                {
-                                    ...props,
-                                    $template: {
-                                        ...templateProps,
-                                        $POD: producer
-                                    }
+                            const dep = new Deployment.Deployment(name, {
+                                ...props,
+                                $template: {
+                                    ...templateProps,
+                                    $POD: producer
                                 }
-                            ) as LiveRefable<Deployment<Ports>, Name>
+                            }) as LiveRefable<Deployment<Ports>, Name>
                             TraceEmbedder.set(dep.node, traceHere)
-                            dep.node.origin["__attach_resource__"]([dep.node])
                             return dep
                         }
                     }
@@ -176,22 +131,7 @@ export namespace Factory {
             name: Name,
             props: HttpRoute.HttpRoute_Props<Ports>
         ) {
-            return new HttpRoute.HttpRoute(
-                this.origin,
-                this._metaWithName(name),
-                props
-            ) as LiveRefable<HttpRoute<Ports>, Name>
-        }
-        PodTemplate<Name extends string, Ports extends string>(
-            name: Name,
-            props: PodTemplate.Pod_Props<Ports> | PodTemplate.Pod_Props<Ports>["$POD"]
-        ) {
-            const props_ = typeof props === "function" ? { $POD: props } : props
-            return new PodTemplate.Pod_Template(
-                this.origin,
-                this._metaWithName(name),
-                props_
-            ) as LiveRefable<PodTemplate<Ports>, Name>
+            return new HttpRoute.HttpRoute(name, props) as LiveRefable<HttpRoute<Ports>, Name>
         }
     }
 }

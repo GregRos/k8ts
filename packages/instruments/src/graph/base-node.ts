@@ -3,27 +3,66 @@ import { Kind } from "../api-kind"
 import { RefKey } from "../ref-key"
 import { ForwardRef } from "../reference"
 import { Relation } from "./dependencies"
+export type LiteralModes = "simple" | "pretty" | "prefix"
 
-export interface BaseEntity<Node extends BaseNode<Node>> {
-    readonly node: Node
+export abstract class BaseEntity<
+    Node extends BaseNode<Node, Entity> = BaseNode<any, any>,
+    Entity extends BaseEntity<Node, Entity> = BaseEntity<any, any>
+> {
+    abstract readonly node: Node
+    abstract readonly kind: Kind.IdentParent
+    abstract readonly name: string
+    protected __kids__(): Entity[] {
+        return []
+    }
 
-    readonly kind: Kind.Identifier
-    readonly name: string
+    protected __parent__(): Entity | undefined {
+        return undefined
+    }
+
+    protected __needs__(): Record<string, Entity | undefined | Entity[]> {
+        return {}
+    }
 }
 
 export abstract class BaseNode<
-    Node extends BaseNode<Node, Entity>,
-    Entity extends BaseEntity<Node> = BaseEntity<Node>
+    Node extends BaseNode<Node, Entity> = BaseNode<any, any>,
+    Entity extends BaseEntity<Node, Entity> = BaseEntity<any, any>
 > {
     private _eqProxy = {}
-    abstract readonly key: RefKey
+    get key(): RefKey {
+        return RefKey.make(this.kind, this.name)
+    }
     get kind() {
-        return this.key.kind
+        return this._entity.kind
     }
 
-    abstract readonly kids: Seq<Node>
-    abstract readonly relations: Seq<Relation<Node>>
-    abstract readonly parent: Node | null
+    get kids() {
+        return seq(this._entity["__kids__"]()).map(x => x.node)
+    }
+    get relations() {
+        const needs = this._entity["__needs__"]()
+        return seq(function* () {
+            for (const [relName, target] of Object.entries(needs)) {
+                if (Array.isArray(target)) {
+                    for (const t of target) {
+                        if (t) {
+                            yield new Relation<Node>(relName, t.node)
+                        }
+                    }
+                } else {
+                    if (target) {
+                        yield new Relation<Node>(relName, target.node)
+                    }
+                }
+            }
+        })
+    }
+
+    get parent(): Node | null {
+        return this._entity["__parent__"]()?.node ?? null
+    }
+
     protected get _asNode() {
         return this as any as Node
     }
@@ -38,7 +77,7 @@ export abstract class BaseNode<
         return (this.ancestors.at(-1).pull() as any) ?? (this as any)
     }
     get name() {
-        return this.key.name
+        return this._entity.name
     }
     get isRoot() {
         return this.parent === null && this._entity.kind.name !== "PodTemplate"

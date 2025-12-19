@@ -1,12 +1,5 @@
 import { CDK } from "@k8ts/imports"
-import {
-    manifest,
-    ManifestResource,
-    Refable,
-    relations,
-    ResourceEntity,
-    type InputPortMapping
-} from "@k8ts/instruments"
+import { ManifestResource, Refable, type InputPortMapping } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { MakeError } from "../../error"
 import { v1 } from "../../kinds/index"
@@ -34,31 +27,6 @@ export namespace Service {
         __PORTS__: ExposedPorts
     }
 
-    @relations({
-        needs: self => ({
-            backend: self.backend as ResourceEntity
-        })
-    })
-    @manifest({
-        body(self): CDK.KubeServiceProps {
-            const svcPorts = self.ports
-            return {
-                spec: {
-                    ...self.props.$frontend,
-                    ports: toServicePorts(svcPorts),
-                    selector: {
-                        app: self.props.$backend.name
-                    },
-                    ...(self.props.$frontend.type === "LoadBalancer"
-                        ? {
-                              allocateLoadBalancerNodePorts: false,
-                              externalTrafficPolicy: "Local"
-                          }
-                        : {})
-                }
-            }
-        }
-    })
     export class Service<ExposedPorts extends string = string> extends ManifestResource<
         Service_Props<string, ExposedPorts>
     > {
@@ -78,6 +46,12 @@ export namespace Service {
                 .pull() as ExposedPorts[]
             const svcPorts = srcPorts.pick(...knownPorts).map(this.props.$ports as any)
             return svcPorts
+        }
+
+        protected override __needs__() {
+            return {
+                backend: this.backend
+            }
         }
 
         portRef(name: ExposedPorts) {
@@ -103,6 +77,26 @@ export namespace Service {
                 throw new MakeError(`Port ${port} is not defined in service ${this.name}`)
             }
             return `:${portNumber}`
+        }
+
+        protected body(): CDK.KubeServiceProps {
+            const self = this
+            const svcPorts = self.ports
+            return {
+                spec: {
+                    ...self.props.$frontend,
+                    ports: toServicePorts(svcPorts),
+                    selector: {
+                        app: self.props.$backend.name
+                    },
+                    ...(self.props.$frontend.type === "LoadBalancer"
+                        ? {
+                              allocateLoadBalancerNodePorts: false,
+                              externalTrafficPolicy: "Local"
+                          }
+                        : {})
+                }
+            }
         }
 
         address(protocol: "http" | "https", port: ExposedPorts) {
