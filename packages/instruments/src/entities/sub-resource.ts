@@ -5,10 +5,7 @@ export abstract class SubResource<Props extends object = object> extends Resourc
     constructor(parent: ResourceEntity, name: string, props: Props) {
         super(name, props)
         this.#parent = parent
-        this.__post_construct__()
     }
-
-    protected __post_construct__() {}
 
     protected __parent__(): ResourceEntity<object> {
         return this.#parent

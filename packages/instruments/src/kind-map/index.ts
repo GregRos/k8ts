@@ -121,22 +121,21 @@ export class KindMap<Kinds extends Kind.IdentParent = Kind.IdentParent> {
         throw new InstrumentsError(`Invalid argument ${something}`)
     }
     private _getEntry(key: LookupKey) {
-        const converted = this._convert(key)
         const entry = this._tryGetEntry(key)
         if (!entry) {
-            if (typeof converted === "string") {
-                throw this._unknownNameError(converted)
-            } else if (converted instanceof Kind.Identifier) {
-                throw this._unknownIdentError(converted)
-            } else if (typeof converted === "function") {
-                throw this._unknownClassError(converted)
+            if (typeof key === "string") {
+                throw this._unknownNameError(key)
+            } else if (key instanceof Kind.Identifier) {
+                throw this._unknownIdentError(key)
+            } else if (typeof key === "function") {
+                throw this._unknownClassError(key)
             }
         }
         return entry!
     }
     private _tryGetEntry(key: LookupKey): NodeEntry | undefined {
         const converted = this._convert(key)
-        return this._entriesMap.get(converted) ?? this._parent?._tryGetEntry(converted) ?? undefined
+        return this._entriesMap.get(converted) ?? this._parent?._tryGetEntry(key) ?? undefined
     }
 
     tryGetKind<P extends Kind.IdentParent>(

@@ -48,7 +48,9 @@ export namespace Container {
         Container_Props<Ports>
     > {
         __PORTS__!: Ports
-        readonly kind = v1.Pod.Container._
+        get kind() {
+            return v1.Pod.Container._
+        }
 
         protected __needs__(): Record<
             string,

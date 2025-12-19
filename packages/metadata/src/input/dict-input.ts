@@ -1,5 +1,6 @@
 import { ValueKey } from "../key"
 import type { Key } from "../key/types"
+import type { MetaLike } from "../meta"
 
 export namespace MetaInputParts {
     type Of<T extends string, V> = {
@@ -11,4 +12,8 @@ export namespace MetaInputParts {
     export type Input = Full & Heading
 }
 
-export type InputMeta = MetaInputParts.Input | undefined | Iterable<readonly [ValueKey, string]>
+export type InputMeta =
+    | MetaLike
+    | MetaInputParts.Input
+    | undefined
+    | Iterable<readonly [ValueKey, string]>

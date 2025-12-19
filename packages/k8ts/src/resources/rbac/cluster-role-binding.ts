@@ -12,7 +12,9 @@ export namespace ClusterRoleBinding {
     }
 
     export class ClusterRoleBinding extends ManifestResource<ClusterRoleBoding_Props> {
-        override kind = rbac.v1.ClusterRoleBinding._
+        get kind() {
+            return rbac.v1.ClusterRoleBinding._
+        }
 
         protected __needs__() {
             return {

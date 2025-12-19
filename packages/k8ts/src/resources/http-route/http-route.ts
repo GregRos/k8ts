@@ -18,7 +18,9 @@ export namespace HttpRoute {
     }
 
     export class HttpRoute<Ports extends string> extends ManifestResource<HttpRoute_Props<Ports>> {
-        kind = HttpRouteKind
+        get kind() {
+            return HttpRouteKind
+        }
 
         protected body() {
             const self = this

@@ -7,7 +7,9 @@ export interface Secret_Props {
 }
 
 export class Secret extends ManifestResource<Secret_Props> {
-    readonly kind = v1.Secret._
+    get kind() {
+        return v1.Secret._
+    }
 
     protected body() {
         return {

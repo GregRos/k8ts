@@ -1,4 +1,9 @@
-import { BaseManifest, ManifestResource, ResourceNode } from "@k8ts/instruments"
+import {
+    BaseManifest,
+    ManifestResource,
+    ManifestSourceEmbedder,
+    ResourceNode
+} from "@k8ts/instruments"
 import Emittery from "emittery"
 import { cloneDeep, cloneDeepWith, isEmpty, unset } from "lodash"
 import { version } from "../../version"
@@ -61,7 +66,8 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
     async generate(res: ResourceNode): Promise<NodeManifest> {
         this._attachProductionAnnotations(res)
         await this.emit("manifest", { resource: res })
-        const manifest = await this._generate(res.entity as ManifestResource)
+        const manifest = await this._generate(res._entity as ManifestResource)
+        ManifestSourceEmbedder.add(manifest, res._entity)
         return {
             node: res,
             manifest: manifest

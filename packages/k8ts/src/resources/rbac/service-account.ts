@@ -9,7 +9,9 @@ export namespace ServiceAccount {
     }
 
     export class ServiceAccount extends ManifestResource<ServiceAccount_Props> {
-        override kind = v1.ServiceAccount._
+        get kind() {
+            return v1.ServiceAccount._
+        }
         protected body(): CDK.KubeServiceAccountProps {
             const self = this
             return {

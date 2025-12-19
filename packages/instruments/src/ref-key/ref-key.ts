@@ -1,4 +1,3 @@
-import { hash } from "immutable"
 import { Kind } from "../api-kind"
 import { InstrumentsError } from "../error"
 export type RefKey<
@@ -69,9 +68,7 @@ export namespace RefKey {
             }
             return this.kind.equals(other.kind) && this.name === other.name
         }
-        hashCode() {
-            return hash(this.string)
-        }
+
         toString() {
             return this.string
         }

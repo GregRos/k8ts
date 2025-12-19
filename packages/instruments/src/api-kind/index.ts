@@ -41,7 +41,7 @@ export namespace Kind {
                 parts.unshift(curr)
                 curr = curr.parent
             }
-            return parts
+            return parts.filter(x => x.name)
         }
 
         get text(): string {

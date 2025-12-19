@@ -3,7 +3,7 @@ import { Cron, CronStanza, ManifestResource, type ResourceEntity } from "@k8ts/i
 import { Timezone } from "@k8ts/instruments/timezone"
 import { Meta } from "@k8ts/metadata"
 import { doddle } from "doddle"
-import { omit, omitBy } from "lodash"
+import { omitBy } from "lodash"
 import { batch } from "../../kinds/batch"
 import { PodTemplate } from "../pod/pod-template"
 export interface CronJob_Props<CronSpec extends Cron.Record>
@@ -17,7 +17,9 @@ export interface CronJob_Props<CronSpec extends Cron.Record>
 }
 
 export class CronJob<Cron extends Cron.Record> extends ManifestResource<CronJob_Props<Cron>> {
-    kind = batch.v1.CronJob._
+    get kind() {
+        return batch.v1.CronJob._
+    }
     private _template = doddle(() => {
         return new PodTemplate.Pod_Template<never>(this, this.name, this.props.$template)
     })
@@ -26,16 +28,19 @@ export class CronJob<Cron extends Cron.Record> extends ManifestResource<CronJob_
         return [this._template.pull()]
     }
 
-    protected body() {
+    protected body(): CDK.KubeCronJobProps {
         const self = this
         const template = self._template.pull()["__submanifest__"]()
-        const noKindFields = omit(template, ["kind", "apiVersion"])
         return {
             spec: {
                 ...omitBy(self.props, (x, k) => k.startsWith("$") || k === "timeZone"),
                 schedule: self.props.$schedule.toString(),
                 timeZone: self.props.timeZone,
-                jobTemplate: noKindFields
+                jobTemplate: {
+                    spec: {
+                        template: template
+                    }
+                }
             }
         }
     }

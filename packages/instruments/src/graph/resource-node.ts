@@ -1,6 +1,8 @@
 import { MutableMeta } from "@k8ts/metadata"
+import { getDeepPropertyDescriptor } from "@k8ts/metadata/util"
 import chalk from "chalk"
 import { seq } from "doddle"
+import { getNiceClassName } from "what-are-you"
 import { Kind } from "../api-kind"
 import { Displayers, displayers, PrivateCtor } from "../displayers"
 import { TraceEmbedder } from "../tracing"
@@ -41,7 +43,7 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
     }
 
     get trace() {
-        return TraceEmbedder.get(this)
+        return TraceEmbedder.get(this._entity)
     }
 
     get isExported() {
@@ -118,7 +120,7 @@ export abstract class ResourceEntity<Props extends object = object> extends Base
     ResourceNode,
     ResourceEntity
 > {
-    abstract readonly kind: Kind.IdentParent
+    abstract get kind(): Kind.IdentParent
 
     with(callback: (self: this) => void) {
         callback(this)
@@ -134,6 +136,12 @@ export abstract class ResourceEntity<Props extends object = object> extends Base
         super()
 
         this.name = name
+        const desc = getDeepPropertyDescriptor(this, "kind")
+        if (!desc || !desc.get) {
+            throw new Error(
+                `ResourceEntity subclass ${getNiceClassName(this)} must implement the 'kind' property as a getter, but it's missing or not a getter.`
+            )
+        }
     }
 
     protected abstract __origin__(): OriginEntity

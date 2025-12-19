@@ -8,6 +8,10 @@ import { Key } from "./key/types"
 import { equalsMap, toJS } from "./util"
 export type Meta = Meta.Meta
 export type MutableMeta = Meta.MutableMeta
+const MetaMarker = Symbol("k8ts.org/metadata")
+export interface MetaLike {
+    readonly [MetaMarker]: true
+}
 export namespace Meta {
     export function _checkNameValue(what: string, v: string) {
         if (!pNameValue.parse(v).isOk) {
@@ -27,7 +31,8 @@ export namespace Meta {
         }
     }
     export type Input = InputMeta
-    export class Meta implements Iterable<[ValueKey, string]> {
+    export class Meta implements Iterable<[ValueKey, string]>, MetaLike {
+        readonly [MetaMarker] = true
         constructor(private readonly _dict: Map<string, string>) {
             for (const [key, value] of _dict.entries()) {
                 _checkValue(key, value)

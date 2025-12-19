@@ -4,7 +4,7 @@ import { seq, Seq } from "doddle"
 import { displayers } from "../displayers"
 import type { KindMap } from "../kind-map"
 import { BaseEntity, BaseNode } from "./base-node"
-import { ResourceNode } from "./resource-node"
+import { ResourceNode, type ResourceEntity } from "./resource-node"
 @displayers({
     simple: s => `[${s.shortFqn}]`,
     prefix: s => {
@@ -33,7 +33,6 @@ export class Origin extends BaseNode<Origin, OriginEntity> implements Iterable<R
     get resourceKinds() {
         return this._entity.resourceKinds
     }
-    private _attached = [] as ResourceNode[]
 
     get relations() {
         return seq([])
@@ -56,11 +55,24 @@ export class Origin extends BaseNode<Origin, OriginEntity> implements Iterable<R
     }).cache()
 
     get resources() {
-        return this._attached
+        return this._entity._resources.map(r => r.node)
     }
 }
+
 export abstract class OriginEntity extends BaseEntity<Origin, OriginEntity> {
     abstract readonly alias: string | undefined
     abstract readonly resourceKinds: KindMap
     abstract meta: Meta
+    readonly _resources: ResourceEntity[] = []
+    readonly _kids: OriginEntity[] = []
+    protected __attach_kid__(kid: OriginEntity) {
+        this._kids.push(kid)
+    }
+
+    protected __attach_resource__(resources: ResourceEntity | Iterable<ResourceEntity>) {
+        resources = Symbol.iterator in resources ? resources : [resources]
+        for (const resource of resources) {
+            this._resources.push(resource)
+        }
+    }
 }

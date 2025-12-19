@@ -1,12 +1,10 @@
-import { Cron, Origin, Trace, TraceEmbedder, displayers, type LiveRefable } from "@k8ts/instruments"
+import { Cron, Origin, displayers, type LiveRefable } from "@k8ts/instruments"
 import chalk from "chalk"
-import StackTracey from "stacktracey"
 import {
     ConfigMap,
     Deployment,
     HttpRoute,
     Namespace,
-    PodTemplate,
     Pv,
     Pv_VolumeMode,
     Pvc,
@@ -102,29 +100,14 @@ export namespace Factory {
             return new Service.Service(name, props) as LiveRefable<Service<ExposedPorts>, Name>
         }
 
-        Deployment<Name extends string>(name: Name, props: Deployment.Deployment_Props_Original) {
-            const builder = this
-            const traceHere = new Trace(new StackTracey().slice(2))
-
-            return {
-                Template(templateProps?: PodTemplate.Pod_Props_Original) {
-                    return {
-                        POD<Ports extends string>(
-                            producer: PodTemplate.Pod_Container_Producer<Ports>
-                        ) {
-                            const dep = new Deployment.Deployment(name, {
-                                ...props,
-                                $template: {
-                                    ...templateProps,
-                                    $POD: producer
-                                }
-                            }) as LiveRefable<Deployment<Ports>, Name>
-                            TraceEmbedder.set(dep.node, traceHere)
-                            return dep
-                        }
-                    }
-                }
-            }
+        Deployment<Name extends string, Ports extends string>(
+            name: Name,
+            props: Deployment.Deployment_Props<Ports>
+        ) {
+            return new Deployment.Deployment<Ports>(name, props) as LiveRefable<
+                Deployment<Ports>,
+                Name
+            >
         }
 
         DomainRoute<Name extends string, Ports extends string>(

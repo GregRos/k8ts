@@ -27,7 +27,9 @@ export namespace Pvc {
     export class Pvc<Mode extends Pv_VolumeMode = Pv_VolumeMode> extends ManifestResource<
         Pvc_Props<Mode>
     > {
-        kind = v1.PersistentVolumeClaim._
+        get kind() {
+            return v1.PersistentVolumeClaim._
+        }
 
         protected __needs__() {
             const self = this

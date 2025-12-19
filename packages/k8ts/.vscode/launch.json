@@ -1,4 +1,17 @@
 {
   "version": "0.2.0",
-  "configurations": []
+  "configurations": [
+    {
+      "type": "node",
+      "name": "EXAMPLE: k8ts",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder:root}/packages/k8ts",
+      "program": "dist_example/run.js",
+      "sourceMaps": true,
+      "runtimeArgs": ["--enable-source-maps"],
+      "resolveSourceMapLocations": ["${workspaceFolder:root}/**"]
+    }
+  ]
 }

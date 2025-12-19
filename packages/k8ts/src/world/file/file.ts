@@ -1,4 +1,10 @@
-import type { FutureExports, LiveRefable, OriginEntity } from "@k8ts/instruments"
+import {
+    OriginStackRunner,
+    type FutureExports,
+    type LiveRefable,
+    type OriginEntity
+} from "@k8ts/instruments"
+import { doddle } from "doddle"
 import { FileExports as Exports_ } from "./exports"
 import { Factory as Factory_ } from "./factory"
 import { FileOrigin } from "./origin"
@@ -23,6 +29,12 @@ export namespace File {
         props: Props<Scope, Produced>,
         parent: OriginEntity
     ) {
+        const origFILE = props.FILE
+        const newFILE = OriginStackRunner.bindIter(
+            doddle(() => origin),
+            origFILE
+        )
+        props.FILE = newFILE
         const origin = new FileOrigin.FileEntity<Scope>(parent, name, props)
         const exports = Exports.make({
             origin,

@@ -48,7 +48,9 @@ export namespace Pv {
         Pv_Props_K8ts<Mode>
     > {
         __MODE__!: Mode
-        readonly kind = v1.PersistentVolume._
+        get kind() {
+            return v1.PersistentVolume._
+        }
 
         protected __needs__() {
             return {

@@ -18,14 +18,13 @@ export namespace FileOrigin {
 
     export class FileEntity<FScope extends Scope> extends ChildOriginEntity<Props<FScope>> {
         kind = build.current.File._
-        get scope() {
-            return this.props.scope
-        }
-
-        protected __post_construct__(): void {
-            this.meta = this.meta.add({
+        #_ = (() => {
+            this.meta.add({
                 namespace: this.props.scope === "cluster" ? undefined : this.props.scope.name
             })
+        })()
+        get scope() {
+            return this.props.scope
         }
     }
 

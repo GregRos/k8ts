@@ -7,7 +7,7 @@ import {
     TextPostProcessor
 } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
-import { List, Map } from "immutable"
+import { mapToObject } from "@k8ts/metadata/util"
 import { dump } from "js-yaml"
 import { AssembledResult } from "./exporter"
 export interface SummarizerOptions {
@@ -48,7 +48,7 @@ export class Summarizer {
     }
 
     private _resources(resources: ResourceNode[]): object {
-        const resourceContainer = List(resources)
+        const resourceContainer = resources
             .map(resource => {
                 const text = pretty`${resource}`
                 const token = this._token(text)
@@ -127,7 +127,7 @@ export class Summarizer {
             ]
         })
 
-        const x = Map(pairs).toJS()
+        const x = mapToObject(new Map(pairs))
         return this._serialize(x)
     }
 }

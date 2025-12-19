@@ -14,7 +14,9 @@ export namespace Mount {
         volume: Volume
     }
     export class Container_Mount_Volume {
-        readonly kind = v1.Pod.Container.VolumeMount._
+        get kind() {
+            return v1.Pod.Container.VolumeMount._
+        }
 
         constructor(readonly props: Container_Mount_Props) {}
 
@@ -36,7 +38,9 @@ export namespace Mount {
     }
 
     export class Container_Mount_Device {
-        kind = v1.Pod.Container.DeviceMount._ satisfies Kind.SubKind
+        get kind() {
+            return v1.Pod.Container.DeviceMount._ satisfies Kind.SubKind
+        }
         get volume() {
             return this.props.device
         }

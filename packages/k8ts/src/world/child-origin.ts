@@ -9,10 +9,7 @@ export abstract class ChildOriginEntity<
         props: Props
     ) {
         super(name, props)
-    }
-
-    protected __post_construct__() {
-        
+        this._parent["__attach_kid__"](this)
     }
 
     protected __parent__() {

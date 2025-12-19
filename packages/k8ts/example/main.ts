@@ -1,4 +1,4 @@
-import { Runner } from "@lib"
+import { Runner } from "../dist"
 import cluster from "./cluster-scoped.k8"
 import namespaced from "./namespaced.k8"
 

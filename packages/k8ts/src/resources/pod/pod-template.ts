@@ -22,8 +22,9 @@ export namespace PodTemplate {
     }
 
     export class Pod_Template<Ports extends string = string> extends SubResource<Pod_Props<Ports>> {
-        readonly meta = Meta.make()
-        readonly kind = v1.PodTemplate._
+        get kind() {
+            return v1.PodTemplate._
+        }
         readonly containers = seq(() => this.props.$POD(new PodScope(this)))
             .map(x => {
                 return x as Container<Ports>
@@ -41,11 +42,10 @@ export namespace PodTemplate {
                 name: this.name
             }
         }
-        protected __post_construct__(): void {
-            this.meta.overwrite({
-                name: this.name
-            })
-        }
+        readonly meta = Meta.make({
+            name: this.name
+        })
+
         protected __submanifest__(): CDK.PodTemplateSpec {
             const self = this
             const { props } = self

@@ -1,5 +1,4 @@
 import type { Doddle } from "doddle"
-import { hash, List } from "immutable"
 import { ManifestResource } from "../entities"
 import { ProxyOperationError } from "../error"
 import { RefKey } from "../ref-key/ref-key"
@@ -14,6 +13,7 @@ export namespace ForwardRef {
         return new Proxy(core, new Handler(core)) as ForwardRef<T>
     }
     export interface Props<Referenced extends object> {
+        readonly class?: Function
         readonly key: RefKey
         readonly namespace?: string
         readonly origin: object
@@ -34,11 +34,7 @@ export namespace ForwardRef {
             if ("equals" in resolved) {
                 return resolved.equals(other)
             }
-            return resolved === other
-        }
-
-        hashCode() {
-            return hash(List.of(this.#props.key, this.#props.origin))
+            return false
         }
 
         get __reference_props__() {
@@ -65,7 +61,7 @@ export namespace ForwardRef {
             return result
         }
         getPrototypeOf(target: T) {
-            return ManifestResource.prototype
+            return this._props.class?.prototype ?? ManifestResource.prototype
         }
         has(target: T, prop: PropertyKey) {
             const { _props, _core } = this

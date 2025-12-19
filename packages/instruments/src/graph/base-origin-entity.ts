@@ -5,7 +5,6 @@ import type { Kind } from "../api-kind"
 import { displayers } from "../displayers"
 import { KindMap, type KindMapInput } from "../kind-map"
 import { Origin, OriginEntity } from "./origin-node"
-import type { ResourceEntity } from "./resource-node"
 export interface OriginEntityProps<Kinds extends Kind.IdentParent[] = Kind.IdentParent[]> {
     meta?: Meta.Input
     kinds?: KindMapInput<Kinds[number]>
@@ -22,8 +21,6 @@ export interface OriginEntityProps<Kinds extends Kind.IdentParent[] = Kind.Ident
 export abstract class BaseOriginEntity<
     Props extends OriginEntityProps = OriginEntityProps
 > extends OriginEntity {
-    readonly _resources: ResourceEntity[] = []
-    readonly _kids: OriginEntity[] = []
     meta: Meta
     get alias() {
         return this.props.alias ?? undefined
@@ -46,16 +43,5 @@ export abstract class BaseOriginEntity<
     }
     get shortFqn() {
         return this.node.shortFqn
-    }
-
-    protected __attach_kid__(kid: OriginEntity) {
-        this._kids.push(kid)
-    }
-
-    protected __attach_resource__(resources: ResourceEntity | Iterable<ResourceEntity>) {
-        resources = Symbol.iterator in resources ? resources : [resources]
-        for (const resource of resources) {
-            this._resources.push(resource)
-        }
     }
 }

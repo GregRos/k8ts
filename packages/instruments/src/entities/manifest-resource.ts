@@ -1,19 +1,14 @@
-import {
-    Kind,
-    ResourceEntity,
-    type BaseManifest,
-    type ManifestIdentFields,
-    type ManifestMetadata,
-    type OriginEntity
-} from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
+import StackTracey from "stacktracey"
+import { ResourceEntity, type OriginEntity } from "../graph"
+import { type BaseManifest, type ManifestIdentFields, type ManifestMetadata } from "../manifest"
+import { Trace, TraceEmbedder } from "../tracing"
 import { OriginStackRunner } from "./origin-stack"
 export abstract class ManifestResource<
     Props extends object = object
 > extends ResourceEntity<Props> {
     readonly _origin: OriginEntity
     readonly meta: Meta
-    abstract override readonly kind: Kind.Kind
     constructor(name: string, props: Props) {
         super(name, props)
         this.meta = Meta.make({
@@ -27,9 +22,9 @@ export abstract class ManifestResource<
             )
         }
         this._origin = lastOrigin
-        this.__post_construct__()
+        this._origin["__attach_resource__"](this)
+        TraceEmbedder.add(this, new Trace(new StackTracey().slice(3)))
     }
-    protected __post_construct__() {}
 
     protected __origin__() {
         return this._origin

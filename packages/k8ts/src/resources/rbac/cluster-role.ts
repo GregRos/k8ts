@@ -32,7 +32,9 @@ export namespace ClusterRole {
     }
 
     export class ClusterRole extends ManifestResource<ClusterRole_Props> {
-        override kind = rbac.v1.ClusterRole._
+        get kind() {
+            return rbac.v1.ClusterRole._
+        }
         constructor(name: string, props: ClusterRole_Props) {
             super(name, props)
         }

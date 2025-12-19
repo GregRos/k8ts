@@ -57,7 +57,7 @@
             "packages/k8ts": true,
             "packages/instruments": true,
             "packages/metadata": true,
-            "**/imports-dist": true,
+            "**/imports-dist_example": true,
             "**/dist-imports": true,
             "**/.git": true,
             "**/.svn": true,

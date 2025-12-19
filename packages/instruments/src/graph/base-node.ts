@@ -29,7 +29,6 @@ export abstract class BaseNode<
     Node extends BaseNode<Node, Entity> = BaseNode<any, any>,
     Entity extends BaseEntity<Node, Entity> = BaseEntity<any, any>
 > {
-    private _eqProxy = {}
     get key(): RefKey {
         return RefKey.make(this.kind, this.name)
     }
@@ -87,7 +86,7 @@ export abstract class BaseNode<
         if (ForwardRef.is(other)) {
             return other.equals(this)
         }
-        return this === other
+        return Object.is(this._entity, other._entity)
     }
 
     readonly ancestors = seq(() => {

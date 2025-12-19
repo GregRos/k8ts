@@ -12,17 +12,21 @@ export class Embedder<Target extends object, Value> {
         return this[Symbol.toStringTag]()
     }
 
-    set(target: Target, data: Value) {
-        if (Object.prototype.hasOwnProperty.call(target, this._symbol)) {
-            throw new Error(`Decorator ${this.name} already set!`)
-        }
-
+    overwrite(target: Target, data: Value) {
         Object.defineProperty(target, this._symbol, {
             enumerable: true,
             value: data,
             writable: true,
             configurable: true
         })
+        return this
+    }
+
+    add(target: Target, data: Value) {
+        if (Object.prototype.hasOwnProperty.call(target, this._symbol)) {
+            throw new Error(`Decorator ${this.name} already set!`)
+        }
+        this.overwrite(target, data)
         return this
     }
 

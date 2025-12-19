@@ -31,7 +31,9 @@ export namespace Service {
         Service_Props<string, ExposedPorts>
     > {
         __PORTS__!: ExposedPorts
-        kind = v1.Service._
+        get kind() {
+            return v1.Service._
+        }
 
         private get backend() {
             return this.props.$backend as Deployment<ExposedPorts>

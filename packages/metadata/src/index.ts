@@ -1,2 +1,2 @@
 export type { InputMeta } from "./input/dict-input"
-export { Meta, type MutableMeta } from "./meta"
+export { Meta, type MetaLike, type MutableMeta } from "./meta"

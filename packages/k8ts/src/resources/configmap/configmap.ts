@@ -19,7 +19,9 @@ export namespace ConfigMap {
     }
 
     export class ConfigMap extends ManifestResource<ConfigMap_Props> {
-        override kind = v1.ConfigMap._
+        get kind() {
+            return v1.ConfigMap._
+        }
         protected async body(): Promise<CDK.KubeConfigMapProps> {
             const self = this
             const binaryData = await resolveBinary(self.props.binaryData ?? {})

@@ -1,7 +1,6 @@
 import { ForwardRef, ResourceNode } from "@k8ts/instruments"
 import { seq } from "doddle"
 import Emittery from "emittery"
-import { Map, Set } from "immutable"
 import { MakeError } from "../../error"
 import type { File } from "../../world/file"
 import { k8ts_namespace } from "../../world/world"
@@ -18,8 +17,8 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
         })
     }
 
-    private _checkNames(resources: Set<ResourceNode>) {
-        let names = Map<string, ResourceNode>()
+    private _checkNames(resources: ResourceNode[]) {
+        let names = new Map<string, ResourceNode>()
         const nameRegexp = /^[a-zA-Z0-9][a-zA-Z0-9_-]*$/
         for (const resource of resources) {
             const name = [resource.kind.name, resource.namespace, resource.name]
@@ -36,7 +35,7 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
                     `Invalid resource name ${resource.name}. Must match ${nameRegexp}`
                 )
             }
-            names = names.set(name, resource)
+            names.set(name, resource)
         }
     }
 
@@ -45,7 +44,7 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
         const parentOrigin = input.__node__
 
         const addResource = async (res: ResourceNode) => {
-            if (resources.has(res)) {
+            if (resources.some(r => r.equals(res))) {
                 return
             }
             if (!res.isRoot) {
@@ -63,10 +62,10 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
 
             this._attachSourceAnnotations(event)
             await this.emit("load", event)
-            resources = resources.add(res)
+            resources.push(res)
         }
 
-        let resources = Set<ResourceNode>()
+        let resources = [] as ResourceNode[]
         // We execute the main FILE iterable to load all the resources attached to the origin
         seq(input).toArray().pull()
         for (let res of input.__node__.resources) {
@@ -77,7 +76,7 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
         }
         // Some resources might appear as dependencies to sub-resources that
         // haven't loaded. We can acquire them by getting all the needed resources
-        for (const resource of resources.toArray()) {
+        for (const resource of resources) {
             for (const relation of resource.recursiveRelationsSubtree) {
                 await addResource(relation.needed)
             }
@@ -89,7 +88,7 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
         }
 
         this._checkNames(resources)
-        return resources.toArray()
+        return [...resources]
     }
 }
 export interface ResourceLoadedEvent {

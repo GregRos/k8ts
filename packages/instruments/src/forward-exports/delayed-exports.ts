@@ -70,10 +70,12 @@ export namespace FutureExports {
             }
 
             const refKey = this._props.origin.resourceKinds.tryParse(key)
+            const clazz = this._props.origin.resourceKinds.tryGetClass(key)
             if (refKey == null) {
                 return undefined
             }
             return ForwardRef.make({
+                class: clazz,
                 key: refKey,
                 origin: this._props.origin,
                 namespace: this._props.origin.meta.tryGet("namespace"),

@@ -32,7 +32,7 @@ class DisplayerDecorator {
         }
     }
     implement(ctor: typeof PrivateCtorExemplar, input: Displayers.In) {
-        this._system.set(ctor.prototype, input)
+        this._system.add(ctor.prototype, input)
         const decorator = this
         Object.defineProperties(ctor.prototype, {
             [Symbol.toStringTag]: {

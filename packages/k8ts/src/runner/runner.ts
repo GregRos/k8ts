@@ -31,16 +31,18 @@ export class Runner extends Emittery<AssemblerEventsTable> {
         const gitInfo = await GitTrace.make({
             cwd: this._options.cwd
         })
+
         const runTrace = new Trace(new StackTracey().slice(1))
         const options = {
             cwd: ".",
             ...this._options,
-            meta: Meta.make(this._options.meta).add(k8ts_namespace, {
-                "^emitted-at": runTrace.format({
-                    cwd: this._options.cwd
-                }),
-                "^source-git": gitInfo?.text
-            })
+            meta: Meta.make(this._options.meta)
+                .add(k8ts_namespace, {
+                    "^emitted-at": runTrace.format({
+                        cwd: this._options.cwd
+                    })
+                })
+                .add(gitInfo?.metaFields)
         }
 
         const progressShower = new ProgressShower(options.progress)

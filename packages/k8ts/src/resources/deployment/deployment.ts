@@ -1,5 +1,10 @@
 import { CDK } from "@k8ts/imports"
-import { ManifestResource, Refable } from "@k8ts/instruments"
+import {
+    ManifestResource,
+    OriginStackRunner,
+    Refable,
+    type ResourceEntity
+} from "@k8ts/instruments"
 import { doddle } from "doddle"
 import { omit, omitBy } from "lodash"
 import { MakeError } from "../../error"
@@ -34,9 +39,19 @@ export namespace Deployment {
         Deployment_Props<Ports>
     > {
         __PORTS__!: Ports
-        kind = apps.v1.Deployment._
+        get kind() {
+            return apps.v1.Deployment._
+        }
 
-        protected __kids__() {
+        #_ = (() => {
+            const origin = OriginStackRunner.current
+            this.props.$template.$POD = OriginStackRunner.bindIter(
+                origin!,
+                this.props.$template.$POD
+            )
+        })()
+
+        protected __kids__(): ResourceEntity[] {
             return [this._template.pull()]
         }
         protected body(): CDK.KubeDeploymentProps {

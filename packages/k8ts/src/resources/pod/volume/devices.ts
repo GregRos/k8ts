@@ -14,7 +14,9 @@ export namespace Device {
     export type Backend = Pod_Device_Backend_Pvc
 
     export class Pod_Device extends SubResource<Pod_Device_Backend_Pvc> {
-        readonly kind = v1.Pod.Device._
+        get kind() {
+            return v1.Pod.Device._
+        }
 
         constructor(
             parent: ResourceEntity,

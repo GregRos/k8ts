@@ -5,7 +5,9 @@ export namespace Namespace {
     export interface Namespace_Props {}
 
     export class Namespace extends ManifestResource<Namespace_Props> {
-        override kind = v1.Namespace._
+        get kind() {
+            return v1.Namespace._
+        }
 
         protected body() {
             return {

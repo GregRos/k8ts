@@ -6,11 +6,12 @@
     }
   ],
   "compilerOptions": {
+    "rootDir": ".",
     "composite": false,
     "declarationMap": false,
-    "outDir": "../dist_test",
-    "noEmit": true,
-    "tsBuildInfoFile": "../dist/test.tsbuildinfo",
+    "outDir": "../dist_example",
+    "noEmit": false,
+    "tsBuildInfoFile": "../dist_example/test.tsbuildinfo",
     "types": ["jest", "node"],
     "paths": {
       "@lib": ["../src"],

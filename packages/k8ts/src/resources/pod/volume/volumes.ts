@@ -29,7 +29,9 @@ export namespace Volume {
     export abstract class Pod_Volume<
         Props extends Pod_Volume_Backend = Pod_Volume_Backend
     > extends SubResource<Props> {
-        readonly kind = v1.Pod.Volume._
+        get kind() {
+            return v1.Pod.Volume._
+        }
 
         protected __needs__(): Record<
             string,

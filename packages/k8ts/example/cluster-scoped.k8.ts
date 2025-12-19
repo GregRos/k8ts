@@ -1,4 +1,4 @@
-import { storage } from "@lib/kinds"
+import { storage } from "k8ts/kinds"
 import { W } from "./world"
 
 export default W.Scope("cluster")

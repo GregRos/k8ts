@@ -84,3 +84,32 @@ export function mapFromObject<V>(obj: { [k: string]: V }): Map<string, V> {
     }
     return map
 }
+
+export function mapToObject<V>(map: Map<string, V>): { [k: string]: V } {
+    const obj: { [k: string]: V } = {}
+    for (const [k, v] of map.entries()) {
+        obj[k] = v
+    }
+    return obj
+}
+
+export type SourcedPropertyDescriptor = PropertyDescriptor & {
+    source: object
+}
+export function getDeepPropertyDescriptor(
+    obj: any,
+    propertyKey: string | symbol
+): SourcedPropertyDescriptor | undefined {
+    let current = obj
+    while (current) {
+        const descriptor = Object.getOwnPropertyDescriptor(current, propertyKey)
+        if (descriptor) {
+            return {
+                ...descriptor,
+                source: current
+            }
+        }
+        current = Object.getPrototypeOf(current)
+    }
+    return undefined
+}
