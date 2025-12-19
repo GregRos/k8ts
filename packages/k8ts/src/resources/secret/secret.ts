@@ -6,7 +6,7 @@ export interface Secret_Props {
     stringData?: Record<string, string>
 }
 
-export class Secret extends ManifestResource<Secret_Props> {
+export class Secret<Name extends string = string> extends ManifestResource<Name, Secret_Props> {
     get kind() {
         return v1.Secret._
     }

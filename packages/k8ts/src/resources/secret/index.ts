@@ -1,3 +1,1 @@
-import * as Secret from "./secret"
-type Secret = Secret.Secret
-export { Secret }
+export * from "./secret"

@@ -46,17 +46,17 @@ import { World } from "./world/world"
 // ] as const
 
 const defaultKindPairs = [
-    Service.Service,
-    Deployment.Deployment,
-    ConfigMap.ConfigMap,
-    Secret.Secret,
-    Pv.Pv,
-    Pvc.Pvc,
-    Namespace.Namespace,
+    Service,
+    Deployment,
+    ConfigMap,
+    Secret,
+    Pv,
+    Pvc,
+    Namespace,
     CronJob,
-    ServiceAccount.ServiceAccount,
-    ClusterRole.ClusterRole,
-    ClusterRoleBinding.ClusterRoleBinding
+    ServiceAccount,
+    ClusterRole,
+    ClusterRoleBinding
 ]
 export function K8ts<MoreKinds extends Kind.Kind>(...extraKinds: MoreKinds[]) {
     return new World.Builder("K8ts", {

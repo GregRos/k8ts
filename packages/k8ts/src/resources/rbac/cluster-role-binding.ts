@@ -4,37 +4,37 @@ import { rbac } from "../../kinds/rbac"
 import type { ClusterRole } from "./cluster-role"
 import type { ServiceAccount } from "./service-account"
 
-export type ClusterRoleBinding = ClusterRoleBinding.ClusterRoleBinding
-export namespace ClusterRoleBinding {
-    export interface ClusterRoleBoding_Props {
-        $role: ClusterRole
-        $subjects: ServiceAccount[]
+export interface ClusterRoleBoding_Props {
+    $role: ClusterRole
+    $subjects: ServiceAccount[]
+}
+
+export class ClusterRoleBinding<Name extends string = string> extends ManifestResource<
+    Name,
+    ClusterRoleBoding_Props
+> {
+    get kind() {
+        return rbac.v1.ClusterRoleBinding._
     }
 
-    export class ClusterRoleBinding extends ManifestResource<ClusterRoleBoding_Props> {
-        get kind() {
-            return rbac.v1.ClusterRoleBinding._
+    protected __needs__() {
+        return {
+            role: this.props.$role,
+            subjects: this.props.$subjects
         }
-
-        protected __needs__() {
-            return {
-                role: this.props.$role,
-                subjects: this.props.$subjects
-            }
-        }
-        protected body(): CDK.KubeClusterRoleBindingProps {
-            return {
-                roleRef: {
-                    apiGroup: this.props.$role.kind.parent!.text,
-                    kind: this.props.$role.kind.name,
-                    name: this.props.$role.name
-                },
-                subjects: this.props.$subjects.map(sa => ({
-                    kind: sa.kind.name,
-                    name: sa.name,
-                    namespace: sa.namespace!
-                }))
-            }
+    }
+    protected body(): CDK.KubeClusterRoleBindingProps {
+        return {
+            roleRef: {
+                apiGroup: this.props.$role.kind.parent!.text,
+                kind: this.props.$role.kind.name,
+                name: this.props.$role.name
+            },
+            subjects: this.props.$subjects.map(sa => ({
+                kind: sa.kind.name,
+                name: sa.name,
+                namespace: sa.namespace!
+            }))
         }
     }
 }

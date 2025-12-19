@@ -1,4 +1,5 @@
 import { Cmd, Cron, Image, localFile } from "@k8ts/instruments"
+import { ConfigMap, CronJob, Deployment, HttpRoute, Pvc, Service } from "k8ts"
 import { gateway, storage, v1 } from "k8ts/kinds"
 import k8tsFile from "./cluster-scoped.k8"
 import { W } from "./world"
@@ -12,24 +13,24 @@ export default W.Scope(k8sNamespace)
         "^a": "xxxx"
     })
     .Resources(function* FILE(FILE) {
-        const claim = FILE.Claim("claim", {
+        const claim = new Pvc("claim", {
             $bind: cool,
             $accessModes: ["ReadWriteOnce"],
             $storage: "1Gi->5Gi"
         })
 
-        const claim2 = FILE.Claim("claim2", {
+        const claim2 = new Pvc("claim2", {
             $storageClass: W.External(storage.v1.StorageClass._, "topolvm"),
             $accessModes: ["ReadWriteOnce"],
             $storage: "1Gi->5Gi"
         })
-        const claim3 = FILE.Claim("claim3", {
+        const claim3 = new Pvc("claim3", {
             $storageClass: W.External(storage.v1.StorageClass._, "topolvm"),
             $accessModes: ["ReadWriteOnce"],
             $storage: "=1Gi"
         })
         yield claim
-        yield FILE.CronJob("test", {
+        yield new CronJob("test", {
             $schedule: Cron.hourly,
             timeZone: "UTC",
             $template: {
@@ -49,17 +50,17 @@ export default W.Scope(k8sNamespace)
                 }
             }
         })
-        const devClaim = FILE.Claim("dev-claim", {
+        const devClaim = new Pvc("dev-claim", {
             $accessModes: ["ReadWriteOnce"],
             $bind: k8tsFile["PersistentVolume/dev-sda"],
             $storage: "1Gi->5Gi"
         })
-        yield FILE.ConfigMap("config", {
+        yield new ConfigMap("config", {
             data: {
                 "config.yaml": localFile("./example.txt")
             }
         })
-        const deploy2 = FILE.Deployment("xyz2", {
+        const deploy2 = new Deployment("xyz2", {
             replicas: 1,
             $template: {
                 *$POD(k) {
@@ -67,7 +68,7 @@ export default W.Scope(k8sNamespace)
                         $backend: claim
                     })
 
-                    FILE.ConfigMap("abc", {
+                    new ConfigMap("abc", {
                         data: {
                             a: "1"
                         }
@@ -109,7 +110,7 @@ export default W.Scope(k8sNamespace)
             }
         })
 
-        const svc2 = FILE.Service("xyz", {
+        const svc2 = new Service("xyz", {
             $frontend: {
                 type: "ClusterIP"
             },
@@ -127,7 +128,7 @@ export default W.Scope(k8sNamespace)
         console.assert(addr1, "http://xyz.namespace.svc.cluster.local")
         console.assert(addr2, "http://xyz.namespace.svc.cluster.local:1111")
         yield svc2
-        const route = FILE.DomainRoute("my-route", {
+        const route = new HttpRoute("my-route", {
             $hostname: "example.com",
             $gateway: W.External(gwKind, "gateway", "gateways"),
             $backend: svc2.portRef("x")

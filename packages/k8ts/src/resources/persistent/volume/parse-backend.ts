@@ -1,6 +1,6 @@
 import { MakeError } from "../../../error"
-import type { Pv } from "./pv"
-export function parseBackend(backend?: Pv.Backend) {
+import type { Pv_Backend } from "./pv"
+export function parseBackend(backend?: Pv_Backend) {
     switch (backend?.type) {
         case undefined:
         case null:

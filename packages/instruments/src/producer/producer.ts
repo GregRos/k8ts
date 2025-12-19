@@ -3,11 +3,11 @@ export type Producer<Factory extends object, Thing extends object> = Producer.Pr
     Thing
 >
 export namespace Producer {
-    export type Producer<Factory extends object, Produced extends object> = (
+    export type Producer<Factory, Produced extends object> = (
         factory: Factory
     ) => Iterable<Produced>
 
-    export function map<Factory extends object, Produced extends object, NewInput extends object>(
+    export function map<Factory, Produced extends object, NewInput extends object>(
         producer: Producer<Factory, Produced>,
         projection: (input: NewInput) => Factory
     ) {

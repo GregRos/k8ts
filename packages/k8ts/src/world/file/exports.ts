@@ -1,19 +1,15 @@
 import { FutureExports, LiveRefable, ManifestResource, Producer } from "@k8ts/instruments"
 import { seq, type Seq } from "doddle"
-import { Factory } from "./factory"
 import type { FileOrigin } from "./origin"
 
 export namespace FileExports {
-    export type Producer<
-        Scope extends FileOrigin.Scope,
-        Produced extends object
-    > = Producer.Producer<Factory.FromScope<Scope>, Produced>
+    export type Producer<Produced extends object> = Producer.Producer<void, Produced>
     export interface Props<
         Scope extends FileOrigin.Scope = FileOrigin.Scope,
         Produced extends LiveRefable = LiveRefable
     > {
         origin: FileOrigin<Scope>
-        FILE: Producer<Scope, Produced>
+        FILE: Producer<Produced>
     }
 
     export class Core {
@@ -21,14 +17,8 @@ export namespace FileExports {
         #produced: Seq<LiveRefable>
         constructor(props: Props) {
             this.#props = props
-            const producer = Producer.map(props.FILE, () => {
-                if (props.origin.scope === "cluster") {
-                    return new Factory.Cluster(props.origin.node)
-                } else {
-                    return new Factory.Namespaced(props.origin.node)
-                }
-            })
-            this.#produced = seq(() => producer(props.origin))
+
+            this.#produced = seq(() => props.FILE())
                 .as<ManifestResource>()
                 .each(x => {
                     x.meta.add("k8ts.org/", {

@@ -116,10 +116,10 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
     simple: s => s.node,
     pretty: s => s.node
 })
-export abstract class ResourceEntity<Props extends object = object> extends BaseEntity<
-    ResourceNode,
-    ResourceEntity
-> {
+export abstract class ResourceEntity<
+    Name extends string = string,
+    Props extends object = object
+> extends BaseEntity<ResourceNode, ResourceEntity> {
     abstract get kind(): Kind.IdentParent
 
     with(callback: (self: this) => void) {
@@ -130,7 +130,7 @@ export abstract class ResourceEntity<Props extends object = object> extends Base
     abstract readonly namespace: string | undefined
 
     protected constructor(
-        readonly name: string,
+        readonly name: Name,
         readonly props: Props
     ) {
         super()

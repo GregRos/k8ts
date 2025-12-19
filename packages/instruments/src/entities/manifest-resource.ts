@@ -5,11 +5,12 @@ import { type BaseManifest, type ManifestIdentFields, type ManifestMetadata } fr
 import { Trace, TraceEmbedder } from "../tracing"
 import { OriginStackRunner } from "./origin-stack"
 export abstract class ManifestResource<
+    Name extends string = string,
     Props extends object = object
-> extends ResourceEntity<Props> {
+> extends ResourceEntity<Name, Props> {
     readonly _origin: OriginEntity
     readonly meta: Meta
-    constructor(name: string, props: Props) {
+    constructor(name: Name, props: Props) {
         super(name, props)
         this.meta = Meta.make({
             name

@@ -9,92 +9,85 @@ import { doddle } from "doddle"
 import { omit, omitBy } from "lodash"
 import { MakeError } from "../../error"
 import { apps } from "../../kinds/apps"
-import { PodTemplate } from "../pod/pod-template"
+import { Pod_Template, type Pod_Props } from "../pod"
 
-export type Deployment<Ports extends string> = Deployment.Deployment<Ports>
-export namespace Deployment {
-    export interface Deployment_Strategy_RollingUpdate extends CDK.RollingUpdateDeployment {
-        type: "RollingUpdate"
-    }
-    export interface Deployment_Strategy_Recreate {
-        type: "Recreate"
-    }
-    export type Deployment_Strategy =
-        | Deployment_Strategy_RollingUpdate
-        | Deployment_Strategy_Recreate
-    export type Deployment_Props_Original = Omit<
-        CDK.DeploymentSpec,
-        "selector" | "template" | "strategy"
-    >
+export interface Deployment_Strategy_RollingUpdate extends CDK.RollingUpdateDeployment {
+    type: "RollingUpdate"
+}
+export interface Deployment_Strategy_Recreate {
+    type: "Recreate"
+}
+export type Deployment_Strategy = Deployment_Strategy_RollingUpdate | Deployment_Strategy_Recreate
+export type Deployment_Props_Original = Omit<
+    CDK.DeploymentSpec,
+    "selector" | "template" | "strategy"
+>
 
-    export type Deployment_Props<Ports extends string> = Deployment_Props_Original & {
-        $template: PodTemplate.Pod_Props<Ports>
-        $strategy?: Deployment_Strategy
-    }
-    export type Deployment_Ref<Ports extends string> = Refable<apps.v1.Deployment._> & {
-        __PORTS__: Ports
+export type Deployment_Props<Ports extends string> = Deployment_Props_Original & {
+    $template: Pod_Props<Ports>
+    $strategy?: Deployment_Strategy
+}
+export type Deployment_Ref<Ports extends string> = Refable<apps.v1.Deployment._> & {
+    __PORTS__: Ports
+}
+
+export class Deployment<
+    Name extends string,
+    Ports extends string = string
+> extends ManifestResource<Name, Deployment_Props<Ports>> {
+    __PORTS__!: Ports
+    get kind() {
+        return apps.v1.Deployment._
     }
 
-    export class Deployment<Ports extends string = string> extends ManifestResource<
-        Deployment_Props<Ports>
-    > {
-        __PORTS__!: Ports
-        get kind() {
-            return apps.v1.Deployment._
+    #_ = (() => {
+        const origin = OriginStackRunner.current
+        this.props.$template.$POD = OriginStackRunner.bindIter(origin!, this.props.$template.$POD)
+    })()
+
+    protected __kids__(): ResourceEntity[] {
+        return [this._template.pull()]
+    }
+    protected body(): CDK.KubeDeploymentProps {
+        const self = this
+        const template = self._template.pull()["__submanifest__"]()
+        const noKindFields = omit(template, ["kind", "apiVersion"])
+        return {
+            spec: {
+                ...omitBy(self.props, (x, k) => k.startsWith("$")),
+                selector: {
+                    matchLabels: {
+                        app: self.name
+                    }
+                },
+                template: noKindFields,
+                strategy: self._strategy
+            }
         }
-
-        #_ = (() => {
-            const origin = OriginStackRunner.current
-            this.props.$template.$POD = OriginStackRunner.bindIter(
-                origin!,
-                this.props.$template.$POD
-            )
-        })()
-
-        protected __kids__(): ResourceEntity[] {
-            return [this._template.pull()]
+    }
+    private get _strategy() {
+        const strat = this.props.$strategy
+        if (!strat) {
+            return undefined
         }
-        protected body(): CDK.KubeDeploymentProps {
-            const self = this
-            const template = self._template.pull()["__submanifest__"]()
-            const noKindFields = omit(template, ["kind", "apiVersion"])
+        if (strat.type === "Recreate") {
+            return strat
+        }
+        if (strat.type === "RollingUpdate") {
             return {
-                spec: {
-                    ...omitBy(self.props, (x, k) => k.startsWith("$")),
-                    selector: {
-                        matchLabels: {
-                            app: self.name
-                        }
-                    },
-                    template: noKindFields,
-                    strategy: self._strategy
-                }
+                type: "RollingUpdate",
+                rollingUpdate: omit(strat, "type")
             }
         }
-        private get _strategy() {
-            const strat = this.props.$strategy
-            if (!strat) {
-                return undefined
-            }
-            if (strat.type === "Recreate") {
-                return strat
-            }
-            if (strat.type === "RollingUpdate") {
-                return {
-                    type: "RollingUpdate",
-                    rollingUpdate: omit(strat, "type")
-                }
-            }
-            throw new MakeError(`Invalid strategy type: ${strat}`)
-        }
-        private readonly _template = doddle(() => {
-            const podTemplate = new PodTemplate.Pod_Template(this, this.name, this.props.$template)
-            podTemplate.meta.add("%app", this.name)
-            return podTemplate
-        })
+        throw new MakeError(`Invalid strategy type: ${strat}`)
+    }
+    private readonly _template = doddle(() => {
+        const podTemplate = new Pod_Template(this, this.name, this.props.$template)
+        podTemplate.meta.add("%app", this.name)
+        return podTemplate
+    })
 
-        get ports() {
-            return this._template.pull().ports
-        }
+    get ports() {
+        return this._template.pull().ports
     }
 }

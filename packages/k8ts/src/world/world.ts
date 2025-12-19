@@ -19,7 +19,7 @@ export namespace World {
     export type DefineScopedFile<Kinds extends Kind.IdentParent, Scope extends FileOrigin.Scope> = {
         metadata(input: Meta.Input): DefineScopedFile<Kinds, Scope>
         Resources<const Produced extends LiveRefable<Kinded<Kinds>>>(
-            producer: FileExports.Producer<Scope, Produced>
+            producer: FileExports.Producer<Produced>
         ): File<Produced>
     }
     export type Props<Kinds extends Kind.IdentParent[] = Kind.IdentParent[]> =
@@ -54,7 +54,7 @@ export namespace World {
                             return self
                         },
                         Resources<const Produced extends LiveRefable<Kinded<Kinds[number]>>>(
-                            producer: FileExports.Producer<Scope, Produced>
+                            producer: FileExports.Producer<Produced>
                         ): File<Produced> {
                             return builder._File(name, {
                                 ...props,
