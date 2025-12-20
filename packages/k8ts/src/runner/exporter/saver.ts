@@ -1,4 +1,4 @@
-import type { Origin } from "@k8ts/instruments"
+import type { OriginNode } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { mkdir, rm, writeFile } from "fs/promises"
 import { join, resolve } from "path"
@@ -26,7 +26,7 @@ export class ManifestSaver extends Emittery<ManifestSaverEventsTable> {
         await mkdir(this._options.outdir, { recursive: true })
     }
 
-    async save(origin: Origin, manifests: string[]) {
+    async save(origin: OriginNode, manifests: string[]) {
         const content = this._splat(manifests)
         const filename = `${origin.name}`
         const encoded = this._encoder.encode(content)

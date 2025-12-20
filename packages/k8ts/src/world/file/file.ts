@@ -1,42 +1,27 @@
 import {
-    OriginStackRunner,
-    type FutureExports,
-    type LiveRefable,
-    type OriginEntity
+    ChildOriginEntity,
+    type ChildOrigin_Props,
+    type FwRef_Exports,
+    type Kind,
+    type Refable
 } from "@k8ts/instruments"
-import { doddle } from "doddle"
-import { FileExports as Exports_ } from "./exports"
-import { FileOrigin } from "./origin"
-export type File<T extends LiveRefable = LiveRefable> = File.File<T>
-export namespace File {
-    export import Exports = Exports_
-
-    export interface Props<
-        Scope extends FileOrigin.Scope = FileOrigin.Scope,
-        Produced extends LiveRefable = LiveRefable
-    > extends FileOrigin.Props<Scope> {
-        FILE: Exports.Producer<Produced>
-    }
-
-    export type Input = Exports.Core & Iterable<LiveRefable>
-    export type File<T extends LiveRefable> = Exports.Core & FutureExports<T>
-
-    export function make<Scope extends FileOrigin.Scope, Produced extends LiveRefable>(
-        name: string,
-        props: Props<Scope, Produced>,
-        parent: OriginEntity
-    ) {
-        const origFILE = props.FILE
-        const newFILE = OriginStackRunner.bindIter(
-            doddle(() => origin),
-            origFILE
-        )
-        props.FILE = newFILE
-        const origin = new FileOrigin.FileEntity<Scope>(parent, name, props)
-        const exports = Exports.make({
-            origin,
-            FILE: props.FILE
-        })
-        return exports as File<Produced>
+import { build } from "../k8ts-sys-kind"
+export interface File_Props<
+    Kinds extends Kind.IdentParent[] = Kind.IdentParent[],
+    Exports extends Refable<Kinds[number]> = Refable<Kinds[number]>
+> {
+    FILE(): Iterable<Exports>
+}
+export class File_Entity<
+    Kinds extends Kind.IdentParent[] = Kind.IdentParent[],
+    Exports extends Refable<Kinds[number]> = Refable<Kinds[number]>
+> extends ChildOriginEntity<ChildOrigin_Props<Kinds, Exports>> {
+    get kind() {
+        return build.current.File._
     }
 }
+
+export type File<
+    Kinds extends Kind.IdentParent[] = Kind.IdentParent[],
+    T extends Refable<Kinds[number]> = Refable<Kinds[number]>
+> = FwRef_Exports<File_Entity<Kinds, T>, T>

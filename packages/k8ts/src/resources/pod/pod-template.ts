@@ -1,5 +1,5 @@
 import { CDK } from "@k8ts/imports"
-import { Kinded, Producer, SubResource } from "@k8ts/instruments"
+import { Kinded, SubResource } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { seq } from "doddle"
 import { omitBy } from "lodash"
@@ -11,7 +11,9 @@ export type Pod_Props_Original = Omit<CDK.PodSpec, "containers" | "initContainer
 type Container_Ref<Ports extends string> = Kinded<v1.Pod.Container._> & {
     __PORTS__: Ports
 }
-export type Pod_Container_Producer<Ports extends string> = Producer<PodScope, Container_Ref<Ports>>
+export type Pod_Container_Producer<Ports extends string> = (
+    scope: PodScope
+) => Iterable<Container_Ref<Ports>>
 
 export interface Pod_Props<Ports extends string> extends Pod_Props_Original {
     $POD: Pod_Container_Producer<Ports>

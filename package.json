@@ -25,14 +25,13 @@
     "doddle": "portal:/C:/codegr/doddle"
   },
   "dependencies": {
-    "@types/node": "^25.0.2",
-    "immutable": "^5.1.4"
+    "@types/node": "^25.0.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.46.3",
     "@typescript-eslint/parser": "^8.46.3",
     "@typescript/analyze-trace": "^0.10.1",
-    "doddle": "^5.2.0",
+    "doddle": "^7.1.6",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-jest": "^28.11.0",

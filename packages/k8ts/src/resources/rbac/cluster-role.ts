@@ -1,5 +1,5 @@
 import { CDK } from "@k8ts/imports"
-import { Kind, ManifestResource, type Producer } from "@k8ts/instruments"
+import { Kind, ManifestResource } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { rbac } from "../../kinds/rbac"
 export interface ClusterRole_Rule<
@@ -9,10 +9,9 @@ export interface ClusterRole_Rule<
     resources: Resources
     verbs: Verbs[]
 }
-export type ClusterRole_RuleProducer<Rules extends ClusterRole_Rule> = Producer<
-    ClusterRole_Scope,
-    Rules
->
+export type ClusterRole_RuleProducer<Rules extends ClusterRole_Rule> = (
+    scope: ClusterRole_Scope
+) => Iterable<Rules>
 class ClusterRole_Scope {
     Resources<const R extends Kind[]>(...resources: R) {
         return {

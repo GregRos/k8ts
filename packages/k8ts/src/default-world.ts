@@ -1,4 +1,5 @@
-import type { Kind } from "@k8ts/instruments"
+import type { Refable } from "@k8ts/instruments"
+import type { AnyCtor } from "what-are-you"
 import {
     ClusterRole,
     ClusterRoleBinding,
@@ -12,7 +13,7 @@ import {
     Service,
     ServiceAccount
 } from "./resources"
-import { World } from "./world/world"
+import { World } from "./world"
 
 // const defaultKinds = [
 //     v1.Service._,
@@ -57,9 +58,9 @@ const defaultKindPairs = [
     ServiceAccount,
     ClusterRole,
     ClusterRoleBinding
-]
-export function K8ts<MoreKinds extends Kind.Kind>(...extraKinds: MoreKinds[]) {
-    return new World.Builder("K8ts", {
-        kinds: defaultKindPairs
+] as const
+export function K8ts<MoreKinds extends AnyCtor<Refable>>(...extraKinds: MoreKinds[]) {
+    return new World("K8ts", {
+        kinds: [...defaultKindPairs]
     })
 }

@@ -7,12 +7,22 @@ const k8sNamespace = k8tsFile["Namespace/namespace"]
 const k8sPv = k8tsFile["PersistentVolume/dev-sda"]
 const cool = k8tsFile["PersistentVolume/pv-cool"]
 const gwKind = gateway.v1.Gateway._
-export default W.Scope(k8sNamespace)
-    .File("deployment2.yaml")
+W.File("deployment2.yaml", {
+    *FILE() {
+        const claim = new Pvc("claim", {
+            $bind: cool,
+            $accessModes: ["ReadWriteOnce"],
+            $storage: "1Gi->5Gi"
+        })
+        yield claim
+    }
+})
+
+export default W.File("deployment2.yaml")
     .metadata({
         "^a": "xxxx"
     })
-    .Resources(function* FILE(FILE) {
+    .Resources(function* FILE() {
         const claim = new Pvc("claim", {
             $bind: cool,
             $accessModes: ["ReadWriteOnce"],
@@ -50,6 +60,7 @@ export default W.Scope(k8sNamespace)
                 }
             }
         })
+        const a = k8tsFile["PersistentVolume/dev-sda"]
         const devClaim = new Pvc("dev-claim", {
             $accessModes: ["ReadWriteOnce"],
             $bind: k8tsFile["PersistentVolume/dev-sda"],

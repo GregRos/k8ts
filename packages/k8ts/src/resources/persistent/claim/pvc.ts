@@ -27,10 +27,10 @@ export interface Pvc_Props<Mode extends Pv_VolumeMode> extends Pvc_Resources {
     $bind?: Pv_Ref<Mode>
 }
 
-export class Pvc<
-    Mode extends Pv_VolumeMode = "Filesystem",
-    Name extends string = string
-> extends ManifestResource<Name, Pvc_Props<Mode>> {
+export class Pvc<Mode extends Pv_VolumeMode, Name extends string = string> extends ManifestResource<
+    Name,
+    Pvc_Props<Mode>
+> {
     declare name: Name
     get kind() {
         return v1.PersistentVolumeClaim._

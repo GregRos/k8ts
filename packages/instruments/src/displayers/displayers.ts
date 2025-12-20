@@ -1,4 +1,5 @@
 import chalk from "chalk"
+import type { AnyCtor, InstanceTypeOf } from "what-are-you"
 import { Embedder } from "../_embedder"
 
 export type KnownFormats = "local" | "global" | undefined
@@ -31,7 +32,7 @@ class DisplayerDecorator {
             return result
         }
     }
-    implement(ctor: typeof PrivateCtorExemplar, input: Displayers.In) {
+    implement(ctor: AnyCtor<any>, input: Displayers.In) {
         this._system.add(ctor.prototype, input)
         const decorator = this
         Object.defineProperties(ctor.prototype, {
@@ -131,20 +132,6 @@ class DisplayerDecorator {
             }
         }
     }
-}
-
-export type PrivateCtor<T extends object> = typeof PrivateCtorExemplar & {
-    prototype: T
-}
-
-export type PublicCtor<T extends object> = abstract new (...args: any[]) => T
-
-export type AnyCtor<T extends object> = PrivateCtor<T> | PublicCtor<T>
-
-export type InstanceTypeOf<T extends AnyCtor<any>> =
-    T extends PrivateCtor<infer U> ? U : T extends PublicCtor<infer U> ? U : never
-abstract class PrivateCtorExemplar {
-    protected constructor(...args: any[]) {}
 }
 
 export const Displayers = new DisplayerDecorator()

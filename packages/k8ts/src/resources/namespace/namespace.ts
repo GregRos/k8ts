@@ -1,5 +1,6 @@
-import { ManifestResource } from "@k8ts/instruments"
+import { ManifestResource, OriginEntity, OriginRunner } from "@k8ts/instruments"
 import { v1 } from "../../kinds/default"
+import { build } from "../../world/k8ts-sys-kind"
 export interface Namespace_Props {}
 
 export class Namespace<Name extends string = string> extends ManifestResource<
@@ -18,5 +19,16 @@ export class Namespace<Name extends string = string> extends ManifestResource<
         return {
             spec: {}
         }
+    }
+
+    Namespaced(nsResources: () => Iterable<ManifestResource>) {
+        const origin = OriginRunner.get().current
+        const childOrigin = new NamespaceOrigin(this.name, {})
+    }
+}
+
+export class NamespaceOrigin extends OriginEntity {
+    get kind() {
+        return build.current.Namespaced._
     }
 }

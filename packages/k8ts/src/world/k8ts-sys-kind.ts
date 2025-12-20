@@ -23,5 +23,9 @@ export namespace build {
             export const _ = current._.kind("External")
             export type _ = typeof _
         }
+        export namespace Namespaced {
+            export const _ = current._.kind("Namespaced")
+            export type _ = typeof _
+        }
     }
 }

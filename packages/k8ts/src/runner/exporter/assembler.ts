@@ -1,9 +1,8 @@
-import { Origin } from "@k8ts/instruments"
+import { OriginNode, type ChildOriginEntity, type OriginEntity } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { aseq } from "doddle"
 import Emittery from "emittery"
 import { cloneDeep } from "lodash"
-import type { File } from "../../world/file"
 import { ResourceLoader, type ResourceLoaderEventsTable } from "./loader"
 import { Manifester, NodeManifest, type ManifesterEventsTable } from "./manifester"
 import { ManifestSaver, type ManifestSaverEventsTable } from "./saver"
@@ -15,7 +14,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
         super()
     }
 
-    async assemble(inFiles: Iterable<File.Input>) {
+    async assemble(inFiles: Iterable<ChildOriginEntity>) {
         const _emit = async <Name extends keyof AssemblerEventsTable>(
             event: Name,
             payload: AssemblerEventsTable[Name]
@@ -40,7 +39,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
                 await _emit("stage", { stage: "gathering" })
             })
             .each(async file => {
-                await _emit("received-file", { file: file.__node__ })
+                await _emit("received-file", { file: file })
             })
             .after(async () => {
                 await _emit("stage", { stage: "loading" })
@@ -50,7 +49,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
                 const loaded = await loader.load(file)
                 loaded.forEach(r => r.meta!.add(this._options.meta))
                 return {
-                    file: file.__entity__,
+                    file: file,
                     resources: loaded.filter(x => !x.isExternal)
                 }
             })
@@ -131,14 +130,14 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
     }
 }
 export interface FileNodes {
-    file: Origin
+    file: OriginNode
     resources: NodeManifest[]
 }
 export interface Artifact extends NodeManifest {
     yaml: string
 }
 export interface AssembledFile {
-    file: Origin
+    file: OriginNode
     path: string
     filename: string
     bytes: number
@@ -170,7 +169,7 @@ export interface AssemblerEventsTable
         ManifesterEventsTable,
         ResourceLoaderEventsTable,
         ValidatorEventsTable {
-    ["received-file"]: { file: Origin }
+    ["received-file"]: { file: OriginEntity }
     ["stage"]: { stage: AssemblyStage }
 }
 export type AnyAssemblerEvent = {

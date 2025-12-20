@@ -4,12 +4,12 @@ import type { ResourceEntity } from "@k8ts/instruments"
 import { SubResource } from "@k8ts/instruments"
 import { v1 } from "../../../kinds/default"
 import type { ConfigMap } from "../../configmap"
-import { Pvc } from "../../persistent"
+import { Pvc, type Pv_VolumeMode } from "../../persistent"
 import type { Secret } from "../../secret"
 import { Container_Mount_Volume, type Container_Mount_Props } from "../container/mounts"
 
-interface Pod_Volume_Backend_Pvc {
-    $backend: Pvc<"Filesystem">
+interface Pod_Volume_Backend_Pvc<Mode extends Pv_VolumeMode = Pv_VolumeMode> {
+    $backend: Pvc<Mode>
     readOnly?: boolean
 }
 
@@ -19,8 +19,8 @@ interface Pod_Volume_Backend_ConfigMap {
 interface Pod_Volume_Backend_Secret {
     $backend: Secret
 }
-export type Pod_Volume_Backend =
-    | Pod_Volume_Backend_Pvc
+export type Pod_Volume_Backend<Mode extends Pv_VolumeMode = Pv_VolumeMode> =
+    | Pod_Volume_Backend_Pvc<Mode>
     | Pod_Volume_Backend_ConfigMap
     | Pod_Volume_Backend_Secret
 
@@ -31,10 +31,18 @@ export abstract class Pod_Volume<
         return v1.Pod.Volume._
     }
 
-    static make(parent: ResourceEntity, name: string, backend: Pod_Volume_Backend): Pod_Volume {
+    static make<Mode extends Pv_VolumeMode>(
+        parent: ResourceEntity,
+        name: string,
+        backend: Pod_Volume_Backend<Mode>
+    ): Pod_Volume<Pod_Volume_Backend<Mode>> {
         switch (backend.$backend.kind.name) {
             case "PersistentVolumeClaim":
-                return new Pod_Volume_Pvc(parent, name, backend as Pod_Volume_Backend_Pvc)
+                return new Pod_Volume_Pvc<Mode>(
+                    parent,
+                    name,
+                    backend as Pod_Volume_Backend_Pvc<Mode>
+                )
             case "ConfigMap":
                 return new Pod_Volume_ConfigMap(
                     parent,
@@ -61,7 +69,7 @@ export abstract class Pod_Volume<
     protected abstract __submanifest__(): CDK.Volume
 }
 
-class Pod_Volume_Pvc extends Pod_Volume<Pod_Volume_Backend_Pvc> {
+class Pod_Volume_Pvc<Mode extends Pv_VolumeMode> extends Pod_Volume<Pod_Volume_Backend_Pvc<Mode>> {
     protected __submanifest__(): CDK.Volume {
         return {
             name: this.name,

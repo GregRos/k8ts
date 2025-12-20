@@ -1,8 +1,7 @@
-import { ForwardRef, ResourceNode } from "@k8ts/instruments"
+import { FwReference, ResourceNode, type ChildOriginEntity } from "@k8ts/instruments"
 import { seq } from "doddle"
 import Emittery from "emittery"
 import { MakeError } from "../../error"
-import type { File } from "../../world/file"
 import { k8ts_namespace } from "../../world/world"
 export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
     constructor(private readonly _options: ResourceLoaderOptions) {
@@ -39,9 +38,9 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
         }
     }
 
-    async load(input: File.Input) {
+    async load(input: ChildOriginEntity) {
         // TODO: Handle ORIGINS that are referenced but not passed to the runner
-        const parentOrigin = input.__node__
+        const parentOrigin = input.node
 
         const addResource = async (res: ResourceNode) => {
             if (resources.some(r => r.equals(res))) {
@@ -68,8 +67,8 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
         let resources = [] as ResourceNode[]
         // We execute the main FILE iterable to load all the resources attached to the origin
         seq(input).toArray().pull()
-        for (let res of input.__node__.resources) {
-            if (ForwardRef.is(res)) {
+        for (let res of input.node.resources) {
+            if (FwReference.is(res)) {
                 throw new MakeError(`Resource ${res} is a forward reference`)
             }
             await addResource(res)

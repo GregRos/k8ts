@@ -27,7 +27,7 @@ export class External<
         return this.key.kind
     }
 
-    protected __origin__() {
+    protected __origin__(): OriginEntity {
         return this._origin
     }
 

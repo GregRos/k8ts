@@ -1,6 +1,6 @@
 import {
     Displayers,
-    Origin,
+    OriginNode,
     pretty,
     Relation,
     ResourceNode,
@@ -120,7 +120,7 @@ export class Summarizer {
         return outputs.join("\n")
     }
 
-    files(obj: { origin: Origin; resources: ResourceNode[] }[]) {
+    files(obj: { origin: OriginNode; resources: ResourceNode[] }[]) {
         let pairs = obj.flatMap(({ origin, resources }) => {
             return [
                 [this._token(pretty`\n${origin}`), this._resources(resources)] as [string, object]

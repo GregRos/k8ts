@@ -1,9 +1,8 @@
-import { GitTrace, Trace } from "@k8ts/instruments"
+import { GitTrace, Trace, type ChildOriginEntity } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
 import Emittery from "emittery"
 import StackTracey from "stacktracey"
-import { File } from "../world/file"
 import { k8ts_namespace } from "../world/world"
 import {
     Assembler,
@@ -27,7 +26,7 @@ export class Runner extends Emittery<AssemblerEventsTable> {
         super()
     }
 
-    async run(input: Iterable<File.Input>) {
+    async run(input: Iterable<ChildOriginEntity>) {
         const gitInfo = await GitTrace.make({
             cwd: this._options.cwd
         })
