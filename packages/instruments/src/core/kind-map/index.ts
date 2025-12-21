@@ -13,19 +13,21 @@ interface NodeEntry {
 }
 export type KindMapInput<Ks extends KindedCtor> = Ks[]
 type LookupKey = string | RefKey.RefKey | AnyCtor<any> | Kind.IdentParent
-export class KindMap<Kinds extends Kind.IdentParent[] = Kind.IdentParent[]> {
-    constructor(
-        private _ownKinds: KindMapInput<Kinds>,
-        private _parent: KindMap | undefined = undefined
-    ) {}
+export class KindMap<Kinds extends KindedCtor = KindedCtor> {
+    __KINDS__!: Kinds["prototype"]["kind"]
+    constructor(private _ownKinds: KindMapInput<Kinds>) {}
 
-    child<Ks extends Kind.IdentParent[] = Kind.IdentParent[]>(
+    [Symbol.iterator]() {
+        return this._ownKinds[Symbol.iterator]()
+    }
+    child<Ks extends KindedCtor = KindedCtor>(
         kinds: KindMapInput<Ks> | KindMap<Ks>
     ): KindMap<Kinds | Ks> {
         const ownKinds = kinds instanceof KindMap ? kinds._ownKinds : kinds
-        return new KindMap<Kinds | Ks>(ownKinds, this)
+        return new KindMap<Kinds | Ks>([...this._ownKinds, ...ownKinds])
     }
 
+    @doddlify
     private get _entriesSeq(): Seq<NodeEntry> {
         return seq(this._ownKinds).map(klass => {
             const kind = klass.prototype.kind
@@ -59,7 +61,7 @@ export class KindMap<Kinds extends Kind.IdentParent[] = Kind.IdentParent[]> {
         return new RefKey.RefKey(trueKind, name) as any
     }
 
-    parse(ref: string | RefKey<Kinds[number]>): RefKey<Kinds[number]> {
+    parse(ref: string | RefKey<this["__KINDS__"]>): RefKey<this["__KINDS__"]> {
         const result = this.tryParse(ref)
         if (!result) {
             throw new InstrumentsError(`Could not parse reference key: ${ref}`)
@@ -67,7 +69,7 @@ export class KindMap<Kinds extends Kind.IdentParent[] = Kind.IdentParent[]> {
         return result as any
     }
 
-    tryParse(ref: unknown): RefKey.RefKey<Kinds[number]> | undefined {
+    tryParse(ref: unknown): RefKey.RefKey<this["__KINDS__"]> | undefined {
         if (typeof ref !== "string" && typeof ref !== "object") {
             return undefined
         }
@@ -137,32 +139,17 @@ export class KindMap<Kinds extends Kind.IdentParent[] = Kind.IdentParent[]> {
     }
     private _tryGetEntry(key: LookupKey): NodeEntry | undefined {
         const converted = this._convert(key)
-        return this._entriesMap.get(converted) ?? this._parent?._tryGetEntry(key) ?? undefined
+        return this._entriesMap.get(converted)
     }
 
-    tryGetKind<P extends Kind.IdentParent>(
-        refKey: RefKey.RefKey<P>
-    ): Kind.Identifier<P["name"]> | undefined
-    tryGetKind<F extends Kind.IdentParent>(klass: F): F
-    tryGetKind(kind: AnyCtor<any>): Kinds[number] | undefined
-    tryGetKind<Name extends string>(kind: Name): (Kinds[number] & { name: Name }) | undefined
-    tryGetKind(key: LookupKey): Kinds[number] | undefined
     tryGetKind(kindOrIdent: LookupKey): any {
         return this._tryGetEntry(kindOrIdent)?.ident as Kinds | undefined
     }
 
-    getKind<K extends Kind.IdentParent>(kind: K): K
-    getKind<Name extends string>(kind: Name): Kinds[number] & { name: Name }
-    getKind(key: AnyCtor<any>): Kinds[number]
-    getKind(kindOrClass: LookupKey): Kinds[number]
-    getKind(kindOrClass: LookupKey): Kinds[number] {
-        return this._getEntry(kindOrClass).ident as Kinds[number]
+    getKind(kindOrClass: LookupKey): this["__KINDS__"] {
+        return this._getEntry(kindOrClass).ident
     }
 
-    tryGetClass(refKey: RefKey.RefKey): AnyCtor<any> | undefined
-    tryGetClass<F extends AnyCtor<any>>(klass: F): F
-    tryGetClass(kind: string): AnyCtor<any> | undefined
-    tryGetClass(ident: Kind.IdentParent): AnyCtor<any> | undefined
     tryGetClass(kindOrIdent: LookupKey): AnyCtor<any> | undefined {
         return this._tryGetEntry(kindOrIdent)?.class
     }

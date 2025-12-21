@@ -1,5 +1,5 @@
 import { seq } from "doddle"
-import { Ip4 } from "../../../_ip"
+import { Ip4 } from "../../ip"
 import { PortSet } from "../set"
 import type {
     InputPortSetEntry,

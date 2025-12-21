@@ -36,7 +36,7 @@ export class Deployment<
     }
 
     #_ = (() => {
-        const origin = OriginRunner.get().current
+        const origin = OriginRunner.current
         if (!origin) {
             throw new MakeError(
                 `Deployment ${this.name} must be created within an OriginEntity context`

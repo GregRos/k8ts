@@ -1,39 +1,45 @@
 import { seq } from "doddle"
-import type { LiveRefable } from "."
+import type { Refable } from "."
 import { FwReference } from "."
 import { ProxyOperationError } from "../../error"
-import type { ResourceEntity } from "../entities"
-import { type OriginEntity } from "../entities/origin/origin-entity"
+import { ChildOriginEntity } from "../entities"
 
-export type FwRef_Exports_ByKey<Exports extends LiveRefable = LiveRefable> = {
+export type FwRef_Exports_ByKey<Exports extends Refable = Refable> = {
     [E in Exports as `${E["kind"]["name"]}/${E["name"]}`]: FwReference<E>
 }
 
-export type FwRef_Exports<Actual extends OriginEntity, Exported extends LiveRefable> = Actual &
+export type FwRef_Exports<Exported extends Refable = Refable> = FxRef_Exports_Proxied &
     FwRef_Exports_ByKey<Exported>
 
-export function FwRef_Exports<Actual extends OriginEntity, Exported extends LiveRefable>(
-    props: FwRef_Exports_Props<Actual, Exported>
-): FwRef_Exports<Actual, Exported> {
-    const handler = new FwRef_Exports_Handler(props)
-    return new Proxy(props.entity, handler) as any
-}
-export interface FwRef_Exports_Props<
-    Actual extends OriginEntity = OriginEntity,
-    Exports extends LiveRefable = LiveRefable
-> {
-    readonly entity: Actual
-    readonly exports: Iterable<Exports>
+export type FwRef_Exports_Brand = FxRef_Exports_Proxied
+
+export function FwRef_Exports<Exported extends Refable>(
+    entity: ChildOriginEntity
+): FwRef_Exports<Exported> {
+    const proxied = new FxRef_Exports_Proxied(entity)
+    const handler = new FwRef_Exports_Handler(proxied)
+    return new Proxy(proxied, handler) as any
 }
 
-class FwRef_Exports_Handler<Entity extends OriginEntity> implements ProxyHandler<Entity> {
-    constructor(private readonly _props: FwRef_Exports_Props) {}
+export class FxRef_Exports_Proxied {
+    #entity: ChildOriginEntity
+    constructor(entity: ChildOriginEntity) {
+        this.#entity = entity
+    }
+
+    __entity__(act?: (entity: ChildOriginEntity) => any): ChildOriginEntity {
+        return this.#entity as any
+    }
+}
+
+class FwRef_Exports_Handler<Entity extends ChildOriginEntity> implements ProxyHandler<Entity> {
+    constructor(private readonly _subject: FxRef_Exports_Proxied) {}
 
     get entity() {
-        return this._props.entity
+        return this._subject["__entity__"]()
     }
     get node() {
-        return this._props.entity.node
+        return this.entity.node
     }
     get resourceKinds() {
         return this.node.resourceKinds
@@ -41,7 +47,7 @@ class FwRef_Exports_Handler<Entity extends OriginEntity> implements ProxyHandler
 
     #createImmutableError(action: string) {
         return new ProxyOperationError(
-            `Tried to ${action} an the exports constructs of ${this._props}, but it is immutable.`
+            `Tried to ${action} an the exports constructs of ${this.entity}, but it is immutable.`
         )
     }
 
@@ -54,11 +60,12 @@ class FwRef_Exports_Handler<Entity extends OriginEntity> implements ProxyHandler
     }
 
     getPrototypeOf(_: Entity): object | null {
-        return Reflect.getPrototypeOf(this.entity)
+        const r = Reflect.getPrototypeOf(this.entity)
+        return r
     }
 
     get exported() {
-        return seq(this._props.exports)
+        return seq(this.entity.resources)
     }
 
     #isValidReferant(prop: PropertyKey) {
@@ -67,10 +74,13 @@ class FwRef_Exports_Handler<Entity extends OriginEntity> implements ProxyHandler
 
     get(target: any, property: string | symbol): any {
         const key = property as string
-        if (Reflect.has(this.entity, key)) {
-            const x = Reflect.get(this.entity, property)
+        if (key === "constructor") {
+            return this._subject.__entity__().constructor
+        }
+        if (Reflect.has(this._subject, key)) {
+            const x = Reflect.get(this._subject, property)
             if (typeof x === "function") {
-                return x.bind(this.entity)
+                return x.bind(this._subject)
             }
             return x
         }
@@ -84,15 +94,14 @@ class FwRef_Exports_Handler<Entity extends OriginEntity> implements ProxyHandler
         return FwReference({
             class: clazz,
             key: refKey,
-            origin: this._props.entity,
-            namespace: this._props.entity.meta.tryGet("namespace"),
+            origin: this.entity,
+            namespace: this.entity.meta.tryGet("namespace"),
             resolver: this.exported
-                .as<ResourceEntity>()
                 .first(exp => exp.node.key.equals(refKey))
                 .map(x => {
                     if (x == null) {
                         throw new ProxyOperationError(
-                            `Failed to resolve forward reference to ${refKey} in ${this._props.entity}.`
+                            `Failed to resolve forward reference to ${refKey} in ${this.entity}.`
                         )
                     }
                     return x
@@ -120,7 +129,7 @@ class FwRef_Exports_Handler<Entity extends OriginEntity> implements ProxyHandler
 
     ownKeys(target: Entity): ArrayLike<string | symbol> {
         throw new ProxyOperationError(
-            `Cannot list all keys of a dynamic exports construct for ${this._props.entity}.`
+            `Cannot list all keys of a dynamic exports construct for ${this.entity}.`
         )
     }
 

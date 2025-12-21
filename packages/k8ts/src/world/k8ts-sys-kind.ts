@@ -14,6 +14,10 @@ export namespace build {
         export namespace File {
             export const _ = current._.kind("File")
             export type _ = typeof _
+            export namespace Section {
+                export const _ = File._.subkind("Section")
+                export type _ = typeof _
+            }
         }
         export namespace World {
             export const _ = current._.kind("World")
@@ -25,6 +29,10 @@ export namespace build {
         }
         export namespace Namespaced {
             export const _ = current._.kind("Namespaced")
+            export type _ = typeof _
+        }
+        export namespace Modifier {
+            export const _ = current._.kind("Modifier")
             export type _ = typeof _
         }
     }

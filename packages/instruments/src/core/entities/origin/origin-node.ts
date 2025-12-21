@@ -3,9 +3,8 @@ import chalk from "chalk"
 import { seq, Seq } from "doddle"
 import { displayers } from "../../../displayers"
 import { type KindMapInput } from "../../kind-map"
-import type { KindedCtor } from "../../reference"
+import type { KindedCtor, Refable } from "../../reference"
 import { BaseNode } from "../base-node"
-import { ResourceNode } from "../resource/resource-node"
 import type { OriginEntity } from "./origin-entity"
 @displayers({
     simple: s => `[${s.shortFqn}]`,
@@ -20,17 +19,19 @@ import type { OriginEntity } from "./origin-entity"
         return chalk.underline(`${pref}${kindName}:${resourceName}`)
     }
 })
-export class OriginNode
-    extends BaseNode<OriginNode, OriginEntity>
-    implements Iterable<ResourceNode>
-{
+export class OriginNode extends BaseNode<OriginNode, OriginEntity> {
     get kids() {
         return seq(this._entity["__kids__"]()).map(x => x.node)
     }
     get meta() {
         return this._entity.meta
     }
-
+    get inheritedMeta(): Meta {
+        const self = this
+        return [this, ...this.ancestors]
+            .map(x => x.meta.clone())
+            .reduce((acc, meta) => acc.add(meta), Meta.make())
+    }
     constructor(entity: OriginEntity) {
         super(entity)
     }
@@ -42,10 +43,11 @@ export class OriginNode
     get relations() {
         return seq([])
     }
-    [Symbol.iterator]() {
-        return this.resources[Symbol.iterator]()
+
+    get resources() {
+        return this._entity.resources
     }
-    readonly attachedTree: Seq<ResourceNode> = seq(() => {
+    readonly attachedTree: Seq<Refable> = seq(() => {
         const self = this
         const desc = self.descendants
             .concatTo([this])
@@ -58,13 +60,9 @@ export class OriginNode
             })
         return desc
     }).cache()
-
-    get resources() {
-        return this._entity._resources.map(r => r.node)
-    }
 }
 
-export interface Origin_Props<KindedCtors extends KindedCtor> {
+export interface Origin_Props<KindedCtors extends KindedCtor = KindedCtor> {
     meta?: Meta.Input
     kinds?: KindMapInput<KindedCtors>
 }

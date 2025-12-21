@@ -1,6 +1,7 @@
-import { GitTrace, Trace, type ChildOriginEntity } from "@k8ts/instruments"
+import { GitTrace, Trace, type FwRef_Exports_Brand } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
+import { seq } from "doddle"
 import Emittery from "emittery"
 import StackTracey from "stacktracey"
 import { k8ts_namespace } from "../world/world"
@@ -26,7 +27,11 @@ export class Runner extends Emittery<AssemblerEventsTable> {
         super()
     }
 
-    async run(input: Iterable<ChildOriginEntity>) {
+    async run(input: Iterable<FwRef_Exports_Brand>) {
+        const results = seq(input)
+            .map(e => e.__entity__())
+            .toArray()
+            .pull()
         const gitInfo = await GitTrace.make({
             cwd: this._options.cwd
         })
@@ -53,7 +58,7 @@ export class Runner extends Emittery<AssemblerEventsTable> {
             printOptions: this._options.printOptions
         })
         const visualizer = progressShower.visualize(assembler)
-        const result = await assembler.assemble(input)
+        const result = await assembler.assemble(results)
 
         const viz = summarizer.result(result)
 

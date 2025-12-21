@@ -1,4 +1,6 @@
-import { FwRef_Exports, type LiveRefable, type Refable } from "../../reference"
+import { doddlify, seq } from "doddle"
+import { memoize } from "lodash"
+import { FwReference, type Refable } from "../../reference"
 import { OriginEntity } from "./origin-entity"
 import type { Origin_Props } from "./origin-node"
 
@@ -15,22 +17,40 @@ export abstract class ChildOriginEntity<
         props: Props
     ) {
         super(name, props)
-        this._parent["__attach_kid__"](this)
+        const origExports = this._props.exports
+        this._props.exports = memoize(() => seq(origExports).cache())
+        this._parent.__attach_kid__(this)
     }
 
     protected __parent__() {
         return this._parent
     }
 
-    *[Symbol.iterator](): Iterator<LiveRefable> {
-        const boundExports = this.__bind__(this.props.exports)
-        yield* boundExports()
-    }
+    @doddlify
+    get resources(): Iterable<Refable> {
+        const self = this
+        const boundExports = self.__bind__(self._props.exports)
+        const allEmitted = new Set<Refable>()
+        const normalResources = seq(() => super.resources).cache()
+        return seq(function* () {
+            for (const em of boundExports()) {
+                if (FwReference.is(em)) {
+                    throw new Error(
+                        `FwReference ${em} cannot be directly exported from ChildOrigin ${self.name}`
+                    )
+                }
+                if (em instanceof OriginEntity) {
+                    continue
+                }
 
-    protected __exports__<Exports extends Refable>(): FwRef_Exports<this, Exports> {
-        return FwRef_Exports({
-            entity: this,
-            exports: this
-        })
+                allEmitted.add(em)
+                yield em
+            }
+            for (const resource of normalResources) {
+                if (!allEmitted.has(resource)) {
+                    yield resource
+                }
+            }
+        }).cache()
     }
 }

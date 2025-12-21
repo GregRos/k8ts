@@ -61,6 +61,9 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
             "^constructed-at": loc,
             "^produced-by": `k8ts@${version}`
         })
+        const resourceOriginMetas = resource.origin.inheritedMeta
+
+        resource.meta!.add(resourceOriginMetas)
     }
 
     async generate(res: ResourceNode): Promise<NodeManifest> {

@@ -1,7 +1,7 @@
 import chalk from "chalk"
+import util from "util"
 import type { AnyCtor, InstanceTypeOf } from "what-are-you"
 import { Embedder } from "../_embedder"
-
 export type KnownFormats = "local" | "global" | undefined
 export namespace Displayers {
     export interface Out {
@@ -37,14 +37,35 @@ class DisplayerDecorator {
         const decorator = this
         Object.defineProperties(ctor.prototype, {
             [Symbol.toStringTag]: {
+                enumerable: false,
+                configurable: true,
                 get() {
                     const a = decorator.get(this)
-                    return a.default()
+                    return a.default().toString()
                 }
             },
             toString: {
+                enumerable: false,
+                configurable: true,
+                writable: true,
                 value() {
-                    return this[Symbol.toStringTag]
+                    return this[Symbol.toStringTag].toString()
+                }
+            },
+            [util.inspect.custom]: {
+                enumerable: false,
+                configurable: true,
+                writable: true,
+                value() {
+                    return this[Symbol.toStringTag].toString()
+                }
+            },
+            inspect: {
+                enumerable: false,
+                configurable: true,
+                writable: true,
+                value() {
+                    return this[Symbol.toStringTag].toString()
                 }
             }
         })

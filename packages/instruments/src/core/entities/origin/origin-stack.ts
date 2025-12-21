@@ -1,27 +1,7 @@
 import { AsyncLocalStorage } from "async_hooks"
-import { doddle, type Doddle, type MaybeDoddle } from "doddle"
+import { doddle, pull, type Doddle, type MaybeDoddle } from "doddle"
 import { isIterable } from "what-are-you"
 import type { OriginEntity } from "./origin-entity"
-
-export class OriginStack {
-    constructor(private readonly _origins: OriginEntity[]) {}
-
-    push(origin: OriginEntity): OriginStack {
-        return new OriginStack([...this._origins, origin])
-    }
-
-    pop(): OriginStack {
-        return new OriginStack(this._origins.slice(0, -1))
-    }
-
-    get current(): OriginEntity | undefined {
-        return this._origins.at(-1)
-    }
-
-    get isEmpty() {
-        return this._origins.length === 0
-    }
-}
 
 export interface OriginStackBinder {
     run<T>(callback: () => T): T
@@ -29,19 +9,23 @@ export interface OriginStackBinder {
 }
 
 export class OriginStackRunner {
-    blah = this
-
-    private readonly _store: AsyncLocalStorage<OriginStack>
+    private readonly _store: AsyncLocalStorage<OriginEntity | undefined>
     constructor() {
-        this._store = new AsyncLocalStorage<OriginStack>()
+        this._store = new AsyncLocalStorage<OriginEntity | undefined>()
     }
 
     get current(): OriginEntity | undefined {
-        return this.get().current
+        return this._store.getStore()
     }
 
-    get(): OriginStack {
-        return this._store.getStore() ?? new OriginStack([])
+    disposableOriginModifier(origin: OriginEntity): Disposable {
+        const curOrigin = this._store.getStore()
+        this._store.enterWith(origin)
+        return {
+            [Symbol.dispose]: () => {
+                this._store.enterWith(curOrigin)
+            }
+        }
     }
 
     binder(origin: MaybeDoddle<OriginEntity>): OriginStackBinder {
@@ -59,7 +43,7 @@ export class OriginStackRunner {
     }
 
     private _run<T>(origin: OriginEntity, callback: () => T): T {
-        return this._store.run(this.get().push(origin), callback)
+        return this._store.run(origin, callback)
     }
 
     private _bindIterator(
@@ -107,7 +91,7 @@ export class OriginStackRunner {
     private _bind<F extends (...args: any[]) => any>(origin: Doddle<OriginEntity>, fn: F): F {
         const self = this
         return function boundRunFunction(this: any, ...args: any[]) {
-            const result = self._run(origin.pull(), () => fn.apply(this, args))
+            const result = self._run(pull(origin), () => fn.apply(this, args))
             if (isIterable(result)) {
                 return self._bindIterable(origin, result)
             }

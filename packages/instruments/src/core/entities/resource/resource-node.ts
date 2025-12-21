@@ -1,4 +1,4 @@
-import { MutableMeta } from "@k8ts/metadata"
+import { Meta } from "@k8ts/metadata"
 import { getDeepPropertyDescriptor } from "@k8ts/metadata/util"
 import chalk from "chalk"
 import { seq } from "doddle"
@@ -52,7 +52,7 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
     }
 
     get meta() {
-        return "meta" in this._entity ? (this._entity.meta as MutableMeta) : undefined
+        return "meta" in this._entity ? (this._entity.meta as Meta) : undefined
     }
 
     get isExternal() {

@@ -1,4 +1,4 @@
-import type { Ip4, Ip4_String } from "../../_ip"
+import type { Ip4, Ip4_String } from "../ip"
 
 export interface PortSpecObj {
     port: Port

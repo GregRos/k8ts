@@ -16,16 +16,15 @@ export abstract class ManifestResource<
         this.meta = Meta.make({
             name
         })
-        const origins = OriginRunner.get()
-        const lastOrigin = origins.current
+        const lastOrigin = OriginRunner.current
         if (!lastOrigin) {
             throw new Error(
                 `ManifestResource ${this.name} must be created within an OriginEntity context`
             )
         }
         this._origin = lastOrigin
-        this._origin["__attach_resource__"](this)
-        TraceEmbedder.add(this, new Trace(new StackTracey().slice(3)))
+        this._origin.__attach_resource__(this)
+        TraceEmbedder.add(this, new Trace(new StackTracey().slice(2)))
     }
 
     protected __origin__() {
@@ -54,8 +53,8 @@ export abstract class ManifestResource<
     protected async __manifest__(): Promise<BaseManifest> {
         const a = {
             ...this.__idents__(),
-            ...(await this.body()),
-            metadata: this.__metadata__()
+            metadata: this.__metadata__(),
+            ...(await this.body())
         }
         return a
     }

@@ -3,20 +3,21 @@ import type { AnyCtor } from "what-are-you"
 import { ProxyOperationError } from "../../error"
 import { ManifestResource } from "../entities"
 import { RefKey } from "../ref-key/ref-key"
+import type { Refable } from "./refable"
 
-export type FwReference<T extends object> = FwReference_Proxied<T> & T
-export function FwReference<Referenced extends object>(
+export type FwReference<T extends Refable = Refable> = FwReference_Proxied<T> & T
+export function FwReference<Referenced extends Refable>(
     props: FwReference_Props<Referenced>
 ): FwReference<Referenced> {
     const core = new FwReference_Proxied(props)
     return new Proxy(core, new FwRef_Handler(core)) as FwReference<Referenced>
 }
 export namespace FwReference {
-    export function is(obj: any): obj is FwReference<object> {
+    export function is(obj: any): obj is FwReference {
         return FwReference_Proxied.is(obj)
     }
 }
-export interface FwReference_Props<Referenced extends object> {
+export interface FwReference_Props<Referenced extends Refable> {
     readonly class?: AnyCtor<Referenced>
     readonly key: RefKey
     readonly namespace?: string
@@ -24,39 +25,40 @@ export interface FwReference_Props<Referenced extends object> {
     readonly resolver: Doddle<Referenced>
 }
 
-class FwReference_Proxied<To extends object> {
-    constructor(private readonly _props: FwReference_Props<To>) {}
+class FwReference_Proxied<To extends Refable> {
+    readonly #props: FwReference_Props<To>
+    constructor(props: FwReference_Props<To>) {
+        this.#props = props
+    }
 
-    static is(obj: any): obj is FwReference<object> {
+    static is(obj: any): obj is FwReference {
         return obj && typeof obj === "object" && "__reference_props__" in obj
     }
-    equals(other: any): boolean {
-        const resolved = this._props.resolver.pull() as any
-        if (FwReference_Proxied.is(other)) {
-            return other.equals(resolved)
-        }
-        if ("equals" in resolved) {
-            return resolved.equals(other)
-        }
-        return false
+
+    protected __pull__() {
+        return this.#props.resolver.pull()
     }
+
     protected __reference_props__() {
-        return this._props
+        return this.#props
     }
 }
 
-class FwRef_Handler<T extends object> implements ProxyHandler<T> {
+class FwRef_Handler<T extends Refable> implements ProxyHandler<T> {
     get _props() {
-        return this._core["__reference_props__"]()
+        return this._subject["__reference_props__"]()
     }
-    constructor(private readonly _core: FwReference_Proxied<T>) {}
+    constructor(private readonly _subject: FwReference_Proxied<T>) {}
 
     get(target: T, prop: PropertyKey) {
-        const { _props, _core } = this
-        if (Reflect.has(_core, prop)) {
-            return Reflect.get(_core, prop)
+        const { _props, _subject } = this
+        if (prop === "constructor") {
+            return this._props.class
         }
-        const resource = _props.resolver.pull() as any
+        if (Reflect.has(_subject, prop)) {
+            return Reflect.get(_subject, prop)
+        }
+        const resource = _subject["__pull__"]() as any
         const result = Reflect.get(resource, prop)
         if (typeof result === "function") {
             return result.bind(resource)
@@ -67,16 +69,16 @@ class FwRef_Handler<T extends object> implements ProxyHandler<T> {
         return this._props.class?.prototype ?? ManifestResource.prototype
     }
     has(target: T, prop: PropertyKey) {
-        const { _props, _core } = this
-        if (Reflect.has(_core, prop)) {
+        const { _props, _subject } = this
+        if (Reflect.has(_subject, prop)) {
             return true
         }
         const resource = _props.resolver.pull() as any
         return Reflect.has(resource, prop)
     }
     getOwnPropertyDescriptor(_: T, p: string | symbol): PropertyDescriptor | undefined {
-        const { _core, _props } = this
-        const desc = Object.getOwnPropertyDescriptor(_core, p)
+        const { _subject, _props } = this
+        const desc = Object.getOwnPropertyDescriptor(_subject, p)
         if (desc) {
             desc.configurable = false
             return desc
@@ -86,7 +88,7 @@ class FwRef_Handler<T extends object> implements ProxyHandler<T> {
         return resourceDesc
     }
     get referant() {
-        return this._core["__reference_props__"]().key.string
+        return this._subject["__reference_props__"]().key.string
     }
     #createImmutableError(action: string) {
         return new ProxyOperationError(
@@ -111,7 +113,7 @@ class FwRef_Handler<T extends object> implements ProxyHandler<T> {
     }
     ownKeys(): ArrayLike<string | symbol> {
         const pulled = this._props.resolver.pull() as any
-        return [...Reflect.ownKeys(this._core), ...Reflect.ownKeys(pulled)]
+        return [...Reflect.ownKeys(this._subject), ...Reflect.ownKeys(pulled)]
     }
     setPrototypeOf(): boolean {
         throw this.#createImmutableError(`set the prototype of`)
