@@ -1,5 +1,5 @@
 import { CDK } from "@k8ts/imports"
-import { Kind, ManifestResource } from "@k8ts/instruments"
+import { Kind, Resource_Top } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { rbac } from "../../kinds/rbac"
 export interface ClusterRole_Rule<
@@ -28,7 +28,7 @@ export interface ClusterRole_Props<Rules extends ClusterRole_Rule = ClusterRole_
     rules: ClusterRole_RuleProducer<Rules>
 }
 
-export class ClusterRole<Name extends string = string> extends ManifestResource<
+export class ClusterRole<Name extends string = string> extends Resource_Top<
     Name,
     ClusterRole_Props
 > {

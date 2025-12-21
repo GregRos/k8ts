@@ -1,9 +1,9 @@
 import { CDK } from "@k8ts/imports"
-import { Cron, CronStanza, ManifestResource, type ResourceEntity } from "@k8ts/instruments"
-import { Timezone } from "../../../../instruments/dist/expressions/timezone"
+import { Cron, CronStanza, Resource_Top, type Resource_Entity } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { doddle } from "doddle"
 import { omitBy } from "lodash"
+import { Timezone } from "../../../../instruments/dist/expressions/timezone"
 import { batch } from "../../kinds/batch"
 import { Pod_Template, type Pod_Props } from "../pod"
 export interface CronJob_Props<CronSpec extends Cron.Record>
@@ -19,7 +19,7 @@ export interface CronJob_Props<CronSpec extends Cron.Record>
 export class CronJob<
     Name extends string = string,
     Cron extends Cron.Record = Cron.Record
-> extends ManifestResource<Name, CronJob_Props<Cron>> {
+> extends Resource_Top<Name, CronJob_Props<Cron>> {
     get kind() {
         return batch.v1.CronJob._
     }
@@ -27,7 +27,7 @@ export class CronJob<
         return new Pod_Template<never>(this, this.name, this.props.$template)
     })
 
-    protected __kids__(): ResourceEntity[] {
+    protected __kids__(): Resource_Entity[] {
         return [this._template.pull()]
     }
 

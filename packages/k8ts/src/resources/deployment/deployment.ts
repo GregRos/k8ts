@@ -1,9 +1,9 @@
 import { CDK } from "@k8ts/imports"
 import {
-    ManifestResource,
     OriginContextTracker,
     Refable,
-    type ResourceEntity
+    Resource_Top,
+    type Resource_Entity
 } from "@k8ts/instruments"
 import { doddle } from "doddle"
 import { omit, omitBy } from "lodash"
@@ -31,10 +31,10 @@ export type Deployment_Ref<Ports extends string> = Refable<apps.v1.Deployment._>
     __PORTS__: Ports
 }
 
-export class Deployment<
-    Name extends string,
-    Ports extends string = string
-> extends ManifestResource<Name, Deployment_Props<Ports>> {
+export class Deployment<Name extends string, Ports extends string = string> extends Resource_Top<
+    Name,
+    Deployment_Props<Ports>
+> {
     __PORTS__!: Ports
     get kind() {
         return apps.v1.Deployment._
@@ -50,7 +50,7 @@ export class Deployment<
         this.props.$template.$POD = origin["__binder__"]().bind(this.props.$template.$POD)
     })()
 
-    protected __kids__(): ResourceEntity[] {
+    protected __kids__(): Resource_Entity[] {
         return [this._template.pull()]
     }
     protected body(): CDK.KubeDeploymentProps {

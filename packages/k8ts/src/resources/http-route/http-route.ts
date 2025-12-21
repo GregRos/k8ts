@@ -1,5 +1,5 @@
 import { CDK } from "@k8ts/imports"
-import { ManifestResource } from "@k8ts/instruments"
+import { Resource_Top } from "@k8ts/instruments"
 import { gateway } from "../../kinds/gateway"
 import type { External } from "../../world/external"
 import type { Port } from "../service/service-port"
@@ -14,7 +14,7 @@ export interface HttpRoute_Props<Ports extends string> {
     _filters?: CDK.HttpRouteSpecRulesFilters[]
 }
 
-export class HttpRoute<Name extends string, Ports extends string> extends ManifestResource<
+export class HttpRoute<Name extends string, Ports extends string> extends Resource_Top<
     Name,
     HttpRoute_Props<Ports>
 > {

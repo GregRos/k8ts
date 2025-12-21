@@ -1,8 +1,8 @@
 import {
     BaseManifest,
-    ManifestResource,
     ManifestSourceEmbedder,
-    ResourceNode
+    Resource_Node,
+    Resource_Top
 } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { cloneDeep, cloneDeepWith, isEmpty, unset } from "lodash"
@@ -47,7 +47,7 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
         return cloneDeepWith(clone, _cleanKeys)
     }
 
-    private async _generate(resource: ManifestResource): Promise<BaseManifest> {
+    private async _generate(resource: Resource_Top): Promise<BaseManifest> {
         const manifest = await resource["__manifest__"]()
 
         const noNullish = this._cleanNullishValues(manifest)
@@ -55,7 +55,7 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
         return noEmpty
     }
 
-    private _attachProductionAnnotations(resource: ResourceNode) {
+    private _attachProductionAnnotations(resource: Resource_Node) {
         const loc = resource.trace.format({
             cwd: this._options.cwd
         })
@@ -68,15 +68,15 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
         resource.meta!.add(resourceOriginMetas)
     }
 
-    async generate(res: ResourceNode): Promise<NodeManifest> {
+    async generate(res: Resource_Node): Promise<NodeManifest> {
         this._attachProductionAnnotations(res)
         await this.emit("manifest", { resource: res })
-        const manifest = await this._generate(res.entity as ManifestResource)
+        const manifest = await this._generate(res.entity as Resource_Top)
         ManifestSourceEmbedder.add(manifest, res.entity)
         res.origin.entity["__emit__"]("resource/manifested", {
             origin: res.origin.entity,
             manifest,
-            resource: res.entity as ManifestResource
+            resource: res.entity as Resource_Top
         })
         return {
             node: res,
@@ -86,11 +86,11 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
 }
 
 export interface NodeManifest {
-    node: ResourceNode
+    node: Resource_Node
     manifest: BaseManifest
 }
 export interface ManifesterManifestEvent {
-    resource: ResourceNode
+    resource: Resource_Node
 }
 
 export interface ManifesterEventsTable {

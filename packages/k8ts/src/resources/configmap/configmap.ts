@@ -3,7 +3,7 @@ import {
     DataSourceRecord_Binary,
     DataSourceRecord_Text,
     LocalFileSource,
-    ManifestResource,
+    Resource_Top,
     resolveBinary,
     resolveText
 } from "@k8ts/instruments"
@@ -16,10 +16,7 @@ export interface ConfigMap_Props {
     binaryData?: DataSourceRecord_Binary
 }
 
-export class ConfigMap<Name extends string = string> extends ManifestResource<
-    Name,
-    ConfigMap_Props
-> {
+export class ConfigMap<Name extends string = string> extends Resource_Top<Name, ConfigMap_Props> {
     get kind() {
         return v1.ConfigMap._
     }

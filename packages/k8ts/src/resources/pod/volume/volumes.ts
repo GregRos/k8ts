@@ -1,7 +1,7 @@
 import type { CDK } from "@k8ts/imports"
 
-import type { ResourceEntity } from "@k8ts/instruments"
-import { SubResource } from "@k8ts/instruments"
+import type { Resource_Entity } from "@k8ts/instruments"
+import { Resource_Child } from "@k8ts/instruments"
 import { v1 } from "../../../kinds/default"
 import type { ConfigMap } from "../../configmap"
 import { Pvc, type Pv_VolumeMode } from "../../persistent"
@@ -26,13 +26,13 @@ export type Pod_Volume_Backend<Mode extends Pv_VolumeMode = Pv_VolumeMode> =
 
 export abstract class Pod_Volume<
     Props extends Pod_Volume_Backend = Pod_Volume_Backend
-> extends SubResource<Props> {
+> extends Resource_Child<Props> {
     get kind() {
         return v1.Pod.Volume._
     }
 
     static make<Mode extends Pv_VolumeMode>(
-        parent: ResourceEntity,
+        parent: Resource_Entity,
         name: string,
         backend: Pod_Volume_Backend<Mode>
     ): Pod_Volume<Pod_Volume_Backend<Mode>> {
@@ -54,7 +54,7 @@ export abstract class Pod_Volume<
         }
     }
 
-    protected __needs__(): Record<string, ResourceEntity | ResourceEntity[] | undefined> {
+    protected __needs__(): Record<string, Resource_Entity | Resource_Entity[] | undefined> {
         return {
             backend: this.props.$backend
         }
@@ -103,7 +103,7 @@ class Pod_Volume_Secret extends Pod_Volume<Pod_Volume_Backend_Secret> {
     }
 }
 
-export function make(parent: ResourceEntity, name: string, input: Pod_Volume_Backend): Pod_Volume {
+export function make(parent: Resource_Entity, name: string, input: Pod_Volume_Backend): Pod_Volume {
     const { $backend } = input
     switch ($backend.kind.name) {
         case "PersistentVolumeClaim":

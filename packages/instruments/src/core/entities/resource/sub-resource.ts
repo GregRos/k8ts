@@ -1,16 +1,16 @@
-import { ResourceEntity } from "./resource-node"
+import { Resource_Entity } from "./resource-entity"
 
-export abstract class SubResource<Props extends object = object> extends ResourceEntity<
+export abstract class Resource_Child<Props extends object = object> extends Resource_Entity<
     string,
     Props
 > {
-    #parent: ResourceEntity
-    constructor(parent: ResourceEntity, name: string, props: Props) {
+    #parent: Resource_Entity
+    constructor(parent: Resource_Entity, name: string, props: Props) {
         super(name, props)
         this.#parent = parent
     }
 
-    protected __parent__(): ResourceEntity {
+    protected __parent__(): Resource_Entity {
         return this.#parent
     }
 

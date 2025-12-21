@@ -1,14 +1,14 @@
 import { Meta } from "@k8ts/metadata"
-import { getDeepPropertyDescriptor } from "@k8ts/metadata/util"
 import chalk from "chalk"
 import { seq } from "doddle"
-import { getNiceClassName, type AnyCtor } from "what-are-you"
+import { type AnyCtor } from "what-are-you"
 import { Displayers, displayers } from "../../../utils/displayers"
 import { Kind } from "../../api-kind"
 import { TraceEmbedder } from "../../tracing"
-import { BaseEntity, BaseNode, Formats } from "../base-node"
-import { type Origin_Entity } from "../origin/entity"
+import { Formats } from "../entity"
+import { Node } from "../node"
 import { OriginNode } from "../origin/node"
+import type { Resource_Entity } from "./resource-entity"
 
 @displayers({
     simple: s => `[${s.shortFqn}]`,
@@ -34,7 +34,7 @@ import { OriginNode } from "../origin/node"
         return text
     }
 })
-export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
+export class Resource_Node extends Node<Resource_Node, Resource_Entity> {
     get fullFqn() {
         return [this.kind.dns, this.namespace, this.name].filter(Boolean).join("/")
     }
@@ -59,7 +59,7 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
         return this.origins.some(x => x.name === "EXTERNAL").pull()
     }
 
-    when<EntityType extends ResourceEntity>(
+    when<EntityType extends Resource_Entity>(
         type: AnyCtor<EntityType>,
         fn: (entity: EntityType) => void
     ) {
@@ -69,7 +69,7 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
         }
     }
 
-    as<EntityType extends ResourceEntity>(type: AnyCtor<EntityType>) {
+    as<EntityType extends Resource_Entity>(type: AnyCtor<EntityType>) {
         const entity = this.entity as EntityType
         if (entity instanceof type) {
             return entity
@@ -107,52 +107,8 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
     }
     constructor(
         readonly origin: OriginNode,
-        readonly entity: ResourceEntity
+        readonly entity: Resource_Entity
     ) {
         super(entity)
-    }
-}
-
-@displayers({
-    simple: s => s.node,
-    pretty: s => s.node
-})
-export abstract class ResourceEntity<
-    Name extends string = string,
-    Props extends object = object
-> extends BaseEntity<ResourceNode, ResourceEntity> {
-    abstract get kind(): Kind.IdentParent
-
-    with(callback: (self: this) => void) {
-        callback(this)
-        return this
-    }
-
-    abstract readonly namespace: string | undefined
-
-    protected constructor(
-        readonly name: Name,
-        readonly props: Props
-    ) {
-        super()
-
-        this.name = name
-        const desc = getDeepPropertyDescriptor(this, "kind")
-        if (!desc || !desc.get) {
-            throw new Error(
-                `ResourceEntity subclass ${getNiceClassName(this)} must implement the 'kind' property as a getter, but it's missing or not a getter.`
-            )
-        }
-    }
-
-    protected abstract __origin__(): Origin_Entity
-    get node(): ResourceNode {
-        return new ResourceNode(this.__origin__().node, this)
-    }
-
-    get shortFqn() {
-        return [this.node.origin.name, [this.kind.name, this.name].filter(Boolean).join("/")].join(
-            ":"
-        )
     }
 }

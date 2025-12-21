@@ -1,5 +1,5 @@
 import { CDK } from "@k8ts/imports"
-import { Kinded, SubResource } from "@k8ts/instruments"
+import { Kinded, Resource_Child } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { seq } from "doddle"
 import { omitBy } from "lodash"
@@ -19,7 +19,7 @@ export interface Pod_Props<Ports extends string> extends Pod_Props_Original {
     $POD: Pod_Container_Producer<Ports>
 }
 
-export class Pod_Template<Ports extends string = string> extends SubResource<Pod_Props<Ports>> {
+export class Pod_Template<Ports extends string = string> extends Resource_Child<Pod_Props<Ports>> {
     get kind() {
         return v1.PodTemplate._
     }

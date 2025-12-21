@@ -1,5 +1,5 @@
 import { CDK } from "@k8ts/imports"
-import { ManifestResource } from "@k8ts/instruments"
+import { Resource_Top } from "@k8ts/instruments"
 import { rbac } from "../../kinds/rbac"
 import type { ClusterRole } from "./cluster-role"
 import type { ServiceAccount } from "./service-account"
@@ -9,7 +9,7 @@ export interface ClusterRoleBoding_Props {
     $subjects: ServiceAccount[]
 }
 
-export class ClusterRoleBinding<Name extends string = string> extends ManifestResource<
+export class ClusterRoleBinding<Name extends string = string> extends Resource_Top<
     Name,
     ClusterRoleBoding_Props
 > {

@@ -1,12 +1,12 @@
 import { CDK } from "@k8ts/imports"
-import { ManifestResource } from "@k8ts/instruments"
+import { Resource_Top } from "@k8ts/instruments"
 import { v1 } from "../../kinds/default"
 export interface ServiceAccount_Props {
     automountToken?: boolean
     imagePullSecrets?: string[]
 }
 
-export class ServiceAccount<Name extends string = string> extends ManifestResource<
+export class ServiceAccount<Name extends string = string> extends Resource_Top<
     Name,
     ServiceAccount_Props
 > {

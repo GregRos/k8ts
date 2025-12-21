@@ -1,7 +1,7 @@
 import { doddlify, seq } from "doddle"
 import { memoize } from "lodash"
 import { FwReference, type Refable } from "../../reference"
-import type { ManifestResource } from "../resource"
+import type { Resource_Top } from "../resource"
 import { Origin_Entity } from "./entity"
 import type { Origin_Props } from "./node"
 
@@ -34,7 +34,7 @@ export abstract class Origin_Exporter<
         const allEmitted = new Set<Refable>()
         const normalResources = seq(() => super.resources).cache()
         return seq(function* () {
-            for (const em of boundExports() as ManifestResource[]) {
+            for (const em of boundExports() as Resource_Top[]) {
                 if (FwReference.is(em)) {
                     throw new Error(
                         `FwReference ${em} cannot be directly exported from ChildOrigin ${self.name}`

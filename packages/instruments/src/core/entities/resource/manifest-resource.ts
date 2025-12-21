@@ -4,11 +4,11 @@ import { type BaseManifest, type ManifestIdentFields, type ManifestMetadata } fr
 import { Trace, TraceEmbedder } from "../../tracing"
 import type { Origin_Entity } from "../origin/entity"
 import { OriginContextTracker } from "../origin/tracker"
-import { ResourceEntity } from "./resource-node"
-export abstract class ManifestResource<
+import { Resource_Entity } from "./resource-entity"
+export abstract class Resource_Top<
     Name extends string = string,
     Props extends object = object
-> extends ResourceEntity<Name, Props> {
+> extends Resource_Entity<Name, Props> {
     readonly _origin: Origin_Entity
     readonly meta: Meta
     constructor(name: Name, props: Props) {

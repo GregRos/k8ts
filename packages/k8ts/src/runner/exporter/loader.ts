@@ -1,4 +1,4 @@
-import { OriginNode, ResourceNode, type BaseNode, type ManifestResource } from "@k8ts/instruments"
+import { OriginNode, Resource_Node, type Node, type Resource_Top } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { MakeError } from "../../error"
 import { k8ts_namespace } from "../../world/world"
@@ -7,8 +7,8 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
         super()
     }
 
-    private _checkNames(resources: ResourceNode[]) {
-        let names = new Map<string, ResourceNode>()
+    private _checkNames(resources: Resource_Node[]) {
+        let names = new Map<string, Resource_Node>()
         const nameRegexp = /^[a-zA-Z0-9][a-zA-Z0-9_-]*$/
         for (const resource of resources) {
             const name = [resource.kind.name, resource.namespace, resource.name]
@@ -31,10 +31,10 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
 
     async load(input: OriginNode) {
         // TODO: Handle ORIGINS that are referenced but not passed to the runner
-        let resources = [] as ResourceNode[]
+        let resources = [] as Resource_Node[]
 
-        const addResource = async (res: BaseNode) => {
-            if (!(res instanceof ResourceNode)) {
+        const addResource = async (res: Node) => {
+            if (!(res instanceof Resource_Node)) {
                 throw new Error(`Expected ResourceNode, got ${res.constructor.name}`)
             }
             if (resources.some(r => r.equals(res))) {
@@ -56,7 +56,7 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
             await this.emit("load", event)
             origin.entity["__emit__"]("resource/loaded", {
                 origin: origin.entity,
-                resource: res.entity as ManifestResource
+                resource: res.entity as Resource_Top
             })
             resources.push(res)
         }
@@ -79,7 +79,7 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
 }
 export interface ResourceLoadedEvent {
     isExported: boolean
-    resource: ResourceNode
+    resource: Resource_Node
 }
 
 export interface ResourceLoaderEventsTable {

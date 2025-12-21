@@ -10,8 +10,8 @@ import {
 } from "@k8ts/instruments"
 import { toContainerPorts } from "../../utils/adapters"
 
-import type { ManifestResource, ResourceEntity } from "@k8ts/instruments"
-import { SubResource } from "@k8ts/instruments"
+import type { Resource_Entity, Resource_Top } from "@k8ts/instruments"
+import { Resource_Child } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { mapKeys, mapValues, omitBy } from "lodash"
 import { Env, type InputEnvMapping } from "../../../env"
@@ -39,13 +39,15 @@ interface Container_Props_K8ts<Ports extends string = never> {
 export type Container_Props<Ports extends string = never> = Container_Props_K8ts<Ports> &
     Omit<CDK.Container, keyof Container_Props_K8ts | "name">
 
-export class Container<Ports extends string = string> extends SubResource<Container_Props<Ports>> {
+export class Container<Ports extends string = string> extends Resource_Child<
+    Container_Props<Ports>
+> {
     __PORTS__!: Ports
     get kind() {
         return v1.Pod.Container._
     }
 
-    protected __needs__(): Record<string, ResourceEntity | ResourceEntity[] | undefined> {
+    protected __needs__(): Record<string, Resource_Entity | Resource_Entity[] | undefined> {
         const a = this.mounts
         return mapValues(
             mapKeys(a, x => x.path),
@@ -96,7 +98,7 @@ export class Container<Ports extends string = string> extends SubResource<Contai
         return container
     }
     constructor(
-        parent: ResourceEntity,
+        parent: Resource_Entity,
         name: string,
         readonly subtype: "init" | "main",
         override readonly props: Container_Props<Ports>
@@ -129,7 +131,7 @@ export class Container<Ports extends string = string> extends SubResource<Contai
 }
 
 export function make<Ports extends string>(
-    parent: ManifestResource,
+    parent: Resource_Top,
     name: string,
     subtype: "init" | "main",
     props: Container_Props<Ports>

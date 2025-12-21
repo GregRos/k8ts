@@ -4,7 +4,7 @@ import { seq, Seq } from "doddle"
 import { displayers } from "../../../utils/displayers"
 import { type KindMapInput } from "../../kind-map"
 import type { KindedCtor, Refable } from "../../reference"
-import { BaseNode } from "../base-node"
+import { Node } from "../node"
 import type { Origin_Entity } from "./entity"
 
 @displayers({
@@ -20,7 +20,7 @@ import type { Origin_Entity } from "./entity"
         return chalk.underline(`${pref}${kindName}:${resourceName}`)
     }
 })
-export class OriginNode extends BaseNode<OriginNode, Origin_Entity> {
+export class OriginNode extends Node<OriginNode, Origin_Entity> {
     get kids() {
         return seq(this.entity["__kids__"]()).map(x => x.node)
     }

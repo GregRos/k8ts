@@ -1,5 +1,5 @@
 import { CDK } from "@k8ts/imports"
-import { ManifestResource, Refable, type Unit } from "@k8ts/instruments"
+import { Refable, Resource_Top, type Unit } from "@k8ts/instruments"
 import { MakeError } from "../../../error"
 import { v1 } from "../../../kinds/default"
 import { storage } from "../../../kinds/storage"
@@ -44,7 +44,7 @@ export type Pv_Ref<Mode extends Pv_VolumeMode = Pv_VolumeMode> = Refable<v1.Pers
 export class Pv<
     Mode extends Pv_VolumeMode = "Filesystem",
     Name extends string = string
-> extends ManifestResource<Name, Pv_Props_K8ts<Mode>> {
+> extends Resource_Top<Name, Pv_Props_K8ts<Mode>> {
     __MODE__!: Mode
     get kind() {
         return v1.PersistentVolume._

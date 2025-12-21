@@ -6,8 +6,8 @@ import { yamprint } from "yamprint"
 import { displayers } from "../../../utils/displayers"
 import { KindMap } from "../../kind-map"
 import type { Refable } from "../../reference"
-import { BaseEntity } from "../base-node"
-import type { ResourceEntity } from "../resource/resource-node"
+import { Entity } from "../entity"
+import type { Resource_Entity } from "../resource/resource-entity"
 import { OriginEventsEmitter, type Origin_EventMap } from "./events"
 import { OriginNode, type Origin_Props } from "./node"
 import type { OriginStackBinder } from "./tracker"
@@ -21,7 +21,7 @@ import { OriginContextTracker } from "./tracker"
         return `${kindPart}/${originName}`
     }
 })
-export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> extends BaseEntity<
+export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> extends Entity<
     OriginNode,
     Origin_Entity
 > {
@@ -52,7 +52,7 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
             target.entity._emitter.emit(event, data)
         }
     }
-    private readonly _ownResources: ResourceEntity[] = []
+    private readonly _ownResources: Resource_Entity[] = []
     private readonly _ownKids: Origin_Entity[] = []
     readonly meta: Meta
 
@@ -85,7 +85,7 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
         })
     }
 
-    protected __attach_resource__(resources: ResourceEntity | Iterable<ResourceEntity>) {
+    protected __attach_resource__(resources: Resource_Entity | Iterable<Resource_Entity>) {
         resources = Symbol.iterator in resources ? resources : [resources]
         for (const resource of resources) {
             this._ownResources.push(resource)

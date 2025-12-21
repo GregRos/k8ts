@@ -1,6 +1,6 @@
 import type { AnyCtor } from "what-are-you"
 import type { Kind } from "../api-kind"
-import type { BaseNode } from "../entities"
+import type { Node } from "../entities"
 
 export type Kinded<K extends Kind.IdentParent = Kind.IdentParent> = { kind: K }
 export type KindedCtor<K extends Kind.IdentParent = Kind.IdentParent> = AnyCtor<Refable<K>> & {
@@ -12,6 +12,6 @@ export type Refable<
 > = Kinded<Kind> & {
     name: Name
     equals(other: any): boolean
-    node: BaseNode
+    node: Node
 }
 export type LiveRefable = Refable

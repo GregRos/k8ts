@@ -1,4 +1,5 @@
-export { BaseEntity, BaseNode } from "./base-node"
+export { Entity } from "./entity"
+export { Node } from "./node"
 export * from "./origin"
 export { Relation } from "./relation"
 export * from "./resource"

@@ -1,11 +1,11 @@
-import { Kind, ResourceEntity, type Origin_Entity, type RefKey } from "@k8ts/instruments"
+import { Kind, Resource_Entity, type Origin_Entity, type RefKey } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { MakeError } from "../../error"
 
 export class External<
     K extends Kind.IdentParent = Kind.IdentParent,
     Name extends string = string
-> extends ResourceEntity<Name> {
+> extends Resource_Entity<Name> {
     meta = Meta.make()
     constructor(
         private readonly _origin: Origin_Entity,

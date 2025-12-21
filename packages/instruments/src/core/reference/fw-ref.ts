@@ -1,6 +1,6 @@
 import type { Doddle } from "doddle"
 import type { AnyCtor } from "what-are-you"
-import { ManifestResource } from "../entities"
+import { Resource_Top } from "../entities"
 import { RefKey } from "../ref-key/ref-key"
 import { ProxyOperationError } from "./ProxyOperationError"
 import type { Refable } from "./refable"
@@ -66,7 +66,7 @@ class FwRef_Handler<T extends Refable> implements ProxyHandler<T> {
         return result
     }
     getPrototypeOf(target: T) {
-        return this._props.class?.prototype ?? ManifestResource.prototype
+        return this._props.class?.prototype ?? Resource_Top.prototype
     }
     has(target: T, prop: PropertyKey) {
         const { _props, _subject } = this

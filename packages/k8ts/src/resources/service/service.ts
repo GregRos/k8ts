@@ -1,5 +1,5 @@
 import { CDK } from "@k8ts/imports"
-import { ManifestResource, Refable, type InputPortMapping } from "@k8ts/instruments"
+import { Refable, Resource_Top, type InputPortMapping } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { MakeError } from "../../error"
 import { v1 } from "../../kinds/index"
@@ -27,7 +27,7 @@ export interface Service_Ref<ExposedPorts extends string> extends Refable<v1.Ser
 export class Service<
     Name extends string = string,
     ExposedPorts extends string = string
-> extends ManifestResource<Name, Service_Props<string, ExposedPorts>> {
+> extends Resource_Top<Name, Service_Props<string, ExposedPorts>> {
     __PORTS__!: ExposedPorts
     get kind() {
         return v1.Service._

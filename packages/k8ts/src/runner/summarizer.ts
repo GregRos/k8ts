@@ -3,7 +3,7 @@ import {
     OriginNode,
     pretty,
     Relation,
-    ResourceNode,
+    Resource_Node,
     TextPostProcessor
 } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
@@ -16,7 +16,7 @@ export interface SummarizerOptions {
 export class Summarizer {
     private _post = new TextPostProcessor()
     constructor(private readonly _options: SummarizerOptions) {}
-    _formatRefFromTo(node: ResourceNode, edge: Relation<ResourceNode>) {
+    _formatRefFromTo(node: Resource_Node, edge: Relation<Resource_Node>) {
         return this._token(pretty`${edge}`)
     }
 
@@ -28,7 +28,7 @@ export class Summarizer {
         return token
     }
 
-    private _resource(resource: ResourceNode): any[] | null {
+    private _resource(resource: Resource_Node): any[] | null {
         const subs = resource.kids
             .map(sub => {
                 const heading = Displayers.get(sub).pretty("local")
@@ -47,7 +47,7 @@ export class Summarizer {
         return [...subs, ...depends]
     }
 
-    private _resources(resources: ResourceNode[]): object {
+    private _resources(resources: Resource_Node[]): object {
         const resourceContainer = resources
             .map(resource => {
                 const text = pretty`${resource}`
@@ -120,7 +120,7 @@ export class Summarizer {
         return outputs.join("\n")
     }
 
-    files(obj: { origin: OriginNode; resources: ResourceNode[] }[]) {
+    files(obj: { origin: OriginNode; resources: Resource_Node[] }[]) {
         let pairs = obj.flatMap(({ origin, resources }) => {
             return [
                 [this._token(pretty`\n${origin}`), this._resources(resources)] as [string, object]

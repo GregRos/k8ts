@@ -1,4 +1,4 @@
-import { ManifestResource } from "@k8ts/instruments"
+import { Resource_Top } from "@k8ts/instruments"
 import { v1 } from "../../kinds/default"
 
 export interface Secret_Props {
@@ -6,7 +6,7 @@ export interface Secret_Props {
     stringData?: Record<string, string>
 }
 
-export class Secret<Name extends string = string> extends ManifestResource<Name, Secret_Props> {
+export class Secret<Name extends string = string> extends Resource_Top<Name, Secret_Props> {
     get kind() {
         return v1.Secret._
     }
