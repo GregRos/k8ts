@@ -3,16 +3,16 @@ import { readFile } from "fs/promises"
 import { dirname, join, resolve } from "path"
 import StackTracey from "stacktracey"
 import { InstrumentsError } from "../../error"
-export type LocalFileMode = "text" | "binary"
+export type DataSource_LocalFile_Mode = "text" | "binary"
 
-export interface LocalFileSourceProps<Mode extends LocalFileMode = "text"> {
+export interface DataSource_LocalFile_Props<Mode extends DataSource_LocalFile_Mode = "text"> {
     pointOfCall: StackTracey
     path: string
     cwd?: string
     mode?: Mode
 }
-export class LocalFileSource<Mode extends LocalFileMode = "text"> {
-    constructor(private readonly _props: LocalFileSourceProps<Mode>) {}
+export class DataSource_LocalFile<Mode extends DataSource_LocalFile_Mode = "text"> {
+    constructor(private readonly _props: DataSource_LocalFile_Props<Mode>) {}
 
     get cwd() {
         if (this._props.cwd) {
@@ -38,22 +38,25 @@ export class LocalFileSource<Mode extends LocalFileMode = "text"> {
     }) as DoddleAsync<Mode extends "text" ? string : Uint8Array>
 }
 
-export function localFile<Mode extends LocalFileMode = "text">(
+export function localFile<Mode extends DataSource_LocalFile_Mode = "text">(
     path: string,
-    props?: Pick<LocalFileSourceProps<Mode>, "cwd" | "mode">
-): LocalFileSource<Mode>
-export function localFile(args: TemplateStringsArray, ...params: any[]): LocalFileSource<"text">
+    props?: Pick<DataSource_LocalFile_Props<Mode>, "cwd" | "mode">
+): DataSource_LocalFile<Mode>
+export function localFile(
+    args: TemplateStringsArray,
+    ...params: any[]
+): DataSource_LocalFile<"text">
 export function localFile(args: any, ...params: any[]) {
     if (typeof args === "string") {
         const options = params[0] ?? {}
-        return new LocalFileSource({
+        return new DataSource_LocalFile({
             pointOfCall: new StackTracey().slice(1),
             path: args,
             ...(options ?? {})
         })
     }
     const path = String.raw(args, ...params)
-    return new LocalFileSource({
+    return new DataSource_LocalFile({
         pointOfCall: new StackTracey().slice(1),
         path
     })
@@ -63,8 +66,8 @@ export interface TypedArrayLike {
     buffer: ArrayBuffer
     byteLength: number
 }
-export type DataSource_Text = LocalFileSource<"text"> | string
-export type DataSource_Binary = LocalFileSource<"binary"> | TypedArrayLike | ArrayBuffer
+export type DataSource_Text = DataSource_LocalFile<"text"> | string
+export type DataSource_Binary = DataSource_LocalFile<"binary"> | TypedArrayLike | ArrayBuffer
 export type DataSourceRecord_Text = Record<string, DataSource_Text>
 export type DataSourceRecord_Binary = Record<string, DataSource_Binary>
 export type DataSourceRecord = DataSourceRecord_Text | DataSourceRecord_Binary
@@ -99,7 +102,7 @@ export async function resolveText(record: DataSourceRecord_Text) {
                 k,
                 doddle(async () => {
                     let resolved = v
-                    if (v instanceof LocalFileSource) {
+                    if (v instanceof DataSource_LocalFile) {
                         resolved = await v.contents.pull()
                     }
                     if (typeof resolved !== "string") {
@@ -122,7 +125,7 @@ export async function resolveBinary(record: DataSourceRecord_Binary) {
                 k,
                 doddle(async () => {
                     let resolved = v as any
-                    if (v instanceof LocalFileSource) {
+                    if (v instanceof DataSource_LocalFile) {
                         resolved = await v.contents.pull()
                     }
                     if (isTypedArray(resolved)) {

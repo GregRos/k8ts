@@ -1,7 +1,7 @@
 import chalk from "chalk"
 import util from "util"
 import type { AnyCtor, InstanceTypeOf } from "what-are-you"
-import { Embedder } from "../_embedder"
+import { Embedder } from "../embedder"
 export type KnownFormats = "local" | "global" | undefined
 export namespace Displayers {
     export interface Out {

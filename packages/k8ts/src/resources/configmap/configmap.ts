@@ -2,7 +2,7 @@ import { CDK } from "@k8ts/imports"
 import {
     DataSourceRecord_Binary,
     DataSourceRecord_Text,
-    LocalFileSource,
+    DataSource_LocalFile,
     Resource_Top,
     resolveBinary,
     resolveText
@@ -10,7 +10,7 @@ import {
 import { toObject } from "@k8ts/metadata/util"
 import { seq } from "doddle"
 import { v1 } from "../../kinds/default"
-export type ConfigMap_Entry_Source = LocalFileSource | string
+export type ConfigMap_Entry_Source = DataSource_LocalFile | string
 export interface ConfigMap_Props {
     data: DataSourceRecord_Text
     binaryData?: DataSourceRecord_Binary

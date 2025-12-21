@@ -1,5 +1,5 @@
-import { pretty } from "../../utils/_string"
 import { displayers } from "../../utils/displayers"
+import { pretty } from "../../utils/string"
 import type { Node } from "./node"
 
 @displayers({
