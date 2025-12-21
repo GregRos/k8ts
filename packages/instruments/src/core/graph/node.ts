@@ -1,7 +1,7 @@
 import { seq, type Seq } from "doddle"
-import { FwReference } from "../reference"
 import type { Entity } from "./entity"
 import { Relation } from "./relation"
+import { FwReference } from "./resource/reference"
 
 export abstract class Node<
     _Node extends Node<_Node, _Entity> = Node<any, any>,

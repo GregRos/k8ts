@@ -1,7 +1,7 @@
 import { doddlify, seq } from "doddle"
 import { memoize } from "lodash"
-import { FwReference, type Resource_Core_Ref } from "../../reference"
 import type { Resource_Top } from "../resource"
+import { FwReference, type Resource_Core_Ref } from "../resource"
 import { Origin_Entity } from "./entity"
 import type { Origin_Props } from "./node"
 

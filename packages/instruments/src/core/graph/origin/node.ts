@@ -2,10 +2,10 @@ import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq, Seq } from "doddle"
 import { displayers } from "../../../utils/displayers"
-import { type KindMapInput } from "../../kind-map"
-import type { Resource_Core_Ref, Resource_Ctor_Of } from "../../reference"
 import { Node } from "../node"
+import type { Resource_Core_Ref, Resource_Ctor_Of } from "../resource"
 import type { Origin_Entity } from "./entity"
+import { type KindMapInput } from "./kind-map"
 
 @displayers({
     simple: s => `[${s.shortFqn}]`,

@@ -1,5 +1,5 @@
-import { FwReference } from "../reference"
 import type { Node } from "./node"
+import { FwReference } from "./resource/reference/fw-ref"
 export type LiteralModes = "simple" | "pretty" | "prefix"
 
 let globalEntityId = 0

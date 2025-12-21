@@ -3,13 +3,13 @@ import chalk from "chalk"
 import { seq } from "doddle"
 import { type AnyCtor } from "what-are-you"
 import { Displayers, displayers } from "../../../utils/displayers"
-import { Kind } from "../../api-kind"
-import { RefKey } from "../../ref-key"
 import { TraceEmbedder } from "../../tracing"
 import { Formats } from "../entity"
 import { Node } from "../node"
 import { OriginNode } from "../origin/node"
+import type { Kind } from "./api-kind"
 import type { Resource_Entity } from "./entity"
+import { RefKey } from "./ref-key"
 
 @displayers({
     simple: s => `[${s.shortFqn}]`,

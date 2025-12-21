@@ -1,6 +1,6 @@
-import { InstrumentsError } from "../../error"
-import { displayers } from "../../utils/displayers"
-import { bind_own_methods } from "../../utils/displayers/bind"
+import { InstrumentsError } from "../../../../error"
+import { bind_own_methods } from "../../../../utils"
+import { displayers } from "../../../../utils/displayers"
 import { RefKey } from "../ref-key"
 import { pluralize } from "./pluralize"
 

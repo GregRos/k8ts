@@ -1,9 +1,9 @@
 import { getDeepPropertyDescriptor } from "@k8ts/metadata/util"
 import { getNiceClassName } from "what-are-you"
 import { displayers } from "../../../utils"
-import type { Kind } from "../../api-kind"
 import { Entity } from "../entity"
 import type { Origin_Entity } from "../origin"
+import type { Kind } from "./api-kind"
 import { Resource_Node } from "./node"
 
 @displayers({

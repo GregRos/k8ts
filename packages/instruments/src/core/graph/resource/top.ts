@@ -1,10 +1,10 @@
 import { Meta } from "@k8ts/metadata"
 import StackTracey from "stacktracey"
-import type { Kind } from "../../api-kind"
 import { type Manifest, type Manifest_Ident, type Manifest_Metadata } from "../../manifest"
 import { Trace, TraceEmbedder } from "../../tracing"
 import type { Origin_Entity } from "../origin/entity"
 import { OriginContextTracker } from "../origin/tracker"
+import type { Kind } from "./api-kind"
 import { Resource_Entity } from "./entity"
 export abstract class Resource_Top<
     Name extends string = string,

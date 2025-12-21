@@ -1,7 +1,7 @@
 import { seq } from "doddle"
 import type { Resource_Core_Ref } from "."
 import { FwReference } from "."
-import { Origin_Exporter } from "../graph"
+import type { Origin_Exporter } from "../../origin"
 import { ProxyOperationError } from "./error"
 
 export type FwRef_Exports_ByKey<Exports extends Resource_Core_Ref = Resource_Core_Ref> = {

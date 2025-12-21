@@ -1,6 +1,7 @@
 import type { AnyCtor } from "what-are-you"
 import type { Kind } from "../api-kind"
-import type { Resource_Entity, Resource_Node } from "../graph"
+import type { Resource_Entity } from "../entity"
+import type { Resource_Node } from "../node"
 
 export type Resource_Min_Ref<K extends Kind.IdentParent = Kind.IdentParent> = { kind: K }
 export type Resource_Ctor_Of<K extends Kind.IdentParent = Kind.IdentParent> = AnyCtor<

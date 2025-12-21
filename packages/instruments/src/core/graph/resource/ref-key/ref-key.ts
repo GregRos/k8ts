@@ -1,5 +1,5 @@
-import { InstrumentsError } from "../../error"
-import { Kind } from "../api-kind"
+import { InstrumentsError } from "../../../../error"
+import type { Kind } from "../api-kind"
 
 export type RefKey_Input = RefKey | RefKey["string"]
 export type RefKey_sFormat<Kind extends string, Name extends string> = `${Kind}/${Name}`

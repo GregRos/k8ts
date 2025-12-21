@@ -1,7 +1,6 @@
 import type { Doddle } from "doddle"
 import type { AnyCtor } from "what-are-you"
-import { Resource_Top } from "../graph"
-import { RefKey } from "../ref-key/ref-key"
+import type { RefKey } from "../ref-key"
 import { ProxyOperationError } from "./error"
 import type { Resource_Core_Ref } from "./refable"
 
@@ -67,6 +66,7 @@ class FwRef_Handler<T extends Resource_Core_Ref> implements ProxyHandler<T> {
         return result
     }
     getPrototypeOf(target: T) {
+        const Resource_Top = require("../top").Resource_Top
         return this._props.class?.prototype ?? Resource_Top.prototype
     }
     has(target: T, prop: PropertyKey) {

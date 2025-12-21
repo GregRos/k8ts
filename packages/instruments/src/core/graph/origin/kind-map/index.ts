@@ -1,10 +1,10 @@
 import { doddlify, seq, type Seq } from "doddle"
 import type { AnyCtor } from "what-are-you"
-import { InstrumentsError } from "../../error"
+import { InstrumentsError } from "../../../../error"
 
-import { Kind } from "../api-kind"
-import { RefKey } from "../ref-key"
-import type { Resource_Ctor_Of } from "../reference/refable"
+import type { Resource_Ctor_Of } from "../../resource"
+import { Kind } from "../../resource/api-kind"
+import { RefKey } from "../../resource/ref-key"
 const separator = "/"
 interface NodeEntry {
     kindName: string
