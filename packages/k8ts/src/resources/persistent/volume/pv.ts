@@ -1,9 +1,13 @@
 import { CDK } from "@k8ts/imports"
-import { Refable, Resource_Top, type Unit } from "@k8ts/instruments"
+import {
+    Resource_Core_Ref,
+    Resource_Top,
+    type Resource_Full_Ref,
+    type Unit
+} from "@k8ts/instruments"
 import { MakeError } from "../../../error"
 import { v1 } from "../../../kinds/default"
 import { storage } from "../../../kinds/storage"
-import { External } from "../../external"
 import { Access } from "../access-mode"
 import type { Pv_VolumeMode } from "../block-mode"
 import { parseBackend } from "./parse-backend"
@@ -28,7 +32,7 @@ export interface Pv_Backend_Nfs {
 export type Pv_Backend = Pv_Backend_HostPath | Pv_Backend_Local | Pv_Backend_Nfs
 export interface Pv_Props_K8ts<Mode extends Pv_VolumeMode = Pv_VolumeMode> {
     $accessModes: Access
-    $storageClass?: External<storage.v1.StorageClass._>
+    $storageClass?: Resource_Full_Ref<storage.v1.StorageClass._>
     $mode?: Mode
     reclaimPolicy?: Reclaim
     $capacity: Unit.Data
@@ -37,9 +41,10 @@ export interface Pv_Props_K8ts<Mode extends Pv_VolumeMode = Pv_VolumeMode> {
     nodeAffinity?: CDK.VolumeNodeAffinity
 }
 export type Reclaim = "Retain" | "Delete" | "Recycle"
-export type Pv_Ref<Mode extends Pv_VolumeMode = Pv_VolumeMode> = Refable<v1.PersistentVolume._> & {
-    __MODE__: Mode
-}
+export type Pv_Ref<Mode extends Pv_VolumeMode = Pv_VolumeMode> =
+    Resource_Core_Ref<v1.PersistentVolume._> & {
+        __MODE__: Mode
+    }
 
 export class Pv<
     Mode extends Pv_VolumeMode = "Filesystem",

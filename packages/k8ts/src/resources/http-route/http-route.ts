@@ -1,14 +1,13 @@
 import { CDK } from "@k8ts/imports"
-import { Resource_Top } from "@k8ts/instruments"
+import { Resource_Top, type Resource_Full_Ref } from "@k8ts/instruments"
 import { gateway } from "../../kinds/gateway"
-import type { External } from "../external"
 import type { Port } from "../service/service-port"
 
 const GatewayKind = gateway.v1.Gateway._
 const HttpRouteKind = gateway.v1.HttpRoute._
 
 export interface HttpRoute_Props<Ports extends string> {
-    $gateway: External<gateway.v1.Gateway._>
+    $gateway: Resource_Full_Ref<gateway.v1.Gateway._>
     $hostname: string
     $backend: Port<Ports>
     _filters?: CDK.HttpRouteSpecRulesFilters[]

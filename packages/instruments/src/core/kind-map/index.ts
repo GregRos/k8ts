@@ -4,23 +4,23 @@ import { InstrumentsError } from "../../error"
 
 import { Kind } from "../api-kind"
 import { RefKey } from "../ref-key"
-import type { KindedCtor } from "../reference/refable"
+import type { Resource_Ctor_Of } from "../reference/refable"
 const separator = "/"
 interface NodeEntry {
     kindName: string
     class: AnyCtor<any>
     ident: Kind.IdentParent
 }
-export type KindMapInput<Ks extends KindedCtor> = Ks[]
-type LookupKey = string | RefKey.RefKey | AnyCtor<any> | Kind.IdentParent
-export class KindMap<Kinds extends KindedCtor = KindedCtor> {
+export type KindMapInput<Ks extends Resource_Ctor_Of> = Ks[]
+type LookupKey = string | RefKey | AnyCtor<any> | Kind.IdentParent
+export class KindMap<Kinds extends Resource_Ctor_Of = Resource_Ctor_Of> {
     __KINDS__!: Kinds["prototype"]["kind"]
     constructor(private _ownKinds: KindMapInput<Kinds>) {}
 
     [Symbol.iterator]() {
         return this._ownKinds[Symbol.iterator]()
     }
-    child<Ks extends KindedCtor = KindedCtor>(
+    child<Ks extends Resource_Ctor_Of = Resource_Ctor_Of>(
         kinds: KindMapInput<Ks> | KindMap<Ks>
     ): KindMap<Kinds | Ks> {
         const ownKinds = kinds instanceof KindMap ? kinds._ownKinds : kinds
@@ -58,7 +58,7 @@ export class KindMap<Kinds extends KindedCtor = KindedCtor> {
         name: Name
     ): RefKey<Kind, Name> {
         const trueKind = this.getKind(kind)
-        return new RefKey.RefKey(trueKind, name) as any
+        return new RefKey(trueKind, name) as any
     }
 
     parse(ref: string | RefKey<this["__KINDS__"]>): RefKey<this["__KINDS__"]> {
@@ -69,14 +69,14 @@ export class KindMap<Kinds extends KindedCtor = KindedCtor> {
         return result as any
     }
 
-    tryParse(ref: unknown): RefKey.RefKey<this["__KINDS__"]> | undefined {
+    tryParse(ref: unknown): RefKey<this["__KINDS__"]> | undefined {
         if (typeof ref !== "string" && typeof ref !== "object") {
             return undefined
         }
         if (ref == null) {
             return undefined
         }
-        if (ref instanceof RefKey.RefKey) {
+        if (ref instanceof RefKey) {
             return ref
         }
         if (typeof ref === "object") {
@@ -109,7 +109,7 @@ export class KindMap<Kinds extends KindedCtor = KindedCtor> {
     private _unknownClassError(klass: Function) {
         return new InstrumentsError(`The class ${klass.name} is not registered`)
     }
-    private _convert(something: LookupKey | RefKey.RefKey | Function | Kind.IdentParent) {
+    private _convert(something: LookupKey | RefKey | Function | Kind.IdentParent) {
         if (typeof something === "string") {
             if (something.includes("/")) {
                 return this.parse(something).kind
@@ -119,7 +119,7 @@ export class KindMap<Kinds extends KindedCtor = KindedCtor> {
             return something as AnyCtor<any>
         } else if (something instanceof Kind.Identifier) {
             return something.text
-        } else if (something instanceof RefKey.RefKey) {
+        } else if (something instanceof RefKey) {
             return something.kind.text
         }
         throw new InstrumentsError(`Invalid argument ${something}`)
@@ -154,7 +154,7 @@ export class KindMap<Kinds extends KindedCtor = KindedCtor> {
         return this._tryGetEntry(kindOrIdent)?.class
     }
 
-    getClass(refKey: RefKey.RefKey): AnyCtor<any>
+    getClass(refKey: RefKey): AnyCtor<any>
     getClass<F extends AnyCtor<any>>(klass: F): F
     getClass(kind: string): AnyCtor<any>
     getClass(ident: Kind.IdentParent): AnyCtor<any>

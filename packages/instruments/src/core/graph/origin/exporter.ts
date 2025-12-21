@@ -1,12 +1,12 @@
 import { doddlify, seq } from "doddle"
 import { memoize } from "lodash"
-import { FwReference, type Refable } from "../../reference"
+import { FwReference, type Resource_Core_Ref } from "../../reference"
 import type { Resource_Top } from "../resource"
 import { Origin_Entity } from "./entity"
 import type { Origin_Props } from "./node"
 
 export interface Origin_Exporter_Props extends Origin_Props {
-    exports(): Iterable<Refable>
+    exports(): Iterable<Resource_Core_Ref>
 }
 
 export abstract class Origin_Exporter<
@@ -28,10 +28,10 @@ export abstract class Origin_Exporter<
     }
 
     @doddlify
-    get resources(): Iterable<Refable> {
+    get resources(): Iterable<Resource_Core_Ref> {
         const self = this
         const boundExports = self.__binder__().bind(self._props.exports)
-        const allEmitted = new Set<Refable>()
+        const allEmitted = new Set<Resource_Core_Ref>()
         const normalResources = seq(() => super.resources).cache()
         return seq(function* () {
             for (const em of boundExports() as Resource_Top[]) {

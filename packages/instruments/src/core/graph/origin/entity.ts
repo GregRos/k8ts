@@ -5,9 +5,9 @@ import { mapValues } from "lodash"
 import { yamprint } from "yamprint"
 import { displayers } from "../../../utils/displayers"
 import { KindMap } from "../../kind-map"
-import type { Refable } from "../../reference"
+import type { Resource_Core_Ref } from "../../reference"
 import { Entity } from "../entity"
-import type { Resource_Entity } from "../resource/resource-entity"
+import type { Resource_Entity } from "../resource/entity"
 import { OriginEventsEmitter, type Origin_EventMap } from "./events"
 import { OriginNode, type Origin_Props } from "./node"
 import type { OriginStackBinder } from "./tracker"
@@ -34,7 +34,7 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
         this._emitter.on(event, listener as any)
     }
 
-    onEach<EventKeys extends keyof Origin_EventMap>(handlers: {
+    onMany<EventKeys extends keyof Origin_EventMap>(handlers: {
         [K in EventKeys]: (data: Origin_EventMap[K]) => void
     }) {
         for (const key of Object.keys(handlers) as EventKeys[]) {
@@ -106,7 +106,7 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
     }
 
     // We don't cache this because resources can be added dynamically
-    get resources(): Iterable<Refable> {
+    get resources(): Iterable<Resource_Core_Ref> {
         const self = this
         return seq(function* () {
             for (const resource of self._ownResources) {

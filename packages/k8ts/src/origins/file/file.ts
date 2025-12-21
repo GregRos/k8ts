@@ -1,10 +1,10 @@
 import {
     FwRef_Exports,
     Origin_Exporter,
-    type KindedCtor,
     type Origin_Entity,
     type Origin_Props,
-    type Refable
+    type Resource_Core_Ref,
+    type Resource_Ctor_Of
 } from "@k8ts/instruments"
 import type { v1 } from "../../kinds"
 import { File_Section_Entity } from "./section"
@@ -21,7 +21,7 @@ export class File_Entity extends Origin_Exporter {
     }
 }
 export function File<
-    Kinds extends KindedCtor[] = KindedCtor[],
+    Kinds extends Resource_Ctor_Of[] = Resource_Ctor_Of[],
     Exports extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
 >(parent: Origin_Entity, name: File_sName, props: File_Props<Kinds, Exports>) {
     const file = new File_Entity(parent, name, {
@@ -35,14 +35,14 @@ export function File<
     return FwRef_Exports<Exports>(file)
 }
 export interface File_Props<
-    Kinds extends KindedCtor[] = KindedCtor[],
+    Kinds extends Resource_Ctor_Of[] = Resource_Ctor_Of[],
     Exports extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
 > extends Origin_Props<Kinds[number]> {
     kinds?: Kinds
     FILE(this: File_Entity, FILE: File_Scope<Kinds>): Iterable<Exports | FwRef_Exports<Exports>>
 }
 
-export class File_Scope<Kinds extends KindedCtor[]> {
+export class File_Scope<Kinds extends Resource_Ctor_Of[]> {
     constructor(private readonly _file: File_Entity) {
         this.on = this._file.on
     }
@@ -50,7 +50,7 @@ export class File_Scope<Kinds extends KindedCtor[]> {
     on: File_Entity["on"]
 
     Section<Exported extends Kinds[number]["prototype"] = Kinds[number]["prototype"]>(
-        ns: Refable<v1.Namespace._>,
+        ns: Resource_Core_Ref<v1.Namespace._>,
         exports: (this: File_Section_Entity) => Iterable<Exported>
     ) {
         const section: File_Section_Entity = new File_Section_Entity(this._file, ns.name, {
@@ -64,6 +64,6 @@ export class File_Scope<Kinds extends KindedCtor[]> {
 }
 
 export type File<
-    Kinds extends KindedCtor[] = KindedCtor[],
+    Kinds extends Resource_Ctor_Of[] = Resource_Ctor_Of[],
     T extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
 > = FwRef_Exports<T>

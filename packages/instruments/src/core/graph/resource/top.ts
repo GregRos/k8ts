@@ -5,7 +5,7 @@ import { type Manifest, type Manifest_Ident, type Manifest_Metadata } from "../.
 import { Trace, TraceEmbedder } from "../../tracing"
 import type { Origin_Entity } from "../origin/entity"
 import { OriginContextTracker } from "../origin/tracker"
-import { Resource_Entity } from "./resource-entity"
+import { Resource_Entity } from "./entity"
 export abstract class Resource_Top<
     Name extends string = string,
     Props extends object = object

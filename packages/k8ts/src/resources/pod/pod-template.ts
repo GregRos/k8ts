@@ -1,5 +1,5 @@
 import { CDK } from "@k8ts/imports"
-import { Kinded, Resource_Child } from "@k8ts/instruments"
+import { Resource_Child, Resource_Min_Ref } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { seq } from "doddle"
 import { omitBy } from "lodash"
@@ -8,7 +8,7 @@ import { Container, type Container_Props } from "./container"
 import { Pod_Device, type Pod_Device_Backend } from "./volume/devices"
 import { Pod_Volume, type Pod_Volume_Backend } from "./volume/volumes"
 export type Pod_Props_Original = Omit<CDK.PodSpec, "containers" | "initContainers" | "volumes">
-type Container_Ref<Ports extends string> = Kinded<v1.Pod.Container._> & {
+type Container_Ref<Ports extends string> = Resource_Min_Ref<v1.Pod.Container._> & {
     __PORTS__: Ports
 }
 export type Pod_Container_Producer<Ports extends string> = (

@@ -4,7 +4,7 @@ import { displayers } from "../../../utils"
 import type { Kind } from "../../api-kind"
 import { Entity } from "../entity"
 import type { Origin_Entity } from "../origin"
-import { Resource_Node } from "./resource-node"
+import { Resource_Node } from "./node"
 
 @displayers({
     simple: s => s.node,
@@ -23,6 +23,13 @@ export abstract class Resource_Entity<
 
     abstract readonly namespace: string | undefined
 
+    ref() {
+        return {
+            kind: this.kind.name,
+            name: this.name,
+            namespace: this.namespace
+        }
+    }
     protected constructor(
         readonly name: Name,
         readonly props: Props

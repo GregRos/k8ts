@@ -120,7 +120,7 @@ export namespace Kind {
         }
 
         refKey<Name extends string>(name: Name) {
-            return new RefKey.RefKey<this, Name>(this as any, name)
+            return new RefKey<this, Name>(this as any, name)
         }
 
         get plural() {

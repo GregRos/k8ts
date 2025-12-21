@@ -1,4 +1,4 @@
-import type { Refable } from "@k8ts/instruments"
+import type { Resource_Core_Ref } from "@k8ts/instruments"
 import type { AnyCtor } from "what-are-you"
 import { World } from "./origins"
 import {
@@ -59,7 +59,7 @@ const defaultKindPairs = [
     ClusterRole,
     ClusterRoleBinding
 ] as const
-export function K8ts<MoreKinds extends AnyCtor<Refable>>(...extraKinds: MoreKinds[]) {
+export function K8ts<MoreKinds extends AnyCtor<Resource_Core_Ref>>(...extraKinds: MoreKinds[]) {
     return new World("K8ts", {
         kinds: [...defaultKindPairs]
     })

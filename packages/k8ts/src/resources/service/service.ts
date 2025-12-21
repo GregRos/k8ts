@@ -1,26 +1,26 @@
 import { CDK } from "@k8ts/imports"
-import { Refable, Resource_Top, type InputPortMapping } from "@k8ts/instruments"
+import { Resource_Core_Ref, Resource_Top, type InputPortMapping } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { MakeError } from "../../error"
 import { v1 } from "../../kinds/index"
 import { Deployment, type Deployment_Ref } from "../deployment"
 import { toServicePorts } from "../utils/adapters"
 import { Port } from "./service-port"
-export interface Service_ClusterIp {
+export interface Service_Frontend_ClusterIp {
     type: "ClusterIP"
 }
 
-export interface Service_LoadBalancer {
+export interface Service_Frontend_LoadBalancer {
     type: "LoadBalancer"
     loadBalancerIP?: string
 }
-export type Service_Frontend = Service_ClusterIp | Service_LoadBalancer
+export type Service_Frontend = Service_Frontend_ClusterIp | Service_Frontend_LoadBalancer
 export interface Service_Props<DeployPorts extends string, ExposedPorts extends DeployPorts> {
     $ports: InputPortMapping<ExposedPorts>
     $backend: Deployment_Ref<DeployPorts>
     $frontend: Service_Frontend
 }
-export interface Service_Ref<ExposedPorts extends string> extends Refable<v1.Service._> {
+export interface Service_Ref<ExposedPorts extends string> extends Resource_Core_Ref<v1.Service._> {
     __PORTS__: ExposedPorts
 }
 
@@ -88,13 +88,7 @@ export class Service<
                 ports: toServicePorts(svcPorts),
                 selector: {
                     app: self.props.$backend.name
-                },
-                ...(self.props.$frontend.type === "LoadBalancer"
-                    ? {
-                          allocateLoadBalancerNodePorts: false,
-                          externalTrafficPolicy: "Local"
-                      }
-                    : {})
+                }
             }
         }
     }

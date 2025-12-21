@@ -1,10 +1,10 @@
-import type { Kind, Refable } from "@k8ts/instruments"
+import type { Kind, Resource_Core_Ref } from "@k8ts/instruments"
 import { EnvBuilder } from "./env"
 
 export type InputEnvValue = string | null | number | boolean | bigint | undefined | EnvVarFrom
 export type InputEnvMapping = Partial<Record<string, InputEnvValue>>
 export interface EnvVarFrom<_Kind extends Kind = Kind> {
-    $ref: Refable<_Kind>
+    $ref: Resource_Core_Ref<_Kind>
     key: string
     optional?: boolean
 }
@@ -21,7 +21,7 @@ export function toInputEnv(env: InputEnv): InputEnvMap {
     return new Map(Object.entries(env))
 }
 export type EnvFrom<_Kind extends Kind = Kind> = {
-    $ref: Refable<_Kind>
+    $ref: Resource_Core_Ref<_Kind>
     prefix?: string
 }
 export type InputEnvMap = Map<string, InputEnvValue>

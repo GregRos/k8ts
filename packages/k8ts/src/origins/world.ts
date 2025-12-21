@@ -2,17 +2,17 @@ import {
     Origin_Entity,
     type FwRef_Exports,
     type Kind,
-    type KindedCtor,
-    type Origin_Props
+    type Origin_Props,
+    type Resource_Ctor_Of
 } from "@k8ts/instruments"
 
 import { External } from "../resources/external"
 import { ExternalOriginEntity } from "./external"
 import { File, type File_Props, type File_sName } from "./file"
 
-export type World_Props<Kinds extends KindedCtor[]> = Origin_Props<Kinds[number]>
+export type World_Props<Kinds extends Resource_Ctor_Of[]> = Origin_Props<Kinds[number]>
 
-export class World<Kinds extends KindedCtor[] = KindedCtor[]> extends Origin_Entity<
+export class World<Kinds extends Resource_Ctor_Of[] = Resource_Ctor_Of[]> extends Origin_Entity<
     World_Props<Kinds>
 > {
     get kind() {
@@ -29,7 +29,7 @@ export class World<Kinds extends KindedCtor[] = KindedCtor[]> extends Origin_Ent
         return new External(this._ExternalOrigin, kind.refKey(name), namespace)
     }
 
-    File<Exports extends KindedCtor["prototype"], ExtraKinds extends KindedCtor[] = []>(
+    File<Exports extends Resource_Ctor_Of["prototype"], ExtraKinds extends Resource_Ctor_Of[] = []>(
         name: File_sName,
         props: File_Props<[...ExtraKinds, ...Kinds], Exports>
     ) {

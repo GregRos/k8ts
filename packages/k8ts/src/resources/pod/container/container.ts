@@ -1,6 +1,5 @@
 import type { CDK } from "@k8ts/imports"
 import {
-    Kinded,
     PortSet,
     ResourcesSpec,
     Unit,
@@ -10,7 +9,7 @@ import {
 } from "@k8ts/instruments"
 import { toContainerPorts } from "../../utils/adapters"
 
-import type { Resource_Entity, Resource_Top } from "@k8ts/instruments"
+import type { Resource_Entity, Resource_Min_Ref, Resource_Top } from "@k8ts/instruments"
 import { Resource_Child } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { mapKeys, mapValues, omitBy } from "lodash"
@@ -23,7 +22,9 @@ const container_ResourcesSpec = ResourcesSpec.make({
 })
 
 type Container_Resources = (typeof container_ResourcesSpec)["__INPUT__"]
-type Container_Mount_Some = Kinded<v1.Pod.Container.DeviceMount._ | v1.Pod.Container.VolumeMount._>
+type Container_Mount_Some = Resource_Min_Ref<
+    v1.Pod.Container.DeviceMount._ | v1.Pod.Container.VolumeMount._
+>
 export type Container_Mounts = {
     [key: string]: Container_Mount_Some
 }

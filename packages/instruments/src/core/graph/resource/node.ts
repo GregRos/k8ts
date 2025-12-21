@@ -9,7 +9,7 @@ import { TraceEmbedder } from "../../tracing"
 import { Formats } from "../entity"
 import { Node } from "../node"
 import { OriginNode } from "../origin/node"
-import type { Resource_Entity } from "./resource-entity"
+import type { Resource_Entity } from "./entity"
 
 @displayers({
     simple: s => `[${s.shortFqn}]`,
@@ -40,7 +40,7 @@ export class Resource_Node extends Node<Resource_Node, Resource_Entity> {
         return [this.kind.dns, this.namespace, this.name].filter(Boolean).join("/")
     }
     get key(): RefKey {
-        return RefKey.make(this.kind, this.name)
+        return new RefKey(this.kind, this.name)
     }
     get kind() {
         return this.entity.kind

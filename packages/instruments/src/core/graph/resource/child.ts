@@ -1,4 +1,4 @@
-import { Resource_Entity } from "./resource-entity"
+import { Resource_Entity } from "./entity"
 
 export abstract class Resource_Child<Props extends object = object> extends Resource_Entity<
     string,

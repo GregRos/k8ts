@@ -8,8 +8,6 @@ export abstract class Entity<
     _Ent extends Entity<_Node, _Ent> = Entity<any, any>
 > {
     private readonly _ID = (() => {
-        const s = this
-        let a = 1
         return globalEntityId++
     })()
     abstract readonly node: _Node

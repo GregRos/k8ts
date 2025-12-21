@@ -1,11 +1,5 @@
 import { CDK } from "@k8ts/imports"
-import {
-    Resource_Top,
-    ResourcesSpec,
-    Unit,
-    type Kinded,
-    type Resource_Entity
-} from "@k8ts/instruments"
+import { Resource_Top, ResourcesSpec, Unit, type Resource_Full_Ref } from "@k8ts/instruments"
 import { Prefix$ } from "../../../_type/prefix$"
 import { MakeError } from "../../../error"
 import { v1 } from "../../../kinds/default"
@@ -23,7 +17,7 @@ type Pvc_Resources = Prefix$<(typeof pvc_ResourcesSpec)["__INPUT__"]>
 export interface Pvc_Props<Mode extends Pv_VolumeMode> extends Pvc_Resources {
     $accessModes: Access
     $mode?: Mode
-    $storageClass?: Resource_Entity & Kinded<typeof StorageClassKind>
+    $storageClass?: Resource_Full_Ref<typeof StorageClassKind>
     $bind?: Pv_Ref<Mode>
 }
 
