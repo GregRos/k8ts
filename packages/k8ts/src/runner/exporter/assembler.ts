@@ -1,9 +1,8 @@
-import { OriginNode } from "@k8ts/instruments"
+import { OriginNode, type ChildOriginEntity } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { aseq } from "doddle"
 import Emittery from "emittery"
 import { cloneDeep } from "lodash"
-import type { World } from "../../world"
 import { ResourceLoader, type ResourceLoaderEventsTable } from "./loader"
 import { Manifester, NodeManifest, type ManifesterEventsTable } from "./manifester"
 import { ManifestSaver, type ManifestSaverEventsTable } from "./saver"
@@ -15,7 +14,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
         super()
     }
 
-    async assemble(ancestor: World) {
+    async assemble(inFiles: Iterable<ChildOriginEntity>) {
         const _emit = async <Name extends keyof AssemblerEventsTable>(
             event: Name,
             payload: AssemblerEventsTable[Name]
@@ -35,7 +34,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
             outdir: this._options.outdir
         })
         saver.onAny(_emit)
-        const reports = aseq(ancestor.__kids__())
+        const reports = aseq(inFiles)
             .map(x => x.node)
             .before(async () => {
                 await _emit("stage", { stage: "gathering" })
