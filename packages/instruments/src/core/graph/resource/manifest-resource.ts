@@ -1,6 +1,6 @@
 import { Meta } from "@k8ts/metadata"
 import StackTracey from "stacktracey"
-import { type BaseManifest, type ManifestIdentFields, type ManifestMetadata } from "../../manifest"
+import { type Manifest, type Manifest_Ident, type Manifest_Metadata } from "../../manifest"
 import { Trace, TraceEmbedder } from "../../tracing"
 import type { Origin_Entity } from "../origin/entity"
 import { OriginContextTracker } from "../origin/tracker"
@@ -31,7 +31,7 @@ export abstract class Resource_Top<
         return this._origin
     }
 
-    protected __metadata__(): ManifestMetadata {
+    protected __metadata__(): Manifest_Metadata {
         const self = this
         return {
             name: self.meta.get("name"),
@@ -41,7 +41,7 @@ export abstract class Resource_Top<
         }
     }
 
-    protected __idents__(): ManifestIdentFields {
+    protected __idents__(): Manifest_Ident {
         return {
             kind: this.kind.name,
             apiVersion: this.kind.parent!.text
@@ -50,7 +50,7 @@ export abstract class Resource_Top<
 
     protected abstract body(): Promise<object> | object
 
-    protected async __manifest__(): Promise<BaseManifest> {
+    protected async __manifest__(): Promise<Manifest> {
         const a = {
             ...this.__idents__(),
             metadata: this.__metadata__(),

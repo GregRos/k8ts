@@ -1,5 +1,5 @@
 export * from "./api-kind"
-export * from "./entities"
+export * from "./graph"
 export * from "./kind-map"
 export * from "./manifest"
 export * from "./ref-key"

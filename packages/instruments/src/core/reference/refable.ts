@@ -1,6 +1,6 @@
 import type { AnyCtor } from "what-are-you"
 import type { Kind } from "../api-kind"
-import type { Node } from "../entities"
+import type { Node } from "../graph"
 
 export type Kinded<K extends Kind.IdentParent = Kind.IdentParent> = { kind: K }
 export type KindedCtor<K extends Kind.IdentParent = Kind.IdentParent> = AnyCtor<Refable<K>> & {

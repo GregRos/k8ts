@@ -1,9 +1,4 @@
-import {
-    BaseManifest,
-    ManifestSourceEmbedder,
-    Resource_Node,
-    Resource_Top
-} from "@k8ts/instruments"
+import { Manifest, ManifestSourceEmbedder, Resource_Node, Resource_Top } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { cloneDeep, cloneDeepWith, isEmpty, unset } from "lodash"
 import { version } from "../../version"
@@ -15,7 +10,7 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
     constructor(private readonly _options: ManifesterOptions) {
         super()
     }
-    private _cleanSpecificEmptyObjects(manifest: BaseManifest) {
+    private _cleanSpecificEmptyObjects(manifest: Manifest) {
         const clone = cloneDeepWith(manifest, (value, key) => {
             if (key !== "metadata") {
                 return
@@ -30,7 +25,7 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
         })
         return clone
     }
-    private _cleanNullishValues(manifest: BaseManifest) {
+    private _cleanNullishValues(manifest: Manifest) {
         const _cleanKeys = (obj: any) => {
             if (typeof obj !== "object") {
                 return obj
@@ -47,7 +42,7 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
         return cloneDeepWith(clone, _cleanKeys)
     }
 
-    private async _generate(resource: Resource_Top): Promise<BaseManifest> {
+    private async _generate(resource: Resource_Top): Promise<Manifest> {
         const manifest = await resource["__manifest__"]()
 
         const noNullish = this._cleanNullishValues(manifest)
@@ -87,7 +82,7 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
 
 export interface NodeManifest {
     node: Resource_Node
-    manifest: BaseManifest
+    manifest: Manifest
 }
 export interface ManifesterManifestEvent {
     resource: Resource_Node

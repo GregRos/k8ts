@@ -1,8 +1,8 @@
 import type { Doddle } from "doddle"
 import type { AnyCtor } from "what-are-you"
-import { Resource_Top } from "../entities"
+import { Resource_Top } from "../graph"
 import { RefKey } from "../ref-key/ref-key"
-import { ProxyOperationError } from "./ProxyOperationError"
+import { ProxyOperationError } from "./error"
 import type { Refable } from "./refable"
 
 export type FwReference<T extends Refable = Refable> = FwReference_Proxied<T> & T

@@ -1,6 +1,6 @@
 import { CDK } from "@k8ts/imports"
 import {
-    BaseManifest,
+    Manifest,
     ManifestSourceEmbedder,
     type Resource_Node,
     type Resource_Top
@@ -13,7 +13,7 @@ export interface YamlSerializerOptions {
     jsYamlOptions: DumpOptions
 }
 export interface SerializingEvent {
-    manifest: BaseManifest
+    manifest: Manifest
     resource: Resource_Node
 }
 export interface SerializerEventsTable {
@@ -24,7 +24,7 @@ export class YamlSerializer extends Emittery<SerializerEventsTable> {
         super()
     }
 
-    async serialize(input: BaseManifest) {
+    async serialize(input: Manifest) {
         const node = ManifestSourceEmbedder.get(input).node
         await this.emit("serialize", {
             manifest: input,

@@ -1,6 +1,6 @@
 import { doddle } from "doddle"
 import EventEmitter from "eventemitter3"
-import type { BaseManifest } from "../../manifest"
+import type { Manifest } from "../../manifest"
 import type { Resource_Entity, Resource_Top } from "../resource"
 import type { Origin_Entity } from "./entity"
 
@@ -53,7 +53,7 @@ export interface Origin_EventMap {
     }
     "resource/manifested": {
         readonly origin: Origin_Entity
-        readonly manifest: BaseManifest
+        readonly manifest: Manifest
         readonly resource: Resource_Top
     }
     "resource/loaded": {
@@ -63,7 +63,7 @@ export interface Origin_EventMap {
     "resource/serialized": {
         readonly origin: Origin_Entity
         readonly resource: Resource_Top
-        readonly manifest: BaseManifest
+        readonly manifest: Manifest
         content: string
     }
     "origin/attached": {

@@ -1,19 +1,14 @@
 import { Embedder } from "../../utils/_embedder"
-import { Resource_Entity } from "../entities/resource/resource-entity"
-export interface ManifestMetadata {
+import { Resource_Entity } from "../graph/resource/resource-entity"
+export interface Manifest_Metadata {
     labels: Record<string, string>
     annotations: Record<string, string>
     name: string
     namespace?: string
 }
-export interface ManifestIdentFields {
+export interface Manifest_Ident {
     kind: string
     apiVersion: string
-}
-export interface BuilderInputTypes {
-    body: PreManifest
-    metadata?: ManifestMetadata
-    idents?: ManifestIdentFields
 }
 
 export type JsonSerializable =
@@ -24,15 +19,7 @@ export type JsonSerializable =
     | JsonSerializable[]
     | { [key: string]: JsonSerializable }
 
-export interface PreManifest {
-    metadata?: {
-        name?: string
-        namespace?: string
-        annotations?: Record<string, string>
-        labels?: Record<string, string>
-    }
-}
-export interface BaseManifest {
+export interface Manifest {
     [key: number]: never
     apiVersion: string
     kind: string
@@ -44,7 +31,7 @@ export interface BaseManifest {
     }
 }
 
-export interface SpecManifest<T extends JsonSerializable> extends BaseManifest {
+export interface SpecManifest<T extends JsonSerializable> extends Manifest {
     spec: T
 }
 
