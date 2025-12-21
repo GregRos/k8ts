@@ -3,13 +3,12 @@ import {
     Origin_Exporter,
     type KindedCtor,
     type Origin_Entity,
-    type Origin_Exporter_Props,
     type Origin_Props,
     type Refable
 } from "@k8ts/instruments"
-import { doddle } from "doddle"
 import type { v1 } from "../../kinds"
-import type { File_sName } from "../world"
+import { File_Section_Entity } from "./section"
+export type File_sName = `${string}.yaml`
 
 export class File_Entity extends Origin_Exporter {
     #_ = (() => {
@@ -18,7 +17,7 @@ export class File_Entity extends Origin_Exporter {
         })
     })()
     get kind() {
-        return "File"
+        return "k8ts:File"
     }
 }
 export function File<
@@ -61,28 +60,6 @@ export class File_Scope<Kinds extends KindedCtor[]> {
             namespace: ns
         })
         return FwRef_Exports<Exported>(section)
-    }
-}
-
-export interface File_Section_Props extends Origin_Exporter_Props {
-    namespace: Refable<v1.Namespace._>
-}
-
-export class File_Section_Entity extends Origin_Exporter<File_Section_Props> {
-    get kind() {
-        return "File/Section"
-    }
-    #_ = doddle(() => {
-        this.meta.overwrite({
-            namespace: this._props.namespace.name
-        })
-    }).pull()
-}
-
-export class File_Section_Scope {
-    on: File_Section_Entity["on"]
-    constructor(private readonly _section: File_Section_Entity) {
-        this.on = this._section.on
     }
 }
 

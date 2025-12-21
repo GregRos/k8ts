@@ -1,7 +1,6 @@
 import { OriginNode, Resource_Node, type Node, type Resource_Top } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { MakeError } from "../../error"
-import { k8ts_namespace } from "../../world/world"
 export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
     constructor(private readonly _options: ResourceLoaderOptions) {
         super()
@@ -49,7 +48,7 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
                 return
             }
             const event = {
-                isExported: res.meta!.has(`#${k8ts_namespace}is-exported`),
+                isExported: res.meta!.has(`#k8ts.org/is-exported`),
                 resource: res
             } as const
 

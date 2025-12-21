@@ -1,5 +1,6 @@
 import type { Refable } from "@k8ts/instruments"
 import type { AnyCtor } from "what-are-you"
+import { World } from "./origins"
 import {
     ClusterRole,
     ClusterRoleBinding,
@@ -13,7 +14,6 @@ import {
     Service,
     ServiceAccount
 } from "./resources"
-import { World } from "./world"
 
 // const defaultKinds = [
 //     v1.Service._,

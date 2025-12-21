@@ -1,15 +1,14 @@
 import {
     Origin_Entity,
-    Origin_Exporter,
     type FwRef_Exports,
     type Kind,
     type KindedCtor,
     type Origin_Props
 } from "@k8ts/instruments"
 
-import { External } from "./external"
-import { File, type File_Props } from "./file"
-export type File_sName = `${string}.yaml`
+import { External } from "../resources/external"
+import { ExternalOriginEntity } from "./external"
+import { File, type File_Props, type File_sName } from "./file"
 
 export type World_Props<Kinds extends KindedCtor[]> = Origin_Props<Kinds[number]>
 
@@ -17,7 +16,7 @@ export class World<Kinds extends KindedCtor[] = KindedCtor[]> extends Origin_Ent
     World_Props<Kinds>
 > {
     get kind() {
-        return "World"
+        return "k8ts:World"
     }
     private readonly _ExternalOrigin = new ExternalOriginEntity(this)
     #_ = (() => {
@@ -38,14 +37,4 @@ export class World<Kinds extends KindedCtor[] = KindedCtor[]> extends Origin_Ent
     }
 }
 
-export class ExternalOriginEntity extends Origin_Exporter {
-    get kind() {
-        return "External"
-    }
-    constructor(parent: Origin_Entity) {
-        super(parent, "External", {
-            *exports() {}
-        })
-    }
-}
 export const k8ts_namespace = "k8ts.org/" as const

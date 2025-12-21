@@ -1,7 +1,7 @@
 import { CDK } from "@k8ts/imports"
 import { Resource_Top } from "@k8ts/instruments"
 import { gateway } from "../../kinds/gateway"
-import type { External } from "../../world/external"
+import type { External } from "../external"
 import type { Port } from "../service/service-port"
 
 const GatewayKind = gateway.v1.Gateway._
