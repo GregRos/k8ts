@@ -1,4 +1,4 @@
-import { anyCharOf, anyStringOf, digit, lower, string, upper } from "parjs"
+import { anyCharOf, anyStringOf, digit, letter, lower, string } from "parjs"
 import { many1, map, maybe, or, qthen, stringify, then, thenq } from "parjs/combinators"
 
 import { MetadataError } from "../error"
@@ -6,9 +6,11 @@ import { SectionKey, ValueKey } from "./repr"
 
 const cPrefix = anyCharOf("%^#")
 const cSection = string("/")
+export const normalChar = letter().pipe(or(digit())).expects("alphanumeric")
+const cDot = anyCharOf(".")
 
-const cExtra = anyCharOf("-_.").expects("'-', '_', or '.'")
-export const normalChar = upper().pipe(or(lower(), digit())).expects("alphanumeric")
+const cExtra = anyCharOf(`-_`).pipe(or(cDot)).expects("'-', '_', or '.'")
+
 const cNameChar = lower().pipe(or(digit())).pipe(or("-"))
 const cInterior = normalChar.pipe(or(cExtra)).expects("alphanumeric, '-', '_', or '.'")
 

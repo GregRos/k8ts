@@ -1,10 +1,10 @@
 import {
-    ChildOriginEntity,
     FwRef_Exports,
-    type ChildOrigin_Props,
+    Origin_Exporter,
     type KindedCtor,
+    type Origin_Entity,
+    type Origin_Exporter_Props,
     type Origin_Props,
-    type OriginEntity,
     type Refable
 } from "@k8ts/instruments"
 import { doddle } from "doddle"
@@ -12,9 +12,9 @@ import type { v1 } from "../../kinds"
 import { build } from "../k8ts-sys-kind"
 import type { File_sName } from "../world"
 
-export class File_Entity extends ChildOriginEntity {
+export class File_Entity extends Origin_Exporter {
     #_ = (() => {
-        this.meta.add("build.k8ts.org/", {
+        this.meta.add("source.k8ts.org/", {
             "^file": this.name
         })
     })()
@@ -25,11 +25,11 @@ export class File_Entity extends ChildOriginEntity {
 export function File<
     Kinds extends KindedCtor[] = KindedCtor[],
     Exports extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
->(parent: OriginEntity, name: File_sName, props: File_Props<Kinds, Exports>) {
+>(parent: Origin_Entity, name: File_sName, props: File_Props<Kinds, Exports>) {
     const file = new File_Entity(parent, name, {
         kinds: props.kinds,
         exports: (): Iterable<Exports> => {
-            return props.FILE(new File_Scope(file, props.kinds ?? []) as any) as Iterable<Exports>
+            return props.FILE.call(file, new File_Scope(file) as any) as Iterable<Exports>
         },
         meta: props.meta ?? {}
     })
@@ -41,32 +41,35 @@ export interface File_Props<
     Exports extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
 > extends Origin_Props<Kinds[number]> {
     kinds?: Kinds
-    FILE(FILE: File_Scope<Kinds>): Iterable<Exports | FwRef_Exports<Exports>>
+    FILE(this: File_Entity, FILE: File_Scope<Kinds>): Iterable<Exports | FwRef_Exports<Exports>>
 }
 
 export class File_Scope<Kinds extends KindedCtor[]> {
-    constructor(
-        private readonly _file: File_Entity,
-        private readonly _kinds: Kinds
-    ) {}
+    constructor(private readonly _file: File_Entity) {
+        this.on = this._file.on
+    }
+
+    on: File_Entity["on"]
 
     Section<Exported extends Kinds[number]["prototype"] = Kinds[number]["prototype"]>(
         ns: Refable<v1.Namespace._>,
-        exports: () => Iterable<Exported>
+        exports: (this: File_Section_Entity) => Iterable<Exported>
     ) {
-        const section = new File_Section_Entity(this._file, ns.name, {
-            exports: exports,
+        const section: File_Section_Entity = new File_Section_Entity(this._file, ns.name, {
+            exports: () => {
+                return exports.call(section)
+            },
             namespace: ns
         })
         return FwRef_Exports<Exported>(section)
     }
 }
 
-export interface File_Section_Props extends ChildOrigin_Props {
+export interface File_Section_Props extends Origin_Exporter_Props {
     namespace: Refable<v1.Namespace._>
 }
 
-export class File_Section_Entity extends ChildOriginEntity<File_Section_Props> {
+export class File_Section_Entity extends Origin_Exporter<File_Section_Props> {
     get kind() {
         return build.current.File.Section._
     }
@@ -75,6 +78,13 @@ export class File_Section_Entity extends ChildOriginEntity<File_Section_Props> {
             namespace: this._props.namespace.name
         })
     }).pull()
+}
+
+export class File_Section_Scope {
+    on: File_Section_Entity["on"]
+    constructor(private readonly _section: File_Section_Entity) {
+        this.on = this._section.on
+    }
 }
 
 export type File<

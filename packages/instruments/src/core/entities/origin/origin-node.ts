@@ -5,7 +5,8 @@ import { displayers } from "../../../displayers"
 import { type KindMapInput } from "../../kind-map"
 import type { KindedCtor, Refable } from "../../reference"
 import { BaseNode } from "../base-node"
-import type { OriginEntity } from "./origin-entity"
+import type { Origin_Entity } from "./origin-entity"
+
 @displayers({
     simple: s => `[${s.shortFqn}]`,
     prefix: s => {
@@ -19,12 +20,12 @@ import type { OriginEntity } from "./origin-entity"
         return chalk.underline(`${pref}${kindName}:${resourceName}`)
     }
 })
-export class OriginNode extends BaseNode<OriginNode, OriginEntity> {
+export class OriginNode extends BaseNode<OriginNode, Origin_Entity> {
     get kids() {
-        return seq(this._entity["__kids__"]()).map(x => x.node)
+        return seq(this.entity["__kids__"]()).map(x => x.node)
     }
     get meta() {
-        return this._entity.meta
+        return this.entity.meta
     }
     get inheritedMeta(): Meta {
         const self = this
@@ -32,12 +33,12 @@ export class OriginNode extends BaseNode<OriginNode, OriginEntity> {
             .map(x => x.meta.clone())
             .reduce((acc, meta) => acc.add(meta), Meta.make())
     }
-    constructor(entity: OriginEntity) {
+    constructor(entity: Origin_Entity) {
         super(entity)
     }
 
     get resourceKinds() {
-        return this._entity["__resource_kinds__"]()
+        return this.entity["__resource_kinds__"]()
     }
 
     get relations() {
@@ -45,7 +46,7 @@ export class OriginNode extends BaseNode<OriginNode, OriginEntity> {
     }
 
     get resources() {
-        return this._entity.resources
+        return this.entity.resources
     }
     readonly attachedTree: Seq<Refable> = seq(() => {
         const self = this

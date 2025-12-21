@@ -4,7 +4,6 @@ import chalk from "chalk"
 import { seq } from "doddle"
 import Emittery from "emittery"
 import StackTracey from "stacktracey"
-import { k8ts_namespace } from "../world/world"
 import {
     Assembler,
     AssemblerEventsTable,
@@ -41,7 +40,7 @@ export class Runner extends Emittery<AssemblerEventsTable> {
             cwd: ".",
             ...this._options,
             meta: Meta.make(this._options.meta)
-                .add(k8ts_namespace, {
+                .add(`source.k8ts.org/`, {
                     "^emitted-at": runTrace.format({
                         cwd: this._options.cwd
                     })

@@ -23,6 +23,7 @@
         }
     ],
     "settings": {
+        "markdownlint.configFile": "",
         "jest.runMode": "on-demand",
         "python.analysis.ignore": ["**/node_modules/**", "**/.git/**"],
         "jest.disabledWorkspaceFolders": ["root"],

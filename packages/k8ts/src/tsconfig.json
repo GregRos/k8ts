@@ -18,5 +18,9 @@
     "outDir": "../dist",
     "tsBuildInfoFile": "../dist/src.tsbuildinfo"
   },
-  "include": ["**/*.ts", "../../instruments/src/reference/exports.ts"]
+  "include": [
+    "**/*.ts",
+    "../../instruments/src/reference/exports.ts",
+    "../../metadata/src/order-meta-keyed-object.ts"
+  ]
 }

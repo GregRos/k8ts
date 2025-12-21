@@ -1,5 +1,10 @@
 import { CDK } from "@k8ts/imports"
-import { ManifestResource, OriginRunner, Refable, type ResourceEntity } from "@k8ts/instruments"
+import {
+    ManifestResource,
+    OriginContextTracker,
+    Refable,
+    type ResourceEntity
+} from "@k8ts/instruments"
 import { doddle } from "doddle"
 import { omit, omitBy } from "lodash"
 import { MakeError } from "../../error"
@@ -36,13 +41,13 @@ export class Deployment<
     }
 
     #_ = (() => {
-        const origin = OriginRunner.current
+        const origin = OriginContextTracker.current
         if (!origin) {
             throw new MakeError(
                 `Deployment ${this.name} must be created within an OriginEntity context`
             )
         }
-        this.props.$template.$POD = origin["__bind__"](this.props.$template.$POD)
+        this.props.$template.$POD = origin["__binder__"]().bind(this.props.$template.$POD)
     })()
 
     protected __kids__(): ResourceEntity[] {

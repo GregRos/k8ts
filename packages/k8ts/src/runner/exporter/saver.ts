@@ -37,6 +37,7 @@ export class ManifestSaver extends Emittery<ManifestSaverEventsTable> {
             content: content,
             bytes: encoded.byteLength
         }
+
         await this.emit("save", e)
         await mkdir(this._options.outdir, { recursive: true })
         await writeFile(join(this._options.outdir, filename), encoded)

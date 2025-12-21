@@ -2,28 +2,28 @@ import { Meta } from "@k8ts/metadata"
 import StackTracey from "stacktracey"
 import { type BaseManifest, type ManifestIdentFields, type ManifestMetadata } from "../../manifest"
 import { Trace, TraceEmbedder } from "../../tracing"
-import type { OriginEntity } from "../origin/origin-entity"
-import { OriginRunner } from "../origin/origin-runner"
+import type { Origin_Entity } from "../origin/origin-entity"
+import { OriginContextTracker } from "../origin/origin-runner"
 import { ResourceEntity } from "./resource-node"
 export abstract class ManifestResource<
     Name extends string = string,
     Props extends object = object
 > extends ResourceEntity<Name, Props> {
-    readonly _origin: OriginEntity
+    readonly _origin: Origin_Entity
     readonly meta: Meta
     constructor(name: Name, props: Props) {
         super(name, props)
         this.meta = Meta.make({
             name
         })
-        const lastOrigin = OriginRunner.current
+        const lastOrigin = OriginContextTracker.current
         if (!lastOrigin) {
             throw new Error(
                 `ManifestResource ${this.name} must be created within an OriginEntity context`
             )
         }
         this._origin = lastOrigin
-        this._origin.__attach_resource__(this)
+        this._origin["__attach_resource__"](this)
         TraceEmbedder.add(this, new Trace(new StackTracey().slice(2)))
     }
 
@@ -56,6 +56,7 @@ export abstract class ManifestResource<
             metadata: this.__metadata__(),
             ...(await this.body())
         }
+
         return a
     }
 

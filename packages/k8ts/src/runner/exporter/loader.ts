@@ -1,4 +1,4 @@
-import { OriginNode, ResourceNode, type BaseNode } from "@k8ts/instruments"
+import { OriginNode, ResourceNode, type BaseNode, type ManifestResource } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { MakeError } from "../../error"
 import { k8ts_namespace } from "../../world/world"
@@ -54,6 +54,10 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
             } as const
 
             await this.emit("load", event)
+            origin.entity["__emit__"]("resource/loaded", {
+                origin: origin.entity,
+                resource: res.entity as ManifestResource
+            })
             resources.push(res)
         }
 

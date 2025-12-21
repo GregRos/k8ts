@@ -7,10 +7,10 @@ import {
 import Emittery from "emittery"
 import { cloneDeep, cloneDeepWith, isEmpty, unset } from "lodash"
 import { version } from "../../version"
-import { k8ts_namespace } from "../../world/world"
 export interface ManifesterOptions {
     cwd?: string
 }
+
 export class Manifester extends Emittery<ManifesterEventsTable> {
     constructor(private readonly _options: ManifesterOptions) {
         super()
@@ -46,8 +46,10 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
 
         return cloneDeepWith(clone, _cleanKeys)
     }
+
     private async _generate(resource: ManifestResource): Promise<BaseManifest> {
         const manifest = await resource["__manifest__"]()
+
         const noNullish = this._cleanNullishValues(manifest)
         const noEmpty = this._cleanSpecificEmptyObjects(noNullish)
         return noEmpty
@@ -57,7 +59,7 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
         const loc = resource.trace.format({
             cwd: this._options.cwd
         })
-        resource.meta!.add(k8ts_namespace, {
+        resource.meta!.add(`build.k8ts.org/`, {
             "^constructed-at": loc,
             "^produced-by": `k8ts@${version}`
         })
@@ -69,8 +71,13 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
     async generate(res: ResourceNode): Promise<NodeManifest> {
         this._attachProductionAnnotations(res)
         await this.emit("manifest", { resource: res })
-        const manifest = await this._generate(res._entity as ManifestResource)
-        ManifestSourceEmbedder.add(manifest, res._entity)
+        const manifest = await this._generate(res.entity as ManifestResource)
+        ManifestSourceEmbedder.add(manifest, res.entity)
+        res.origin.entity["__emit__"]("resource/manifested", {
+            origin: res.origin.entity,
+            manifest,
+            resource: res.entity as ManifestResource
+        })
         return {
             node: res,
             manifest: manifest

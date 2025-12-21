@@ -46,14 +46,14 @@ export abstract class BaseNode<
         return RefKey.make(this.kind, this.name)
     }
     get kind() {
-        return this._entity.kind
+        return this.entity.kind
     }
 
     get kids() {
-        return seq(this._entity["__kids__"]()).map(x => x.node)
+        return seq(this.entity["__kids__"]()).map(x => x.node)
     }
     get relations() {
-        const needs = this._entity["__needs__"]()
+        const needs = this.entity["__needs__"]()
         return seq(function* () {
             for (const [relName, target] of Object.entries(needs)) {
                 if (Array.isArray(target)) {
@@ -72,15 +72,15 @@ export abstract class BaseNode<
     }
 
     get parent(): Node | null {
-        return this._entity["__parent__"]()?.node ?? null
+        return this.entity["__parent__"]()?.node ?? null
     }
 
     protected get _asNode() {
         return this as any as Node
     }
     private readonly _ID: number
-    constructor(readonly _entity: Entity) {
-        this._ID = this._entity["_ID"]
+    constructor(readonly entity: Entity) {
+        this._ID = this.entity["_ID"]
     }
 
     get shortFqn() {
@@ -91,17 +91,20 @@ export abstract class BaseNode<
         return (this.ancestors.at(-1).pull() as any) ?? (this as any)
     }
     get name() {
-        return this._entity.name
+        return this.entity.name
     }
     get isRoot() {
-        return this.parent === null && this._entity.kind.name !== "PodTemplate"
+        return this.parent === null && this.entity.kind.name !== "PodTemplate"
     }
 
     equals(other: any): boolean {
         if (FwReference.is(other)) {
             return this.equals(other["__pull__"]())
         }
-        return this._entity.equals(other._entity)
+        if (other instanceof BaseNode === false) {
+            return false
+        }
+        return this.entity.equals(other.entity)
     }
 
     readonly ancestors = seq((): Node[] => {

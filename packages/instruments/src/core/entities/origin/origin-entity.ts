@@ -1,13 +1,17 @@
 import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq } from "doddle"
+import { mapValues } from "lodash"
+import { yamprint } from "yamprint"
 import { displayers } from "../../../displayers"
 import { KindMap } from "../../kind-map"
-import type { Refable, RefKey } from "../../reference"
+import type { Refable } from "../../reference"
 import { BaseEntity } from "../base-node"
 import type { ResourceEntity } from "../resource/resource-node"
-import { type Origin_Props, OriginNode } from "./origin-node"
-import { OriginRunner } from "./origin-runner"
+import { OriginEventsEmitter, type Origin_EventMap } from "./origin-events"
+import { OriginNode, type Origin_Props } from "./origin-node"
+import { OriginContextTracker } from "./origin-runner"
+import type { OriginStackBinder } from "./origin-stack"
 
 @displayers({
     simple: x => `[${x.shortFqn}]`,
@@ -17,12 +21,39 @@ import { OriginRunner } from "./origin-runner"
         return `${kindPart}/${originName}`
     }
 })
-export abstract class OriginEntity<Props extends Origin_Props = Origin_Props> extends BaseEntity<
+export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> extends BaseEntity<
     OriginNode,
-    OriginEntity
+    Origin_Entity
 > {
-    private readonly _resources: ResourceEntity[] = []
-    private readonly _kids: OriginEntity[] = []
+    private _emitter = OriginEventsEmitter()
+
+    on<EventKey extends keyof Origin_EventMap>(
+        event: EventKey,
+        listener: (data: Origin_EventMap[EventKey]) => void
+    ) {
+        this._emitter.on(event, listener as any)
+    }
+
+    onEach<EventKeys extends keyof Origin_EventMap>(handlers: {
+        [K in EventKeys]: (data: Origin_EventMap[K]) => void
+    }) {
+        for (const key of Object.keys(handlers) as EventKeys[]) {
+            this._emitter.on(key, handlers[key] as any)
+        }
+    }
+    protected __emit__<EventKey extends keyof Origin_EventMap>(
+        event: EventKey,
+        data: Origin_EventMap[EventKey]
+    ) {
+        const values = mapValues(data, v => `${v}`)
+
+        console.log(`Emitting event ${event} on Origin ${this.name}\n${yamprint(values)}`)
+        for (const target of [this.node, ...this.node.ancestors]) {
+            target.entity._emitter.emit(event, data)
+        }
+    }
+    private readonly _ownResources: ResourceEntity[] = []
+    private readonly _ownKids: Origin_Entity[] = []
     readonly meta: Meta
 
     get node(): OriginNode {
@@ -46,43 +77,42 @@ export abstract class OriginEntity<Props extends Origin_Props = Origin_Props> ex
         return this.node.shortFqn
     }
 
-    __attach_kid__(kid: OriginEntity) {
-        this._kids.push(kid)
+    protected __attach_kid__(kid: Origin_Entity) {
+        this._ownKids.push(kid)
+        this.__emit__("origin/attached", {
+            origin: this,
+            child: kid
+        })
     }
 
-    find(refKey: RefKey) {
-        for (const resource of this._resources) {
-            if (resource.node.key.equals(refKey)) {
-                return resource
-            }
-        }
-        throw new Error(`Resource with key ${refKey.toString()} not found in Origin ${this.name}`)
-    }
-
-    __attach_resource__(resources: ResourceEntity | Iterable<ResourceEntity>) {
+    protected __attach_resource__(resources: ResourceEntity | Iterable<ResourceEntity>) {
         resources = Symbol.iterator in resources ? resources : [resources]
         for (const resource of resources) {
-            this._resources.push(resource)
+            this._ownResources.push(resource)
+            this.__emit__("resource/attached", {
+                origin: this,
+                resource
+            })
         }
     }
 
-    __kids__(): Iterable<OriginEntity> {
-        return this._kids
+    protected __kids__(): Iterable<Origin_Entity> {
+        return this._ownKids
     }
 
-    __bind__<F extends (...args: any[]) => any>(fn: F): F {
+    protected __binder__(): OriginStackBinder {
         const origin = this
-        return OriginRunner.binder(origin).bind(fn)
+        return OriginContextTracker.binder(origin)
     }
 
     // We don't cache this because resources can be added dynamically
     get resources(): Iterable<Refable> {
         const self = this
         return seq(function* () {
-            for (const resource of self._resources) {
+            for (const resource of self._ownResources) {
                 yield resource
             }
-            for (const kid of self._kids) {
+            for (const kid of self._ownKids) {
                 yield* kid.resources
             }
         })

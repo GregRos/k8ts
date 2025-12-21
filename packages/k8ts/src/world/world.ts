@@ -1,6 +1,6 @@
 import {
-    ChildOriginEntity,
-    OriginEntity,
+    Origin_Entity,
+    Origin_Exporter,
     type FwRef_Exports,
     type Kind,
     type KindedCtor,
@@ -14,13 +14,13 @@ export type File_sName = `${string}.yaml`
 
 export type World_Props<Kinds extends KindedCtor[]> = Origin_Props<Kinds[number]>
 
-export class World<Kinds extends KindedCtor[] = KindedCtor[]> extends OriginEntity<
+export class World<Kinds extends KindedCtor[] = KindedCtor[]> extends Origin_Entity<
     World_Props<Kinds>
 > {
     readonly kind = build.current.World._
     private readonly _ExternalOrigin = new ExternalOriginEntity(this)
     #_ = (() => {
-        this.meta.add("build.k8ts.org/", {
+        this.meta.add("source.k8ts.org/", {
             "^world": this.name
         })
     })()
@@ -37,9 +37,11 @@ export class World<Kinds extends KindedCtor[] = KindedCtor[]> extends OriginEnti
     }
 }
 
-export class ExternalOriginEntity extends ChildOriginEntity {
-    kind = build.current.External._
-    constructor(parent: OriginEntity) {
+export class ExternalOriginEntity extends Origin_Exporter {
+    get kind() {
+        return build.current.External._
+    }
+    constructor(parent: Origin_Entity) {
         super(parent, "External", {
             *exports() {}
         })

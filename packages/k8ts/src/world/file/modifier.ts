@@ -1,15 +1,15 @@
-import { OriginEntity, OriginRunner } from "@k8ts/instruments"
+import { Origin_Entity, OriginContextTracker } from "@k8ts/instruments"
 import { build } from "../k8ts-sys-kind"
 
 export interface ModifierOrigin_Props {}
 
-export class ModifierOrigin extends OriginEntity<ModifierOrigin_Props> {
+export class ModifierOrigin extends Origin_Entity<ModifierOrigin_Props> {
     get kind() {
         return build.current.Modifier._
     }
 
     #currentRunnerState = (() => {
-        return OriginRunner.disposableOriginModifier(this)
+        return OriginContextTracker.disposableOriginModifier(this)
     })();
 
     [Symbol.dispose]() {

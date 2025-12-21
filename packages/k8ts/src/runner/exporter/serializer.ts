@@ -1,5 +1,10 @@
 import { CDK } from "@k8ts/imports"
-import { BaseManifest, ManifestSourceEmbedder, type ResourceNode } from "@k8ts/instruments"
+import {
+    BaseManifest,
+    ManifestSourceEmbedder,
+    type ManifestResource,
+    type ResourceNode
+} from "@k8ts/instruments"
 import Emittery from "emittery"
 import { dump, type DumpOptions } from "js-yaml"
 import { MakeError } from "../../error"
@@ -20,9 +25,10 @@ export class YamlSerializer extends Emittery<SerializerEventsTable> {
     }
 
     async serialize(input: BaseManifest) {
+        const node = ManifestSourceEmbedder.get(input).node
         await this.emit("serialize", {
             manifest: input,
-            resource: ManifestSourceEmbedder.get(input).node
+            resource: node
         })
 
         try {
@@ -42,7 +48,14 @@ export class YamlSerializer extends Emittery<SerializerEventsTable> {
                 ...this._options.jsYamlOptions,
                 noRefs: true
             })
-            return result
+            const e = {
+                origin: node.origin.entity,
+                resource: node.entity as ManifestResource,
+                manifest: input,
+                content: result
+            }
+            node.origin.entity["__emit__"]("resource/serialized", e)
+            return e.content
         } catch (err) {
             const resource = ManifestSourceEmbedder.get(input)
             throw new MakeError(`Failed to serialize manifest ${resource}`, {

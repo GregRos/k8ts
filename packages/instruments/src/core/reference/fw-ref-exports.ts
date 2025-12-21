@@ -2,7 +2,7 @@ import { seq } from "doddle"
 import type { Refable } from "."
 import { FwReference } from "."
 import { ProxyOperationError } from "../../error"
-import { ChildOriginEntity } from "../entities"
+import { Origin_Exporter } from "../entities"
 
 export type FwRef_Exports_ByKey<Exports extends Refable = Refable> = {
     [E in Exports as `${E["kind"]["name"]}/${E["name"]}`]: FwReference<E>
@@ -14,7 +14,7 @@ export type FwRef_Exports<Exported extends Refable = Refable> = FxRef_Exports_Pr
 export type FwRef_Exports_Brand = FxRef_Exports_Proxied
 
 export function FwRef_Exports<Exported extends Refable>(
-    entity: ChildOriginEntity
+    entity: Origin_Exporter
 ): FwRef_Exports<Exported> {
     const proxied = new FxRef_Exports_Proxied(entity)
     const handler = new FwRef_Exports_Handler(proxied)
@@ -22,17 +22,17 @@ export function FwRef_Exports<Exported extends Refable>(
 }
 
 export class FxRef_Exports_Proxied {
-    #entity: ChildOriginEntity
-    constructor(entity: ChildOriginEntity) {
+    #entity: Origin_Exporter
+    constructor(entity: Origin_Exporter) {
         this.#entity = entity
     }
 
-    __entity__(act?: (entity: ChildOriginEntity) => any): ChildOriginEntity {
+    __entity__(act?: (entity: Origin_Exporter) => any): Origin_Exporter {
         return this.#entity as any
     }
 }
 
-class FwRef_Exports_Handler<Entity extends ChildOriginEntity> implements ProxyHandler<Entity> {
+class FwRef_Exports_Handler<Entity extends Origin_Exporter> implements ProxyHandler<Entity> {
     constructor(private readonly _subject: FxRef_Exports_Proxied) {}
 
     get entity() {

@@ -5,6 +5,7 @@ import { parseKey, parseMetaInput } from "./key"
 import { pNameValue } from "./key/parse-key"
 import { checkMetaString, ValueKey, type SectionKey } from "./key/repr"
 import { Key } from "./key/types"
+import { orderMetaKeyedObject } from "./order-meta-keyed-object"
 import { equalsMap, toJS } from "./util"
 export type Meta = Meta.Meta
 export type MutableMeta = Meta.MutableMeta
@@ -150,7 +151,7 @@ export namespace Meta {
                     out[k.suffix] = v
                 }
             }
-            return out
+            return orderMetaKeyedObject(out)
         }
 
         get labels() {

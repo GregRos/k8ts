@@ -1,3 +1,3 @@
-import { OriginStackRunner } from "./origin-stack"
+import { _OriginContextTracker } from "./origin-stack"
 
-export const OriginRunner = new OriginStackRunner()
+export const OriginContextTracker = new _OriginContextTracker()

@@ -7,7 +7,7 @@ import { Displayers, displayers } from "../../../displayers"
 import { Kind } from "../../api-kind"
 import { TraceEmbedder } from "../../tracing"
 import { BaseEntity, BaseNode, Formats } from "../base-node"
-import { type OriginEntity } from "../origin/origin-entity"
+import { type Origin_Entity } from "../origin/origin-entity"
 import { OriginNode } from "../origin/origin-node"
 
 @displayers({
@@ -44,7 +44,7 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
     }
 
     get trace() {
-        return TraceEmbedder.get(this._entity)
+        return TraceEmbedder.get(this.entity)
     }
 
     get isExported() {
@@ -52,7 +52,7 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
     }
 
     get meta() {
-        return "meta" in this._entity ? (this._entity.meta as Meta) : undefined
+        return "meta" in this.entity ? (this.entity.meta as Meta) : undefined
     }
 
     get isExternal() {
@@ -63,14 +63,14 @@ export class ResourceNode extends BaseNode<ResourceNode, ResourceEntity> {
         type: AnyCtor<EntityType>,
         fn: (entity: EntityType) => void
     ) {
-        const entity = this._entity as EntityType
+        const entity = this.entity as EntityType
         if (entity instanceof type) {
             fn(entity)
         }
     }
 
     as<EntityType extends ResourceEntity>(type: AnyCtor<EntityType>) {
-        const entity = this._entity as EntityType
+        const entity = this.entity as EntityType
         if (entity instanceof type) {
             return entity
         }
@@ -145,7 +145,7 @@ export abstract class ResourceEntity<
         }
     }
 
-    protected abstract __origin__(): OriginEntity
+    protected abstract __origin__(): Origin_Entity
     get node(): ResourceNode {
         return new ResourceNode(this.__origin__().node, this)
     }

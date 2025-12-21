@@ -1,4 +1,4 @@
-import { OriginNode, type ChildOriginEntity } from "@k8ts/instruments"
+import { OriginNode, type Origin_Exporter } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { aseq } from "doddle"
 import Emittery from "emittery"
@@ -14,7 +14,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
         super()
     }
 
-    async assemble(inFiles: Iterable<ChildOriginEntity>) {
+    async assemble(inFiles: Iterable<Origin_Exporter>) {
         const _emit = async <Name extends keyof AssemblerEventsTable>(
             event: Name,
             payload: AssemblerEventsTable[Name]
