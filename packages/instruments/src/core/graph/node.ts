@@ -1,5 +1,4 @@
 import { seq, type Seq } from "doddle"
-import { RefKey } from "../ref-key"
 import { FwReference } from "../reference"
 import type { Entity } from "./entity"
 import { Relation } from "./relation"
@@ -8,13 +7,6 @@ export abstract class Node<
     _Node extends Node<_Node, _Entity> = Node<any, any>,
     _Entity extends Entity<_Node, _Entity> = Entity<any, any>
 > {
-    get key(): RefKey {
-        return RefKey.make(this.kind, this.name)
-    }
-    get kind() {
-        return this.entity.kind
-    }
-
     get kids() {
         return seq(this.entity["__kids__"]()).map(x => x.node)
     }
@@ -49,10 +41,6 @@ export abstract class Node<
         this._ID = this.entity["_ID"]
     }
 
-    get shortFqn() {
-        return `${this.kind.name}/${this.name}`
-    }
-
     get root(): _Node {
         return (this.ancestors.at(-1).pull() as any) ?? (this as any)
     }
@@ -60,9 +48,8 @@ export abstract class Node<
         return this.entity.name
     }
     get isRoot() {
-        return this.parent === null && this.entity.kind.name !== "PodTemplate"
+        return this.parent === null
     }
-
     equals(other: any): boolean {
         if (FwReference.is(other)) {
             return this.equals(other["__pull__"]())

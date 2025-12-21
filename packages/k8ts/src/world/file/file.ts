@@ -9,7 +9,6 @@ import {
 } from "@k8ts/instruments"
 import { doddle } from "doddle"
 import type { v1 } from "../../kinds"
-import { build } from "../k8ts-sys-kind"
 import type { File_sName } from "../world"
 
 export class File_Entity extends Origin_Exporter {
@@ -19,7 +18,7 @@ export class File_Entity extends Origin_Exporter {
         })
     })()
     get kind() {
-        return build.current.File._
+        return "File"
     }
 }
 export function File<
@@ -71,7 +70,7 @@ export interface File_Section_Props extends Origin_Exporter_Props {
 
 export class File_Section_Entity extends Origin_Exporter<File_Section_Props> {
     get kind() {
-        return build.current.File.Section._
+        return "File/Section"
     }
     #_ = doddle(() => {
         this.meta.overwrite({

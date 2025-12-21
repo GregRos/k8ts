@@ -9,7 +9,6 @@ import {
 
 import { External } from "./external"
 import { File, type File_Props } from "./file"
-import { build } from "./k8ts-sys-kind"
 export type File_sName = `${string}.yaml`
 
 export type World_Props<Kinds extends KindedCtor[]> = Origin_Props<Kinds[number]>
@@ -17,7 +16,9 @@ export type World_Props<Kinds extends KindedCtor[]> = Origin_Props<Kinds[number]
 export class World<Kinds extends KindedCtor[] = KindedCtor[]> extends Origin_Entity<
     World_Props<Kinds>
 > {
-    readonly kind = build.current.World._
+    get kind() {
+        return "World"
+    }
     private readonly _ExternalOrigin = new ExternalOriginEntity(this)
     #_ = (() => {
         this.meta.add("source.k8ts.org/", {
@@ -39,7 +40,7 @@ export class World<Kinds extends KindedCtor[] = KindedCtor[]> extends Origin_Ent
 
 export class ExternalOriginEntity extends Origin_Exporter {
     get kind() {
-        return build.current.External._
+        return "External"
     }
     constructor(parent: Origin_Entity) {
         super(parent, "External", {

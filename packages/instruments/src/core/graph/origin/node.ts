@@ -13,7 +13,7 @@ import type { Origin_Entity } from "./entity"
         return ""
     },
     pretty(origin, format) {
-        const kindName = chalk.greenBright.bold(origin.kind.name)
+        const kindName = chalk.greenBright.bold(origin.kind)
         const resourceName = chalk.cyan(origin.name)
         const pref = this.prefix!()
 
@@ -26,6 +26,12 @@ export class OriginNode extends Node<OriginNode, Origin_Entity> {
     }
     get meta() {
         return this.entity.meta
+    }
+    get kind() {
+        return this.entity.kind
+    }
+    get shortFqn() {
+        return `${this.kind}/${this.name}`
     }
     get inheritedMeta(): Meta {
         const self = this

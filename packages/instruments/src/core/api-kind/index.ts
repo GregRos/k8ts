@@ -3,7 +3,7 @@ import { displayers } from "../../utils/displayers"
 import { bind_own_methods } from "../../utils/displayers/bind"
 import { RefKey } from "../ref-key"
 import { pluralize } from "./pluralize"
-export { From_Groups } from "./tree"
+
 export type Kind<
     GroupName extends string = string,
     Version extends string = string,

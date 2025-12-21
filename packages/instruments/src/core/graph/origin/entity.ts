@@ -16,7 +16,7 @@ import { OriginContextTracker } from "./tracker"
 @displayers({
     simple: x => `[${x.shortFqn}]`,
     pretty(origin) {
-        const kindPart = chalk.greenBright.bold(origin.kind.name)
+        const kindPart = chalk.greenBright.bold(origin.kind)
         const originName = chalk.cyan(origin.name)
         return `${kindPart}/${originName}`
     }
@@ -25,8 +25,8 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
     OriginNode,
     Origin_Entity
 > {
+    abstract get kind(): string
     private _emitter = OriginEventsEmitter()
-
     on<EventKey extends keyof Origin_EventMap>(
         event: EventKey,
         listener: (data: Origin_EventMap[EventKey]) => void

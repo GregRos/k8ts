@@ -1,5 +1,6 @@
 import { Meta } from "@k8ts/metadata"
 import StackTracey from "stacktracey"
+import type { Kind } from "../../api-kind"
 import { type Manifest, type Manifest_Ident, type Manifest_Metadata } from "../../manifest"
 import { Trace, TraceEmbedder } from "../../tracing"
 import type { Origin_Entity } from "../origin/entity"
@@ -11,6 +12,8 @@ export abstract class Resource_Top<
 > extends Resource_Entity<Name, Props> {
     readonly _origin: Origin_Entity
     readonly meta: Meta
+    abstract readonly kind: Kind.IdentParent
+
     constructor(name: Name, props: Props) {
         super(name, props)
         this.meta = Meta.make({

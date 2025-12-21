@@ -1,4 +1,3 @@
-import { Kind } from "../api-kind"
 import { FwReference } from "../reference"
 import type { Node } from "./node"
 export type LiteralModes = "simple" | "pretty" | "prefix"
@@ -14,7 +13,6 @@ export abstract class Entity<
         return globalEntityId++
     })()
     abstract readonly node: _Node
-    abstract readonly kind: Kind.IdentParent
     abstract readonly name: string
     equals(other: any): boolean {
         if (FwReference.is(other)) {

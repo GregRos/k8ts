@@ -4,6 +4,7 @@ import { seq } from "doddle"
 import { type AnyCtor } from "what-are-you"
 import { Displayers, displayers } from "../../../utils/displayers"
 import { Kind } from "../../api-kind"
+import { RefKey } from "../../ref-key"
 import { TraceEmbedder } from "../../tracing"
 import { Formats } from "../entity"
 import { Node } from "../node"
@@ -37,6 +38,12 @@ import type { Resource_Entity } from "./resource-entity"
 export class Resource_Node extends Node<Resource_Node, Resource_Entity> {
     get fullFqn() {
         return [this.kind.dns, this.namespace, this.name].filter(Boolean).join("/")
+    }
+    get key(): RefKey {
+        return RefKey.make(this.kind, this.name)
+    }
+    get kind() {
+        return this.entity.kind
     }
 
     get namespace() {
@@ -90,7 +97,7 @@ export class Resource_Node extends Node<Resource_Node, Resource_Entity> {
         })
     }
 
-    override get shortFqn() {
+    get shortFqn() {
         return `${this.origin.name}:${this.key}`
     }
 
