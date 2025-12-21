@@ -1,7 +1,7 @@
 import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq, Seq } from "doddle"
-import { displayers } from "../../../displayers"
+import { displayers } from "../../../utils/displayers"
 import { type KindMapInput } from "../../kind-map"
 import type { KindedCtor, Refable } from "../../reference"
 import { BaseNode } from "../base-node"

@@ -7,9 +7,3 @@ export class InstrumentsError extends Error {
         Object.assign(this, details)
     }
 }
-
-export class ProxyOperationError extends InstrumentsError {
-    constructor(message: string, details: Record<string, any> = {}) {
-        super(message, details)
-    }
-}

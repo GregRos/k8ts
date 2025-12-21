@@ -2,7 +2,7 @@ import { doddle, DoddleAsync, seq, type Doddle } from "doddle"
 import { readFile } from "fs/promises"
 import { dirname, join, resolve } from "path"
 import StackTracey from "stacktracey"
-import { InstrumentsError } from "../error"
+import { InstrumentsError } from "../../error"
 export type LocalFileMode = "text" | "binary"
 
 export interface LocalFileSourceProps<Mode extends LocalFileMode = "text"> {

@@ -1,4 +1,4 @@
-import { Embedder } from "../../_embedder"
+import { Embedder } from "../../utils/_embedder"
 import { ResourceEntity } from "../entities/resource/resource-node"
 export interface ManifestMetadata {
     labels: Record<string, string>

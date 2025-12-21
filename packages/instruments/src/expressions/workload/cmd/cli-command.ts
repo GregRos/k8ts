@@ -1,6 +1,6 @@
 import { seq } from "doddle"
 import { defaultsDeep, merge } from "lodash"
-import { displayers } from "../../../displayers"
+import { displayers } from "../../../utils/displayers"
 import {
     Cli_Flag,
     Cli_OptionValueTerm,

@@ -1,4 +1,4 @@
-import { displayers } from "../../../displayers"
+import { displayers } from "../../../utils/displayers"
 
 export type JoinIfNotEmpty<A extends string, J extends string, B extends string> = A extends ""
     ? B

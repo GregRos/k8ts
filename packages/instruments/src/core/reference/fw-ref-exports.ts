@@ -1,8 +1,8 @@
 import { seq } from "doddle"
 import type { Refable } from "."
 import { FwReference } from "."
-import { ProxyOperationError } from "../../error"
 import { Origin_Exporter } from "../entities"
+import { ProxyOperationError } from "./ProxyOperationError"
 
 export type FwRef_Exports_ByKey<Exports extends Refable = Refable> = {
     [E in Exports as `${E["kind"]["name"]}/${E["name"]}`]: FwReference<E>

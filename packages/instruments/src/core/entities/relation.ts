@@ -1,6 +1,6 @@
 import type { BaseNode } from "."
-import { pretty } from "../../_string"
-import { displayers } from "../../displayers"
+import { pretty } from "../../utils/_string"
+import { displayers } from "../../utils/displayers"
 
 @displayers({
     simple: s => [s.why, "-->", s.needed],
