@@ -2,7 +2,7 @@ import { doddle } from "doddle"
 import EventEmitter from "eventemitter3"
 import type { BaseManifest } from "../../manifest"
 import type { ManifestResource, ResourceEntity } from "../resource"
-import type { Origin_Entity } from "./origin-entity"
+import type { Origin_Entity } from "./entity"
 
 export function OriginEventsEmitter() {
     const em = new EventEmitter<Origin_EventMap>()

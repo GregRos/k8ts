@@ -8,10 +8,10 @@ import { KindMap } from "../../kind-map"
 import type { Refable } from "../../reference"
 import { BaseEntity } from "../base-node"
 import type { ResourceEntity } from "../resource/resource-node"
-import { OriginEventsEmitter, type Origin_EventMap } from "./origin-events"
-import { OriginNode, type Origin_Props } from "./origin-node"
-import { OriginContextTracker } from "./origin-runner"
-import type { OriginStackBinder } from "./origin-stack"
+import { OriginEventsEmitter, type Origin_EventMap } from "./events"
+import { OriginNode, type Origin_Props } from "./node"
+import type { OriginStackBinder } from "./tracker"
+import { OriginContextTracker } from "./tracker"
 
 @displayers({
     simple: x => `[${x.shortFqn}]`,

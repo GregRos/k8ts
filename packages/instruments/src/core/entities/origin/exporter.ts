@@ -2,8 +2,8 @@ import { doddlify, seq } from "doddle"
 import { memoize } from "lodash"
 import { FwReference, type Refable } from "../../reference"
 import type { ManifestResource } from "../resource"
-import { Origin_Entity } from "./origin-entity"
-import type { Origin_Props } from "./origin-node"
+import { Origin_Entity } from "./entity"
+import type { Origin_Props } from "./node"
 
 export interface Origin_Exporter_Props extends Origin_Props {
     exports(): Iterable<Refable>

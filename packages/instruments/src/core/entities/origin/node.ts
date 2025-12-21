@@ -5,7 +5,7 @@ import { displayers } from "../../../displayers"
 import { type KindMapInput } from "../../kind-map"
 import type { KindedCtor, Refable } from "../../reference"
 import { BaseNode } from "../base-node"
-import type { Origin_Entity } from "./origin-entity"
+import type { Origin_Entity } from "./entity"
 
 @displayers({
     simple: s => `[${s.shortFqn}]`,

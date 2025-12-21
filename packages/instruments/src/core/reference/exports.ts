@@ -1,5 +1,5 @@
 import type { LiveRefable } from "."
-import type { Origin_Entity } from "../entities/origin/origin-entity"
+import type { Origin_Entity } from "../entities/origin/entity"
 
 export interface ExportsProps<
     Entity extends Origin_Entity = Origin_Entity,

@@ -2,8 +2,8 @@ import { Meta } from "@k8ts/metadata"
 import StackTracey from "stacktracey"
 import { type BaseManifest, type ManifestIdentFields, type ManifestMetadata } from "../../manifest"
 import { Trace, TraceEmbedder } from "../../tracing"
-import type { Origin_Entity } from "../origin/origin-entity"
-import { OriginContextTracker } from "../origin/origin-runner"
+import type { Origin_Entity } from "../origin/entity"
+import { OriginContextTracker } from "../origin/tracker"
 import { ResourceEntity } from "./resource-node"
 export abstract class ManifestResource<
     Name extends string = string,

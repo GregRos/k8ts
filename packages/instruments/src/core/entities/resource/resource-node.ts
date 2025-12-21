@@ -7,8 +7,8 @@ import { Displayers, displayers } from "../../../displayers"
 import { Kind } from "../../api-kind"
 import { TraceEmbedder } from "../../tracing"
 import { BaseEntity, BaseNode, Formats } from "../base-node"
-import { type Origin_Entity } from "../origin/origin-entity"
-import { OriginNode } from "../origin/origin-node"
+import { type Origin_Entity } from "../origin/entity"
+import { OriginNode } from "../origin/node"
 
 @displayers({
     simple: s => `[${s.shortFqn}]`,

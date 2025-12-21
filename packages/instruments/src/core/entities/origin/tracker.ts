@@ -1,7 +1,7 @@
 import { AsyncLocalStorage } from "async_hooks"
 import { doddle, pull, type Doddle, type MaybeDoddle } from "doddle"
 import { isIterable } from "what-are-you"
-import type { Origin_Entity } from "./origin-entity"
+import type { Origin_Entity } from "./entity"
 
 export interface OriginStackBinder {
     run<T>(callback: () => T): T
@@ -99,3 +99,5 @@ export class _OriginContextTracker {
         } as F
     }
 }
+
+export const OriginContextTracker = new _OriginContextTracker()
