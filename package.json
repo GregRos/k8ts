@@ -19,7 +19,7 @@
     "eslint:fix": "eslint --fix '**/*.ts'",
     "lint:check": "run-s prettier:check",
     "lint:fix": "run-s prettier:fix",
-    "tidy": "yarn install && run-s lint:fix build:clean test"
+    "tidy": "yarn install && yarn workspaces foreach -Apt exec yarn install && run-s lint:fix build:clean test"
   },
   "dependencies": {
     "@types/node": "^25.0.2",
