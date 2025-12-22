@@ -9,6 +9,7 @@ on:
       - "packages/sample-interfaces/**"
       - ".github/workflows/sample-interfaces.push.yaml"
       - "tsconfig.base.json"
+      - "yarn.lock"
       - ".*"
   workflow_dispatch:
 
