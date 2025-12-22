@@ -1,6 +1,6 @@
 {
   "name": "@k8ts/instruments",
-  "version": "0.6.0",
+  "version": "0.6.2",
   "description": "A collection of utilities and core components for k8ts.",
   "keywords": [
     "k8ts",
@@ -72,7 +72,7 @@
     "what-are-you": "^0.1.12"
   },
   "devDependencies": {
-    "@k8ts/metadata": "workspace:^",
+    "@k8ts/metadata": "workspace:*",
     "@types/jest": "^30.0.0",
     "@types/lodash": "^4.17.16",
     "@types/node": "20.9.1",

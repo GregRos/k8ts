@@ -19,7 +19,8 @@
     "eslint:fix": "eslint --fix '**/*.ts'",
     "lint:check": "run-s prettier:check",
     "lint:fix": "run-s prettier:fix",
-    "tidy": "yarn install && yarn workspaces foreach -Apt exec yarn install && run-s lint:fix build:clean test"
+    "fix:install": "yarn install && yarn workspaces foreach -Ap exec yarn install",
+    "tidy": "run-s fix:install lint:fix build:clean test"
   },
   "dependencies": {
     "@types/node": "^25.0.2",

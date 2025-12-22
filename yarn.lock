@@ -1612,7 +1612,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@k8ts/instruments@workspace:packages/instruments"
   dependencies:
-    "@k8ts/metadata": "workspace:^"
+    "@k8ts/metadata": "workspace:*"
     "@types/jest": "npm:^30.0.0"
     "@types/lodash": "npm:^4.17.16"
     "@types/node": "npm:20.9.1"
@@ -1640,7 +1640,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@k8ts/metadata@workspace:^, @k8ts/metadata@workspace:packages/metadata":
+"@k8ts/metadata@workspace:*, @k8ts/metadata@workspace:^, @k8ts/metadata@workspace:packages/metadata":
   version: 0.0.0-use.local
   resolution: "@k8ts/metadata@workspace:packages/metadata"
   dependencies:
