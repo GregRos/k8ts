@@ -4338,13 +4338,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"doddle@portal:/C:/codegr/doddle::locator=%40k8ts%2Fworkspace%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "doddle@portal:/C:/codegr/doddle::locator=%40k8ts%2Fworkspace%40workspace%3A."
+"doddle@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "doddle@npm:7.2.0"
   dependencies:
     tslib: "npm:^2.8.1"
+  checksum: 10c0/298a5b774ab94cd496adef4ff9fa3028e6051bdb52a403d397c681bbb9316ccd3e714d4a3467e9b91f554b533e6bd87c50005d1b0a1a83d81f72632fd98aa76b
   languageName: node
-  linkType: soft
+  linkType: hard
 
 "dot-case@npm:^3.0.4":
   version: 3.0.4
