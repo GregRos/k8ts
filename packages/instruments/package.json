@@ -88,7 +88,6 @@
   "peerDependencies": {
     "@k8ts/metadata": "workspace:^"
   },
-  "packageManager": "yarn@4.1.1",
   "engines": {
     "node": ">=16.0.0"
   }
