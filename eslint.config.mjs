@@ -56,7 +56,7 @@ export default [
     },
     {
         // Run exclusively on normal TS/JS files.
-        files: ["packages/{parjs,char-info}/{src,spec}/*.{ts,tsx}"],
+        files: ["packages/*/{src,test}/*.{ts,tsx}"],
         ignores: ["**/*.md/*.{ts,js,tsx}"],
         plugins: { ts: typescript, jest },
 

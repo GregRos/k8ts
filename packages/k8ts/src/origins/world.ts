@@ -12,11 +12,11 @@ import { File, type File_Props, type File_sName } from "./file"
 
 export type World_Props<Kinds extends Resource_Ctor_Of[]> = Origin_Props<Kinds[number]>
 
-export class World<Kinds extends Resource_Ctor_Of[] = Resource_Ctor_Of[]> extends Origin_Entity<
-    World_Props<Kinds>
-> {
+export class World_Entity<
+    Kinds extends Resource_Ctor_Of[] = Resource_Ctor_Of[]
+> extends Origin_Entity<World_Props<Kinds>> {
     get kind() {
-        return "k8ts:World"
+        return "[k8ts] World"
     }
     private readonly _ExternalOrigin = new Origin_External(this)
     #_ = (() => {

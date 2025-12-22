@@ -1,54 +1,46 @@
-k8ts (pronounced “Kate’s”) is an experimental TypeScript framework for generating k8s manifests. It currently only has a TypeScript API.
+# K8ts
+k8ts (pronounced “Kate’s”) is an experimental TypeScript framework for generating k8s manifests.
 
 # Features
 
 **🔗Reference tracking**
-Tracks and validates references between resources, reducing the likelihood of deployment errors.
+Tracks and validates references between resources; reduces deployment issues.
 
-**📝 Source tracking**
-Links manifests to versions, commits, and lines of code using annotations. A single glance at a resource is enough to tell where it came from.
+<!-- **📝 Source tracking**
+Uses metadata to link deployed manifests to source lines, commits, and package versions. -->
 
 **📂 File-based organization**
-Lets you generate resources into separate files, ensuring the output is organized and **human-readable.**
+Declaratively organize manifests into separate files. Ideal for deployment using GitOps tools, such as FluxCD.
 
-Ideal for deployment using GitOps tools, such as FluxCD.
-
-**🧰 Useful APIs**
-Handy abstractions for working with paths, command-lines, environment variables, URLs, and paths. Stuff that commonly appears in k8s manifests.
+<!-- **🧰 Useful APIs**
+Handy abstractions for working with paths, command-lines, environment variables, etc. -->
 
 **🗃️ Metadata management**
 A rich, extensible metadata model that lets you easily embed metadata automatically.
 
-**🛠️ Transparent pipeline**
-Uses a highly transparent declaration-to-serialization pipeline that can be tapped at any point to do things like:
-
-- Filter resources
-- Modify their specs
-- Add labels or annotations
-
+**🛠️ Hackable pipeline**
+Uses a generation pipeline that can be tapped at any point to filter resources, modify them, or add metadata.
+<!-- 
 🧩 **Highly extensible**
-At its core, it’s a framework for _building k8s generators_.
-
-- Uses decorators to capture common functionality.
-- Rich dependency graph allows tracking of arbitrary resources.
+Designed to accomodate all possible k8s resources, with flexible dependency and origin tracking systems. -->
 
 ## Non-features
 
 **😴 Doesn’t deploy anything**
-K8ts builds manifest but deployment is handled using other tools, such as FluxCD. This is to be deliberately avoided.
+It just generates (and validates) YAML. That's it.
 
 **🙈 Doesn’t look at the cluster**
-Doesn’t run queries or check what resources are currently in the cluster.
-
-Some sort of validation mechanism might be added in the future, but at its core, k8ts will always remain **a framework for generating text files.**
+Doesn't query your cluster. It only knows about resources you tell it about.
 
 # Install
-
-Currently three packages are needed:
+Install the following packages:
 
 ```ts
 yarn add -D k8ts @k8ts/instruments @k8ts/metadata
 ```
+
+# Usage
+First, create a World. This is the parent of all resources you define.
 
 # Docs
 

@@ -1,12 +1,12 @@
-import type { Resource_Core_Ref } from "@k8ts/instruments"
-import type { AnyCtor } from "what-are-you"
-import { World } from "./origins"
+import type { Resource_Ctor_Of } from "@k8ts/instruments"
+import { World_Entity, type World_Props } from "./origins"
 import {
     ClusterRole,
     ClusterRoleBinding,
     ConfigMap,
     CronJob,
     Deployment,
+    HttpRoute,
     Namespace,
     Pv,
     Pvc,
@@ -57,10 +57,17 @@ const defaultKindPairs = [
     CronJob,
     ServiceAccount,
     ClusterRole,
+    HttpRoute,
     ClusterRoleBinding
 ] as const
-export function K8ts<MoreKinds extends AnyCtor<Resource_Core_Ref>>(...extraKinds: MoreKinds[]) {
-    return new World("K8ts", {
-        kinds: [...defaultKindPairs]
-    })
+
+export class World<MoreKinds extends Resource_Ctor_Of[] = []> extends World_Entity<
+    [...typeof defaultKindPairs, ...MoreKinds]
+> {
+    constructor(name: string, props?: World_Props<[...typeof defaultKindPairs, ...MoreKinds]>) {
+        props ??= {}
+        props.kinds ??= []
+        props.kinds.push(...(defaultKindPairs as any))
+        super(name, props)
+    }
 }

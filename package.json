@@ -1,5 +1,6 @@
 {
   "name": "@k8ts/workspace",
+  "version": "0.2.0",
   "private": true,
   "license": "MIT",
   "workspaces": [
@@ -19,8 +20,8 @@
     "eslint:fix": "eslint --fix '**/*.ts'",
     "lint:check": "run-s prettier:check",
     "lint:fix": "run-s prettier:fix",
-    "fix:install": "yarn install && yarn workspaces foreach -Ap exec yarn install",
-    "tidy": "run-s fix:install lint:fix build:clean test"
+    "install:all": "yarn install && yarn workspaces foreach -Ap exec yarn install",
+    "tidy": "run-s install:all lint:fix build:clean test"
   },
   "dependencies": {
     "@types/node": "^25.0.2",

@@ -3,9 +3,8 @@
   "tasks": [
     {
       "type": "npm",
-      "tsconfig": "tsconfig.json",
       "problemMatcher": ["$tsc-watch"],
-      "option": "watch",
+      "script": "watch",
       "group": {
         "kind": "build",
         "isDefault": true
@@ -13,7 +12,7 @@
       "runOptions": {
         "runOn": "folderOpen"
       },
-      "label": "tsc: watch - tsconfig.json"
+      "label": "tsc watch [global]"
     },
 
     {

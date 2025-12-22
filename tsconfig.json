@@ -1,9 +1,6 @@
 {
   "references": [
     {
-      "path": "./tools/tsconfig.json"
-    },
-    {
       "path": "./packages/sample-interfaces/tsconfig.json"
     },
     {

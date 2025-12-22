@@ -23,7 +23,7 @@ export interface File_Section_Props<Exported extends Resource_Core_Ref = Resourc
 
 export class Origin_Section extends Origin_Exporter<File_Section_Props> {
     get kind() {
-        return "k8ts:File/Section"
+        return "[k8ts] File/Section"
     }
     #_ = doddle(() => {
         this.meta.overwrite({

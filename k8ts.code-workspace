@@ -23,76 +23,15 @@
         }
     ],
     "settings": {
-        "markdownlint.configFile": "",
         "jest.runMode": "on-demand",
-        "python.analysis.ignore": ["**/node_modules/**", "**/.git/**"],
         "jest.disabledWorkspaceFolders": ["root"],
-        "[css]": {
-            "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "[html]": {
-            "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "[javascript]": {
-            "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "[json]": {
-            "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "[jsonc]": {
-            "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "[scss]": {
-            "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "[typescript]": {
-            "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "[yaml]": {
-            "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "typescript.suggest.autoImports": true,
-        "typescript.suggest.includeCompletionsForImportStatements": true,
-        "typescript.updateImportsOnFileMove.enabled": "always",
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+
         "files.exclude": {
             "packages/k8ts": true,
             "packages/instruments": true,
             "packages/metadata": true,
-            "packages/sample-interfaces": true,
-            "**/sample-interfaces-dist_example": true,
-            "**/dist-imports": true,
-            "**/.git": true,
-            "**/.svn": true,
-            "**/.hg": true,
-            "**/.nyc_output": true,
-            "**/coverage": true,
-            "**/dist-spec": true,
-            "**/CVS": true,
-            "**/.DS_Store": true,
-            "**/Thumbs.db": true,
-            "**/*.aux": true,
-            "**/*.bbl": true,
-            "**/*.fdb_latexmk": true,
-            "**/*.fls": true,
-            "**/*.out": true,
-            "**/*.synctex.gz": true,
-            "**/.idea": true,
-            "**/.mypy_cache": true,
-            "**/__pycache__": true,
-            "**/dist": true,
-            "**/dist/**/*": true,
-            "**/dist_aux": true,
-            ".nyc_output": true,
-            "coverage": true,
-            "docs": true,
-            "**/node_modules": true
-        },
-        "search.exclude": {
-            "**/node_modules": true,
-            "**/bower_components": true,
-            "**/*.code-search": true,
-            "**/.ruby-lsp": true,
-            "**/sample-interfaces": true
+            "packages/sample-interfaces": true
         }
     }
 }

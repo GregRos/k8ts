@@ -2,13 +2,13 @@
   "extends": "../../../tsconfig.base.json",
   "references": [
     {
-      "path": "../../sample-interfaces/src/tsconfig.json"
+      "path": "../../instruments/src/tsconfig.json"
     },
     {
       "path": "../../metadata/src/tsconfig.json"
     },
     {
-      "path": "../../instruments/src/tsconfig.json"
+      "path": "../../sample-interfaces/src/tsconfig.json"
     }
   ],
   "compilerOptions": {

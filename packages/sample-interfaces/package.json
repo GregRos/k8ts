@@ -1,6 +1,6 @@
 {
   "name": "@k8ts/sample-interfaces",
-  "version": "0.1.3",
+  "version": "0.3.0",
   "description": "Temporary k8s resource definitions for k8ts, generated using cdk8s.",
   "keywords": [],
   "bugs": {
