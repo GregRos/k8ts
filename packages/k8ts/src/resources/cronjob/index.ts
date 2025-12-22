@@ -1,6 +1,6 @@
-import { CDK } from "@k8ts/imports"
 import { Cron, CronStanza, Resource_Top, type Resource_Entity } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
+import { CDK } from "@k8ts/sample-interfaces"
 import { doddle } from "doddle"
 import { omitBy } from "lodash"
 import { Timezone } from "../../../../instruments/dist/expressions/timezone"

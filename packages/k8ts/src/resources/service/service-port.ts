@@ -1,4 +1,4 @@
-import { CDK } from "@k8ts/imports"
+import { CDK } from "@k8ts/sample-interfaces"
 import type { Service, Service_Ref } from "./service"
 
 export interface Service_Port_Props<Port extends string> {

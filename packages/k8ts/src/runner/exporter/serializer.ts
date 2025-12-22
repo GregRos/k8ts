@@ -1,10 +1,10 @@
-import { CDK } from "@k8ts/imports"
 import {
     Manifest,
     ManifestSourceEmbedder,
     type Resource_Node,
     type Resource_Top
 } from "@k8ts/instruments"
+import { CDK } from "@k8ts/sample-interfaces"
 import Emittery from "emittery"
 import { dump, type DumpOptions } from "js-yaml"
 import { MakeError } from "../../error"

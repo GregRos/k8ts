@@ -1,4 +1,3 @@
-import { CDK } from "@k8ts/imports"
 import {
     DataSourceRecord_Binary,
     DataSourceRecord_Text,
@@ -8,6 +7,7 @@ import {
     resolveText
 } from "@k8ts/instruments"
 import { toObject } from "@k8ts/metadata/util"
+import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { v1 } from "../../kinds/default"
 export type ConfigMap_Entry_Source = DataSource_LocalFile | string

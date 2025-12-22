@@ -1,4 +1,4 @@
-import type { CDK } from "@k8ts/imports"
+import type { CDK } from "@k8ts/sample-interfaces"
 
 import type { Resource_Entity } from "@k8ts/instruments"
 import { Resource_Child } from "@k8ts/instruments"

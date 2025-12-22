@@ -1,5 +1,5 @@
-import type { CDK } from "@k8ts/imports"
 import { merge } from "@k8ts/metadata/util"
+import type { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { isObject } from "what-are-you"
 import { MakeError } from "../error"

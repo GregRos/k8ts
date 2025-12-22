@@ -3,12 +3,9 @@
   "version": "0.6.0",
   "description": "A collection of utilities and core components for k8ts.",
   "keywords": [
+    "k8ts",
     "kubernetes",
-    "typescript",
-    "manifests",
-    "build",
-    "helm",
-    "cdk8s"
+    "typescript"
   ],
   "bugs": {
     "url": "https://github.com/GregRos/k8ts/issues"
@@ -64,8 +61,7 @@
   "dependencies": {
     "chalk": "4.1.2",
     "dayjs": "^1.11.13",
-    "doddle": "^7.1.6",
-    "emittery": "0.13.1",
+    "doddle": "^7.2.0",
     "eventemitter3": "^5.0.1",
     "ip-address": "^10.0.1",
     "lodash": "^4.17.21",
@@ -77,8 +73,6 @@
   },
   "devDependencies": {
     "@k8ts/metadata": "workspace:^",
-    "@swc/core": "^1.11.11",
-    "@swc/jest": "^0.2.37",
     "@types/jest": "^30.0.0",
     "@types/lodash": "^4.17.16",
     "@types/node": "20.9.1",

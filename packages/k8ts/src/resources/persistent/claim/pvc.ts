@@ -1,5 +1,5 @@
-import { CDK } from "@k8ts/imports"
 import { Resource_Top, ResourcesSpec, Unit, type Resource_Full_Ref } from "@k8ts/instruments"
+import { CDK } from "@k8ts/sample-interfaces"
 import { Prefix$ } from "../../../_type/prefix$"
 import { MakeError } from "../../../error"
 import { v1 } from "../../../kinds/default"

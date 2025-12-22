@@ -1,6 +1,6 @@
-import { CDK } from "@k8ts/imports"
 import { Resource_Child, Resource_Min_Ref } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
+import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { omitBy } from "lodash"
 import { v1 } from "../../kinds/default"
@@ -16,6 +16,7 @@ export type Pod_Container_Producer<Ports extends string> = (
 ) => Iterable<Container_Ref<Ports>>
 
 export interface Pod_Props<Ports extends string> extends Pod_Props_Original {
+    meta?: Meta.Input
     $POD: Pod_Container_Producer<Ports>
 }
 
@@ -37,12 +38,12 @@ export class Pod_Template<Ports extends string = string> extends Resource_Child<
     }
     protected __metadata__() {
         return {
-            name: this.name
+            name: this.name,
+            labels: this.meta.labels,
+            annotations: this.meta.annotations
         }
     }
-    readonly meta = Meta.make({
-        name: this.name
-    })
+    readonly meta = Meta.make(this.props.meta ?? {}).add("name", this.name)
 
     protected __submanifest__(): CDK.PodTemplateSpec {
         const self = this
@@ -66,6 +67,7 @@ export class Pod_Template<Ports extends string = string> extends Resource_Child<
             })
             .toArray()
         return {
+            metadata: self.__metadata__(),
             spec: {
                 ...omitBy(props, (x, k) => k.startsWith("$")),
                 containers: mainContainers.pull(),

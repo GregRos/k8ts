@@ -2,7 +2,7 @@ import { Origin_Entity, OriginContextTracker } from "@k8ts/instruments"
 
 export interface ModifierOrigin_Props {}
 
-export class ModifierOrigin extends Origin_Entity<ModifierOrigin_Props> {
+export class Origin_Modifier extends Origin_Entity<ModifierOrigin_Props> {
     get kind() {
         return "Modifier"
     }
@@ -17,5 +17,5 @@ export class ModifierOrigin extends Origin_Entity<ModifierOrigin_Props> {
 }
 
 export function Modifier(name: string, props: ModifierOrigin_Props = {}) {
-    return new ModifierOrigin(name, props)
+    return new Origin_Modifier(name, props)
 }

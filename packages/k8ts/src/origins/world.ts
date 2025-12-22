@@ -7,7 +7,7 @@ import {
 } from "@k8ts/instruments"
 
 import { External } from "../resources/external"
-import { ExternalOriginEntity } from "./external"
+import { Origin_External } from "./external"
 import { File, type File_Props, type File_sName } from "./file"
 
 export type World_Props<Kinds extends Resource_Ctor_Of[]> = Origin_Props<Kinds[number]>
@@ -18,7 +18,7 @@ export class World<Kinds extends Resource_Ctor_Of[] = Resource_Ctor_Of[]> extend
     get kind() {
         return "k8ts:World"
     }
-    private readonly _ExternalOrigin = new ExternalOriginEntity(this)
+    private readonly _ExternalOrigin = new Origin_External(this)
     #_ = (() => {
         this.meta.add("source.k8ts.org/", {
             "^world": this.name
@@ -29,9 +29,9 @@ export class World<Kinds extends Resource_Ctor_Of[] = Resource_Ctor_Of[]> extend
         return new External(this._ExternalOrigin, kind.refKey(name), namespace)
     }
 
-    File<Exports extends Resource_Ctor_Of["prototype"], ExtraKinds extends Resource_Ctor_Of[] = []>(
+    File<Exports extends Resource_Ctor_Of["prototype"]>(
         name: File_sName,
-        props: File_Props<[...ExtraKinds, ...Kinds], Exports>
+        props: File_Props<Kinds, Exports>
     ) {
         return File(this, name, props) as FwRef_Exports<Exports>
     }

@@ -1,5 +1,5 @@
-import { CDK } from "@k8ts/imports"
 import { Resource_Core_Ref, Resource_Top, type InputPortMapping } from "@k8ts/instruments"
+import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { MakeError } from "../../error"
 import { v1 } from "../../kinds/index"

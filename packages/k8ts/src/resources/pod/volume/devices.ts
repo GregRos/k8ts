@@ -1,6 +1,6 @@
-import type { CDK } from "@k8ts/imports"
 import type { Resource_Entity } from "@k8ts/instruments"
 import { Resource_Child } from "@k8ts/instruments"
+import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../../kinds/default"
 import { Pvc } from "../../persistent"
 import { Container_Mount_Device } from "../container/mounts"

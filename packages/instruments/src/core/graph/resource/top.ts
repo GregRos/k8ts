@@ -46,8 +46,8 @@ export abstract class Resource_Top<
 
     protected __idents__(): Manifest_Ident {
         return {
-            kind: this.kind.name,
-            apiVersion: this.kind.parent!.text
+            apiVersion: this.kind.parent!.text,
+            kind: this.kind.name
         }
     }
 

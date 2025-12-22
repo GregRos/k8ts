@@ -1,0 +1,7 @@
+language: typescript
+imports:
+  - k8s
+  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
+
+app: tsx --tsconfig cluster/tsconfig.json cluster/index.ts
+output: packages/sample-interfaces

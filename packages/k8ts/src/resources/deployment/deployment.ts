@@ -1,10 +1,10 @@
-import { CDK } from "@k8ts/imports"
 import {
     OriginContextTracker,
     Resource_Core_Ref,
     Resource_Top,
     type Resource_Entity
 } from "@k8ts/instruments"
+import { CDK } from "@k8ts/sample-interfaces"
 import { doddle } from "doddle"
 import { omit, omitBy } from "lodash"
 import { MakeError } from "../../error"

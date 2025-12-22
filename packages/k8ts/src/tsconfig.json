@@ -2,9 +2,8 @@
   "extends": "../../../tsconfig.base.json",
   "references": [
     {
-      "path": "../../imports/src/tsconfig.json"
+      "path": "../../sample-interfaces/src/tsconfig.json"
     },
-
     {
       "path": "../../metadata/src/tsconfig.json"
     },

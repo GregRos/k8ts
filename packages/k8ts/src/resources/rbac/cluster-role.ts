@@ -1,5 +1,5 @@
-import { CDK } from "@k8ts/imports"
 import { Kind, Resource_Top } from "@k8ts/instruments"
+import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { rbac } from "../../kinds/rbac"
 export interface ClusterRole_Rule<

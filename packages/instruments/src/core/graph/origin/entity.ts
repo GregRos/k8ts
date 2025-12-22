@@ -2,7 +2,6 @@ import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq } from "doddle"
 import { mapValues } from "lodash"
-import { yamprint } from "yamprint"
 import { displayers } from "../../../utils/displayers"
 import { Entity } from "../entity"
 import type { Resource_Entity } from "../resource/entity"
@@ -27,6 +26,22 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
 > {
     abstract get kind(): string
     private _emitter = OriginEventsEmitter()
+    private readonly _ownResources: Resource_Entity[] = []
+    private readonly _ownKids: Origin_Entity[] = []
+    readonly meta: Meta
+
+    constructor(
+        readonly name: string,
+        protected readonly _props: Props
+    ) {
+        super()
+
+        this.meta = Meta.make(_props.meta ?? {})
+    }
+
+    get node(): OriginNode {
+        return new OriginNode(this)
+    }
     on<EventKey extends keyof Origin_EventMap>(
         event: EventKey,
         listener: (data: Origin_EventMap[EventKey]) => void
@@ -47,27 +62,10 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
     ) {
         const values = mapValues(data, v => `${v}`)
 
-        console.log(`Emitting event ${event} on Origin ${this.name}\n${yamprint(values)}`)
         for (const target of [this.node, ...this.node.ancestors]) {
             target.entity._emitter.emit(event, data)
         }
     }
-    private readonly _ownResources: Resource_Entity[] = []
-    private readonly _ownKids: Origin_Entity[] = []
-    readonly meta: Meta
-
-    get node(): OriginNode {
-        return new OriginNode(this)
-    }
-    constructor(
-        readonly name: string,
-        protected readonly _props: Props
-    ) {
-        super()
-
-        this.meta = Meta.make(_props.meta ?? {})
-    }
-
     protected __resource_kinds__(): KindMap {
         const parentKindsIfAny = this.__parent__()?.__resource_kinds__() ?? []
         return new KindMap([...(this._props.kinds ?? []), ...parentKindsIfAny])

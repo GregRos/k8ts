@@ -1,10 +1,10 @@
-import { CDK } from "@k8ts/imports"
 import {
     Resource_Core_Ref,
     Resource_Top,
     type Resource_Full_Ref,
     type Unit
 } from "@k8ts/instruments"
+import { CDK } from "@k8ts/sample-interfaces"
 import { MakeError } from "../../../error"
 import { v1 } from "../../../kinds/default"
 import { storage } from "../../../kinds/storage"

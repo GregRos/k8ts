@@ -1,5 +1,5 @@
-import { CDK } from "@k8ts/imports"
 import { Resource_Top } from "@k8ts/instruments"
+import { CDK } from "@k8ts/sample-interfaces"
 import { rbac } from "../../kinds/rbac"
 import type { ClusterRole } from "./cluster-role"
 import type { ServiceAccount } from "./service-account"

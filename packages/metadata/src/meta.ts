@@ -51,7 +51,7 @@ export namespace Meta {
         clone() {
             return this._create(new Map(this._dict))
         }
-        add(key: Key.Value, value: string): Meta
+        add(key: Key.Value, value?: string): Meta
         add(key: Key.Section, value: MetaInputParts.Nested): Meta
         add(input: InputMeta): Meta
         add(a: any, b?: any) {
@@ -77,7 +77,7 @@ export namespace Meta {
             return parseMetaInput(newS)
         }
 
-        overwrite(key: Key.Value, value: string): Meta
+        overwrite(key: Key.Value, value: string | undefined): Meta
         overwrite(key: Key.Section, value: MetaInputParts.Nested): Meta
         overwrite(input?: InputMeta): Meta
         overwrite(a?: any, b?: any) {

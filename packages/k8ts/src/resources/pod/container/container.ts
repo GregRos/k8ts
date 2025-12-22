@@ -1,4 +1,3 @@
-import type { CDK } from "@k8ts/imports"
 import {
     PortSet,
     ResourcesSpec,
@@ -7,6 +6,7 @@ import {
     type InputPortSetRecord,
     type TaggedImage
 } from "@k8ts/instruments"
+import type { CDK } from "@k8ts/sample-interfaces"
 import { toContainerPorts } from "../../utils/adapters"
 
 import type { Resource_Entity, Resource_Min_Ref, Resource_Top } from "@k8ts/instruments"

@@ -1,5 +1,5 @@
-import type { CDK } from "@k8ts/imports"
 import { Kind } from "@k8ts/instruments"
+import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../../kinds/default"
 import type { Pod_Volume } from "../volume"
 import type { Pod_Device } from "../volume/devices"

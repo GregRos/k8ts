@@ -1,4 +1,4 @@
-export type { CDK } from "@k8ts/imports"
+export type { CDK } from "@k8ts/sample-interfaces"
 export { K8ts } from "./default-world"
 export * from "./origins"
 export * from "./origins/file"

@@ -1,13 +1,10 @@
 import { doddlify, seq } from "doddle"
-import { memoize } from "lodash"
 import type { Resource_Top } from "../resource"
 import { FwReference, type Resource_Core_Ref } from "../resource"
 import { Origin_Entity } from "./entity"
 import type { Origin_Props } from "./node"
 
-export interface Origin_Exporter_Props extends Origin_Props {
-    exports(): Iterable<Resource_Core_Ref>
-}
+export interface Origin_Exporter_Props extends Origin_Props {}
 
 export abstract class Origin_Exporter<
     Props extends Origin_Exporter_Props = Origin_Exporter_Props
@@ -18,10 +15,11 @@ export abstract class Origin_Exporter<
         props: Props
     ) {
         super(name, props)
-        const origExports = this._props.exports
-        this._props.exports = memoize(() => seq(origExports).cache())
+
         this._parent["__attach_kid__"](this)
     }
+
+    protected abstract __exports__(): Iterable<Resource_Core_Ref>
 
     protected __parent__() {
         return this._parent
@@ -30,7 +28,7 @@ export abstract class Origin_Exporter<
     @doddlify
     get resources(): Iterable<Resource_Core_Ref> {
         const self = this
-        const boundExports = self.__binder__().bind(self._props.exports)
+        const boundExports = self.__binder__().bind(self.__exports__.bind(self))
         const allEmitted = new Set<Resource_Core_Ref>()
         const normalResources = seq(() => super.resources).cache()
         return seq(function* () {
