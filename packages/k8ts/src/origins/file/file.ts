@@ -3,7 +3,7 @@ import {
     Origin_Exporter,
     type Origin_Entity,
     type Origin_Props,
-    type Resource_Core_Ref,
+    type Ref2_Of,
     type Resource_Ctor_Of
 } from "@k8ts/instruments"
 import { doddlify, seq } from "doddle"
@@ -15,7 +15,7 @@ export interface File_Props<
     Exports extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
 > extends Origin_Props<Kinds[number]> {
     kinds?: Kinds
-    namespace?: Resource_Core_Ref<v1.Namespace._>
+    namespace?: Ref2_Of<v1.Namespace._>
     FILE(FILE: Origin_File_Scope<Kinds>): Iterable<Exports | FwRef_Exports<Exports>>
 }
 export class Origin_File extends Origin_Exporter<File_Props> {
@@ -32,10 +32,7 @@ export class Origin_File extends Origin_Exporter<File_Props> {
     @doddlify
     protected __exports__() {
         return seq(
-            this._props.FILE.call(
-                this,
-                new Origin_File_Scope(this) as any
-            ) as Iterable<Resource_Core_Ref>
+            this._props.FILE.call(this, new Origin_File_Scope(this) as any) as Iterable<Ref2_Of>
         ).cache()
     }
 }

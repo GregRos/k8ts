@@ -1,6 +1,6 @@
 import {
     OriginContextTracker,
-    Resource_Core_Ref,
+    Ref2_Of,
     Resource_Top,
     type Resource_Entity
 } from "@k8ts/instruments"
@@ -27,7 +27,7 @@ export type Deployment_Props<Ports extends string> = Deployment_Props_Original &
     $template: Pod_Props<Ports>
     $strategy?: Deployment_Strategy
 }
-export type Deployment_Ref<Ports extends string> = Resource_Core_Ref<apps.v1.Deployment._> & {
+export type Deployment_Ref<Ports extends string> = Ref2_Of<apps.v1.Deployment._> & {
     __PORTS__: Ports
 }
 

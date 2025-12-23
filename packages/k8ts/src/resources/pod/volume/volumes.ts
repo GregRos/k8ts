@@ -1,62 +1,58 @@
 import type { CDK } from "@k8ts/sample-interfaces"
 
-import type { Resource_Entity } from "@k8ts/instruments"
+import type {
+    Ref2_Of,
+    Resource_Entity,
+    Resource_Ref_Keys_Of,
+    Resource_Ref_Min
+} from "@k8ts/instruments"
 import { Resource_Child } from "@k8ts/instruments"
 import { v1 } from "../../../kinds/default"
-import type { ConfigMap } from "../../configmap"
-import { Pvc, type Pv_VolumeMode } from "../../persistent"
-import type { Secret } from "../../secret"
 import { Container_Mount_Volume, type Container_Mount_Props } from "../container/mounts"
 
-interface Pod_Volume_Backend_Pvc<Mode extends Pv_VolumeMode = Pv_VolumeMode> {
-    $backend: Pvc<Mode>
+export interface Pod_Volume_Backend_Pvc<
+    A extends Ref2_Of<v1.PersistentVolumeClaim._> = Ref2_Of<v1.PersistentVolumeClaim._>
+> {
+    $backend: A
     readOnly?: boolean
 }
 
-interface Pod_Volume_Backend_ConfigMap {
-    $backend: ConfigMap
+const allowedVolumeResourceKinds = [v1.ConfigMap._, v1.Secret._] as const
+type VolumeResourceKind = (typeof allowedVolumeResourceKinds)[number]
+export type AllowedResources = Resource_Ref_Min<VolumeResourceKind>
+export interface Pod_Volume_Backend_ConfigMap<
+    A extends Ref2_Of<v1.ConfigMap._> = Ref2_Of<v1.ConfigMap._>
+> {
+    $backend: A
+    optional?: boolean
+    mappings?: {
+        [K in Resource_Ref_Keys_Of<A>]?: string
+    }
 }
-interface Pod_Volume_Backend_Secret {
-    $backend: Secret
+
+export interface Pod_Volume_Backend_Secret<A extends Ref2_Of<v1.Secret._> = Ref2_Of<v1.Secret._>> {
+    $backend: A
+    optional?: boolean
+    mappings?: {
+        [K in Resource_Ref_Keys_Of<A>]?: string
+    }
 }
-export type Pod_Volume_Backend<Mode extends Pv_VolumeMode = Pv_VolumeMode> =
-    | Pod_Volume_Backend_Pvc<Mode>
+
+export type Pod_Volume_Backend =
+    | Pod_Volume_Backend_Pvc
     | Pod_Volume_Backend_ConfigMap
     | Pod_Volume_Backend_Secret
 
 export abstract class Pod_Volume<
-    Props extends Pod_Volume_Backend = Pod_Volume_Backend
-> extends Resource_Child<Props> {
+    P extends Pod_Volume_Backend = Pod_Volume_Backend
+> extends Resource_Child<P> {
     get kind() {
         return v1.Pod.Volume._
     }
 
-    static make<Mode extends Pv_VolumeMode>(
-        parent: Resource_Entity,
-        name: string,
-        backend: Pod_Volume_Backend<Mode>
-    ): Pod_Volume<Pod_Volume_Backend<Mode>> {
-        switch (backend.$backend.kind.name) {
-            case "PersistentVolumeClaim":
-                return new Pod_Volume_Pvc<Mode>(
-                    parent,
-                    name,
-                    backend as Pod_Volume_Backend_Pvc<Mode>
-                )
-            case "ConfigMap":
-                return new Pod_Volume_ConfigMap(
-                    parent,
-                    name,
-                    backend as Pod_Volume_Backend_ConfigMap
-                )
-            case "Secret":
-                return new Pod_Volume_Secret(parent, name, backend as Pod_Volume_Backend_Secret)
-        }
-    }
-
     protected __needs__(): Record<string, Resource_Entity | Resource_Entity[] | undefined> {
         return {
-            backend: this.props.$backend
+            backend: this.props.$backend as any
         }
     }
     Mount(options?: Omit<Container_Mount_Props, "volume">) {
@@ -69,7 +65,7 @@ export abstract class Pod_Volume<
     protected abstract __submanifest__(): CDK.Volume
 }
 
-class Pod_Volume_Pvc<Mode extends Pv_VolumeMode> extends Pod_Volume<Pod_Volume_Backend_Pvc<Mode>> {
+export class Pod_Volume_Pvc extends Pod_Volume<Pod_Volume_Backend_Pvc> {
     protected __submanifest__(): CDK.Volume {
         return {
             name: this.name,
@@ -81,36 +77,48 @@ class Pod_Volume_Pvc<Mode extends Pv_VolumeMode> extends Pod_Volume<Pod_Volume_B
     }
 }
 
-class Pod_Volume_ConfigMap extends Pod_Volume<Pod_Volume_Backend_ConfigMap> {
+function mappingsToKeyPaths(input: Record<string, string>) {
+    const mappings = input
+    const arr = Object.entries(mappings).map(([key, value]) => {
+        return {
+            key: key,
+            path: value
+        } satisfies CDK.KeyToPath
+    })
+    if (arr.length === 0) {
+        return undefined
+    }
+    return arr
+}
+
+export class Pod_Volume_ConfigMap extends Pod_Volume<Pod_Volume_Backend_ConfigMap> {
     protected __submanifest__(): CDK.Volume {
+        const mappings = mappingsToKeyPaths(this.props.mappings ?? {})
+
         return {
             name: this.name,
             configMap: {
-                name: this.props.$backend.name
+                name: this.props.$backend.name,
+                optional: this.props.optional,
+                items: mappings
             }
         }
     }
 }
 
-class Pod_Volume_Secret extends Pod_Volume<Pod_Volume_Backend_Secret> {
+export class Pod_Volume_Secret<
+    Source extends Ref2_Of<v1.Secret._>
+> extends Pod_Volume<Pod_Volume_Backend_Secret> {
     protected __submanifest__(): CDK.Volume {
+        const mappings = mappingsToKeyPaths(this.props.mappings ?? {})
+
         return {
             name: this.name,
             secret: {
-                secretName: this.props.$backend.name
+                secretName: this.props.$backend.name,
+                optional: this.props.optional,
+                items: mappings
             }
         }
-    }
-}
-
-export function make(parent: Resource_Entity, name: string, input: Pod_Volume_Backend): Pod_Volume {
-    const { $backend } = input
-    switch ($backend.kind.name) {
-        case "PersistentVolumeClaim":
-            return new Pod_Volume_Pvc(parent, name, input as Pod_Volume_Backend_Pvc)
-        case "ConfigMap":
-            return new Pod_Volume_ConfigMap(parent, name, input as Pod_Volume_Backend_ConfigMap)
-        case "Secret":
-            return new Pod_Volume_Secret(parent, name, input as Pod_Volume_Backend_Secret)
     }
 }

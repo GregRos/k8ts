@@ -29,6 +29,7 @@ export class World_Entity<
         return new External(this._ExternalOrigin, kind.refKey(name), namespace)
     }
 
+
     File<Exports extends Resource_Ctor_Of["prototype"]>(
         name: File_sName,
         props: File_Props<Kinds, Exports>

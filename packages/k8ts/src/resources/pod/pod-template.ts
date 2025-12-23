@@ -1,4 +1,9 @@
-import { Resource_Child, Resource_Min_Ref } from "@k8ts/instruments"
+import {
+    Resource_Child,
+    Resource_Ref_Min,
+    type Ref2_Of,
+    type Resource_Entity
+} from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
@@ -6,9 +11,18 @@ import { omitBy } from "lodash"
 import { v1 } from "../../kinds/default"
 import { Container, type Container_Props } from "./container"
 import { Pod_Device, type Pod_Device_Backend } from "./volume/devices"
-import { Pod_Volume, type Pod_Volume_Backend } from "./volume/volumes"
+import {
+    Pod_Volume,
+    Pod_Volume_ConfigMap,
+    Pod_Volume_Pvc,
+    Pod_Volume_Secret,
+    type Pod_Volume_Backend,
+    type Pod_Volume_Backend_ConfigMap,
+    type Pod_Volume_Backend_Pvc,
+    type Pod_Volume_Backend_Secret
+} from "./volume/volumes"
 export type Pod_Props_Original = Omit<CDK.PodSpec, "containers" | "initContainers" | "volumes">
-type Container_Ref<Ports extends string> = Resource_Min_Ref<v1.Pod.Container._> & {
+type Container_Ref<Ports extends string> = Resource_Ref_Min<v1.Pod.Container._> & {
     __PORTS__: Ports
 }
 export type Pod_Container_Producer<Ports extends string> = (
@@ -26,7 +40,7 @@ export class Pod_Template<Ports extends string = string> extends Resource_Child<
     }
     readonly containers = seq(() => this.props.$POD(new PodScope(this)))
         .map(x => {
-            return x as Container<Ports>
+            return x as any as Container<Container_Props<Ports>>
         })
         .cache()
     readonly mounts = seq(() => this.containers.concatMap(x => x.mounts)).cache()
@@ -86,8 +100,28 @@ export class PodScope {
     InitContainer(name: string, options: Container_Props<never>) {
         return new Container(this._parent, name, "init", options)
     }
-    Volume(name: string, options: Pod_Volume_Backend) {
-        return Pod_Volume.make(this._parent, name, options)
+    Volume<Actual extends Ref2_Of<v1.ConfigMap._>>(
+        name: string,
+        options: Pod_Volume_Backend_ConfigMap<Actual>
+    ): Pod_Volume
+    Volume<Actual extends Ref2_Of<v1.Secret._>>(
+        name: string,
+        options: Pod_Volume_Backend_Secret<Actual>
+    ): Pod_Volume
+    Volume<Actual extends Ref2_Of<v1.PersistentVolumeClaim._>>(
+        name: string,
+        options: Pod_Volume_Backend_Pvc<Actual>
+    ): Pod_Volume
+    Volume(name: string, options: Pod_Volume_Backend): Pod_Volume {
+        const backend = options.$backend as any as Resource_Entity
+        if (backend.is(v1.ConfigMap._)) {
+            return new Pod_Volume_ConfigMap(this._parent, name, options as any)
+        } else if (backend.is(v1.Secret._)) {
+            return new Pod_Volume_Secret(this._parent, name, options as any)
+        } else if (backend.is(v1.PersistentVolumeClaim._)) {
+            return new Pod_Volume_Pvc(this._parent, name, options as any)
+        }
+        throw new Error(`Unsupported volume backend kind: ${backend.kind}`)
     }
     Device(name: string, options: Pod_Device_Backend) {
         return new Pod_Device(this._parent, name, options)

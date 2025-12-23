@@ -20,7 +20,9 @@ export abstract class Resource_Entity<
         callback(this)
         return this
     }
-
+    is<K extends Kind.IdentParent>(kind: K): this is { kind: K } {
+        return this.kind.equals(kind)
+    }
     abstract readonly namespace: string | undefined
 
     ref() {

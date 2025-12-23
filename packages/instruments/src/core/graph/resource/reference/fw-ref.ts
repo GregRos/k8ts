@@ -2,11 +2,10 @@ import type { Doddle } from "doddle"
 import type { AnyCtor } from "what-are-you"
 import type { RefKey } from "../ref-key"
 import { ProxyOperationError } from "./error"
-import type { Resource_Core_Ref } from "./refable"
+import type { Ref2_Of } from "./refable"
 
-export type FwReference<T extends Resource_Core_Ref = Resource_Core_Ref> = FwReference_Proxied<T> &
-    T
-export function FwReference<Referenced extends Resource_Core_Ref>(
+export type FwReference<T extends Ref2_Of = Ref2_Of> = FwReference_Proxied<T> & T
+export function FwReference<Referenced extends Ref2_Of>(
     props: FwReference_Props<Referenced>
 ): FwReference<Referenced> {
     const core = new FwReference_Proxied(props)
@@ -17,7 +16,7 @@ export namespace FwReference {
         return FwReference_Proxied.is(obj)
     }
 }
-export interface FwReference_Props<Referenced extends Resource_Core_Ref> {
+export interface FwReference_Props<Referenced extends Ref2_Of> {
     readonly class?: AnyCtor<Referenced>
     readonly key: RefKey
     readonly namespace?: string
@@ -25,7 +24,7 @@ export interface FwReference_Props<Referenced extends Resource_Core_Ref> {
     readonly resolver: Doddle<Referenced>
 }
 
-class FwReference_Proxied<To extends Resource_Core_Ref> {
+class FwReference_Proxied<To extends Ref2_Of> {
     readonly #props: FwReference_Props<To>
     constructor(props: FwReference_Props<To>) {
         this.#props = props
@@ -44,7 +43,7 @@ class FwReference_Proxied<To extends Resource_Core_Ref> {
     }
 }
 
-class FwRef_Handler<T extends Resource_Core_Ref> implements ProxyHandler<T> {
+class FwRef_Handler<T extends Ref2_Of> implements ProxyHandler<T> {
     get _props() {
         return this._subject["__reference_props__"]()
     }

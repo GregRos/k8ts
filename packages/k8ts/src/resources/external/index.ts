@@ -19,6 +19,10 @@ export class External<
         }
     }
 
+    known<Type>(): this & Type {
+        return this as any
+    }
+
     get namespace() {
         return this.meta.tryGet("namespace")
     }

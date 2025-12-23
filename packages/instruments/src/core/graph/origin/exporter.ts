@@ -1,6 +1,6 @@
 import { doddlify, seq } from "doddle"
 import type { Resource_Top } from "../resource"
-import { FwReference, type Resource_Core_Ref } from "../resource"
+import { FwReference, type Ref2_Of } from "../resource"
 import { Origin_Entity } from "./entity"
 import type { Origin_Props } from "./node"
 
@@ -19,17 +19,17 @@ export abstract class Origin_Exporter<
         this._parent["__attach_kid__"](this)
     }
 
-    protected abstract __exports__(): Iterable<Resource_Core_Ref>
+    protected abstract __exports__(): Iterable<Ref2_Of>
 
     protected __parent__() {
         return this._parent
     }
 
     @doddlify
-    get resources(): Iterable<Resource_Core_Ref> {
+    get resources(): Iterable<Ref2_Of> {
         const self = this
         const boundExports = self.__binder__().bind(self.__exports__.bind(self))
-        const allEmitted = new Set<Resource_Core_Ref>()
+        const allEmitted = new Set<Ref2_Of>()
         const normalResources = seq(() => super.resources).cache()
         return seq(function* () {
             for (const em of boundExports() as Resource_Top[]) {

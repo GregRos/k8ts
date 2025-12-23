@@ -1,19 +1,19 @@
 import { seq } from "doddle"
-import type { Resource_Core_Ref } from "."
+import type { Ref2_Of } from "."
 import { FwReference } from "."
 import type { Origin_Exporter } from "../../origin"
 import { ProxyOperationError } from "./error"
 
-export type FwRef_Exports_ByKey<Exports extends Resource_Core_Ref = Resource_Core_Ref> = {
+export type FwRef_Exports_ByKey<Exports extends Ref2_Of = Ref2_Of> = {
     [E in Exports as `${E["kind"]["name"]}/${E["name"]}`]: FwReference<E>
 }
 
-export type FwRef_Exports<Exported extends Resource_Core_Ref = Resource_Core_Ref> =
-    FxRef_Exports_Proxied & FwRef_Exports_ByKey<Exported>
+export type FwRef_Exports<Exported extends Ref2_Of = Ref2_Of> = FxRef_Exports_Proxied &
+    FwRef_Exports_ByKey<Exported>
 
 export type FwRef_Exports_Brand = FxRef_Exports_Proxied
 
-export function FwRef_Exports<Exported extends Resource_Core_Ref>(
+export function FwRef_Exports<Exported extends Ref2_Of>(
     entity: Origin_Exporter
 ): FwRef_Exports<Exported> {
     const proxied = new FxRef_Exports_Proxied(entity)

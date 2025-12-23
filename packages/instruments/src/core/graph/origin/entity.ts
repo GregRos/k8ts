@@ -5,7 +5,7 @@ import { mapValues } from "lodash"
 import { displayers } from "../../../utils/displayers"
 import { Entity } from "../entity"
 import type { Resource_Entity } from "../resource/entity"
-import type { Resource_Core_Ref } from "../resource/reference/refable"
+import type { Ref2_Of } from "../resource/reference/refable"
 import { OriginEventsEmitter, type Origin_EventMap } from "./events"
 import { KindMap } from "./kind-map"
 import { OriginNode, type Origin_Props } from "./node"
@@ -104,7 +104,7 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
     }
 
     // We don't cache this because resources can be added dynamically
-    get resources(): Iterable<Resource_Core_Ref> {
+    get resources(): Iterable<Ref2_Of> {
         const self = this
         return seq(function* () {
             for (const resource of self._ownResources) {

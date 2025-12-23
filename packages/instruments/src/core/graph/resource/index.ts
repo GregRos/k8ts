@@ -1,6 +1,7 @@
 export * from "./api-kind"
 export * from "./child"
 export * from "./entity"
+export * from "./field"
 export * from "./node"
 export * from "./ref-key"
 export * from "./reference"

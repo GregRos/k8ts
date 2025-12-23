@@ -3,22 +3,29 @@ import type { Kind } from "../api-kind"
 import type { Resource_Entity } from "../entity"
 import type { Resource_Node } from "../node"
 
-export type Resource_Min_Ref<K extends Kind.IdentParent = Kind.IdentParent> = { kind: K }
+export type Resource_Ref_Min<K extends Kind.IdentParent = Kind.IdentParent> = { kind: K }
 export type Resource_Ctor_Of<K extends Kind.IdentParent = Kind.IdentParent> = AnyCtor<
-    Resource_Core_Ref<K>
+    Ref2_Of<K>
 > & {
-    prototype: Resource_Core_Ref<K>
+    prototype: Ref2_Of<K>
 }
-export type Resource_Core_Ref<
+export type Ref2_Of<
     Kind extends Kind.IdentParent = Kind.IdentParent,
     Name extends string = string
-> = Resource_Min_Ref<Kind> & {
+> = Resource_Ref_Min<Kind> & {
     name: Name
     equals(other: any): boolean
     node: Resource_Node
 }
-
-export type Resource_Full_Ref<
+export type Resource_Ref_Full<
     _Kind extends Kind.IdentParent = Kind.IdentParent,
     _Name extends string = string
-> = Resource_Core_Ref<_Kind, _Name> & Resource_Entity<_Name>
+> = Ref2_Of<_Kind, _Name> & Resource_Entity<_Name>
+
+export type Resource_Ref_Keys_Of<X extends Resource_Ref_Min, Else = never> = [X] extends [
+    {
+        keys: (infer K extends string)[]
+    }
+]
+    ? K
+    : Else

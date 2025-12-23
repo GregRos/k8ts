@@ -3,7 +3,7 @@ import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../../kinds/default"
 import type { Pod_Volume } from "../volume"
 import type { Pod_Device } from "../volume/devices"
-type Path_Rooted = `/${string}`
+export type Path_Rooted = `/${string}`
 export type Container_Mount_Path = `${"" | "." | ".."}${Path_Rooted}`
 
 export type Container_Mount = Container_Mount_Volume | Container_Mount_Device
