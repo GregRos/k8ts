@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@types/node": "^25.0.2",
+    "what-are-you": "^0.2.0",
     "yamprint": "^0.8.4"
   },
   "devDependencies": {

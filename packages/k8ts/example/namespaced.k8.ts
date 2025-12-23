@@ -1,4 +1,4 @@
-import { Cmd, Cron, Image, localFile } from "@k8ts/instruments"
+import { Cmd, Cron, Image, local_file } from "@k8ts/instruments"
 import { ConfigMap, CronJob, Deployment, HttpRoute, Pvc, Service } from "k8ts"
 import { gateway, storage, v1 } from "k8ts/kinds"
 import k8tsFile from "./cluster-scoped.k8"
@@ -60,10 +60,11 @@ export default W.File("deployment2.yaml", {
                     $storage: "1Gi->5Gi"
                 })
                 yield new ConfigMap("config", {
-                    data: {
-                        "config.yaml": localFile("./example.txt")
+                    $data: {
+                        "config.yaml": local_file("./example.txt").as("text")
                     }
                 })
+
                 const deploy2 = new Deployment("xyz2", {
                     replicas: 1,
                     $template: {
@@ -72,10 +73,14 @@ export default W.File("deployment2.yaml", {
                                 $backend: claim
                             })
 
-                            new ConfigMap("abc", {
-                                data: {
+                            const r = new ConfigMap("abc", {
+                                $data: {
                                     a: "1"
                                 }
+                            })
+                            r.keys
+                            const v12 = k.Volume("data2", {
+                                $backend: r
                             })
 
                             const d = k.Device("dev", {
@@ -101,11 +106,13 @@ export default W.File("deployment2.yaml", {
                                 $env: {
                                     abc: "a",
                                     xyz: {
-                                        $ref: W.External(v1.ConfigMap._, "config"),
-                                        key: "abc"
+                                        $backend: W.External(v1.ConfigMap._, "config").known<{
+                                            keys: ["a"]
+                                        }>(),
+                                        key: "324"
                                     },
                                     a123: {
-                                        $ref: W.External(v1.Secret._, "config"),
+                                        $backend: W.External(v1.Secret._, "config"),
                                         key: "a123"
                                     }
                                 }

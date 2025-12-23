@@ -40,7 +40,7 @@ export class Pod_Template<Ports extends string = string> extends Resource_Child<
     }
     readonly containers = seq(() => this.props.$POD(new PodScope(this)))
         .map(x => {
-            return x as any as Container<Container_Props<Ports>>
+            return x as Container<Ports>
         })
         .cache()
     readonly mounts = seq(() => this.containers.concatMap(x => x.mounts)).cache()

@@ -1,27 +1,39 @@
-import type { Kind, Resource_Core_Ref } from "@k8ts/instruments"
-import { EnvBuilder } from "./env"
+import type { Ref2_Of, Resource_Ref_Keys_Of } from "@k8ts/instruments"
+import type { ConfigMap } from "../resources"
 
-export type InputEnvValue = string | null | number | boolean | bigint | undefined | EnvVarFrom
-export type InputEnvMapping = Partial<Record<string, InputEnvValue>>
-export interface EnvVarFrom<_Kind extends Kind = Kind> {
-    $ref: Resource_Core_Ref<_Kind>
-    key: string
+export type Env_Value = string | null | number | boolean | bigint | undefined
+export interface Env_From<Backend extends Ref2_Of = Ref2_Of> {
+    $backend: Backend
+    key: Resource_Ref_Keys_Of<this["$backend"], string>
     optional?: boolean
 }
 
-export type InputEnv = EnvBuilder | InputEnvMapping | InputEnvMap
-
-export function toInputEnv(env: InputEnv): InputEnvMap {
-    if (env instanceof EnvBuilder) {
-        return new Map(env["_env"])
-    }
-    if (env instanceof Map) {
-        return new Map(env)
-    }
-    return new Map(Object.entries(env))
+export type InputEnvValue = string | null | number | boolean | bigint | undefined | EnvVarFrom
+export type InputEnvMapping = Partial<Record<string, InputEnvValue>>
+export interface EnvVarFrom<_Backend extends Ref2_Of = Ref2_Of> {
+    $backend: _Backend
+    key: Resource_Ref_Keys_Of<this["$backend"], string>
+    optional?: boolean
 }
-export type EnvFrom<_Kind extends Kind = Kind> = {
-    $ref: Resource_Core_Ref<_Kind>
-    prefix?: string
+function test<
+    T extends {
+        [key in keyof T]: {
+            $backend: Ref2_Of & { keys: string[] }
+            key: T[key]["$backend"]["keys"][number]
+        }
+    }
+>(obj: T): void {}
+export interface TTT<Backend extends Ref2_Of = Ref2_Of> {
+    $backend: Backend
+    key: Resource_Ref_Keys_Of<this["$backend"], string>
 }
-export type InputEnvMap = Map<string, InputEnvValue>
+interface A<X> {
+    x: X
+}
+function test2<T extends A<Record<keyof T, TTT | number>>>(obj: T): void {}
+test({
+    a: {
+        $backend: null! as ConfigMap<"", "abc">,
+        key: "abc"
+    }
+})
