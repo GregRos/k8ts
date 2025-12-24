@@ -7,9 +7,9 @@ export type Path_Rooted = `/${string}`
 export type Container_Mount_Path = `${"" | "." | ".."}${Path_Rooted}`
 
 export type Container_Mount = Container_Mount_Volume | Container_Mount_Device
-export interface Container_Mount_Props {
+export interface Container_Mount_Props<SubPaths extends string = string> {
     readOnly?: boolean
-    subPath?: string
+    subPath?: SubPaths
     volume: Pod_Volume
 }
 export class Container_Mount_Volume {

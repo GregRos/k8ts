@@ -114,18 +114,18 @@ export class PodScope {
     InitContainer(name: string, options: Container_Props<never>) {
         return new Container(this._parent, name, "init", options)
     }
-    Volume<Actual extends Ref2_Of<v1.ConfigMap._>>(
+    Volume<const P extends Pod_Volume_Backend_ConfigMap<Ref2_Of<v1.ConfigMap._>>>(
         name: string,
-        options: Pod_Volume_Backend_ConfigMap<Actual>
-    ): Pod_Volume
-    Volume<Actual extends Ref2_Of<v1.Secret._>>(
+        options: P
+    ): Pod_Volume<P>
+    Volume<const P extends Pod_Volume_Backend_Secret<Ref2_Of<v1.Secret._>>>(
         name: string,
-        options: Pod_Volume_Backend_Secret<Actual>
-    ): Pod_Volume
-    Volume<Actual extends Ref2_Of<v1.PersistentVolumeClaim._>>(
+        options: P
+    ): Pod_Volume<P>
+    Volume<const P extends Pod_Volume_Backend_Pvc<Ref2_Of<v1.PersistentVolumeClaim._>>>(
         name: string,
-        options: Pod_Volume_Backend_Pvc<Actual>
-    ): Pod_Volume
+        options: P
+    ): Pod_Volume<P>
     Volume(name: string, options: Pod_Volume_Backend): Pod_Volume {
         const backend = options.$backend as any as Resource_Entity
         if (backend.is(v1.ConfigMap._)) {

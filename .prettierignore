@@ -11,3 +11,4 @@ coverage/
 .git/
 *.md
 _imports/
+packages/sample-interfaces/

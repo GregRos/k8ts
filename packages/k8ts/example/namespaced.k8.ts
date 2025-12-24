@@ -82,7 +82,7 @@ export default W.File("deployment2.yaml", {
                     $bind: k8tsFile["PersistentVolume/dev-sda"],
                     $storage: "1Gi->5Gi"
                 })
-                yield new ConfigMap("config", {
+                const xx = new ConfigMap("config", {
                     $data: {
                         "config.yaml": localRefFile("./example.txt").as("text")
                     }
@@ -103,13 +103,20 @@ export default W.File("deployment2.yaml", {
                             })
                             r.keys
                             const v12 = k.Volume("data2", {
-                                $backend: r
+                                $backend: r,
+                                mappings: {
+                                    a: "xxxx"
+                                }
                             })
                             const ext_configMap = v1.ConfigMap._.refKey({
                                 name: "config",
                                 namespace: k8sNamespace
                             }).External({
                                 keys: ["a", "b", "c"]
+                            })
+
+                            const m = k.Volume("external-config", {
+                                $backend: r
                             })
 
                             const d = k.Device("dev", {
@@ -125,7 +132,10 @@ export default W.File("deployment2.yaml", {
                                 $mounts: {
                                     "/xyz": v.Mount(),
                                     "/etc": v.Mount(),
-                                    "/dev": d.Mount()
+                                    "/dev": d.Mount(),
+                                    "/xfyz": v12.Mount({
+                                        subPath: "xxxx"
+                                    })
                                 },
 
                                 $resources: {

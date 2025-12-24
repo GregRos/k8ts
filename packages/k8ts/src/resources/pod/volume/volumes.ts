@@ -43,6 +43,23 @@ export type Pod_Volume_Backend =
     | Pod_Volume_Backend_ConfigMap
     | Pod_Volume_Backend_Secret
 
+type _KeysOf<T> = T extends {
+    $backend: {
+        keys: infer Ks extends string[]
+    }
+}
+    ? Ks[number]
+    : never
+
+type _Mapped<T> = T extends {
+    mappings: infer M
+}
+    ? {
+          [K in _KeysOf<T>]: K extends keyof M ? M[K] : K
+      }[_KeysOf<T>]
+    : _KeysOf<T>
+export type Pod_Volume_Backend_Known_Paths<T extends Pod_Volume_Backend> = string & _Mapped<T>
+
 export abstract class Pod_Volume<
     P extends Pod_Volume_Backend = Pod_Volume_Backend
 > extends Resource_Child<P> {
@@ -60,7 +77,7 @@ export abstract class Pod_Volume<
             backend: this.props.$backend as any
         }
     }
-    Mount(options?: Omit<Container_Mount_Props, "volume">) {
+    Mount(options?: Omit<Container_Mount_Props<Pod_Volume_Backend_Known_Paths<P>>, "volume">) {
         return new Container_Mount_Volume({
             volume: this,
             ...options
