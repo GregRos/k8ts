@@ -157,7 +157,7 @@ export namespace Cron {
         if (parts.length !== 5) {
             throw new Error(`Invalid cron string: ${cron}`)
         }
-        return of as any
+        return of(...(parts as any))
     }
 
     export function record<R extends Record>(record: R): CronStanza<R> {
