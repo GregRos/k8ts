@@ -41,7 +41,7 @@ export class ClusterRole<Name extends string = string> extends Resource_Top<
 
     private _fromObject(rule: ClusterRole_Rule) {
         return {
-            apiGroups: rule.resources.map(x => x.parent.parent.name),
+            apiGroups: Array.from(new Set(rule.resources.map(x => x.parent.parent.name))),
             resources: rule.resources.map(r => r.plural),
             verbs: rule.verbs
         }

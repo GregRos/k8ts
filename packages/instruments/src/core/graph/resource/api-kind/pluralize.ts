@@ -16,6 +16,11 @@ type _Word_Plural_Map = {
     z: "zes"
     ro: "es"
     x: "es"
+    ay: "ays"
+    ey: "eys"
+    iy: "iys"
+    oy: "oys"
+    uy: "uys"
 }
 
 export type Pluralize<S extends string> = S extends `${infer K extends keyof _Word_Plural_Map}`
@@ -24,6 +29,9 @@ export type Pluralize<S extends string> = S extends `${infer K extends keyof _Wo
 export function pluralize<S extends string>(word: S): Pluralize<S> {
     if (["s", "sh", "ch", "x", "z", "ro"].some(suffix => word.endsWith(suffix))) {
         return `${word}es` as Pluralize<S>
+    }
+    if (["ay", "ey", "iy", "oy", "uy"].some(suffix => word.endsWith(suffix))) {
+        return `${word}s` as Pluralize<S>
     }
     if (word.endsWith("y")) {
         return `${word.slice(0, -1)}ies` as Pluralize<S>

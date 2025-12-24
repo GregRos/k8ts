@@ -96,8 +96,8 @@ export namespace Kind {
         const _Group extends string = string,
         const _Version extends string = string
     > extends Identifier<_Version, Kind.Group<_Group>> {
-        kind<_Kind extends string>(kind: _Kind) {
-            return new Kind(kind, this as Version<_Group, _Version>)
+        kind<_Kind extends string>(kind: _Kind, specialPlural?: string) {
+            return new Kind(kind, this as Version<_Group, _Version>, specialPlural)
         }
 
         __FORMAT__!: _Version
@@ -116,7 +116,11 @@ export namespace Kind {
         const _Version extends string = string,
         const _Kind extends string = string
     > extends Identifier<_Kind, Version<_Group, _Version>> {
-        constructor(name: _Kind, parent: Version<_Group, _Version>) {
+        constructor(
+            name: _Kind,
+            parent: Version<_Group, _Version>,
+            private readonly _specialPlural?: string
+        ) {
             super(name, parent)
         }
 
@@ -136,7 +140,7 @@ export namespace Kind {
             ) as any
         }
         get plural() {
-            return pluralize(this.name.toLowerCase())
+            return this._specialPlural ?? pluralize(this.name.toLowerCase())
         }
         get version() {
             return this.parent

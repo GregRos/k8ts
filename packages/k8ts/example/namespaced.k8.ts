@@ -1,6 +1,16 @@
 import { Cmd, Cron, Image, localRefFile } from "@k8ts/instruments"
-import { ConfigMap, CronJob, Deployment, HttpRoute, Pvc, Service } from "k8ts"
-import { gateway, storage, v1 } from "k8ts/kinds"
+import {
+    ClusterRole,
+    ClusterRoleBinding,
+    ConfigMap,
+    CronJob,
+    Deployment,
+    HttpRoute,
+    Pvc,
+    Service,
+    ServiceAccount
+} from "k8ts"
+import { gateway, metrics, storage, v1 } from "k8ts/kinds"
 import k8tsFile from "./cluster-scoped.k8"
 import { W } from "./world"
 const k8sNamespace = k8tsFile["Namespace/namespace"]
@@ -148,7 +158,35 @@ export default W.File("deployment2.yaml", {
                     },
                     $backend: deploy2
                 })
+                const serviceAccount = new ServiceAccount("x", {
+                    automountToken: true
+                })
 
+                yield serviceAccount
+
+                const clusterRole = new ClusterRole("name", {
+                    *rules(ROLE) {
+                        // Core API group: namespaces, pods, nodes
+                        yield ROLE.Rule(v1.Namespace._, v1.Pod._, v1.Node._).verbs("get", "list")
+
+                        // gateway.networking.k8s.io: httproutes, gateways
+                        yield ROLE.Rule(gateway.v1.HttpRoute._, gateway.v1.Gateway._).verbs(
+                            "get",
+                            "list"
+                        )
+
+                        // metrics.k8s.io: nodes, pods
+                        yield ROLE.Rule(
+                            metrics.v1beta1.NodeMetrics._,
+                            metrics.v1beta1.PodMetrics._
+                        ).verbs("get", "list")
+                    }
+                })
+
+                const clusterRoleBinding = new ClusterRoleBinding("name", {
+                    $role: clusterRole,
+                    $subjects: [serviceAccount]
+                })
                 const addr1 = svc2.address("http", "x")
                 const addr2 = svc2.address("http", "y")
                 console.log(addr1)
