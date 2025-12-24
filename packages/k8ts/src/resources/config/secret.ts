@@ -25,6 +25,9 @@ export class Secret<
     Name extends string = string,
     Keys extends string = string
 > extends Resource_Top<Name, Secret_Props<Keys>> {
+    get keys() {
+        return Object.keys(this.props.$data ?? {}) as Keys[]
+    }
     get kind() {
         return v1.Secret._
     }
