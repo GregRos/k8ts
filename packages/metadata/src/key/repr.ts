@@ -73,7 +73,7 @@ export class ValueKey extends KeyType {
     }
 
     get parent() {
-        if (this._section == null) {
+        if (!this._section) {
             return null
         }
         return new SectionKey(this._section)

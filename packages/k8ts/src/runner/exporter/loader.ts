@@ -25,9 +25,6 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
                 )
             }
             names.set(name, resource)
-            const resourceOriginMetas = resource.origin.inheritedMeta
-
-            resource.meta!.add(resourceOriginMetas)
         }
     }
 
@@ -56,6 +53,9 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
             } as const
 
             await this.emit("load", event)
+            const resourceOriginMetas = res.origin.inheritedMeta
+
+            res.meta!.add(resourceOriginMetas)
             origin.entity["__emit__"]("resource/loaded", {
                 origin: origin.entity,
                 resource: res.entity as Resource_Top

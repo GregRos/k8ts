@@ -1,6 +1,6 @@
 {
   "name": "@k8ts/instruments",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "A collection of utilities and core components for k8ts.",
   "keywords": [
     "k8ts",

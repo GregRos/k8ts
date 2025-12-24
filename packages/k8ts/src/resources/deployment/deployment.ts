@@ -5,7 +5,7 @@ import {
     type Resource_Entity
 } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
-import { doddle } from "doddle"
+import { doddlify } from "doddle"
 import { omit, omitBy } from "lodash"
 import { MakeError } from "../../error"
 import { apps } from "../../kinds/apps"
@@ -51,11 +51,11 @@ export class Deployment<Name extends string, Ports extends string = string> exte
     })()
 
     protected __kids__(): Resource_Entity[] {
-        return [this._template.pull()]
+        return [this.template]
     }
     protected body(): CDK.KubeDeploymentProps {
         const self = this
-        const template = self._template.pull()["__submanifest__"]()
+        const template = self.template["__submanifest__"]()
         const noKindFields = omit(template, ["kind", "apiVersion"])
         return {
             spec: {
@@ -86,13 +86,15 @@ export class Deployment<Name extends string, Ports extends string = string> exte
         }
         throw new MakeError(`Invalid strategy type: ${strat}`)
     }
-    private readonly _template = doddle(() => {
+
+    @doddlify
+    get template() {
         const podTemplate = new Pod_Template(this, this.name, this.props.$template)
         podTemplate.meta.add("%app", this.name)
         return podTemplate
-    })
+    }
 
     get ports() {
-        return this._template.pull().ports
+        return this.template.ports
     }
 }
