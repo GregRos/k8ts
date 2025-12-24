@@ -13,7 +13,7 @@ export type ClusterRole_RuleProducer<Rules extends ClusterRole_Rule> = (
     scope: ClusterRole_Scope
 ) => Iterable<Rules>
 class ClusterRole_Scope {
-    Resources<const R extends Kind[]>(...resources: R) {
+    Rule<const R extends Kind[]>(...resources: R) {
         return {
             verbs(...verbs: Verbs[]) {
                 return {

@@ -1,6 +1,7 @@
 export * from "./entity"
 export * from "./events"
 export * from "./exporter"
+export * from "./external"
 export * from "./kind-map"
 export * from "./node"
 export * from "./tracker"

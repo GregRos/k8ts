@@ -53,14 +53,6 @@ export class KindMap<Kinds extends Resource_Ctor_Of = Resource_Ctor_Of> {
             .pull()
     }
 
-    refKey<Kind extends Kind.IdentParent, Name extends string>(
-        kind: Kind,
-        name: Name
-    ): RefKey<Kind, Name> {
-        const trueKind = this.getKind(kind)
-        return new RefKey(trueKind, name) as any
-    }
-
     parse(ref: string | RefKey<this["__KINDS__"]>): RefKey<this["__KINDS__"]> {
         const result = this.tryParse(ref)
         if (!result) {
@@ -90,7 +82,10 @@ export class KindMap<Kinds extends Resource_Ctor_Of = Resource_Ctor_Of> {
         if (!ident) {
             return undefined
         }
-        return this.refKey(ident, name)
+
+        return (ident as Kind.Kind).refKey({
+            name
+        })
     }
 
     get kinds(): Set<string> {
@@ -142,8 +137,8 @@ export class KindMap<Kinds extends Resource_Ctor_Of = Resource_Ctor_Of> {
         return this._entriesMap.get(converted)
     }
 
-    tryGetKind(kindOrIdent: LookupKey): any {
-        return this._tryGetEntry(kindOrIdent)?.ident as Kinds | undefined
+    tryGetKind(kindOrIdent: LookupKey): this["__KINDS__"] | undefined {
+        return this._tryGetEntry(kindOrIdent)?.ident as this["__KINDS__"] | undefined
     }
 
     getKind(kindOrClass: LookupKey): this["__KINDS__"] {

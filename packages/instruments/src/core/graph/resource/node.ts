@@ -20,8 +20,12 @@ import { RefKey } from "./ref-key"
         if (format !== "lowkey") {
             kindName = chalk.bold(kindName)
         }
-        const resourceName = chalk.blueBright(resource.name)
-        const mainPart = `${kindName}/${resourceName}`
+        const parts = [kindName]
+        if (resource.namespace) {
+            parts.push(chalk.yellowBright(resource.namespace))
+        }
+        parts.push(chalk.blueBright(resource.name))
+        const mainPart = parts.join("/")
         let originPart = `${Displayers.get(resource.origin).prefix!()}`
         let text = ""
 
@@ -40,7 +44,10 @@ export class Resource_Node extends Node<Resource_Node, Resource_Entity> {
         return [this.kind.dns, this.namespace, this.name].filter(Boolean).join("/")
     }
     get key(): RefKey {
-        return new RefKey(this.kind, this.name)
+        return new RefKey(this.kind, {
+            name: this.name,
+            namespace: this.namespace
+        })
     }
     get kind() {
         return this.entity.kind
@@ -63,7 +70,7 @@ export class Resource_Node extends Node<Resource_Node, Resource_Entity> {
     }
 
     get isExternal() {
-        return this.origins.some(x => x.name === "EXTERNAL").pull()
+        return this.meta?.tryGet("#k8ts.org/is-external") ?? false
     }
 
     when<EntityType extends Resource_Entity>(
@@ -95,6 +102,10 @@ export class Resource_Node extends Node<Resource_Node, Resource_Entity> {
                 current = current.parent
             }
         })
+    }
+
+    get disabled() {
+        return "disabled" in this.entity ? !!this.entity.disabled : false
     }
 
     get shortFqn() {

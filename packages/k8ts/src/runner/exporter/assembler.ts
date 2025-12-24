@@ -60,6 +60,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
             .collect()
             .map(async ({ file, resources }) => {
                 const manifests = await aseq(resources)
+                    .filter(x => !x.disabled)
                     .map(async resource => {
                         return await generator.generate(resource)
                     })

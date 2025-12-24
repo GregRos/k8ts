@@ -50,6 +50,11 @@ export abstract class Pod_Volume<
         return v1.Pod.Volume._
     }
 
+    get sourceNamespace() {
+        const backend = this.props.$backend as any as Resource_Entity
+        return backend.namespace
+    }
+
     protected __needs__(): Record<string, Resource_Entity | Resource_Entity[] | undefined> {
         return {
             backend: this.props.$backend as any

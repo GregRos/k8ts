@@ -43,7 +43,7 @@ export abstract class Origin_Exporter<
                 }
 
                 allEmitted.add(em)
-                if (em._origin.equals(self)) {
+                if (em["__origin__"]().equals(self)) {
                     // Means it's being exported for the first time
                     self.__emit__("resource/exported", {
                         origin: self,

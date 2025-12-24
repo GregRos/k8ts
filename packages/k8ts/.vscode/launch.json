@@ -8,8 +8,7 @@
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "cwd": "${workspaceFolder:root}/packages/k8ts",
-      "program": "example/run.ts",
-      "runtimeExecutable": "tsx",
+      "program": "dist_example/run.js",
       "sourceMaps": true,
       "runtimeArgs": ["--enable-source-maps"],
       "resolveSourceMapLocations": ["${workspaceFolder:root}/**"]

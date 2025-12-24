@@ -10,10 +10,20 @@ export abstract class Resource_Top<
     Name extends string = string,
     Props extends object = object
 > extends Resource_Entity<Name, Props> {
-    readonly _origin: Origin_Entity
+    private readonly _origin: Origin_Entity
     readonly meta: Meta
     abstract readonly kind: Kind.IdentParent
 
+    get disabled() {
+        return this.meta.tryGet("#k8ts.org/disabled", "") !== ""
+    }
+    set disabled(v: boolean) {
+        if (!v) {
+            this.meta.delete("#k8ts.org/disabled")
+        } else {
+            this.meta.add("#k8ts.org/disabled", "true")
+        }
+    }
     constructor(name: Name, props: Props) {
         super(name, props)
         this.meta = Meta.make({

@@ -42,7 +42,7 @@ class DataSource_LocalFile_Binary extends DataSource_Lazy<Uint8Array> {
     }
 }
 
-export function local_file(path: string) {
+export function localRefFile(path: string) {
     const trace = new StackTracey().slice(1)
     const callerFile = trace.at(0).file
     return new DataSource_LocalFile_Path(new Path(callerFile).parent(), path)

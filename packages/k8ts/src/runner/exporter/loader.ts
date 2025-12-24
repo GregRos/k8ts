@@ -25,6 +25,9 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
                 )
             }
             names.set(name, resource)
+            const resourceOriginMetas = resource.origin.inheritedMeta
+
+            resource.meta!.add(resourceOriginMetas)
         }
     }
 

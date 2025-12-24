@@ -7,8 +7,18 @@ export interface Secret_Data_Entry {
     value: DataSource
 }
 
+export type Secret_Types =
+    | `kubernetes.io/${
+          | "service-account-token"
+          | "dockercfg"
+          | "dockerconfigjson"
+          | "basic-auth"
+          | "ssh-auth"
+          | "tls"}`
+    | "bootstrap.kubernetes.io/token"
 export interface Secret_Props<Keys extends string = string> {
-    $data: Record<Keys, DataSource>
+    $type?: Secret_Types
+    $data?: Record<Keys, DataSource>
 }
 
 export class Secret<
@@ -20,8 +30,9 @@ export class Secret<
     }
 
     protected async body() {
-        const resolved = await resolveDataSourceRecord(this, this.props.$data)
+        const resolved = await resolveDataSourceRecord(this, this.props.$data ?? {})
         return {
+            type: this.props.$type ?? "Opaque",
             data: resolved.binaryData,
             stringData: resolved.data
         }

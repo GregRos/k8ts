@@ -51,6 +51,16 @@ export namespace Meta {
         clone() {
             return this._create(new Map(this._dict))
         }
+
+        delete(key: Key.Value): Meta
+        delete(ns: Key.Section, key: string): Meta
+        delete(ns: Key.Section): Meta
+        delete(a: any, b?: any) {
+            const parsed = parseKey(a)
+            this._dict.delete(parsed.str)
+            return this
+        }
+
         add(key: Key.Value, value?: string): Meta
         add(key: Key.Section, value: MetaInputParts.Nested): Meta
         add(input: InputMeta): Meta

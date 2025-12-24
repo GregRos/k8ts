@@ -12,7 +12,6 @@ export class DataSource_EnvVar extends DataSource_Lazy<string> {
     }
 }
 
-export function local_envVar(args: TemplateStringsArray, ...params: any[]) {
-    const joined = String.raw(args, ...params)
-    return new DataSource_EnvVar(joined)
+export function localRefEnvVar(name: string) {
+    return new DataSource_EnvVar(name)
 }

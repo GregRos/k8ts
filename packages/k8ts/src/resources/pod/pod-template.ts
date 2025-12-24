@@ -2,12 +2,14 @@ import {
     Resource_Child,
     Resource_Ref_Min,
     type Ref2_Of,
-    type Resource_Entity
+    type Resource_Entity,
+    type Resource_Ref_Keys_Of
 } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { omitBy } from "lodash"
+import type { Env_Value } from "../../env/types"
 import { v1 } from "../../kinds/default"
 import { Container, type Container_Props } from "./container"
 import { Pod_Device, type Pod_Device_Backend } from "./volume/devices"
@@ -94,7 +96,19 @@ export class Pod_Template<Ports extends string = string> extends Resource_Child<
 
 export class PodScope {
     constructor(private readonly _parent: Pod_Template) {}
-    Container<Ports extends string>(name: string, options: Container_Props<Ports>) {
+    Container<
+        Ports extends string,
+        Env extends {
+            [key in keyof Env]:
+                | {
+                      $backend: Ref2_Of
+                      key: Env[key] extends object
+                          ? Resource_Ref_Keys_Of<Env[key]["$backend"], string>
+                          : never
+                  }
+                | Env_Value
+        }
+    >(name: string, options: Container_Props<Ports, Env>) {
         return new Container(this._parent, name, "main", options)
     }
     InitContainer(name: string, options: Container_Props<never>) {

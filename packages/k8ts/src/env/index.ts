@@ -1,2 +1,2 @@
 export { Env, EnvBuilder } from "./env"
-export type { InputEnvMapping } from "./types"
+export type { Env_From, Env_Leaf, Env_Value } from "./types"

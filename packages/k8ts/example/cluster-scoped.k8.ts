@@ -4,12 +4,14 @@ import { W } from "./world"
 
 export default W.File("namespace.yaml", {
     *FILE() {
-        const ref = W.External(storage.v1.StorageClass._, "topolvm")
+        const topolvm = storage.v1.StorageClass._.refKey({
+            name: "topolvm"
+        }).External()
         yield new Namespace("namespace")
-
+        2
         yield new Pv("pv-cool", {
             $capacity: "1Gi",
-            $storageClass: ref,
+            $storageClass: topolvm,
             $accessModes: ["ReadWriteOnce"],
             nodeAffinity: {} as any
         })

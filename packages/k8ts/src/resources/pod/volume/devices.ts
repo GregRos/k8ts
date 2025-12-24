@@ -23,7 +23,10 @@ export class Pod_Device extends Resource_Child<Pod_Device_Backend_Pvc> {
     ) {
         super(parent, name, backend)
     }
-
+    get sourceNamespace() {
+        const backend = this.props.$backend as any as Resource_Entity
+        return backend.namespace
+    }
     protected __needs__(): Record<string, Resource_Entity | Resource_Entity[] | undefined> {
         return {
             backend: this.backend.$backend
