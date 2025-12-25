@@ -1,26 +1,21 @@
 import { seq } from "doddle"
 import { Ip4 } from "../../ip"
-import { PortSet } from "../set"
-import type {
-    InputPortSetEntry,
-    InputPortSetRecord,
-    InputPortSetSpec,
-    PortSetEntry,
-    Protocol
-} from "../types"
+import type { Port_Exports_Input } from "../set"
+import { Port_Exports } from "../set"
+import type { Port_Full, Port_Full_Input, Port_Input, Port_Protocol } from "../types"
 import { parsePortSpec } from "./parse"
 
-function portSetEntry(name: string, value: InputPortSetEntry): PortSetEntry {
+function portSetEntry(name: string, value: Port_Full_Input): Port_Full {
     return {
         name,
         port: value.port,
-        protocol: value.protocol.toUpperCase() as Protocol,
+        protocol: value.protocol.toUpperCase() as Port_Protocol,
         hostIp: value.hostIp ? new Ip4(value.hostIp) : undefined,
         hostPort: value.hostPort
     }
 }
 
-export function parsePortInput(name: string, input: InputPortSetSpec): PortSetEntry {
+export function parsePortInput(name: string, input: Port_Input): Port_Full {
     if (typeof input === "string") {
         return portSetEntry(name, parsePortSpec(name, input))
     }
@@ -34,9 +29,9 @@ export function parsePortInput(name: string, input: InputPortSetSpec): PortSetEn
 }
 
 export function portRecordInput(
-    record: InputPortSetRecord<string> | PortSet<string>
-): Map<string, PortSetEntry> {
-    if (record instanceof PortSet) {
+    record: Port_Exports_Input<string> | Port_Exports<string>
+): Map<string, Port_Full> {
+    if (record instanceof Port_Exports) {
         return record.values
     }
     const inputMap = seq(Object.entries(record))

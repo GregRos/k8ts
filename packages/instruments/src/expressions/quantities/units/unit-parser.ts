@@ -10,7 +10,6 @@ const pValueUnit = int().pipe(
         return { value, unit }
     })
 )
-// TODO: Simplify unit parser to allow for arbitrary resources/units
 export class UnitValue<Unit extends string = string> {
     constructor(
         readonly unit: Unit,

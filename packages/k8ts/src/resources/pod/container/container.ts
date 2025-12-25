@@ -1,9 +1,9 @@
 import {
-    PortSet,
+    Port_Exports,
     ResourcesSpec,
     Unit,
     type CmdBuilder,
-    type InputPortSetRecord,
+    type Port_Exports_Input,
     type Ref2_Of,
     type TaggedImage
 } from "@k8ts/instruments"
@@ -40,7 +40,7 @@ export interface Container_Props<
     _Env extends Record<string, Env_Leaf> = Record<string, Env_Leaf>
 > extends Omit<CDK.Container, "name"> {
     $image: TaggedImage
-    $ports?: InputPortSetRecord<Ports>
+    $ports?: Port_Exports_Input<Ports>
     $command?: CmdBuilder
     $mounts?: Container_Mounts
     $env?: _Env
@@ -82,7 +82,7 @@ export class Container<Ports extends string = string> extends Resource_Child<
             .pull()
     }
     get ports() {
-        return PortSet.make(this.props.$ports)
+        return Port_Exports.make(this.props.$ports)
     }
     protected __submanifest__(): CDK.Container {
         const self = this
@@ -91,7 +91,7 @@ export class Container<Ports extends string = string> extends Resource_Child<
         let resourcesObject = self._resources()?.toObject()
         const containerPorts =
             $ports &&
-            seq(toContainerPorts(PortSet.make($ports)).values())
+            seq(toContainerPorts(Port_Exports.make($ports)).values())
                 .toArray()
                 .pull()
 

@@ -9,7 +9,7 @@ import { AnyUnitParser } from "../units/unit-parser"
 import { createResourceParser } from "./parser"
 import type { ReqLimit, Resources_ReqLimits_Trait, Resources_UnitMap_Trait } from "./types"
 
-export class Resources_Map<const RM extends Resources_UnitMap_Trait<RM>> {
+export class Resources_UnitMap<const RM extends Resources_UnitMap_Trait<RM>> {
     constructor(private _map: Map<string, ReqLimit>) {}
 
     toObject() {
@@ -65,7 +65,7 @@ export class ResourcesSpec<const RM extends Resources_UnitMap_Trait<RM>> {
     }
     __INPUT__!: Resources_ReqLimits_Trait<RM>
 
-    parse<const R extends Resources_ReqLimits_Trait<RM>>(input: R): Resources_Map<RM> {
+    parse<const R extends Resources_ReqLimits_Trait<RM>>(input: R): Resources_UnitMap<RM> {
         const allKeys = new Set([...Object.keys(input), ...this._unitParsers.keys()])
         const map = seq(allKeys)
             .toMap(key => {
@@ -96,7 +96,7 @@ export class ResourcesSpec<const RM extends Resources_UnitMap_Trait<RM>> {
                 return [key, getVal()] as const
             })
             .pull()
-        return new Resources_Map(map as Map<string, ReqLimit>)
+        return new Resources_UnitMap(map as Map<string, ReqLimit>)
     }
 
     static make<const RM extends Resources_UnitMap_Trait<RM>>(unitMap: {

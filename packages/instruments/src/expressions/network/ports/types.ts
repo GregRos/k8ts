@@ -1,43 +1,29 @@
 import type { Ip4, Ip4_String } from "../ip"
 
-export interface PortSpecObj {
-    port: Port
-    protocol: Protocol
-}
-
-export type Port = number
-export type InputPort = Port | `${Port}`
-export type InputProtocol = Protocol | Lowercase<Protocol>
-export type Protocol = "TCP" | "UDP"
-export type InputPortProto = `${Port}/${InputProtocol}`
-export interface PortMapEntry {
+type Port = number
+export type Port_Basic_Input = Port | `${Port}`
+export type Port_Protocol_Input = Port_Protocol | Lowercase<Port_Protocol>
+export type Port_Protocol = "TCP" | "UDP"
+export type Port_WithProto_Input = `${Port}/${Port_Protocol_Input}`
+export interface Port_Mapping_Entry {
     name: string
-    protocol: Protocol
+    protocol: Port_Protocol
     frontend: number
 }
 
-export interface PortSetEntry {
+export interface Port_Full {
     name: string
     port: number
-    protocol: Protocol
+    protocol: Port_Protocol
     hostIp?: Ip4
     hostPort?: number
 }
 
-export interface InputPortSetEntry {
+export interface Port_Full_Input {
     port: Port
-    protocol: InputProtocol
+    protocol: Port_Protocol_Input
     hostIp?: Ip4_String
     hostPort?: Port
 }
 
-export type InputPortSetSpec = InputPortSetEntry | InputPort | InputPortProto
-
-export type InputPortSetRecord<Names extends string = string> = {
-    [K in Names]: InputPortSetSpec
-}
-export type InputPortMapping<Names extends string = string> = [Names] extends [never]
-    ? never
-    : {
-          [K in Names]: number | true
-      }
+export type Port_Input = Port_Full_Input | Port_Basic_Input | Port_WithProto_Input

@@ -1,7 +1,7 @@
 import { anyStringOf, int, string } from "parjs"
 import { map, maybe, must, qthen, then } from "parjs/combinators"
 import { PortError } from "../error"
-import type { InputPortSetEntry, Protocol } from "../types"
+import type { Port_Full_Input, Port_Protocol } from "../types"
 
 function validatePort(port: number) {
     if (port < 0 || port > 65535) {
@@ -13,7 +13,7 @@ function validatePort(port: number) {
     return true
 }
 const pProtocol = anyStringOf("tcp", "udp", "TCP", "UDP").pipe(
-    map(s => s.toUpperCase() as Protocol)
+    map(s => s.toUpperCase() as Port_Protocol)
 )
 
 const pPort = int().pipe(must(validatePort))
@@ -25,7 +25,7 @@ const pPortSpec = pPort.pipe(
         return {
             port,
             protocol: protocol?.toUpperCase() ?? "TCP"
-        } as InputPortSetEntry
+        } as Port_Full_Input
     })
 )
 

@@ -1,4 +1,4 @@
-import { Ref2_Of, Resource_Top, type InputPortMapping } from "@k8ts/instruments"
+import { Ref2_Of, Resource_Top, type PortMapping_Input } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { MakeError } from "../../error"
@@ -16,7 +16,7 @@ export interface Service_Frontend_LoadBalancer {
 }
 export type Service_Frontend = Service_Frontend_ClusterIp | Service_Frontend_LoadBalancer
 export interface Service_Props<DeployPorts extends string, ExposedPorts extends DeployPorts> {
-    $ports: InputPortMapping<ExposedPorts>
+    $ports: PortMapping_Input<ExposedPorts>
     $backend: Deployment_Ref<DeployPorts>
     $frontend: Service_Frontend
 }
