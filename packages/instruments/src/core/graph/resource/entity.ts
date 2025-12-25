@@ -14,13 +14,13 @@ export abstract class Resource_Entity<
     Name extends string = string,
     Props extends object = object
 > extends Entity<Resource_Node, Resource_Entity> {
-    abstract get kind(): Kind.IdentParent
+    abstract get kind(): Kind.KindLike
 
     with(callback: (self: this) => void) {
         callback(this)
         return this
     }
-    is<K extends Kind.IdentParent>(kind: K): this is { kind: K } {
+    is<K extends Kind.KindLike>(kind: K): this is { kind: K } {
         return this.kind.equals(kind)
     }
     abstract readonly namespace: string | undefined

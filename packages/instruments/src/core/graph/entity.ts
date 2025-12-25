@@ -1,5 +1,5 @@
 import type { Node } from "./node"
-import { FwReference } from "./resource/reference/fw-ref"
+import { FwRef } from "./resource"
 export type LiteralModes = "simple" | "pretty" | "prefix"
 
 let globalEntityId = 0
@@ -13,7 +13,7 @@ export abstract class Entity<
     abstract readonly node: _Node
     abstract readonly name: string
     equals(other: any): boolean {
-        if (FwReference.is(other)) {
+        if (FwRef.is(other)) {
             return this.equals(other["__pull__"]())
         }
         return Object.is(this, other)

@@ -9,10 +9,10 @@ const separator = "/"
 interface NodeEntry {
     kindName: string
     class: AnyCtor<any>
-    ident: Kind.IdentParent
+    ident: Kind.KindLike
 }
 export type KindMapInput<Ks extends Resource_Ctor_Of> = Ks[]
-type LookupKey = string | RefKey | AnyCtor<any> | Kind.IdentParent
+type LookupKey = string | RefKey | AnyCtor<any> | Kind.KindLike
 export class KindMap<Kinds extends Resource_Ctor_Of = Resource_Ctor_Of> {
     __KINDS__!: Kinds["prototype"]["kind"]
     constructor(private _ownKinds: KindMapInput<Kinds>) {}
@@ -104,7 +104,7 @@ export class KindMap<Kinds extends Resource_Ctor_Of = Resource_Ctor_Of> {
     private _unknownClassError(klass: Function) {
         return new InstrumentsError(`The class ${klass.name} is not registered`)
     }
-    private _convert(something: LookupKey | RefKey | Function | Kind.IdentParent) {
+    private _convert(something: LookupKey | RefKey | Function | Kind.KindLike) {
         if (typeof something === "string") {
             if (something.includes("/")) {
                 return this.parse(something).kind
@@ -152,7 +152,7 @@ export class KindMap<Kinds extends Resource_Ctor_Of = Resource_Ctor_Of> {
     getClass(refKey: RefKey): AnyCtor<any>
     getClass<F extends AnyCtor<any>>(klass: F): F
     getClass(kind: string): AnyCtor<any>
-    getClass(ident: Kind.IdentParent): AnyCtor<any>
+    getClass(ident: Kind.KindLike): AnyCtor<any>
     getClass<T extends AnyCtor<any> | string>(
         kindOrClass: T
     ): T extends AnyCtor<any> ? string : AnyCtor<any>

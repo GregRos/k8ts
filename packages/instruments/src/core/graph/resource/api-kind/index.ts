@@ -1,7 +1,7 @@
 import { InstrumentsError } from "../../../../error"
 import { bind_own_methods } from "../../../../utils"
 import { displayers } from "../../../../utils/displayers"
-import { External_Base, type External_Props, type External_WithFeatures } from "../external"
+import { External, type External_Props, type External_WithFeatures } from "../external"
 import { RefKey, type RefKey_Options } from "../ref-key"
 import { pluralize } from "./pluralize"
 
@@ -11,11 +11,11 @@ export type Kind<
     Name extends string = string
 > = Kind.Kind<GroupName, Version, Name>
 export namespace Kind {
-    export interface IdentParent {
+    export interface KindLike {
         text: string
         name: string
         dns: string
-        parent: IdentParent | null
+        parent: KindLike | null
         equals(other: any): boolean
     }
     type _alphabeta = "alpha" | "beta" | ""
@@ -27,17 +27,17 @@ export namespace Kind {
     @bind_own_methods()
     export abstract class Identifier<
         Name extends string = string,
-        Parent extends IdentParent | null = IdentParent | null
-    > implements IdentParent
+        Parent extends KindLike | null = KindLike | null
+    > implements KindLike
     {
         constructor(
             readonly name: Name,
             readonly parent: Parent
         ) {}
 
-        get full(): IdentParent[] {
-            const parts: IdentParent[] = []
-            let curr: IdentParent | null = this
+        get full(): KindLike[] {
+            const parts: KindLike[] = []
+            let curr: KindLike | null = this
             while (curr) {
                 parts.unshift(curr)
                 curr = curr.parent
@@ -60,7 +60,7 @@ export namespace Kind {
             string,
             {
                 name: Name
-            } & IdentParent
+            } & KindLike
         >
 
         equals(other: any) {
@@ -131,7 +131,7 @@ export namespace Kind {
             N extends string = string,
             const P extends External_Props<this> = External_Props<this>
         >(options: P & RefKey_Options<N>): External_WithFeatures<this, P> {
-            return new External_Base(
+            return new External(
                 this.refKey({
                     name: options.name,
                     namespace: options.namespace
@@ -162,7 +162,7 @@ export namespace Kind {
     @bind_own_methods()
     export class SubKind<
         Name extends string = string,
-        Parent extends IdentParent = IdentParent
+        Parent extends KindLike = KindLike
     > extends Identifier<Name, Parent> {
         constructor(name: Name, parent: Parent) {
             super(name, parent)

@@ -12,7 +12,7 @@ export abstract class Resource_Top<
 > extends Resource_Entity<Name, Props> {
     private readonly _origin: Origin_Entity
     readonly meta: Meta
-    abstract readonly kind: Kind.IdentParent
+    abstract readonly kind: Kind.KindLike
 
     get disabled() {
         return this.meta.tryGet("#k8ts.org/disabled", "") !== ""

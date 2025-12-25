@@ -4,33 +4,70 @@ import type { RefKey } from "../ref-key"
 import { ProxyOperationError } from "./error"
 import type { Ref2_Of } from "./refable"
 
-export type FwReference<T extends Ref2_Of = Ref2_Of> = FwReference_Proxied<T> & T
-export function FwReference<Referenced extends Ref2_Of>(
-    props: FwReference_Props<Referenced>
-): FwReference<Referenced> {
-    const core = new FwReference_Proxied(props)
-    return new Proxy(core, new FwRef_Handler(core)) as FwReference<Referenced>
+/**
+ * The type of a forward reference to a resource.
+ *
+ * Acts as a stand-in for a resource that may not yet be available. Can be used to reference
+ * resources across different Origins while deferring their actual resolution until needed. This
+ * allows for circular references and more flexible resource definitions.
+ *
+ * The base `FwRef` object only has some basic properties about the resource being referenced, such
+ * as its {@link RefKey} and class type. Accessing any other properties or methods on the `FwRef`
+ * will trigger the resolution of the actual resource via a resolver.
+ *
+ * Because the `FwRef` avoids resolving the actual resource until needed, it won't detect missing
+ * resources when the reference is created. Instead, the missing resource will be detected later on,
+ * typically until resources are manifested. This makes it a bit harder to debug such issues.
+ */
+export type FwRef<T extends Ref2_Of = Ref2_Of> = FwRef_Proxied<T> & T
+
+/**
+ * Creates a forward reference to a resource, returning a proxy that defers resource resolution
+ * until properties or methods are accessed.
+ *
+ * @param props The properties of the forward reference.
+ * @returns The forward reference proxy.
+ */
+export function FwRef<Referenced extends Ref2_Of>(
+    props: FwRef_Props<Referenced>
+): FwRef<Referenced> {
+    const core = new FwRef_Proxied(props)
+    return new Proxy(core, new FwRef_Handler(core)) as FwRef<Referenced>
 }
-export namespace FwReference {
-    export function is(obj: any): obj is FwReference {
-        return FwReference_Proxied.is(obj)
+export namespace FwRef {
+    export function is(obj: any): obj is FwRef {
+        return FwRef_Proxied.is(obj)
     }
 }
-export interface FwReference_Props<Referenced extends Ref2_Of> {
+/** Properties for creating a forward reference to a resource. */
+export interface FwRef_Props<Referenced extends Ref2_Of> {
+    /** The class constructor of the referenced resource. */
     readonly class?: AnyCtor<Referenced>
+    /** The reference key identifying the referenced resource. */
     readonly key: RefKey
-    readonly namespace?: string
     readonly origin: object
     readonly resolver: Doddle<Referenced>
 }
 
-class FwReference_Proxied<To extends Ref2_Of> {
-    readonly #props: FwReference_Props<To>
-    constructor(props: FwReference_Props<To>) {
+class FwRef_Proxied<To extends Ref2_Of> {
+    readonly #props: FwRef_Props<To>
+    constructor(props: FwRef_Props<To>) {
         this.#props = props
     }
 
-    static is(obj: any): obj is FwReference {
+    get name() {
+        return this.#props.key.name
+    }
+
+    get namespace() {
+        return this.#props.key.namespace
+    }
+
+    get kind() {
+        return this.#props.key.kind
+    }
+
+    static is(obj: any): obj is FwRef {
         return obj && typeof obj === "object" && "__reference_props__" in obj
     }
 
@@ -47,7 +84,7 @@ class FwRef_Handler<T extends Ref2_Of> implements ProxyHandler<T> {
     get _props() {
         return this._subject["__reference_props__"]()
     }
-    constructor(private readonly _subject: FwReference_Proxied<T>) {}
+    constructor(private readonly _subject: FwRef_Proxied<T>) {}
 
     get(target: T, prop: PropertyKey) {
         const { _props, _subject } = this

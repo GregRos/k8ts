@@ -13,4 +13,4 @@ export interface External_KindToFeatures {
     [s: string]: {}
 }
 
-export type External_Props<K extends Kind.IdentParent> = External_KindToFeatures[K["name"]]
+export type External_Props<K extends Kind.KindLike> = External_KindToFeatures[K["name"]]

@@ -3,7 +3,7 @@ import { Origin_External } from "../../origin"
 import type { Kind } from "../api-kind"
 import { Resource_Entity } from "../entity"
 import type { RefKey } from "../ref-key"
-export class External_Base<K extends Kind.IdentParent> extends Resource_Entity<string, any> {
+export class External<K extends Kind.KindLike> extends Resource_Entity<string, any> {
     readonly meta = Meta.make()
     constructor(
         readonly key: RefKey<K>,

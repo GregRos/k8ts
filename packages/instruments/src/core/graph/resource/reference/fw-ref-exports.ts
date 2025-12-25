@@ -1,18 +1,42 @@
 import { seq } from "doddle"
 import type { Ref2_Of } from "."
-import { FwReference } from "."
+import { FwRef } from "."
 import type { Origin_Exporter } from "../../origin"
+import { RefKey } from "../ref-key"
 import { ProxyOperationError } from "./error"
 
+/** Expands the resources exported by an Origin_Exported into a dictionary of name to FwRef. */
 export type FwRef_Exports_ByKey<Exports extends Ref2_Of = Ref2_Of> = {
-    [E in Exports as `${E["kind"]["name"]}/${E["name"]}`]: FwReference<E>
+    [E in Exports as `${E["kind"]["name"]}/${E["name"]}`]: FwRef<E>
 }
-
+/**
+ * A type describing all resources exported by an {@link Origin_Exporter} as forward references.
+ *
+ * FwRefs can be accessed using a key lookup, using the shorthand of `KindName/name`. For example, a
+ * Deployment named "my-app" can be accessed via `exports["Deployment/my-app"]`.
+ *
+ * This construct is immutable; attempts to modify it will will throw errors.
+ *
+ * The underlying entity can be accessed via the `__entity__()` method.
+ *
+ * During TypeScript compilation, this serves as a type-safe way to reference resources between
+ * entities. During runtime, it provides a dynamic proxy that resolves forward references to the
+ * actual resources when accessed.
+ *
+ * During runtime, this construct can provide references to all resources attached to the Origin,
+ * even if they were not explicitly exported.
+ */
 export type FwRef_Exports<Exported extends Ref2_Of = Ref2_Of> = FxRef_Exports_Proxied &
     FwRef_Exports_ByKey<Exported>
 
 export type FwRef_Exports_Brand = FxRef_Exports_Proxied
 
+/**
+ * Creates a forward reference exports construct for the given {@link Origin_Exporter} entity.
+ *
+ * @param entity
+ * @returns
+ */
 export function FwRef_Exports<Exported extends Ref2_Of>(
     entity: Origin_Exporter
 ): FwRef_Exports<Exported> {
@@ -21,6 +45,10 @@ export function FwRef_Exports<Exported extends Ref2_Of>(
     return new Proxy(proxied, handler) as any
 }
 
+/**
+ * A basic core of the {@link FwRef_Exports} construct, containing information about the underlying
+ * {@link Origin_Exporter} entity.
+ */
 export class FxRef_Exports_Proxied {
     #entity: Origin_Exporter
     constructor(entity: Origin_Exporter) {
@@ -32,6 +60,10 @@ export class FxRef_Exports_Proxied {
     }
 }
 
+/**
+ * Proxy handler for the {@link FwRef_Exports} construct, providing dynamic access to the resources
+ * attached to the underlying {@link Origin_Exporter} entity.
+ */
 class FwRef_Exports_Handler<Entity extends Origin_Exporter> implements ProxyHandler<Entity> {
     constructor(private readonly _subject: FxRef_Exports_Proxied) {}
 
@@ -91,13 +123,15 @@ class FwRef_Exports_Handler<Entity extends Origin_Exporter> implements ProxyHand
         if (refKey == null) {
             return undefined
         }
-        return FwReference({
+        return FwRef({
             class: clazz,
-            key: refKey,
+            key: new RefKey(refKey.kind, {
+                name: refKey.name,
+                namespace: refKey.namespace
+            }),
             origin: this.entity,
-            namespace: this.entity.meta.tryGet("namespace"),
             resolver: this.exported
-                .first(exp => exp.node.key.equals(refKey))
+                .first(exp => exp.node.name === refKey.name && exp.node.kind.equals(refKey.kind))
                 .map(x => {
                     if (x == null) {
                         throw new ProxyOperationError(

@@ -1,7 +1,7 @@
 import { seq, type Seq } from "doddle"
 import type { Entity } from "./entity"
 import { Relation } from "./relation"
-import { FwReference } from "./resource/reference"
+import { FwRef } from "./resource"
 
 export abstract class Node<
     _Node extends Node<_Node, _Entity> = Node<any, any>,
@@ -51,7 +51,7 @@ export abstract class Node<
         return this.parent === null
     }
     equals(other: any): boolean {
-        if (FwReference.is(other)) {
+        if (FwRef.is(other)) {
             return this.equals(other["__pull__"]())
         }
         if (other instanceof Node === false) {
@@ -90,14 +90,14 @@ export abstract class Node<
     })
 
     isParentOf(other: _Node): boolean {
-        if (FwReference.is(other)) {
+        if (FwRef.is(other)) {
             return other.isChildOf(this._asNode)
         }
         return other.equals(this) || other.ancestors.some(x => x.equals(this)).pull()
     }
 
     isChildOf(other: _Node): boolean {
-        if (FwReference.is(other)) {
+        if (FwRef.is(other)) {
             return other.isParentOf(this._asNode)
         }
         return this.equals(other) || this.ancestors.some(x => x.equals(other)).pull()

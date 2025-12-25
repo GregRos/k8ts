@@ -18,8 +18,6 @@ export abstract class Resource_Child<Props extends object = object> extends Reso
         return this.__parent__()["__origin__"]()
     }
 
-    protected abstract __submanifest__(): object
-
     get namespace(): string | undefined {
         return this.__parent__()?.namespace
     }
