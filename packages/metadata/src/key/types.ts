@@ -3,18 +3,19 @@ export namespace Char {
         export type Label = "%"
         export type Annotation = "^"
         export type Comment = "#"
-        export type Custom = `${Label | Annotation | Comment}`
+        export type Any = `${Label | Annotation | Comment}`
     }
-
-    export type Section = "/"
-    export const Section = "/"
+    export namespace Suffix {
+        export type Domain = "/"
+        export const Domain = "/"
+    }
 }
 
 export namespace Key {
-    export type Section = `${string}${Char.Section}`
+    export type Domain = `${string}${Char.Suffix.Domain}`
     export type Special = "name" | "namespace"
-    export type Value = (`${Char.Prefix.Custom}${string}` & `${string}${string}`) | Special
+    export type Value = (`${Char.Prefix.Any}${string}` & `${string}${string}`) | Special
 
-    export type Key = Section | Value
+    export type Key = Domain | Value
 }
 export type Key = Key.Key

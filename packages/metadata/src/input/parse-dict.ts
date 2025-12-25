@@ -1,6 +1,6 @@
 import { isNullish } from "what-are-you"
 import { parseInnerKey, parseOuterKey } from "../key/parse-key"
-import { SectionKey } from "../key/repr"
+import { DomainPrefix } from "../key/repr"
 import { Meta } from "../meta"
 import type { InputMeta } from "./dict-input"
 
@@ -20,7 +20,7 @@ export function parseMetaInput(input: InputMeta): Map<string, string> {
         if (isNullish(value)) {
             continue
         }
-        if (outer instanceof SectionKey) {
+        if (outer instanceof DomainPrefix) {
             if (typeof value !== "object") {
                 throw new Error(`Expected object for section key ${key}`)
             }
@@ -33,7 +33,7 @@ export function parseMetaInput(input: InputMeta): Map<string, string> {
                 if (typeof vv !== "string") {
                     throw new Error(`Expected string value for inner key ${kk}`)
                 }
-                map.set(inner.section(outer).str, vv as string)
+                map.set(inner.domain(outer).str, vv as string)
             }
         } else {
             if (typeof value !== "string") {

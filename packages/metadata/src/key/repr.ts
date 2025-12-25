@@ -1,5 +1,7 @@
+import { isNullish } from "what-are-you"
 import { MetadataError } from "../error"
 import { normalChar } from "./parse-key"
+import type { Char } from "./types"
 interface ImmObject {
     equals(other: ImmObject): boolean
 }
@@ -27,16 +29,16 @@ export function checkMetaString(thing: string, input: string, length: number) {
     }
 }
 
-export class ValueKey extends KeyType {
+export class MetadataKey extends KeyType {
     type = "full" as const
     constructor(
-        readonly _prefix: string,
-        readonly _section: string | undefined,
-        readonly _name: string
+        private readonly _prefix: string,
+        private readonly _domain: string | undefined,
+        private readonly _name: string
     ) {
         super()
-        if (_section) {
-            checkMetaString(`DNS prefix for ${this.str}`, _section, 253)
+        if (_domain) {
+            checkMetaString(`DNS prefix for ${this.str}`, _domain, 253)
         }
         checkMetaString(`Metadata name of ${this.str}`, _name, 63)
     }
@@ -58,9 +60,9 @@ export class ValueKey extends KeyType {
 
     get suffix() {
         const parts = []
-        if (this._section) {
-            parts.push(this._section)
-            if (!this._section.endsWith("/")) {
+        if (this._domain) {
+            parts.push(this._domain)
+            if (!this._domain.endsWith("/")) {
                 parts.push("/")
             }
         }
@@ -73,31 +75,54 @@ export class ValueKey extends KeyType {
     }
 
     get parent() {
-        if (!this._section) {
+        if (!this._domain) {
             return null
         }
-        return new SectionKey(this._section)
+        return new DomainPrefix(this._domain)
     }
 
-    section(section: string | SectionKey) {
-        section = section instanceof SectionKey ? section.str : section
-        if (this._section) {
-            throw new Error("Already has a section")
+    prefix(): Char.Prefix.Any
+    prefix(prefix: Char.Prefix.Any): this
+    prefix(prefix?: any) {
+        if (isNullish(prefix)) {
+            return this._prefix as Char.Prefix.Any
         }
-        return new ValueKey(this._prefix, section, this._name)
+        return new MetadataKey(prefix, this._domain, this._name)
+    }
+
+    name(): string
+    name(name: string): this
+    name(name?: any) {
+        if (isNullish(name)) {
+            return this._name
+        }
+        return new MetadataKey(this._prefix, this._domain, name)
+    }
+
+    domain(): DomainPrefix
+    domain(domain: string | DomainPrefix): this
+    domain(domain?: any) {
+        if (isNullish(domain)) {
+            return this._domain ? new DomainPrefix(this._domain) : null
+        }
+        domain = domain instanceof DomainPrefix ? domain.str : domain
+        if (this._domain) {
+            throw new Error("Already has a domain")
+        }
+        return new MetadataKey(this._prefix, domain, this._name)
     }
 }
 
-export class SectionKey extends KeyType {
-    type = "heading" as const
-    constructor(readonly _section: string) {
+export class DomainPrefix extends KeyType {
+    type = "domain" as const
+    constructor(private readonly _domain: string) {
         super()
-        checkMetaString(`Section name ${this._section}`, _section, 253)
+        checkMetaString(`Section name ${this._domain}`, _domain, 253)
     }
 
     get str() {
-        return [this._section].join("")
+        return [this._domain].join("")
     }
 }
 
-export type SomeKey = ValueKey | SectionKey
+export type SomeKey = MetadataKey | DomainPrefix

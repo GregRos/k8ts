@@ -2,7 +2,7 @@ import { anyCharOf, anyStringOf, digit, letter, lower, string } from "parjs"
 import { many1, map, maybe, or, qthen, stringify, then, thenq } from "parjs/combinators"
 
 import { MetadataError } from "../error"
-import { SectionKey, ValueKey } from "./repr"
+import { DomainPrefix, MetadataKey } from "./repr"
 
 const cPrefix = anyCharOf("%^#")
 const cSection = string("/")
@@ -17,20 +17,20 @@ const cInterior = normalChar.pipe(or(cExtra)).expects("alphanumeric, '-', '_', o
 export const pNameValue = cNameChar.pipe(many1(), stringify())
 const pSpecialKey = anyStringOf("namespace", "name").pipe(
     map(key => {
-        return new ValueKey("", "", key)
+        return new MetadataKey("", "", key)
     })
 )
 const pCleanKey = cInterior.pipe(many1(), stringify())
 
 const pSectionKey = pCleanKey.pipe(
     thenq(cSection),
-    map(x => new SectionKey(x))
+    map(x => new DomainPrefix(x))
 )
 
 const pInnerKey = cPrefix.pipe(
     then(pCleanKey),
     map(([prefix, name]) => {
-        return new ValueKey(prefix, "", name)
+        return new MetadataKey(prefix, "", name)
     })
 )
 
@@ -38,9 +38,9 @@ const pKey = cPrefix.pipe(
     then(pCleanKey, cSection.pipe(qthen(pCleanKey), stringify(), maybe())),
     map(([prefix, nameOrSection, name]) => {
         if (name) {
-            return new ValueKey(prefix, nameOrSection, name)
+            return new MetadataKey(prefix, nameOrSection, name)
         }
-        return new ValueKey(prefix, "", nameOrSection)
+        return new MetadataKey(prefix, "", nameOrSection)
     }),
     or(pSpecialKey)
 )
