@@ -1,14 +1,16 @@
 import type { CDK } from "@k8ts/sample-interfaces"
 
-import type {
-    Ref2_Of,
-    Resource_Entity,
-    Resource_Ref_Keys_Of,
-    Resource_Ref_Min
+import {
+    Resource_Child,
+    type Ref2_Of,
+    type Resource_Entity,
+    type Resource_Ref_Keys_Of
 } from "@k8ts/instruments"
-import { Resource_Child } from "@k8ts/instruments"
 import { v1 } from "../../../kinds/default"
-import { Container_Mount_Volume, type Container_Mount_Props } from "../container/mounts"
+import {
+    type Container_Volume_Mount_Attrs,
+    type Container_Volume_Mount_Source
+} from "../container/mounts/volume"
 
 export interface Pod_Volume_Backend_Pvc<
     A extends Ref2_Of<v1.PersistentVolumeClaim._> = Ref2_Of<v1.PersistentVolumeClaim._>
@@ -19,7 +21,7 @@ export interface Pod_Volume_Backend_Pvc<
 
 const allowedVolumeResourceKinds = [v1.ConfigMap._, v1.Secret._] as const
 type VolumeResourceKind = (typeof allowedVolumeResourceKinds)[number]
-export type AllowedResources = Resource_Ref_Min<VolumeResourceKind>
+export type AllowedResources = Ref2_Of<VolumeResourceKind>
 export interface Pod_Volume_Backend_ConfigMap<
     A extends Ref2_Of<v1.ConfigMap._> = Ref2_Of<v1.ConfigMap._>
 > {
@@ -77,11 +79,13 @@ export abstract class Pod_Volume<
             backend: this.props.$backend as any
         }
     }
-    Mount(options?: Omit<Container_Mount_Props<Pod_Volume_Backend_Known_Paths<P>>, "volume">) {
-        return new Container_Mount_Volume({
-            volume: this,
-            ...options
-        })
+    Mount(
+        options?: Container_Volume_Mount_Attrs<Pod_Volume_Backend_Known_Paths<P>>
+    ): Container_Volume_Mount_Source {
+        return {
+            ...options,
+            backend: this
+        }
     }
 
     protected abstract __submanifest__(): CDK.Volume

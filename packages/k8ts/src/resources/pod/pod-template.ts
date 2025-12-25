@@ -1,7 +1,6 @@
 import {
+    Ref2_Of,
     Resource_Child,
-    Resource_Ref_Min,
-    type Ref2_Of,
     type Resource_Entity,
     type Resource_Ref_Keys_Of
 } from "@k8ts/instruments"
@@ -24,7 +23,7 @@ import {
     type Pod_Volume_Backend_Secret
 } from "./volume/volumes"
 export type Pod_Props_Original = Omit<CDK.PodSpec, "containers" | "initContainers" | "volumes">
-type Container_Ref<Ports extends string> = Resource_Ref_Min<v1.Pod.Container._> & {
+type Container_Ref<Ports extends string> = Ref2_Of<v1.Pod.Container._> & {
     __PORTS__: Ports
 }
 export type Pod_Container_Producer<Ports extends string> = (

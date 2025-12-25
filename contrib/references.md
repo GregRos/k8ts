@@ -13,4 +13,4 @@ The full resource types are extremely large. If we use them as part of signature
 External resources expose minimal functionality as objects but can be of any type. Using minimal resource types lets the code that relies on them not to assume that the full object exists.
 
 ## 3. Delayed resources
-Same as (2), it encourages code to avoid doing things that would resolve the FwReference permaturely
+Same as (2), it encourages code to avoid doing things that would resolve the FwRef permaturely

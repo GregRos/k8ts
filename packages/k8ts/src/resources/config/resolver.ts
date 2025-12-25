@@ -1,8 +1,8 @@
-import { DataSource_Lazy, type DataSource, type Resource_Ref_Min } from "@k8ts/instruments"
+import { DataSource_Lazy, type DataSource, type Ref2_Of } from "@k8ts/instruments"
 import { isArrayBufferLike, isTypedArray } from "what-are-you"
 
 export async function resolveDataSourceRecord(
-    resource: Resource_Ref_Min,
+    resource: Ref2_Of,
     input: Record<string, DataSource>
 ) {
     const binaryData: [string, string][] = []

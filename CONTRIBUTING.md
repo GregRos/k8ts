@@ -46,7 +46,7 @@ Core building blocks for k8s resource entities.
 
 1. Resource, entity, node, and origin base classes.
 2. Current origin tracker which includes an iterator hook.
-3. Exports objects and FwReference proxy objects.
+3. Exports objects and FwRef proxy objects.
 4. Type mechanisms for computing reference structures
 
 ### Expressions

@@ -10,24 +10,24 @@ import {
 import type { CDK } from "@k8ts/sample-interfaces"
 import { toContainerPorts } from "../../utils/adapters"
 
-import { Resource_Child, Resource_Entity, Resource_Ref_Min, Resource_Top } from "@k8ts/instruments"
+import { Resource_Child, Resource_Entity, Resource_Top } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { mapKeys, mapValues, omitBy } from "lodash"
 import { Env } from "../../../env"
 import type { Env_Leaf } from "../../../env/types"
 import { v1 } from "../../../kinds/default"
-import { Container_Mount_Device, type Container_Mount } from "./mounts"
+import { Pod_Device, Pod_Volume } from "../volume"
+import { Container_Device_Mount, type Container_Device_Mount_Source } from "./mounts/device"
+import { Container_Volume_Mount, type Container_Volume_Mount_Source } from "./mounts/volume"
 const container_ResourcesSpec = ResourcesSpec.make({
     cpu: Unit.Cpu,
     memory: Unit.Data
 })
 
 type Container_Resources = (typeof container_ResourcesSpec)["__INPUT__"]
-type Container_Mount_Some = Resource_Ref_Min<
-    v1.Pod.Container.DeviceMount._ | v1.Pod.Container.VolumeMount._
->
+type Container_Mount_Any = Container_Volume_Mount_Source | Container_Device_Mount_Source
 export type Container_Mounts = {
-    [key: string]: Container_Mount_Some
+    [key: string]: Container_Mount_Any
 }
 
 export interface Container_Env_From {
@@ -60,23 +60,34 @@ export class Container<Ports extends string = string> extends Resource_Child<
         const a = this.mounts
         return mapValues(
             mapKeys(a, x => x.path),
-            x => x.mount.volume
+            x => x.backend as any as Resource_Entity
         )
     }
     get mounts() {
         return seq(Object.entries(this.props.$mounts ?? {}))
-            .map(([path, mount]) => {
-                return {
-                    mount: mount as Container_Mount,
-                    path: path as string
+            .map(([path, mount]: [string, Container_Mount_Any]) => {
+                if (mount.backend.is(Pod_Device)) {
+                    return new Container_Device_Mount(this, {
+                        backend: mount.backend,
+                        mountPath: path
+                    })
+                } else if (mount.backend.is(Pod_Volume)) {
+                    const x = mount as any
+                    return new Container_Volume_Mount(this, {
+                        backend: mount.backend,
+                        mountPath: path,
+                        readOnly: x.readOnly,
+                        subPath: x.subPath
+                    })
                 }
+                throw new Error(`Unsupported mount backend type: ${mount.backend}`)
             })
             .toArray()
             .pull()
     }
 
     get volumes() {
-        return seq(this.mounts.map(x => x.mount.volume))
+        return seq(this.mounts.map(x => x.backend as Pod_Volume | Pod_Device))
             .uniq()
             .toArray()
             .pull()
@@ -169,19 +180,21 @@ export class Container<Ports extends string = string> extends Resource_Child<
     }
 
     private _groupedMounts() {
-        const x = {
-            volumeMounts: [],
-            volumeDevices: []
-        } as Pick<CDK.Container, "volumeMounts" | "volumeDevices">
+        const volumeMounts = [] as CDK.VolumeMount[]
+        const volumeDevices = [] as CDK.VolumeDevice[]
         for (const mnt of this.mounts) {
-            const { mount, path } = mnt
-            if (mount instanceof Container_Mount_Device) {
-                x.volumeDevices!.push(mount["__submanifest__"](path))
-            } else {
-                x.volumeMounts!.push(mount["__submanifest__"](path))
+            if (mnt.backend.is(Pod_Device)) {
+                const deviceMount = mnt as Container_Device_Mount
+                volumeDevices!.push(deviceMount["__submanifest__"]())
+            } else if (mnt.backend.is(Pod_Volume)) {
+                const volumeMount = mnt as Container_Volume_Mount
+                volumeMounts!.push(volumeMount["__submanifest__"]())
             }
         }
-        return x
+        return {
+            volumeMounts: volumeMounts.length > 0 ? volumeMounts : undefined,
+            volumeDevices: volumeDevices.length > 0 ? volumeDevices : undefined
+        }
     }
     private _resources() {
         if (!this.props.$resources) {

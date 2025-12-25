@@ -108,4 +108,4 @@ When (2) happens, the generator is invoked and iterated until the desired resour
 This involves two Proxies:
 
 1. The FwRefernce_Exports proxy for the `file` object itself.
-2. The `FwReference` proxy for the `Deployment` stand-in.
+2. The `FwRef` proxy for the `Deployment` stand-in.
