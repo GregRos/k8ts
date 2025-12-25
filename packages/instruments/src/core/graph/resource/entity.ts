@@ -1,10 +1,11 @@
 import { getDeepPropertyDescriptor } from "@k8ts/metadata/util"
-import { getNiceClassName } from "what-are-you"
+import { getNiceClassName, type AnyCtor } from "what-are-you"
 import { displayers } from "../../../utils"
 import { Entity } from "../entity"
 import type { Origin_Entity } from "../origin"
 import type { Kind } from "./api-kind"
 import { Resource_Node } from "./node"
+import type { Ref2_Of } from "./reference"
 
 @displayers({
     simple: s => s.node,
@@ -20,9 +21,7 @@ export abstract class Resource_Entity<
         callback(this)
         return this
     }
-    is<K extends Kind.KindLike>(kind: K): this is { kind: K } {
-        return this.kind.equals(kind)
-    }
+
     abstract readonly namespace: string | undefined
 
     ref() {
@@ -32,6 +31,15 @@ export abstract class Resource_Entity<
             namespace: this.namespace
         }
     }
+    is<K extends Kind.KindLike>(kind: K): this is { kind: K }
+    is<Inst extends Ref2_Of = Ref2_Of>(cls: AnyCtor<Inst>): this is Inst
+    is(cls: any): boolean {
+        if (typeof cls === "function") {
+            return this instanceof cls
+        }
+        return this.kind.equals(cls)
+    }
+
     protected constructor(
         readonly name: Name,
         readonly props: Props

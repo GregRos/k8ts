@@ -11,6 +11,7 @@ export type Ref2_Of<Kind extends Kind.KindLike = Kind.KindLike, Name extends str
     name: Name
     equals(other: any): boolean
     node: Resource_Node
+    is<Inst extends Ref2_Of>(cls: AnyCtor<Inst>): this is Inst
 }
 export type Resource_Ref_Full<
     _Kind extends Kind.KindLike = Kind.KindLike,

@@ -1,7 +1,7 @@
-import type { Ref2_Of } from ".."
 import { InstrumentsError } from "../../../../error"
 import type { Kind } from "../api-kind"
-import { External, type External_Props, type External_WithFeatures } from "../external"
+import { type External_Props, type External_WithFeatures } from "../external"
+import type { Ref2_Of } from "../reference"
 
 /** Input type for reference keys. Accepts either a RefKey instance or its string representation. */
 export type RefKey_Input = RefKey | RefKey["string"]
@@ -148,6 +148,8 @@ export class RefKey<K extends Kind.KindLike = Kind.KindLike, Name extends string
     External<const P extends External_Props<K> = External_Props<K>>(
         options?: P
     ): External_WithFeatures<K, P> {
+        const External = require("../external").External
+
         return new External(this, options ?? {}) as any
     }
 }

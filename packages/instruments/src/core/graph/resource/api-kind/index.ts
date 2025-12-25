@@ -1,7 +1,6 @@
 import { InstrumentsError } from "../../../../error"
 import { bind_own_methods } from "../../../../utils"
 import { displayers } from "../../../../utils/displayers"
-import { External, type External_Props, type External_WithFeatures } from "../external"
 import { RefKey, type RefKey_Options } from "../ref-key"
 import { pluralize } from "./pluralize"
 
@@ -127,18 +126,7 @@ export namespace Kind {
         refKey<Name extends string>(options: RefKey_Options<Name>) {
             return new RefKey<this, Name>(this as any, options)
         }
-        External<
-            N extends string = string,
-            const P extends External_Props<this> = External_Props<this>
-        >(options: P & RefKey_Options<N>): External_WithFeatures<this, P> {
-            return new External(
-                this.refKey({
-                    name: options.name,
-                    namespace: options.namespace
-                }),
-                options ?? {}
-            ) as any
-        }
+
         get plural() {
             return this._specialPlural ?? pluralize(this.name.toLowerCase())
         }

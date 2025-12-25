@@ -1,6 +1,6 @@
 import { doddlify, seq } from "doddle"
-import type { Resource_Top } from "../resource"
-import { FwRef, type Ref2_Of } from "../resource"
+import type { Ref2_Of, Resource_Top } from "../resource"
+import { FwRef } from "../resource/reference/fw-ref"
 import { Origin_Entity } from "./entity"
 import type { Origin_Props } from "./node"
 

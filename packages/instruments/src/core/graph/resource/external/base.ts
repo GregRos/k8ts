@@ -1,5 +1,5 @@
 import { Meta } from "@k8ts/metadata"
-import { Origin_External } from "../../origin"
+import { Origin_External } from "../../origin/external"
 import type { Kind } from "../api-kind"
 import { Resource_Entity } from "../entity"
 import type { RefKey } from "../ref-key"

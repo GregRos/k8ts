@@ -1,9 +1,9 @@
 import { seq } from "doddle"
-import type { Ref2_Of } from "."
-import { FwRef } from "."
-import type { Origin_Exporter } from "../../origin"
+import type { Origin_Exporter } from "../../origin/exporter"
 import { RefKey } from "../ref-key"
 import { ProxyOperationError } from "./error"
+import { FwRef } from "./fw-ref"
+import type { Ref2_Of } from "./refable"
 
 /** Expands the resources exported by an Origin_Exported into a dictionary of name to FwRef. */
 export type FwRef_Exports_ByKey<Exports extends Ref2_Of = Ref2_Of> = {
