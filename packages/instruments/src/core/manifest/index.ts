@@ -1,5 +1,5 @@
 import { Embedder } from "../../utils/embedder"
-import { Resource_Entity } from "../graph/resource/entity"
+import { Rsc_Entity } from "../graph/resource/entity"
 export interface Manifest_Metadata {
     labels: Record<string, string>
     annotations: Record<string, string>
@@ -35,4 +35,4 @@ export interface SpecManifest<T extends JsonSerializable> extends Manifest {
     spec: T
 }
 
-export const ManifestSourceEmbedder = new Embedder<object, Resource_Entity>("ManifestSource")
+export const ManifestSourceEmbedder = new Embedder<object, Rsc_Entity>("ManifestSource")

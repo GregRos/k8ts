@@ -1,4 +1,4 @@
-import type { Resource_Entity } from "@k8ts/instruments"
+import type { Rsc_Entity } from "@k8ts/instruments"
 import { Resource_Child } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../../kinds/default"
@@ -17,14 +17,14 @@ export class Pod_Device extends Resource_Child<Pod_Device_Backend_Pvc> {
     }
 
     constructor(
-        parent: Resource_Entity,
+        parent: Rsc_Entity,
         name: string,
         readonly backend: Pod_Device_Backend_Pvc
     ) {
         super(parent, name, backend)
     }
     get sourceNamespace() {
-        const backend = this.props.$backend as any as Resource_Entity
+        const backend = this.props.$backend as any as Rsc_Entity
         return backend.namespace
     }
     protected __needs__() {
@@ -50,6 +50,6 @@ export class Pod_Device extends Resource_Child<Pod_Device_Backend_Pvc> {
     }
 }
 
-export function make(parent: Resource_Entity, name: string, input: Pod_Device_Backend) {
+export function make(parent: Rsc_Entity, name: string, input: Pod_Device_Backend) {
     return new Pod_Device(parent, name, input)
 }

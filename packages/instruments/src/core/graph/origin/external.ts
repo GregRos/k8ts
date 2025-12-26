@@ -1,4 +1,4 @@
-import type { External, Resource_Ctor_Of } from "../resource"
+import type { External, Rsc_Ctor_Of } from "../resource"
 import { Origin_Entity } from "./entity"
 import type { Origin_Props } from "./node"
 /**
@@ -13,7 +13,7 @@ export class Origin_External extends Origin_Entity {
         super("External", {})
     }
 
-    protected __parent__(): Origin_Entity<Origin_Props<Resource_Ctor_Of>> | undefined {
+    protected __parent__(): Origin_Entity<Origin_Props<Rsc_Ctor_Of>> | undefined {
         return undefined
     }
 

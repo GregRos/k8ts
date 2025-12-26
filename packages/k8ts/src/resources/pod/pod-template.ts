@@ -1,4 +1,4 @@
-import { Resource_Child, Rsc_Ref, type Resource_Ref_Keys_Of } from "@k8ts/instruments"
+import { Resource_Child, Rsc_Ref, type Rsc_Ref_Keys_Of } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify, seq } from "doddle"
@@ -128,7 +128,7 @@ export class PodScope {
                 | {
                       $backend: Rsc_Ref
                       key: Env[key] extends object
-                          ? Resource_Ref_Keys_Of<Env[key]["$backend"], string>
+                          ? Rsc_Ref_Keys_Of<Env[key]["$backend"], string>
                           : never
                   }
                 | Env_Value

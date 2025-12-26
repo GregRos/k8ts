@@ -5,11 +5,11 @@ import { Trace, TraceEmbedder } from "../../tracing"
 import type { Origin_Entity } from "../origin/entity"
 import { OriginContextTracker } from "../origin/tracker"
 import type { Kind } from "./api-kind"
-import { Resource_Entity } from "./entity"
-export abstract class Resource_Top<
+import { Rsc_Entity } from "./entity"
+export abstract class Rsc_Top<
     Name extends string = string,
     Props extends object = object
-> extends Resource_Entity<Name, Props> {
+> extends Rsc_Entity<Name, Props> {
     private readonly _origin: Origin_Entity
     readonly meta: Meta
     abstract readonly kind: Kind.Kind

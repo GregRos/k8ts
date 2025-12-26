@@ -8,7 +8,7 @@ import { Formats } from "../entity"
 import { Node } from "../node"
 import { OriginNode } from "../origin/node"
 import type { Kind } from "./api-kind"
-import type { Resource_Entity } from "./entity"
+import type { Rsc_Entity } from "./entity"
 import { RefKey } from "./ref-key"
 
 @displayers({
@@ -39,7 +39,7 @@ import { RefKey } from "./ref-key"
         return text
     }
 })
-export class Resource_Node extends Node<Resource_Node, Resource_Entity> {
+export class Resource_Node extends Node<Resource_Node, Rsc_Entity> {
     get fullFqn() {
         return [this.kind.dns, this.namespace, this.name].filter(Boolean).join("/")
     }
@@ -73,7 +73,7 @@ export class Resource_Node extends Node<Resource_Node, Resource_Entity> {
         return this.meta?.tryGet("#k8ts.org/is-external") ?? false
     }
 
-    when<EntityType extends Resource_Entity>(
+    when<EntityType extends Rsc_Entity>(
         type: AnyCtor<EntityType>,
         fn: (entity: EntityType) => void
     ) {
@@ -83,7 +83,7 @@ export class Resource_Node extends Node<Resource_Node, Resource_Entity> {
         }
     }
 
-    as<EntityType extends Resource_Entity>(type: AnyCtor<EntityType>) {
+    as<EntityType extends Rsc_Entity>(type: AnyCtor<EntityType>) {
         const entity = this.entity as EntityType
         if (entity instanceof type) {
             return entity
@@ -125,7 +125,7 @@ export class Resource_Node extends Node<Resource_Node, Resource_Entity> {
     }
     constructor(
         readonly origin: OriginNode,
-        readonly entity: Resource_Entity
+        readonly entity: Rsc_Entity
     ) {
         super(entity)
     }

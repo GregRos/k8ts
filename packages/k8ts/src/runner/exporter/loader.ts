@@ -1,4 +1,4 @@
-import { OriginNode, Resource_Node, type Node, type Resource_Top } from "@k8ts/instruments"
+import { OriginNode, Resource_Node, type Node, type Rsc_Top } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { MakeError } from "../../error"
 export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
@@ -58,7 +58,7 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
             res.meta!.add(resourceOriginMetas)
             origin.entity["__emit__"]("resource/loaded", {
                 origin: origin.entity,
-                resource: res.entity as Resource_Top
+                resource: res.entity as Rsc_Top
             })
             resources.push(res)
         }

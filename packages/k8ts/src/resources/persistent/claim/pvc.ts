@@ -1,4 +1,4 @@
-import { Resource_Top, ResourcesSpec, Unit, type Rsc_Ref } from "@k8ts/instruments"
+import { ResourcesSpec, Rsc_Top, Unit, type Rsc_Ref } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { Prefix$ } from "../../../_type/prefix$"
 import { MakeError } from "../../../error"
@@ -21,7 +21,7 @@ export interface Pvc_Props<Mode extends Pv_VolumeMode> extends Pvc_Resources {
     $bind?: Pv_Ref<Mode>
 }
 
-export class Pvc<Mode extends Pv_VolumeMode, Name extends string = string> extends Resource_Top<
+export class Pvc<Mode extends Pv_VolumeMode, Name extends string = string> extends Rsc_Top<
     Name,
     Pvc_Props<Mode>
 > {

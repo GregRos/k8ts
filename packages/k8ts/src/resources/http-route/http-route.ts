@@ -1,4 +1,4 @@
-import { Resource_Top, type Rsc_Ref } from "@k8ts/instruments"
+import { Rsc_Top, type Rsc_Ref } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { gateway } from "../../kinds/gateway"
 import type { Port } from "../service/service-port"
@@ -13,7 +13,7 @@ export interface HttpRoute_Props<Ports extends string> {
     _filters?: CDK.HttpRouteSpecRulesFilters[]
 }
 
-export class HttpRoute<Name extends string, Ports extends string> extends Resource_Top<
+export class HttpRoute<Name extends string, Ports extends string> extends Rsc_Top<
     Name,
     HttpRoute_Props<Ports>
 > {

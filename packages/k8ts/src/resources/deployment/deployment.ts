@@ -1,9 +1,4 @@
-import {
-    OriginContextTracker,
-    Resource_Top,
-    Rsc_Ref,
-    type Resource_Entity
-} from "@k8ts/instruments"
+import { OriginContextTracker, Rsc_Ref, Rsc_Top, type Rsc_Entity } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
 import { omit, omitBy } from "lodash"
@@ -31,7 +26,7 @@ export type Deployment_Ref<Ports extends string> = Rsc_Ref<apps.v1.Deployment._>
     __PORTS__: Ports
 }
 
-export class Deployment<Name extends string, Ports extends string = string> extends Resource_Top<
+export class Deployment<Name extends string, Ports extends string = string> extends Rsc_Top<
     Name,
     Deployment_Props<Ports>
 > {
@@ -50,7 +45,7 @@ export class Deployment<Name extends string, Ports extends string = string> exte
         this.props.$template.$POD = origin["__binder__"]().bind(this.props.$template.$POD)
     })()
 
-    protected __kids__(): Resource_Entity[] {
+    protected __kids__(): Rsc_Entity[] {
         return [this.template]
     }
     protected body(): CDK.KubeDeploymentProps {

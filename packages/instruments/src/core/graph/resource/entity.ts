@@ -11,10 +11,10 @@ import { FwRef } from "./reference"
     simple: s => s.node,
     pretty: s => s.node
 })
-export abstract class Resource_Entity<
+export abstract class Rsc_Entity<
     Name extends string = string,
     Props extends object = object
-> extends Entity<Resource_Node, Resource_Entity> {
+> extends Entity<Resource_Node, Rsc_Entity> {
     abstract get kind(): Kind.KindLike
 
     with(callback: (self: this) => void) {
@@ -54,7 +54,7 @@ export abstract class Resource_Entity<
         if (FwRef.is(other)) {
             return other.equals(this)
         }
-        if (other instanceof Resource_Entity) {
+        if (other instanceof Rsc_Entity) {
             return Object.is(this, other)
         }
         return false

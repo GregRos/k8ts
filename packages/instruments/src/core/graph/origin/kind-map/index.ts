@@ -2,7 +2,7 @@ import { doddlify, seq, type Seq } from "doddle"
 import type { AnyCtor } from "what-are-you"
 import { InstrumentsError } from "../../../../error"
 
-import type { Resource_Ctor_Of } from "../../resource"
+import type { Rsc_Ctor_Of } from "../../resource"
 import { Kind } from "../../resource/api-kind"
 import { RefKey } from "../../resource/ref-key"
 const separator = "/"
@@ -11,16 +11,16 @@ interface NodeEntry {
     class: AnyCtor<any>
     ident: Kind.KindLike
 }
-export type KindMapInput<Ks extends Resource_Ctor_Of> = Ks[]
+export type KindMapInput<Ks extends Rsc_Ctor_Of> = Ks[]
 type LookupKey = string | RefKey | AnyCtor<any> | Kind.KindLike
-export class KindMap<Kinds extends Resource_Ctor_Of = Resource_Ctor_Of> {
+export class KindMap<Kinds extends Rsc_Ctor_Of = Rsc_Ctor_Of> {
     __KINDS__!: Kinds["prototype"]["kind"]
     constructor(private _ownKinds: KindMapInput<Kinds>) {}
 
     [Symbol.iterator]() {
         return this._ownKinds[Symbol.iterator]()
     }
-    child<Ks extends Resource_Ctor_Of = Resource_Ctor_Of>(
+    child<Ks extends Rsc_Ctor_Of = Rsc_Ctor_Of>(
         kinds: KindMapInput<Ks> | KindMap<Ks>
     ): KindMap<Kinds | Ks> {
         const ownKinds = kinds instanceof KindMap ? kinds._ownKinds : kinds

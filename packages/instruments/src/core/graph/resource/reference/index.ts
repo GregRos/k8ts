@@ -1,3 +1,3 @@
 export { FwRef } from "./fw-ref"
-export { FwRef_Exports, type FwRef_Exports_Brand } from "./fw-ref-exports"
+export { Rsc_FwRef_Exports } from "./fw-ref-exports"
 export type * from "./refable"

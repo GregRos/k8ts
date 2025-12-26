@@ -2,7 +2,7 @@ import {
     Manifest,
     ManifestSourceEmbedder,
     type Resource_Node,
-    type Resource_Top
+    type Rsc_Top
 } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import Emittery from "emittery"
@@ -50,7 +50,7 @@ export class YamlSerializer extends Emittery<SerializerEventsTable> {
             })
             const e = {
                 origin: node.origin.entity,
-                resource: node.entity as Resource_Top,
+                resource: node.entity as Rsc_Top,
                 manifest: input,
                 content: result
             }

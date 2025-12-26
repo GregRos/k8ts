@@ -1,4 +1,4 @@
-import { Kind, Resource_Top } from "@k8ts/instruments"
+import { Kind, Rsc_Top } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { rbac } from "../../kinds/rbac"
@@ -28,10 +28,7 @@ export interface ClusterRole_Props<Rules extends ClusterRole_Rule = ClusterRole_
     rules: ClusterRole_RuleProducer<Rules>
 }
 
-export class ClusterRole<Name extends string = string> extends Resource_Top<
-    Name,
-    ClusterRole_Props
-> {
+export class ClusterRole<Name extends string = string> extends Rsc_Top<Name, ClusterRole_Props> {
     get kind() {
         return rbac.v1.ClusterRole._
     }

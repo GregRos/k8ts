@@ -1,11 +1,6 @@
 import type { CDK } from "@k8ts/sample-interfaces"
 
-import {
-    Resource_Child,
-    Resource_Entity,
-    type Resource_Ref_Keys_Of,
-    type Rsc_Ref
-} from "@k8ts/instruments"
+import { Resource_Child, Rsc_Entity, type Rsc_Ref, type Rsc_Ref_Keys_Of } from "@k8ts/instruments"
 import { v1 } from "../../../kinds/default"
 import type { HostPathType } from "../../hostpath"
 import {
@@ -36,7 +31,7 @@ export interface Pod_Volume_Backend_ConfigMap<
     $backend: A
     optional?: boolean
     mappings?: {
-        [K in Resource_Ref_Keys_Of<A>]?: string
+        [K in Rsc_Ref_Keys_Of<A>]?: string
     }
 }
 
@@ -44,7 +39,7 @@ export interface Pod_Volume_Backend_Secret<A extends Rsc_Ref<v1.Secret._> = Rsc_
     $backend: A
     optional?: boolean
     mappings?: {
-        [K in Resource_Ref_Keys_Of<A>]?: string
+        [K in Rsc_Ref_Keys_Of<A>]?: string
     }
 }
 
@@ -80,16 +75,15 @@ export abstract class Pod_Volume<
 
     get namespace() {
         const backend = this.props.$backend
-        if (backend instanceof Resource_Entity) {
+        if (backend instanceof Rsc_Entity) {
             return backend.namespace
         }
         return undefined
     }
 
-    protected __needs__(): Record<string, Resource_Entity | Resource_Entity[] | undefined> {
+    protected __needs__(): Record<string, Rsc_Entity | Rsc_Entity[] | undefined> {
         return {
-            backend:
-                this.props.$backend instanceof Resource_Entity ? this.props.$backend : undefined
+            backend: this.props.$backend instanceof Rsc_Entity ? this.props.$backend : undefined
         }
     }
     Mount(

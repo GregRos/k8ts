@@ -1,9 +1,9 @@
 import {
-    FwRef_Exports,
     Origin_Exporter,
+    Rsc_FwRef_Exports,
     type Origin_Entity,
     type Origin_Props,
-    type Resource_Ctor_Of,
+    type Rsc_Ctor_Of,
     type Rsc_Ref
 } from "@k8ts/instruments"
 import { doddlify, seq } from "doddle"
@@ -11,12 +11,12 @@ import type { v1 } from "../../kinds"
 import { Origin_Section, type File_Section_Props } from "./section"
 export type File_sName = `${string}.yaml`
 export interface File_Props<
-    Kinds extends Resource_Ctor_Of[] = Resource_Ctor_Of[],
+    Kinds extends Rsc_Ctor_Of[] = Rsc_Ctor_Of[],
     Exports extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
 > extends Origin_Props<Kinds[number]> {
     kinds?: Kinds
     namespace?: Rsc_Ref<v1.Namespace._>
-    FILE(FILE: Origin_File_Scope<Kinds>): Iterable<Exports | FwRef_Exports<Exports>>
+    FILE(FILE: Origin_File_Scope<Kinds>): Iterable<Exports | Rsc_FwRef_Exports<Exports>>
 }
 export class Origin_File extends Origin_Exporter<File_Props> {
     #_ = (() => {
@@ -37,15 +37,15 @@ export class Origin_File extends Origin_Exporter<File_Props> {
     }
 }
 export function File<
-    Kinds extends Resource_Ctor_Of[] = Resource_Ctor_Of[],
+    Kinds extends Rsc_Ctor_Of[] = Rsc_Ctor_Of[],
     Exports extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
 >(parent: Origin_Entity, name: File_sName, props: File_Props<Kinds, Exports>) {
     const file = new Origin_File(parent, name, props as any)
 
-    return FwRef_Exports<Exports>(file)
+    return Rsc_FwRef_Exports<Exports>(file)
 }
 
-export class Origin_File_Scope<Kinds extends Resource_Ctor_Of[]> {
+export class Origin_File_Scope<Kinds extends Rsc_Ctor_Of[]> {
     constructor(private readonly _file: Origin_File) {
         this.on = this._file.on
     }
@@ -59,11 +59,11 @@ export class Origin_File_Scope<Kinds extends Resource_Ctor_Of[]> {
         props: File_Section_Props<Exported>
     ) {
         const section: Origin_Section = new Origin_Section(this._file, name, props)
-        return FwRef_Exports<Exported>(section)
+        return Rsc_FwRef_Exports<Exported>(section)
     }
 }
 
 export type File<
-    Kinds extends Resource_Ctor_Of[] = Resource_Ctor_Of[],
+    Kinds extends Rsc_Ctor_Of[] = Rsc_Ctor_Of[],
     T extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
-> = FwRef_Exports<T>
+> = Rsc_FwRef_Exports<T>

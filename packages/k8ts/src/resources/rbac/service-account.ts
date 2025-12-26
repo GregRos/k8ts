@@ -1,4 +1,4 @@
-import { Resource_Top } from "@k8ts/instruments"
+import { Rsc_Top } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../kinds/default"
 export interface ServiceAccount_Props {
@@ -6,7 +6,7 @@ export interface ServiceAccount_Props {
     imagePullSecrets?: string[]
 }
 
-export class ServiceAccount<Name extends string = string> extends Resource_Top<
+export class ServiceAccount<Name extends string = string> extends Rsc_Top<
     Name,
     ServiceAccount_Props
 > {

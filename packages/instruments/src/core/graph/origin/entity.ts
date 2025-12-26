@@ -4,7 +4,7 @@ import { seq } from "doddle"
 import { mapValues } from "lodash"
 import { displayers } from "../../../utils/displayers"
 import { Entity } from "../entity"
-import { Resource_Entity } from "../resource/entity"
+import { Rsc_Entity } from "../resource/entity"
 import type { Rsc_Ref } from "../resource/reference/refable"
 import { OriginEventsEmitter, type Origin_EventMap } from "./events"
 import { KindMap } from "./kind-map"
@@ -32,7 +32,7 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
     }
     abstract get kind(): string
     private _emitter = OriginEventsEmitter()
-    private readonly _ownResources: Resource_Entity[] = []
+    private readonly _ownResources: Rsc_Entity[] = []
     private readonly _ownKids: Origin_Entity[] = []
     readonly meta: Meta
 
@@ -103,7 +103,7 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
         })
     }
 
-    protected __attach_resource__(resources: Resource_Entity | Iterable<Resource_Entity>) {
+    protected __attach_resource__(resources: Rsc_Entity | Iterable<Rsc_Entity>) {
         resources = Symbol.iterator in resources ? resources : [resources]
         for (const resource of resources) {
             this._ownResources.push(resource)

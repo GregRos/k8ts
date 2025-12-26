@@ -1,4 +1,4 @@
-import { Resource_Top, Rsc_Ref, type PortMapping_Input } from "@k8ts/instruments"
+import { Rsc_Ref, Rsc_Top, type PortMapping_Input } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { MakeError } from "../../error"
@@ -30,7 +30,7 @@ export interface Service_Ref<ExposedPorts extends string> extends Rsc_Ref<v1.Ser
 export class Service<
     Name extends string = string,
     Ports_Exposed extends string = string
-> extends Resource_Top<Name, Service_Props<string, Ports_Exposed>> {
+> extends Rsc_Top<Name, Service_Props<string, Ports_Exposed>> {
     __PORTS__!: Ports_Exposed
     get kind() {
         return v1.Service._

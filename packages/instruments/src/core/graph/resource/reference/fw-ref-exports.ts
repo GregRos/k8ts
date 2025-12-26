@@ -27,34 +27,33 @@ export type FwRef_Exports_ByKey<Exports extends Rsc_Ref = Rsc_Ref> = {
  * During runtime, this construct can provide references to all resources attached to the Origin,
  * even if they were not explicitly exported.
  */
-export type FwRef_Exports<Exported extends Rsc_Ref = Rsc_Ref> = FxRef_Exports_Proxied &
+export type Rsc_FwRef_Exports<Exported extends Rsc_Ref = any> = Rsc_FwRef_Exports_Proxied &
     FwRef_Exports_ByKey<Exported>
 
-export type FwRef_Exports_Brand = FxRef_Exports_Proxied
 /**
  * Creates a forward reference exports construct for the given {@link Origin_Exporter} entity.
  *
  * @param entity
  * @returns
  */
-export function FwRef_Exports<Exported extends Rsc_Ref>(
+export function Rsc_FwRef_Exports<Exported extends Rsc_Ref>(
     entity: Origin_Exporter
-): FwRef_Exports<Exported> {
-    const proxied = new FxRef_Exports_Proxied(entity)
+): Rsc_FwRef_Exports<Exported> {
+    const proxied = new Rsc_FwRef_Exports_Proxied(entity)
     const handler = new FwRef_Exports_Handler(proxied)
     return new Proxy(proxied, handler) as any
 }
-export namespace FwRef_Exports {
-    export function is(obj: any): obj is FwRef_Exports {
-        return obj instanceof FxRef_Exports_Proxied
+export namespace Rsc_FwRef_Exports {
+    export function is(obj: any): obj is Rsc_FwRef_Exports {
+        return obj instanceof Rsc_FwRef_Exports_Proxied
     }
 }
 
 /**
- * A basic core of the {@link FwRef_Exports} construct, containing information about the underlying
- * {@link Origin_Exporter} entity.
+ * A basic core of the {@link Rsc_FwRef_Exports} construct, containing information about the
+ * underlying {@link Origin_Exporter} entity.
  */
-export class FxRef_Exports_Proxied {
+export class Rsc_FwRef_Exports_Proxied {
     #entity: Origin_Exporter
     constructor(entity: Origin_Exporter) {
         this.#entity = entity
@@ -68,7 +67,7 @@ export class FxRef_Exports_Proxied {
         if (!other) {
             return false
         }
-        if (FwRef_Exports.is(other)) {
+        if (Rsc_FwRef_Exports.is(other)) {
             return this.#entity.equals(other.#entity)
         }
         if (other instanceof Origin_Entity) {
@@ -79,11 +78,11 @@ export class FxRef_Exports_Proxied {
 }
 
 /**
- * Proxy handler for the {@link FwRef_Exports} construct, providing dynamic access to the resources
- * attached to the underlying {@link Origin_Exporter} entity.
+ * Proxy handler for the {@link Rsc_FwRef_Exports} construct, providing dynamic access to the
+ * resources attached to the underlying {@link Origin_Exporter} entity.
  */
 class FwRef_Exports_Handler<Entity extends Origin_Exporter> implements ProxyHandler<Entity> {
-    constructor(private readonly _subject: FxRef_Exports_Proxied) {}
+    constructor(private readonly _subject: Rsc_FwRef_Exports_Proxied) {}
 
     get entity() {
         return this._subject["__entity__"]()
@@ -110,7 +109,7 @@ class FwRef_Exports_Handler<Entity extends Origin_Exporter> implements ProxyHand
     }
 
     getPrototypeOf(_: Entity): object | null {
-        return FxRef_Exports_Proxied.prototype
+        return Rsc_FwRef_Exports_Proxied.prototype
     }
 
     get exported() {

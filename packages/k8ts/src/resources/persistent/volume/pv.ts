@@ -1,4 +1,4 @@
-import { Resource_Top, Rsc_Ref, type Unit } from "@k8ts/instruments"
+import { Rsc_Ref, Rsc_Top, type Unit } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { MakeError } from "../../../error"
 import { v1 } from "../../../kinds/default"
@@ -44,7 +44,7 @@ export type Pv_Ref<Mode extends Pv_VolumeMode = Pv_VolumeMode> = Rsc_Ref<v1.Pers
 export class Pv<
     Mode extends Pv_VolumeMode = "Filesystem",
     Name extends string = string
-> extends Resource_Top<Name, Pv_Props_K8ts<Mode>> {
+> extends Rsc_Top<Name, Pv_Props_K8ts<Mode>> {
     __MODE__!: Mode
     get kind() {
         return v1.PersistentVolume._

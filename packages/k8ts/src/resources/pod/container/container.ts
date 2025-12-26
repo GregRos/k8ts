@@ -10,7 +10,7 @@ import {
 import type { CDK } from "@k8ts/sample-interfaces"
 import { toContainerPorts } from "../../utils/adapters"
 
-import { Resource_Child, Resource_Entity, Resource_Top } from "@k8ts/instruments"
+import { Resource_Child, Rsc_Entity, Rsc_Top } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { mapKeys, mapValues, omitBy } from "lodash"
 import { Env } from "../../../env"
@@ -115,7 +115,7 @@ export class Pod_Container<Ports extends string = string> extends Resource_Child
                 continue
             }
             const backend = value.$backend
-            if (backend instanceof Resource_Entity) {
+            if (backend instanceof Rsc_Entity) {
                 if (backend.namespace !== self.namespace) {
                     throw new Error(
                         `Environment variable reference "${key}" must be in the same namespace as the container "${self}", but was ${backend}"`
@@ -131,7 +131,7 @@ export class Pod_Container<Ports extends string = string> extends Resource_Child
             }
         }
         const envFroms = (self.props.$envFrom ?? []).map(ef => {
-            const source = ef.source as any as Resource_Entity
+            const source = ef.source as any as Rsc_Entity
             if (source.namespace !== self.namespace) {
                 throw new Error(
                     `EnvFrom source reference "${source}" must be in the same namespace as the container "${self}"`
@@ -171,7 +171,7 @@ export class Pod_Container<Ports extends string = string> extends Resource_Child
         return container
     }
     constructor(
-        parent: Resource_Entity,
+        parent: Rsc_Entity,
         name: string,
         readonly subtype: "init" | "main",
         override readonly props: Pod_Container_Props<Ports>
@@ -206,7 +206,7 @@ export class Pod_Container<Ports extends string = string> extends Resource_Child
 }
 
 export function make<Ports extends string>(
-    parent: Resource_Top,
+    parent: Rsc_Top,
     name: string,
     subtype: "init" | "main",
     props: Pod_Container_Props<Ports>

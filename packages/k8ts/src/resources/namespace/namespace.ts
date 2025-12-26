@@ -1,8 +1,8 @@
-import { Resource_Top } from "@k8ts/instruments"
+import { Rsc_Top } from "@k8ts/instruments"
 import { v1 } from "../../kinds/default"
 export interface Namespace_Props {}
 
-export class Namespace<Name extends string = string> extends Resource_Top<Name, Namespace_Props> {
+export class Namespace<Name extends string = string> extends Rsc_Top<Name, Namespace_Props> {
     constructor(name: Name, props: Namespace_Props = {}) {
         super(name, props)
     }
