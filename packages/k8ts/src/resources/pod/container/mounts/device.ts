@@ -15,7 +15,7 @@ export class Container_Device_Mount extends Rsc_Child<Container_Mount_Device_Pro
         super(parent, props.$backend.name, props)
     }
     get kind() {
-        return v1.Pod.Container.DeviceMount._ satisfies Kind.SubKind
+        return v1.Pod.Container.DeviceMount._ satisfies Kind.Ident_SubKind
     }
     get backend() {
         return this.props.$backend

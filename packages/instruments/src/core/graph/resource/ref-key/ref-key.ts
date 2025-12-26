@@ -78,7 +78,7 @@ export interface RefKey_Options<Name extends string = string> {
  * resources to reference other resources. Serves as the basis for the {@link External} resource
  * type.
  */
-export class RefKey<K extends Kind.KindLike = Kind.KindLike, Name extends string = string> {
+export class RefKey<K extends Kind.Ident_Like = Kind.Ident_Like, Name extends string = string> {
     /** The resource name */
     readonly name: string
     /** The optional namespace for namespaced resources */

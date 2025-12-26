@@ -2,7 +2,7 @@ import type { Kind } from "."
 import { Rsc_Entity } from "./entity"
 
 export abstract class Rsc_Child<Props extends object = object> extends Rsc_Entity<string, Props> {
-    abstract get kind(): Kind.SubKind
+    abstract get kind(): Kind.Ident_SubKind
     #parent: Rsc_Entity
     constructor(parent: Rsc_Entity, name: string, props: Props) {
         super(name, props)

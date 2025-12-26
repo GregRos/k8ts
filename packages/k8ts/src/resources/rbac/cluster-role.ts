@@ -3,7 +3,7 @@ import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { rbac } from "../../kinds/rbac"
 export interface ClusterRole_Rule<
-    Groups extends Kind.Group[] = Kind.Group[],
+    Groups extends Kind.Ident_Group[] = Kind.Ident_Group[],
     Resources extends Kind.Kind<Groups[number]["name"], string, string>[] = Kind.Kind[]
 > {
     resources: Resources

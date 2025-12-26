@@ -10,43 +10,43 @@ export type Kind<
     Name extends string = string
 > = Kind.Kind<GroupName, Version, Name>
 export namespace Kind {
-    export interface KindLike {
+    export interface Ident_Like {
         text: string
         name: string
         dns: string
-        parent: KindLike | null
+        parent: Ident_Like | null
         equals(other: any): boolean
     }
     type _alphabeta = "alpha" | "beta" | ""
     type _subversion = `${_alphabeta}${number}` | ""
     type _version = `v${number}${_subversion | ""}`
-    export type _Kind_Parents<T extends KindLike> = T extends {
-        subkind(...args: any[]): KindLike
-        parent: infer P extends KindLike
+    export type _Kind_Parents<T extends Ident_Like> = T extends {
+        subkind(...args: any[]): Ident_Like
+        parent: infer P extends Ident_Like
     }
         ? [T, ..._Kind_Parents<P>]
         : []
 
-    export type _Names_For_kind_Parents<T extends KindLike> = {
+    export type _Names_For_kind_Parents<T extends Ident_Like> = {
         [K in keyof _Kind_Parents<T>]: string
     }
     @displayers({
         simple: self => self.text
     })
     @bind_own_methods()
-    export abstract class Identifier<
+    export abstract class Ident<
         Name extends string = string,
-        Parent extends KindLike | null = KindLike | null
-    > implements KindLike
+        Parent extends Ident_Like | null = Ident_Like | null
+    > implements Ident_Like
     {
         constructor(
             readonly name: Name,
             readonly parent: Parent
         ) {}
 
-        get full(): KindLike[] {
-            const parts: KindLike[] = []
-            let curr: KindLike | null = this
+        get full(): Ident_Like[] {
+            const parts: Ident_Like[] = []
+            let curr: Ident_Like | null = this
             while (curr) {
                 parts.unshift(curr)
                 curr = curr.parent
@@ -65,11 +65,11 @@ export namespace Kind {
                 .join(".")
         }
 
-        abstract child(name: string): Identifier<
+        abstract child(name: string): Ident<
             string,
             {
                 name: Name
-            } & KindLike
+            } & Ident_Like
         >
 
         equals(other: any) {
@@ -79,22 +79,22 @@ export namespace Kind {
             if (typeof other !== "object" || !other) {
                 return false
             }
-            if (!(other instanceof Identifier)) {
+            if (!(other instanceof Ident)) {
                 return false
             }
             return this.text === other.text
         }
     }
     @bind_own_methods()
-    export class Group<const _Group extends string = string> extends Identifier<_Group, null> {
+    export class Ident_Group<const _Group extends string = string> extends Ident<_Group, null> {
         constructor(override name: _Group) {
             super(name, null)
         }
         version<Version extends _version>(apiVersion: Version) {
-            return new Version(apiVersion, this)
+            return new Ident_Version(apiVersion, this)
         }
 
-        child(name: string): Version<_Group, string> {
+        child(name: string): Ident_Version<_Group, string> {
             if (!name.startsWith("v")) {
                 throw new InstrumentsError(
                     `Invalid version name "${name}". Version name must start with "v".`
@@ -104,12 +104,12 @@ export namespace Kind {
         }
     }
     @bind_own_methods()
-    export class Version<
+    export class Ident_Version<
         const _Group extends string = string,
         const _Version extends string = string
-    > extends Identifier<_Version, Kind.Group<_Group>> {
+    > extends Ident<_Version, Kind.Ident_Group<_Group>> {
         kind<_Kind extends string>(kind: _Kind, specialPlural?: string) {
-            return new Kind(kind, this as Version<_Group, _Version>, specialPlural)
+            return new Kind(kind, this as Ident_Version<_Group, _Version>, specialPlural)
         }
 
         __FORMAT__!: _Version
@@ -127,10 +127,10 @@ export namespace Kind {
         const _Group extends string = string,
         const _Version extends string = string,
         const _Kind extends string = string
-    > extends Identifier<_Kind, Version<_Group, _Version>> {
+    > extends Ident<_Kind, Ident_Version<_Group, _Version>> {
         constructor(
             name: _Kind,
-            parent: Version<_Group, _Version>,
+            parent: Ident_Version<_Group, _Version>,
             private readonly _specialPlural?: string
         ) {
             super(name, parent)
@@ -152,24 +152,24 @@ export namespace Kind {
         }
 
         subkind<SubKind extends string>(subkind: SubKind) {
-            return new SubKind(subkind, this)
+            return new Ident_SubKind(subkind, this)
         }
 
-        child<Name extends string>(name: Name): SubKind<Name, this> {
+        child<Name extends string>(name: Name): Ident_SubKind<Name, this> {
             return this.subkind(name)
         }
     }
 
     @bind_own_methods()
-    export class SubKind<
+    export class Ident_SubKind<
         Name extends string = string,
-        Parent extends KindLike = KindLike
-    > extends Identifier<Name, Parent> {
+        Parent extends Ident_Like = Ident_Like
+    > extends Ident<Name, Parent> {
         constructor(name: Name, parent: Parent) {
             super(name, parent)
         }
-        subkind<_SubKind2 extends string>(subkind: _SubKind2): SubKind<_SubKind2, this> {
-            return new SubKind(subkind, this)
+        subkind<_SubKind2 extends string>(subkind: _SubKind2): Ident_SubKind<_SubKind2, this> {
+            return new Ident_SubKind(subkind, this)
         }
 
         child<Name extends string>(name: Name) {
@@ -178,16 +178,10 @@ export namespace Kind {
     }
 
     export function group<ApiGroup extends string>(apiGroup: ApiGroup) {
-        return new Group(apiGroup)
+        return new Ident_Group(apiGroup)
     }
 
     export function version<ApiVersion extends _version>(apiVersion: ApiVersion) {
-        return new Version(apiVersion, group(""))
-    }
-}
-export function kinded(kind: Kind.Identifier) {
-    return <T extends abstract new (...args: any[]) => object>(ctor: T) => {
-        ctor.prototype.kind = kind
-        return ctor
+        return new Ident_Version(apiVersion, group(""))
     }
 }

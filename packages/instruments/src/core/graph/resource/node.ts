@@ -120,7 +120,7 @@ export class Rsc_Node extends Node<Rsc_Node, Rsc_Entity> {
         return Displayers.get(this).pretty(format)
     }
 
-    hasKind(kind: Kind.Identifier) {
+    hasKind(kind: Kind.Ident) {
         return this.kind.equals(kind)
     }
     constructor(

@@ -2,17 +2,17 @@ import type { AnyCtor } from "what-are-you"
 import type { RefLike } from "../../entity"
 import type { Kind } from "../api-kind"
 import type { Rsc_Node } from "../node"
-export type Rsc_Ctor_Of<K extends Kind.KindLike = Kind.KindLike> = AnyCtor<Rsc_Ref<K>> & {
+export type Rsc_Ctor_Of<K extends Kind.Ident_Like = Kind.Ident_Like> = AnyCtor<Rsc_Ref<K>> & {
     prototype: Rsc_Ref<K>
 }
 export type Rsc_Ref<
-    Kind extends Kind.KindLike = Kind.KindLike,
+    Kind extends Kind.Ident_Like = Kind.Ident_Like,
     Name extends string = string
 > = RefLike & {
     kind: Kind
     name: Name
     namespace?: string
-    is<Kind extends Kind.KindLike>(kind: Kind): this is Rsc_Ref<Kind>
+    is<Kind extends Kind.Ident_Like>(kind: Kind): this is Rsc_Ref<Kind>
     equals(other: any): boolean
     node: Rsc_Node
 }

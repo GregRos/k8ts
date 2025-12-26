@@ -15,7 +15,7 @@ export abstract class Rsc_Entity<
     Name extends string = string,
     Props extends object = object
 > extends Entity<Rsc_Node, Rsc_Entity> {
-    abstract get kind(): Kind.KindLike
+    abstract get kind(): Kind.Ident_Like
 
     with(callback: (self: this) => void) {
         callback(this)
