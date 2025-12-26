@@ -3,7 +3,7 @@ import { Meta } from "@k8ts/metadata"
 import { aseq } from "doddle"
 import Emittery from "emittery"
 import { cloneDeep } from "lodash"
-import { ResourceLoader, type ResourceLoaderEventsTable } from "./loader"
+import { Assembler_RscLoader, type Assembler_RscLoaderEvents } from "./loader"
 import { Manifester, NodeManifest, type ManifesterEventsTable } from "./manifester"
 import { ManifestSaver, type ManifestSaverEventsTable } from "./saver"
 import { YamlSerializer, type SerializerEventsTable } from "./serializer"
@@ -22,7 +22,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
             return await this.emit(event, payload)
         }
         const validator = new NodeGraphValidator({})
-        const loader = new ResourceLoader({})
+        const loader = new Assembler_RscLoader({})
         loader.onAny(_emit)
         const generator = new Manifester({
             cwd: this._options.cwd
@@ -169,7 +169,7 @@ export interface AssemblerEventsTable
     extends ManifestSaverEventsTable,
         SerializerEventsTable,
         ManifesterEventsTable,
-        ResourceLoaderEventsTable,
+        Assembler_RscLoaderEvents,
         ValidatorEventsTable {
     ["received-file"]: { file: OriginNode }
     ["stage"]: { stage: AssemblyStage }

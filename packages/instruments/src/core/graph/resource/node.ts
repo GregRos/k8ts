@@ -39,7 +39,7 @@ import { RefKey } from "./ref-key"
         return text
     }
 })
-export class Resource_Node extends Node<Resource_Node, Rsc_Entity> {
+export class Rsc_Node extends Node<Rsc_Node, Rsc_Entity> {
     get fullFqn() {
         return [this.kind.dns, this.namespace, this.name].filter(Boolean).join("/")
     }

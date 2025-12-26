@@ -1,13 +1,13 @@
-import { OriginNode, Resource_Node, type Node, type Rsc_Top } from "@k8ts/instruments"
+import { OriginNode, Rsc_Node, type Node, type Rsc_Top } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { MakeError } from "../../error"
-export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
-    constructor(private readonly _options: ResourceLoaderOptions) {
+export class Assembler_RscLoader extends Emittery<Assembler_RscLoaderEvents> {
+    constructor(private readonly _options: Assembler_RscLoaderOptions) {
         super()
     }
 
-    private _checkNames(resources: Resource_Node[]) {
-        let names = new Map<string, Resource_Node>()
+    private _checkNames(resources: Rsc_Node[]) {
+        let names = new Map<string, Rsc_Node>()
         const nameRegexp = /^[a-zA-Z0-9][a-zA-Z0-9_-]*$/
         for (const resource of resources) {
             const name = [resource.kind.name, resource.namespace, resource.name]
@@ -30,10 +30,10 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
 
     async load(input: OriginNode) {
         // TODO: Handle ORIGINS that are referenced but not passed to the runner
-        let resources = [] as Resource_Node[]
+        let resources = [] as Rsc_Node[]
 
         const addResource = async (res: Node) => {
-            if (!(res instanceof Resource_Node)) {
+            if (!(res instanceof Rsc_Node)) {
                 throw new Error(`Expected ResourceNode, got ${res.constructor.name}`)
             }
             if (resources.some(r => r.equals(res))) {
@@ -79,13 +79,13 @@ export class ResourceLoader extends Emittery<ResourceLoaderEventsTable> {
         return [...resources]
     }
 }
-export interface ResourceLoadedEvent {
+export interface Assembler_RscLoadedEvent {
     isExported: boolean
-    resource: Resource_Node
+    resource: Rsc_Node
 }
 
-export interface ResourceLoaderEventsTable {
-    load: ResourceLoadedEvent
+export interface Assembler_RscLoaderEvents {
+    load: Assembler_RscLoadedEvent
 }
 
-export interface ResourceLoaderOptions {}
+export interface Assembler_RscLoaderOptions {}

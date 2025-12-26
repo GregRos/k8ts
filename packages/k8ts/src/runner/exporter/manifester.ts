@@ -1,4 +1,4 @@
-import { Manifest, ManifestSourceEmbedder, Resource_Node, Rsc_Top } from "@k8ts/instruments"
+import { Manifest, ManifestSourceEmbedder, Rsc_Node, Rsc_Top } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { cloneDeep, cloneDeepWith, isEmpty, unset } from "lodash"
 import { version } from "../../version"
@@ -50,7 +50,7 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
         return noEmpty
     }
 
-    private _attachProductionAnnotations(resource: Resource_Node) {
+    private _attachProductionAnnotations(resource: Rsc_Node) {
         const loc = resource.trace.format({
             cwd: this._options.cwd
         })
@@ -60,7 +60,7 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
         })
     }
 
-    async generate(res: Resource_Node): Promise<NodeManifest> {
+    async generate(res: Rsc_Node): Promise<NodeManifest> {
         this._attachProductionAnnotations(res)
         await this.emit("manifest", { resource: res })
         const manifest = await this._generate(res.entity as Rsc_Top)
@@ -78,11 +78,11 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
 }
 
 export interface NodeManifest {
-    node: Resource_Node
+    node: Rsc_Node
     manifest: Manifest
 }
 export interface ManifesterManifestEvent {
-    resource: Resource_Node
+    resource: Rsc_Node
 }
 
 export interface ManifesterEventsTable {

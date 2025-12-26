@@ -3,7 +3,7 @@ import {
     OriginNode,
     pretty,
     Relation,
-    Resource_Node,
+    Rsc_Node,
     TextPostProcessor
 } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
@@ -16,7 +16,7 @@ export interface SummarizerOptions {
 export class Summarizer {
     private _post = new TextPostProcessor()
     constructor(private readonly _options: SummarizerOptions) {}
-    _formatRefFromTo(node: Resource_Node, edge: Relation<Resource_Node>) {
+    _formatRefFromTo(node: Rsc_Node, edge: Relation<Rsc_Node>) {
         return this._token(pretty`${edge}`)
     }
 
@@ -28,7 +28,7 @@ export class Summarizer {
         return token
     }
 
-    private _resource(resource: Resource_Node): any[] | null {
+    private _resource(resource: Rsc_Node): any[] | null {
         const subs = resource.kids
             .map(sub => {
                 const heading = Displayers.get(sub).pretty("local")
@@ -47,7 +47,7 @@ export class Summarizer {
         return [...subs, ...depends]
     }
 
-    private _resources(resources: Resource_Node[]): object {
+    private _resources(resources: Rsc_Node[]): object {
         const resourceContainer = resources
             .map(resource => {
                 const text = pretty`${resource}`
@@ -120,7 +120,7 @@ export class Summarizer {
         return outputs.join("\n")
     }
 
-    files(obj: { origin: OriginNode; resources: Resource_Node[] }[]) {
+    files(obj: { origin: OriginNode; resources: Rsc_Node[] }[]) {
         let pairs = obj.flatMap(({ origin, resources }) => {
             return [
                 [this._token(pretty`\n${origin}`), this._resources(resources)] as [string, object]

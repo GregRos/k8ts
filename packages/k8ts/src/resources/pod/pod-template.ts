@@ -1,4 +1,4 @@
-import { Resource_Child, Rsc_Ref, type Rsc_Ref_Keys_Of } from "@k8ts/instruments"
+import { Rsc_Child, Rsc_Ref, type Rsc_Ref_Keys_Of } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify, seq } from "doddle"
@@ -32,7 +32,7 @@ export interface Pod_Props<Ports extends string> extends Pod_Props_Original {
     $POD: Pod_Container_Producer<Ports>
 }
 
-export class Pod_Template<Ports extends string = string> extends Resource_Child<Pod_Props<Ports>> {
+export class Pod_Template<Ports extends string = string> extends Rsc_Child<Pod_Props<Ports>> {
     get kind() {
         return v1.PodTemplate._
     }

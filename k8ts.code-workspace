@@ -27,6 +27,12 @@
         "jest.disabledWorkspaceFolders": ["root"],
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+        "search.exclude": {
+            "**/node_modules": true,
+            "**/bower_components": true,
+            "**/*.code-search": true,
+            "**/k8ts.vault/**": true
+        },
         "files.exclude": {
             "packages/k8ts": true,
             "packages/instruments": true,

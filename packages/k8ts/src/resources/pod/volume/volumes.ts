@@ -1,6 +1,6 @@
 import type { CDK } from "@k8ts/sample-interfaces"
 
-import { Resource_Child, Rsc_Entity, type Rsc_Ref, type Rsc_Ref_Keys_Of } from "@k8ts/instruments"
+import { Rsc_Child, Rsc_Entity, type Rsc_Ref, type Rsc_Ref_Keys_Of } from "@k8ts/instruments"
 import { v1 } from "../../../kinds/default"
 import type { HostPathType } from "../../hostpath"
 import {
@@ -68,7 +68,7 @@ export type Pod_Volume_Backend_Known_Paths<T extends Pod_Volume_Backend> = strin
 
 export abstract class Pod_Volume<
     P extends Pod_Volume_Backend = Pod_Volume_Backend
-> extends Resource_Child<P> {
+> extends Rsc_Child<P> {
     get kind() {
         return v1.Pod.Volume._
     }

@@ -10,7 +10,7 @@ import {
 import type { CDK } from "@k8ts/sample-interfaces"
 import { toContainerPorts } from "../../utils/adapters"
 
-import { Resource_Child, Rsc_Entity, Rsc_Top } from "@k8ts/instruments"
+import { Rsc_Child, Rsc_Entity, Rsc_Top } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { mapKeys, mapValues, omitBy } from "lodash"
 import { Env } from "../../../env"
@@ -48,7 +48,7 @@ export interface Pod_Container_Props<
     $resources?: Pod_Container_Resources
 }
 
-export class Pod_Container<Ports extends string = string> extends Resource_Child<
+export class Pod_Container<Ports extends string = string> extends Rsc_Child<
     Pod_Container_Props<Ports>
 > {
     __PORTS__!: Ports

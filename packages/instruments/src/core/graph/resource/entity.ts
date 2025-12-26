@@ -4,7 +4,7 @@ import { displayers } from "../../../utils"
 import { Entity } from "../entity"
 import type { Origin_Entity } from "../origin"
 import type { Kind } from "./api-kind"
-import { Resource_Node } from "./node"
+import { Rsc_Node } from "./node"
 import { FwRef } from "./reference"
 
 @displayers({
@@ -14,7 +14,7 @@ import { FwRef } from "./reference"
 export abstract class Rsc_Entity<
     Name extends string = string,
     Props extends object = object
-> extends Entity<Resource_Node, Rsc_Entity> {
+> extends Entity<Rsc_Node, Rsc_Entity> {
     abstract get kind(): Kind.KindLike
 
     with(callback: (self: this) => void) {
@@ -61,8 +61,8 @@ export abstract class Rsc_Entity<
     }
 
     protected abstract __origin__(): Origin_Entity
-    get node(): Resource_Node {
-        return new Resource_Node(this.__origin__().node, this)
+    get node(): Rsc_Node {
+        return new Rsc_Node(this.__origin__().node, this)
     }
 
     get shortFqn() {
