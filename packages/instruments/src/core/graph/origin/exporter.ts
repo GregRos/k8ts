@@ -1,11 +1,11 @@
 import { doddlify, seq } from "doddle"
-import type { Ref2_Of, Resource_Top } from "../resource"
+import type { FwRef_Exports, Ref2_Of, Resource_Top } from "../resource"
 import { FwRef } from "../resource/reference/fw-ref"
 import { Origin_Entity } from "./entity"
 import type { Origin_Props } from "./node"
-
 export interface Origin_Exporter_Props extends Origin_Props {}
 
+/** Base class for Origins that export resources via the {@link FwRef_Exports} mechanism. */
 export abstract class Origin_Exporter<
     Props extends Origin_Exporter_Props = Origin_Exporter_Props
 > extends Origin_Entity<Props> {

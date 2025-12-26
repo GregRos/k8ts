@@ -1626,7 +1626,7 @@ __metadata:
     chalk: "npm:4.1.2"
     dayjs: "npm:^1.11.13"
     declare-it: "npm:^2.1.0"
-    doddle: "npm:^7.2.0"
+    doddle: "npm:^7.3.1"
     eventemitter3: "npm:^5.0.1"
     ip-address: "npm:^10.0.1"
     jest: "npm:^30.2.0"
@@ -1657,7 +1657,7 @@ __metadata:
     "@types/jest": "npm:^30.0.0"
     "@types/node": "npm:20.9.1"
     declare-it: "npm:^2.1.0"
-    doddle: "npm:^7.2.0"
+    doddle: "npm:^7.3.1"
     jest: "npm:^30.2.0"
     npm-run-all: "npm:^4.1.5"
     parjs: "npm:^1.3.9"
@@ -1680,46 +1680,13 @@ __metadata:
     cdk8s: "npm:^2.69.48"
     cdk8s-cli: "npm:^2.200.7"
     constructs: "npm:^10.4.2"
-    doddle: "npm:^7.2.0"
+    doddle: "npm:^7.3.1"
     npm-run-all: "npm:^4.1.5"
     shx: "npm:^0.3.4"
     ts-node: "npm:^10.9.2"
     tsx: "npm:^4.21.0"
     typescript: "npm:^5.8.2"
     what-are-you: "npm:^0.2.0"
-  languageName: unknown
-  linkType: soft
-
-"@k8ts/workspace@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@k8ts/workspace@workspace:."
-  dependencies:
-    "@types/node": "npm:^25.0.2"
-    "@typescript-eslint/eslint-plugin": "npm:^8.46.3"
-    "@typescript-eslint/parser": "npm:^8.46.3"
-    "@typescript/analyze-trace": "npm:^0.10.1"
-    doddle: "npm:^7.2.0"
-    eslint: "npm:^9.39.1"
-    eslint-config-prettier: "npm:9.1.0"
-    eslint-plugin-jest: "npm:^28.11.0"
-    eslint-plugin-markdown: "npm:^5.1.0"
-    husky: "npm:^9.1.7"
-    jest: "npm:^29.7.0"
-    lint-staged: "npm:^16.2.6"
-    npm-run-all: "npm:^4.1.5"
-    prettier: "npm:^3.3.1"
-    prettier-plugin-jsdoc: "npm:^1.3.0"
-    prettier-plugin-organize-imports: "npm:3.2.4"
-    prettier-plugin-packagejson: "npm:2.5.0"
-    process-tracing: "npm:^1.0.2"
-    shelljs: "npm:0.8.5"
-    shx: "npm:^0.3.4"
-    ts-jest: "npm:^29.2.6"
-    ts-node: "npm:^10.9.2"
-    tsx: "npm:^4.21.0"
-    typescript: "npm:^5.8.2"
-    what-are-you: "npm:^0.2.0"
-    yamprint: "npm:^0.8.4"
   languageName: unknown
   linkType: soft
 
@@ -4386,6 +4353,15 @@ __metadata:
   dependencies:
     tslib: "npm:^2.8.1"
   checksum: 10c0/298a5b774ab94cd496adef4ff9fa3028e6051bdb52a403d397c681bbb9316ccd3e714d4a3467e9b91f554b533e6bd87c50005d1b0a1a83d81f72632fd98aa76b
+  languageName: node
+  linkType: hard
+
+"doddle@npm:^7.3.1":
+  version: 7.3.1
+  resolution: "doddle@npm:7.3.1"
+  dependencies:
+    tslib: "npm:^2.8.1"
+  checksum: 10c0/fc72d1175577195a63e42a6e950d8a797abe32b8d64c72d046d143c54fd20f5a6cbcf1bbd9ba59749282b5ae1089b03ab2d18076b7c7098d67c5abbe602ee83d
   languageName: node
   linkType: hard
 
@@ -8005,7 +7981,7 @@ __metadata:
     chalk: "npm:4.1.2"
     dayjs: "npm:^1.11.13"
     declare-it: "npm:^2.1.0"
-    doddle: "npm:^7.2.0"
+    doddle: "npm:^7.3.1"
     emittery: "npm:0.13.1"
     ip-address: "npm:^10.0.1"
     jest: "npm:^29.7.0"
@@ -12376,6 +12352,39 @@ __metadata:
   checksum: 10c0/58e8e969782292cb3a7bfba823f1179a7615250a0cefb4841d5166234db1880a3d0fe83a31dd8d648329ec92c2d0cd1890ad9ec9e53674bb36ca43e9753cdeac
   languageName: node
   linkType: hard
+
+"workspace@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "workspace@workspace:."
+  dependencies:
+    "@types/node": "npm:^25.0.2"
+    "@typescript-eslint/eslint-plugin": "npm:^8.46.3"
+    "@typescript-eslint/parser": "npm:^8.46.3"
+    "@typescript/analyze-trace": "npm:^0.10.1"
+    doddle: "npm:^7.2.0"
+    eslint: "npm:^9.39.1"
+    eslint-config-prettier: "npm:9.1.0"
+    eslint-plugin-jest: "npm:^28.11.0"
+    eslint-plugin-markdown: "npm:^5.1.0"
+    husky: "npm:^9.1.7"
+    jest: "npm:^29.7.0"
+    lint-staged: "npm:^16.2.6"
+    npm-run-all: "npm:^4.1.5"
+    prettier: "npm:^3.3.1"
+    prettier-plugin-jsdoc: "npm:^1.3.0"
+    prettier-plugin-organize-imports: "npm:3.2.4"
+    prettier-plugin-packagejson: "npm:2.5.0"
+    process-tracing: "npm:^1.0.2"
+    shelljs: "npm:0.8.5"
+    shx: "npm:^0.3.4"
+    ts-jest: "npm:^29.2.6"
+    ts-node: "npm:^10.9.2"
+    tsx: "npm:^4.21.0"
+    typescript: "npm:^5.8.2"
+    what-are-you: "npm:^0.2.0"
+    yamprint: "npm:^0.8.4"
+  languageName: unknown
+  linkType: soft
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0, wrap-ansi@npm:^7.0.0":
   version: 7.0.0

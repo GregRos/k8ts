@@ -1,8 +1,9 @@
-import { Ref2_Of, Resource_Top, type Resource_Ref_Full, type Unit } from "@k8ts/instruments"
+import { Ref2_Of, Resource_Top, type Unit } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { MakeError } from "../../../error"
 import { v1 } from "../../../kinds/default"
 import { storage } from "../../../kinds/storage"
+import type { HostPathType } from "../../hostpath"
 import { Access } from "../access-mode"
 import type { Pv_VolumeMode } from "../block-mode"
 import { parseBackend } from "./parse-backend"
@@ -10,16 +11,16 @@ import { parseBackend } from "./parse-backend"
 const StorageClassKind = storage.v1.StorageClass._
 
 export interface Pv_Backend_HostPath {
-    type: "HostPath"
-    hostpathType: string
+    kind: "HostPath"
+    hostpathType: HostPathType
     path: string
 }
 export interface Pv_Backend_Local {
-    type: "Local"
+    kind: "Local"
     path: string
 }
 export interface Pv_Backend_Nfs {
-    type: "NFS"
+    kind: "NFS"
     server: string
     path: string
 }
@@ -27,7 +28,7 @@ export interface Pv_Backend_Nfs {
 export type Pv_Backend = Pv_Backend_HostPath | Pv_Backend_Local | Pv_Backend_Nfs
 export interface Pv_Props_K8ts<Mode extends Pv_VolumeMode = Pv_VolumeMode> {
     $accessModes: Access
-    $storageClass?: Resource_Ref_Full<storage.v1.StorageClass._>
+    $storageClass?: Ref2_Of<storage.v1.StorageClass._>
     $mode?: Mode
     reclaimPolicy?: Reclaim
     $capacity: Unit.Data
@@ -58,7 +59,7 @@ export class Pv<
         const self = this
         const pvProps = self.props
         const accessModes = Access.pv_parseAccessMode(pvProps.$accessModes)
-        if (self.props.$backend?.type === "Local") {
+        if (self.props.$backend?.kind === "Local") {
             if (!pvProps.nodeAffinity) {
                 throw new MakeError(
                     `While manifesting ${self.node.format("source")}, PV with Local backend must have nodeAffinity.`

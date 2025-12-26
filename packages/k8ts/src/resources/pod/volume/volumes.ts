@@ -2,11 +2,12 @@ import type { CDK } from "@k8ts/sample-interfaces"
 
 import {
     Resource_Child,
+    Resource_Entity,
     type Ref2_Of,
-    type Resource_Entity,
     type Resource_Ref_Keys_Of
 } from "@k8ts/instruments"
 import { v1 } from "../../../kinds/default"
+import type { HostPathType } from "../../hostpath"
 import {
     type Container_Volume_Mount_Attrs,
     type Container_Volume_Mount_Source
@@ -18,10 +19,17 @@ export interface Pod_Volume_Backend_Pvc<
     $backend: A
     readOnly?: boolean
 }
-
 const allowedVolumeResourceKinds = [v1.ConfigMap._, v1.Secret._] as const
 type VolumeResourceKind = (typeof allowedVolumeResourceKinds)[number]
 export type AllowedResources = Ref2_Of<VolumeResourceKind>
+
+export interface Pod_Volume_Backend_HostPath {
+    $backend: {
+        kind: "HostPath"
+        type?: HostPathType
+        path: string
+    }
+}
 export interface Pod_Volume_Backend_ConfigMap<
     A extends Ref2_Of<v1.ConfigMap._> = Ref2_Of<v1.ConfigMap._>
 > {
@@ -44,6 +52,7 @@ export type Pod_Volume_Backend =
     | Pod_Volume_Backend_Pvc
     | Pod_Volume_Backend_ConfigMap
     | Pod_Volume_Backend_Secret
+    | Pod_Volume_Backend_HostPath
 
 type _KeysOf<T> = T extends {
     $backend: {
@@ -69,14 +78,18 @@ export abstract class Pod_Volume<
         return v1.Pod.Volume._
     }
 
-    get sourceNamespace() {
-        const backend = this.props.$backend as any as Resource_Entity
-        return backend.namespace
+    get namespace() {
+        const backend = this.props.$backend
+        if (backend instanceof Resource_Entity) {
+            return backend.namespace
+        }
+        return undefined
     }
 
     protected __needs__(): Record<string, Resource_Entity | Resource_Entity[] | undefined> {
         return {
-            backend: this.props.$backend as any
+            backend:
+                this.props.$backend instanceof Resource_Entity ? this.props.$backend : undefined
         }
     }
     Mount(
@@ -84,7 +97,7 @@ export abstract class Pod_Volume<
     ): Container_Volume_Mount_Source {
         return {
             ...options,
-            backend: this
+            $backend: this
         }
     }
 
@@ -144,6 +157,18 @@ export class Pod_Volume_Secret<
                 secretName: this.props.$backend.name,
                 optional: this.props.optional,
                 items: mappings
+            }
+        }
+    }
+}
+
+export class Pod_Volume_HostPath extends Pod_Volume<Pod_Volume_Backend_HostPath> {
+    protected __submanifest__(): CDK.Volume {
+        return {
+            name: this.name,
+            hostPath: {
+                path: this.props.$backend.path,
+                type: this.props.$backend.type
             }
         }
     }

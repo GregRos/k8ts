@@ -1,7 +1,10 @@
-import type { Resource_Ctor_Of } from "../resource"
+import type { External, Resource_Ctor_Of } from "../resource"
 import { Origin_Entity } from "./entity"
 import type { Origin_Props } from "./node"
-
+/**
+ * Used as the Origin of {@link External} resources. These resources are never manifested by k8ts.
+ * They're expected to already exist in the target cluster.
+ */
 export class Origin_External extends Origin_Entity {
     get kind() {
         return "[k8ts] External"

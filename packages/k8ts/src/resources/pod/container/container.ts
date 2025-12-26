@@ -56,38 +56,38 @@ export class Container<Ports extends string = string> extends Resource_Child<
         return v1.Pod.Container._
     }
 
-    protected __needs__(): Record<string, Resource_Entity | Resource_Entity[] | undefined> {
+    protected __needs__(): Record<string, Ref2_Of | Ref2_Of[]> {
         const a = this.mounts
         return mapValues(
             mapKeys(a, x => x.path),
-            x => x.backend as any as Resource_Entity
+            x => x.backend
         )
     }
     get mounts() {
         return seq(Object.entries(this.props.$mounts ?? {}))
             .map(([path, mount]: [string, Container_Mount_Any]) => {
-                if (mount.backend.is(Pod_Device)) {
+                if (mount.$backend.is(Pod_Device)) {
                     return new Container_Device_Mount(this, {
-                        backend: mount.backend,
+                        $backend: mount.$backend,
                         mountPath: path
                     })
-                } else if (mount.backend.is(Pod_Volume)) {
+                } else if (mount.$backend.is(Pod_Volume)) {
                     const x = mount as any
                     return new Container_Volume_Mount(this, {
-                        backend: mount.backend,
+                        $backend: mount.$backend,
                         mountPath: path,
                         readOnly: x.readOnly,
                         subPath: x.subPath
                     })
                 }
-                throw new Error(`Unsupported mount backend type: ${mount.backend}`)
+                throw new Error(`Unsupported mount backend type: ${mount.$backend}`)
             })
             .toArray()
             .pull()
     }
 
     get volumes() {
-        return seq(this.mounts.map(x => x.backend as Pod_Volume | Pod_Device))
+        return seq(this.mounts.map(x => x.backend))
             .uniq()
             .toArray()
             .pull()
@@ -124,7 +124,7 @@ export class Container<Ports extends string = string> extends Resource_Child<
             }
         }
         for (const vol of self.volumes) {
-            if (vol.sourceNamespace !== self.namespace) {
+            if (vol.namespace !== self.namespace) {
                 throw new Error(
                     `Volume reference "${vol}" must be in the same namespace as the container "${self}"`
                 )

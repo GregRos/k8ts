@@ -1,46 +1,74 @@
 import { seq, type Seq } from "doddle"
-import type { Entity } from "./entity"
+import { Entity } from "./entity"
 import { Relation } from "./relation"
 import { FwRef } from "./resource/reference/fw-ref"
-
+/**
+ * The {@link Node} is a wrapper around a {@link Entity} that provides traversal, display, and other
+ * utilities. Note that the {@link Node} itself is immutable. Changes only happen to the underlying
+ * {@link Entity}.
+ *
+ * Two {@link Node} instances are considered equal if they wrap the same {@link Entity}, even if
+ * they're different instances.
+ *
+ * Node classes are primarily used for traversal in the graph structure formed by {@link Entity}
+ * instances. They provide methods to navigate parent-child relationships, access metadata, and
+ * explore dependencies between entities.
+ *
+ * This is mainly done in the manifestation pipeline, but users can also rely on it to construct
+ * resources dynamically.
+ *
+ * Accessing the `Node` of an `Entity` always forces any `FwRef` instances to resolve.
+ */
 export abstract class Node<
     _Node extends Node<_Node, _Entity> = Node<any, any>,
     _Entity extends Entity<_Node, _Entity> = Entity<any, any>
 > {
-    get kids() {
-        return seq(this.entity["__kids__"]()).map(x => x.node)
+    /** The nodes of child entities. */
+
+    private readonly _ID: number
+    constructor(readonly entity: _Entity) {
+        this._ID = this.entity["_ID"]
     }
+    get kids() {
+        return seq(this.entity["__kids__"]()).map(x => x.assert(Entity).node as _Node)
+    }
+    /** The direct **needs** of this this node's entity. */
     get relations() {
-        const needs = this.entity["__needs__"]()
+        const needs = seq(() => {
+            return seq.fromObject(this.entity["__needs__"]())
+        })
         return seq(function* () {
-            for (const [relName, target] of Object.entries(needs)) {
+            for (const [relName, target] of needs) {
                 if (Array.isArray(target)) {
                     for (const t of target) {
                         if (t) {
-                            yield new Relation<_Node>(relName, t.node)
+                            yield new Relation<_Node>(
+                                relName,
+                                t.assert(Entity<_Node, _Entity>).node
+                            )
                         }
                     }
                 } else {
                     if (target) {
-                        yield new Relation<_Node>(relName, target.node)
+                        yield new Relation<_Node>(
+                            relName,
+                            target.assert(Entity<_Node, _Entity>).node
+                        )
                     }
                 }
             }
         })
     }
 
+    /** The node for this node's parent entity. */
     get parent(): _Node | null {
-        return this.entity["__parent__"]()?.node ?? null
+        return (this.entity["__parent__"]()?.assert(Entity).node as any) ?? null
     }
 
-    protected get _asNode() {
-        return this as any as _Node
-    }
-    private readonly _ID: number
-    constructor(readonly entity: _Entity) {
-        this._ID = this.entity["_ID"]
-    }
-
+    /**
+     * The root node of this node's entity tree. Doesn't cross tree boundaries, so the root of a
+     * Resource-level tree.
+     */
     get root(): _Node {
         return (this.ancestors.at(-1).pull() as any) ?? (this as any)
     }
@@ -60,23 +88,23 @@ export abstract class Node<
         return this.entity.equals(other.entity)
     }
 
-    readonly ancestors = seq((): _Node[] => {
-        const seen = [] as _Node[]
-        const recurse = function (from: _Node) {
+    readonly ancestors = seq((): Node[] => {
+        const seen = [] as Node[]
+        const recurse = function (from: Node) {
             const parent = from.parent
             if (parent && !seen.find(x => x.equals(parent))) {
                 seen.push(parent)
                 recurse(parent)
             }
         }
-        recurse(this._asNode)
+        recurse(this)
         return seen
-    })
+    }).as<_Node>()
 
-    readonly descendants = seq((): _Node[] => {
+    readonly descendants = seq((): Node[] => {
         const self = this
-        let seen = [] as _Node[]
-        const recurse = function (from: _Node) {
+        let seen = [] as Node[]
+        const recurse = function (from: Node) {
             for (const kid of from.kids) {
                 if (seen.find(x => x.equals(kid))) {
                     continue
@@ -85,40 +113,40 @@ export abstract class Node<
                 recurse(kid)
             }
         }
-        recurse(this._asNode)
+        recurse(this)
         return seen
-    })
+    }).as<_Node>()
 
-    isParentOf(other: _Node): boolean {
+    isParentOf(other: Node): boolean {
         if (FwRef.is(other)) {
-            return other.isChildOf(this._asNode)
+            return other.isChildOf(this)
         }
         return other.equals(this) || other.ancestors.some(x => x.equals(this)).pull()
     }
 
-    isChildOf(other: _Node): boolean {
+    isChildOf(other: Node): boolean {
         if (FwRef.is(other)) {
-            return other.isParentOf(this._asNode)
+            return other.isParentOf(this)
         }
         return this.equals(other) || this.ancestors.some(x => x.equals(other)).pull()
     }
 
-    hasRelationTo(other: _Node): boolean {
+    hasRelationTo(other: Node): boolean {
         return this.recursiveRelations.some(x => x.needed.equals(other)).pull()
     }
 
-    readonly recursiveRelationsSubtree = seq((): Seq<Relation<_Node>> => {
+    readonly recursiveRelationsSubtree = seq((): Seq<Relation<Node>> => {
         const self = this
         return seq(function* () {
-            for (const child of [self, ...self.descendants] as _Node[]) {
+            for (const child of [self, ...self.descendants] as Node[]) {
                 yield* child.recursiveRelations
             }
         }) as any
-    })
+    }).as<Relation<_Node>>()
 
     readonly recursiveRelations = seq(() => {
-        let resources = [] as _Node[]
-        const recurseIntoDependency = function* (root: Relation<_Node>): Iterable<Relation<_Node>> {
+        let resources = [] as Node[]
+        const recurseIntoDependency = function* (root: Relation<Node>): Iterable<Relation<Node>> {
             yield root
             if (resources.find(r => r.equals(root.needed))) {
                 return
@@ -130,7 +158,7 @@ export abstract class Node<
                 yield* recurseIntoDependency(needsEdge)
             }
         }
-        return seq(recurseIntoDependency.bind(null, new Relation<_Node>("self", this._asNode)))
+        return seq(recurseIntoDependency.bind(null, new Relation<_Node>("self", this)))
             .after(() => {
                 resources = []
             })

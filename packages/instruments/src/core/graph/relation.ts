@@ -12,6 +12,8 @@ import type { Node } from "./node"
 export class Relation<_Node extends Node<_Node>> {
     constructor(
         readonly why: string,
-        readonly needed: _Node
-    ) {}
+        readonly needed: Node
+    ) {
+        const a = 1
+    }
 }

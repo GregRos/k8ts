@@ -92,8 +92,7 @@ class FwRef_Exports_Handler<Entity extends Origin_Exporter> implements ProxyHand
     }
 
     getPrototypeOf(_: Entity): object | null {
-        const r = Reflect.getPrototypeOf(this.entity)
-        return r
+        return FxRef_Exports_Proxied.prototype
     }
 
     get exported() {

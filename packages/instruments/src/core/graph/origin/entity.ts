@@ -4,7 +4,7 @@ import { seq } from "doddle"
 import { mapValues } from "lodash"
 import { displayers } from "../../../utils/displayers"
 import { Entity } from "../entity"
-import type { Resource_Entity } from "../resource/entity"
+import { Resource_Entity } from "../resource/entity"
 import type { Ref2_Of } from "../resource/reference/refable"
 import { OriginEventsEmitter, type Origin_EventMap } from "./events"
 import { KindMap } from "./kind-map"
@@ -24,6 +24,12 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
     OriginNode,
     Origin_Entity
 > {
+    get ref() {
+        return {
+            kind: this.kind,
+            name: this.name
+        }
+    }
     abstract get kind(): string
     private _emitter = OriginEventsEmitter()
     private readonly _ownResources: Resource_Entity[] = []
@@ -63,11 +69,12 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
         const values = mapValues(data, v => `${v}`)
 
         for (const target of [this.node, ...this.node.ancestors]) {
-            target.entity._emitter.emit(event, data)
+            target.entity.assert(Origin_Entity)._emitter.emit(event, data)
         }
     }
     protected __resource_kinds__(): KindMap {
-        const parentKindsIfAny = this.__parent__()?.__resource_kinds__() ?? []
+        const parent = this.__parent__()?.assert(Origin_Entity)
+        const parentKindsIfAny = parent?.__resource_kinds__() ?? []
         return new KindMap([...(this._props.kinds ?? []), ...parentKindsIfAny])
     }
 

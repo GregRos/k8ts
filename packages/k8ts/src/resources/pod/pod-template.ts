@@ -1,12 +1,7 @@
-import {
-    Ref2_Of,
-    Resource_Child,
-    type Resource_Entity,
-    type Resource_Ref_Keys_Of
-} from "@k8ts/instruments"
+import { Ref2_Of, Resource_Child, type Resource_Ref_Keys_Of } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
-import { seq } from "doddle"
+import { doddlify, seq } from "doddle"
 import { omitBy } from "lodash"
 import type { Env_Value } from "../../env/types"
 import { v1 } from "../../kinds/default"
@@ -15,10 +10,12 @@ import { Pod_Device, type Pod_Device_Backend } from "./volume/devices"
 import {
     Pod_Volume,
     Pod_Volume_ConfigMap,
+    Pod_Volume_HostPath,
     Pod_Volume_Pvc,
     Pod_Volume_Secret,
     type Pod_Volume_Backend,
     type Pod_Volume_Backend_ConfigMap,
+    type Pod_Volume_Backend_HostPath,
     type Pod_Volume_Backend_Pvc,
     type Pod_Volume_Backend_Secret
 } from "./volume/volumes"
@@ -39,17 +36,44 @@ export class Pod_Template<Ports extends string = string> extends Resource_Child<
     get kind() {
         return v1.PodTemplate._
     }
-    readonly containers = seq(() => this.props.$POD(new PodScope(this)))
-        .map(x => {
-            return x as Container<Ports>
-        })
+    private readonly _containers = seq(() => this.props.$POD(new PodScope(this)))
+        .as<Container<Ports>>()
         .cache()
-    readonly mounts = seq(() => this.containers.concatMap(x => x.mounts)).cache()
-    readonly volumes = seq(() => this.containers.concatMap(x => x.volumes)).uniq()
-    readonly ports = seq(() => this.containers.map(x => x.ports)).reduce((a, b) => a.union(b))
+
+    private readonly _mounts = seq(() => this._containers.concatMap(x => x.mounts))
+        .uniq()
+        .cache()
+    private readonly _volumes = seq(() => this._containers.concatMap(x => x.volumes))
+        .uniq()
+        .cache()
+
+    private readonly _ports = this._containers.map(x => x.ports).reduce((a, b) => a.union(b))
+
+    get containers() {
+        return this._containers as Iterable<Container<Ports>>
+    }
+    @doddlify
+    get mounts() {
+        return this._mounts as Iterable<any>
+    }
+
+    @doddlify
+    get volumes() {
+        return this._containers.concatMap(x => x.volumes).uniq() as Iterable<
+            Container["volumes"][number]
+        >
+    }
+
+    @doddlify
+    get ports() {
+        return this._containers
+            .map(x => x.ports)
+            .reduce((a, b) => a.union(b))
+            .pull()
+    }
 
     protected __kids__() {
-        return [...this.containers, ...this.volumes]
+        return [...this._containers, ...this.volumes]
     }
     protected __metadata__() {
         return {
@@ -63,7 +87,7 @@ export class Pod_Template<Ports extends string = string> extends Resource_Child<
     protected __submanifest__(): CDK.PodTemplateSpec {
         const self = this
         const { props } = self
-        const containers = self.containers
+        const containers = self._containers
         const initContainers = containers
             .filter(c => c.subtype === "init")
             .map(x => x["__submanifest__"]())
@@ -73,12 +97,14 @@ export class Pod_Template<Ports extends string = string> extends Resource_Child<
             .map(x => x["__submanifest__"]())
             .toArray()
 
-        const volumes = self.volumes
+        const volumes = self._volumes
             .map(x => {
-                if (x instanceof Pod_Volume) {
+                if (x.is(Pod_Volume)) {
+                    return x["__submanifest__"]()
+                } else if (x.is(Pod_Device)) {
                     return x["__submanifest__"]()
                 }
-                return x["__submanifest__"]()
+                throw new Error(`Unsupported volume type: ${x}`)
             })
             .toArray()
         return {
@@ -113,6 +139,7 @@ export class PodScope {
     InitContainer(name: string, options: Container_Props<never>) {
         return new Container(this._parent, name, "init", options)
     }
+    Volume<const P extends Pod_Volume_Backend_HostPath>(name: string, options: P): Pod_Volume<P>
     Volume<const P extends Pod_Volume_Backend_ConfigMap<Ref2_Of<v1.ConfigMap._>>>(
         name: string,
         options: P
@@ -126,7 +153,13 @@ export class PodScope {
         options: P
     ): Pod_Volume<P>
     Volume(name: string, options: Pod_Volume_Backend): Pod_Volume {
-        const backend = options.$backend as any as Resource_Entity
+        {
+            const backend = options.$backend
+            if (backend.kind === "HostPath") {
+                return new Pod_Volume_HostPath(this._parent, name, options as any)
+            }
+        }
+        const backend = options.$backend as Ref2_Of
         if (backend.is(v1.ConfigMap._)) {
             return new Pod_Volume_ConfigMap(this._parent, name, options as any)
         } else if (backend.is(v1.Secret._)) {

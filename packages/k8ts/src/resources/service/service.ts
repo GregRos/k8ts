@@ -13,6 +13,9 @@ export interface Service_Frontend_ClusterIp {
 export interface Service_Frontend_LoadBalancer {
     type: "LoadBalancer"
     loadBalancerIP?: string
+    loadBalancerSourceRanges?: string[]
+    loadBalancerClass?: string
+    allocateLoadBalancerNodePorts?: boolean
 }
 export type Service_Frontend = Service_Frontend_ClusterIp | Service_Frontend_LoadBalancer
 export interface Service_Props<DeployPorts extends string, ExposedPorts extends DeployPorts> {
@@ -26,24 +29,23 @@ export interface Service_Ref<ExposedPorts extends string> extends Ref2_Of<v1.Ser
 
 export class Service<
     Name extends string = string,
-    ExposedPorts extends string = string
-> extends Resource_Top<Name, Service_Props<string, ExposedPorts>> {
-    __PORTS__!: ExposedPorts
+    Ports_Exposed extends string = string
+> extends Resource_Top<Name, Service_Props<string, Ports_Exposed>> {
+    __PORTS__!: Ports_Exposed
     get kind() {
         return v1.Service._
     }
 
     private get backend() {
-        return this.props.$backend as Deployment<ExposedPorts>
+        return this.props.$backend.assert(Deployment<Ports_Exposed>)
     }
-    // TODO: Ports force evaluates the backend which is not needed
     get ports() {
-        const srcPorts = this.backend.ports.pull()
+        const srcPorts = this.backend.ports
         const knownPorts = seq(Object.entries(this.props.$ports))
             .filter(([, v]) => v !== undefined)
             .map(([k]) => k)
             .toArray()
-            .pull() as ExposedPorts[]
+            .pull() as Ports_Exposed[]
         const svcPorts = srcPorts.pick(...knownPorts).map(this.props.$ports as any)
         return svcPorts
     }
@@ -54,7 +56,7 @@ export class Service<
         }
     }
 
-    portRef(name: ExposedPorts) {
+    portRef(name: Ports_Exposed) {
         return new Port({
             service: this,
             name: name
@@ -65,7 +67,7 @@ export class Service<
         return `${this.name}.${this.namespace}.svc.cluster.local`
     }
 
-    private _getPortoPart(port: ExposedPorts, protocol: "http" | "https") {
+    private _getPortoPart(port: Ports_Exposed, protocol: "http" | "https") {
         const portNumber = this.props.$ports[port]
         if (portNumber === 80 && protocol === "http") {
             return ""
@@ -93,7 +95,7 @@ export class Service<
         }
     }
 
-    address(protocol: "http" | "https", port: ExposedPorts) {
+    address(protocol: "http" | "https", port: Ports_Exposed) {
         return `${protocol}://${this.hostname}${this._getPortoPart(port, protocol)}`
     }
 }

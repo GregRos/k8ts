@@ -1,7 +1,7 @@
 import { AsyncLocalStorage } from "async_hooks"
 import { doddle, pull, type Doddle, type MaybeDoddle } from "doddle"
 import { isIterable, type AnyCtor } from "what-are-you"
-import type { Origin_Entity } from "./entity"
+import { Origin_Entity } from "./entity"
 
 export interface OriginStackBinder {
     run<T>(callback: () => T): T
@@ -24,7 +24,7 @@ export class _OriginContextTracker {
             if (current instanceof t) {
                 return current
             }
-            current = current["__parent__"]()
+            current = current["__parent__"]()?.assert(Origin_Entity)
         }
         throw new Error(`No origin of type ${t.name} found in the current origin stack`)
     }

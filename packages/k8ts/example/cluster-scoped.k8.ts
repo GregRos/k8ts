@@ -13,23 +13,23 @@ export default W.File("namespace.yaml", {
             $capacity: "1Gi",
             $storageClass: topolvm,
             $accessModes: ["ReadWriteOnce"],
-            nodeAffinity: {} as any
+            nodeAffinity: {}
         })
         yield new Pv("dev-sda", {
             $capacity: "1Gi",
             $accessModes: ["ReadWriteOnce"],
             $backend: {
-                type: "Local",
+                kind: "Local",
                 path: "/dev/sda"
             },
             $mode: "Block",
-            nodeAffinity: {} as any
+            nodeAffinity: {}
         })
         yield new Pv("nfs-volume", {
             $capacity: "5Gi",
             $accessModes: ["ReadWriteMany"],
             $backend: {
-                type: "NFS",
+                kind: "NFS",
                 server: "nfs.example.com",
                 path: "/exported/path"
             }

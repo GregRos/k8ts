@@ -36,12 +36,4 @@ export class External<K extends Kind.KindLike> extends Resource_Entity<string, a
     get kind() {
         return this.key.kind
     }
-
-    ref() {
-        return {
-            kind: this.kind.name,
-            name: this.name,
-            namespace: this.namespace
-        }
-    }
 }

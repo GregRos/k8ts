@@ -1,6 +1,6 @@
 {
   "name": "@k8ts/instruments",
-  "version": "0.9.4",
+  "version": "0.10.0",
   "description": "A collection of utilities and core components for k8ts.",
   "keywords": [
     "k8ts",
@@ -61,7 +61,7 @@
   "dependencies": {
     "chalk": "4.1.2",
     "dayjs": "^1.11.13",
-    "doddle": "^7.2.0",
+    "doddle": "^7.3.1",
     "eventemitter3": "^5.0.1",
     "ip-address": "^10.0.1",
     "lodash": "^4.17.21",
