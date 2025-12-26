@@ -1,11 +1,11 @@
-import { Ref2_Of, Resource_Child, type Resource_Ref_Keys_Of } from "@k8ts/instruments"
+import { Resource_Child, Rsc_Ref, type Resource_Ref_Keys_Of } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify, seq } from "doddle"
 import { omitBy } from "lodash"
 import type { Env_Value } from "../../env/types"
 import { v1 } from "../../kinds/default"
-import { Container, type Container_Props } from "./container"
+import { Pod_Container, type Pod_Container_Props } from "./container"
 import { Pod_Device, type Pod_Device_Backend } from "./volume/devices"
 import {
     Pod_Volume,
@@ -20,7 +20,7 @@ import {
     type Pod_Volume_Backend_Secret
 } from "./volume/volumes"
 export type Pod_Props_Original = Omit<CDK.PodSpec, "containers" | "initContainers" | "volumes">
-type Container_Ref<Ports extends string> = Ref2_Of<v1.Pod.Container._> & {
+type Container_Ref<Ports extends string> = Rsc_Ref<v1.Pod.Container._> & {
     __PORTS__: Ports
 }
 export type Pod_Container_Producer<Ports extends string> = (
@@ -37,7 +37,7 @@ export class Pod_Template<Ports extends string = string> extends Resource_Child<
         return v1.PodTemplate._
     }
     private readonly _containers = seq(() => this.props.$POD(new PodScope(this)))
-        .as<Container<Ports>>()
+        .as<Pod_Container<Ports>>()
         .cache()
 
     private readonly _mounts = seq(() => this._containers.concatMap(x => x.mounts))
@@ -50,7 +50,7 @@ export class Pod_Template<Ports extends string = string> extends Resource_Child<
     private readonly _ports = this._containers.map(x => x.ports).reduce((a, b) => a.union(b))
 
     get containers() {
-        return this._containers as Iterable<Container<Ports>>
+        return this._containers as Iterable<Pod_Container<Ports>>
     }
     @doddlify
     get mounts() {
@@ -60,7 +60,7 @@ export class Pod_Template<Ports extends string = string> extends Resource_Child<
     @doddlify
     get volumes() {
         return this._containers.concatMap(x => x.volumes).uniq() as Iterable<
-            Container["volumes"][number]
+            Pod_Container["volumes"][number]
         >
     }
 
@@ -126,29 +126,29 @@ export class PodScope {
         Env extends {
             [key in keyof Env]:
                 | {
-                      $backend: Ref2_Of
+                      $backend: Rsc_Ref
                       key: Env[key] extends object
                           ? Resource_Ref_Keys_Of<Env[key]["$backend"], string>
                           : never
                   }
                 | Env_Value
         }
-    >(name: string, options: Container_Props<Ports, Env>) {
-        return new Container(this._parent, name, "main", options)
+    >(name: string, options: Pod_Container_Props<Ports, Env>) {
+        return new Pod_Container(this._parent, name, "main", options)
     }
-    InitContainer(name: string, options: Container_Props<never>) {
-        return new Container(this._parent, name, "init", options)
+    InitContainer(name: string, options: Pod_Container_Props<never>) {
+        return new Pod_Container(this._parent, name, "init", options)
     }
     Volume<const P extends Pod_Volume_Backend_HostPath>(name: string, options: P): Pod_Volume<P>
-    Volume<const P extends Pod_Volume_Backend_ConfigMap<Ref2_Of<v1.ConfigMap._>>>(
+    Volume<const P extends Pod_Volume_Backend_ConfigMap<Rsc_Ref<v1.ConfigMap._>>>(
         name: string,
         options: P
     ): Pod_Volume<P>
-    Volume<const P extends Pod_Volume_Backend_Secret<Ref2_Of<v1.Secret._>>>(
+    Volume<const P extends Pod_Volume_Backend_Secret<Rsc_Ref<v1.Secret._>>>(
         name: string,
         options: P
     ): Pod_Volume<P>
-    Volume<const P extends Pod_Volume_Backend_Pvc<Ref2_Of<v1.PersistentVolumeClaim._>>>(
+    Volume<const P extends Pod_Volume_Backend_Pvc<Rsc_Ref<v1.PersistentVolumeClaim._>>>(
         name: string,
         options: P
     ): Pod_Volume<P>
@@ -159,7 +159,7 @@ export class PodScope {
                 return new Pod_Volume_HostPath(this._parent, name, options as any)
             }
         }
-        const backend = options.$backend as Ref2_Of
+        const backend = options.$backend as Rsc_Ref
         if (backend.is(v1.ConfigMap._)) {
             return new Pod_Volume_ConfigMap(this._parent, name, options as any)
         } else if (backend.is(v1.Secret._)) {

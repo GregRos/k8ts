@@ -1,5 +1,5 @@
 import { doddlify, seq } from "doddle"
-import type { FwRef_Exports, Ref2_Of, Resource_Top } from "../resource"
+import { FwRef_Exports, Resource_Top, Rsc_Ref } from "../resource"
 import { FwRef } from "../resource/reference/fw-ref"
 import { Origin_Entity } from "./entity"
 import type { Origin_Props } from "./node"
@@ -19,18 +19,18 @@ export abstract class Origin_Exporter<
         this._parent["__attach_kid__"](this)
     }
 
-    protected abstract __exports__(): Iterable<Ref2_Of>
+    protected abstract __exports__(): Iterable<Rsc_Ref>
 
     protected __parent__() {
         return this._parent
     }
 
     @doddlify
-    get resources(): Iterable<Ref2_Of> {
+    get resources(): Iterable<Rsc_Ref> {
         const self = this
         const boundExports = self.__binder__().bind(self.__exports__.bind(self))
-        const allEmitted = new Set<Ref2_Of>()
-        const normalResources = seq(() => super.resources).cache()
+        const allEmitted = new Set<Rsc_Ref>()
+        const attachedResources = seq(() => super.resources).cache()
         return seq(function* () {
             for (const em of boundExports() as Resource_Top[]) {
                 if (FwRef.is(em)) {
@@ -38,7 +38,9 @@ export abstract class Origin_Exporter<
                         `FwRef ${em} cannot be directly exported from ChildOrigin ${self.name}`
                     )
                 }
-                if (em instanceof Origin_Entity) {
+                if (em instanceof Origin_Entity || FwRef_Exports.is(em)) {
+                    // Skip Origin entities. Later we go over attachedResources and after evaluating
+                    // these exports, any resources attached to child Origins will be included.
                     continue
                 }
 
@@ -52,7 +54,7 @@ export abstract class Origin_Exporter<
                 }
                 yield em
             }
-            for (const resource of normalResources) {
+            for (const resource of attachedResources) {
                 if (!allEmitted.has(resource)) {
                     yield resource
                 }

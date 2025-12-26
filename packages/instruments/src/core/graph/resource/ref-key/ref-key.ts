@@ -2,7 +2,7 @@ import { InstrumentsError } from "../../../../error"
 import type { Kind } from "../api-kind"
 import type { External } from "../external"
 import { type External_Props } from "../external"
-import type { Ref2_Of } from "../reference"
+import type { Rsc_Ref } from "../reference"
 /** Input type for reference keys. Accepts either a RefKey instance or its string representation. */
 export type RefKey_Input = RefKey | RefKey["string"]
 
@@ -70,7 +70,7 @@ export interface RefKey_Options<Name extends string = string> {
     /** The resource name */
     name: Name
     /** Optional namespace for namespaced resources. Can be a RefKey, string, or Ref2 */
-    namespace?: RefKey<nsKind> | string | Ref2_Of<nsKind>
+    namespace?: RefKey<nsKind> | string | Rsc_Ref<nsKind>
 }
 
 /**

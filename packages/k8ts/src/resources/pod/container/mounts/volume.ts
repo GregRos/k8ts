@@ -1,4 +1,4 @@
-import { Resource_Child, type Ref2_Of, type Resource_Entity } from "@k8ts/instruments"
+import { Resource_Child, type Resource_Entity, type Rsc_Ref } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../../../kinds"
 
@@ -7,7 +7,7 @@ export interface Container_Volume_Mount_Attrs<SubPaths extends string = string> 
     readOnly?: boolean
 }
 export interface Container_Volume_Mount_Source extends Container_Volume_Mount_Attrs {
-    $backend: Ref2_Of<v1.Pod.Volume._>
+    $backend: Rsc_Ref<v1.Pod.Volume._>
 }
 export interface Container_Volume_Mount_Props extends Container_Volume_Mount_Source {
     mountPath: string

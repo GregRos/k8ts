@@ -4,7 +4,7 @@ import {
     Unit,
     type CmdBuilder,
     type Port_Exports_Input,
-    type Ref2_Of,
+    type Rsc_Ref,
     type TaggedImage
 } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
@@ -24,39 +24,39 @@ const container_ResourcesSpec = ResourcesSpec.make({
     memory: Unit.Data
 })
 
-type Container_Resources = (typeof container_ResourcesSpec)["__INPUT__"]
-type Container_Mount_Any = Container_Volume_Mount_Source | Container_Device_Mount_Source
-export type Container_Mounts = {
-    [key: string]: Container_Mount_Any
+type Pod_Container_Resources = (typeof container_ResourcesSpec)["__INPUT__"]
+type Pod_Container_Mount_Any = Container_Volume_Mount_Source | Container_Device_Mount_Source
+export type Pod_Container_Mounts = {
+    [key: string]: Pod_Container_Mount_Any
 }
 
-export interface Container_Env_From {
-    source: Ref2_Of<v1.ConfigMap._> | Ref2_Of<v1.Secret._>
+export interface Pod_Container_Env_From {
+    source: Rsc_Ref<v1.ConfigMap._> | Rsc_Ref<v1.Secret._>
     prefix?: string
     optional?: boolean
 }
-export interface Container_Props<
+export interface Pod_Container_Props<
     Ports extends string = never,
     _Env extends Record<string, Env_Leaf> = Record<string, Env_Leaf>
 > extends Omit<CDK.Container, "name"> {
     $image: TaggedImage
     $ports?: Port_Exports_Input<Ports>
     $command?: CmdBuilder
-    $mounts?: Container_Mounts
+    $mounts?: Pod_Container_Mounts
     $env?: _Env
-    $envFrom?: Container_Env_From[]
-    $resources?: Container_Resources
+    $envFrom?: Pod_Container_Env_From[]
+    $resources?: Pod_Container_Resources
 }
 
-export class Container<Ports extends string = string> extends Resource_Child<
-    Container_Props<Ports>
+export class Pod_Container<Ports extends string = string> extends Resource_Child<
+    Pod_Container_Props<Ports>
 > {
     __PORTS__!: Ports
     get kind() {
         return v1.Pod.Container._
     }
 
-    protected __needs__(): Record<string, Ref2_Of | Ref2_Of[]> {
+    protected __needs__(): Record<string, Rsc_Ref | Rsc_Ref[]> {
         const a = this.mounts
         return mapValues(
             mapKeys(a, x => x.path),
@@ -65,7 +65,7 @@ export class Container<Ports extends string = string> extends Resource_Child<
     }
     get mounts() {
         return seq(Object.entries(this.props.$mounts ?? {}))
-            .map(([path, mount]: [string, Container_Mount_Any]) => {
+            .map(([path, mount]: [string, Pod_Container_Mount_Any]) => {
                 if (mount.$backend.is(Pod_Device)) {
                     return new Container_Device_Mount(this, {
                         $backend: mount.$backend,
@@ -174,7 +174,7 @@ export class Container<Ports extends string = string> extends Resource_Child<
         parent: Resource_Entity,
         name: string,
         readonly subtype: "init" | "main",
-        override readonly props: Container_Props<Ports>
+        override readonly props: Pod_Container_Props<Ports>
     ) {
         super(parent, name, props)
     }
@@ -209,7 +209,7 @@ export function make<Ports extends string>(
     parent: Resource_Top,
     name: string,
     subtype: "init" | "main",
-    props: Container_Props<Ports>
+    props: Pod_Container_Props<Ports>
 ) {
-    return new Container(parent, name, subtype, props)
+    return new Pod_Container(parent, name, subtype, props)
 }

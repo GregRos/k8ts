@@ -3,8 +3,8 @@ import type { CDK } from "@k8ts/sample-interfaces"
 import {
     Resource_Child,
     Resource_Entity,
-    type Ref2_Of,
-    type Resource_Ref_Keys_Of
+    type Resource_Ref_Keys_Of,
+    type Rsc_Ref
 } from "@k8ts/instruments"
 import { v1 } from "../../../kinds/default"
 import type { HostPathType } from "../../hostpath"
@@ -14,14 +14,14 @@ import {
 } from "../container/mounts/volume"
 
 export interface Pod_Volume_Backend_Pvc<
-    A extends Ref2_Of<v1.PersistentVolumeClaim._> = Ref2_Of<v1.PersistentVolumeClaim._>
+    A extends Rsc_Ref<v1.PersistentVolumeClaim._> = Rsc_Ref<v1.PersistentVolumeClaim._>
 > {
     $backend: A
     readOnly?: boolean
 }
 const allowedVolumeResourceKinds = [v1.ConfigMap._, v1.Secret._] as const
 type VolumeResourceKind = (typeof allowedVolumeResourceKinds)[number]
-export type AllowedResources = Ref2_Of<VolumeResourceKind>
+export type AllowedResources = Rsc_Ref<VolumeResourceKind>
 
 export interface Pod_Volume_Backend_HostPath {
     $backend: {
@@ -31,7 +31,7 @@ export interface Pod_Volume_Backend_HostPath {
     }
 }
 export interface Pod_Volume_Backend_ConfigMap<
-    A extends Ref2_Of<v1.ConfigMap._> = Ref2_Of<v1.ConfigMap._>
+    A extends Rsc_Ref<v1.ConfigMap._> = Rsc_Ref<v1.ConfigMap._>
 > {
     $backend: A
     optional?: boolean
@@ -40,7 +40,7 @@ export interface Pod_Volume_Backend_ConfigMap<
     }
 }
 
-export interface Pod_Volume_Backend_Secret<A extends Ref2_Of<v1.Secret._> = Ref2_Of<v1.Secret._>> {
+export interface Pod_Volume_Backend_Secret<A extends Rsc_Ref<v1.Secret._> = Rsc_Ref<v1.Secret._>> {
     $backend: A
     optional?: boolean
     mappings?: {
@@ -146,7 +146,7 @@ export class Pod_Volume_ConfigMap extends Pod_Volume<Pod_Volume_Backend_ConfigMa
 }
 
 export class Pod_Volume_Secret<
-    Source extends Ref2_Of<v1.Secret._>
+    Source extends Rsc_Ref<v1.Secret._>
 > extends Pod_Volume<Pod_Volume_Backend_Secret> {
     protected __submanifest__(): CDK.Volume {
         const mappings = mappingsToKeyPaths(this.props.mappings ?? {})

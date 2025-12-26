@@ -1,4 +1,4 @@
-import type { Ref2_Of } from "@k8ts/instruments"
+import type { Rsc_Ref } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { isObject } from "what-are-you"
@@ -32,7 +32,7 @@ export class EnvBuilder<M extends Record<keyof M, Env_Leaf>> {
         }
     }
 
-    private _envFromConfigMap<S extends Ref2_Of<v1.ConfigMap._>>(
+    private _envFromConfigMap<S extends Rsc_Ref<v1.ConfigMap._>>(
         value: Env_From
     ): CDK.EnvVarSource {
         return {

@@ -3,7 +3,7 @@ import chalk from "chalk"
 import { seq, Seq } from "doddle"
 import { displayers } from "../../../utils/displayers"
 import { Node } from "../node"
-import type { Ref2_Of, Resource_Ctor_Of } from "../resource"
+import type { Resource_Ctor_Of, Rsc_Ref } from "../resource"
 import type { Origin_Entity } from "./entity"
 import { type KindMapInput } from "./kind-map"
 
@@ -54,7 +54,7 @@ export class OriginNode extends Node<OriginNode, Origin_Entity> {
     get resources() {
         return this.entity.resources
     }
-    readonly attachedTree: Seq<Ref2_Of> = seq(() => {
+    readonly attachedTree: Seq<Rsc_Ref> = seq(() => {
         const self = this
         const desc = self.descendants
             .concatTo([this])

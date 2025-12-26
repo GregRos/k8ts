@@ -12,8 +12,11 @@ export abstract class Resource_Top<
 > extends Resource_Entity<Name, Props> {
     private readonly _origin: Origin_Entity
     readonly meta: Meta
-    abstract readonly kind: Kind.KindLike
+    abstract readonly kind: Kind.Kind
 
+    get key() {
+        return this.kind.refKey({ name: this.name, namespace: this.namespace })
+    }
     get disabled() {
         return this.meta.tryGet("#k8ts.org/disabled", "") !== ""
     }

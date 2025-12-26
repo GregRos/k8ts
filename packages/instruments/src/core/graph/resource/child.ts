@@ -1,9 +1,11 @@
+import type { Kind } from "."
 import { Resource_Entity } from "./entity"
 
 export abstract class Resource_Child<Props extends object = object> extends Resource_Entity<
     string,
     Props
 > {
+    abstract get kind(): Kind.SubKind
     #parent: Resource_Entity
     constructor(parent: Resource_Entity, name: string, props: Props) {
         super(name, props)

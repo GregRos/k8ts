@@ -20,6 +20,16 @@ export namespace Kind {
     type _alphabeta = "alpha" | "beta" | ""
     type _subversion = `${_alphabeta}${number}` | ""
     type _version = `v${number}${_subversion | ""}`
+    export type _Kind_Parents<T extends KindLike> = T extends {
+        subkind(...args: any[]): KindLike
+        parent: infer P extends KindLike
+    }
+        ? [T, ..._Kind_Parents<P>]
+        : []
+
+    export type _Names_For_kind_Parents<T extends KindLike> = {
+        [K in keyof _Kind_Parents<T>]: string
+    }
     @displayers({
         simple: self => self.text
     })
@@ -63,6 +73,9 @@ export namespace Kind {
         >
 
         equals(other: any) {
+            if (!other) {
+                return false
+            }
             if (typeof other !== "object" || !other) {
                 return false
             }

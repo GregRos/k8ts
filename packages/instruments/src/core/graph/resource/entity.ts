@@ -5,6 +5,7 @@ import { Entity } from "../entity"
 import type { Origin_Entity } from "../origin"
 import type { Kind } from "./api-kind"
 import { Resource_Node } from "./node"
+import { FwRef } from "./reference"
 
 @displayers({
     simple: s => s.node,
@@ -44,6 +45,19 @@ export abstract class Resource_Entity<
                 `ResourceEntity subclass ${getNiceClassName(this)} must implement the 'kind' property as a getter, but it's missing or not a getter.`
             )
         }
+    }
+
+    equals(other: any): boolean {
+        if (!other) {
+            return false
+        }
+        if (FwRef.is(other)) {
+            return other.equals(this)
+        }
+        if (other instanceof Resource_Entity) {
+            return Object.is(this, other)
+        }
+        return false
     }
 
     protected abstract __origin__(): Origin_Entity

@@ -1,6 +1,5 @@
 import { getNiceClassName, type AnyCtor } from "what-are-you"
 import type { Node } from "./node"
-import { FwRef } from "./resource/reference/fw-ref"
 export type LiteralModes = "simple" | "pretty" | "prefix"
 
 let globalEntityId = 0
@@ -45,12 +44,7 @@ export abstract class Entity<
         }
         return this.kind.equals(cls)
     }
-    equals(other: any): boolean {
-        if (FwRef.is(other)) {
-            return this.equals(other["__pull__"]())
-        }
-        return Object.is(this, other)
-    }
+    abstract equals(other: any): boolean
 
     protected __kids__(): Iterable<_EntRefType> {
         return []

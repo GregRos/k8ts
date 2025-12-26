@@ -1,4 +1,4 @@
-import { Ref2_Of, Resource_Top, type PortMapping_Input } from "@k8ts/instruments"
+import { Resource_Top, Rsc_Ref, type PortMapping_Input } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { MakeError } from "../../error"
@@ -23,7 +23,7 @@ export interface Service_Props<DeployPorts extends string, ExposedPorts extends 
     $backend: Deployment_Ref<DeployPorts>
     $frontend: Service_Frontend
 }
-export interface Service_Ref<ExposedPorts extends string> extends Ref2_Of<v1.Service._> {
+export interface Service_Ref<ExposedPorts extends string> extends Rsc_Ref<v1.Service._> {
     __PORTS__: ExposedPorts
 }
 

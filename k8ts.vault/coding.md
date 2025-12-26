@@ -26,27 +26,7 @@ class A extends B {
 
 The initializer runs *after* parent class constructors but *before* the constructor of the current class, if any. If the class has a constructor we don't use this trick.
 
-For static initializers, the `static { ... }` block can be used, but instance initializers lack this feature.
-
-## Associating types using overrides
-
-- We may want to associate a type with a class.
-- We want to avoid defining it as a type parameter to avoid complicating the class signature.
-
-We do this by defining a child class that declares the same member with a different type:
-
-```ts
-class Parent {
-    readonly example: ParentThing
-}
-
-class Child {
-    declare readonly example: ChildThing
-}
-```
-
-We can then access the appropriate type using `this["example"]`.
-
+To maintain consistency, `#_` is always used for this purpose.
 ## Using getters to avoid init issues
 
 - We want to enforce members on classes via `implements` or `abstract`
@@ -56,7 +36,7 @@ We can then access the appropriate type using `this["example"]`.
 
 In this case, we can't declare the member as a field, since its initializer might not have run yet.
 
-Instead, we can declare the member using a `getter` which gets defined on the prototype and so always works.
+Instead, we can declare the member using a getter which gets defined on the prototype and so always works.
 
 In Python this would just be achieved using `static` members but those work differently in JS.
 
@@ -76,11 +56,12 @@ class Deployment extends Base {
 
 - When a Resource is created, it attaches itself to an Origin as a side-effect.
 - The Origin it attaches to depends on the syntactic scope the `new` call is in and other stuff.
+- We don’t want to pass the origin explicitly because the entire framework is built around lexical scoping.
 
 We keep track of the current Origin using node's `async_hooks`. These don't actually persist in iterables, which is why we create a patched `Iterator` to make sure the Origin is persisted there too.
-
 ## Exporting using generators uses Proxy objects
-A parent thing (resource or origin) defines child thing using a generator. It uses `yield` to "export" stuff out and that stuff can be referenced by name.
+Origins contain Resources. 
+A parent thing (resource or origin) defines child things using a generator. It uses `yield` to "export" stuff out and that stuff can be referenced by name.
 
 This is type checked during compile time. However, during runtime, invalid references might only be caught at late stages of the manifest generator pipeline.
 

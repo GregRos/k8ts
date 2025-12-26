@@ -1,12 +1,13 @@
 import { seq } from "doddle"
+import { Origin_Entity } from "../../origin"
 import type { Origin_Exporter } from "../../origin/exporter"
 import { RefKey } from "../ref-key"
 import { ProxyOperationError } from "./error"
 import { FwRef } from "./fw-ref"
-import type { Ref2_Of } from "./refable"
+import type { Rsc_Ref } from "./refable"
 
 /** Expands the resources exported by an Origin_Exported into a dictionary of name to FwRef. */
-export type FwRef_Exports_ByKey<Exports extends Ref2_Of = Ref2_Of> = {
+export type FwRef_Exports_ByKey<Exports extends Rsc_Ref = Rsc_Ref> = {
     [E in Exports as `${E["kind"]["name"]}/${E["name"]}`]: FwRef<E>
 }
 /**
@@ -26,23 +27,27 @@ export type FwRef_Exports_ByKey<Exports extends Ref2_Of = Ref2_Of> = {
  * During runtime, this construct can provide references to all resources attached to the Origin,
  * even if they were not explicitly exported.
  */
-export type FwRef_Exports<Exported extends Ref2_Of = Ref2_Of> = FxRef_Exports_Proxied &
+export type FwRef_Exports<Exported extends Rsc_Ref = Rsc_Ref> = FxRef_Exports_Proxied &
     FwRef_Exports_ByKey<Exported>
 
 export type FwRef_Exports_Brand = FxRef_Exports_Proxied
-
 /**
  * Creates a forward reference exports construct for the given {@link Origin_Exporter} entity.
  *
  * @param entity
  * @returns
  */
-export function FwRef_Exports<Exported extends Ref2_Of>(
+export function FwRef_Exports<Exported extends Rsc_Ref>(
     entity: Origin_Exporter
 ): FwRef_Exports<Exported> {
     const proxied = new FxRef_Exports_Proxied(entity)
     const handler = new FwRef_Exports_Handler(proxied)
     return new Proxy(proxied, handler) as any
+}
+export namespace FwRef_Exports {
+    export function is(obj: any): obj is FwRef_Exports {
+        return obj instanceof FxRef_Exports_Proxied
+    }
 }
 
 /**
@@ -57,6 +62,19 @@ export class FxRef_Exports_Proxied {
 
     __entity__(act?: (entity: Origin_Exporter) => any): Origin_Exporter {
         return this.#entity as any
+    }
+
+    equals(other: any): boolean {
+        if (!other) {
+            return false
+        }
+        if (FwRef_Exports.is(other)) {
+            return this.#entity.equals(other.#entity)
+        }
+        if (other instanceof Origin_Entity) {
+            return other.equals(this.#entity)
+        }
+        return false
     }
 }
 

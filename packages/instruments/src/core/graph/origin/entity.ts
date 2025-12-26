@@ -5,7 +5,7 @@ import { mapValues } from "lodash"
 import { displayers } from "../../../utils/displayers"
 import { Entity } from "../entity"
 import { Resource_Entity } from "../resource/entity"
-import type { Ref2_Of } from "../resource/reference/refable"
+import type { Rsc_Ref } from "../resource/reference/refable"
 import { OriginEventsEmitter, type Origin_EventMap } from "./events"
 import { KindMap } from "./kind-map"
 import { OriginNode, type Origin_Props } from "./node"
@@ -36,6 +36,19 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
     private readonly _ownKids: Origin_Entity[] = []
     readonly meta: Meta
 
+    equals(other: any): boolean {
+        const FwRef_Exports = require("../resource/reference/fw-ref-exports").FwRef_Exports
+        if (!other) {
+            return false
+        }
+        if (other instanceof Origin_Entity) {
+            return Object.is(this, other)
+        }
+        if (FwRef_Exports.is(other)) {
+            return other.equals(this)
+        }
+        return false
+    }
     constructor(
         readonly name: string,
         protected readonly _props: Props
@@ -111,7 +124,7 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
     }
 
     // We don't cache this because resources can be added dynamically
-    get resources(): Iterable<Ref2_Of> {
+    get resources(): Iterable<Rsc_Ref> {
         const self = this
         return seq(function* () {
             for (const resource of self._ownResources) {

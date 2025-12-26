@@ -1,8 +1,8 @@
 import type { Doddle } from "doddle"
 import type { AnyCtor } from "what-are-you"
-import type { RefKey } from "../ref-key"
+import { RefKey } from "../ref-key"
 import { ProxyOperationError } from "./error"
-import type { Ref2_Of } from "./refable"
+import type { Rsc_Ref } from "./refable"
 
 /**
  * The type of a forward reference to a resource.
@@ -19,7 +19,7 @@ import type { Ref2_Of } from "./refable"
  * resources when the reference is created. Instead, the missing resource will be detected later on,
  * typically until resources are manifested. This makes it a bit harder to debug such issues.
  */
-export type FwRef<T extends Ref2_Of = Ref2_Of> = FwRef_Proxied<T> & T
+export type FwRef<T extends Rsc_Ref = Rsc_Ref> = FwRef_Proxied<T> & T
 
 /**
  * Creates a forward reference to a resource, returning a proxy that defers resource resolution
@@ -28,7 +28,7 @@ export type FwRef<T extends Ref2_Of = Ref2_Of> = FwRef_Proxied<T> & T
  * @param props The properties of the forward reference.
  * @returns The forward reference proxy.
  */
-export function FwRef<Referenced extends Ref2_Of>(
+export function FwRef<Referenced extends Rsc_Ref>(
     props: FwRef_Props<Referenced>
 ): FwRef<Referenced> {
     const core = new FwRef_Proxied(props)
@@ -40,7 +40,7 @@ export namespace FwRef {
     }
 }
 /** Properties for creating a forward reference to a resource. */
-export interface FwRef_Props<Referenced extends Ref2_Of> {
+export interface FwRef_Props<Referenced extends Rsc_Ref> {
     /** The class constructor of the referenced resource. */
     readonly class?: AnyCtor<Referenced>
     /** The reference key identifying the referenced resource. */
@@ -49,7 +49,7 @@ export interface FwRef_Props<Referenced extends Ref2_Of> {
     readonly resolver: Doddle<Referenced>
 }
 
-class FwRef_Proxied<To extends Ref2_Of> {
+class FwRef_Proxied<To extends Rsc_Ref> {
     readonly #props: FwRef_Props<To>
     constructor(props: FwRef_Props<To>) {
         this.#props = props
@@ -78,9 +78,26 @@ class FwRef_Proxied<To extends Ref2_Of> {
     protected __reference_props__() {
         return this.#props
     }
+
+    get key() {
+        return new RefKey(this.kind, {
+            name: this.name,
+            namespace: this.namespace
+        })
+    }
+
+    equals(other: any): boolean {
+        if (!other) {
+            return false
+        }
+        // Resource_Top has a key property, but Resource_Child doesn't
+        // However in that case, the kind will be different anyway
+        // since FwRefs are just for top resources.
+        return this.key.equals(other.key)
+    }
 }
 
-class FwRef_Handler<T extends Ref2_Of> implements ProxyHandler<T> {
+class FwRef_Handler<T extends Rsc_Ref> implements ProxyHandler<T> {
     get _props() {
         return this._subject["__reference_props__"]()
     }

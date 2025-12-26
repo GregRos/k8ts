@@ -1,8 +1,8 @@
-import type { Ref2_Of } from "@k8ts/instruments"
+import type { Rsc_Ref } from "@k8ts/instruments"
 
 export type Env_Value = string | null | number | boolean | bigint | undefined
 export interface Env_From {
-    $backend: Ref2_Of
+    $backend: Rsc_Ref
     key: string
     optional?: boolean
 }

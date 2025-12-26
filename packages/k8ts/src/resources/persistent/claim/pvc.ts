@@ -1,4 +1,4 @@
-import { Resource_Top, ResourcesSpec, Unit, type Ref2_Of } from "@k8ts/instruments"
+import { Resource_Top, ResourcesSpec, Unit, type Rsc_Ref } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { Prefix$ } from "../../../_type/prefix$"
 import { MakeError } from "../../../error"
@@ -17,7 +17,7 @@ type Pvc_Resources = Prefix$<(typeof pvc_ResourcesSpec)["__INPUT__"]>
 export interface Pvc_Props<Mode extends Pv_VolumeMode> extends Pvc_Resources {
     $accessModes: Access
     $mode?: Mode
-    $storageClass?: Ref2_Of<typeof StorageClassKind>
+    $storageClass?: Rsc_Ref<typeof StorageClassKind>
     $bind?: Pv_Ref<Mode>
 }
 

@@ -79,6 +79,9 @@ export abstract class Node<
         return this.parent === null
     }
     equals(other: any): boolean {
+        if (!other) {
+            return false
+        }
         if (FwRef.is(other)) {
             return this.equals(other["__pull__"]())
         }

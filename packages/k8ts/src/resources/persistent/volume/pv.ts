@@ -1,4 +1,4 @@
-import { Ref2_Of, Resource_Top, type Unit } from "@k8ts/instruments"
+import { Resource_Top, Rsc_Ref, type Unit } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { MakeError } from "../../../error"
 import { v1 } from "../../../kinds/default"
@@ -28,7 +28,7 @@ export interface Pv_Backend_Nfs {
 export type Pv_Backend = Pv_Backend_HostPath | Pv_Backend_Local | Pv_Backend_Nfs
 export interface Pv_Props_K8ts<Mode extends Pv_VolumeMode = Pv_VolumeMode> {
     $accessModes: Access
-    $storageClass?: Ref2_Of<storage.v1.StorageClass._>
+    $storageClass?: Rsc_Ref<storage.v1.StorageClass._>
     $mode?: Mode
     reclaimPolicy?: Reclaim
     $capacity: Unit.Data
@@ -37,7 +37,7 @@ export interface Pv_Props_K8ts<Mode extends Pv_VolumeMode = Pv_VolumeMode> {
     nodeAffinity?: CDK.VolumeNodeAffinity
 }
 export type Reclaim = "Retain" | "Delete" | "Recycle"
-export type Pv_Ref<Mode extends Pv_VolumeMode = Pv_VolumeMode> = Ref2_Of<v1.PersistentVolume._> & {
+export type Pv_Ref<Mode extends Pv_VolumeMode = Pv_VolumeMode> = Rsc_Ref<v1.PersistentVolume._> & {
     __MODE__: Mode
 }
 

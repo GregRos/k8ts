@@ -1,9 +1,9 @@
-import { Resource_Child, type Kind, type Ref2_Of, type Resource_Entity } from "@k8ts/instruments"
+import { Resource_Child, type Kind, type Resource_Entity, type Rsc_Ref } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../../../kinds"
 
 export interface Container_Device_Mount_Source {
-    $backend: Ref2_Of<v1.Pod.Device._>
+    $backend: Rsc_Ref<v1.Pod.Device._>
 }
 
 export interface Container_Mount_Device_Props extends Container_Device_Mount_Source {
