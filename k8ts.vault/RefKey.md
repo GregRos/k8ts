@@ -1,7 +1,7 @@
 The [[RefKey]] is an object that uniquely identifies a top-level resource, the kind that’s defined in a manifest file.
 
 It combines:
-- The resource’s [[Kind]]
+- The resource’s [[Ident]]
 - The resource’s name
 - The resource’s namespaces, if any.
 

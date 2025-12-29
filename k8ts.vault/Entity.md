@@ -1,3 +1,8 @@
+---
+aliases:
+  - Entities
+---
+
 # Entities
 An Entity is a subclass of the `Entity` base class. Both Resources and Origins are Entities. An Entity represents a core part of the k8ts domain.
 

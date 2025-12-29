@@ -1,4 +1,5 @@
-# Origins and Resources
+# Origins and Rsc
+
 
 K8ts tries to model k8s resources and the things that contain these resources - file, folders, etc.
 
