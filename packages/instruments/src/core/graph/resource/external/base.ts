@@ -1,9 +1,9 @@
 import { Meta } from "@k8ts/metadata"
 import { Origin_External } from "../../origin/external"
-import type { Kind } from "../api-kind"
+import type { Ident_Kind } from "../api-kind"
 import { Rsc_Entity } from "../entity"
 import type { RefKey } from "../ref-key"
-export class External<K extends Kind.Ident_Like> extends Rsc_Entity<string, any> {
+export class External<K extends Ident_Kind> extends Rsc_Entity<string, any> {
     readonly meta = Meta.make()
     constructor(
         readonly key: RefKey<K>,

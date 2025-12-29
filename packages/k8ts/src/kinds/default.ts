@@ -1,6 +1,6 @@
-import { Kind } from "@k8ts/instruments"
+import { group } from "@k8ts/instruments"
 
-const root = Kind.group("")
+const root = group("")
 type root = typeof root
 
 export namespace v1 {

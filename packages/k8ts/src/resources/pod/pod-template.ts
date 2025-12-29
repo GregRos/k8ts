@@ -1,7 +1,7 @@
-import { Rsc_Child, Rsc_Ref, type Rsc_Ref_Keys_Of } from "@k8ts/instruments"
+import { Rsc_Part, Rsc_Ref, type Rsc_Ref_Keys_Of } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
-import { doddlify, seq } from "doddle"
+import { seq } from "doddle"
 import { omitBy } from "lodash"
 import type { Env_Value } from "../../env/types"
 import { v1 } from "../../kinds/default"
@@ -24,7 +24,7 @@ type Container_Ref<Ports extends string> = Rsc_Ref<v1.Pod.Container._> & {
     __PORTS__: Ports
 }
 export type Pod_Container_Producer<Ports extends string> = (
-    scope: PodScope
+    scope: Pod_Scope
 ) => Iterable<Container_Ref<Ports>>
 
 export interface Pod_Props<Ports extends string> extends Pod_Props_Original {
@@ -32,11 +32,11 @@ export interface Pod_Props<Ports extends string> extends Pod_Props_Original {
     $POD: Pod_Container_Producer<Ports>
 }
 
-export class Pod_Template<Ports extends string = string> extends Rsc_Child<Pod_Props<Ports>> {
+export class Pod_Template<Ports extends string = string> extends Rsc_Part<Pod_Props<Ports>> {
     get kind() {
         return v1.PodTemplate._
     }
-    private readonly _containers = seq(() => this.props.$POD(new PodScope(this)))
+    private readonly _containers = seq(() => this.props.$POD(new Pod_Scope(this)))
         .as<Pod_Container<Ports>>()
         .cache()
 
@@ -46,30 +46,21 @@ export class Pod_Template<Ports extends string = string> extends Rsc_Child<Pod_P
     private readonly _volumes = seq(() => this._containers.concatMap(x => x.volumes))
         .uniq()
         .cache()
-
     private readonly _ports = this._containers.map(x => x.ports).reduce((a, b) => a.union(b))
 
     get containers() {
-        return this._containers as Iterable<Pod_Container<Ports>>
+        return this._containers.toIterable()
     }
-    @doddlify
     get mounts() {
-        return this._mounts as Iterable<any>
+        return this._mounts.toIterable()
     }
 
-    @doddlify
     get volumes() {
-        return this._containers.concatMap(x => x.volumes).uniq() as Iterable<
-            Pod_Container["volumes"][number]
-        >
+        return this._volumes.toIterable()
     }
 
-    @doddlify
     get ports() {
-        return this._containers
-            .map(x => x.ports)
-            .reduce((a, b) => a.union(b))
-            .pull()
+        return this._ports.pull()
     }
 
     protected __kids__() {
@@ -119,7 +110,7 @@ export class Pod_Template<Ports extends string = string> extends Rsc_Child<Pod_P
     }
 }
 
-export class PodScope {
+export class Pod_Scope {
     constructor(private readonly _parent: Pod_Template) {}
     Container<
         Ports extends string,

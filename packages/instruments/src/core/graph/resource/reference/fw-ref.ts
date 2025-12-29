@@ -60,7 +60,7 @@ class FwRef_Proxied<To extends Rsc_Ref> {
     }
 
     get namespace() {
-        return this.#props.key.namespace
+        return this.__pull__().namespace // The $props.key won't have a namespace
     }
 
     get kind() {
@@ -119,8 +119,8 @@ class FwRef_Handler<T extends Rsc_Ref> implements ProxyHandler<T> {
         return result
     }
     getPrototypeOf(target: T) {
-        const Resource_Top = require("../top").Resource_Top
-        return this._props.class?.prototype ?? Resource_Top.prototype
+        const Rsc_Top = require("../top").Rsc_Top
+        return this._props.class?.prototype ?? Rsc_Top.prototype
     }
     has(target: T, prop: PropertyKey) {
         const { _props, _subject } = this

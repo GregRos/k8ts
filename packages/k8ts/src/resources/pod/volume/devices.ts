@@ -1,5 +1,5 @@
 import type { Rsc_Entity } from "@k8ts/instruments"
-import { Rsc_Child } from "@k8ts/instruments"
+import { Rsc_Part } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../../kinds/default"
 import { Pvc } from "../../persistent"
@@ -11,7 +11,7 @@ interface Pod_Device_Backend_Pvc {
 
 export type Pod_Device_Backend = Pod_Device_Backend_Pvc
 
-export class Pod_Device extends Rsc_Child<Pod_Device_Backend_Pvc> {
+export class Pod_Device extends Rsc_Part<Pod_Device_Backend_Pvc> {
     get kind() {
         return v1.Pod.Device._
     }

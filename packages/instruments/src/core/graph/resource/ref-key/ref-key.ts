@@ -1,5 +1,5 @@
 import { InstrumentsError } from "../../../../error"
-import type { Kind } from "../api-kind"
+import type { Ident_Kind } from "../api-kind"
 import type { External } from "../external"
 import { type External_Props } from "../external"
 import type { Rsc_Ref } from "../reference"
@@ -59,7 +59,7 @@ export function tryParse(ref: string): RefKey_Parsed | undefined {
     }
 }
 
-type nsKind = Kind<"", "v1", "Namespace">
+type nsKind = Ident_Kind<"", "v1", "Namespace">
 
 /**
  * Options for creating a RefKey instance.
@@ -77,8 +77,11 @@ export interface RefKey_Options<Name extends string = string> {
  * A unique identifier for a k8s resource consisting of a Kind, name, and namespace. Used by
  * resources to reference other resources. Serves as the basis for the {@link External} resource
  * type.
+ *
+ * Important: This class is ambiguous because it can represent keys for namespaced resources but
+ * ignore the namespace. Needs some kind of refactor.
  */
-export class RefKey<K extends Kind.Ident_Like = Kind.Ident_Like, Name extends string = string> {
+export class RefKey<K extends Ident_Kind = Ident_Kind, Name extends string = string> {
     /** The resource name */
     readonly name: string
     /** The optional namespace for namespaced resources */

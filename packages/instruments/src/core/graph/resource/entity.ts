@@ -3,7 +3,7 @@ import { getNiceClassName } from "what-are-you"
 import { displayers } from "../../../utils"
 import { Entity } from "../entity"
 import type { Origin_Entity } from "../origin"
-import type { Kind } from "./api-kind"
+import type { Ident } from "./api-kind"
 import { Rsc_Node } from "./node"
 import { FwRef } from "./reference"
 
@@ -15,7 +15,7 @@ export abstract class Rsc_Entity<
     Name extends string = string,
     Props extends object = object
 > extends Entity<Rsc_Node, Rsc_Entity> {
-    abstract get kind(): Kind.Ident_Like
+    abstract get kind(): Ident
 
     with(callback: (self: this) => void) {
         callback(this)

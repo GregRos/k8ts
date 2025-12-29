@@ -10,7 +10,7 @@ import {
 import type { CDK } from "@k8ts/sample-interfaces"
 import { toContainerPorts } from "../../utils/adapters"
 
-import { Rsc_Child, Rsc_Entity, Rsc_Top } from "@k8ts/instruments"
+import { Rsc_Entity, Rsc_Part, Rsc_Top } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { mapKeys, mapValues, omitBy } from "lodash"
 import { Env } from "../../../env"
@@ -48,7 +48,7 @@ export interface Pod_Container_Props<
     $resources?: Pod_Container_Resources
 }
 
-export class Pod_Container<Ports extends string = string> extends Rsc_Child<
+export class Pod_Container<Ports extends string = string> extends Rsc_Part<
     Pod_Container_Props<Ports>
 > {
     __PORTS__!: Ports
@@ -126,7 +126,7 @@ export class Pod_Container<Ports extends string = string> extends Rsc_Child<
         for (const vol of self.volumes) {
             if (vol.namespace !== self.namespace) {
                 throw new Error(
-                    `Volume reference "${vol}" must be in the same namespace as the container "${self}"`
+                    `Volume reference "${vol}" had an inherited namespace ${vol.namespace}, which is different from the container "${self}"`
                 )
             }
         }

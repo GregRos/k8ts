@@ -1,4 +1,4 @@
-import type { Kind } from "../api-kind"
+import type { Ident_Kind } from "../api-kind"
 
 export interface External_Features {
     keys?: string[]
@@ -13,4 +13,4 @@ export interface External_KindToFeatures {
     [s: string]: {}
 }
 
-export type External_Props<K extends Kind.Ident_Like> = External_KindToFeatures[K["name"]]
+export type External_Props<K extends Ident_Kind> = External_KindToFeatures[K["name"]]

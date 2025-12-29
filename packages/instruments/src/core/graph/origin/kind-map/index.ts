@@ -2,17 +2,17 @@ import { doddlify, seq, type Seq } from "doddle"
 import type { AnyCtor } from "what-are-you"
 import { InstrumentsError } from "../../../../error"
 
-import type { Rsc_Ctor_Of } from "../../resource"
-import { Kind } from "../../resource/api-kind"
+import { Ident, Ident_Kind } from "../../resource/api-kind"
 import { RefKey } from "../../resource/ref-key"
+import { Rsc_Ctor_Of } from "../../resource/reference"
 const separator = "/"
 interface NodeEntry {
     kindName: string
     class: AnyCtor<any>
-    ident: Kind.Ident_Like
+    ident: Ident_Kind
 }
 export type KindMapInput<Ks extends Rsc_Ctor_Of> = Ks[]
-type LookupKey = string | RefKey | AnyCtor<any> | Kind.Ident_Like
+type LookupKey = string | RefKey | AnyCtor<any> | Ident_Kind
 export class KindMap<Kinds extends Rsc_Ctor_Of = Rsc_Ctor_Of> {
     __KINDS__!: Kinds["prototype"]["kind"]
     constructor(private _ownKinds: KindMapInput<Kinds>) {}
@@ -83,7 +83,7 @@ export class KindMap<Kinds extends Rsc_Ctor_Of = Rsc_Ctor_Of> {
             return undefined
         }
 
-        return (ident as Kind.Kind).refKey({
+        return (ident as Ident_Kind).refKey({
             name
         })
     }
@@ -98,13 +98,13 @@ export class KindMap<Kinds extends Rsc_Ctor_Of = Rsc_Ctor_Of> {
     private _unknownNameError(kind: string) {
         return new InstrumentsError(`The shorthand name ${kind} is not registered`)
     }
-    private _unknownIdentError(ident: Kind.Ident) {
+    private _unknownIdentError(ident: Ident) {
         return new InstrumentsError(`The kind identifier ${ident} is not registered`)
     }
     private _unknownClassError(klass: Function) {
         return new InstrumentsError(`The class ${klass.name} is not registered`)
     }
-    private _convert(something: LookupKey | RefKey | Function | Kind.Ident_Like) {
+    private _convert(something: LookupKey | RefKey | Function | Ident_Kind) {
         if (typeof something === "string") {
             if (something.includes("/")) {
                 return this.parse(something).kind
@@ -112,7 +112,7 @@ export class KindMap<Kinds extends Rsc_Ctor_Of = Rsc_Ctor_Of> {
             return something
         } else if (typeof something === "function") {
             return something as AnyCtor<any>
-        } else if (something instanceof Kind.Ident) {
+        } else if (something instanceof Ident) {
             return something.text
         } else if (something instanceof RefKey) {
             return something.kind.text
@@ -124,7 +124,7 @@ export class KindMap<Kinds extends Rsc_Ctor_Of = Rsc_Ctor_Of> {
         if (!entry) {
             if (typeof key === "string") {
                 throw this._unknownNameError(key)
-            } else if (key instanceof Kind.Ident) {
+            } else if (key instanceof Ident) {
                 throw this._unknownIdentError(key)
             } else if (typeof key === "function") {
                 throw this._unknownClassError(key)
@@ -152,7 +152,7 @@ export class KindMap<Kinds extends Rsc_Ctor_Of = Rsc_Ctor_Of> {
     getClass(refKey: RefKey): AnyCtor<any>
     getClass<F extends AnyCtor<any>>(klass: F): F
     getClass(kind: string): AnyCtor<any>
-    getClass(ident: Kind.Ident_Like): AnyCtor<any>
+    getClass(ident: Ident_Kind): AnyCtor<any>
     getClass<T extends AnyCtor<any> | string>(
         kindOrClass: T
     ): T extends AnyCtor<any> ? string : AnyCtor<any>

@@ -1,4 +1,4 @@
-import { Rsc_Child, type Kind, type Rsc_Entity, type Rsc_Ref } from "@k8ts/instruments"
+import { Rsc_Part, type Ident_Rsc_Part, type Rsc_Entity, type Rsc_Ref } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../../../kinds"
 
@@ -10,12 +10,12 @@ export interface Container_Mount_Device_Props extends Container_Device_Mount_Sou
     mountPath: string
 }
 
-export class Container_Device_Mount extends Rsc_Child<Container_Mount_Device_Props> {
+export class Container_Device_Mount extends Rsc_Part<Container_Mount_Device_Props> {
     constructor(parent: Rsc_Entity, props: Container_Mount_Device_Props) {
         super(parent, props.$backend.name, props)
     }
     get kind() {
-        return v1.Pod.Container.DeviceMount._ satisfies Kind.Ident_SubKind
+        return v1.Pod.Container.DeviceMount._ satisfies Ident_Rsc_Part
     }
     get backend() {
         return this.props.$backend

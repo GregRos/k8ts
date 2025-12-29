@@ -1,7 +1,7 @@
-import { Kind } from "@k8ts/instruments"
+import { group } from "@k8ts/instruments"
 
 export namespace batch {
-    export const _ = Kind.group("batch")
+    export const _ = group("batch")
     export type _ = typeof _
     export namespace v1 {
         export const _ = batch._.version("v1")

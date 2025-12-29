@@ -1,7 +1,7 @@
-import { Kind } from "@k8ts/instruments"
+import { group } from "@k8ts/instruments"
 
 export namespace metrics {
-    export const _ = Kind.group("metrics.k8s.io")
+    export const _ = group("metrics.k8s.io")
     export type _ = typeof _
     export namespace v1beta1 {
         export const _ = metrics._.version("v1beta1")

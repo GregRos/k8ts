@@ -7,7 +7,7 @@ import { TraceEmbedder } from "../../tracing"
 import { Formats } from "../entity"
 import { Node } from "../node"
 import { OriginNode } from "../origin/node"
-import type { Kind } from "./api-kind"
+import type { Ident_Kind, Ident_Like } from "./api-kind"
 import type { Rsc_Entity } from "./entity"
 import { RefKey } from "./ref-key"
 
@@ -50,7 +50,7 @@ export class Rsc_Node extends Node<Rsc_Node, Rsc_Entity> {
         })
     }
     get kind() {
-        return this.entity.kind
+        return this.entity.kind as Ident_Kind
     }
 
     get namespace() {
@@ -120,7 +120,7 @@ export class Rsc_Node extends Node<Rsc_Node, Rsc_Entity> {
         return Displayers.get(this).pretty(format)
     }
 
-    hasKind(kind: Kind.Ident) {
+    hasKind(kind: Ident_Like) {
         return this.kind.equals(kind)
     }
     constructor(

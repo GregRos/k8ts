@@ -1,6 +1,6 @@
 import type { CDK } from "@k8ts/sample-interfaces"
 
-import { Rsc_Child, Rsc_Entity, type Rsc_Ref, type Rsc_Ref_Keys_Of } from "@k8ts/instruments"
+import { Rsc_Entity, Rsc_Part, type Rsc_Ref, type Rsc_Ref_Keys_Of } from "@k8ts/instruments"
 import { v1 } from "../../../kinds/default"
 import type { HostPathType } from "../../hostpath"
 import {
@@ -68,7 +68,7 @@ export type Pod_Volume_Backend_Known_Paths<T extends Pod_Volume_Backend> = strin
 
 export abstract class Pod_Volume<
     P extends Pod_Volume_Backend = Pod_Volume_Backend
-> extends Rsc_Child<P> {
+> extends Rsc_Part<P> {
     get kind() {
         return v1.Pod.Volume._
     }
@@ -76,7 +76,8 @@ export abstract class Pod_Volume<
     get namespace() {
         const backend = this.props.$backend
         if (backend instanceof Rsc_Entity) {
-            return backend.namespace
+            const x = backend.namespace
+            return x
         }
         return undefined
     }

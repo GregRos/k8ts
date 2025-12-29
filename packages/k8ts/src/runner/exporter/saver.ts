@@ -1,8 +1,7 @@
 import type { OriginNode } from "@k8ts/instruments"
 import Emittery from "emittery"
-import { mkdir, rm, writeFile } from "fs/promises"
+import { glob, mkdir, rm, writeFile } from "fs/promises"
 import { join, resolve } from "path"
-
 export class ManifestSaver extends Emittery<ManifestSaverEventsTable> {
     private _encoder = new TextEncoder()
     constructor(private readonly _options: ManifestSaverOptions) {
@@ -17,13 +16,16 @@ export class ManifestSaver extends Emittery<ManifestSaverEventsTable> {
         await this.emit("purge", {
             outdir: this._options.outdir
         })
-        await rm(this._options.outdir, {
-            force: true,
-            maxRetries: 2,
-            retryDelay: 500,
-            recursive: true
-        })
         await mkdir(this._options.outdir, { recursive: true })
+
+        for await (const file of glob(`${this._options.outdir}/**/*`)) {
+            await rm(file, {
+                force: true,
+                maxRetries: 2,
+                retryDelay: 500,
+                recursive: true
+            })
+        }
     }
 
     async save(origin: OriginNode, manifests: string[]) {

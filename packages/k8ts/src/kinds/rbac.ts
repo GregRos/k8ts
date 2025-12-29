@@ -1,7 +1,7 @@
-import { Kind } from "@k8ts/instruments"
+import { group } from "@k8ts/instruments"
 
 export namespace rbac {
-    export const _ = Kind.group("rbac.authorization.k8s.io")
+    export const _ = group("rbac.authorization.k8s.io")
     export type _ = typeof _
     export namespace v1 {
         export const _ = rbac._.version("v1")

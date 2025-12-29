@@ -142,8 +142,7 @@ class FwRef_Exports_Handler<Entity extends Origin_Exporter> implements ProxyHand
         return FwRef({
             class: clazz,
             key: new RefKey(refKey.kind, {
-                name: refKey.name,
-                namespace: refKey.namespace
+                name: refKey.name
             }),
             origin: this.entity,
             resolver: this.exported

@@ -1,4 +1,4 @@
-import { Rsc_Child, type Rsc_Entity, type Rsc_Ref } from "@k8ts/instruments"
+import { Rsc_Part, type Rsc_Entity, type Rsc_Ref } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../../../kinds"
 
@@ -12,7 +12,7 @@ export interface Container_Volume_Mount_Source extends Container_Volume_Mount_At
 export interface Container_Volume_Mount_Props extends Container_Volume_Mount_Source {
     mountPath: string
 }
-export class Container_Volume_Mount extends Rsc_Child<Container_Volume_Mount_Props> {
+export class Container_Volume_Mount extends Rsc_Part<Container_Volume_Mount_Props> {
     constructor(parent: Rsc_Entity, props: Container_Volume_Mount_Props) {
         super(parent, props.$backend.name, props)
     }

@@ -1,10 +1,10 @@
-import { Kind, Rsc_Top } from "@k8ts/instruments"
+import { Ident_Kind, Rsc_Top, type Ident_Group } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { rbac } from "../../kinds/rbac"
 export interface ClusterRole_Rule<
-    Groups extends Kind.Ident_Group[] = Kind.Ident_Group[],
-    Resources extends Kind.Kind<Groups[number]["name"], string, string>[] = Kind.Kind[]
+    Groups extends Ident_Group[] = Ident_Group[],
+    Resources extends Ident_Kind<Groups[number]["name"], string, string>[] = Ident_Kind[]
 > {
     resources: Resources
     verbs: Verbs[]
@@ -13,7 +13,7 @@ export type ClusterRole_RuleProducer<Rules extends ClusterRole_Rule> = (
     scope: ClusterRole_Scope
 ) => Iterable<Rules>
 class ClusterRole_Scope {
-    Rule<const R extends Kind[]>(...resources: R) {
+    Rule<const R extends Ident_Kind[]>(...resources: R) {
         return {
             verbs(...verbs: Verbs[]) {
                 return {
