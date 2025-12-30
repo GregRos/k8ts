@@ -21,7 +21,7 @@ export interface Port_Full {
 
 export interface Port_Full_Input {
     port: Port
-    protocol: Port_Protocol_Input
+    protocol?: Port_Protocol_Input
     hostIp?: Ip4_String
     hostPort?: Port
 }

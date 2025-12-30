@@ -9,7 +9,7 @@ function portSetEntry(name: string, value: Port_Full_Input): Port_Full {
     return {
         name,
         port: value.port,
-        protocol: value.protocol.toUpperCase() as Port_Protocol,
+        protocol: (value.protocol?.toUpperCase() as Port_Protocol) ?? "TCP",
         hostIp: value.hostIp ? new Ip4(value.hostIp) : undefined,
         hostPort: value.hostPort
     }
