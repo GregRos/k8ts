@@ -18,6 +18,6 @@ export abstract class Rsc_Part<Props extends object = object> extends Rsc_Entity
     }
 
     get namespace(): string | undefined {
-        return this.__parent__()?.namespace
+        return this.__parent__().namespace
     }
 }

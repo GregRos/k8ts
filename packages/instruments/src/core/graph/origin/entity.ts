@@ -5,7 +5,7 @@ import { mapValues } from "lodash"
 import { displayers } from "../../../utils/displayers"
 import { Entity } from "../entity"
 import { Rsc_Entity } from "../resource/entity"
-import type { Rsc_Ref } from "../resource/reference/refable"
+import type { Rsc_Ctor_Of, Rsc_Ref } from "../resource/reference/refable"
 import { OriginEventsEmitter, type Origin_EventMap } from "./events"
 import { KindMap } from "./kind-map"
 import { OriginNode, type Origin_Props } from "./node"
@@ -33,9 +33,15 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
     abstract get kind(): string
     private _emitter = OriginEventsEmitter()
     private readonly _ownResources: Rsc_Entity[] = []
-    private readonly _ownKids: Origin_Entity[] = []
     readonly meta: Meta
 
+    protected __attach_kid__(kid: Origin_Entity<Origin_Props<Rsc_Ctor_Of>>): void {
+        super.__attach_kid__(kid)
+        this.__emit__("origin/attached", {
+            origin: this,
+            child: kid
+        })
+    }
     equals(other: any): boolean {
         const FwRef_Exports = require("../resource/reference/fw-ref-exports").FwRef_Exports
         if (!other) {
@@ -95,27 +101,18 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
         return this.node.shortFqn
     }
 
-    protected __attach_kid__(kid: Origin_Entity) {
-        this._ownKids.push(kid)
-        this.__emit__("origin/attached", {
-            origin: this,
-            child: kid
-        })
-    }
-
     protected __attach_resource__(resources: Rsc_Entity | Iterable<Rsc_Entity>) {
         resources = Symbol.iterator in resources ? resources : [resources]
         for (const resource of resources) {
             this._ownResources.push(resource)
+            if ("meta" in resource && resource.meta instanceof Meta.Meta) {
+                resource.meta.add(this.node.inheritedMeta)
+            }
             this.__emit__("resource/attached", {
                 origin: this,
                 resource
             })
         }
-    }
-
-    protected __kids__(): Iterable<Origin_Entity> {
-        return this._ownKids
     }
 
     protected __binder__(): OriginStackBinder {
@@ -130,8 +127,9 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
             for (const resource of self._ownResources) {
                 yield resource
             }
-            for (const kid of self._ownKids) {
-                yield* kid.resources
+            for (const kid of self.__kids__()) {
+                const asOrigin = kid as Origin_Entity
+                yield* asOrigin.resources
             }
         })
     }

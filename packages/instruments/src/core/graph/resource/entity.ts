@@ -5,7 +5,7 @@ import { Entity } from "../entity"
 import type { Origin_Entity } from "../origin"
 import type { Ident } from "./api-kind"
 import { Rsc_Node } from "./node"
-import { FwRef } from "./reference"
+import { FwRef, type Rsc_Ref } from "./reference"
 
 @displayers({
     simple: s => s.node,
@@ -14,7 +14,7 @@ import { FwRef } from "./reference"
 export abstract class Rsc_Entity<
     Name extends string = string,
     Props extends object = object
-> extends Entity<Rsc_Node, Rsc_Entity> {
+> extends Entity<Rsc_Node, Rsc_Entity, Rsc_Ref> {
     abstract get kind(): Ident
 
     with(callback: (self: this) => void) {

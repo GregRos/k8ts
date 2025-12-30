@@ -79,7 +79,7 @@ export abstract class Pod_Volume<
             const x = backend.namespace
             return x
         }
-        return undefined
+        return this.__parent__().namespace
     }
 
     protected __needs__(): Record<string, Rsc_Entity | Rsc_Entity[] | undefined> {

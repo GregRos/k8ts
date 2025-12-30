@@ -64,7 +64,8 @@ export class Pod_Template<Ports extends string = string> extends Rsc_Part<Pod_Pr
     }
 
     protected __kids__() {
-        return [...this._containers, ...this.volumes]
+        this._containers.toArray().pull()
+        return super.__kids__()
     }
     protected __metadata__() {
         return {

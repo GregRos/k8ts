@@ -53,9 +53,7 @@ export class Assembler_RscLoader extends Emittery<Assembler_RscLoaderEvents> {
             } as const
 
             await this.emit("load", event)
-            const resourceOriginMetas = res.origin.inheritedMeta
 
-            res.meta!.add(resourceOriginMetas)
             origin.entity["__emit__"]("resource/loaded", {
                 origin: origin.entity,
                 resource: res.entity as Rsc_Top

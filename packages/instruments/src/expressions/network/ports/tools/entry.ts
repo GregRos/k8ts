@@ -6,10 +6,11 @@ import type { Port_Full, Port_Full_Input, Port_Input, Port_Protocol } from "../t
 import { parsePortSpec } from "./parse"
 
 function portSetEntry(name: string, value: Port_Full_Input): Port_Full {
+    const proto = value.protocol ? (value.protocol.toUpperCase() as Port_Protocol) : "TCP"
     return {
         name,
         port: value.port,
-        protocol: (value.protocol?.toUpperCase() as Port_Protocol) ?? "TCP",
+        protocol: proto,
         hostIp: value.hostIp ? new Ip4(value.hostIp) : undefined,
         hostPort: value.hostPort
     }

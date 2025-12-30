@@ -4,7 +4,7 @@ import { seq, Seq } from "doddle"
 import { displayers } from "../../../utils/displayers"
 import { Node } from "../node"
 import type { Rsc_Ctor_Of, Rsc_Ref } from "../resource"
-import type { Origin_Entity } from "./entity"
+import { Origin_Entity } from "./entity"
 import { type KindMapInput } from "./kind-map"
 
 @displayers({
@@ -22,7 +22,7 @@ import { type KindMapInput } from "./kind-map"
 })
 export class OriginNode extends Node<OriginNode, Origin_Entity> {
     get kids() {
-        return seq(this.entity["__kids__"]()).map(x => x.node)
+        return seq(this.entity["__kids__"]()).map(x => x.assert(Origin_Entity).node)
     }
     get meta() {
         return this.entity.meta

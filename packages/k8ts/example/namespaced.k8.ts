@@ -115,6 +115,14 @@ export default W.File("deployment2.yaml", {
                                 keys: ["a", "b", "c"]
                             })
 
+                            const a = k.Volume("hostpath", {
+                                $backend: {
+                                    kind: "HostPath",
+                                    path: "/data/xyz",
+                                    type: "CharDevice"
+                                }
+                            })
+
                             const m = k.Volume("external-config", {
                                 $backend: r
                             })

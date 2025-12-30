@@ -21,6 +21,15 @@ export abstract class Entity<
     _Ent extends Entity<_Node, _Ent> = Entity<any, any>,
     _EntRefType extends RefLike = RefLike
 > {
+    private readonly _ownKids: _EntRefType[] = []
+
+    protected __attach_kid__(kid: _EntRefType) {
+        this._ownKids.push(kid)
+    }
+
+    protected __kids__(): Iterable<_EntRefType> {
+        return this._ownKids
+    }
     abstract get ref(): RefLike["ref"]
     abstract readonly kind: any
     private readonly _ID = (() => {
@@ -45,10 +54,6 @@ export abstract class Entity<
         return this.kind.equals(cls)
     }
     abstract equals(other: any): boolean
-
-    protected __kids__(): Iterable<_EntRefType> {
-        return []
-    }
 
     protected __parent__(): _EntRefType | undefined {
         return undefined
