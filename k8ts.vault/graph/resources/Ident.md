@@ -1,3 +1,8 @@
+---
+aliases:
+  - Idents
+---
+
 An `Ident` is a hierarchical identifier as an object, and represents types or groups of types of objects in k8s.
 
 It’s an abstract class and there are several subclasses, each specialized for a level of the hierarchy. Each subclass except for the first one has a `parent` which is always another `Ident`.
@@ -87,4 +92,6 @@ Not all subkinds are recognized as k8s. In some cases, they’re just invented b
 - `v1/Pod/Container`
 - `v1/Pod/Container/VolumeMount`
 
+> [!ai] INSERT explain that resource part idents
+> don’t restrict where the resource part can appear as a child. So for example `Container` can appear inside `PodTemplate` which is inside `Deployment`, it doesn’t just go in a `Pod`.
 
