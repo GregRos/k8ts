@@ -1,7 +1,7 @@
 import type { Rsc_Entity } from "@k8ts/instruments"
 import { Rsc_Part } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
-import { v1 } from "../../../kinds/default"
+import { v1 } from "../../../idents/default"
 import { Pvc } from "../../persistent"
 import type { Container_Device_Mount_Source } from "../container/mounts/device"
 interface Pod_Device_Backend_Pvc {

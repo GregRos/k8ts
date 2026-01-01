@@ -7,7 +7,7 @@ import {
     type Rsc_Ref
 } from "@k8ts/instruments"
 import { doddlify, seq } from "doddle"
-import type { v1 } from "../../kinds"
+import type { v1 } from "../../idents"
 import { Origin_Section, type File_Section_Props } from "./section"
 export type File_sName = `${string}.yaml`
 export interface File_Props<

@@ -1,5 +1,5 @@
 import { Namespace, Pv } from "k8ts"
-import { storage } from "k8ts/kinds"
+import { storage } from "../dist/idents"
 import { W } from "./world"
 
 export default W.File("namespace.yaml", {

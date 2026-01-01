@@ -4,7 +4,7 @@ import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { omitBy } from "lodash"
 import type { Env_Value } from "../../env/types"
-import { v1 } from "../../kinds/default"
+import { v1 } from "../../idents/default"
 import { Pod_Container, type Pod_Container_Props } from "./container"
 import { Pod_Device, type Pod_Device_Backend } from "./volume/devices"
 import {

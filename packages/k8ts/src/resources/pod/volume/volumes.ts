@@ -1,7 +1,7 @@
 import type { CDK } from "@k8ts/sample-interfaces"
 
 import { Rsc_Entity, Rsc_Part, type Rsc_Ref, type Rsc_Ref_Keys_Of } from "@k8ts/instruments"
-import { v1 } from "../../../kinds/default"
+import { v1 } from "../../../idents/default"
 import type { HostPathType } from "../../hostpath"
 import {
     type Container_Volume_Mount_Attrs,

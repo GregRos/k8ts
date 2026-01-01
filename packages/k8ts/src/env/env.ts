@@ -3,7 +3,7 @@ import type { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { isObject } from "what-are-you"
 import { MakeError } from "../error"
-import { v1 } from "../kinds/index"
+import { v1 } from "../idents/index"
 import { type Env_From, type Env_Leaf, type Env_Value } from "./types"
 import { isValidEnvVarName } from "./validate-name"
 

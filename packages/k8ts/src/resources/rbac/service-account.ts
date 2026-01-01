@@ -1,6 +1,6 @@
 import { Rsc_Top } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
-import { v1 } from "../../kinds/default"
+import { v1 } from "../../idents/default"
 export interface ServiceAccount_Props {
     automountToken?: boolean
     imagePullSecrets?: string[]

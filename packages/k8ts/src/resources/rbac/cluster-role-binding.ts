@@ -1,6 +1,6 @@
 import { Rsc_Top } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
-import { rbac } from "../../kinds/rbac"
+import { rbac } from "../../idents/rbac"
 import type { ClusterRole } from "./cluster-role"
 import type { ServiceAccount } from "./service-account"
 

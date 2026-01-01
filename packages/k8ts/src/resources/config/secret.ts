@@ -1,5 +1,5 @@
 import { Rsc_Top, type DataSource } from "@k8ts/instruments"
-import { v1 } from "../../kinds/default"
+import { v1 } from "../../idents/default"
 import { resolveDataSourceRecord } from "./resolver"
 
 export interface Secret_Data_Entry {

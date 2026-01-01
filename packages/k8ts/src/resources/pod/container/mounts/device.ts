@@ -1,6 +1,6 @@
 import { Rsc_Part, type Ident_Rsc_Part, type Rsc_Entity, type Rsc_Ref } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
-import { v1 } from "../../../../kinds"
+import { v1 } from "../../../../idents"
 
 export interface Container_Device_Mount_Source {
     $backend: Rsc_Ref<v1.Pod.Device._>

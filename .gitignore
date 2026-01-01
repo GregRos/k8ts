@@ -99,3 +99,5 @@ jspm_packages
 **/*dist*
 .out
 .k8ts
+k8ts-plus-usage*.code-workspace
+.ai/auto-document

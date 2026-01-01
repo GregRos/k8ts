@@ -1,6 +1,6 @@
 import { type Origin_Exporter_Props, type Rsc_Ref, Origin_Exporter } from "@k8ts/instruments"
 import { doddle, doddlify, seq } from "doddle"
-import type { v1 } from "../../kinds"
+import type { v1 } from "../../idents"
 
 export class File_Section_Scope {
     on: Origin_Section["on"]

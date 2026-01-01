@@ -1,7 +1,7 @@
 import { Ident_Kind, Rsc_Top, type Ident_Group } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
-import { rbac } from "../../kinds/rbac"
+import { rbac } from "../../idents/rbac"
 export interface ClusterRole_Rule<
     Groups extends Ident_Group[] = Ident_Group[],
     Resources extends Ident_Kind<Groups[number]["name"], string, string>[] = Ident_Kind[]
