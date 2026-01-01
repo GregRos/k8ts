@@ -1,9 +1,9 @@
 import { ResourceTop } from "@k8ts/instruments"
 import { v1 } from "../../idents/default"
-export interface Namespace_Props {}
+export interface NamespaceProps {}
 
-export class Namespace<Name extends string = string> extends ResourceTop<Name, Namespace_Props> {
-    constructor(name: Name, props: Namespace_Props = {}) {
+export class Namespace<Name extends string = string> extends ResourceTop<Name, NamespaceProps> {
+    constructor(name: Name, props: NamespaceProps = {}) {
         super(name, props)
     }
     declare name: Name

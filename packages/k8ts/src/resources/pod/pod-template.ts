@@ -5,39 +5,39 @@ import { seq } from "doddle"
 import { omitBy } from "lodash"
 import type { EnvValuePrimitive } from "../../env/types"
 import { v1 } from "../../idents/default"
-import { Pod_Container, type Pod_Container_Props } from "./container"
-import { Pod_Device, type Pod_Device_Backend } from "./volume/devices"
+import { PodContainer, type PodContainerProps } from "./container"
+import { PodDevice, type PodDeviceBackend } from "./volume/devices"
 import {
-    Pod_Volume,
-    Pod_Volume_ConfigMap,
-    Pod_Volume_HostPath,
-    Pod_Volume_Pvc,
-    Pod_Volume_Secret,
-    type Pod_Volume_Backend,
-    type Pod_Volume_Backend_ConfigMap,
-    type Pod_Volume_Backend_HostPath,
-    type Pod_Volume_Backend_Pvc,
-    type Pod_Volume_Backend_Secret
+    PodVolume,
+    PodVolumeConfigMap,
+    PodVolumeHostPath,
+    PodVolumePvc,
+    PodVolumeSecret,
+    type PodVolumeBackend,
+    type PodVolumeBackendConfigMap,
+    type PodVolumeBackendHostPath,
+    type PodVolumeBackendPvc,
+    type PodVolumeBackendSecret
 } from "./volume/volumes"
-export type Pod_Props_Original = Omit<CDK.PodSpec, "containers" | "initContainers" | "volumes">
-type Container_Ref<Ports extends string> = ResourceRef<v1.Pod.Container._> & {
+export type PodPropsOriginal = Omit<CDK.PodSpec, "containers" | "initContainers" | "volumes">
+type ContainerRef<Ports extends string> = ResourceRef<v1.Pod.Container._> & {
     __PORTS__: Ports
 }
-export type Pod_Container_Producer<Ports extends string> = (
-    scope: Pod_Scope
-) => Iterable<Container_Ref<Ports>>
+export type PodContainerProducer<Ports extends string> = (
+    scope: PodScope
+) => Iterable<ContainerRef<Ports>>
 
-export interface Pod_Props<Ports extends string> extends Pod_Props_Original {
+export interface PodProps<Ports extends string> extends PodPropsOriginal {
     meta?: Meta.Input
-    $POD: Pod_Container_Producer<Ports>
+    $POD: PodContainerProducer<Ports>
 }
 
-export class Pod_Template<Ports extends string = string> extends ResourcePart<Pod_Props<Ports>> {
+export class PodTemplate<Ports extends string = string> extends ResourcePart<PodProps<Ports>> {
     get ident() {
         return v1.PodTemplate._
     }
-    private readonly _containers = seq(() => this.props.$POD(new Pod_Scope(this)))
-        .as<Pod_Container<Ports>>()
+    private readonly _containers = seq(() => this.props.$POD(new PodScope(this)))
+        .as<PodContainer<Ports>>()
         .cache()
 
     private readonly _mounts = seq(() => this._containers.concatMap(x => x.mounts))
@@ -91,9 +91,9 @@ export class Pod_Template<Ports extends string = string> extends ResourcePart<Po
 
         const volumes = self._volumes
             .map(x => {
-                if (x.is(Pod_Volume)) {
+                if (x.is(PodVolume)) {
                     return x["__submanifest__"]()
-                } else if (x.is(Pod_Device)) {
+                } else if (x.is(PodDevice)) {
                     return x["__submanifest__"]()
                 }
                 throw new Error(`Unsupported volume type: ${x}`)
@@ -111,8 +111,8 @@ export class Pod_Template<Ports extends string = string> extends ResourcePart<Po
     }
 }
 
-export class Pod_Scope {
-    constructor(private readonly _parent: Pod_Template) {}
+export class PodScope {
+    constructor(private readonly _parent: PodTemplate) {}
     Container<
         Ports extends string,
         Env extends {
@@ -125,43 +125,43 @@ export class Pod_Scope {
                   }
                 | EnvValuePrimitive
         }
-    >(name: string, options: Pod_Container_Props<Ports, Env>) {
-        return new Pod_Container(this._parent, name, "main", options)
+    >(name: string, options: PodContainerProps<Ports, Env>) {
+        return new PodContainer(this._parent, name, "main", options)
     }
-    InitContainer(name: string, options: Pod_Container_Props<never>) {
-        return new Pod_Container(this._parent, name, "init", options)
+    InitContainer(name: string, options: PodContainerProps<never>) {
+        return new PodContainer(this._parent, name, "init", options)
     }
-    Volume<const P extends Pod_Volume_Backend_HostPath>(name: string, options: P): Pod_Volume<P>
-    Volume<const P extends Pod_Volume_Backend_ConfigMap<ResourceRef<v1.ConfigMap._>>>(
+    Volume<const P extends PodVolumeBackendHostPath>(name: string, options: P): PodVolume<P>
+    Volume<const P extends PodVolumeBackendConfigMap<ResourceRef<v1.ConfigMap._>>>(
         name: string,
         options: P
-    ): Pod_Volume<P>
-    Volume<const P extends Pod_Volume_Backend_Secret<ResourceRef<v1.Secret._>>>(
+    ): PodVolume<P>
+    Volume<const P extends PodVolumeBackendSecret<ResourceRef<v1.Secret._>>>(
         name: string,
         options: P
-    ): Pod_Volume<P>
-    Volume<const P extends Pod_Volume_Backend_Pvc<ResourceRef<v1.PersistentVolumeClaim._>>>(
+    ): PodVolume<P>
+    Volume<const P extends PodVolumeBackendPvc<ResourceRef<v1.PersistentVolumeClaim._>>>(
         name: string,
         options: P
-    ): Pod_Volume<P>
-    Volume(name: string, options: Pod_Volume_Backend): Pod_Volume {
+    ): PodVolume<P>
+    Volume(name: string, options: PodVolumeBackend): PodVolume {
         {
             const backend = options.$backend
             if ("kind" in backend && backend.kind === "HostPath") {
-                return new Pod_Volume_HostPath(this._parent, name, options as any)
+                return new PodVolumeHostPath(this._parent, name, options as any)
             }
         }
         const backend = options.$backend as ResourceRef
         if (backend.is(v1.ConfigMap._)) {
-            return new Pod_Volume_ConfigMap(this._parent, name, options as any)
+            return new PodVolumeConfigMap(this._parent, name, options as any)
         } else if (backend.is(v1.Secret._)) {
-            return new Pod_Volume_Secret(this._parent, name, options as any)
+            return new PodVolumeSecret(this._parent, name, options as any)
         } else if (backend.is(v1.PersistentVolumeClaim._)) {
-            return new Pod_Volume_Pvc(this._parent, name, options as any)
+            return new PodVolumePvc(this._parent, name, options as any)
         }
         throw new Error(`Unsupported volume backend kind: ${backend.ident}`)
     }
-    Device(name: string, options: Pod_Device_Backend) {
-        return new Pod_Device(this._parent, name, options)
+    Device(name: string, options: PodDeviceBackend) {
+        return new PodDevice(this._parent, name, options)
     }
 }

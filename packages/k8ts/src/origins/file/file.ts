@@ -1,24 +1,24 @@
 import {
     ForwardExports,
-    Origin_Exporter,
-    type Origin_Entity,
-    type Origin_Props,
+    OriginExporter,
+    type OriginEntity,
+    type OriginProps,
     type ResourceConstructor,
     type ResourceRef
 } from "@k8ts/instruments"
 import { doddlify, seq } from "doddle"
 import type { v1 } from "../../idents"
-import { Origin_Section, type File_Section_Props } from "./section"
+import { OriginSection, type FileSectionProps } from "./section"
 export type File_sName = `${string}.yaml`
-export interface File_Props<
+export interface FileProps<
     Kinds extends ResourceConstructor[] = ResourceConstructor[],
     Exports extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
-> extends Origin_Props<Kinds[number]> {
+> extends OriginProps<Kinds[number]> {
     kinds?: Kinds
     namespace?: ResourceRef<v1.Namespace._>
-    FILE(FILE: Origin_File_Scope<Kinds>): Iterable<Exports | ForwardExports<Exports>>
+    FILE(FILE: OriginFileScope<Kinds>): Iterable<Exports | ForwardExports<Exports>>
 }
-export class Origin_File extends Origin_Exporter<File_Props> {
+export class OriginFile extends OriginExporter<FileProps> {
     #_ = (() => {
         this.meta.add("source.k8ts.org/", {
             "^file": this.name
@@ -32,33 +32,33 @@ export class Origin_File extends Origin_Exporter<File_Props> {
     @doddlify
     protected __exports__() {
         return seq(
-            this._props.FILE.call(this, new Origin_File_Scope(this) as any) as Iterable<ResourceRef>
+            this._props.FILE.call(this, new OriginFileScope(this) as any) as Iterable<ResourceRef>
         ).cache()
     }
 }
 export function File<
     Kinds extends ResourceConstructor[] = ResourceConstructor[],
     Exports extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
->(parent: Origin_Entity, name: File_sName, props: File_Props<Kinds, Exports>) {
-    const file = new Origin_File(parent, name, props as any)
+>(parent: OriginEntity, name: File_sName, props: FileProps<Kinds, Exports>) {
+    const file = new OriginFile(parent, name, props as any)
 
     return ForwardExports<Exports>(file)
 }
 
-export class Origin_File_Scope<Kinds extends ResourceConstructor[]> {
-    constructor(private readonly _file: Origin_File) {
+export class OriginFileScope<Kinds extends ResourceConstructor[]> {
+    constructor(private readonly _file: OriginFile) {
         this.on = this._file.on
     }
     get __entity__() {
         return this._file
     }
-    on: Origin_File["on"]
+    on: OriginFile["on"]
 
     Section<Exported extends Kinds[number]["prototype"] = Kinds[number]["prototype"]>(
         name: string,
-        props: File_Section_Props<Exported>
+        props: FileSectionProps<Exported>
     ) {
-        const section: Origin_Section = new Origin_Section(this._file, name, props)
+        const section: OriginSection = new OriginSection(this._file, name, props)
         return ForwardExports<Exported>(section)
     }
 }

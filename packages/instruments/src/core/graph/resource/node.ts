@@ -7,7 +7,7 @@ import { TraceEmbedder } from "../../tracing"
 import { Formats } from "../entity"
 import { Node } from "../node"
 import { OriginNode } from "../origin/node"
-import type { IdentKind, Ident_Like } from "./api-kind"
+import type { IdentKind, IdentLike } from "./api-kind"
 import type { Resource } from "./entity"
 import { RefKey } from "./ref-key"
 
@@ -117,7 +117,7 @@ export class ResourceNode extends Node<ResourceNode, Resource> {
         return Displayers.get(this).pretty(format)
     }
 
-    hasIdent(ident: Ident_Like) {
+    hasIdent(ident: IdentLike) {
         return this.ident.equals(ident)
     }
     constructor(

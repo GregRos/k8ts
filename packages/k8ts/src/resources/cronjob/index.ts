@@ -5,11 +5,11 @@ import { doddlify } from "doddle"
 import { omitBy } from "lodash"
 import { Timezone } from "../../../../instruments/dist/expressions/timezone"
 import { batch } from "../../idents/batch"
-import { Pod_Template, type Pod_Props } from "../pod"
+import { PodTemplate, type PodProps } from "../pod"
 export interface CronJob_Props<CronSpec extends Cron.Record>
     extends Omit<CDK.CronJobSpec, "jobTemplate" | "schedule" | "timeZone"> {
     $schedule: CronStanza<CronSpec>
-    $template: Pod_Props<never> & {
+    $template: PodProps<never> & {
         restartPolicy: "Always" | "OnFailure" | "Never"
     }
     $meta?: Meta.Input
@@ -26,7 +26,7 @@ export class CronJob<
 
     @doddlify
     get template() {
-        return new Pod_Template<never>(this, this.name, this.props.$template)
+        return new PodTemplate<never>(this, this.name, this.props.$template)
     }
 
     protected __kids__(): Iterable<ResourceRef> {

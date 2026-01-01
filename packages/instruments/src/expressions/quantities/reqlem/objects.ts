@@ -7,9 +7,9 @@ import { InstrumentsError } from "../../../error"
 import type { UnitParser, UnitValue } from "../units"
 import { AnyUnitParser } from "../units/unit-parser"
 import { createResourceParser } from "./parser"
-import type { ReqLimit, Resources_ReqLimits_Trait, Resources_UnitMap_Trait } from "./types"
+import type { ReqLimit, ResourcesReqLimits_Trait, ResourcesUnitMap_Trait } from "./types"
 
-export class Resources_UnitMap<const RM extends Resources_UnitMap_Trait<RM>> {
+export class ResourcesUnitMap<const RM extends ResourcesUnitMap_Trait<RM>> {
     constructor(private _map: Map<string, ReqLimit>) {}
 
     toObject() {
@@ -35,7 +35,7 @@ export class Resources_UnitMap<const RM extends Resources_UnitMap_Trait<RM>> {
     }
 }
 
-export class ResourcesSpec<const RM extends Resources_UnitMap_Trait<RM>> {
+export class ResourcesSpec<const RM extends ResourcesUnitMap_Trait<RM>> {
     readonly _unitParsers: Map<string, Parjser<UnitValue | undefined>>
     readonly _reqLimitParsers: Map<string, Parjser<ReqLimit>>
     readonly _anyUnitParser = AnyUnitParser.make()
@@ -63,9 +63,9 @@ export class ResourcesSpec<const RM extends Resources_UnitMap_Trait<RM>> {
         }
         return pReqLimit.parse(input).value
     }
-    __INPUT__!: Resources_ReqLimits_Trait<RM>
+    __INPUT__!: ResourcesReqLimits_Trait<RM>
 
-    parse<const R extends Resources_ReqLimits_Trait<RM>>(input: R): Resources_UnitMap<RM> {
+    parse<const R extends ResourcesReqLimits_Trait<RM>>(input: R): ResourcesUnitMap<RM> {
         const allKeys = new Set([...Object.keys(input), ...this._unitParsers.keys()])
         const map = seq(allKeys)
             .toMap(key => {
@@ -96,10 +96,10 @@ export class ResourcesSpec<const RM extends Resources_UnitMap_Trait<RM>> {
                 return [key, getVal()] as const
             })
             .pull()
-        return new Resources_UnitMap(map as Map<string, ReqLimit>)
+        return new ResourcesUnitMap(map as Map<string, ReqLimit>)
     }
 
-    static make<const RM extends Resources_UnitMap_Trait<RM>>(unitMap: {
+    static make<const RM extends ResourcesUnitMap_Trait<RM>>(unitMap: {
         [K in keyof RM]: UnitParser<RM[K]>
     }) {
         return new ResourcesSpec<RM>(mapFromObject(unitMap as any) as Map<string, UnitParser>)

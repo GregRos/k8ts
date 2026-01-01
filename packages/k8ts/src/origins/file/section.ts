@@ -1,23 +1,23 @@
-import { type Origin_Exporter_Props, type ResourceRef, Origin_Exporter } from "@k8ts/instruments"
+import { type OriginExporterProps, type ResourceRef, OriginExporter } from "@k8ts/instruments"
 import { doddle, doddlify, seq } from "doddle"
 import type { v1 } from "../../idents"
 
-export class File_Section_Scope {
-    on: Origin_Section["on"]
+export class FileSectionScope {
+    on: OriginSection["on"]
     get __entity__() {
         return this._section
     }
-    constructor(private readonly _section: Origin_Section) {
+    constructor(private readonly _section: OriginSection) {
         this.on = this._section.on
     }
 }
-export interface File_Section_Props<Exported extends ResourceRef = ResourceRef>
-    extends Origin_Exporter_Props {
+export interface FileSectionProps<Exported extends ResourceRef = ResourceRef>
+    extends OriginExporterProps {
     namespace?: ResourceRef<v1.Namespace._>
-    SECTION(SCOPE: File_Section_Scope): Iterable<Exported>
+    SECTION(SCOPE: FileSectionScope): Iterable<Exported>
 }
 
-export class Origin_Section extends Origin_Exporter<File_Section_Props> {
+export class OriginSection extends OriginExporter<FileSectionProps> {
     get ident() {
         return "[k8ts] File/Section"
     }
@@ -30,7 +30,7 @@ export class Origin_Section extends Origin_Exporter<File_Section_Props> {
     @doddlify
     protected __exports__() {
         return seq(
-            this._props.SECTION.call(this, new File_Section_Scope(this)) as Iterable<ResourceRef>
+            this._props.SECTION.call(this, new FileSectionScope(this)) as Iterable<ResourceRef>
         ).cache()
     }
 }

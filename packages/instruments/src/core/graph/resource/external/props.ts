@@ -1,9 +1,9 @@
 import type { IdentKind } from "../api-kind"
 
-export interface External_Features {
+export interface ExternalFeatures {
     keys?: string[]
 }
-export interface External_KindToFeatures {
+export interface ExternalKindToFeatures {
     ConfigMap: {
         keys?: string[]
     }
@@ -13,4 +13,4 @@ export interface External_KindToFeatures {
     [s: string]: {}
 }
 
-export type External_Props<K extends IdentKind> = External_KindToFeatures[K["name"]]
+export type ExternalProps<K extends IdentKind> = ExternalKindToFeatures[K["name"]]

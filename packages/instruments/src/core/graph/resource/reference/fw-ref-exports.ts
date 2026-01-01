@@ -1,17 +1,17 @@
 import { seq } from "doddle"
-import { Origin_Entity } from "../../origin"
-import type { Origin_Exporter } from "../../origin/exporter"
+import { OriginEntity } from "../../origin"
+import type { OriginExporter } from "../../origin/exporter"
 import { RefKey } from "../ref-key"
 import { ProxyOperationError } from "./error"
 import { FwRef } from "./fw-ref"
 import type { ResourceRef } from "./refable"
 
-/** Expands the resources exported by an Origin_Exported into a dictionary of name to FwRef. */
+/** Expands the resources exported by an OriginExported into a dictionary of name to FwRef. */
 export type FwRef_Exports_ByKey<Exports extends ResourceRef = ResourceRef> = {
     [E in Exports as `${E["ident"]["name"]}/${E["name"]}`]: FwRef<E>
 }
 /**
- * A type describing all resources exported by an {@link Origin_Exporter} as forward references.
+ * A type describing all resources exported by an {@link OriginExporter} as forward references.
  *
  * FwRefs can be accessed using a key lookup, using the shorthand of `KindName/name`. For example, a
  * Deployment named "my-app" can be accessed via `exports["Deployment/my-app"]`.
@@ -27,39 +27,39 @@ export type FwRef_Exports_ByKey<Exports extends ResourceRef = ResourceRef> = {
  * During runtime, this construct can provide references to all resources attached to the Origin,
  * even if they were not explicitly exported.
  */
-export type ForwardExports<Exported extends ResourceRef = any> = Rsc_FwRef_Exports_Proxied &
+export type ForwardExports<Exported extends ResourceRef = any> = RscFwRef_Exports_Proxied &
     FwRef_Exports_ByKey<Exported>
 
 /**
- * Creates a forward reference exports construct for the given {@link Origin_Exporter} entity.
+ * Creates a forward reference exports construct for the given {@link OriginExporter} entity.
  *
  * @param entity
  * @returns
  */
 export function ForwardExports<Exported extends ResourceRef>(
-    entity: Origin_Exporter
+    entity: OriginExporter
 ): ForwardExports<Exported> {
-    const proxied = new Rsc_FwRef_Exports_Proxied(entity)
+    const proxied = new RscFwRef_Exports_Proxied(entity)
     const handler = new FwRef_Exports_Handler(proxied)
     return new Proxy(proxied, handler) as any
 }
 export namespace ForwardExports {
     export function is(obj: any): obj is ForwardExports {
-        return obj instanceof Rsc_FwRef_Exports_Proxied
+        return obj instanceof RscFwRef_Exports_Proxied
     }
 }
 
 /**
  * A basic core of the {@link ForwardExports} construct, containing information about the underlying
- * {@link Origin_Exporter} entity.
+ * {@link OriginExporter} entity.
  */
-export class Rsc_FwRef_Exports_Proxied {
-    #entity: Origin_Exporter
-    constructor(entity: Origin_Exporter) {
+export class RscFwRef_Exports_Proxied {
+    #entity: OriginExporter
+    constructor(entity: OriginExporter) {
         this.#entity = entity
     }
 
-    __entity__(act?: (entity: Origin_Exporter) => any): Origin_Exporter {
+    __entity__(act?: (entity: OriginExporter) => any): OriginExporter {
         return this.#entity as any
     }
 
@@ -70,7 +70,7 @@ export class Rsc_FwRef_Exports_Proxied {
         if (ForwardExports.is(other)) {
             return this.#entity.equals(other.#entity)
         }
-        if (other instanceof Origin_Entity) {
+        if (other instanceof OriginEntity) {
             return other.equals(this.#entity)
         }
         return false
@@ -79,10 +79,10 @@ export class Rsc_FwRef_Exports_Proxied {
 
 /**
  * Proxy handler for the {@link ForwardExports} construct, providing dynamic access to the resources
- * attached to the underlying {@link Origin_Exporter} entity.
+ * attached to the underlying {@link OriginExporter} entity.
  */
-class FwRef_Exports_Handler<Entity extends Origin_Exporter> implements ProxyHandler<Entity> {
-    constructor(private readonly _subject: Rsc_FwRef_Exports_Proxied) {}
+class FwRef_Exports_Handler<Entity extends OriginExporter> implements ProxyHandler<Entity> {
+    constructor(private readonly _subject: RscFwRef_Exports_Proxied) {}
 
     get entity() {
         return this._subject["__entity__"]()
@@ -109,7 +109,7 @@ class FwRef_Exports_Handler<Entity extends Origin_Exporter> implements ProxyHand
     }
 
     getPrototypeOf(_: Entity): object | null {
-        return Rsc_FwRef_Exports_Proxied.prototype
+        return RscFwRef_Exports_Proxied.prototype
     }
 
     get exported() {

@@ -2,7 +2,7 @@ import { getDeepPropertyDescriptor } from "@k8ts/metadata/util"
 import { getNiceClassName } from "what-are-you"
 import { displayers } from "../../../utils"
 import { Entity } from "../entity"
-import type { Origin_Entity } from "../origin"
+import type { OriginEntity } from "../origin"
 import type { Ident } from "./api-kind"
 import { ResourceNode } from "./node"
 import { FwRef, type ResourceRef } from "./reference"
@@ -60,7 +60,7 @@ export abstract class Resource<
         return false
     }
 
-    protected abstract __origin__(): Origin_Entity
+    protected abstract __origin__(): OriginEntity
     get node(): ResourceNode {
         return new ResourceNode(this.__origin__().node, this)
     }

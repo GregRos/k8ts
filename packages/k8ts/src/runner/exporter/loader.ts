@@ -1,8 +1,8 @@
 import { OriginNode, ResourceNode, type Node, type ResourceTop } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { MakeError } from "../../error"
-export class Assembler_RscLoader extends Emittery<Assembler_RscLoaderEvents> {
-    constructor(private readonly _options: Assembler_RscLoaderOptions) {
+export class AssemblerRscLoader extends Emittery<AssemblerRscLoaderEvents> {
+    constructor(private readonly _options: AssemblerRscLoaderOptions) {
         super()
     }
 
@@ -77,13 +77,13 @@ export class Assembler_RscLoader extends Emittery<Assembler_RscLoaderEvents> {
         return [...resources]
     }
 }
-export interface Assembler_RscLoadedEvent {
+export interface AssemblerRscLoadedEvent {
     isExported: boolean
     resource: ResourceNode
 }
 
-export interface Assembler_RscLoaderEvents {
-    load: Assembler_RscLoadedEvent
+export interface AssemblerRscLoaderEvents {
+    load: AssemblerRscLoadedEvent
 }
 
-export interface Assembler_RscLoaderOptions {}
+export interface AssemblerRscLoaderOptions {}

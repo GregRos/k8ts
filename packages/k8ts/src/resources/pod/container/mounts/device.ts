@@ -1,26 +1,26 @@
 import {
     ResourcePart,
-    type Ident_ResourcePart,
+    type IdentResourcePart,
     type Resource,
     type ResourceRef
 } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../../../idents"
 
-export interface Container_Device_Mount_Source {
+export interface ContainerDeviceMountSource {
     $backend: ResourceRef<v1.Pod.Device._>
 }
 
-export interface Container_Mount_Device_Props extends Container_Device_Mount_Source {
+export interface ContainerMountDeviceProps extends ContainerDeviceMountSource {
     mountPath: string
 }
 
-export class Container_Device_Mount extends ResourcePart<Container_Mount_Device_Props> {
-    constructor(parent: Resource, props: Container_Mount_Device_Props) {
+export class ContainerDeviceMount extends ResourcePart<ContainerMountDeviceProps> {
+    constructor(parent: Resource, props: ContainerMountDeviceProps) {
         super(parent, props.$backend.name, props)
     }
     get ident() {
-        return v1.Pod.Container.DeviceMount._ satisfies Ident_ResourcePart
+        return v1.Pod.Container.DeviceMount._ satisfies IdentResourcePart
     }
     get backend() {
         return this.props.$backend

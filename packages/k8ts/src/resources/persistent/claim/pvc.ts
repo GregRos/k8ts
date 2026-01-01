@@ -13,8 +13,8 @@ const StorageClassKind = storage.v1.StorageClass._
 const pvc_ResourcesSpec = ResourcesSpec.make({
     storage: Unit.Data
 })
-type Pvc_Resources = Prefix$<(typeof pvc_ResourcesSpec)["__INPUT__"]>
-export interface Pvc_Props<Mode extends PvMode> extends Pvc_Resources {
+type PvcResources = Prefix$<(typeof pvc_ResourcesSpec)["__INPUT__"]>
+export interface PvcProps<Mode extends PvMode> extends PvcResources {
     $accessModes: PvAccessModes
     $mode?: Mode
     $storageClass?: ResourceRef<typeof StorageClassKind>
@@ -23,7 +23,7 @@ export interface Pvc_Props<Mode extends PvMode> extends Pvc_Resources {
 
 export class Pvc<Mode extends PvMode, Name extends string = string> extends ResourceTop<
     Name,
-    Pvc_Props<Mode>
+    PvcProps<Mode>
 > {
     declare name: Name
     get ident() {

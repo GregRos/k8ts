@@ -1,17 +1,17 @@
 import {
-    Origin_Entity,
+    OriginEntity,
     type ForwardExports,
-    type Origin_Props,
+    type OriginProps,
     type ResourceConstructor
 } from "@k8ts/instruments"
 
-import { File, type File_Props, type File_sName } from "./file"
+import { File, type FileProps, type File_sName } from "./file"
 
-export type World_Props<Kinds extends ResourceConstructor[]> = Origin_Props<Kinds[number]>
+export type WorldProps<Kinds extends ResourceConstructor[]> = OriginProps<Kinds[number]>
 
-export class World_Entity<
+export class WorldEntity<
     Kinds extends ResourceConstructor[] = ResourceConstructor[]
-> extends Origin_Entity<World_Props<Kinds>> {
+> extends OriginEntity<WorldProps<Kinds>> {
     get ident() {
         return "[k8ts] World"
     }
@@ -23,7 +23,7 @@ export class World_Entity<
 
     File<Exports extends ResourceConstructor["prototype"]>(
         name: File_sName,
-        props: File_Props<Kinds, Exports>
+        props: FileProps<Kinds, Exports>
     ) {
         return File(this, name, props) as ForwardExports<Exports>
     }

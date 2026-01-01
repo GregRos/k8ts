@@ -3,15 +3,15 @@ import { ResourcePart } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../../idents/default"
 import { Pvc } from "../../persistent"
-import type { Container_Device_Mount_Source } from "../container/mounts/device"
-interface Pod_Device_Backend_Pvc {
+import type { ContainerDeviceMountSource } from "../container/mounts/device"
+interface PodDeviceBackendPvc {
     $backend: Pvc<"Block">
     readOnly?: boolean
 }
 
-export type Pod_Device_Backend = Pod_Device_Backend_Pvc
+export type PodDeviceBackend = PodDeviceBackendPvc
 
-export class Pod_Device extends ResourcePart<Pod_Device_Backend_Pvc> {
+export class PodDevice extends ResourcePart<PodDeviceBackendPvc> {
     get ident() {
         return v1.Pod.Device._
     }
@@ -19,7 +19,7 @@ export class Pod_Device extends ResourcePart<Pod_Device_Backend_Pvc> {
     constructor(
         parent: Resource,
         name: string,
-        readonly backend: Pod_Device_Backend_Pvc
+        readonly backend: PodDeviceBackendPvc
     ) {
         super(parent, name, backend)
     }
@@ -43,13 +43,13 @@ export class Pod_Device extends ResourcePart<Pod_Device_Backend_Pvc> {
         }
     }
 
-    Mount(): Container_Device_Mount_Source {
+    Mount(): ContainerDeviceMountSource {
         return {
             $backend: this
         }
     }
 }
 
-export function make(parent: Resource, name: string, input: Pod_Device_Backend) {
-    return new Pod_Device(parent, name, input)
+export function make(parent: Resource, name: string, input: PodDeviceBackend) {
+    return new PodDevice(parent, name, input)
 }

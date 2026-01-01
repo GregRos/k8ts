@@ -4,11 +4,11 @@ import { displayers } from "../../../../utils/displayers"
 import { RefKey, type RefKey_Options } from "../ref-key"
 import { pluralize } from "./pluralize"
 
-export interface Ident_Like {
+export interface IdentLike {
     text: string
     name: string
     dns: string
-    parent: Ident_Like | null
+    parent: IdentLike | null
     equals(other: any): boolean
 }
 type _alphabeta = "alpha" | "beta" | ""
@@ -21,17 +21,17 @@ type _version = `v${number}${_subversion | ""}`
 @bind_own_methods()
 export abstract class Ident<
     Name extends string = string,
-    Parent extends Ident_Like | null = Ident_Like | null
-> implements Ident_Like
+    Parent extends IdentLike | null = IdentLike | null
+> implements IdentLike
 {
     constructor(
         readonly name: Name,
         readonly parent: Parent
     ) {}
 
-    get full(): Ident_Like[] {
-        const parts: Ident_Like[] = []
-        let curr: Ident_Like | null = this
+    get full(): IdentLike[] {
+        const parts: IdentLike[] = []
+        let curr: IdentLike | null = this
         while (curr) {
             parts.unshift(curr)
             curr = curr.parent
@@ -54,7 +54,7 @@ export abstract class Ident<
         string,
         {
             name: Name
-        } & Ident_Like
+        } & IdentLike
     >
 
     equals(other: any) {
@@ -76,10 +76,10 @@ export class IdentGroup<const _Group extends string = string> extends Ident<_Gro
         super(name, null)
     }
     version<Version extends _version>(apiVersion: Version) {
-        return new Ident_Version(apiVersion, this)
+        return new IdentVersion(apiVersion, this)
     }
 
-    child(name: string): Ident_Version<_Group, string> {
+    child(name: string): IdentVersion<_Group, string> {
         if (!name.startsWith("v")) {
             throw new InstrumentsError(
                 `Invalid version name "${name}". Version name must start with "v".`
@@ -89,12 +89,12 @@ export class IdentGroup<const _Group extends string = string> extends Ident<_Gro
     }
 }
 @bind_own_methods()
-export class Ident_Version<
+export class IdentVersion<
     const _Group extends string = string,
     const _Version extends string = string
 > extends Ident<_Version, IdentGroup<_Group>> {
     kind<_Kind extends string>(kind: _Kind, specialPlural?: string) {
-        return new IdentKind(kind, this as Ident_Version<_Group, _Version>, specialPlural)
+        return new IdentKind(kind, this as IdentVersion<_Group, _Version>, specialPlural)
     }
 
     __FORMAT__!: _Version
@@ -112,10 +112,10 @@ export class IdentKind<
     const _Group extends string = string,
     const _Version extends string = string,
     const _Kind extends string = string
-> extends Ident<_Kind, Ident_Version<_Group, _Version>> {
+> extends Ident<_Kind, IdentVersion<_Group, _Version>> {
     constructor(
         name: _Kind,
-        parent: Ident_Version<_Group, _Version>,
+        parent: IdentVersion<_Group, _Version>,
         private readonly _specialPlural?: string
     ) {
         super(name, parent)
@@ -137,24 +137,24 @@ export class IdentKind<
     }
 
     subkind<SubKind extends string>(subkind: SubKind) {
-        return new Ident_ResourcePart(subkind, this)
+        return new IdentResourcePart(subkind, this)
     }
 
-    child<Name extends string>(name: Name): Ident_ResourcePart<Name, this> {
+    child<Name extends string>(name: Name): IdentResourcePart<Name, this> {
         return this.subkind(name)
     }
 }
 
 @bind_own_methods()
-export class Ident_ResourcePart<
+export class IdentResourcePart<
     Name extends string = string,
-    Parent extends Ident_Like = Ident_Like
+    Parent extends IdentLike = IdentLike
 > extends Ident<Name, Parent> {
     constructor(name: Name, parent: Parent) {
         super(name, parent)
     }
-    subkind<_SubKind2 extends string>(subkind: _SubKind2): Ident_ResourcePart<_SubKind2, this> {
-        return new Ident_ResourcePart(subkind, this)
+    subkind<_SubKind2 extends string>(subkind: _SubKind2): IdentResourcePart<_SubKind2, this> {
+        return new IdentResourcePart(subkind, this)
     }
 
     child<Name extends string>(name: Name) {
@@ -167,5 +167,5 @@ export function group<ApiGroup extends string>(apiGroup: ApiGroup) {
 }
 
 export function version<ApiVersion extends _version>(apiVersion: ApiVersion) {
-    return new Ident_Version(apiVersion, group(""))
+    return new IdentVersion(apiVersion, group(""))
 }

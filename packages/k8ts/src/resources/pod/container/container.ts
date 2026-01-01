@@ -1,9 +1,9 @@
 import {
-    Port_Exports,
+    PortExports,
     ResourcesSpec,
     Unit,
     type CmdBuilder,
-    type Port_Exports_Input,
+    type PortExportsInput,
     type ResourceRef,
     type TaggedImage
 } from "@k8ts/instruments"
@@ -16,40 +16,40 @@ import { mapKeys, mapValues, omitBy } from "lodash"
 import { Env } from "../../../env"
 import type { EnvValue } from "../../../env/types"
 import { v1 } from "../../../idents/default"
-import { Pod_Device, Pod_Volume } from "../volume"
-import { Container_Device_Mount, type Container_Device_Mount_Source } from "./mounts/device"
-import { Container_Volume_Mount, type Container_Volume_Mount_Source } from "./mounts/volume"
+import { PodDevice, PodVolume } from "../volume"
+import { ContainerDeviceMount, type ContainerDeviceMountSource } from "./mounts/device"
+import { ContainerVolumeMount, type ContainerVolumeMountSource } from "./mounts/volume"
 const container_ResourcesSpec = ResourcesSpec.make({
     cpu: Unit.Cpu,
     memory: Unit.Data
 })
 
-type Pod_Container_Resources = (typeof container_ResourcesSpec)["__INPUT__"]
-type Pod_Container_Mount_Any = Container_Volume_Mount_Source | Container_Device_Mount_Source
-export type Pod_Container_Mounts = {
-    [key: string]: Pod_Container_Mount_Any
+type PodContainerResources = (typeof container_ResourcesSpec)["__INPUT__"]
+type PodContainerMountAny = ContainerVolumeMountSource | ContainerDeviceMountSource
+export type PodContainerMounts = {
+    [key: string]: PodContainerMountAny
 }
 
-export interface Pod_Container_Env_From {
+export interface PodContainerEnvFrom {
     source: ResourceRef<v1.ConfigMap._> | ResourceRef<v1.Secret._>
     prefix?: string
     optional?: boolean
 }
-export interface Pod_Container_Props<
+export interface PodContainerProps<
     Ports extends string = never,
     _Env extends Record<string, EnvValue> = Record<string, EnvValue>
 > extends Omit<CDK.Container, "name"> {
     $image: TaggedImage
-    $ports?: Port_Exports_Input<Ports>
+    $ports?: PortExportsInput<Ports>
     $command?: CmdBuilder
-    $mounts?: Pod_Container_Mounts
+    $mounts?: PodContainerMounts
     $env?: _Env
-    $envFrom?: Pod_Container_Env_From[]
-    $resources?: Pod_Container_Resources
+    $envFrom?: PodContainerEnvFrom[]
+    $resources?: PodContainerResources
 }
 
-export class Pod_Container<Ports extends string = string> extends ResourcePart<
-    Pod_Container_Props<Ports>
+export class PodContainer<Ports extends string = string> extends ResourcePart<
+    PodContainerProps<Ports>
 > {
     __PORTS__!: Ports
     get ident() {
@@ -65,15 +65,15 @@ export class Pod_Container<Ports extends string = string> extends ResourcePart<
     }
     get mounts() {
         return seq(Object.entries(this.props.$mounts ?? {}))
-            .map(([path, mount]: [string, Pod_Container_Mount_Any]) => {
-                if (mount.$backend.is(Pod_Device)) {
-                    return new Container_Device_Mount(this, {
+            .map(([path, mount]: [string, PodContainerMountAny]) => {
+                if (mount.$backend.is(PodDevice)) {
+                    return new ContainerDeviceMount(this, {
                         $backend: mount.$backend,
                         mountPath: path
                     })
-                } else if (mount.$backend.is(Pod_Volume)) {
+                } else if (mount.$backend.is(PodVolume)) {
                     const x = mount as any
-                    return new Container_Volume_Mount(this, {
+                    return new ContainerVolumeMount(this, {
                         $backend: mount.$backend,
                         mountPath: path,
                         readOnly: x.readOnly,
@@ -93,7 +93,7 @@ export class Pod_Container<Ports extends string = string> extends ResourcePart<
             .pull()
     }
     get ports() {
-        return Port_Exports.make(this.props.$ports)
+        return PortExports.make(this.props.$ports)
     }
     protected __submanifest__(): CDK.Container {
         const self = this
@@ -102,7 +102,7 @@ export class Pod_Container<Ports extends string = string> extends ResourcePart<
         let resourcesObject = self._resources()?.toObject()
         const containerPorts =
             $ports &&
-            seq(toContainerPorts(Port_Exports.make($ports)).values())
+            seq(toContainerPorts(PortExports.make($ports)).values())
                 .toArray()
                 .pull()
 
@@ -174,7 +174,7 @@ export class Pod_Container<Ports extends string = string> extends ResourcePart<
         parent: Resource,
         name: string,
         readonly subtype: "init" | "main",
-        override readonly props: Pod_Container_Props<Ports>
+        override readonly props: PodContainerProps<Ports>
     ) {
         super(parent, name, props)
     }
@@ -183,11 +183,11 @@ export class Pod_Container<Ports extends string = string> extends ResourcePart<
         const volumeMounts = [] as CDK.VolumeMount[]
         const volumeDevices = [] as CDK.VolumeDevice[]
         for (const mnt of this.mounts) {
-            if (mnt.backend.is(Pod_Device)) {
-                const deviceMount = mnt as Container_Device_Mount
+            if (mnt.backend.is(PodDevice)) {
+                const deviceMount = mnt as ContainerDeviceMount
                 volumeDevices!.push(deviceMount["__submanifest__"]())
-            } else if (mnt.backend.is(Pod_Volume)) {
-                const volumeMount = mnt as Container_Volume_Mount
+            } else if (mnt.backend.is(PodVolume)) {
+                const volumeMount = mnt as ContainerVolumeMount
                 volumeMounts!.push(volumeMount["__submanifest__"]())
             }
         }
@@ -209,7 +209,7 @@ export function make<Ports extends string>(
     parent: ResourceTop,
     name: string,
     subtype: "init" | "main",
-    props: Pod_Container_Props<Ports>
+    props: PodContainerProps<Ports>
 ) {
-    return new Pod_Container(parent, name, subtype, props)
+    return new PodContainer(parent, name, subtype, props)
 }

@@ -6,38 +6,38 @@ import { v1 } from "../../idents/index"
 import { Deployment, type DeploymentRef } from "../deployment"
 import { toServicePorts } from "../utils/adapters"
 import { Port } from "./service-port"
-export interface Service_Frontend_ClusterIp {
+export interface ServiceFrontendClusterIp {
     type: "ClusterIP"
 }
 
-export interface Service_Frontend_LoadBalancer {
+export interface ServiceFrontendLoadBalancer {
     type: "LoadBalancer"
     loadBalancerIP?: string
     loadBalancerSourceRanges?: string[]
     loadBalancerClass?: string
     allocateLoadBalancerNodePorts?: boolean
 }
-export type Service_Frontend = Service_Frontend_ClusterIp | Service_Frontend_LoadBalancer
-export interface Service_Props<DeployPorts extends string, ExposedPorts extends DeployPorts> {
+export type ServiceFrontend = ServiceFrontendClusterIp | ServiceFrontendLoadBalancer
+export interface ServiceProps<DeployPorts extends string, ExposedPorts extends DeployPorts> {
     $ports: PortMapping_Input<ExposedPorts>
     $backend: DeploymentRef<DeployPorts>
-    $frontend: Service_Frontend
+    $frontend: ServiceFrontend
 }
-export interface Service_Ref<ExposedPorts extends string> extends ResourceRef<v1.Service._> {
+export interface ServiceRef<ExposedPorts extends string> extends ResourceRef<v1.Service._> {
     __PORTS__: ExposedPorts
 }
 
 export class Service<
     Name extends string = string,
-    Ports_Exposed extends string = string
-> extends ResourceTop<Name, Service_Props<string, Ports_Exposed>> {
-    __PORTS__!: Ports_Exposed
+    PortsExposed extends string = string
+> extends ResourceTop<Name, ServiceProps<string, PortsExposed>> {
+    __PORTS__!: PortsExposed
     get ident() {
         return v1.Service._
     }
 
     private get backend() {
-        return this.props.$backend.assert(Deployment<Ports_Exposed>)
+        return this.props.$backend.assert(Deployment<PortsExposed>)
     }
     get ports() {
         const srcPorts = this.backend.ports
@@ -45,7 +45,7 @@ export class Service<
             .filter(([, v]) => v !== undefined)
             .map(([k]) => k)
             .toArray()
-            .pull() as Ports_Exposed[]
+            .pull() as PortsExposed[]
         const svcPorts = srcPorts.pick(...knownPorts).map(this.props.$ports as any)
         return svcPorts
     }
@@ -56,7 +56,7 @@ export class Service<
         }
     }
 
-    portRef(name: Ports_Exposed) {
+    portRef(name: PortsExposed) {
         return new Port({
             service: this,
             name: name
@@ -67,7 +67,7 @@ export class Service<
         return `${this.name}.${this.namespace}.svc.cluster.local`
     }
 
-    private _getPortoPart(port: Ports_Exposed, protocol: "http" | "https") {
+    private _getPortoPart(port: PortsExposed, protocol: "http" | "https") {
         const portNumber = this.props.$ports[port]
         if (portNumber === 80 && protocol === "http") {
             return ""
@@ -95,7 +95,7 @@ export class Service<
         }
     }
 
-    address(protocol: "http" | "https", port: Ports_Exposed) {
+    address(protocol: "http" | "https", port: PortsExposed) {
         return `${protocol}://${this.hostname}${this._getPortoPart(port, protocol)}`
     }
 }

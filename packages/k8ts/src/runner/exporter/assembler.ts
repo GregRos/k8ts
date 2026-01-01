@@ -1,9 +1,9 @@
-import { OriginNode, type Origin_Exporter } from "@k8ts/instruments"
+import { OriginNode, type OriginExporter } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { aseq } from "doddle"
 import Emittery from "emittery"
 import { cloneDeep } from "lodash"
-import { Assembler_RscLoader, type Assembler_RscLoaderEvents } from "./loader"
+import { AssemblerRscLoader, type AssemblerRscLoaderEvents } from "./loader"
 import { Manifester, NodeManifest, type ManifesterEventsTable } from "./manifester"
 import { ManifestSaver, type ManifestSaverEventsTable } from "./saver"
 import { YamlSerializer, type SerializerEventsTable } from "./serializer"
@@ -14,7 +14,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
         super()
     }
 
-    async assemble(inFiles: Iterable<Origin_Exporter>) {
+    async assemble(inFiles: Iterable<OriginExporter>) {
         const _emit = async <Name extends keyof AssemblerEventsTable>(
             event: Name,
             payload: AssemblerEventsTable[Name]
@@ -22,7 +22,7 @@ export class Assembler extends Emittery<AssemblerEventsTable> {
             return await this.emit(event, payload)
         }
         const validator = new NodeGraphValidator({})
-        const loader = new Assembler_RscLoader({})
+        const loader = new AssemblerRscLoader({})
         loader.onAny(_emit)
         const generator = new Manifester({
             cwd: this._options.cwd
@@ -169,7 +169,7 @@ export interface AssemblerEventsTable
     extends ManifestSaverEventsTable,
         SerializerEventsTable,
         ManifesterEventsTable,
-        Assembler_RscLoaderEvents,
+        AssemblerRscLoaderEvents,
         ValidatorEventsTable {
     ["received-file"]: { file: OriginNode }
     ["stage"]: { stage: AssemblyStage }

@@ -2,18 +2,18 @@ import { ResourcePart, type Resource, type ResourceRef } from "@k8ts/instruments
 import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../../../idents"
 
-export interface Container_Volume_Mount_Attrs<SubPaths extends string = string> {
+export interface ContainerVolumeMountAttrs<SubPaths extends string = string> {
     subPath?: SubPaths
     readOnly?: boolean
 }
-export interface Container_Volume_Mount_Source extends Container_Volume_Mount_Attrs {
+export interface ContainerVolumeMountSource extends ContainerVolumeMountAttrs {
     $backend: ResourceRef<v1.Pod.Volume._>
 }
-export interface Container_Volume_Mount_Props extends Container_Volume_Mount_Source {
+export interface ContainerVolumeMountProps extends ContainerVolumeMountSource {
     mountPath: string
 }
-export class Container_Volume_Mount extends ResourcePart<Container_Volume_Mount_Props> {
-    constructor(parent: Resource, props: Container_Volume_Mount_Props) {
+export class ContainerVolumeMount extends ResourcePart<ContainerVolumeMountProps> {
+    constructor(parent: Resource, props: ContainerVolumeMountProps) {
         super(parent, props.$backend.name, props)
     }
     get ident() {

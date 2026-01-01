@@ -1,8 +1,8 @@
 import { InstrumentsError } from "../../../error"
 import { displayers } from "../../../utils/displayers"
-import type { Cli_Value } from "./types"
+import type { CliValue } from "./types"
 
-export class Cli_Flag {
+export class CliFlag {
     constructor(readonly key: string) {}
 
     str(joiner: string) {
@@ -23,11 +23,11 @@ export type Cli_sTermJoiner = "=" | " "
 @displayers({
     simple: s => s.str("=")
 })
-export class Cli_OptionValueTerm {
+export class CliOptionValueTerm {
     constructor(
         private readonly key: string,
         private readonly overrideTermJoiner: string | undefined,
-        private readonly value: Cli_Value
+        private readonly value: CliValue
     ) {}
 
     get isMissing() {
@@ -61,7 +61,7 @@ export class Cli_OptionValueTerm {
     }
 }
 
-export class Cli_VerbatimTerm {
+export class CliVerbatimTerm {
     constructor(readonly value: string) {}
 
     str(joiner: string) {
@@ -77,4 +77,4 @@ export class Cli_VerbatimTerm {
     }
 }
 
-export type CliTerm = Cli_Flag | Cli_OptionValueTerm | Cli_VerbatimTerm
+export type CliTerm = CliFlag | CliOptionValueTerm | CliVerbatimTerm

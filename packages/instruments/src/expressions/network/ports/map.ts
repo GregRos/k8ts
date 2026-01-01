@@ -1,6 +1,6 @@
 import { filterMap, mapValues } from "@k8ts/metadata/util"
 import { PortError } from "./error"
-import type { Port_Mapping_Entry } from "./types"
+import type { PortMappingEntry } from "./types"
 
 /**
  * Represents an immutable mapping of named ports to their frontend/backend configuration.
@@ -10,22 +10,22 @@ import type { Port_Mapping_Entry } from "./types"
  *
  * @template Names The union type of all port names in the map.
  */
-export class Port_Map<Names extends string> {
-    constructor(private readonly _map: Map<string, Port_Mapping_Entry>) {}
+export class PortMap<Names extends string> {
+    constructor(private readonly _map: Map<string, PortMappingEntry>) {}
 
     private _apply(
-        f: (map: Map<string, Port_Mapping_Entry>) => Map<string, Port_Mapping_Entry>
-    ): Port_Map<any> {
-        return new Port_Map(f(this._map))
+        f: (map: Map<string, PortMappingEntry>) => Map<string, PortMappingEntry>
+    ): PortMap<any> {
+        return new PortMap(f(this._map))
     }
 
     /**
-     * Creates a new Port_Map containing only the specified port names.
+     * Creates a new PortMap containing only the specified port names.
      *
      * @param name The port names to include in the new map.
-     * @returns A new Port_Map with only the selected ports.
+     * @returns A new PortMap with only the selected ports.
      */
-    pick<InNames extends Names>(...name: InNames[]): Port_Map<InNames> {
+    pick<InNames extends Names>(...name: InNames[]): PortMap<InNames> {
         return this._apply(map => filterMap(map, (_, key) => name.includes(key as InNames)))
     }
 
@@ -38,10 +38,10 @@ export class Port_Map<Names extends string> {
      * Remaps the frontend ports to new values.
      *
      * @param mapping A record mapping port names to their new frontend port numbers.
-     * @returns A new Port_Map with updated frontend ports.
+     * @returns A new PortMap with updated frontend ports.
      */
-    map(mapping: Record<Names, number>): Port_Map<Names> {
-        return new Port_Map(
+    map(mapping: Record<Names, number>): PortMap<Names> {
+        return new PortMap(
             mapValues(this._map, entry => {
                 return {
                     ...entry,
@@ -58,14 +58,14 @@ export class Port_Map<Names extends string> {
      * @returns The port mapping entry.
      * @throws {PortError} If the port name is not found in the map.
      */
-    get(name: Names): Port_Mapping_Entry {
+    get(name: Names): PortMappingEntry {
         if (!this._map.has(name)) {
             throw new PortError(`Port ${name} not found`)
         }
-        return this._map.get(name) as Port_Mapping_Entry
+        return this._map.get(name) as PortMappingEntry
     }
 
-    /** Converts this Port_Map to a standard Map. */
+    /** Converts this PortMap to a standard Map. */
     toMap() {
         return this._map
     }

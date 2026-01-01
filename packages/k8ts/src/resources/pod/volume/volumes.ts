@@ -4,11 +4,11 @@ import { Resource, ResourcePart, type KeysResourceRef, type ResourceRef } from "
 import { v1 } from "../../../idents/default"
 import type { HostPathType } from "../../hostpath"
 import {
-    type Container_Volume_Mount_Attrs,
-    type Container_Volume_Mount_Source
+    type ContainerVolumeMountAttrs,
+    type ContainerVolumeMountSource
 } from "../container/mounts/volume"
 
-export interface Pod_Volume_Backend_Pvc<
+export interface PodVolumeBackendPvc<
     A extends ResourceRef<v1.PersistentVolumeClaim._> = ResourceRef<v1.PersistentVolumeClaim._>
 > {
     $backend: A
@@ -18,14 +18,14 @@ const allowedVolumeResourceKinds = [v1.ConfigMap._, v1.Secret._] as const
 type VolumeResourceKind = (typeof allowedVolumeResourceKinds)[number]
 export type AllowedResources = ResourceRef<VolumeResourceKind>
 
-export interface Pod_Volume_Backend_HostPath {
+export interface PodVolumeBackendHostPath {
     $backend: {
         kind: "HostPath"
         type?: HostPathType
         path: string
     }
 }
-export interface Pod_Volume_Backend_ConfigMap<
+export interface PodVolumeBackendConfigMap<
     A extends ResourceRef<v1.ConfigMap._> = ResourceRef<v1.ConfigMap._>
 > {
     $backend: A
@@ -35,7 +35,7 @@ export interface Pod_Volume_Backend_ConfigMap<
     }
 }
 
-export interface Pod_Volume_Backend_Secret<
+export interface PodVolumeBackendSecret<
     A extends ResourceRef<v1.Secret._> = ResourceRef<v1.Secret._>
 > {
     $backend: A
@@ -45,11 +45,11 @@ export interface Pod_Volume_Backend_Secret<
     }
 }
 
-export type Pod_Volume_Backend =
-    | Pod_Volume_Backend_Pvc
-    | Pod_Volume_Backend_ConfigMap
-    | Pod_Volume_Backend_Secret
-    | Pod_Volume_Backend_HostPath
+export type PodVolumeBackend =
+    | PodVolumeBackendPvc
+    | PodVolumeBackendConfigMap
+    | PodVolumeBackendSecret
+    | PodVolumeBackendHostPath
 
 type _KeysOf<T> = T extends {
     $backend: {
@@ -66,10 +66,10 @@ type _Mapped<T> = T extends {
           [K in _KeysOf<T>]: K extends keyof M ? M[K] : K
       }[_KeysOf<T>]
     : _KeysOf<T>
-export type Pod_Volume_Backend_Known_Paths<T extends Pod_Volume_Backend> = string & _Mapped<T>
+export type PodVolumeBackendKnownPaths<T extends PodVolumeBackend> = string & _Mapped<T>
 
-export abstract class Pod_Volume<
-    P extends Pod_Volume_Backend = Pod_Volume_Backend
+export abstract class PodVolume<
+    P extends PodVolumeBackend = PodVolumeBackend
 > extends ResourcePart<P> {
     get ident() {
         return v1.Pod.Volume._
@@ -90,8 +90,8 @@ export abstract class Pod_Volume<
         }
     }
     Mount(
-        options?: Container_Volume_Mount_Attrs<Pod_Volume_Backend_Known_Paths<P>>
-    ): Container_Volume_Mount_Source {
+        options?: ContainerVolumeMountAttrs<PodVolumeBackendKnownPaths<P>>
+    ): ContainerVolumeMountSource {
         return {
             ...options,
             $backend: this
@@ -101,7 +101,7 @@ export abstract class Pod_Volume<
     protected abstract __submanifest__(): CDK.Volume
 }
 
-export class Pod_Volume_Pvc extends Pod_Volume<Pod_Volume_Backend_Pvc> {
+export class PodVolumePvc extends PodVolume<PodVolumeBackendPvc> {
     protected __submanifest__(): CDK.Volume {
         return {
             name: this.name,
@@ -127,7 +127,7 @@ function mappingsToKeyPaths(input: Record<string, string>) {
     return arr
 }
 
-export class Pod_Volume_ConfigMap extends Pod_Volume<Pod_Volume_Backend_ConfigMap> {
+export class PodVolumeConfigMap extends PodVolume<PodVolumeBackendConfigMap> {
     protected __submanifest__(): CDK.Volume {
         const mappings = mappingsToKeyPaths(this.props.mappings ?? {})
 
@@ -142,9 +142,9 @@ export class Pod_Volume_ConfigMap extends Pod_Volume<Pod_Volume_Backend_ConfigMa
     }
 }
 
-export class Pod_Volume_Secret<
+export class PodVolumeSecret<
     Source extends ResourceRef<v1.Secret._>
-> extends Pod_Volume<Pod_Volume_Backend_Secret> {
+> extends PodVolume<PodVolumeBackendSecret> {
     protected __submanifest__(): CDK.Volume {
         const mappings = mappingsToKeyPaths(this.props.mappings ?? {})
 
@@ -159,7 +159,7 @@ export class Pod_Volume_Secret<
     }
 }
 
-export class Pod_Volume_HostPath extends Pod_Volume<Pod_Volume_Backend_HostPath> {
+export class PodVolumeHostPath extends PodVolume<PodVolumeBackendHostPath> {
     protected __submanifest__(): CDK.Volume {
         return {
             name: this.name,

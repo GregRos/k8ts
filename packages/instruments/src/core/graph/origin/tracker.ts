@@ -1,7 +1,7 @@
 import { AsyncLocalStorage } from "async_hooks"
 import { doddle, pull, type Doddle, type MaybeDoddle } from "doddle"
 import { isIterable, type AnyCtor } from "what-are-you"
-import { Origin_Entity } from "./entity"
+import { OriginEntity } from "./entity"
 
 export interface OriginStackBinder {
     run<T>(callback: () => T): T
@@ -9,27 +9,27 @@ export interface OriginStackBinder {
 }
 
 export class _OriginContextTracker {
-    private readonly _store: AsyncLocalStorage<Origin_Entity | undefined>
+    private readonly _store: AsyncLocalStorage<OriginEntity | undefined>
     constructor() {
-        this._store = new AsyncLocalStorage<Origin_Entity | undefined>()
+        this._store = new AsyncLocalStorage<OriginEntity | undefined>()
     }
 
-    get current(): Origin_Entity | undefined {
+    get current(): OriginEntity | undefined {
         return this._store.getStore()
     }
 
-    firstOfType<X extends Origin_Entity>(t: AnyCtor<X>): X {
+    firstOfType<X extends OriginEntity>(t: AnyCtor<X>): X {
         let current = this._store.getStore()
         while (current) {
             if (current instanceof t) {
                 return current
             }
-            current = current["__parent__"]()?.assert(Origin_Entity)
+            current = current["__parent__"]()?.assert(OriginEntity)
         }
         throw new Error(`No origin of type ${t.name} found in the current origin stack`)
     }
 
-    disposableOriginModifier(origin: Origin_Entity): Disposable {
+    disposableOriginModifier(origin: OriginEntity): Disposable {
         const curOrigin = this._store.getStore()
         this._store.enterWith(origin)
         return {
@@ -39,7 +39,7 @@ export class _OriginContextTracker {
         }
     }
 
-    binder(origin: MaybeDoddle<Origin_Entity>): OriginStackBinder {
+    binder(origin: MaybeDoddle<OriginEntity>): OriginStackBinder {
         const runner = this
         return {
             run<T>(callback: () => T): T {
@@ -48,17 +48,17 @@ export class _OriginContextTracker {
             },
             bind<F extends (...args: any[]) => any>(fn: F): F {
                 const boundOrigin = origin
-                return runner._bind(boundOrigin as Doddle<Origin_Entity>, fn)
+                return runner._bind(boundOrigin as Doddle<OriginEntity>, fn)
             }
         }
     }
 
-    private _run<T>(origin: Origin_Entity, callback: () => T): T {
+    private _run<T>(origin: OriginEntity, callback: () => T): T {
         return this._store.run(origin, callback)
     }
 
     private _bindIterator(
-        boundOrigin: Doddle<Origin_Entity> | Origin_Entity,
+        boundOrigin: Doddle<OriginEntity> | OriginEntity,
         iterator: Iterator<any>
     ): Iterator<any> {
         const runner = this
@@ -86,7 +86,7 @@ export class _OriginContextTracker {
     }
 
     private _bindIterable<It extends Iterable<any>>(
-        boundOrigin: Doddle<Origin_Entity> | Origin_Entity,
+        boundOrigin: Doddle<OriginEntity> | OriginEntity,
         iterable: It
     ) {
         const iterator = iterable[Symbol.iterator]()
@@ -99,7 +99,7 @@ export class _OriginContextTracker {
         return boundIterator
     }
 
-    private _bind<F extends (...args: any[]) => any>(origin: Doddle<Origin_Entity>, fn: F): F {
+    private _bind<F extends (...args: any[]) => any>(origin: Doddle<OriginEntity>, fn: F): F {
         const self = this
         return function boundRunFunction(this: any, ...args: any[]) {
             const result = self._run(pull(origin), () => fn.apply(this, args))

@@ -4,22 +4,22 @@ import { doddlify } from "doddle"
 import { omit, omitBy } from "lodash"
 import { MakeError } from "../../error"
 import { apps } from "../../idents/apps"
-import { Pod_Template, type Pod_Props } from "../pod"
+import { PodTemplate, type PodProps } from "../pod"
 
 export interface DeploymentStrategyRollingUpdate extends CDK.RollingUpdateDeployment {
     type: "RollingUpdate"
 }
-export interface Deployment_Strategy_Recreate {
+export interface DeploymentStrategyRecreate {
     type: "Recreate"
 }
-export type Deployment_Strategy = DeploymentStrategyRollingUpdate | Deployment_Strategy_Recreate
+export type DeploymentStrategy = DeploymentStrategyRollingUpdate | DeploymentStrategyRecreate
 
 export type DeploymentProps<Ports extends string> = Omit<
     CDK.DeploymentSpec,
     "selector" | "template" | "strategy"
 > & {
-    $template: Pod_Props<Ports>
-    $strategy?: Deployment_Strategy
+    $template: PodProps<Ports>
+    $strategy?: DeploymentStrategy
 }
 export type DeploymentRef<Ports extends string> = ResourceRef<apps.v1.Deployment._> & {
     __PORTS__: Ports
@@ -83,7 +83,7 @@ export class Deployment<Name extends string, Ports extends string = string> exte
 
     @doddlify
     get template() {
-        const podTemplate = new Pod_Template(this, this.name, this.props.$template)
+        const podTemplate = new PodTemplate(this, this.name, this.props.$template)
         podTemplate.meta.add("%app", this.name)
         return podTemplate
     }

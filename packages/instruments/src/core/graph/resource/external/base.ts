@@ -1,5 +1,5 @@
 import { Meta } from "@k8ts/metadata"
-import { Origin_External } from "../../origin/external"
+import { OriginExternal } from "../../origin/external"
 import type { IdentKind } from "../api-kind"
 import { Resource } from "../entity"
 import type { RefKey } from "../ref-key"
@@ -27,7 +27,7 @@ export class External<K extends IdentKind> extends Resource<string, any> {
     }
 
     protected __origin__() {
-        return Origin_External.instance
+        return OriginExternal.instance
     }
     get namespace() {
         return this.meta.tryGet("namespace")

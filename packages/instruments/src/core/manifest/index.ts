@@ -1,12 +1,12 @@
 import { Embedder } from "../../utils/embedder"
 import { Resource } from "../graph/resource/entity"
-export interface Manifest_Metadata {
+export interface ManifestMetadata {
     labels: Record<string, string>
     annotations: Record<string, string>
     name: string
     namespace?: string
 }
-export interface Manifest_Ident {
+export interface ManifestIdent {
     kind: string
     apiVersion: string
 }

@@ -1,7 +1,7 @@
 import { InstrumentsError } from "../../../../error"
 import type { IdentKind } from "../api-kind"
 import type { External } from "../external"
-import { type External_Props } from "../external"
+import { type ExternalProps } from "../external"
 import type { ResourceRef } from "../reference"
 /** Input type for reference keys. Accepts either a RefKey instance or its string representation. */
 export type RefKey_Input = RefKey | RefKey["string"]
@@ -148,7 +148,7 @@ export class RefKey<K extends IdentKind = IdentKind, Name extends string = strin
      * @param options - Optional external properties configuration
      * @returns An External instance with the specified features
      */
-    External(options?: External_Props<K>): External<K> {
+    External(options?: ExternalProps<K>): External<K> {
         const External = require("../external").External
 
         return new External(this, options ?? {}) as any

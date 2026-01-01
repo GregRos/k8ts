@@ -80,7 +80,7 @@ class FwRef_Proxied<To extends ResourceRef = ResourceRef> {
     }
 
     get clazz() {
-        return this.#props.class ?? (require("../top").Rsc_Top as AnyCtor<To>)
+        return this.#props.class ?? (require("../top").RscTop as AnyCtor<To>)
     }
 
     get namespace() {
@@ -114,7 +114,7 @@ class FwRef_Proxied<To extends ResourceRef = ResourceRef> {
         if (!other) {
             return false
         }
-        // Resource_Top has a key property, but Resource_Child doesn't
+        // ResourceTop has a key property, but ResourceChild doesn't
         // However in that case, the kind will be different anyway
         // since FwRefs are just for top resources.
         return this.key.equals(other.key)
@@ -145,8 +145,8 @@ class FwRef_Handler<T extends ResourceRef> implements ProxyHandler<T> {
         return result
     }
     getPrototypeOf(target: T) {
-        const Rsc_Top = require("../top").Rsc_Top
-        return this._props.class?.prototype ?? Rsc_Top.prototype
+        const RscTop = require("../top").RscTop
+        return this._props.class?.prototype ?? RscTop.prototype
     }
     has(target: T, prop: PropertyKey) {
         const { _props, _subject } = this

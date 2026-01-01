@@ -1,8 +1,8 @@
-import type { Ident_ResourcePart } from "./api-kind"
+import type { IdentResourcePart } from "./api-kind"
 import { Resource } from "./entity"
 
 export abstract class ResourcePart<Props extends object = object> extends Resource<string, Props> {
-    abstract get ident(): Ident_ResourcePart
+    abstract get ident(): IdentResourcePart
     #parent: Resource
     constructor(parent: Resource, name: string, props: Props) {
         super(name, props)

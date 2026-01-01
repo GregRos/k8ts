@@ -2,13 +2,13 @@ import { seq } from "doddle"
 import { defaultsDeep, merge } from "lodash"
 import { displayers } from "../../../utils/displayers"
 import {
-    Cli_Flag,
-    Cli_OptionValueTerm,
-    Cli_VerbatimTerm,
+    CliFlag,
+    CliOptionValueTerm,
+    CliVerbatimTerm,
     type Cli_sTermJoiner,
     type CliTerm
 } from "./cli-term"
-import type { Cli_Record_ArgMap, Cli_sFlag } from "./types"
+import type { Cli_sFlag, CliRecordArgMap } from "./types"
 
 export interface CliCommandBuilderOptions {
     joiner: Cli_sTermJoiner
@@ -33,16 +33,16 @@ export class CmdBuilder {
     }
 
     flag(...flags: Cli_sFlag[]) {
-        const flagTerms = flags.map(flag => new Cli_Flag(flag))
+        const flagTerms = flags.map(flag => new CliFlag(flag))
         return this._withArgs(terms => terms.concat(flagTerms))
     }
 
     verbatim(...values: string[]) {
-        const verbatimTerms = values.map(value => new Cli_VerbatimTerm(value))
+        const verbatimTerms = values.map(value => new CliVerbatimTerm(value))
         return this._withArgs(terms => terms.concat(verbatimTerms))
     }
 
-    option(args: Cli_Record_ArgMap) {
+    option(args: CliRecordArgMap) {
         const map = new Map(Object.entries(args)) as Map<Cli_sFlag, string>
         const optionTerms = seq(map)
             .map(([key, value]) => {
@@ -55,7 +55,7 @@ export class CmdBuilder {
                     joiner = " "
                     key = key.slice(0, -1) as Cli_sFlag
                 }
-                return new Cli_OptionValueTerm(key, joiner, value)
+                return new CliOptionValueTerm(key, joiner, value)
             })
             .toArray()
             .pull()

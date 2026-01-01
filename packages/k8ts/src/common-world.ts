@@ -1,5 +1,5 @@
 import type { ResourceConstructor } from "@k8ts/instruments"
-import { World_Entity, type World_Props } from "./origins"
+import { WorldEntity, type WorldProps } from "./origins"
 import {
     ClusterRole,
     ClusterRoleBinding,
@@ -61,10 +61,10 @@ const defaultKindPairs = [
     ClusterRoleBinding
 ] as const
 
-export class World<MoreKinds extends ResourceConstructor[] = []> extends World_Entity<
+export class World<MoreKinds extends ResourceConstructor[] = []> extends WorldEntity<
     [...typeof defaultKindPairs, ...MoreKinds]
 > {
-    constructor(name: string, props?: World_Props<[...typeof defaultKindPairs, ...MoreKinds]>) {
+    constructor(name: string, props?: WorldProps<[...typeof defaultKindPairs, ...MoreKinds]>) {
         props ??= {}
         props.kinds ??= []
         props.kinds.push(...(defaultKindPairs as any))

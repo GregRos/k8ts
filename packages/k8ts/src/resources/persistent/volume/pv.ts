@@ -10,23 +10,23 @@ import { parseBackend } from "./parse-backend"
 
 const StorageClassKind = storage.v1.StorageClass._
 
-export interface Pv_Backend_HostPath {
+export interface PvBackendHostPath {
     kind: "HostPath"
     hostpathType: HostPathType
     path: string
 }
-export interface Pv_Backend_Local {
+export interface PvBackendLocal {
     kind: "Local"
     path: string
 }
-export interface Pv_Backend_Nfs {
+export interface PvBackendNfs {
     kind: "NFS"
     server: string
     path: string
 }
 
-export type PvBackend = Pv_Backend_HostPath | Pv_Backend_Local | Pv_Backend_Nfs
-export interface Pv_Props_K8ts<Mode extends PvMode = PvMode> {
+export type PvBackend = PvBackendHostPath | PvBackendLocal | PvBackendNfs
+export interface PvPropsK8ts<Mode extends PvMode = PvMode> {
     $accessModes: PvAccessModes
     $storageClass?: ResourceRef<storage.v1.StorageClass._>
     $mode?: Mode
@@ -44,7 +44,7 @@ export type PvRef<Mode extends PvMode = PvMode> = ResourceRef<v1.PersistentVolum
 export class Pv<
     Mode extends PvMode = "Filesystem",
     Name extends string = string
-> extends ResourceTop<Name, Pv_Props_K8ts<Mode>> {
+> extends ResourceTop<Name, PvPropsK8ts<Mode>> {
     __MODE__!: Mode
     get ident() {
         return v1.PersistentVolume._
