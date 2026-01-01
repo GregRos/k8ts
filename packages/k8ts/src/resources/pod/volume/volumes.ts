@@ -69,7 +69,7 @@ export type Pod_Volume_Backend_Known_Paths<T extends Pod_Volume_Backend> = strin
 export abstract class Pod_Volume<
     P extends Pod_Volume_Backend = Pod_Volume_Backend
 > extends Rsc_Part<P> {
-    get kind() {
+    get ident() {
         return v1.Pod.Volume._
     }
 

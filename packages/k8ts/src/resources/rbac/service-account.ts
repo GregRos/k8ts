@@ -10,7 +10,7 @@ export class ServiceAccount<Name extends string = string> extends Rsc_Top<
     Name,
     ServiceAccount_Props
 > {
-    get kind() {
+    get ident() {
         return v1.ServiceAccount._
     }
     protected body(): CDK.KubeServiceAccountProps {

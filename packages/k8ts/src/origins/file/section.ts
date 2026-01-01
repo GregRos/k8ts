@@ -18,7 +18,7 @@ export interface File_Section_Props<Exported extends Rsc_Ref = Rsc_Ref>
 }
 
 export class Origin_Section extends Origin_Exporter<File_Section_Props> {
-    get kind() {
+    get ident() {
         return "[k8ts] File/Section"
     }
     #_ = doddle(() => {

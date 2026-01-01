@@ -8,7 +8,7 @@ import type { Rsc_Ref } from "./refable"
 
 /** Expands the resources exported by an Origin_Exported into a dictionary of name to FwRef. */
 export type FwRef_Exports_ByKey<Exports extends Rsc_Ref = Rsc_Ref> = {
-    [E in Exports as `${E["kind"]["name"]}/${E["name"]}`]: FwRef<E>
+    [E in Exports as `${E["ident"]["name"]}/${E["name"]}`]: FwRef<E>
 }
 /**
  * A type describing all resources exported by an {@link Origin_Exporter} as forward references.
@@ -146,7 +146,7 @@ class FwRef_Exports_Handler<Entity extends Origin_Exporter> implements ProxyHand
             }),
             origin: this.entity,
             resolver: this.exported
-                .first(exp => exp.node.name === refKey.name && exp.node.kind.equals(refKey.kind))
+                .first(exp => exp.node.name === refKey.name && exp.node.ident.equals(refKey.kind))
                 .map(x => {
                     if (x == null) {
                         throw new ProxyOperationError(

@@ -10,7 +10,7 @@ export class Assembler_RscLoader extends Emittery<Assembler_RscLoaderEvents> {
         let names = new Map<string, Rsc_Node>()
         const nameRegexp = /^[a-zA-Z0-9][a-zA-Z0-9_-]*$/
         for (const resource of resources) {
-            const name = [resource.kind.name, resource.namespace, resource.name]
+            const name = [resource.ident.name, resource.namespace, resource.name]
                 .filter(Boolean)
                 .join("/")
             const existing = names.get(name)

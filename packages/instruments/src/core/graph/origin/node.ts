@@ -13,7 +13,7 @@ import { type KindMapInput } from "./kind-map"
         return ""
     },
     pretty(origin, format) {
-        const kindName = chalk.greenBright.bold(origin.kind)
+        const kindName = chalk.greenBright.bold(origin.ident)
         const resourceName = chalk.cyan(origin.name)
         const pref = this.prefix!()
 
@@ -27,11 +27,11 @@ export class OriginNode extends Node<OriginNode, Origin_Entity> {
     get meta() {
         return this.entity.meta
     }
-    get kind() {
-        return this.entity.kind
+    get ident() {
+        return this.entity.ident
     }
     get shortFqn() {
-        return `${this.kind}/${this.name}`
+        return `${this.ident}/${this.name}`
     }
     get inheritedMeta(): Meta {
         const self = this

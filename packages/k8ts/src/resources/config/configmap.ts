@@ -13,7 +13,7 @@ export class ConfigMap<Name extends string = string, Keys extends string = strin
     get keys(): Keys[] {
         return Object.keys(this.props.$data) as Keys[]
     }
-    get kind() {
+    get ident() {
         return v1.ConfigMap._
     }
 

@@ -14,7 +14,7 @@ export class Container_Device_Mount extends Rsc_Part<Container_Mount_Device_Prop
     constructor(parent: Rsc_Entity, props: Container_Mount_Device_Props) {
         super(parent, props.$backend.name, props)
     }
-    get kind() {
+    get ident() {
         return v1.Pod.Container.DeviceMount._ satisfies Ident_Rsc_Part
     }
     get backend() {

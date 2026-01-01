@@ -12,7 +12,7 @@ export type World_Props<Kinds extends Rsc_Ctor_Of[]> = Origin_Props<Kinds[number
 export class World_Entity<Kinds extends Rsc_Ctor_Of[] = Rsc_Ctor_Of[]> extends Origin_Entity<
     World_Props<Kinds>
 > {
-    get kind() {
+    get ident() {
         return "[k8ts] World"
     }
     #_ = (() => {

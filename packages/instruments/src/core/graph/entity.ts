@@ -11,7 +11,7 @@ export type RefLike = {
         name: string
         namespace?: string
     }
-    kind: any
+    ident: any
     name: string
     assert<Inst extends RefLike>(cls: abstract new (...args: any[]) => Inst): Inst
     is<Inst extends RefLike>(cls: abstract new (...args: any[]) => Inst): this is Inst
@@ -31,7 +31,7 @@ export abstract class Entity<
         return this._ownKids
     }
     abstract get ref(): RefLike["ref"]
-    abstract readonly kind: any
+    abstract readonly ident: any
     private readonly _ID = (() => {
         return globalEntityId++
     })()
@@ -45,13 +45,13 @@ export abstract class Entity<
             `This Resource ${this} is not compatible with the class ${getNiceClassName(cls)}.`
         )
     }
-    is<K extends this["kind"]>(kind: K): this is { kind: K }
+    is<K extends this["ident"]>(ident: K): this is { ident: K }
     is<Inst extends _EntRefType = _EntRefType>(cls: AnyCtor<Inst>): this is Inst
     is(cls: any): boolean {
         if (typeof cls === "function") {
             return this instanceof cls
         }
-        return this.kind.equals(cls)
+        return this.ident.equals(cls)
     }
     abstract equals(other: any): boolean
 

@@ -46,7 +46,7 @@ export class Pv<
     Name extends string = string
 > extends Rsc_Top<Name, Pv_Props_K8ts<Mode>> {
     __MODE__!: Mode
-    get kind() {
+    get ident() {
         return v1.PersistentVolume._
     }
 

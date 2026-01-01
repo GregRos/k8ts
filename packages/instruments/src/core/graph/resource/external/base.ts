@@ -33,7 +33,7 @@ export class External<K extends Ident_Kind> extends Rsc_Entity<string, any> {
         return this.meta.tryGet("namespace")
     }
 
-    get kind() {
+    get ident() {
         return this.key.kind
     }
 }

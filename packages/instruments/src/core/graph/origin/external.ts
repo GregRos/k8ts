@@ -6,7 +6,7 @@ import type { Origin_Props } from "./node"
  * They're expected to already exist in the target cluster.
  */
 export class Origin_External extends Origin_Entity {
-    get kind() {
+    get ident() {
         return "[k8ts] External"
     }
     private constructor() {

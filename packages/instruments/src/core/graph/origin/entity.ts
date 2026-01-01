@@ -15,7 +15,7 @@ import { OriginContextTracker } from "./tracker"
 @displayers({
     simple: x => `[${x.shortFqn}]`,
     pretty(origin) {
-        const kindPart = chalk.greenBright.bold(origin.kind)
+        const kindPart = chalk.greenBright.bold(origin.ident)
         const originName = chalk.cyan(origin.name)
         return `${kindPart}/${originName}`
     }
@@ -26,11 +26,11 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
 > {
     get ref() {
         return {
-            kind: this.kind,
+            kind: this.ident,
             name: this.name
         }
     }
-    abstract get kind(): string
+    abstract get ident(): string
     private _emitter = OriginEventsEmitter()
     private readonly _ownResources: Rsc_Entity[] = []
     readonly meta: Meta

@@ -29,7 +29,7 @@ export interface ClusterRole_Props<Rules extends ClusterRole_Rule = ClusterRole_
 }
 
 export class ClusterRole<Name extends string = string> extends Rsc_Top<Name, ClusterRole_Props> {
-    get kind() {
+    get ident() {
         return rbac.v1.ClusterRole._
     }
     constructor(name: Name, props: ClusterRole_Props) {

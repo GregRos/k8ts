@@ -7,7 +7,7 @@ export class Namespace<Name extends string = string> extends Rsc_Top<Name, Names
         super(name, props)
     }
     declare name: Name
-    get kind() {
+    get ident() {
         return v1.Namespace._
     }
 

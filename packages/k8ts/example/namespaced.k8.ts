@@ -39,6 +39,7 @@ export default W.File("deployment2.yaml", {
     *FILE(FILE) {
         yield FILE.Section("inner", {
             *SECTION(SECTION) {
+                SECTION.__entity__
                 const claim = new Pvc("claim", {
                     $bind: cool,
                     $accessModes: ["ReadWriteOnce"],

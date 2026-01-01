@@ -16,7 +16,7 @@ export class Container_Volume_Mount extends Rsc_Part<Container_Volume_Mount_Prop
     constructor(parent: Rsc_Entity, props: Container_Volume_Mount_Props) {
         super(parent, props.$backend.name, props)
     }
-    get kind() {
+    get ident() {
         return v1.Pod.Container.VolumeMount._
     }
 

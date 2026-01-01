@@ -9,10 +9,10 @@ export type Rsc_Ref<
     _Kind extends Ident_Like = Ident_Like,
     Name extends string = string
 > = RefLike & {
-    kind: _Kind
+    ident: _Kind
     name: Name
     namespace?: string
-    is<_Kind2 extends Ident_Like>(kind: _Kind2): this is Rsc_Ref<_Kind2>
+    is<_Ident extends Ident_Like>(ident: _Ident): this is Rsc_Ref<_Ident>
     equals(other: any): boolean
     node: Rsc_Node
 }

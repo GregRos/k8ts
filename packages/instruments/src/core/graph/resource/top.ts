@@ -12,10 +12,10 @@ export abstract class Rsc_Top<
 > extends Rsc_Entity<Name, Props> {
     private readonly _origin: Origin_Entity
     readonly meta: Meta
-    abstract readonly kind: Ident_Kind
+    abstract readonly ident: Ident_Kind
 
     get key() {
-        return this.kind.refKey({ name: this.name, namespace: this.namespace })
+        return this.ident.refKey({ name: this.name, namespace: this.namespace })
     }
     get disabled() {
         return this.meta.tryGet("#k8ts.org/disabled", "") !== ""
@@ -59,8 +59,8 @@ export abstract class Rsc_Top<
 
     protected __idents__(): Manifest_Ident {
         return {
-            apiVersion: this.kind.parent!.text,
-            kind: this.kind.name
+            apiVersion: this.ident.parent!.text,
+            kind: this.ident.name
         }
     }
 

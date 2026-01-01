@@ -20,7 +20,7 @@ export class CronJob<
     Name extends string = string,
     Cron extends Cron.Record = Cron.Record
 > extends Rsc_Top<Name, CronJob_Props<Cron>> {
-    get kind() {
+    get ident() {
         return batch.v1.CronJob._
     }
 

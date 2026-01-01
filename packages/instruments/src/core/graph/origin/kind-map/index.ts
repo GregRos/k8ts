@@ -14,7 +14,7 @@ interface NodeEntry {
 export type KindMapInput<Ks extends Rsc_Ctor_Of> = Ks[]
 type LookupKey = string | RefKey | AnyCtor<any> | Ident_Kind
 export class KindMap<Kinds extends Rsc_Ctor_Of = Rsc_Ctor_Of> {
-    __KINDS__!: Kinds["prototype"]["kind"]
+    __KINDS__!: Kinds["prototype"]["ident"]
     constructor(private _ownKinds: KindMapInput<Kinds>) {}
 
     [Symbol.iterator]() {
@@ -30,7 +30,7 @@ export class KindMap<Kinds extends Rsc_Ctor_Of = Rsc_Ctor_Of> {
     @doddlify
     private get _entriesSeq(): Seq<NodeEntry> {
         return seq(this._ownKinds).map(klass => {
-            const kind = klass.prototype.kind
+            const kind = klass.prototype.ident
             const entry: NodeEntry = {
                 kindName: kind.name,
                 class: klass,

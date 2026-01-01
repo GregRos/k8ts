@@ -19,7 +19,7 @@ export class HttpRoute<Name extends string, Ports extends string> extends Rsc_To
 > {
     declare name: Name
 
-    get kind() {
+    get ident() {
         return HttpRouteKind
     }
 

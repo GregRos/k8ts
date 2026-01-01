@@ -32,7 +32,7 @@ export class Service<
     Ports_Exposed extends string = string
 > extends Rsc_Top<Name, Service_Props<string, Ports_Exposed>> {
     __PORTS__!: Ports_Exposed
-    get kind() {
+    get ident() {
         return v1.Service._
     }
 

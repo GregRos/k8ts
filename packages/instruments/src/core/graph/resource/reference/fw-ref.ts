@@ -1,5 +1,6 @@
-import type { Doddle } from "doddle"
-import type { AnyCtor } from "what-are-you"
+import { seq, type Doddle } from "doddle"
+import { mapValues } from "lodash"
+import { getNiceClassName, type AnyCtor } from "what-are-you"
 import { RefKey } from "../ref-key"
 import { ProxyOperationError } from "./error"
 import type { Rsc_Ref } from "./refable"
@@ -48,15 +49,38 @@ export interface FwRef_Props<Referenced extends Rsc_Ref> {
     readonly origin: object
     readonly resolver: Doddle<Referenced>
 }
-
-class FwRef_Proxied<To extends Rsc_Ref> {
+const hiddenProperties = {
+    is(this: FwRef_Proxied, clsOrKind: any): boolean {
+        if (typeof clsOrKind === "function") {
+            return this.clazz.prototype instanceof clsOrKind || this instanceof clsOrKind
+        }
+        return this.kind.equals(clsOrKind)
+    },
+    assert(this: FwRef_Proxied, cls: abstract new (...args: any[]) => any): any {
+        if (hiddenProperties.is.call(this, cls)) {
+            return this as any
+        }
+        throw new Error(
+            `This Resource ${this} is not compatible with the class ${getNiceClassName(cls)}.`
+        )
+    }
+}
+class FwRef_Proxied<To extends Rsc_Ref = Rsc_Ref> {
     readonly #props: FwRef_Props<To>
     constructor(props: FwRef_Props<To>) {
         this.#props = props
+        Object.defineProperties(
+            this,
+            mapValues(hiddenProperties, prop => ({ value: prop.bind(this) }))
+        )
     }
 
     get name() {
         return this.#props.key.name
+    }
+
+    get clazz() {
+        return this.#props.class ?? (require("../top").Rsc_Top as AnyCtor<To>)
     }
 
     get namespace() {
@@ -108,9 +132,11 @@ class FwRef_Handler<T extends Rsc_Ref> implements ProxyHandler<T> {
         if (prop === "constructor") {
             return this._props.class
         }
+
         if (Reflect.has(_subject, prop)) {
             return Reflect.get(_subject, prop)
         }
+
         const resource = _subject["__pull__"]() as any
         const result = Reflect.get(resource, prop)
         if (typeof result === "function") {
@@ -151,10 +177,12 @@ class FwRef_Handler<T extends Rsc_Ref> implements ProxyHandler<T> {
     }
 
     defineProperty(_: any, property: string | symbol, desc: PropertyDescriptor): boolean {
-        throw this.#createImmutableError(`define property ${String(property)} on`)
+        const pulled = this._props.resolver.pull() as any
+        return Reflect.defineProperty(pulled, property, desc)
     }
     deleteProperty(_: T, p: string | symbol): boolean {
-        throw this.#createImmutableError(`delete property ${String(p)} from`)
+        const pulled = this._props.resolver.pull() as any
+        return Reflect.deleteProperty(pulled, p)
     }
     preventExtensions(): boolean {
         return true
@@ -163,13 +191,18 @@ class FwRef_Handler<T extends Rsc_Ref> implements ProxyHandler<T> {
         return false
     }
     set(_: T, p: string | symbol): boolean {
-        throw this.#createImmutableError(`set property ${String(p)} on`)
+        const pulled = this._props.resolver.pull() as any
+        return Reflect.set(pulled, p, (_ as any)[p])
     }
     ownKeys(): ArrayLike<string | symbol> {
         const pulled = this._props.resolver.pull() as any
-        return [...Reflect.ownKeys(this._subject), ...Reflect.ownKeys(pulled)]
+        const keys1 = Reflect.ownKeys(this._subject)
+        const keys2 = Reflect.ownKeys(pulled)
+        const uniq = seq(keys1).concat(keys2).uniq().toArray()
+        return uniq.pull()
     }
     setPrototypeOf(): boolean {
-        throw this.#createImmutableError(`set the prototype of`)
+        const pulled = this._props.resolver.pull() as any
+        return Reflect.setPrototypeOf(pulled, pulled)
     }
 }

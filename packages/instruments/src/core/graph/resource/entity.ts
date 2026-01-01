@@ -15,7 +15,7 @@ export abstract class Rsc_Entity<
     Name extends string = string,
     Props extends object = object
 > extends Entity<Rsc_Node, Rsc_Entity, Rsc_Ref> {
-    abstract get kind(): Ident
+    abstract get ident(): Ident
 
     with(callback: (self: this) => void) {
         callback(this)
@@ -26,7 +26,7 @@ export abstract class Rsc_Entity<
 
     get ref() {
         return {
-            kind: this.kind.name,
+            kind: this.ident.name,
             name: this.name,
             namespace: this.namespace
         }
@@ -66,7 +66,7 @@ export abstract class Rsc_Entity<
     }
 
     get shortFqn() {
-        return [this.node.origin.name, [this.kind.name, this.name].filter(Boolean).join("/")].join(
+        return [this.node.origin.name, [this.ident.name, this.name].filter(Boolean).join("/")].join(
             ":"
         )
     }

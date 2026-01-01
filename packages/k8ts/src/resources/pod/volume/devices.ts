@@ -12,7 +12,7 @@ interface Pod_Device_Backend_Pvc {
 export type Pod_Device_Backend = Pod_Device_Backend_Pvc
 
 export class Pod_Device extends Rsc_Part<Pod_Device_Backend_Pvc> {
-    get kind() {
+    get ident() {
         return v1.Pod.Device._
     }
 

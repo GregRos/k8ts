@@ -16,7 +16,7 @@ import { RefKey } from "./ref-key"
     pretty(resource, format) {
         format ??= "global"
 
-        let kindName = chalk.greenBright(resource.kind.name)
+        let kindName = chalk.greenBright(resource.ident.name)
         if (format !== "lowkey") {
             kindName = chalk.bold(kindName)
         }
@@ -41,16 +41,16 @@ import { RefKey } from "./ref-key"
 })
 export class Rsc_Node extends Node<Rsc_Node, Rsc_Entity> {
     get fullFqn() {
-        return [this.kind.dns, this.namespace, this.name].filter(Boolean).join("/")
+        return [this.ident.dns, this.namespace, this.name].filter(Boolean).join("/")
     }
     get key(): RefKey {
-        return new RefKey(this.kind, {
+        return new RefKey(this.ident, {
             name: this.name,
             namespace: this.namespace
         })
     }
-    get kind() {
-        return this.entity.kind as Ident_Kind
+    get ident() {
+        return this.entity.ident as Ident_Kind
     }
 
     get namespace() {
@@ -120,8 +120,8 @@ export class Rsc_Node extends Node<Rsc_Node, Rsc_Entity> {
         return Displayers.get(this).pretty(format)
     }
 
-    hasKind(kind: Ident_Like) {
-        return this.kind.equals(kind)
+    hasIdent(ident: Ident_Like) {
+        return this.ident.equals(ident)
     }
     constructor(
         readonly origin: OriginNode,

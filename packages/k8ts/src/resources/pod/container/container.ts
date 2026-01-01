@@ -52,7 +52,7 @@ export class Pod_Container<Ports extends string = string> extends Rsc_Part<
     Pod_Container_Props<Ports>
 > {
     __PORTS__!: Ports
-    get kind() {
+    get ident() {
         return v1.Pod.Container._
     }
 
@@ -153,7 +153,7 @@ export class Pod_Container<Ports extends string = string> extends Rsc_Part<
                 } as CDK.EnvFromSource
             } else {
                 throw new Error(
-                    `EnvFrom source reference "${source}" must be a ConfigMap or Secret, but was ${source.kind}`
+                    `EnvFrom source reference "${source}" must be a ConfigMap or Secret, but was ${source.ident}`
                 )
             }
         })

@@ -33,7 +33,7 @@ export interface Pod_Props<Ports extends string> extends Pod_Props_Original {
 }
 
 export class Pod_Template<Ports extends string = string> extends Rsc_Part<Pod_Props<Ports>> {
-    get kind() {
+    get ident() {
         return v1.PodTemplate._
     }
     private readonly _containers = seq(() => this.props.$POD(new Pod_Scope(this)))
@@ -147,7 +147,7 @@ export class Pod_Scope {
     Volume(name: string, options: Pod_Volume_Backend): Pod_Volume {
         {
             const backend = options.$backend
-            if (backend.kind === "HostPath") {
+            if ("kind" in backend && backend.kind === "HostPath") {
                 return new Pod_Volume_HostPath(this._parent, name, options as any)
             }
         }
@@ -159,7 +159,7 @@ export class Pod_Scope {
         } else if (backend.is(v1.PersistentVolumeClaim._)) {
             return new Pod_Volume_Pvc(this._parent, name, options as any)
         }
-        throw new Error(`Unsupported volume backend kind: ${backend.kind}`)
+        throw new Error(`Unsupported volume backend kind: ${backend.ident}`)
     }
     Device(name: string, options: Pod_Device_Backend) {
         return new Pod_Device(this._parent, name, options)
