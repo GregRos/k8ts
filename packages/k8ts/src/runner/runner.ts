@@ -1,6 +1,5 @@
 import { GitTrace, Trace, type ForwardExports } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
-import chalk from "chalk"
 import { seq } from "doddle"
 import Emittery from "emittery"
 import StackTracey from "stacktracey"
@@ -10,9 +9,7 @@ import {
     AssemblerOptions,
     ProgressOptions,
     ProgressShower
-} from "./exporter"
-import { proverbsPath } from "./paths"
-import { Proverbs } from "./silly/proverbs"
+} from "../assembler"
 import { Summarizer } from "./summarizer"
 
 export interface RunnerOptions extends AssemblerOptions {
@@ -64,9 +61,5 @@ export class Runner extends Emittery<AssemblerEventsTable> {
         await visualizer
         console.log()
         console.log(viz)
-        try {
-            const proverbs = await Proverbs.make(proverbsPath)
-            console.log(chalk.italic.magentaBright(proverbs.random))
-        } catch {}
     }
 }

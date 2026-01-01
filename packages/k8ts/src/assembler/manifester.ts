@@ -1,7 +1,7 @@
 import { Manifest, ManifestSourceEmbedder, ResourceNode, ResourceTop } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { cloneDeep, cloneDeepWith, isEmpty, unset } from "lodash"
-import { version } from "../../version"
+import { version } from "../version"
 export interface ManifesterOptions {
     cwd?: string
 }

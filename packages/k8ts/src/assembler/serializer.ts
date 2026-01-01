@@ -7,7 +7,7 @@ import {
 import { CDK } from "@k8ts/sample-interfaces"
 import Emittery from "emittery"
 import { dump, type DumpOptions } from "js-yaml"
-import { MakeError } from "../../error"
+import { MakeError } from "../error"
 
 export interface YamlSerializerOptions {
     jsYamlOptions: DumpOptions
