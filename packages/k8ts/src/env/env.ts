@@ -1,13 +1,13 @@
-import type { Rsc_Ref } from "@k8ts/instruments"
+import type { ResourceRef } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { isObject } from "what-are-you"
 import { MakeError } from "../error"
 import { v1 } from "../idents/index"
-import { type Env_From, type Env_Leaf, type Env_Value } from "./types"
+import { type EnvValue, type EnvValuePrimitive, type EnvValueSource } from "./types"
 import { isValidEnvVarName } from "./validate-name"
 
-export class EnvBuilder<M extends Record<keyof M, Env_Leaf>> {
+export class EnvBuilder<M extends Record<keyof M, EnvValue>> {
     constructor(private readonly _env: M) {
         for (const key of Object.keys(_env)) {
             if (!isValidEnvVarName(key)) {
@@ -22,7 +22,7 @@ export class EnvBuilder<M extends Record<keyof M, Env_Leaf>> {
         return this._env
     }
 
-    private _envFromSecret(value: Env_From): CDK.EnvVarSource {
+    private _envFromSecret(value: EnvValueSource): CDK.EnvVarSource {
         return {
             secretKeyRef: {
                 name: value.$backend.name,
@@ -32,8 +32,8 @@ export class EnvBuilder<M extends Record<keyof M, Env_Leaf>> {
         }
     }
 
-    private _envFromConfigMap<S extends Rsc_Ref<v1.ConfigMap._>>(
-        value: Env_From
+    private _envFromConfigMap<S extends ResourceRef<v1.ConfigMap._>>(
+        value: EnvValueSource
     ): CDK.EnvVarSource {
         return {
             configMapKeyRef: {
@@ -44,7 +44,7 @@ export class EnvBuilder<M extends Record<keyof M, Env_Leaf>> {
         }
     }
 
-    *[Symbol.iterator](): IterableIterator<[string, Env_Value]> {
+    *[Symbol.iterator](): IterableIterator<[string, EnvValuePrimitive]> {
         for (const entry of Object.entries(this._env)) {
             yield entry as any
         }
@@ -90,7 +90,7 @@ export class EnvBuilder<M extends Record<keyof M, Env_Leaf>> {
     }
 
     get entries() {
-        return Object.entries(this._env) as [string, Env_Leaf][]
+        return Object.entries(this._env) as [string, EnvValue][]
     }
 
     static make<M>(env?: M) {
@@ -100,7 +100,7 @@ export class EnvBuilder<M extends Record<keyof M, Env_Leaf>> {
 
 export function Env<
     M extends {
-        [key in keyof M]: Env_Leaf
+        [key in keyof M]: EnvValue
     }
 >(env?: M) {
     return EnvBuilder.make(env)

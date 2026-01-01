@@ -1,4 +1,4 @@
-import { OriginNode, Rsc_Node, type Node, type Rsc_Top } from "@k8ts/instruments"
+import { OriginNode, ResourceNode, type Node, type ResourceTop } from "@k8ts/instruments"
 import Emittery from "emittery"
 import { MakeError } from "../../error"
 export class Assembler_RscLoader extends Emittery<Assembler_RscLoaderEvents> {
@@ -6,8 +6,8 @@ export class Assembler_RscLoader extends Emittery<Assembler_RscLoaderEvents> {
         super()
     }
 
-    private _checkNames(resources: Rsc_Node[]) {
-        let names = new Map<string, Rsc_Node>()
+    private _checkNames(resources: ResourceNode[]) {
+        let names = new Map<string, ResourceNode>()
         const nameRegexp = /^[a-zA-Z0-9][a-zA-Z0-9_-]*$/
         for (const resource of resources) {
             const name = [resource.ident.name, resource.namespace, resource.name]
@@ -30,10 +30,10 @@ export class Assembler_RscLoader extends Emittery<Assembler_RscLoaderEvents> {
 
     async load(input: OriginNode) {
         // TODO: Handle ORIGINS that are referenced but not passed to the runner
-        let resources = [] as Rsc_Node[]
+        let resources = [] as ResourceNode[]
 
         const addResource = async (res: Node) => {
-            if (!(res instanceof Rsc_Node)) {
+            if (!(res instanceof ResourceNode)) {
                 throw new Error(`Expected ResourceNode, got ${res.constructor.name}`)
             }
             if (resources.some(r => r.equals(res))) {
@@ -56,7 +56,7 @@ export class Assembler_RscLoader extends Emittery<Assembler_RscLoaderEvents> {
 
             origin.entity["__emit__"]("resource/loaded", {
                 origin: origin.entity,
-                resource: res.entity as Rsc_Top
+                resource: res.entity as ResourceTop
             })
             resources.push(res)
         }
@@ -79,7 +79,7 @@ export class Assembler_RscLoader extends Emittery<Assembler_RscLoaderEvents> {
 }
 export interface Assembler_RscLoadedEvent {
     isExported: boolean
-    resource: Rsc_Node
+    resource: ResourceNode
 }
 
 export interface Assembler_RscLoaderEvents {

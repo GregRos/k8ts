@@ -1,10 +1,10 @@
-import type { Rsc_Ref } from "@k8ts/instruments"
+import type { ResourceRef } from "@k8ts/instruments"
 
-export type Env_Value = string | null | number | boolean | bigint | undefined
-export interface Env_From {
-    $backend: Rsc_Ref
+export type EnvValuePrimitive = string | null | number | boolean | bigint | undefined
+export interface EnvValueSource {
+    $backend: ResourceRef
     key: string
     optional?: boolean
 }
 
-export type Env_Leaf = string | null | number | boolean | bigint | undefined | Env_From
+export type EnvValue = EnvValuePrimitive | EnvValueSource

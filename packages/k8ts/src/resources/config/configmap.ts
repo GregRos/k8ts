@@ -1,4 +1,4 @@
-import { Rsc_Top, type DataSource } from "@k8ts/instruments"
+import { ResourceTop, type DataSource } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../idents/default"
 import { resolveDataSourceRecord } from "./resolver"
@@ -6,10 +6,10 @@ export interface ConfigMap_Props<Keys extends string = string> {
     $data: Record<Keys, DataSource>
 }
 
-export class ConfigMap<Name extends string = string, Keys extends string = string> extends Rsc_Top<
-    Name,
-    ConfigMap_Props<Keys>
-> {
+export class ConfigMap<
+    Name extends string = string,
+    Keys extends string = string
+> extends ResourceTop<Name, ConfigMap_Props<Keys>> {
     get keys(): Keys[] {
         return Object.keys(this.props.$data) as Keys[]
     }

@@ -1,23 +1,23 @@
 import type { AnyCtor } from "what-are-you"
 import type { RefLike } from "../../entity"
 import type { Ident_Like } from "../api-kind"
-import type { Rsc_Node } from "../node"
-export type Rsc_Ctor_Of<K extends Ident_Like = Ident_Like> = AnyCtor<Rsc_Ref<K>> & {
-    prototype: Rsc_Ref<K>
+import type { ResourceNode } from "../node"
+export type ResourceConstructor<K extends Ident_Like = Ident_Like> = AnyCtor<ResourceRef<K>> & {
+    prototype: ResourceRef<K>
 }
-export type Rsc_Ref<
+export type ResourceRef<
     _Kind extends Ident_Like = Ident_Like,
     Name extends string = string
 > = RefLike & {
     ident: _Kind
     name: Name
     namespace?: string
-    is<_Ident extends Ident_Like>(ident: _Ident): this is Rsc_Ref<_Ident>
+    is<_Ident extends Ident_Like>(ident: _Ident): this is ResourceRef<_Ident>
     equals(other: any): boolean
-    node: Rsc_Node
+    node: ResourceNode
 }
 
-export type Rsc_Ref_Keys_Of<X extends Rsc_Ref, Else = never> = [X] extends [
+export type KeysResourceRef<X extends ResourceRef, Else = never> = [X] extends [
     {
         keys: (infer K extends string)[]
     }

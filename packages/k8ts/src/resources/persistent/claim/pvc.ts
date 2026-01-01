@@ -1,12 +1,12 @@
-import { ResourcesSpec, Rsc_Top, Unit, type Rsc_Ref } from "@k8ts/instruments"
+import { ResourcesSpec, ResourceTop, Unit, type ResourceRef } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { Prefix$ } from "../../../_type/prefix$"
 import { MakeError } from "../../../error"
 import { v1 } from "../../../idents/default"
 import { storage } from "../../../idents/storage"
-import { Access } from "../access-mode"
-import type { Pv_VolumeMode } from "../block-mode"
-import type { Pv, Pv_Ref } from "../volume"
+import { parsePvAccessMode, type PvAccessModes } from "../access-mode"
+import type { PvMode } from "../block-mode"
+import type { Pv, PvRef } from "../volume"
 
 const StorageClassKind = storage.v1.StorageClass._
 
@@ -14,14 +14,14 @@ const pvc_ResourcesSpec = ResourcesSpec.make({
     storage: Unit.Data
 })
 type Pvc_Resources = Prefix$<(typeof pvc_ResourcesSpec)["__INPUT__"]>
-export interface Pvc_Props<Mode extends Pv_VolumeMode> extends Pvc_Resources {
-    $accessModes: Access
+export interface Pvc_Props<Mode extends PvMode> extends Pvc_Resources {
+    $accessModes: PvAccessModes
     $mode?: Mode
-    $storageClass?: Rsc_Ref<typeof StorageClassKind>
-    $bind?: Pv_Ref<Mode>
+    $storageClass?: ResourceRef<typeof StorageClassKind>
+    $bind?: PvRef<Mode>
 }
 
-export class Pvc<Mode extends Pv_VolumeMode, Name extends string = string> extends Rsc_Top<
+export class Pvc<Mode extends PvMode, Name extends string = string> extends ResourceTop<
     Name,
     Pvc_Props<Mode>
 > {
@@ -40,7 +40,7 @@ export class Pvc<Mode extends Pv_VolumeMode, Name extends string = string> exten
     protected body(): CDK.KubePersistentVolumeClaimProps {
         const self = this
         const { $storage, $accessModes, $mode, $storageClass, $bind } = self.props
-        const nAccessModes = Access.pv_parseAccessMode($accessModes)
+        const nAccessModes = parsePvAccessMode($accessModes)
         if (!$bind && !$storageClass) {
             throw new MakeError(
                 `While manifesting ${self.node.format("source")}, PVC that doesn't have a $bind must have a $storageClass.`

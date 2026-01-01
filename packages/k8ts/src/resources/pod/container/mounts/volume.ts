@@ -1,4 +1,4 @@
-import { Rsc_Part, type Rsc_Entity, type Rsc_Ref } from "@k8ts/instruments"
+import { ResourcePart, type Resource, type ResourceRef } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../../../idents"
 
@@ -7,13 +7,13 @@ export interface Container_Volume_Mount_Attrs<SubPaths extends string = string> 
     readOnly?: boolean
 }
 export interface Container_Volume_Mount_Source extends Container_Volume_Mount_Attrs {
-    $backend: Rsc_Ref<v1.Pod.Volume._>
+    $backend: ResourceRef<v1.Pod.Volume._>
 }
 export interface Container_Volume_Mount_Props extends Container_Volume_Mount_Source {
     mountPath: string
 }
-export class Container_Volume_Mount extends Rsc_Part<Container_Volume_Mount_Props> {
-    constructor(parent: Rsc_Entity, props: Container_Volume_Mount_Props) {
+export class Container_Volume_Mount extends ResourcePart<Container_Volume_Mount_Props> {
+    constructor(parent: Resource, props: Container_Volume_Mount_Props) {
         super(parent, props.$backend.name, props)
     }
     get ident() {

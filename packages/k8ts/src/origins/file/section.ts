@@ -1,4 +1,4 @@
-import { type Origin_Exporter_Props, type Rsc_Ref, Origin_Exporter } from "@k8ts/instruments"
+import { type Origin_Exporter_Props, type ResourceRef, Origin_Exporter } from "@k8ts/instruments"
 import { doddle, doddlify, seq } from "doddle"
 import type { v1 } from "../../idents"
 
@@ -11,9 +11,9 @@ export class File_Section_Scope {
         this.on = this._section.on
     }
 }
-export interface File_Section_Props<Exported extends Rsc_Ref = Rsc_Ref>
+export interface File_Section_Props<Exported extends ResourceRef = ResourceRef>
     extends Origin_Exporter_Props {
-    namespace?: Rsc_Ref<v1.Namespace._>
+    namespace?: ResourceRef<v1.Namespace._>
     SECTION(SCOPE: File_Section_Scope): Iterable<Exported>
 }
 
@@ -30,7 +30,7 @@ export class Origin_Section extends Origin_Exporter<File_Section_Props> {
     @doddlify
     protected __exports__() {
         return seq(
-            this._props.SECTION.call(this, new File_Section_Scope(this)) as Iterable<Rsc_Ref>
+            this._props.SECTION.call(this, new File_Section_Scope(this)) as Iterable<ResourceRef>
         ).cache()
     }
 }

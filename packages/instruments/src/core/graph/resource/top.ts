@@ -4,15 +4,15 @@ import { type Manifest, type Manifest_Ident, type Manifest_Metadata } from "../.
 import { Trace, TraceEmbedder } from "../../tracing"
 import type { Origin_Entity } from "../origin/entity"
 import { OriginContextTracker } from "../origin/tracker"
-import type { Ident_Kind } from "./api-kind"
-import { Rsc_Entity } from "./entity"
-export abstract class Rsc_Top<
+import type { IdentKind } from "./api-kind"
+import { Resource } from "./entity"
+export abstract class ResourceTop<
     Name extends string = string,
     Props extends object = object
-> extends Rsc_Entity<Name, Props> {
+> extends Resource<Name, Props> {
     private readonly _origin: Origin_Entity
     readonly meta: Meta
-    abstract readonly ident: Ident_Kind
+    abstract readonly ident: IdentKind
 
     get key() {
         return this.ident.refKey({ name: this.name, namespace: this.namespace })

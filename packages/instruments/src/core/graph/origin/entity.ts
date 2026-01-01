@@ -4,8 +4,8 @@ import { seq } from "doddle"
 import { mapValues } from "lodash"
 import { displayers } from "../../../utils/displayers"
 import { Entity } from "../entity"
-import { Rsc_Entity } from "../resource/entity"
-import type { Rsc_Ctor_Of, Rsc_Ref } from "../resource/reference/refable"
+import { Resource } from "../resource/entity"
+import type { ResourceConstructor, ResourceRef } from "../resource/reference/refable"
 import { OriginEventsEmitter, type Origin_EventMap } from "./events"
 import { KindMap } from "./kind-map"
 import { OriginNode, type Origin_Props } from "./node"
@@ -32,10 +32,10 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
     }
     abstract get ident(): string
     private _emitter = OriginEventsEmitter()
-    private readonly _ownResources: Rsc_Entity[] = []
+    private readonly _ownResources: Resource[] = []
     readonly meta: Meta
 
-    protected __attach_kid__(kid: Origin_Entity<Origin_Props<Rsc_Ctor_Of>>): void {
+    protected __attach_kid__(kid: Origin_Entity<Origin_Props<ResourceConstructor>>): void {
         super.__attach_kid__(kid)
         this.__emit__("origin/attached", {
             origin: this,
@@ -101,7 +101,7 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
         return this.node.shortFqn
     }
 
-    protected __attach_resource__(resources: Rsc_Entity | Iterable<Rsc_Entity>) {
+    protected __attach_resource__(resources: Resource | Iterable<Resource>) {
         resources = Symbol.iterator in resources ? resources : [resources]
         for (const resource of resources) {
             this._ownResources.push(resource)
@@ -121,7 +121,7 @@ export abstract class Origin_Entity<Props extends Origin_Props = Origin_Props> e
     }
 
     // We don't cache this because resources can be added dynamically
-    get resources(): Iterable<Rsc_Ref> {
+    get resources(): Iterable<ResourceRef> {
         const self = this
         return seq(function* () {
             for (const resource of self._ownResources) {

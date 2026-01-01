@@ -1,15 +1,15 @@
-import type { Ident_Rsc_Part } from "./api-kind"
-import { Rsc_Entity } from "./entity"
+import type { Ident_ResourcePart } from "./api-kind"
+import { Resource } from "./entity"
 
-export abstract class Rsc_Part<Props extends object = object> extends Rsc_Entity<string, Props> {
-    abstract get ident(): Ident_Rsc_Part
-    #parent: Rsc_Entity
-    constructor(parent: Rsc_Entity, name: string, props: Props) {
+export abstract class ResourcePart<Props extends object = object> extends Resource<string, Props> {
+    abstract get ident(): Ident_ResourcePart
+    #parent: Resource
+    constructor(parent: Resource, name: string, props: Props) {
         super(name, props)
         this.#parent = parent
     }
 
-    protected __parent__(): Rsc_Entity {
+    protected __parent__(): Resource {
         return this.#parent
     }
 

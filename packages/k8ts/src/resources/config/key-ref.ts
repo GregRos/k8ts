@@ -1,6 +1,6 @@
-import type { Rsc_Ref } from "@k8ts/instruments"
+import type { ResourceRef } from "@k8ts/instruments"
 
-export class ConfigKeyRef<Backend extends Rsc_Ref = Rsc_Ref, K extends string = string> {
+export class ConfigKeyRef<Backend extends ResourceRef = ResourceRef, K extends string = string> {
     constructor(
         readonly backend: Backend,
         public readonly key: K

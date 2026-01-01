@@ -4,17 +4,17 @@ import { displayers } from "../../../utils"
 import { Entity } from "../entity"
 import type { Origin_Entity } from "../origin"
 import type { Ident } from "./api-kind"
-import { Rsc_Node } from "./node"
-import { FwRef, type Rsc_Ref } from "./reference"
+import { ResourceNode } from "./node"
+import { FwRef, type ResourceRef } from "./reference"
 
 @displayers({
     simple: s => s.node,
     pretty: s => s.node
 })
-export abstract class Rsc_Entity<
+export abstract class Resource<
     Name extends string = string,
     Props extends object = object
-> extends Entity<Rsc_Node, Rsc_Entity, Rsc_Ref> {
+> extends Entity<ResourceNode, Resource, ResourceRef> {
     abstract get ident(): Ident
 
     with(callback: (self: this) => void) {
@@ -54,15 +54,15 @@ export abstract class Rsc_Entity<
         if (FwRef.is(other)) {
             return other.equals(this)
         }
-        if (other instanceof Rsc_Entity) {
+        if (other instanceof Resource) {
             return Object.is(this, other)
         }
         return false
     }
 
     protected abstract __origin__(): Origin_Entity
-    get node(): Rsc_Node {
-        return new Rsc_Node(this.__origin__().node, this)
+    get node(): ResourceNode {
+        return new ResourceNode(this.__origin__().node, this)
     }
 
     get shortFqn() {

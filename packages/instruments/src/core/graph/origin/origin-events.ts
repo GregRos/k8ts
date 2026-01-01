@@ -1,7 +1,7 @@
 import { doddle } from "doddle"
 import EventEmitter from "eventemitter3"
 import type { Manifest } from "../../manifest"
-import type { Rsc_Entity, Rsc_Top } from "../resource"
+import type { Resource, ResourceTop } from "../resource"
 import type { Origin_Entity } from "./entity"
 
 export function OriginEventsEmitter() {
@@ -45,24 +45,24 @@ export function SubscribeFn(self: Origin_Entity, em: EventEmitter<Origin_EventMa
 export interface Origin_EventMap {
     "resource/exported": {
         readonly origin: Origin_Entity
-        readonly resource: Rsc_Top
+        readonly resource: ResourceTop
     }
     "resource/attached": {
         readonly origin: Origin_Entity
-        readonly resource: Rsc_Entity
+        readonly resource: Resource
     }
     "resource/manifested": {
         readonly origin: Origin_Entity
         readonly manifest: Manifest
-        readonly resource: Rsc_Top
+        readonly resource: ResourceTop
     }
     "resource/loaded": {
         readonly origin: Origin_Entity
-        readonly resource: Rsc_Top
+        readonly resource: ResourceTop
     }
     "resource/serialized": {
         readonly origin: Origin_Entity
-        readonly resource: Rsc_Top
+        readonly resource: ResourceTop
         readonly manifest: Manifest
         content: string
     }

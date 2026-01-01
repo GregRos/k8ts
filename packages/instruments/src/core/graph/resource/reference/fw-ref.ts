@@ -3,7 +3,7 @@ import { mapValues } from "lodash"
 import { getNiceClassName, type AnyCtor } from "what-are-you"
 import { RefKey } from "../ref-key"
 import { ProxyOperationError } from "./error"
-import type { Rsc_Ref } from "./refable"
+import type { ResourceRef } from "./refable"
 
 /**
  * The type of a forward reference to a resource.
@@ -20,7 +20,7 @@ import type { Rsc_Ref } from "./refable"
  * resources when the reference is created. Instead, the missing resource will be detected later on,
  * typically until resources are manifested. This makes it a bit harder to debug such issues.
  */
-export type FwRef<T extends Rsc_Ref = Rsc_Ref> = FwRef_Proxied<T> & T
+export type FwRef<T extends ResourceRef = ResourceRef> = FwRef_Proxied<T> & T
 
 /**
  * Creates a forward reference to a resource, returning a proxy that defers resource resolution
@@ -29,7 +29,7 @@ export type FwRef<T extends Rsc_Ref = Rsc_Ref> = FwRef_Proxied<T> & T
  * @param props The properties of the forward reference.
  * @returns The forward reference proxy.
  */
-export function FwRef<Referenced extends Rsc_Ref>(
+export function FwRef<Referenced extends ResourceRef>(
     props: FwRef_Props<Referenced>
 ): FwRef<Referenced> {
     const core = new FwRef_Proxied(props)
@@ -41,7 +41,7 @@ export namespace FwRef {
     }
 }
 /** Properties for creating a forward reference to a resource. */
-export interface FwRef_Props<Referenced extends Rsc_Ref> {
+export interface FwRef_Props<Referenced extends ResourceRef> {
     /** The class constructor of the referenced resource. */
     readonly class?: AnyCtor<Referenced>
     /** The reference key identifying the referenced resource. */
@@ -65,7 +65,7 @@ const hiddenProperties = {
         )
     }
 }
-class FwRef_Proxied<To extends Rsc_Ref = Rsc_Ref> {
+class FwRef_Proxied<To extends ResourceRef = ResourceRef> {
     readonly #props: FwRef_Props<To>
     constructor(props: FwRef_Props<To>) {
         this.#props = props
@@ -121,7 +121,7 @@ class FwRef_Proxied<To extends Rsc_Ref = Rsc_Ref> {
     }
 }
 
-class FwRef_Handler<T extends Rsc_Ref> implements ProxyHandler<T> {
+class FwRef_Handler<T extends ResourceRef> implements ProxyHandler<T> {
     get _props() {
         return this._subject["__reference_props__"]()
     }

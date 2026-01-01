@@ -1,4 +1,4 @@
-import { Cron, CronStanza, Rsc_Top, type Rsc_Ref } from "@k8ts/instruments"
+import { Cron, CronStanza, ResourceTop, type ResourceRef } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
@@ -19,7 +19,7 @@ export interface CronJob_Props<CronSpec extends Cron.Record>
 export class CronJob<
     Name extends string = string,
     Cron extends Cron.Record = Cron.Record
-> extends Rsc_Top<Name, CronJob_Props<Cron>> {
+> extends ResourceTop<Name, CronJob_Props<Cron>> {
     get ident() {
         return batch.v1.CronJob._
     }
@@ -29,7 +29,7 @@ export class CronJob<
         return new Pod_Template<never>(this, this.name, this.props.$template)
     }
 
-    protected __kids__(): Iterable<Rsc_Ref> {
+    protected __kids__(): Iterable<ResourceRef> {
         this.template
         return super.__kids__()
     }

@@ -1,11 +1,11 @@
 import { doddlify, seq } from "doddle"
-import { Rsc_FwRef_Exports, Rsc_Ref, Rsc_Top } from "../resource"
+import { ForwardExports, ResourceRef, ResourceTop } from "../resource"
 import { FwRef } from "../resource/reference/fw-ref"
 import { Origin_Entity } from "./entity"
 import type { Origin_Props } from "./node"
 export interface Origin_Exporter_Props extends Origin_Props {}
 
-/** Base class for Origins that export resources via the {@link Rsc_FwRef_Exports} mechanism. */
+/** Base class for Origins that export resources via the {@link ForwardExports} mechanism. */
 export abstract class Origin_Exporter<
     Props extends Origin_Exporter_Props = Origin_Exporter_Props
 > extends Origin_Entity<Props> {
@@ -19,26 +19,26 @@ export abstract class Origin_Exporter<
         this._parent["__attach_kid__"](this)
     }
 
-    protected abstract __exports__(): Iterable<Rsc_Ref>
+    protected abstract __exports__(): Iterable<ResourceRef>
 
     protected __parent__() {
         return this._parent
     }
 
     @doddlify
-    get resources(): Iterable<Rsc_Ref> {
+    get resources(): Iterable<ResourceRef> {
         const self = this
         const boundExports = self.__binder__().bind(self.__exports__.bind(self))
-        const allEmitted = new Set<Rsc_Ref>()
+        const allEmitted = new Set<ResourceRef>()
         const attachedResources = seq(() => super.resources).cache()
         return seq(function* () {
-            for (const em of boundExports() as Rsc_Top[]) {
+            for (const em of boundExports() as ResourceTop[]) {
                 if (FwRef.is(em)) {
                     throw new Error(
                         `FwRef ${em} cannot be directly exported from ChildOrigin ${self.name}`
                     )
                 }
-                if (em instanceof Origin_Entity || Rsc_FwRef_Exports.is(em)) {
+                if (em instanceof Origin_Entity || ForwardExports.is(em)) {
                     // Skip Origin entities. Later we go over attachedResources and after evaluating
                     // these exports, any resources attached to child Origins will be included.
                     continue

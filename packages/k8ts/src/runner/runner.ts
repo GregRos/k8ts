@@ -1,4 +1,4 @@
-import { GitTrace, Trace, type Rsc_FwRef_Exports } from "@k8ts/instruments"
+import { GitTrace, Trace, type ForwardExports } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq } from "doddle"
@@ -26,7 +26,7 @@ export class Runner extends Emittery<AssemblerEventsTable> {
         super()
     }
 
-    async run<Ts extends Rsc_FwRef_Exports[]>(input: Ts) {
+    async run<Ts extends ForwardExports[]>(input: Ts) {
         const results = seq(input)
             .map(e => e.__entity__())
             .toArray()

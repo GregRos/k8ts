@@ -7,8 +7,8 @@ import { TraceEmbedder } from "../../tracing"
 import { Formats } from "../entity"
 import { Node } from "../node"
 import { OriginNode } from "../origin/node"
-import type { Ident_Kind, Ident_Like } from "./api-kind"
-import type { Rsc_Entity } from "./entity"
+import type { IdentKind, Ident_Like } from "./api-kind"
+import type { Resource } from "./entity"
 import { RefKey } from "./ref-key"
 
 @displayers({
@@ -39,7 +39,7 @@ import { RefKey } from "./ref-key"
         return text
     }
 })
-export class Rsc_Node extends Node<Rsc_Node, Rsc_Entity> {
+export class ResourceNode extends Node<ResourceNode, Resource> {
     get fullFqn() {
         return [this.ident.dns, this.namespace, this.name].filter(Boolean).join("/")
     }
@@ -50,7 +50,7 @@ export class Rsc_Node extends Node<Rsc_Node, Rsc_Entity> {
         })
     }
     get ident() {
-        return this.entity.ident as Ident_Kind
+        return this.entity.ident as IdentKind
     }
 
     get namespace() {
@@ -73,17 +73,14 @@ export class Rsc_Node extends Node<Rsc_Node, Rsc_Entity> {
         return this.meta?.tryGet("#k8ts.org/is-external") ?? false
     }
 
-    when<EntityType extends Rsc_Entity>(
-        type: AnyCtor<EntityType>,
-        fn: (entity: EntityType) => void
-    ) {
+    when<EntityType extends Resource>(type: AnyCtor<EntityType>, fn: (entity: EntityType) => void) {
         const entity = this.entity as EntityType
         if (entity instanceof type) {
             fn(entity)
         }
     }
 
-    as<EntityType extends Rsc_Entity>(type: AnyCtor<EntityType>) {
+    as<EntityType extends Resource>(type: AnyCtor<EntityType>) {
         const entity = this.entity as EntityType
         if (entity instanceof type) {
             return entity
@@ -125,7 +122,7 @@ export class Rsc_Node extends Node<Rsc_Node, Rsc_Entity> {
     }
     constructor(
         readonly origin: OriginNode,
-        readonly entity: Rsc_Entity
+        readonly entity: Resource
     ) {
         super(entity)
     }

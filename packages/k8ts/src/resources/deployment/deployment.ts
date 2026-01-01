@@ -1,4 +1,4 @@
-import { OriginContextTracker, Rsc_Ref, Rsc_Top } from "@k8ts/instruments"
+import { OriginContextTracker, ResourceRef, ResourceTop } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
 import { omit, omitBy } from "lodash"
@@ -6,29 +6,28 @@ import { MakeError } from "../../error"
 import { apps } from "../../idents/apps"
 import { Pod_Template, type Pod_Props } from "../pod"
 
-export interface Deployment_Strategy_RollingUpdate extends CDK.RollingUpdateDeployment {
+export interface DeploymentStrategyRollingUpdate extends CDK.RollingUpdateDeployment {
     type: "RollingUpdate"
 }
 export interface Deployment_Strategy_Recreate {
     type: "Recreate"
 }
-export type Deployment_Strategy = Deployment_Strategy_RollingUpdate | Deployment_Strategy_Recreate
-export type Deployment_Props_Original = Omit<
+export type Deployment_Strategy = DeploymentStrategyRollingUpdate | Deployment_Strategy_Recreate
+
+export type DeploymentProps<Ports extends string> = Omit<
     CDK.DeploymentSpec,
     "selector" | "template" | "strategy"
->
-
-export type Deployment_Props<Ports extends string> = Deployment_Props_Original & {
+> & {
     $template: Pod_Props<Ports>
     $strategy?: Deployment_Strategy
 }
-export type Deployment_Ref<Ports extends string> = Rsc_Ref<apps.v1.Deployment._> & {
+export type DeploymentRef<Ports extends string> = ResourceRef<apps.v1.Deployment._> & {
     __PORTS__: Ports
 }
 
-export class Deployment<Name extends string, Ports extends string = string> extends Rsc_Top<
+export class Deployment<Name extends string, Ports extends string = string> extends ResourceTop<
     Name,
-    Deployment_Props<Ports>
+    DeploymentProps<Ports>
 > {
     __PORTS__!: Ports
     get ident() {
@@ -45,7 +44,7 @@ export class Deployment<Name extends string, Ports extends string = string> exte
         this.props.$template.$POD = origin["__binder__"]().bind(this.props.$template.$POD)
     })()
 
-    protected __kids__(): Iterable<Rsc_Ref> {
+    protected __kids__(): Iterable<ResourceRef> {
         return [this.template]
     }
     protected body(): CDK.KubeDeploymentProps {

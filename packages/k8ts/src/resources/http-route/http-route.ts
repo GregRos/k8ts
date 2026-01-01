@@ -1,4 +1,4 @@
-import { Rsc_Top, type Rsc_Ref } from "@k8ts/instruments"
+import { ResourceTop, type ResourceRef } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { gateway } from "../../idents/gateway"
 import type { Port } from "../service/service-port"
@@ -7,13 +7,13 @@ const GatewayKind = gateway.v1.Gateway._
 const HttpRouteKind = gateway.v1.HttpRoute._
 
 export interface HttpRoute_Props<Ports extends string> {
-    $gateway: Rsc_Ref<gateway.v1.Gateway._>
+    $gateway: ResourceRef<gateway.v1.Gateway._>
     $hostname: string
     $backend: Port<Ports>
     _filters?: CDK.HttpRouteSpecRulesFilters[]
 }
 
-export class HttpRoute<Name extends string, Ports extends string> extends Rsc_Top<
+export class HttpRoute<Name extends string, Ports extends string> extends ResourceTop<
     Name,
     HttpRoute_Props<Ports>
 > {

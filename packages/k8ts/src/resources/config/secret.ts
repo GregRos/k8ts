@@ -1,4 +1,4 @@
-import { Rsc_Top, type DataSource } from "@k8ts/instruments"
+import { ResourceTop, type DataSource } from "@k8ts/instruments"
 import { v1 } from "../../idents/default"
 import { resolveDataSourceRecord } from "./resolver"
 
@@ -21,7 +21,7 @@ export interface Secret_Props<Keys extends string = string> {
     $data?: Record<Keys, DataSource>
 }
 
-export class Secret<Name extends string = string, Keys extends string = string> extends Rsc_Top<
+export class Secret<Name extends string = string, Keys extends string = string> extends ResourceTop<
     Name,
     Secret_Props<Keys>
 > {

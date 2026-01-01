@@ -1,9 +1,9 @@
-import { Rsc_Part, Rsc_Ref, type Rsc_Ref_Keys_Of } from "@k8ts/instruments"
+import { ResourcePart, ResourceRef, type KeysResourceRef } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { omitBy } from "lodash"
-import type { Env_Value } from "../../env/types"
+import type { EnvValuePrimitive } from "../../env/types"
 import { v1 } from "../../idents/default"
 import { Pod_Container, type Pod_Container_Props } from "./container"
 import { Pod_Device, type Pod_Device_Backend } from "./volume/devices"
@@ -20,7 +20,7 @@ import {
     type Pod_Volume_Backend_Secret
 } from "./volume/volumes"
 export type Pod_Props_Original = Omit<CDK.PodSpec, "containers" | "initContainers" | "volumes">
-type Container_Ref<Ports extends string> = Rsc_Ref<v1.Pod.Container._> & {
+type Container_Ref<Ports extends string> = ResourceRef<v1.Pod.Container._> & {
     __PORTS__: Ports
 }
 export type Pod_Container_Producer<Ports extends string> = (
@@ -32,7 +32,7 @@ export interface Pod_Props<Ports extends string> extends Pod_Props_Original {
     $POD: Pod_Container_Producer<Ports>
 }
 
-export class Pod_Template<Ports extends string = string> extends Rsc_Part<Pod_Props<Ports>> {
+export class Pod_Template<Ports extends string = string> extends ResourcePart<Pod_Props<Ports>> {
     get ident() {
         return v1.PodTemplate._
     }
@@ -118,12 +118,12 @@ export class Pod_Scope {
         Env extends {
             [key in keyof Env]:
                 | {
-                      $backend: Rsc_Ref
+                      $backend: ResourceRef
                       key: Env[key] extends object
-                          ? Rsc_Ref_Keys_Of<Env[key]["$backend"], string>
+                          ? KeysResourceRef<Env[key]["$backend"], string>
                           : never
                   }
-                | Env_Value
+                | EnvValuePrimitive
         }
     >(name: string, options: Pod_Container_Props<Ports, Env>) {
         return new Pod_Container(this._parent, name, "main", options)
@@ -132,15 +132,15 @@ export class Pod_Scope {
         return new Pod_Container(this._parent, name, "init", options)
     }
     Volume<const P extends Pod_Volume_Backend_HostPath>(name: string, options: P): Pod_Volume<P>
-    Volume<const P extends Pod_Volume_Backend_ConfigMap<Rsc_Ref<v1.ConfigMap._>>>(
+    Volume<const P extends Pod_Volume_Backend_ConfigMap<ResourceRef<v1.ConfigMap._>>>(
         name: string,
         options: P
     ): Pod_Volume<P>
-    Volume<const P extends Pod_Volume_Backend_Secret<Rsc_Ref<v1.Secret._>>>(
+    Volume<const P extends Pod_Volume_Backend_Secret<ResourceRef<v1.Secret._>>>(
         name: string,
         options: P
     ): Pod_Volume<P>
-    Volume<const P extends Pod_Volume_Backend_Pvc<Rsc_Ref<v1.PersistentVolumeClaim._>>>(
+    Volume<const P extends Pod_Volume_Backend_Pvc<ResourceRef<v1.PersistentVolumeClaim._>>>(
         name: string,
         options: P
     ): Pod_Volume<P>
@@ -151,7 +151,7 @@ export class Pod_Scope {
                 return new Pod_Volume_HostPath(this._parent, name, options as any)
             }
         }
-        const backend = options.$backend as Rsc_Ref
+        const backend = options.$backend as ResourceRef
         if (backend.is(v1.ConfigMap._)) {
             return new Pod_Volume_ConfigMap(this._parent, name, options as any)
         } else if (backend.is(v1.Secret._)) {

@@ -4,17 +4,17 @@ import {
     Unit,
     type CmdBuilder,
     type Port_Exports_Input,
-    type Rsc_Ref,
+    type ResourceRef,
     type TaggedImage
 } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { toContainerPorts } from "../../utils/adapters"
 
-import { Rsc_Entity, Rsc_Part, Rsc_Top } from "@k8ts/instruments"
+import { Resource, ResourcePart, ResourceTop } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { mapKeys, mapValues, omitBy } from "lodash"
 import { Env } from "../../../env"
-import type { Env_Leaf } from "../../../env/types"
+import type { EnvValue } from "../../../env/types"
 import { v1 } from "../../../idents/default"
 import { Pod_Device, Pod_Volume } from "../volume"
 import { Container_Device_Mount, type Container_Device_Mount_Source } from "./mounts/device"
@@ -31,13 +31,13 @@ export type Pod_Container_Mounts = {
 }
 
 export interface Pod_Container_Env_From {
-    source: Rsc_Ref<v1.ConfigMap._> | Rsc_Ref<v1.Secret._>
+    source: ResourceRef<v1.ConfigMap._> | ResourceRef<v1.Secret._>
     prefix?: string
     optional?: boolean
 }
 export interface Pod_Container_Props<
     Ports extends string = never,
-    _Env extends Record<string, Env_Leaf> = Record<string, Env_Leaf>
+    _Env extends Record<string, EnvValue> = Record<string, EnvValue>
 > extends Omit<CDK.Container, "name"> {
     $image: TaggedImage
     $ports?: Port_Exports_Input<Ports>
@@ -48,7 +48,7 @@ export interface Pod_Container_Props<
     $resources?: Pod_Container_Resources
 }
 
-export class Pod_Container<Ports extends string = string> extends Rsc_Part<
+export class Pod_Container<Ports extends string = string> extends ResourcePart<
     Pod_Container_Props<Ports>
 > {
     __PORTS__!: Ports
@@ -56,7 +56,7 @@ export class Pod_Container<Ports extends string = string> extends Rsc_Part<
         return v1.Pod.Container._
     }
 
-    protected __needs__(): Record<string, Rsc_Ref | Rsc_Ref[]> {
+    protected __needs__(): Record<string, ResourceRef | ResourceRef[]> {
         const a = this.mounts
         return mapValues(
             mapKeys(a, x => x.path),
@@ -115,7 +115,7 @@ export class Pod_Container<Ports extends string = string> extends Rsc_Part<
                 continue
             }
             const backend = value.$backend
-            if (backend instanceof Rsc_Entity) {
+            if (backend instanceof Resource) {
                 if (backend.namespace !== self.namespace) {
                     throw new Error(
                         `Environment variable reference "${key}" must be in the same namespace as the container "${self}", but was ${backend}"`
@@ -131,7 +131,7 @@ export class Pod_Container<Ports extends string = string> extends Rsc_Part<
             }
         }
         const envFroms = (self.props.$envFrom ?? []).map(ef => {
-            const source = ef.source as any as Rsc_Entity
+            const source = ef.source as any as Resource
             if (source.namespace !== self.namespace) {
                 throw new Error(
                     `EnvFrom source reference "${source}" must be in the same namespace as the container "${self}"`
@@ -171,7 +171,7 @@ export class Pod_Container<Ports extends string = string> extends Rsc_Part<
         return container
     }
     constructor(
-        parent: Rsc_Entity,
+        parent: Resource,
         name: string,
         readonly subtype: "init" | "main",
         override readonly props: Pod_Container_Props<Ports>
@@ -206,7 +206,7 @@ export class Pod_Container<Ports extends string = string> extends Rsc_Part<
 }
 
 export function make<Ports extends string>(
-    parent: Rsc_Top,
+    parent: ResourceTop,
     name: string,
     subtype: "init" | "main",
     props: Pod_Container_Props<Ports>

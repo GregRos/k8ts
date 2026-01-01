@@ -1,9 +1,9 @@
-import { Rsc_Ref, Rsc_Top, type PortMapping_Input } from "@k8ts/instruments"
+import { ResourceRef, ResourceTop, type PortMapping_Input } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { MakeError } from "../../error"
 import { v1 } from "../../idents/index"
-import { Deployment, type Deployment_Ref } from "../deployment"
+import { Deployment, type DeploymentRef } from "../deployment"
 import { toServicePorts } from "../utils/adapters"
 import { Port } from "./service-port"
 export interface Service_Frontend_ClusterIp {
@@ -20,17 +20,17 @@ export interface Service_Frontend_LoadBalancer {
 export type Service_Frontend = Service_Frontend_ClusterIp | Service_Frontend_LoadBalancer
 export interface Service_Props<DeployPorts extends string, ExposedPorts extends DeployPorts> {
     $ports: PortMapping_Input<ExposedPorts>
-    $backend: Deployment_Ref<DeployPorts>
+    $backend: DeploymentRef<DeployPorts>
     $frontend: Service_Frontend
 }
-export interface Service_Ref<ExposedPorts extends string> extends Rsc_Ref<v1.Service._> {
+export interface Service_Ref<ExposedPorts extends string> extends ResourceRef<v1.Service._> {
     __PORTS__: ExposedPorts
 }
 
 export class Service<
     Name extends string = string,
     Ports_Exposed extends string = string
-> extends Rsc_Top<Name, Service_Props<string, Ports_Exposed>> {
+> extends ResourceTop<Name, Service_Props<string, Ports_Exposed>> {
     __PORTS__!: Ports_Exposed
     get ident() {
         return v1.Service._

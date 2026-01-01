@@ -71,7 +71,7 @@ export abstract class Ident<
     }
 }
 @bind_own_methods()
-export class Ident_Group<const _Group extends string = string> extends Ident<_Group, null> {
+export class IdentGroup<const _Group extends string = string> extends Ident<_Group, null> {
     constructor(override name: _Group) {
         super(name, null)
     }
@@ -92,9 +92,9 @@ export class Ident_Group<const _Group extends string = string> extends Ident<_Gr
 export class Ident_Version<
     const _Group extends string = string,
     const _Version extends string = string
-> extends Ident<_Version, Ident_Group<_Group>> {
+> extends Ident<_Version, IdentGroup<_Group>> {
     kind<_Kind extends string>(kind: _Kind, specialPlural?: string) {
-        return new Ident_Kind(kind, this as Ident_Version<_Group, _Version>, specialPlural)
+        return new IdentKind(kind, this as Ident_Version<_Group, _Version>, specialPlural)
     }
 
     __FORMAT__!: _Version
@@ -103,12 +103,12 @@ export class Ident_Version<
         return this.parent
     }
 
-    child(name: string): Ident_Kind<_Group, _Version, string> {
+    child(name: string): IdentKind<_Group, _Version, string> {
         return this.kind(name)
     }
 }
 @bind_own_methods()
-export class Ident_Kind<
+export class IdentKind<
     const _Group extends string = string,
     const _Version extends string = string,
     const _Kind extends string = string
@@ -137,24 +137,24 @@ export class Ident_Kind<
     }
 
     subkind<SubKind extends string>(subkind: SubKind) {
-        return new Ident_Rsc_Part(subkind, this)
+        return new Ident_ResourcePart(subkind, this)
     }
 
-    child<Name extends string>(name: Name): Ident_Rsc_Part<Name, this> {
+    child<Name extends string>(name: Name): Ident_ResourcePart<Name, this> {
         return this.subkind(name)
     }
 }
 
 @bind_own_methods()
-export class Ident_Rsc_Part<
+export class Ident_ResourcePart<
     Name extends string = string,
     Parent extends Ident_Like = Ident_Like
 > extends Ident<Name, Parent> {
     constructor(name: Name, parent: Parent) {
         super(name, parent)
     }
-    subkind<_SubKind2 extends string>(subkind: _SubKind2): Ident_Rsc_Part<_SubKind2, this> {
-        return new Ident_Rsc_Part(subkind, this)
+    subkind<_SubKind2 extends string>(subkind: _SubKind2): Ident_ResourcePart<_SubKind2, this> {
+        return new Ident_ResourcePart(subkind, this)
     }
 
     child<Name extends string>(name: Name) {
@@ -163,7 +163,7 @@ export class Ident_Rsc_Part<
 }
 
 export function group<ApiGroup extends string>(apiGroup: ApiGroup) {
-    return new Ident_Group(apiGroup)
+    return new IdentGroup(apiGroup)
 }
 
 export function version<ApiVersion extends _version>(apiVersion: ApiVersion) {

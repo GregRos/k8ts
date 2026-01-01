@@ -2,25 +2,25 @@ import { doddlify, seq, type Seq } from "doddle"
 import type { AnyCtor } from "what-are-you"
 import { InstrumentsError } from "../../../../error"
 
-import { Ident, Ident_Kind } from "../../resource/api-kind"
+import { Ident, IdentKind } from "../../resource/api-kind"
 import { RefKey } from "../../resource/ref-key"
-import { Rsc_Ctor_Of } from "../../resource/reference"
+import { ResourceConstructor } from "../../resource/reference"
 const separator = "/"
 interface NodeEntry {
     kindName: string
     class: AnyCtor<any>
-    ident: Ident_Kind
+    ident: IdentKind
 }
-export type KindMapInput<Ks extends Rsc_Ctor_Of> = Ks[]
-type LookupKey = string | RefKey | AnyCtor<any> | Ident_Kind
-export class KindMap<Kinds extends Rsc_Ctor_Of = Rsc_Ctor_Of> {
+export type KindMapInput<Ks extends ResourceConstructor> = Ks[]
+type LookupKey = string | RefKey | AnyCtor<any> | IdentKind
+export class KindMap<Kinds extends ResourceConstructor = ResourceConstructor> {
     __KINDS__!: Kinds["prototype"]["ident"]
     constructor(private _ownKinds: KindMapInput<Kinds>) {}
 
     [Symbol.iterator]() {
         return this._ownKinds[Symbol.iterator]()
     }
-    child<Ks extends Rsc_Ctor_Of = Rsc_Ctor_Of>(
+    child<Ks extends ResourceConstructor = ResourceConstructor>(
         kinds: KindMapInput<Ks> | KindMap<Ks>
     ): KindMap<Kinds | Ks> {
         const ownKinds = kinds instanceof KindMap ? kinds._ownKinds : kinds
@@ -83,7 +83,7 @@ export class KindMap<Kinds extends Rsc_Ctor_Of = Rsc_Ctor_Of> {
             return undefined
         }
 
-        return (ident as Ident_Kind).refKey({
+        return (ident as IdentKind).refKey({
             name
         })
     }
@@ -104,7 +104,7 @@ export class KindMap<Kinds extends Rsc_Ctor_Of = Rsc_Ctor_Of> {
     private _unknownClassError(klass: Function) {
         return new InstrumentsError(`The class ${klass.name} is not registered`)
     }
-    private _convert(something: LookupKey | RefKey | Function | Ident_Kind) {
+    private _convert(something: LookupKey | RefKey | Function | IdentKind) {
         if (typeof something === "string") {
             if (something.includes("/")) {
                 return this.parse(something).kind
@@ -152,7 +152,7 @@ export class KindMap<Kinds extends Rsc_Ctor_Of = Rsc_Ctor_Of> {
     getClass(refKey: RefKey): AnyCtor<any>
     getClass<F extends AnyCtor<any>>(klass: F): F
     getClass(kind: string): AnyCtor<any>
-    getClass(ident: Ident_Kind): AnyCtor<any>
+    getClass(ident: IdentKind): AnyCtor<any>
     getClass<T extends AnyCtor<any> | string>(
         kindOrClass: T
     ): T extends AnyCtor<any> ? string : AnyCtor<any>

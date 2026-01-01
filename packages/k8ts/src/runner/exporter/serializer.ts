@@ -1,4 +1,9 @@
-import { Manifest, ManifestSourceEmbedder, type Rsc_Node, type Rsc_Top } from "@k8ts/instruments"
+import {
+    Manifest,
+    ManifestSourceEmbedder,
+    type ResourceNode,
+    type ResourceTop
+} from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import Emittery from "emittery"
 import { dump, type DumpOptions } from "js-yaml"
@@ -9,7 +14,7 @@ export interface YamlSerializerOptions {
 }
 export interface SerializingEvent {
     manifest: Manifest
-    resource: Rsc_Node
+    resource: ResourceNode
 }
 export interface SerializerEventsTable {
     serialize: SerializingEvent
@@ -45,7 +50,7 @@ export class YamlSerializer extends Emittery<SerializerEventsTable> {
             })
             const e = {
                 origin: node.origin.entity,
-                resource: node.entity as Rsc_Top,
+                resource: node.entity as ResourceTop,
                 manifest: input,
                 content: result
             }

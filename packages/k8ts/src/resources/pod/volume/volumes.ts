@@ -1,6 +1,6 @@
 import type { CDK } from "@k8ts/sample-interfaces"
 
-import { Rsc_Entity, Rsc_Part, type Rsc_Ref, type Rsc_Ref_Keys_Of } from "@k8ts/instruments"
+import { Resource, ResourcePart, type KeysResourceRef, type ResourceRef } from "@k8ts/instruments"
 import { v1 } from "../../../idents/default"
 import type { HostPathType } from "../../hostpath"
 import {
@@ -9,14 +9,14 @@ import {
 } from "../container/mounts/volume"
 
 export interface Pod_Volume_Backend_Pvc<
-    A extends Rsc_Ref<v1.PersistentVolumeClaim._> = Rsc_Ref<v1.PersistentVolumeClaim._>
+    A extends ResourceRef<v1.PersistentVolumeClaim._> = ResourceRef<v1.PersistentVolumeClaim._>
 > {
     $backend: A
     readOnly?: boolean
 }
 const allowedVolumeResourceKinds = [v1.ConfigMap._, v1.Secret._] as const
 type VolumeResourceKind = (typeof allowedVolumeResourceKinds)[number]
-export type AllowedResources = Rsc_Ref<VolumeResourceKind>
+export type AllowedResources = ResourceRef<VolumeResourceKind>
 
 export interface Pod_Volume_Backend_HostPath {
     $backend: {
@@ -26,20 +26,22 @@ export interface Pod_Volume_Backend_HostPath {
     }
 }
 export interface Pod_Volume_Backend_ConfigMap<
-    A extends Rsc_Ref<v1.ConfigMap._> = Rsc_Ref<v1.ConfigMap._>
+    A extends ResourceRef<v1.ConfigMap._> = ResourceRef<v1.ConfigMap._>
 > {
     $backend: A
     optional?: boolean
     mappings?: {
-        [K in Rsc_Ref_Keys_Of<A>]?: string
+        [K in KeysResourceRef<A>]?: string
     }
 }
 
-export interface Pod_Volume_Backend_Secret<A extends Rsc_Ref<v1.Secret._> = Rsc_Ref<v1.Secret._>> {
+export interface Pod_Volume_Backend_Secret<
+    A extends ResourceRef<v1.Secret._> = ResourceRef<v1.Secret._>
+> {
     $backend: A
     optional?: boolean
     mappings?: {
-        [K in Rsc_Ref_Keys_Of<A>]?: string
+        [K in KeysResourceRef<A>]?: string
     }
 }
 
@@ -68,23 +70,23 @@ export type Pod_Volume_Backend_Known_Paths<T extends Pod_Volume_Backend> = strin
 
 export abstract class Pod_Volume<
     P extends Pod_Volume_Backend = Pod_Volume_Backend
-> extends Rsc_Part<P> {
+> extends ResourcePart<P> {
     get ident() {
         return v1.Pod.Volume._
     }
 
     get namespace() {
         const backend = this.props.$backend
-        if (backend instanceof Rsc_Entity) {
+        if (backend instanceof Resource) {
             const x = backend.namespace
             return x
         }
         return this.__parent__().namespace
     }
 
-    protected __needs__(): Record<string, Rsc_Entity | Rsc_Entity[] | undefined> {
+    protected __needs__(): Record<string, Resource | Resource[] | undefined> {
         return {
-            backend: this.props.$backend instanceof Rsc_Entity ? this.props.$backend : undefined
+            backend: this.props.$backend instanceof Resource ? this.props.$backend : undefined
         }
     }
     Mount(
@@ -141,7 +143,7 @@ export class Pod_Volume_ConfigMap extends Pod_Volume<Pod_Volume_Backend_ConfigMa
 }
 
 export class Pod_Volume_Secret<
-    Source extends Rsc_Ref<v1.Secret._>
+    Source extends ResourceRef<v1.Secret._>
 > extends Pod_Volume<Pod_Volume_Backend_Secret> {
     protected __submanifest__(): CDK.Volume {
         const mappings = mappingsToKeyPaths(this.props.mappings ?? {})

@@ -1,5 +1,5 @@
-import type { Rsc_Entity } from "@k8ts/instruments"
-import { Rsc_Part } from "@k8ts/instruments"
+import type { Resource } from "@k8ts/instruments"
+import { ResourcePart } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../../idents/default"
 import { Pvc } from "../../persistent"
@@ -11,20 +11,20 @@ interface Pod_Device_Backend_Pvc {
 
 export type Pod_Device_Backend = Pod_Device_Backend_Pvc
 
-export class Pod_Device extends Rsc_Part<Pod_Device_Backend_Pvc> {
+export class Pod_Device extends ResourcePart<Pod_Device_Backend_Pvc> {
     get ident() {
         return v1.Pod.Device._
     }
 
     constructor(
-        parent: Rsc_Entity,
+        parent: Resource,
         name: string,
         readonly backend: Pod_Device_Backend_Pvc
     ) {
         super(parent, name, backend)
     }
     get sourceNamespace() {
-        const backend = this.props.$backend as any as Rsc_Entity
+        const backend = this.props.$backend as any as Resource
         return backend.namespace
     }
     protected __needs__() {
@@ -50,6 +50,6 @@ export class Pod_Device extends Rsc_Part<Pod_Device_Backend_Pvc> {
     }
 }
 
-export function make(parent: Rsc_Entity, name: string, input: Pod_Device_Backend) {
+export function make(parent: Resource, name: string, input: Pod_Device_Backend) {
     return new Pod_Device(parent, name, input)
 }

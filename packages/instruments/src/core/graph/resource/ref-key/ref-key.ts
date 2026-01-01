@@ -1,8 +1,8 @@
 import { InstrumentsError } from "../../../../error"
-import type { Ident_Kind } from "../api-kind"
+import type { IdentKind } from "../api-kind"
 import type { External } from "../external"
 import { type External_Props } from "../external"
-import type { Rsc_Ref } from "../reference"
+import type { ResourceRef } from "../reference"
 /** Input type for reference keys. Accepts either a RefKey instance or its string representation. */
 export type RefKey_Input = RefKey | RefKey["string"]
 
@@ -59,7 +59,7 @@ export function tryParse(ref: string): RefKey_Parsed | undefined {
     }
 }
 
-type nsKind = Ident_Kind<"", "v1", "Namespace">
+type nsKind = IdentKind<"", "v1", "Namespace">
 
 /**
  * Options for creating a RefKey instance.
@@ -70,7 +70,7 @@ export interface RefKey_Options<Name extends string = string> {
     /** The resource name */
     name: Name
     /** Optional namespace for namespaced resources. Can be a RefKey, string, or Ref2 */
-    namespace?: RefKey<nsKind> | string | Rsc_Ref<nsKind>
+    namespace?: RefKey<nsKind> | string | ResourceRef<nsKind>
 }
 
 /**
@@ -81,7 +81,7 @@ export interface RefKey_Options<Name extends string = string> {
  * Important: This class is ambiguous because it can represent keys for namespaced resources but
  * ignore the namespace. Needs some kind of refactor.
  */
-export class RefKey<K extends Ident_Kind = Ident_Kind, Name extends string = string> {
+export class RefKey<K extends IdentKind = IdentKind, Name extends string = string> {
     /** The resource name */
     readonly name: string
     /** The optional namespace for namespaced resources */

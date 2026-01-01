@@ -1,22 +1,22 @@
 import {
+    ForwardExports,
     Origin_Exporter,
-    Rsc_FwRef_Exports,
     type Origin_Entity,
     type Origin_Props,
-    type Rsc_Ctor_Of,
-    type Rsc_Ref
+    type ResourceConstructor,
+    type ResourceRef
 } from "@k8ts/instruments"
 import { doddlify, seq } from "doddle"
 import type { v1 } from "../../idents"
 import { Origin_Section, type File_Section_Props } from "./section"
 export type File_sName = `${string}.yaml`
 export interface File_Props<
-    Kinds extends Rsc_Ctor_Of[] = Rsc_Ctor_Of[],
+    Kinds extends ResourceConstructor[] = ResourceConstructor[],
     Exports extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
 > extends Origin_Props<Kinds[number]> {
     kinds?: Kinds
-    namespace?: Rsc_Ref<v1.Namespace._>
-    FILE(FILE: Origin_File_Scope<Kinds>): Iterable<Exports | Rsc_FwRef_Exports<Exports>>
+    namespace?: ResourceRef<v1.Namespace._>
+    FILE(FILE: Origin_File_Scope<Kinds>): Iterable<Exports | ForwardExports<Exports>>
 }
 export class Origin_File extends Origin_Exporter<File_Props> {
     #_ = (() => {
@@ -32,20 +32,20 @@ export class Origin_File extends Origin_Exporter<File_Props> {
     @doddlify
     protected __exports__() {
         return seq(
-            this._props.FILE.call(this, new Origin_File_Scope(this) as any) as Iterable<Rsc_Ref>
+            this._props.FILE.call(this, new Origin_File_Scope(this) as any) as Iterable<ResourceRef>
         ).cache()
     }
 }
 export function File<
-    Kinds extends Rsc_Ctor_Of[] = Rsc_Ctor_Of[],
+    Kinds extends ResourceConstructor[] = ResourceConstructor[],
     Exports extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
 >(parent: Origin_Entity, name: File_sName, props: File_Props<Kinds, Exports>) {
     const file = new Origin_File(parent, name, props as any)
 
-    return Rsc_FwRef_Exports<Exports>(file)
+    return ForwardExports<Exports>(file)
 }
 
-export class Origin_File_Scope<Kinds extends Rsc_Ctor_Of[]> {
+export class Origin_File_Scope<Kinds extends ResourceConstructor[]> {
     constructor(private readonly _file: Origin_File) {
         this.on = this._file.on
     }
@@ -59,11 +59,11 @@ export class Origin_File_Scope<Kinds extends Rsc_Ctor_Of[]> {
         props: File_Section_Props<Exported>
     ) {
         const section: Origin_Section = new Origin_Section(this._file, name, props)
-        return Rsc_FwRef_Exports<Exported>(section)
+        return ForwardExports<Exported>(section)
     }
 }
 
 export type File<
-    Kinds extends Rsc_Ctor_Of[] = Rsc_Ctor_Of[],
+    Kinds extends ResourceConstructor[] = ResourceConstructor[],
     T extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
-> = Rsc_FwRef_Exports<T>
+> = ForwardExports<T>

@@ -1,11 +1,11 @@
-import { Rsc_Ref, Rsc_Top, type Unit } from "@k8ts/instruments"
+import { ResourceRef, ResourceTop, type Unit } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { MakeError } from "../../../error"
 import { v1 } from "../../../idents/default"
 import { storage } from "../../../idents/storage"
 import type { HostPathType } from "../../hostpath"
-import { Access } from "../access-mode"
-import type { Pv_VolumeMode } from "../block-mode"
+import { parsePvAccessMode, type PvAccessModes } from "../access-mode"
+import type { PvMode } from "../block-mode"
 import { parseBackend } from "./parse-backend"
 
 const StorageClassKind = storage.v1.StorageClass._
@@ -25,26 +25,26 @@ export interface Pv_Backend_Nfs {
     path: string
 }
 
-export type Pv_Backend = Pv_Backend_HostPath | Pv_Backend_Local | Pv_Backend_Nfs
-export interface Pv_Props_K8ts<Mode extends Pv_VolumeMode = Pv_VolumeMode> {
-    $accessModes: Access
-    $storageClass?: Rsc_Ref<storage.v1.StorageClass._>
+export type PvBackend = Pv_Backend_HostPath | Pv_Backend_Local | Pv_Backend_Nfs
+export interface Pv_Props_K8ts<Mode extends PvMode = PvMode> {
+    $accessModes: PvAccessModes
+    $storageClass?: ResourceRef<storage.v1.StorageClass._>
     $mode?: Mode
     reclaimPolicy?: Reclaim
     $capacity: Unit.Data
-    $backend?: Pv_Backend
+    $backend?: PvBackend
     mountOptions?: string[]
     nodeAffinity?: CDK.VolumeNodeAffinity
 }
 export type Reclaim = "Retain" | "Delete" | "Recycle"
-export type Pv_Ref<Mode extends Pv_VolumeMode = Pv_VolumeMode> = Rsc_Ref<v1.PersistentVolume._> & {
+export type PvRef<Mode extends PvMode = PvMode> = ResourceRef<v1.PersistentVolume._> & {
     __MODE__: Mode
 }
 
 export class Pv<
-    Mode extends Pv_VolumeMode = "Filesystem",
+    Mode extends PvMode = "Filesystem",
     Name extends string = string
-> extends Rsc_Top<Name, Pv_Props_K8ts<Mode>> {
+> extends ResourceTop<Name, Pv_Props_K8ts<Mode>> {
     __MODE__!: Mode
     get ident() {
         return v1.PersistentVolume._
@@ -58,7 +58,7 @@ export class Pv<
     protected body() {
         const self = this
         const pvProps = self.props
-        const accessModes = Access.pv_parseAccessMode(pvProps.$accessModes)
+        const accessModes = parsePvAccessMode(pvProps.$accessModes)
         if (self.props.$backend?.kind === "Local") {
             if (!pvProps.nodeAffinity) {
                 throw new MakeError(

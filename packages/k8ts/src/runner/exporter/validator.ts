@@ -1,7 +1,7 @@
-import { Rsc_Node } from "@k8ts/instruments"
+import { ResourceNode } from "@k8ts/instruments"
 import { FileNodes } from "./assembler"
 export interface ValidatingEvent {
-    node: Rsc_Node
+    node: ResourceNode
 }
 export interface ValidatorEventsTable {
     validating: ValidatingEvent
