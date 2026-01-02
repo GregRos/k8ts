@@ -1,27 +1,31 @@
+import type { StringRecordLike } from "../../../utils/types"
 import type { UnitValue } from "../units/unit-parser"
-export type Resources_sUnitTerm<Unit extends string> = `${number}${Unit}` | "?"
+export type Reqs_sUnitTerm<Unit extends string> = `${number}${Unit}` | "?"
 
-export type Resources_ReqLim_Array<Unit extends string> = [
-    Resources_sUnitTerm<Unit>,
-    Resources_sUnitTerm<Unit>
+export type Reqs_ReqLim_Array_FromTo<Unit extends string> = [
+    Reqs_sUnitTerm<Unit>,
+    Reqs_sUnitTerm<Unit>
 ]
-export type ResourcesUnitMap_Trait<T> = Record<keyof T, string>
+
+export type Reqs_ReqLim_Array_Exactly<Unit extends string> = [Reqs_sUnitTerm<Unit>]
+
 type _Spaces = "" | " " | "  "
-export type Resources_sToFrom<Unit extends string> =
-    `${Resources_sUnitTerm<Unit>}${_Spaces}->${_Spaces}${Resources_sUnitTerm<Unit>}`
-export type Resources_sExactly<U extends string> = `=${Resources_sUnitTerm<U>}`
-export interface Resources_ReqLim<Unit extends string = string> {
+export type Reqs_sFromTo<Unit extends string> =
+    `${Reqs_sUnitTerm<Unit>}${_Spaces}->${_Spaces}${Reqs_sUnitTerm<Unit>}`
+export type Reqs_sExactly<U extends string> = `=${Reqs_sUnitTerm<U>}`
+export interface Reqs_ReqLimit<Unit extends string = string> {
     readonly request?: UnitValue<Unit>
     readonly limit?: UnitValue<Unit>
 }
-export type Resources_Input<Unit extends string> =
-    | Resources_sToFrom<Unit>
-    | Resources_sExactly<Unit>
-    | Resources_ReqLim_Array<Unit>
+export type Reqs_One<Unit extends string> =
+    | Reqs_sFromTo<Unit>
+    | Reqs_sExactly<Unit>
+    | Reqs_ReqLim_Array_FromTo<Unit>
+    | Reqs_ReqLim_Array_Exactly<Unit>
 type CustomResource = `${string}/${string}`
 
-export type ResourcesReqLimits_Trait<ResourceUnit extends ResourcesUnitMap_Trait<ResourceUnit>> = {
-    [K in keyof ResourceUnit]: Resources_Input<ResourceUnit[K]>
+export type Reqs_Dictionary<UnitDict extends StringRecordLike<UnitDict>> = {
+    [K in keyof UnitDict]: Reqs_One<UnitDict[K]>
 } & {
-    [K in CustomResource]?: Resources_Input<string>
+    [K in CustomResource]?: Reqs_One<string>
 }

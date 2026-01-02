@@ -19,7 +19,7 @@ import { PodDevice, PodVolume } from "../volume"
 import { ContainerDeviceMount, type ContainerDeviceMount_Input } from "./mounts/device"
 import { ContainerVolumeMount, type ContainerVolumeMount_Unbound } from "./mounts/volume"
 import { toContainerPorts } from "./utils"
-const container_ResourcesSpec = ResourcesSpec.make({
+const container_ResourcesSpec = new ResourcesSpec({
     cpu: Unit.Cpu,
     memory: Unit.Data
 })

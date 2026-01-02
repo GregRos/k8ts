@@ -103,7 +103,7 @@ export class ResourceKey<K extends IdentKind = IdentKind, Name extends string = 
      * @returns An External instance with the specified features
      */
     DummyResource(): DummyResource<K> {
-        const DummyResource = require("../external").DummyResource
+        const DummyResource = require("../dummy").DummyResource
 
         return new DummyResource(this) as any
     }

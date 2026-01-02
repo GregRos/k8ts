@@ -1,6 +1,6 @@
 import { ResourcesSpec, Unit } from "@lib"
 
-const reqLimitCpuSpec = ResourcesSpec.make({
+const reqLimitCpuSpec = new ResourcesSpec({
     cpu: Unit.Cpu
 })
 it("valid inputs - CPU", () => {
@@ -38,7 +38,7 @@ it("invalid inputs - CPU", () => {
     ).toThrow()
 })
 
-const reqLimitMemoryCpuSpec = ResourcesSpec.make({
+const reqLimitMemoryCpuSpec = new ResourcesSpec({
     cpu: Unit.Cpu,
     memory: Unit.Data
 })
@@ -60,13 +60,13 @@ it("valid inputs - Data, Cpu", () => {
 })
 
 it("invalid inputs - Data", () => {
-    expect(() =>
-        reqLimitMemoryCpuSpec.parse({
+    expect(() => {
+        const a = reqLimitMemoryCpuSpec.parse({
             cpu: "1m->2m",
             // @ts-expect-error
             memory: "1Mi->2"
         })
-    ).toThrow()
+    }).toThrow()
     expect(() =>
         reqLimitMemoryCpuSpec.parse({
             cpu: "1m->2m",

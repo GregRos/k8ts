@@ -1,19 +1,19 @@
-import { mapFromObject, mapValues } from "@k8ts/metadata/util"
 import { seq } from "doddle"
-import { isEmpty, merge } from "lodash"
+import { isEmpty, mapValues, merge } from "lodash"
 import { string, type Parjser } from "parjs"
 import { mapConst, or } from "parjs/combinators"
 import { InstrumentsError } from "../../../error"
+import type { StringRecordLike } from "../../../utils/types"
 import type { UnitParser, UnitValue } from "../units"
 import { AnyUnitParser } from "../units/unit-parser"
-import { createResourceParser } from "./parser"
-import type { Resources_ReqLim, ResourcesReqLimits_Trait, ResourcesUnitMap_Trait } from "./types"
+import { createRequirementsParser } from "./parser"
+import type { Reqs_Dictionary, Reqs_ReqLimit } from "./types"
 
-export class ResourcesUnitMap<const RM extends ResourcesUnitMap_Trait<RM>> {
-    constructor(private _map: Map<string, Resources_ReqLim>) {}
+export class Reqs_Units {
+    constructor(private _record: Record<string, Reqs_ReqLimit>) {}
 
     toObject() {
-        const kubernetesForm = mapValues(this._map, (value, key) => {
+        const kubernetesForm = mapValues(this._record, (value, key) => {
             const result = {} as any
             if (value.request) {
                 result.requests = {
@@ -31,47 +31,49 @@ export class ResourcesUnitMap<const RM extends ResourcesUnitMap_Trait<RM>> {
             return undefined
         })
 
-        return merge({}, ...kubernetesForm.values())
+        return merge({}, ...Object.values(kubernetesForm).filter(x => x !== undefined))
     }
 }
 
-export class ResourcesSpec<const RM extends ResourcesUnitMap_Trait<RM>> {
-    readonly _unitParsers: Map<string, Parjser<UnitValue | undefined>>
-    readonly _reqLimitParsers: Map<string, Parjser<Resources_ReqLim>>
-    readonly _anyUnitParser = AnyUnitParser.make()
-    readonly _anyReqLimitParser = createResourceParser(this._anyUnitParser)
-    constructor(_unitMap: Map<string, UnitParser>) {
+export class ResourcesSpec<const UnitMap extends StringRecordLike<UnitMap>> {
+    private readonly _unitParsers: Record<string, Parjser<UnitValue | undefined>>
+    private readonly _reqLimitParsers: Record<string, Parjser<Reqs_ReqLimit>>
+    private readonly _anyUnitParser = AnyUnitParser.make()
+    private readonly _anyReqLimitParser = createRequirementsParser(this._anyUnitParser)
+    constructor(unitMap: {
+        [K in keyof UnitMap]: UnitParser<UnitMap[K]>
+    }) {
         const questionMarkParser = string("?").pipe(mapConst(undefined))
-        this._unitParsers = mapValues(_unitMap, parser =>
-            parser.parser.pipe(or(questionMarkParser))
+        this._unitParsers = mapValues(unitMap, parser => parser.parser.pipe(or(questionMarkParser)))
+        this._reqLimitParsers = mapValues(unitMap, parser =>
+            createRequirementsParser(parser as UnitParser)
         )
-        this._reqLimitParsers = mapValues(_unitMap, parser => createResourceParser(parser))
     }
 
     private _parseUnitValue(resource: string, input: string): UnitValue | undefined {
-        const pUnitValue = this._unitParsers.get(input)
+        const pUnitValue = this._unitParsers[input]
         if (!pUnitValue) {
             throw new InstrumentsError(`No parser found for ${input}`)
         }
         return pUnitValue.parse(input).value
     }
 
-    private _parseReqLimit(resource: string, input: string): Resources_ReqLim {
-        const pReqLimit = this._reqLimitParsers.get(resource)
+    private _parseReqLimit(resource: string, input: string): Reqs_ReqLimit {
+        const pReqLimit = this._reqLimitParsers[resource]
         if (!pReqLimit) {
             return this._anyReqLimitParser.parse(input).value
         }
         return pReqLimit.parse(input).value
     }
-    __INPUT__!: ResourcesReqLimits_Trait<RM>
+    __INPUT__!: Reqs_Dictionary<UnitMap>
 
-    parse<const R extends ResourcesReqLimits_Trait<RM>>(input: R): ResourcesUnitMap<RM> {
-        const allKeys = new Set([...Object.keys(input), ...this._unitParsers.keys()])
+    parse<const R extends Reqs_Dictionary<UnitMap>>(input: R): Reqs_Units {
+        const allKeys = new Set([...Object.keys(input), ...Object.keys(this._unitParsers)])
         const map = seq(allKeys)
-            .toMap(key => {
+            .toRecord(key => {
                 const getVal = () => {
                     const value = input[key as keyof R]
-                    const pUnitValue = this._unitParsers.get(key) ?? this._anyUnitParser.parser
+                    const pUnitValue = this._unitParsers[key] ?? this._anyUnitParser.parser
                     if (!pUnitValue) {
                         throw new InstrumentsError(`No parser found for ${String(key)}`)
                     }
@@ -96,12 +98,6 @@ export class ResourcesSpec<const RM extends ResourcesUnitMap_Trait<RM>> {
                 return [key, getVal()] as const
             })
             .pull()
-        return new ResourcesUnitMap(map as Map<string, Resources_ReqLim>)
-    }
-
-    static make<const RM extends ResourcesUnitMap_Trait<RM>>(unitMap: {
-        [K in keyof RM]: UnitParser<RM[K]>
-    }) {
-        return new ResourcesSpec<RM>(mapFromObject(unitMap as any) as Map<string, UnitParser>)
+        return new Reqs_Units(map)
     }
 }

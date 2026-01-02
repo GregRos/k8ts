@@ -44,14 +44,14 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
         })
     }
     equals(other: any): boolean {
-        const FwRef_Exports = require("../resource/reference/fw-ref-exports").FwRef_Exports
+        const ForwardExports = require("../resource/reference/forward-exports").ForwardExports
         if (!other) {
             return false
         }
         if (other instanceof Origin) {
             return Object.is(this, other)
         }
-        if (FwRef_Exports.is(other)) {
+        if (ForwardExports.is(other)) {
             return other.equals(this)
         }
         return false

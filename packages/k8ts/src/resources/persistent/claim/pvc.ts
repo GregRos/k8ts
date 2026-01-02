@@ -7,7 +7,7 @@ import { parsePvAccessMode, type PvAccessMode_Many } from "../access-mode"
 import type { Pv, Pv_Ref } from "../volume"
 import type { PvVolumeMode } from "../volume-mode"
 
-const pvc_ResourcesSpec = ResourcesSpec.make({
+const pvc_ResourcesSpec = new ResourcesSpec({
     storage: Unit.Data
 })
 export interface Pvc_Props<Mode extends PvVolumeMode> {

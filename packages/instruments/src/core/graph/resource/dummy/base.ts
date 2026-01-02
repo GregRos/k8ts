@@ -16,14 +16,6 @@ export class DummyResource<K extends IdentKind> extends Resource<string, any> {
             namespace: key.namespace,
             "#k8ts.org/is-external": "true"
         })
-
-        if (props.keys) {
-            Object.defineProperties(this, {
-                keys: {
-                    get: () => props.keys
-                }
-            })
-        }
     }
 
     protected __origin__() {
