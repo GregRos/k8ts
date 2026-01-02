@@ -1,50 +1,51 @@
 import { ResourceRef, ResourceTop, type Unit } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { MakeError } from "../../../error"
-import type { HostPathType } from "../../hostpath"
+import type { HostPath_Type } from "../../hostpath"
 import { v1 } from "../../idents/default"
 import { storage } from "../../idents/storage"
-import { parsePvAccessMode, type PvAccessModes } from "../access-mode"
-import type { PvMode } from "../block-mode"
+import { parsePvAccessMode, type PvAccessMode_Many } from "../access-mode"
+import type { PvVolumeMode } from "../volume-mode"
 import { parseBackend } from "./parse-backend"
 
 const StorageClassKind = storage.v1.StorageClass._
 
-export interface PvBackendHostPath {
+export interface Pv_Backend_HostPath {
     kind: "HostPath"
-    hostpathType: HostPathType
+    hostpathType: HostPath_Type
     path: string
 }
-export interface PvBackendLocal {
+export interface Pv_Backend_Local {
     kind: "Local"
     path: string
 }
-export interface PvBackendNfs {
+export interface Pv_Backend_NFS {
     kind: "NFS"
     server: string
     path: string
 }
 
-export type PvBackend = PvBackendHostPath | PvBackendLocal | PvBackendNfs
-export interface PvPropsK8ts<Mode extends PvMode = PvMode> {
-    $accessModes: PvAccessModes
+export type Pv_Backend = Pv_Backend_HostPath | Pv_Backend_Local | Pv_Backend_NFS
+export interface Pv_Props<Mode extends PvVolumeMode = PvVolumeMode> {
+    $accessModes: PvAccessMode_Many
     $storageClass?: ResourceRef<storage.v1.StorageClass._>
     $mode?: Mode
-    reclaimPolicy?: Reclaim
+    reclaimPolicy?: Pv_ReclaimMode
     $capacity: Unit.Data
-    $backend?: PvBackend
+    $backend?: Pv_Backend
     mountOptions?: string[]
     nodeAffinity?: CDK.VolumeNodeAffinity
 }
-export type Reclaim = "Retain" | "Delete" | "Recycle"
-export type PvRef<Mode extends PvMode = PvMode> = ResourceRef<v1.PersistentVolume._> & {
-    __MODE__: Mode
-}
+export type Pv_ReclaimMode = "Retain" | "Delete" | "Recycle"
+export type Pv_Ref<Mode extends PvVolumeMode = PvVolumeMode> =
+    ResourceRef<v1.PersistentVolume._> & {
+        __MODE__: Mode
+    }
 
 export class Pv<
-    Mode extends PvMode = "Filesystem",
+    Mode extends PvVolumeMode = "Filesystem",
     Name extends string = string
-> extends ResourceTop<Name, PvPropsK8ts<Mode>> {
+> extends ResourceTop<Name, Pv_Props<Mode>> {
     __MODE__!: Mode
     get ident() {
         return v1.PersistentVolume._

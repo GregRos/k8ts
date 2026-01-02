@@ -1,6 +1,6 @@
 export type PvAccessMode_Explicit = "ReadWriteOnce" | "ReadOnlyMany" | "ReadWriteMany"
 export type PvAccessMode = PvAccessMode_Explicit | "RWX" | "ROX" | "RWO"
-export type PvAccessModes = PvAccessMode | PvAccessMode[]
+export type PvAccessMode_Many = PvAccessMode | PvAccessMode[]
 
 function parseOne(mode: PvAccessMode): PvAccessMode_Explicit {
     switch (mode) {
@@ -16,7 +16,7 @@ function parseOne(mode: PvAccessMode): PvAccessMode_Explicit {
     }
 }
 
-export function parsePvAccessMode(modes: PvAccessModes): PvAccessMode_Explicit[] {
+export function parsePvAccessMode(modes: PvAccessMode_Many): PvAccessMode_Explicit[] {
     if (Array.isArray(modes)) {
         return modes.map(parseOne)
     } else {

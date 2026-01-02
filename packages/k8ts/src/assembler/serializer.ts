@@ -5,12 +5,13 @@ import {
     type ResourceTop
 } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
-import Emittery from "emittery"
+import type EventEmitter from "eventemitter3"
 import { dump, type DumpOptions } from "js-yaml"
 import { MakeError } from "../error"
 
 export interface YamlSerializerOptions {
     jsYamlOptions: DumpOptions
+    emitter?: EventEmitter<any>
 }
 export interface SerializingEvent {
     manifest: Manifest
@@ -19,14 +20,12 @@ export interface SerializingEvent {
 export interface SerializerEventsTable {
     serialize: SerializingEvent
 }
-export class YamlSerializer extends Emittery<SerializerEventsTable> {
-    constructor(private readonly _options: Partial<YamlSerializerOptions>) {
-        super()
-    }
+export class Assembler_Serializer_Yaml {
+    constructor(private readonly _options: Partial<YamlSerializerOptions>) {}
 
     async serialize(input: Manifest) {
         const node = ManifestSourceEmbedder.get(input).node
-        await this.emit("serialize", {
+        this._options.emitter?.emit("serialize", {
             manifest: input,
             resource: node
         })

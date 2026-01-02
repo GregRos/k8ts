@@ -1,15 +1,14 @@
 import { Manifest, ManifestSourceEmbedder, ResourceNode, ResourceTop } from "@k8ts/instruments"
-import Emittery from "emittery"
+import type EventEmitter from "eventemitter3"
 import { cloneDeep, cloneDeepWith, isEmpty, unset } from "lodash"
 import { version } from "../version"
 export interface ManifesterOptions {
     cwd?: string
+    emitter?: EventEmitter<any>
 }
 
-export class Manifester extends Emittery<ManifesterEventsTable> {
-    constructor(private readonly _options: ManifesterOptions) {
-        super()
-    }
+export class Assembler_Manifester {
+    constructor(private readonly _options: ManifesterOptions) {}
     private _cleanSpecificEmptyObjects(manifest: Manifest) {
         const clone = cloneDeepWith(manifest, (value, key) => {
             if (key !== "metadata") {
@@ -62,7 +61,7 @@ export class Manifester extends Emittery<ManifesterEventsTable> {
 
     async generate(res: ResourceNode): Promise<NodeManifest> {
         this._attachProductionAnnotations(res)
-        await this.emit("manifest", { resource: res })
+        this._options.emitter?.emit("manifest", { resource: res })
         const manifest = await this._generate(res.entity as ResourceTop)
         ManifestSourceEmbedder.add(manifest, res.entity)
         res.origin.entity["__emit__"]("resource/manifested", {

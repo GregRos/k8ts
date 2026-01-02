@@ -1,19 +1,17 @@
 import type { OriginNode } from "@k8ts/instruments"
-import Emittery from "emittery"
+import type EventEmitter from "eventemitter3"
 import { glob, mkdir, rm, writeFile } from "fs/promises"
 import { join, resolve } from "path"
-export class ManifestSaver extends Emittery<ManifestSaverEventsTable> {
+export class ManifestSaver {
     private _encoder = new TextEncoder()
-    constructor(private readonly _options: ManifestSaverOptions) {
-        super()
-    }
+    constructor(private readonly _options: ManifestSaverOptions) {}
 
     _splat(manifests: string[]) {
         return manifests.join("\n---\n")
     }
 
     async prepareOnce() {
-        await this.emit("purge", {
+        this._options.emitter?.emit("purge", {
             outdir: this._options.outdir
         })
         await mkdir(this._options.outdir, { recursive: true })
@@ -40,7 +38,7 @@ export class ManifestSaver extends Emittery<ManifestSaverEventsTable> {
             bytes: encoded.byteLength
         }
 
-        await this.emit("save", e)
+        this._options.emitter?.emit("save", e)
         await mkdir(this._options.outdir, { recursive: true })
         await writeFile(join(this._options.outdir, filename), encoded)
         return e
@@ -62,4 +60,5 @@ export interface ManifestSaverEventsTable {
 
 export interface ManifestSaverOptions {
     outdir: string
+    emitter?: EventEmitter<any>
 }

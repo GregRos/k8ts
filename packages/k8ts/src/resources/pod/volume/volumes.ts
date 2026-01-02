@@ -1,31 +1,28 @@
 import type { CDK } from "@k8ts/sample-interfaces"
 
 import { Resource, ResourcePart, type KeysResourceRef, type ResourceRef } from "@k8ts/instruments"
-import type { HostPathType } from "../../hostpath"
+import type { HostPath_Type } from "../../hostpath"
 import { v1 } from "../../idents/default"
 import {
-    type ContainerVolumeMountAttrs,
-    type ContainerVolumeMountSource
+    type ContainerVolumeMount_Input,
+    type ContainerVolumeMount_Unbound
 } from "../container/mounts/volume"
 
-export interface PodVolumeBackendPvc<
+export interface PodVolume_Backend_Pvc<
     A extends ResourceRef<v1.PersistentVolumeClaim._> = ResourceRef<v1.PersistentVolumeClaim._>
 > {
     $backend: A
     readOnly?: boolean
 }
-const allowedVolumeResourceKinds = [v1.ConfigMap._, v1.Secret._] as const
-type VolumeResourceKind = (typeof allowedVolumeResourceKinds)[number]
-export type AllowedResources = ResourceRef<VolumeResourceKind>
 
-export interface PodVolumeBackendHostPath {
+export interface PodVolume_Backend_HostPath {
     $backend: {
         kind: "HostPath"
-        type?: HostPathType
+        type?: HostPath_Type
         path: string
     }
 }
-export interface PodVolumeBackendConfigMap<
+export interface PodVolume_Backend_ConfigMap<
     A extends ResourceRef<v1.ConfigMap._> = ResourceRef<v1.ConfigMap._>
 > {
     $backend: A
@@ -35,7 +32,7 @@ export interface PodVolumeBackendConfigMap<
     }
 }
 
-export interface PodVolumeBackendSecret<
+export interface PodVolume_Backend_Secret<
     A extends ResourceRef<v1.Secret._> = ResourceRef<v1.Secret._>
 > {
     $backend: A
@@ -45,11 +42,11 @@ export interface PodVolumeBackendSecret<
     }
 }
 
-export type PodVolumeBackend =
-    | PodVolumeBackendPvc
-    | PodVolumeBackendConfigMap
-    | PodVolumeBackendSecret
-    | PodVolumeBackendHostPath
+export type PodVolume_Backend =
+    | PodVolume_Backend_Pvc
+    | PodVolume_Backend_ConfigMap
+    | PodVolume_Backend_Secret
+    | PodVolume_Backend_HostPath
 
 type _KeysOf<T> = T extends {
     $backend: {
@@ -66,10 +63,10 @@ type _Mapped<T> = T extends {
           [K in _KeysOf<T>]: K extends keyof M ? M[K] : K
       }[_KeysOf<T>]
     : _KeysOf<T>
-export type PodVolumeBackendKnownPaths<T extends PodVolumeBackend> = string & _Mapped<T>
+export type PodVolumeBackendKnownPaths<T extends PodVolume_Backend> = string & _Mapped<T>
 
 export abstract class PodVolume<
-    P extends PodVolumeBackend = PodVolumeBackend
+    P extends PodVolume_Backend = PodVolume_Backend
 > extends ResourcePart<P> {
     get ident() {
         return v1.Pod.Volume._
@@ -90,8 +87,8 @@ export abstract class PodVolume<
         }
     }
     Mount(
-        options?: ContainerVolumeMountAttrs<PodVolumeBackendKnownPaths<P>>
-    ): ContainerVolumeMountSource {
+        options?: ContainerVolumeMount_Input<PodVolumeBackendKnownPaths<P>>
+    ): ContainerVolumeMount_Unbound {
         return {
             ...options,
             $backend: this
@@ -101,7 +98,7 @@ export abstract class PodVolume<
     protected abstract __submanifest__(): CDK.Volume
 }
 
-export class PodVolumePvc extends PodVolume<PodVolumeBackendPvc> {
+export class PodVolume_Pvc extends PodVolume<PodVolume_Backend_Pvc> {
     protected __submanifest__(): CDK.Volume {
         return {
             name: this.name,
@@ -127,7 +124,7 @@ function mappingsToKeyPaths(input: Record<string, string>) {
     return arr
 }
 
-export class PodVolumeConfigMap extends PodVolume<PodVolumeBackendConfigMap> {
+export class PodVolume_ConfigMap extends PodVolume<PodVolume_Backend_ConfigMap> {
     protected __submanifest__(): CDK.Volume {
         const mappings = mappingsToKeyPaths(this.props.mappings ?? {})
 
@@ -142,9 +139,9 @@ export class PodVolumeConfigMap extends PodVolume<PodVolumeBackendConfigMap> {
     }
 }
 
-export class PodVolumeSecret<
+export class PodVolume_Secret<
     Source extends ResourceRef<v1.Secret._>
-> extends PodVolume<PodVolumeBackendSecret> {
+> extends PodVolume<PodVolume_Backend_Secret> {
     protected __submanifest__(): CDK.Volume {
         const mappings = mappingsToKeyPaths(this.props.mappings ?? {})
 
@@ -159,7 +156,7 @@ export class PodVolumeSecret<
     }
 }
 
-export class PodVolumeHostPath extends PodVolume<PodVolumeBackendHostPath> {
+export class PodVolume_HostPath extends PodVolume<PodVolume_Backend_HostPath> {
     protected __submanifest__(): CDK.Volume {
         return {
             name: this.name,

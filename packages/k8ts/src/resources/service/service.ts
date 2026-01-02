@@ -2,35 +2,35 @@ import { ResourceRef, ResourceTop, type PortMapping_Input } from "@k8ts/instrume
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { MakeError } from "../../error"
-import { Deployment, type DeploymentRef } from "../deployment"
+import { Deployment, type Deployment_Ref } from "../deployment"
 import { v1 } from "../idents/index"
-import { toServicePorts } from "../utils/adapters"
-import { Port } from "./service-port"
-export interface ServiceFrontendClusterIp {
+import { Service_PortRef } from "./service-port"
+import { toServicePorts } from "./utils"
+export interface Sevice_Frontend_ClusterIp {
     type: "ClusterIP"
 }
 
-export interface ServiceFrontendLoadBalancer {
+export interface Service_Frontend_LoadBalancer {
     type: "LoadBalancer"
     loadBalancerIP?: string
     loadBalancerSourceRanges?: string[]
     loadBalancerClass?: string
     allocateLoadBalancerNodePorts?: boolean
 }
-export type ServiceFrontend = ServiceFrontendClusterIp | ServiceFrontendLoadBalancer
-export interface ServiceProps<DeployPorts extends string, ExposedPorts extends DeployPorts> {
+export type Service_Frontend = Sevice_Frontend_ClusterIp | Service_Frontend_LoadBalancer
+export interface Service_Props<DeployPorts extends string, ExposedPorts extends DeployPorts> {
     $ports: PortMapping_Input<ExposedPorts>
-    $backend: DeploymentRef<DeployPorts>
-    $frontend: ServiceFrontend
+    $backend: Deployment_Ref<DeployPorts>
+    $frontend: Service_Frontend
 }
-export interface ServiceRef<ExposedPorts extends string> extends ResourceRef<v1.Service._> {
+export interface Service_Ref<ExposedPorts extends string> extends ResourceRef<v1.Service._> {
     __PORTS__: ExposedPorts
 }
 
 export class Service<
     Name extends string = string,
     PortsExposed extends string = string
-> extends ResourceTop<Name, ServiceProps<string, PortsExposed>> {
+> extends ResourceTop<Name, Service_Props<string, PortsExposed>> {
     __PORTS__!: PortsExposed
     get ident() {
         return v1.Service._
@@ -57,7 +57,7 @@ export class Service<
     }
 
     portRef(name: PortsExposed) {
-        return new Port({
+        return new Service_PortRef({
             service: this,
             name: name
         })

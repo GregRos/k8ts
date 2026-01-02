@@ -1,29 +1,26 @@
 import { ResourcesSpec, ResourceTop, Unit, type ResourceRef } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
-import { Prefix$ } from "../../../_type/prefix$"
 import { MakeError } from "../../../error"
 import { v1 } from "../../idents/default"
 import { storage } from "../../idents/storage"
-import { parsePvAccessMode, type PvAccessModes } from "../access-mode"
-import type { PvMode } from "../block-mode"
-import type { Pv, PvRef } from "../volume"
-
-const StorageClassKind = storage.v1.StorageClass._
+import { parsePvAccessMode, type PvAccessMode_Many } from "../access-mode"
+import type { Pv, Pv_Ref } from "../volume"
+import type { PvVolumeMode } from "../volume-mode"
 
 const pvc_ResourcesSpec = ResourcesSpec.make({
     storage: Unit.Data
 })
-type PvcResources = Prefix$<(typeof pvc_ResourcesSpec)["__INPUT__"]>
-export interface PvcProps<Mode extends PvMode> extends PvcResources {
-    $accessModes: PvAccessModes
+export interface Pvc_Props<Mode extends PvVolumeMode> {
+    $accessModes: PvAccessMode_Many
     $mode?: Mode
-    $storageClass?: ResourceRef<typeof StorageClassKind>
-    $bind?: PvRef<Mode>
+    $storageClass?: ResourceRef<storage.v1.StorageClass._>
+    $bind?: Pv_Ref<Mode>
+    $resources: typeof pvc_ResourcesSpec.__INPUT__
 }
 
-export class Pvc<Mode extends PvMode, Name extends string = string> extends ResourceTop<
+export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extends ResourceTop<
     Name,
-    PvcProps<Mode>
+    Pvc_Props<Mode>
 > {
     declare name: Name
     get ident() {
@@ -39,7 +36,7 @@ export class Pvc<Mode extends PvMode, Name extends string = string> extends Reso
     }
     protected body(): CDK.KubePersistentVolumeClaimProps {
         const self = this
-        const { $storage, $accessModes, $mode, $storageClass, $bind } = self.props
+        const { $resources, $accessModes, $mode, $storageClass, $bind } = self.props
         const nAccessModes = parsePvAccessMode($accessModes)
         if (!$bind && !$storageClass) {
             throw new MakeError(
@@ -53,7 +50,7 @@ export class Pvc<Mode extends PvMode, Name extends string = string> extends Reso
                 volumeMode: $mode,
                 resources: pvc_ResourcesSpec
                     .parse({
-                        storage: $storage
+                        storage: $resources.storage
                     })
                     .toObject(),
                 storageClassName: self.props.$storageClass?.name ?? "standard"

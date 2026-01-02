@@ -3,7 +3,7 @@ import { ResourcePart } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../idents/default"
 import { Pvc } from "../../persistent"
-import type { ContainerDeviceMountSource } from "../container/mounts/device"
+import type { ContainerDeviceMount_Input } from "../container/mounts/device"
 interface PodDeviceBackendPvc {
     $backend: Pvc<"Block">
     readOnly?: boolean
@@ -43,7 +43,7 @@ export class PodDevice extends ResourcePart<PodDeviceBackendPvc> {
         }
     }
 
-    Mount(): ContainerDeviceMountSource {
+    Mount(): ContainerDeviceMount_Input {
         return {
             $backend: this
         }

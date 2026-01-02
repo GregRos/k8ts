@@ -1,17 +1,17 @@
-import { Service, type ServiceRef } from "./service"
+import { Service, type Service_Ref } from "./service"
 
-export interface ServicePortProps<Port extends string> {
-    service: ServiceRef<Port>
+export interface Service_PortRef_Props<Port extends string> {
+    service: Service_Ref<Port>
     name: Port
 }
 
-export class Port<Port extends string> {
-    constructor(readonly props: ServicePortProps<Port>) {}
+export class Service_PortRef<Port extends string> {
+    constructor(readonly props: Service_PortRef_Props<Port>) {}
     get service() {
         return this.props.service
     }
 
-    port() {
+    number() {
         return this.props.service.assert(Service).ports.get(this.props.name).frontend
     }
 }

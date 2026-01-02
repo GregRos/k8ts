@@ -43,18 +43,24 @@ export default W.File("deployment2.yaml", {
                 const claim = new Pvc("claim", {
                     $bind: cool,
                     $accessModes: ["ReadWriteOnce"],
-                    $storage: "1Gi->5Gi"
+                    $resources: {
+                        storage: "10Gi->20Gi"
+                    }
                 })
 
                 const claim2 = new Pvc("claim2", {
                     $storageClass: ext_topolvm_class,
                     $accessModes: ["ReadWriteOnce"],
-                    $storage: "1Gi->5Gi"
+                    $resources: {
+                        storage: "1Gi->5Gi"
+                    }
                 })
                 const claim3 = new Pvc("claim3", {
                     $storageClass: ext_topolvm_class,
                     $accessModes: ["ReadWriteOnce"],
-                    $storage: "=1Gi"
+                    $resources: {
+                        storage: "=1Gi"
+                    }
                 })
                 yield claim
                 yield new CronJob("test", {
@@ -81,7 +87,9 @@ export default W.File("deployment2.yaml", {
                 const devClaim = new Pvc("dev-claim", {
                     $accessModes: ["ReadWriteOnce"],
                     $bind: k8tsFile["PersistentVolume/dev-sda"],
-                    $storage: "1Gi->5Gi"
+                    $resources: {
+                        storage: "1Gi->5Gi"
+                    }
                 })
                 const xx = new ConfigMap("config", {
                     $data: {

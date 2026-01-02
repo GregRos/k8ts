@@ -1,7 +1,7 @@
 import { attr, dest, ManifestSourceEmbedder, pretty, quantity, verb } from "@k8ts/instruments"
 import ora from "ora"
 import type { Assembler, AssemblerEventsTable, AssemblyStage } from "./assembler"
-import { stage } from "./stage"
+import { AssemblerStage } from "./stage"
 export interface ProgressOptions {
     waitTransition?: number
     debug?: boolean
@@ -43,7 +43,7 @@ export class ProgressShower {
                     if (event.stage !== "done") {
                         return
                     }
-                    spinner.text = pretty`${stage(event.stage)}`
+                    spinner.text = pretty`${AssemblerStage(event.stage)}`
                     break
                 case "received-file":
                     spinner.text = pretty`${verb("Receive")} ${event.file}`

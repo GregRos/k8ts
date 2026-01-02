@@ -2,12 +2,12 @@ import { ResourceTop, type DataSource } from "@k8ts/instruments"
 import { v1 } from "../idents/default"
 import { resolveDataSourceRecord } from "./resolver"
 
-export interface SecretDataEntry {
+export interface Secret_Entry {
     as: "base64" | "plain"
     value: DataSource
 }
 
-export type SecretTypes =
+export type Secret_Types =
     | `kubernetes.io/${
           | "service-account-token"
           | "dockercfg"
@@ -16,14 +16,14 @@ export type SecretTypes =
           | "ssh-auth"
           | "tls"}`
     | "bootstrap.kubernetes.io/token"
-export interface SecretProps<Keys extends string = string> {
-    $type?: SecretTypes
+export interface Secret_Props<Keys extends string = string> {
+    $type?: Secret_Types
     $data?: Record<Keys, DataSource>
 }
 
 export class Secret<Name extends string = string, Keys extends string = string> extends ResourceTop<
     Name,
-    SecretProps<Keys>
+    Secret_Props<Keys>
 > {
     get keys() {
         return Object.keys(this.props.$data ?? {}) as Keys[]

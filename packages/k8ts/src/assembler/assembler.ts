@@ -3,22 +3,27 @@ import { Meta } from "@k8ts/metadata"
 import { aseq } from "doddle"
 import EventEmitter from "eventemitter3"
 import { cloneDeep } from "lodash"
-import { AssemblerRscLoader, type AssemblerRscLoaderEvents } from "./loader"
-import { Manifester, NodeManifest, type ManifesterEventsTable } from "./manifester"
+import { Assembler_ResourceLoader, type AssemblerRscLoaderEvents } from "./loader"
+import { Assembler_Manifester, NodeManifest, type ManifesterEventsTable } from "./manifester"
 import { ManifestSaver, type ManifestSaverEventsTable } from "./saver"
-import { YamlSerializer, type SerializerEventsTable } from "./serializer"
-import { NodeGraphValidator, ValidatorEventsTable } from "./validator"
+import { Assembler_Serializer_Yaml, type SerializerEventsTable } from "./serializer"
 
-const ANY_EVENT = Symbol("ANY_EVENT")
+const assemblerEventNames = [
+    "save",
+    "purge",
+    "serialize",
+    "manifest",
+    "load",
+    "received-file",
+    "stage"
+] as const satisfies ReadonlyArray<keyof AssemblerEventsTable>
 export class Assembler {
     private _emitter: EventEmitter<AssemblerEventsTable> = new EventEmitter()
-    constructor(private readonly _options: AssemblerOptions) {
-        // super()
-    }
+    constructor(private readonly _options: AssemblerOptions) {}
 
     on<Name extends keyof AssemblerEventsTable>(
         event: Name,
-        listener: (name: Name, payload: AssemblerEventsTable[Name]) => void
+        listener: (payload: AssemblerEventsTable[Name]) => void
     ) {
         this._emitter.on(event, listener as any)
         return this
@@ -30,45 +35,36 @@ export class Assembler {
             payload: AssemblerEventsTable[Name]
         ) => void
     ) {
-        return this.on(
-            ANY_EVENT as any,
-            ((_: any, name: any, payload: any) => {
-                return handler(name, payload)
-            }) as any
-        )
+        for (const eventName of assemblerEventNames) {
+            this._emitter.on(eventName, (payload: unknown) => {
+                handler(eventName, payload as any)
+            })
+        }
+        return this
     }
 
     async assemble(inFiles: Iterable<OriginExporter>) {
-        const _emit = <Name extends keyof AssemblerEventsTable>(
-            event: Name,
-            payload: AssemblerEventsTable[Name]
-        ) => {
-            this._emitter.emit(ANY_EVENT as any, event, payload)
-            this._emitter.emit(event, payload)
-        }
-        const validator = new NodeGraphValidator({})
-        const loader = new AssemblerRscLoader({})
-        loader.onAny(_emit)
-        const generator = new Manifester({
-            cwd: this._options.cwd
+        const emitter = this._emitter
+        const loader = new Assembler_ResourceLoader({ emitter })
+        const generator = new Assembler_Manifester({
+            cwd: this._options.cwd,
+            emitter
         })
-        generator.onAny(_emit)
-        const serializer = new YamlSerializer({})
-        serializer.onAny(_emit)
+        const serializer = new Assembler_Serializer_Yaml({ emitter })
         const saver = new ManifestSaver({
-            outdir: this._options.outdir
+            outdir: this._options.outdir,
+            emitter
         })
-        saver.onAny(_emit)
         const reports = aseq(inFiles)
             .map(x => x.node)
             .before(async () => {
-                await _emit("stage", { stage: "gathering" })
+                emitter.emit("stage", { stage: "gathering" })
             })
             .each(async file => {
-                await _emit("received-file", { file: file })
+                emitter.emit("received-file", { file: file })
             })
             .after(async () => {
-                await _emit("stage", { stage: "loading" })
+                emitter.emit("stage", { stage: "loading" })
             })
             .collect()
             .map(async file => {
@@ -80,7 +76,7 @@ export class Assembler {
                 }
             })
             .after(async () => {
-                await _emit("stage", { stage: "manifesting" })
+                emitter.emit("stage", { stage: "manifesting" })
             })
             .collect()
             .map(async ({ file, resources }) => {
@@ -97,17 +93,11 @@ export class Assembler {
                     resources: manifests
                 } satisfies FileNodes
             })
+
             .after(async () => {
-                await _emit("stage", { stage: "validating" })
+                emitter.emit("stage", { stage: "serializing" })
             })
-            .chunk(1000000)
-            .concatMap(async x => {
-                validator.validate(x)
-                return x
-            })
-            .after(async () => {
-                await _emit("stage", { stage: "serializing" })
-            })
+            .collect()
             .map(async ({ file, resources }) => {
                 const artifacts = await aseq(resources)
                     .map(async obj => {
@@ -125,7 +115,7 @@ export class Assembler {
                 }
             })
             .after(async () => {
-                await _emit("stage", { stage: "saving" })
+                emitter.emit("stage", { stage: "saving" })
             })
             .after(async () => {
                 await saver.prepareOnce()
@@ -145,7 +135,7 @@ export class Assembler {
                 }
             })
             .after(async () => {
-                await _emit("stage", { stage: "done" })
+                emitter.emit("stage", { stage: "done" })
             })
             .collect()
             .toArray()
@@ -194,8 +184,7 @@ export interface AssemblerEventsTable
     extends ManifestSaverEventsTable,
         SerializerEventsTable,
         ManifesterEventsTable,
-        AssemblerRscLoaderEvents,
-        ValidatorEventsTable {
+        AssemblerRscLoaderEvents {
     ["received-file"]: { file: OriginNode }
     ["stage"]: { stage: AssemblyStage }
 }

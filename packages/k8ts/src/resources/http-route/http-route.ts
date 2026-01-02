@@ -1,15 +1,12 @@
 import { ResourceTop, type ResourceRef } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { gateway } from "../idents/gateway"
-import type { Port } from "../service/service-port"
-
-const GatewayKind = gateway.v1.Gateway._
-const HttpRouteKind = gateway.v1.HttpRoute._
+import type { Service_PortRef } from "../service/service-port"
 
 export interface HttpRoute_Props<Ports extends string> {
     $gateway: ResourceRef<gateway.v1.Gateway._>
     $hostname: string
-    $backend: Port<Ports>
+    $backend: Service_PortRef<Ports>
     _filters?: CDK.HttpRouteSpecRulesFilters[]
 }
 
@@ -20,7 +17,7 @@ export class HttpRoute<Name extends string, Ports extends string> extends Resour
     declare name: Name
 
     get ident() {
-        return HttpRouteKind
+        return gateway.v1.HttpRoute._
     }
 
     private _getBackendRef() {
@@ -28,7 +25,7 @@ export class HttpRoute<Name extends string, Ports extends string> extends Resour
             kind: "Service",
             namespace: this.props.$backend.service.namespace,
             name: this.props.$backend.service.name,
-            port: this.props.$backend.port()
+            port: this.props.$backend.number()
         }
         return backendRef
     }

@@ -1,10 +1,8 @@
 import { OriginNode, ResourceNode, type Node, type ResourceTop } from "@k8ts/instruments"
-import Emittery from "emittery"
+import type EventEmitter from "eventemitter3"
 import { MakeError } from "../error"
-export class AssemblerRscLoader extends Emittery<AssemblerRscLoaderEvents> {
-    constructor(private readonly _options: AssemblerRscLoaderOptions) {
-        super()
-    }
+export class Assembler_ResourceLoader {
+    constructor(private readonly _options: AssemblerRscLoaderOptions) {}
 
     private _checkNames(resources: ResourceNode[]) {
         let names = new Map<string, ResourceNode>()
@@ -52,7 +50,7 @@ export class AssemblerRscLoader extends Emittery<AssemblerRscLoaderEvents> {
                 resource: res
             } as const
 
-            await this.emit("load", event)
+            this._options.emitter?.emit("load", event)
 
             origin.entity["__emit__"]("resource/loaded", {
                 origin: origin.entity,
@@ -86,4 +84,6 @@ export interface AssemblerRscLoaderEvents {
     load: AssemblerRscLoadedEvent
 }
 
-export interface AssemblerRscLoaderOptions {}
+export interface AssemblerRscLoaderOptions {
+    emitter?: EventEmitter<any>
+}

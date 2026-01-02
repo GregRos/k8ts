@@ -6,28 +6,29 @@ import { MakeError } from "../../error"
 import { apps } from "../idents/apps"
 import { PodTemplate, type PodProps } from "../pod"
 
-export interface DeploymentStrategyRollingUpdate extends CDK.RollingUpdateDeployment {
+export interface Deployment_Strategy_RollingUpdate extends CDK.RollingUpdateDeployment {
     type: "RollingUpdate"
+    options?: CDK.RollingUpdateDeployment
 }
-export interface DeploymentStrategyRecreate {
+export interface Deployment_Strategy_Recreate {
     type: "Recreate"
 }
-export type DeploymentStrategy = DeploymentStrategyRollingUpdate | DeploymentStrategyRecreate
+export type Deployment_Strategy = Deployment_Strategy_RollingUpdate | Deployment_Strategy_Recreate
 
-export type DeploymentProps<Ports extends string> = Omit<
+export type Deployment_Props<Ports extends string> = Omit<
     CDK.DeploymentSpec,
     "selector" | "template" | "strategy"
 > & {
     $template: PodProps<Ports>
-    $strategy?: DeploymentStrategy
+    $strategy?: Deployment_Strategy
 }
-export type DeploymentRef<Ports extends string> = ResourceRef<apps.v1.Deployment._> & {
+export type Deployment_Ref<Ports extends string> = ResourceRef<apps.v1.Deployment._> & {
     __PORTS__: Ports
 }
 
 export class Deployment<Name extends string, Ports extends string = string> extends ResourceTop<
     Name,
-    DeploymentProps<Ports>
+    Deployment_Props<Ports>
 > {
     __PORTS__!: Ports
     get ident() {

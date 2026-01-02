@@ -8,7 +8,6 @@ import {
     type TaggedImage
 } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
-import { toContainerPorts } from "../../utils/adapters"
 
 import { Resource, ResourcePart, ResourceTop } from "@k8ts/instruments"
 import { seq } from "doddle"
@@ -17,39 +16,40 @@ import { Env } from "../../../env"
 import type { EnvValue } from "../../../env/types"
 import { v1 } from "../../idents/default"
 import { PodDevice, PodVolume } from "../volume"
-import { ContainerDeviceMount, type ContainerDeviceMountSource } from "./mounts/device"
-import { ContainerVolumeMount, type ContainerVolumeMountSource } from "./mounts/volume"
+import { ContainerDeviceMount, type ContainerDeviceMount_Input } from "./mounts/device"
+import { ContainerVolumeMount, type ContainerVolumeMount_Unbound } from "./mounts/volume"
+import { toContainerPorts } from "./utils"
 const container_ResourcesSpec = ResourcesSpec.make({
     cpu: Unit.Cpu,
     memory: Unit.Data
 })
 
 type PodContainerResources = (typeof container_ResourcesSpec)["__INPUT__"]
-type PodContainerMountAny = ContainerVolumeMountSource | ContainerDeviceMountSource
-export type PodContainerMounts = {
+type PodContainerMountAny = ContainerVolumeMount_Unbound | ContainerDeviceMount_Input
+export type PodContainer_Mounts = {
     [key: string]: PodContainerMountAny
 }
 
-export interface PodContainerEnvFrom {
+export interface PodContainer_EnvFromItem {
     source: ResourceRef<v1.ConfigMap._> | ResourceRef<v1.Secret._>
     prefix?: string
     optional?: boolean
 }
-export interface PodContainerProps<
+export interface PodContainer_Props<
     Ports extends string = never,
     _Env extends Record<string, EnvValue> = Record<string, EnvValue>
 > extends Omit<CDK.Container, "name"> {
     $image: TaggedImage
     $ports?: PortExportsInput<Ports>
     $command?: CmdBuilder
-    $mounts?: PodContainerMounts
+    $mounts?: PodContainer_Mounts
     $env?: _Env
-    $envFrom?: PodContainerEnvFrom[]
+    $envFrom?: PodContainer_EnvFromItem[]
     $resources?: PodContainerResources
 }
 
 export class PodContainer<Ports extends string = string> extends ResourcePart<
-    PodContainerProps<Ports>
+    PodContainer_Props<Ports>
 > {
     __PORTS__!: Ports
     get ident() {
@@ -174,7 +174,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
         parent: Resource,
         name: string,
         readonly subtype: "init" | "main",
-        override readonly props: PodContainerProps<Ports>
+        override readonly props: PodContainer_Props<Ports>
     ) {
         super(parent, name, props)
     }
@@ -209,7 +209,7 @@ export function make<Ports extends string>(
     parent: ResourceTop,
     name: string,
     subtype: "init" | "main",
-    props: PodContainerProps<Ports>
+    props: PodContainer_Props<Ports>
 ) {
     return new PodContainer(parent, name, subtype, props)
 }

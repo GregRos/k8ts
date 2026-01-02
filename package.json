@@ -24,7 +24,7 @@
     "tidy": "run-s install:all lint:fix build:clean test"
   },
   "dependencies": {
-    "what-are-you": "^0.2.0",
+    "what-are-you": "^0.3.0",
     "yamprint": "^0.8.4"
   },
   "devDependencies": {

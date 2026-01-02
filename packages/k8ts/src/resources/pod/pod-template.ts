@@ -5,19 +5,19 @@ import { seq } from "doddle"
 import { omitBy } from "lodash"
 import type { EnvValuePrimitive } from "../../env/types"
 import { v1 } from "../idents/default"
-import { PodContainer, type PodContainerProps } from "./container"
+import { PodContainer, type PodContainer_Props } from "./container"
 import { PodDevice, type PodDeviceBackend } from "./volume/devices"
 import {
     PodVolume,
-    PodVolumeConfigMap,
-    PodVolumeHostPath,
-    PodVolumePvc,
-    PodVolumeSecret,
-    type PodVolumeBackend,
-    type PodVolumeBackendConfigMap,
-    type PodVolumeBackendHostPath,
-    type PodVolumeBackendPvc,
-    type PodVolumeBackendSecret
+    PodVolume_ConfigMap,
+    PodVolume_HostPath,
+    PodVolume_Pvc,
+    PodVolume_Secret,
+    type PodVolume_Backend,
+    type PodVolume_Backend_ConfigMap,
+    type PodVolume_Backend_HostPath,
+    type PodVolume_Backend_Pvc,
+    type PodVolume_Backend_Secret
 } from "./volume/volumes"
 export type PodPropsOriginal = Omit<CDK.PodSpec, "containers" | "initContainers" | "volumes">
 type ContainerRef<Ports extends string> = ResourceRef<v1.Pod.Container._> & {
@@ -125,39 +125,39 @@ export class PodScope {
                   }
                 | EnvValuePrimitive
         }
-    >(name: string, options: PodContainerProps<Ports, Env>) {
+    >(name: string, options: PodContainer_Props<Ports, Env>) {
         return new PodContainer(this._parent, name, "main", options)
     }
-    InitContainer(name: string, options: PodContainerProps<never>) {
+    InitContainer(name: string, options: PodContainer_Props<never>) {
         return new PodContainer(this._parent, name, "init", options)
     }
-    Volume<const P extends PodVolumeBackendHostPath>(name: string, options: P): PodVolume<P>
-    Volume<const P extends PodVolumeBackendConfigMap<ResourceRef<v1.ConfigMap._>>>(
+    Volume<const P extends PodVolume_Backend_HostPath>(name: string, options: P): PodVolume<P>
+    Volume<const P extends PodVolume_Backend_ConfigMap<ResourceRef<v1.ConfigMap._>>>(
         name: string,
         options: P
     ): PodVolume<P>
-    Volume<const P extends PodVolumeBackendSecret<ResourceRef<v1.Secret._>>>(
+    Volume<const P extends PodVolume_Backend_Secret<ResourceRef<v1.Secret._>>>(
         name: string,
         options: P
     ): PodVolume<P>
-    Volume<const P extends PodVolumeBackendPvc<ResourceRef<v1.PersistentVolumeClaim._>>>(
+    Volume<const P extends PodVolume_Backend_Pvc<ResourceRef<v1.PersistentVolumeClaim._>>>(
         name: string,
         options: P
     ): PodVolume<P>
-    Volume(name: string, options: PodVolumeBackend): PodVolume {
+    Volume(name: string, options: PodVolume_Backend): PodVolume {
         {
             const backend = options.$backend
             if ("kind" in backend && backend.kind === "HostPath") {
-                return new PodVolumeHostPath(this._parent, name, options as any)
+                return new PodVolume_HostPath(this._parent, name, options as any)
             }
         }
         const backend = options.$backend as ResourceRef
         if (backend.is(v1.ConfigMap._)) {
-            return new PodVolumeConfigMap(this._parent, name, options as any)
+            return new PodVolume_ConfigMap(this._parent, name, options as any)
         } else if (backend.is(v1.Secret._)) {
-            return new PodVolumeSecret(this._parent, name, options as any)
+            return new PodVolume_Secret(this._parent, name, options as any)
         } else if (backend.is(v1.PersistentVolumeClaim._)) {
-            return new PodVolumePvc(this._parent, name, options as any)
+            return new PodVolume_Pvc(this._parent, name, options as any)
         }
         throw new Error(`Unsupported volume backend kind: ${backend.ident}`)
     }

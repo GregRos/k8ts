@@ -7,16 +7,16 @@ import {
 import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../../idents"
 
-export interface ContainerDeviceMountSource {
+export interface ContainerDeviceMount_Input {
     $backend: ResourceRef<v1.Pod.Device._>
 }
 
-export interface ContainerMountDeviceProps extends ContainerDeviceMountSource {
+export interface ContainerMountDevice_Props extends ContainerDeviceMount_Input {
     mountPath: string
 }
 
-export class ContainerDeviceMount extends ResourcePart<ContainerMountDeviceProps> {
-    constructor(parent: Resource, props: ContainerMountDeviceProps) {
+export class ContainerDeviceMount extends ResourcePart<ContainerMountDevice_Props> {
+    constructor(parent: Resource, props: ContainerMountDevice_Props) {
         super(parent, props.$backend.name, props)
     }
     get ident() {
