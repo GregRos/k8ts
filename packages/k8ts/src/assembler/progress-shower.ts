@@ -1,6 +1,5 @@
 import { attr, dest, ManifestSourceEmbedder, pretty, quantity, verb } from "@k8ts/instruments"
 import ora from "ora"
-import { setTimeout } from "timers/promises"
 import type { Assembler, AssemblerEventsTable, AssemblyStage } from "./assembler"
 import { stage } from "./stage"
 export interface ProgressOptions {
@@ -33,7 +32,7 @@ export class ProgressShower {
         spinner.text = "abc"
         let filesWritten = 0
         let lastStage: AssemblyStage = "start"
-        const unsub = typedOnAny(events, async event => {
+        const unsub = typedOnAny(events, event => {
             switch (event.type) {
                 case "load":
                     spinner.text = pretty`${verb("Load")} ${attr(
@@ -64,9 +63,7 @@ export class ProgressShower {
                     spinner.text = pretty`${verb("Purge")} ${dest(event.outdir)}`
                     break
             }
-            if (this._options.waitTransition) {
-                await setTimeout(this._options.waitTransition)
-            }
+
             spinner.render()
 
             if (this._options.debug) {

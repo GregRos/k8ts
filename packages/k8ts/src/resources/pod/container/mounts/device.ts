@@ -5,7 +5,7 @@ import {
     type ResourceRef
 } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
-import { v1 } from "../../../../idents"
+import { v1 } from "../../../idents"
 
 export interface ContainerDeviceMountSource {
     $backend: ResourceRef<v1.Pod.Device._>

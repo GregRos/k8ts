@@ -1,6 +1,6 @@
 import { type OriginExporterProps, type ResourceRef, OriginExporter } from "@k8ts/instruments"
 import { doddle, doddlify, seq } from "doddle"
-import type { v1 } from "../../idents"
+import type { v1 } from "../../resources/idents"
 
 export class FileSectionScope {
     on: OriginSection["on"]

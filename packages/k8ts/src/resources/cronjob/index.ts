@@ -4,7 +4,7 @@ import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
 import { omitBy } from "lodash"
 import { Timezone } from "../../../../instruments/dist/expressions/timezone"
-import { batch } from "../../idents/batch"
+import { batch } from "../idents/batch"
 import { PodTemplate, type PodProps } from "../pod"
 export interface CronJob_Props<CronSpec extends Cron.Record>
     extends Omit<CDK.CronJobSpec, "jobTemplate" | "schedule" | "timeZone"> {

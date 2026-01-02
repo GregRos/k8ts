@@ -1,6 +1,6 @@
 import { ResourceTop, type ResourceRef } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
-import { gateway } from "../../idents/gateway"
+import { gateway } from "../idents/gateway"
 import type { Port } from "../service/service-port"
 
 const GatewayKind = gateway.v1.Gateway._

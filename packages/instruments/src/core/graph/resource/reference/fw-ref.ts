@@ -71,7 +71,7 @@ class FwRef_Proxied<To extends ResourceRef = ResourceRef> {
         this.#props = props
         Object.defineProperties(
             this,
-            mapValues(hiddenProperties, prop => ({ value: prop.bind(this) }))
+            mapValues(hiddenProperties, prop => ({ value: prop }))
         )
     }
 

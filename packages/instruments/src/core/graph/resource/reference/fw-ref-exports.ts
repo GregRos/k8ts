@@ -135,10 +135,11 @@ class FwRef_Exports_Handler<Entity extends OriginExporter> implements ProxyHandl
 
         const resourceKinds = this.resourceKinds
         const refKey = resourceKinds.tryParse(key)
-        const clazz = resourceKinds.tryGetClass(key)
         if (refKey == null) {
             return undefined
         }
+        const clazz = resourceKinds.getClass(key)
+
         return FwRef({
             class: clazz,
             key: new RefKey(refKey.kind, {

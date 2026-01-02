@@ -3,7 +3,7 @@ import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
 import { omit, omitBy } from "lodash"
 import { MakeError } from "../../error"
-import { apps } from "../../idents/apps"
+import { apps } from "../idents/apps"
 import { PodTemplate, type PodProps } from "../pod"
 
 export interface DeploymentStrategyRollingUpdate extends CDK.RollingUpdateDeployment {

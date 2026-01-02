@@ -1,10 +1,10 @@
 import type { ResourceRef } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
-import { isObject } from "what-are-you"
+import { isPrimitive } from "what-are-you"
 import { MakeError } from "../error"
-import { v1 } from "../idents/index"
-import { type EnvValue, type EnvValuePrimitive, type EnvValueSource } from "./types"
+import { v1 } from "../resources/idents"
+import { type EnvValue, type EnvValueSource } from "./types"
 import { isValidEnvVarName } from "./validate-name"
 
 export class EnvBuilder<M extends Record<keyof M, EnvValue>> {
@@ -44,7 +44,7 @@ export class EnvBuilder<M extends Record<keyof M, EnvValue>> {
         }
     }
 
-    *[Symbol.iterator](): IterableIterator<[string, EnvValuePrimitive]> {
+    *[Symbol.iterator](): IterableIterator<[string, EnvValue]> {
         for (const entry of Object.entries(this._env)) {
             yield entry as any
         }
@@ -53,30 +53,28 @@ export class EnvBuilder<M extends Record<keyof M, EnvValue>> {
     toEnvVars() {
         return seq(this)
             .map(([key, value]) => {
-                if (!isObject(value)) {
+                if (isPrimitive(value)) {
                     return {
                         name: key,
                         value: `${value}`
                     }
                 }
-                const resourceValue = value as any
-                switch (resourceValue.$backend.kind) {
-                    case v1.Secret._:
-                        return {
-                            name: key,
-                            valueFrom: this._envFromSecret(resourceValue as any)
-                        } satisfies CDK.EnvVar
-                    case v1.ConfigMap._:
-                        return {
-                            name: key,
-                            valueFrom: this._envFromConfigMap(resourceValue as any)
-                        } satisfies CDK.EnvVar
-                    default:
-                        throw new MakeError("Invalid environment variable reference", {
-                            key: key,
-                            value: value
-                        })
+                if (value.$backend.is(v1.Secret._)) {
+                    return {
+                        name: key,
+                        valueFrom: this._envFromSecret(value as any)
+                    } satisfies CDK.EnvVar
                 }
+                if (value.$backend.is(v1.ConfigMap._)) {
+                    return {
+                        name: key,
+                        valueFrom: this._envFromConfigMap(value as any)
+                    } satisfies CDK.EnvVar
+                }
+                throw new MakeError("Invalid environment variable reference", {
+                    key: key,
+                    value: value
+                })
             })
             .toArray()
             .pull()

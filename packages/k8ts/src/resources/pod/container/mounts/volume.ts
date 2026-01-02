@@ -1,6 +1,6 @@
 import { ResourcePart, type Resource, type ResourceRef } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
-import { v1 } from "../../../../idents"
+import { v1 } from "../../../idents"
 
 export interface ContainerVolumeMountAttrs<SubPaths extends string = string> {
     subPath?: SubPaths

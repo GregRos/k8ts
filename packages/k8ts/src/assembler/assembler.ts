@@ -1,7 +1,7 @@
 import { OriginNode, type OriginExporter } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { aseq } from "doddle"
-import Emittery from "emittery"
+import EventEmitter from "eventemitter3"
 import { cloneDeep } from "lodash"
 import { AssemblerRscLoader, type AssemblerRscLoaderEvents } from "./loader"
 import { Manifester, NodeManifest, type ManifesterEventsTable } from "./manifester"
@@ -9,17 +9,42 @@ import { ManifestSaver, type ManifestSaverEventsTable } from "./saver"
 import { YamlSerializer, type SerializerEventsTable } from "./serializer"
 import { NodeGraphValidator, ValidatorEventsTable } from "./validator"
 
-export class Assembler extends Emittery<AssemblerEventsTable> {
+const ANY_EVENT = Symbol("ANY_EVENT")
+export class Assembler {
+    private _emitter: EventEmitter<AssemblerEventsTable> = new EventEmitter()
     constructor(private readonly _options: AssemblerOptions) {
-        super()
+        // super()
+    }
+
+    on<Name extends keyof AssemblerEventsTable>(
+        event: Name,
+        listener: (name: Name, payload: AssemblerEventsTable[Name]) => void
+    ) {
+        this._emitter.on(event, listener as any)
+        return this
+    }
+
+    onAny(
+        handler: <Name extends keyof AssemblerEventsTable>(
+            name: Name,
+            payload: AssemblerEventsTable[Name]
+        ) => void
+    ) {
+        return this.on(
+            ANY_EVENT as any,
+            ((_: any, name: any, payload: any) => {
+                return handler(name, payload)
+            }) as any
+        )
     }
 
     async assemble(inFiles: Iterable<OriginExporter>) {
-        const _emit = async <Name extends keyof AssemblerEventsTable>(
+        const _emit = <Name extends keyof AssemblerEventsTable>(
             event: Name,
             payload: AssemblerEventsTable[Name]
         ) => {
-            return await this.emit(event, payload)
+            this._emitter.emit(ANY_EVENT as any, event, payload)
+            this._emitter.emit(event, payload)
         }
         const validator = new NodeGraphValidator({})
         const loader = new AssemblerRscLoader({})

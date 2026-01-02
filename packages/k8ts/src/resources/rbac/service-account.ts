@@ -1,6 +1,6 @@
 import { ResourceTop } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
-import { v1 } from "../../idents/default"
+import { v1 } from "../idents/default"
 export interface ServiceAccount_Props {
     automountToken?: boolean
     imagePullSecrets?: string[]

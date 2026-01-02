@@ -1,6 +1,6 @@
 import { ResourceTop, type DataSource } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
-import { v1 } from "../../idents/default"
+import { v1 } from "../idents/default"
 import { resolveDataSourceRecord } from "./resolver"
 export interface ConfigMap_Props<Keys extends string = string> {
     $data: Record<Keys, DataSource>

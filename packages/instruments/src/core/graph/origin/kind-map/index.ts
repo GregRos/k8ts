@@ -107,7 +107,8 @@ export class KindMap<Kinds extends ResourceConstructor = ResourceConstructor> {
     private _convert(something: LookupKey | RefKey | Function | IdentKind) {
         if (typeof something === "string") {
             if (something.includes("/")) {
-                return this.parse(something).kind
+                const r = this.parse(something)
+                return r.kind.text
             }
             return something
         } else if (typeof something === "function") {

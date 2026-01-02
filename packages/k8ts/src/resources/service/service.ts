@@ -2,8 +2,8 @@ import { ResourceRef, ResourceTop, type PortMapping_Input } from "@k8ts/instrume
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { MakeError } from "../../error"
-import { v1 } from "../../idents/index"
 import { Deployment, type DeploymentRef } from "../deployment"
+import { v1 } from "../idents/index"
 import { toServicePorts } from "../utils/adapters"
 import { Port } from "./service-port"
 export interface ServiceFrontendClusterIp {

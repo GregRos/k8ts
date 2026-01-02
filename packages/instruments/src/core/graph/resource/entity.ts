@@ -39,10 +39,10 @@ export abstract class Resource<
         super()
 
         this.name = name
-        const desc = getDeepPropertyDescriptor(this, "kind")
+        const desc = getDeepPropertyDescriptor(this, "ident")
         if (!desc || !desc.get) {
             throw new Error(
-                `ResourceEntity subclass ${getNiceClassName(this)} must implement the 'kind' property as a getter, but it's missing or not a getter.`
+                `ResourceEntity subclass ${getNiceClassName(this)} must implement the 'ident' property as a getter, but it's missing or not a getter.`
             )
         }
     }

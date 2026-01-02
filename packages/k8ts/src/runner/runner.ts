@@ -1,15 +1,8 @@
 import { GitTrace, Trace, type ForwardExports } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { seq } from "doddle"
-import Emittery from "emittery"
 import StackTracey from "stacktracey"
-import {
-    Assembler,
-    AssemblerEventsTable,
-    AssemblerOptions,
-    ProgressOptions,
-    ProgressShower
-} from "../assembler"
+import { Assembler, AssemblerOptions, ProgressOptions, ProgressShower } from "../assembler"
 import { Summarizer } from "./summarizer"
 
 export interface RunnerOptions extends AssemblerOptions {
@@ -18,10 +11,8 @@ export interface RunnerOptions extends AssemblerOptions {
     progress: ProgressOptions
 }
 
-export class Runner extends Emittery<AssemblerEventsTable> {
-    constructor(private readonly _options: RunnerOptions) {
-        super()
-    }
+export class Runner {
+    constructor(private readonly _options: RunnerOptions) {}
 
     async run<Ts extends ForwardExports[]>(input: Ts) {
         const results = seq(input)
@@ -47,9 +38,6 @@ export class Runner extends Emittery<AssemblerEventsTable> {
 
         const progressShower = new ProgressShower(options.progress)
         const assembler = new Assembler(options)
-        assembler.onAny(async (name, data) => {
-            await this.emit(name, data)
-        })
         const summarizer = new Summarizer({
             printOptions: this._options.printOptions
         })

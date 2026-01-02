@@ -17,7 +17,7 @@
       "@lib": ["../src"],
       "@lib/*": ["../src/*"],
       "@imports": ["../src/_imports"],
-      "@lib/kinds": ["../src/idents/index"]
+      "@lib/kinds": ["../src/resources/idents/index"]
     }
   },
   "include": ["**/*.ts"]

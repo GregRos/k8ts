@@ -61,6 +61,9 @@ export abstract class Ident<
         if (!other) {
             return false
         }
+        if (typeof other === "string") {
+            return this.text === other
+        }
         if (typeof other !== "object" || !other) {
             return false
         }

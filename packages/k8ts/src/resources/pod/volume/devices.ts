@@ -1,7 +1,7 @@
 import type { Resource } from "@k8ts/instruments"
 import { ResourcePart } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
-import { v1 } from "../../../idents/default"
+import { v1 } from "../../idents/default"
 import { Pvc } from "../../persistent"
 import type { ContainerDeviceMountSource } from "../container/mounts/device"
 interface PodDeviceBackendPvc {

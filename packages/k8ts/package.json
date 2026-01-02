@@ -36,10 +36,10 @@
       "types": "./dist/index.d.ts"
     },
     "./kinds": {
-      "require": "./dist/kinds/index.js",
-      "import": "./dist/kinds/index.js",
-      "default": "./dist/kinds/index.js",
-      "types": "./dist/kinds/index.d.ts"
+      "require": "./dist/idents.js",
+      "import": "./dist/idents.js",
+      "default": "./dist/idents.js.js",
+      "types": "./dist/idents.js.d.ts"
     }
   },
   "main": "dist/index.js",
@@ -67,6 +67,7 @@
     "dayjs": "^1.11.13",
     "doddle": "^7.3.1",
     "emittery": "0.13.1",
+    "eventemitter3": "^5.0.1",
     "ip-address": "^10.0.1",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
@@ -74,7 +75,7 @@
     "parjs": "^1.3.9",
     "simple-git": "^3.27.0",
     "stacktracey": "^2.1.8",
-    "what-are-you": "^0.2.0"
+    "what-are-you": "portal:/C:/codegr/what-are-you"
   },
   "devDependencies": {
     "@k8ts/instruments": "workspace:^",

@@ -1,8 +1,8 @@
 import type { CDK } from "@k8ts/sample-interfaces"
 
 import { Resource, ResourcePart, type KeysResourceRef, type ResourceRef } from "@k8ts/instruments"
-import { v1 } from "../../../idents/default"
 import type { HostPathType } from "../../hostpath"
+import { v1 } from "../../idents/default"
 import {
     type ContainerVolumeMountAttrs,
     type ContainerVolumeMountSource

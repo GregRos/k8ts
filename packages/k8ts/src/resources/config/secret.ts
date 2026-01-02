@@ -1,5 +1,5 @@
 import { ResourceTop, type DataSource } from "@k8ts/instruments"
-import { v1 } from "../../idents/default"
+import { v1 } from "../idents/default"
 import { resolveDataSourceRecord } from "./resolver"
 
 export interface SecretDataEntry {
