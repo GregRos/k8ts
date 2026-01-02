@@ -10,13 +10,13 @@ import type { PortMappingEntry } from "./types"
  *
  * @template Names The union type of all port names in the map.
  */
-export class PortMap<Names extends string> {
+export class PortsMapped<Names extends string> {
     constructor(private readonly _map: Map<string, PortMappingEntry>) {}
 
     private _apply(
         f: (map: Map<string, PortMappingEntry>) => Map<string, PortMappingEntry>
-    ): PortMap<any> {
-        return new PortMap(f(this._map))
+    ): PortsMapped<any> {
+        return new PortsMapped(f(this._map))
     }
 
     /**
@@ -25,7 +25,7 @@ export class PortMap<Names extends string> {
      * @param name The port names to include in the new map.
      * @returns A new PortMap with only the selected ports.
      */
-    pick<InNames extends Names>(...name: InNames[]): PortMap<InNames> {
+    pick<InNames extends Names>(...name: InNames[]): PortsMapped<InNames> {
         return this._apply(map => filterMap(map, (_, key) => name.includes(key as InNames)))
     }
 
@@ -40,8 +40,8 @@ export class PortMap<Names extends string> {
      * @param mapping A record mapping port names to their new frontend port numbers.
      * @returns A new PortMap with updated frontend ports.
      */
-    map(mapping: Record<Names, number>): PortMap<Names> {
-        return new PortMap(
+    map(mapping: Record<Names, number>): PortsMapped<Names> {
+        return new PortsMapped(
             mapValues(this._map, entry => {
                 return {
                     ...entry,

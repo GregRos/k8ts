@@ -3,8 +3,8 @@ import type { AnyCtor } from "what-are-you"
 import { InstrumentsError } from "../../../../error"
 
 import { Ident, IdentKind } from "../../resource/api-kind"
-import { ResourceKey } from "../../resource/ref-key"
 import { ResourceConstructor } from "../../resource/reference"
+import { ResourceKey } from "../../resource/resource-key"
 const separator = "/"
 interface NodeEntry {
     kindName: string

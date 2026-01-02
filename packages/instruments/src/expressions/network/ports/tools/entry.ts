@@ -1,7 +1,7 @@
 import { seq } from "doddle"
 import { Ip4 } from "../../ip"
 import type { PortExportsInput } from "../set"
-import { PortExports } from "../set"
+import { PortsExposed } from "../set"
 import type { PortFull, PortFullInput, PortInput, PortProtocol } from "../types"
 import { parsePortSpec } from "./parse"
 
@@ -30,9 +30,9 @@ export function parsePortInput(name: string, input: PortInput): PortFull {
 }
 
 export function portRecordInput(
-    record: PortExportsInput<string> | PortExports<string>
+    record: PortExportsInput<string> | PortsExposed<string>
 ): Map<string, PortFull> {
-    if (record instanceof PortExports) {
+    if (record instanceof PortsExposed) {
         return record.values
     }
     const inputMap = seq(Object.entries(record))

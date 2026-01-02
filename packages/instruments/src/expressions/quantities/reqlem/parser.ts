@@ -1,7 +1,7 @@
 import { space, string } from "parjs"
 import { between, many, manySepBy, map, must, or, qthen } from "parjs/combinators"
 import type { UnitParser } from "../units/unit-parser"
-import type { ReqLimit } from "./types"
+import type { Resources_ReqLim } from "./types"
 
 export function createResourceParser(pUnitValue: UnitParser) {
     const pSpaces = space().pipe(many())
@@ -21,7 +21,7 @@ export function createResourceParser(pUnitValue: UnitParser) {
             return {
                 request: a,
                 limit: b
-            } as ReqLimit
+            } as Resources_ReqLim
         })
     )
     const equalsExprParser = string("=").pipe(
@@ -30,7 +30,7 @@ export function createResourceParser(pUnitValue: UnitParser) {
             return {
                 request: x,
                 limit: x
-            } as ReqLimit
+            } as Resources_ReqLim
         })
     )
     return equalsExprParser.pipe(or(arrowExprParser))

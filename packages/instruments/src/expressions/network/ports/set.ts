@@ -2,7 +2,7 @@ import { Meta } from "@k8ts/metadata"
 import { filterMap, mapValues, merge } from "@k8ts/metadata/util"
 import { seq } from "doddle"
 import { PortError } from "./error"
-import { PortMap, PortMapping_Input } from "./map"
+import { PortMapping_Input, PortsMapped } from "./map"
 import { parsePortInput, portRecordInput } from "./tools/entry"
 import type { PortBasicInput, PortFull, PortFullInput, PortInput, PortProtocolInput } from "./types"
 
@@ -12,7 +12,7 @@ import type { PortBasicInput, PortFull, PortFullInput, PortInput, PortProtocolIn
  *
  * @template Names All exported port names.
  */
-export class PortExports<Names extends string = never> {
+export class PortsExposed<Names extends string = never> {
     constructor(private readonly _map: Map<Names, PortFull> = new Map()) {
         for (const entry of _map.values()) {
             Meta._checkNameValue(`container port '${entry.name}' (${entry.port})`, entry.name)
@@ -20,7 +20,7 @@ export class PortExports<Names extends string = never> {
     }
 
     private _apply(f: (map: Map<string, PortFull>) => Map<string, PortFull>) {
-        return new PortExports(f(this._map))
+        return new PortsExposed(f(this._map))
     }
 
     /**
@@ -30,8 +30,8 @@ export class PortExports<Names extends string = never> {
      * @returns A new PortExports containing ports from both dictionaries. The 2nd dictionary's
      *   ports will overwrite any with the same name from the first.
      */
-    union<InNames extends string>(other: PortExports<InNames>): PortExports<Names | InNames> {
-        return new PortExports(merge(this._map, other._map))
+    union<InNames extends string>(other: PortsExposed<InNames>): PortsExposed<Names | InNames> {
+        return new PortsExposed(merge(this._map, other._map))
     }
 
     /**
@@ -45,7 +45,7 @@ export class PortExports<Names extends string = never> {
         name: Name,
         port: PortBasicInput,
         protocol: PortProtocolInput
-    ): PortExports<Names | Name>
+    ): PortsExposed<Names | Name>
     /**
      * Adds a port with a name and full port configuration.
      *
@@ -53,13 +53,13 @@ export class PortExports<Names extends string = never> {
      * @param entry The port configuration including number and protocol, and optional host
      *   settings.
      */
-    add<Name extends string>(name: Name, entry: PortFullInput): PortExports<Names | Name>
+    add<Name extends string>(name: Name, entry: PortFullInput): PortsExposed<Names | Name>
     /**
      * Adds multiple ports from a record of port configurations.
      *
      * @param input A record mapping port names to their configurations.
      */
-    add<InNames extends string>(input?: PortExportsInput<InNames>): PortExports<Names | InNames>
+    add<InNames extends string>(input?: PortExportsInput<InNames>): PortsExposed<Names | InNames>
     add(a: any, b?: any, c?: any): any {
         if (!a) {
             return this
@@ -82,7 +82,7 @@ export class PortExports<Names extends string = never> {
      * @param name The port names to include.
      * @returns A new PortExports with only the selected ports.
      */
-    pick<InNames extends Names>(...name: InNames[]): PortExports<InNames> {
+    pick<InNames extends Names>(...name: InNames[]): PortsExposed<InNames> {
         return this._apply(map => filterMap(map, (_, key) => name.includes(key as InNames))) as any
     }
 
@@ -118,8 +118,8 @@ export class PortExports<Names extends string = never> {
      * @returns A new PortMap with the specified frontend mappings.
      * @throws {PortError} If a port name is missing from the mapping or has an invalid value.
      */
-    map(mapping: PortMapping_Input<Names>): PortMap<Names> {
-        return new PortMap(
+    map(mapping: PortMapping_Input<Names>): PortsMapped<Names> {
+        return new PortsMapped(
             mapValues(this._map, entry => {
                 if (!(entry.name in mapping)) {
                     throw new PortError(`Port ${entry.name} not found in mapping`)
@@ -152,7 +152,7 @@ export class PortExports<Names extends string = never> {
      * @returns A new PortExports containing the specified ports.
      */
     static make<Names extends string>(input?: PortExportsInput<Names>) {
-        return new PortExports().add(input)
+        return new PortsExposed().add(input)
     }
 }
 

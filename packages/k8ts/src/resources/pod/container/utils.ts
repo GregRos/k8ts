@@ -1,4 +1,4 @@
-import type { PortExports, PortFull } from "@k8ts/instruments"
+import type { PortFull, PortsExposed } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 export function toContainerPort(entry: PortFull): CDK.ContainerPort {
@@ -11,6 +11,6 @@ export function toContainerPort(entry: PortFull): CDK.ContainerPort {
     }
 }
 
-export function toContainerPorts(ports: PortExports<any>) {
+export function toContainerPorts(ports: PortsExposed<any>) {
     return seq(ports.values.values()).map(toContainerPort).toArray().pull()
 }

@@ -9,7 +9,7 @@ import { Node } from "../node"
 import { OriginNode } from "../origin/node"
 import type { IdentKind, IdentLike } from "./api-kind"
 import type { Resource } from "./entity"
-import { ResourceKey } from "./ref-key"
+import { ResourceKey } from "./resource-key"
 
 @displayers({
     simple: s => `[${s.shortFqn}]`,

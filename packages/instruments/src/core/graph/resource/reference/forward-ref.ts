@@ -1,7 +1,7 @@
 import { seq, type Doddle } from "doddle"
 import { mapValues } from "lodash"
 import { getNiceClassName, type AnyCtor } from "what-are-you"
-import { ResourceKey } from "../ref-key"
+import { ResourceKey } from "../resource-key"
 import { ProxyOperationError } from "./error"
 import type { ResourceRef } from "./resource-ref"
 

@@ -1,11 +1,11 @@
-import type { ExternalResource, ResourceConstructor } from "../resource"
+import type { DummyResource, ResourceConstructor } from "../resource"
 import { Origin } from "./entity"
 import type { Origin_Props } from "./node"
 /**
- * Used as the Origin of {@link ExternalResource} resources. These resources are never manifested by
+ * Used as the Origin of {@link DummyResource} resources. These resources are never manifested by
  * k8ts. They're expected to already exist in the target cluster.
  */
-export class OriginExternal extends Origin {
+export class DummyOrigin extends Origin {
     get ident() {
         return "[k8ts] External"
     }
@@ -17,5 +17,5 @@ export class OriginExternal extends Origin {
         return undefined
     }
 
-    static instance = new OriginExternal()
+    static instance = new DummyOrigin()
 }

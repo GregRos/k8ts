@@ -1,7 +1,7 @@
 import { InstrumentsError } from "../../../../error"
 import { bind_own_methods } from "../../../../utils"
 import { displayers } from "../../../../utils/displayers"
-import { ResourceKey, type RefKey_Options } from "../ref-key"
+import { ResourceKey, type RefKey_Options } from "../resource-key"
 import { pluralize } from "./pluralize"
 
 export interface IdentLike {

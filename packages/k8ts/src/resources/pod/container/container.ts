@@ -1,5 +1,5 @@
 import {
-    PortExports,
+    PortsExposed,
     ResourcesSpec,
     Unit,
     type CmdBuilder,
@@ -93,7 +93,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
             .pull()
     }
     get ports() {
-        return PortExports.make(this.props.$ports)
+        return PortsExposed.make(this.props.$ports)
     }
     protected __submanifest__(): CDK.Container {
         const self = this
@@ -102,7 +102,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
         let resourcesObject = self._resources()?.toObject()
         const containerPorts =
             $ports &&
-            seq(toContainerPorts(PortExports.make($ports)).values())
+            seq(toContainerPorts(PortsExposed.make($ports)).values())
                 .toArray()
                 .pull()
 

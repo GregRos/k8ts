@@ -1,16 +1,9 @@
 import type { IdentKind } from "../api-kind"
-import type { ExternalResource } from "../external"
+import type { DummyResource } from "../dummy"
 import type { ResourceRef } from "../reference"
+import type { ResourceKey_sFormat } from "./parsing"
 
-/**
- * String format template for reference keys.
- *
- * @template Kind - The Kubernetes resource kind
- * @template Name - The resource name
- */
-export type ResourceKey_sFormat<Kind extends string, Name extends string> = `${Kind}/${Name}`
-
-const separator = "/"
+export const separator = "/"
 
 /** Parsed representation of a reference key string. */
 export interface ResourceKey_Parsed {
@@ -18,33 +11,6 @@ export interface ResourceKey_Parsed {
     kind: string
     /** The resource name */
     name: string
-}
-
-/**
- * Attempts to parse a reference key string into its kind and name components. Returns undefined if
- * the string cannot be parsed.
- *
- * @param ref - The reference key string to parse (format: "Kind/Name")
- * @returns The parsed reference key, or undefined if parsing fails
- */
-export function tryParse(ref: string): ResourceKey_Parsed | undefined {
-    if (typeof ref !== "string") {
-        return undefined
-    }
-    if (ref == null) {
-        return undefined
-    }
-    if (typeof ref === "object") {
-        return undefined
-    }
-    const [kind, name] = ref.split(separator).map(s => s.trim())
-    if (!kind || !name) {
-        return undefined
-    }
-    return {
-        kind,
-        name
-    }
 }
 
 type nsKind = IdentKind<"", "v1", "Namespace">
@@ -63,8 +29,8 @@ export interface RefKey_Options<Name extends string = string> {
 
 /**
  * A unique identifier for a k8s resource consisting of a Kind, name, and namespace. Used by
- * resources to reference other resources. Serves as the basis for the {@link ExternalResource}
- * resource type.
+ * resources to reference other resources. Serves as the basis for the {@link DummyResource} resource
+ * type.
  *
  * Important: This class is ambiguous because it can represent keys for namespaced resources but
  * ignore the namespace. Needs some kind of refactor.
@@ -136,9 +102,9 @@ export class ResourceKey<K extends IdentKind = IdentKind, Name extends string = 
      * @param options - Optional external properties configuration
      * @returns An External instance with the specified features
      */
-    External(): ExternalResource<K> {
-        const External = require("../external").External
+    DummyResource(): DummyResource<K> {
+        const DummyResource = require("../external").DummyResource
 
-        return new External(this) as any
+        return new DummyResource(this) as any
     }
 }

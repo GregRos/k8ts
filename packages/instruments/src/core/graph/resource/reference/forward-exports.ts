@@ -1,7 +1,7 @@
 import { seq } from "doddle"
 import { Origin } from "../../origin"
 import type { OriginExporter } from "../../origin/exporter"
-import { ResourceKey } from "../ref-key"
+import { ResourceKey } from "../resource-key"
 import { ProxyOperationError } from "./error"
 import { ForwardRef } from "./forward-ref"
 import type { ResourceRef } from "./resource-ref"

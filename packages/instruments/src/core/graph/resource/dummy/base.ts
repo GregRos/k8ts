@@ -1,9 +1,9 @@
 import { Meta } from "@k8ts/metadata"
-import { OriginExternal } from "../../origin/external"
+import { DummyOrigin } from "../../origin/dummy"
 import type { IdentKind } from "../api-kind"
 import { Resource } from "../entity"
-import type { ResourceKey } from "../ref-key"
-export class ExternalResource<K extends IdentKind> extends Resource<string, any> {
+import type { ResourceKey } from "../resource-key"
+export class DummyResource<K extends IdentKind> extends Resource<string, any> {
     readonly meta = Meta.make()
     constructor(
         readonly key: ResourceKey<K>,
@@ -27,7 +27,7 @@ export class ExternalResource<K extends IdentKind> extends Resource<string, any>
     }
 
     protected __origin__() {
-        return OriginExternal.instance
+        return DummyOrigin.instance
     }
     get namespace() {
         return this.meta.tryGet("namespace")

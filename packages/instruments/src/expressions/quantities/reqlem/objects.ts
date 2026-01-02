@@ -7,10 +7,10 @@ import { InstrumentsError } from "../../../error"
 import type { UnitParser, UnitValue } from "../units"
 import { AnyUnitParser } from "../units/unit-parser"
 import { createResourceParser } from "./parser"
-import type { ReqLimit, ResourcesReqLimits_Trait, ResourcesUnitMap_Trait } from "./types"
+import type { Resources_ReqLim, ResourcesReqLimits_Trait, ResourcesUnitMap_Trait } from "./types"
 
 export class ResourcesUnitMap<const RM extends ResourcesUnitMap_Trait<RM>> {
-    constructor(private _map: Map<string, ReqLimit>) {}
+    constructor(private _map: Map<string, Resources_ReqLim>) {}
 
     toObject() {
         const kubernetesForm = mapValues(this._map, (value, key) => {
@@ -37,7 +37,7 @@ export class ResourcesUnitMap<const RM extends ResourcesUnitMap_Trait<RM>> {
 
 export class ResourcesSpec<const RM extends ResourcesUnitMap_Trait<RM>> {
     readonly _unitParsers: Map<string, Parjser<UnitValue | undefined>>
-    readonly _reqLimitParsers: Map<string, Parjser<ReqLimit>>
+    readonly _reqLimitParsers: Map<string, Parjser<Resources_ReqLim>>
     readonly _anyUnitParser = AnyUnitParser.make()
     readonly _anyReqLimitParser = createResourceParser(this._anyUnitParser)
     constructor(_unitMap: Map<string, UnitParser>) {
@@ -56,7 +56,7 @@ export class ResourcesSpec<const RM extends ResourcesUnitMap_Trait<RM>> {
         return pUnitValue.parse(input).value
     }
 
-    private _parseReqLimit(resource: string, input: string): ReqLimit {
+    private _parseReqLimit(resource: string, input: string): Resources_ReqLim {
         const pReqLimit = this._reqLimitParsers.get(resource)
         if (!pReqLimit) {
             return this._anyReqLimitParser.parse(input).value
@@ -96,7 +96,7 @@ export class ResourcesSpec<const RM extends ResourcesUnitMap_Trait<RM>> {
                 return [key, getVal()] as const
             })
             .pull()
-        return new ResourcesUnitMap(map as Map<string, ReqLimit>)
+        return new ResourcesUnitMap(map as Map<string, Resources_ReqLim>)
     }
 
     static make<const RM extends ResourcesUnitMap_Trait<RM>>(unitMap: {

@@ -6,7 +6,7 @@ export default W.File("namespace.yaml", {
     *FILE() {
         const topolvm = storage.v1.StorageClass._.refKey({
             name: "topolvm"
-        }).External()
+        }).DummyResource()
         yield new Namespace("namespace")
         2
         yield new Pv("pv-cool", {
