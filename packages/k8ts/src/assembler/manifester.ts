@@ -1,4 +1,4 @@
-import { Manifest, ManifestSourceEmbedder, ResourceNode, ResourceTop } from "@k8ts/instruments"
+import { K8tsManifest, ManifestSourceEmbedder, ResourceNode, ResourceTop } from "@k8ts/instruments"
 import type EventEmitter from "eventemitter3"
 import { cloneDeep, cloneDeepWith, isEmpty, unset } from "lodash"
 import { version } from "../version"
@@ -9,7 +9,7 @@ export interface ManifesterOptions {
 
 export class Assembler_Manifester {
     constructor(private readonly _options: ManifesterOptions) {}
-    private _cleanSpecificEmptyObjects(manifest: Manifest) {
+    private _cleanSpecificEmptyObjects(manifest: K8tsManifest) {
         const clone = cloneDeepWith(manifest, (value, key) => {
             if (key !== "metadata") {
                 return
@@ -24,7 +24,7 @@ export class Assembler_Manifester {
         })
         return clone
     }
-    private _cleanNullishValues(manifest: Manifest) {
+    private _cleanNullishValues(manifest: K8tsManifest) {
         const _cleanKeys = (obj: any) => {
             if (typeof obj !== "object") {
                 return obj
@@ -41,7 +41,7 @@ export class Assembler_Manifester {
         return cloneDeepWith(clone, _cleanKeys)
     }
 
-    private async _generate(resource: ResourceTop): Promise<Manifest> {
+    private async _generate(resource: ResourceTop): Promise<K8tsManifest> {
         const manifest = await resource["__manifest__"]()
 
         const noNullish = this._cleanNullishValues(manifest)
@@ -78,7 +78,7 @@ export class Assembler_Manifester {
 
 export interface NodeManifest {
     node: ResourceNode
-    manifest: Manifest
+    manifest: K8tsManifest
 }
 export interface ManifesterManifestEvent {
     resource: ResourceNode

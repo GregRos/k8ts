@@ -4,8 +4,8 @@ import { seq, Seq } from "doddle"
 import { displayers } from "../../../utils/displayers"
 import { Node } from "../node"
 import type { ResourceConstructor, ResourceRef } from "../resource"
-import { OriginEntity } from "./entity"
-import { type KindMapInput } from "./kind-map"
+import { Origin } from "./entity"
+import { type KindMap_Input } from "./kind-map"
 
 @displayers({
     simple: s => `[${s.shortFqn}]`,
@@ -20,9 +20,9 @@ import { type KindMapInput } from "./kind-map"
         return chalk.underline(`${pref}${kindName}:${resourceName}`)
     }
 })
-export class OriginNode extends Node<OriginNode, OriginEntity> {
+export class OriginNode extends Node<OriginNode, Origin> {
     get kids() {
-        return seq(this.entity["__kids__"]()).map(x => x.assert(OriginEntity).node)
+        return seq(this.entity["__kids__"]()).map(x => x.assert(Origin).node)
     }
     get meta() {
         return this.entity.meta
@@ -39,7 +39,7 @@ export class OriginNode extends Node<OriginNode, OriginEntity> {
             .map(x => x.meta.clone())
             .reduce((acc, meta) => acc.add(meta), Meta.make())
     }
-    constructor(entity: OriginEntity) {
+    constructor(entity: Origin) {
         super(entity)
     }
 
@@ -69,7 +69,7 @@ export class OriginNode extends Node<OriginNode, OriginEntity> {
     }).cache()
 }
 
-export interface OriginProps<KindedCtors extends ResourceConstructor = ResourceConstructor> {
+export interface Origin_Props<KindedCtors extends ResourceConstructor = ResourceConstructor> {
     meta?: Meta.Input
-    kinds?: KindMapInput<KindedCtors>
+    kinds?: KindMap_Input<KindedCtors>
 }

@@ -4,7 +4,6 @@ export type LiteralModes = "simple" | "pretty" | "prefix"
 
 let globalEntityId = 0
 
-type AbsCtor<T> = abstract new (...args: any[]) => any
 export type RefLike = {
     get ref(): {
         kind: string

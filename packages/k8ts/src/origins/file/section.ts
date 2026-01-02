@@ -1,4 +1,4 @@
-import { type OriginExporterProps, type ResourceRef, OriginExporter } from "@k8ts/instruments"
+import { type OriginExporter_Props, type ResourceRef, OriginExporter } from "@k8ts/instruments"
 import { doddle, doddlify, seq } from "doddle"
 import type { v1 } from "../../resources/idents"
 
@@ -12,7 +12,7 @@ export class FileSectionScope {
     }
 }
 export interface FileSectionProps<Exported extends ResourceRef = ResourceRef>
-    extends OriginExporterProps {
+    extends OriginExporter_Props {
     namespace?: ResourceRef<v1.Namespace._>
     SECTION(SCOPE: FileSectionScope): Iterable<Exported>
 }

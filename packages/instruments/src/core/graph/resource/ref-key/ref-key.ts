@@ -1,10 +1,6 @@
-import { InstrumentsError } from "../../../../error"
 import type { IdentKind } from "../api-kind"
-import type { External } from "../external"
-import { type ExternalProps } from "../external"
+import type { ExternalResource } from "../external"
 import type { ResourceRef } from "../reference"
-/** Input type for reference keys. Accepts either a RefKey instance or its string representation. */
-export type RefKey_Input = RefKey | RefKey["string"]
 
 /**
  * String format template for reference keys.
@@ -12,24 +8,16 @@ export type RefKey_Input = RefKey | RefKey["string"]
  * @template Kind - The Kubernetes resource kind
  * @template Name - The resource name
  */
-export type RefKey_sFormat<Kind extends string, Name extends string> = `${Kind}/${Name}`
+export type ResourceKey_sFormat<Kind extends string, Name extends string> = `${Kind}/${Name}`
 
 const separator = "/"
 
 /** Parsed representation of a reference key string. */
-export interface RefKey_Parsed {
+export interface ResourceKey_Parsed {
     /** The Kubernetes resource kind */
     kind: string
     /** The resource name */
     name: string
-}
-
-export function parse(ref: string) {
-    const result = tryParse(ref)
-    if (!result) {
-        throw new InstrumentsError(`Could not parse reference key: ${ref}`)
-    }
-    return result
 }
 
 /**
@@ -39,7 +27,7 @@ export function parse(ref: string) {
  * @param ref - The reference key string to parse (format: "Kind/Name")
  * @returns The parsed reference key, or undefined if parsing fails
  */
-export function tryParse(ref: string): RefKey_Parsed | undefined {
+export function tryParse(ref: string): ResourceKey_Parsed | undefined {
     if (typeof ref !== "string") {
         return undefined
     }
@@ -70,18 +58,18 @@ export interface RefKey_Options<Name extends string = string> {
     /** The resource name */
     name: Name
     /** Optional namespace for namespaced resources. Can be a RefKey, string, or Ref2 */
-    namespace?: RefKey<nsKind> | string | ResourceRef<nsKind>
+    namespace?: ResourceKey<nsKind> | string | ResourceRef<nsKind>
 }
 
 /**
  * A unique identifier for a k8s resource consisting of a Kind, name, and namespace. Used by
- * resources to reference other resources. Serves as the basis for the {@link External} resource
- * type.
+ * resources to reference other resources. Serves as the basis for the {@link ExternalResource}
+ * resource type.
  *
  * Important: This class is ambiguous because it can represent keys for namespaced resources but
  * ignore the namespace. Needs some kind of refactor.
  */
-export class RefKey<K extends IdentKind = IdentKind, Name extends string = string> {
+export class ResourceKey<K extends IdentKind = IdentKind, Name extends string = string> {
     /** The resource name */
     readonly name: string
     /** The optional namespace for namespaced resources */
@@ -106,10 +94,10 @@ export class RefKey<K extends IdentKind = IdentKind, Name extends string = strin
      * Returns the string representation of this reference key. Format: "Kind/Namespace/Name" or
      * "Kind/Name" for cluster-scoped resources.
      */
-    get string(): RefKey_sFormat<K["name"], Name> {
+    get string(): ResourceKey_sFormat<K["name"], Name> {
         return [this.kind.name, this.namespace, this.name]
             .filter(x => !!x)
-            .join(separator) as RefKey_sFormat<K["name"], Name>
+            .join(separator) as ResourceKey_sFormat<K["name"], Name>
     }
 
     /**
@@ -118,7 +106,7 @@ export class RefKey<K extends IdentKind = IdentKind, Name extends string = strin
      * @param other - The RefKey to compare with
      * @returns True if both RefKeys have the same kind, name, and namespace
      */
-    equals(other: RefKey): boolean {
+    equals(other: ResourceKey): boolean {
         if (other == null) {
             return false
         }
@@ -148,9 +136,9 @@ export class RefKey<K extends IdentKind = IdentKind, Name extends string = strin
      * @param options - Optional external properties configuration
      * @returns An External instance with the specified features
      */
-    External(options?: ExternalProps<K>): External<K> {
+    External(): ExternalResource<K> {
         const External = require("../external").External
 
-        return new External(this, options ?? {}) as any
+        return new External(this) as any
     }
 }

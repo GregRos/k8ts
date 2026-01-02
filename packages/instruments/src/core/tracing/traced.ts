@@ -1,4 +1,4 @@
 import { Embedder } from "../../utils/embedder"
-import { Trace } from "./trace"
+import { Trace_SourceCode } from "./trace"
 
-export const TraceEmbedder = new Embedder<object, Trace>("TRACED")
+export const TraceEmbedder = new Embedder<object, Trace_SourceCode>("TRACED")

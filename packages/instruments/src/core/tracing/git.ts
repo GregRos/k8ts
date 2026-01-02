@@ -15,7 +15,7 @@ export interface GitTraceProps {
         date: string
     }
 }
-export class GitTrace {
+export class Trace_GitCommit {
     private constructor(readonly props: GitTraceProps) {}
 
     get metaFields() {
@@ -56,7 +56,7 @@ export class GitTrace {
         const l = await sg.log({
             maxCount: 1
         })
-        return new GitTrace({
+        return new Trace_GitCommit({
             commit: {
                 sha: l.latest!.hash,
                 message: l.latest!.message,

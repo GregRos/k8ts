@@ -17,7 +17,7 @@ export type ResourceRef<
     node: ResourceNode
 }
 
-export type KeysResourceRef<X extends ResourceRef, Else = never> = [X] extends [
+export type ResourceRef_HasKeys<X extends ResourceRef, Else = never> = [X] extends [
     {
         keys: (infer K extends string)[]
     }

@@ -1,7 +1,7 @@
 import { seq, type Seq } from "doddle"
 import { Entity } from "./entity"
 import { Relation } from "./relation"
-import { FwRef } from "./resource/reference/fw-ref"
+import { ForwardRef } from "./resource/reference/forward-ref"
 /**
  * The {@link Node} is a wrapper around a {@link Entity} that provides traversal, display, and other
  * utilities. Note that the {@link Node} itself is immutable. Changes only happen to the underlying
@@ -82,7 +82,7 @@ export abstract class Node<
         if (!other) {
             return false
         }
-        if (FwRef.is(other)) {
+        if (ForwardRef.is(other)) {
             return this.equals(other["__pull__"]())
         }
         if (other instanceof Node === false) {
@@ -121,14 +121,14 @@ export abstract class Node<
     }).as<_Node>()
 
     isParentOf(other: Node): boolean {
-        if (FwRef.is(other)) {
+        if (ForwardRef.is(other)) {
             return other.isChildOf(this)
         }
         return other.equals(this) || other.ancestors.some(x => x.equals(this)).pull()
     }
 
     isChildOf(other: Node): boolean {
-        if (FwRef.is(other)) {
+        if (ForwardRef.is(other)) {
             return other.isParentOf(this)
         }
         return this.equals(other) || this.ancestors.some(x => x.equals(other)).pull()

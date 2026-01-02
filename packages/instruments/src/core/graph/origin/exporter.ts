@@ -1,16 +1,16 @@
 import { doddlify, seq } from "doddle"
 import { ForwardExports, ResourceRef, ResourceTop } from "../resource"
-import { FwRef } from "../resource/reference/fw-ref"
-import { OriginEntity } from "./entity"
-import type { OriginProps } from "./node"
-export interface OriginExporterProps extends OriginProps {}
+import { ForwardRef } from "../resource/reference/forward-ref"
+import { Origin } from "./entity"
+import type { Origin_Props } from "./node"
+export interface OriginExporter_Props extends Origin_Props {}
 
 /** Base class for Origins that export resources via the {@link ForwardExports} mechanism. */
 export abstract class OriginExporter<
-    Props extends OriginExporterProps = OriginExporterProps
-> extends OriginEntity<Props> {
+    Props extends OriginExporter_Props = OriginExporter_Props
+> extends Origin<Props> {
     constructor(
-        private readonly _parent: OriginEntity,
+        private readonly _parent: Origin,
         name: string,
         props: Props
     ) {
@@ -33,12 +33,12 @@ export abstract class OriginExporter<
         const attachedResources = seq(() => super.resources).cache()
         return seq(function* () {
             for (const em of boundExports() as ResourceTop[]) {
-                if (FwRef.is(em)) {
+                if (ForwardRef.is(em)) {
                     throw new Error(
                         `FwRef ${em} cannot be directly exported from ChildOrigin ${self.name}`
                     )
                 }
-                if (em instanceof OriginEntity || ForwardExports.is(em)) {
+                if (em instanceof Origin || ForwardExports.is(em)) {
                     // Skip Origin entities. Later we go over attachedResources and after evaluating
                     // these exports, any resources attached to child Origins will be included.
                     continue

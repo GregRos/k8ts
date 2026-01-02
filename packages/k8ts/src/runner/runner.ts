@@ -1,4 +1,4 @@
-import { GitTrace, Trace, type ForwardExports } from "@k8ts/instruments"
+import { ForwardExports, Trace_GitCommit, Trace_SourceCode } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { seq } from "doddle"
 import StackTracey from "stacktracey"
@@ -19,11 +19,11 @@ export class Runner {
             .map(e => e.__entity__())
             .toArray()
             .pull()
-        const gitInfo = await GitTrace.make({
+        const gitInfo = await Trace_GitCommit.make({
             cwd: this._options.cwd
         })
 
-        const runTrace = new Trace(new StackTracey().slice(1))
+        const runTrace = new Trace_SourceCode(new StackTracey().slice(1))
         const options = {
             cwd: ".",
             ...this._options,

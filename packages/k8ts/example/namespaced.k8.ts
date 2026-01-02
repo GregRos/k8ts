@@ -24,12 +24,7 @@ const ext_gateway = gateway.v1.Gateway._.refKey({
 const ext_topolvm_class = storage.v1.StorageClass._.refKey({
     name: "topolvm"
 }).External()
-const ext_config_map = v1.ConfigMap._.refKey({
-    name: "config",
-    namespace: k8sNamespace
-}).External({
-    keys: ["a", "b", "c"]
-})
+
 const cool = k8tsFile["PersistentVolume/pv-cool"]
 export default W.File("deployment2.yaml", {
     meta: {
@@ -120,9 +115,7 @@ export default W.File("deployment2.yaml", {
                             const ext_configMap = v1.ConfigMap._.refKey({
                                 name: "config",
                                 namespace: k8sNamespace
-                            }).External({
-                                keys: ["a", "b", "c"]
-                            })
+                            }).External()
 
                             const a = k.Volume("hostpath", {
                                 $backend: {

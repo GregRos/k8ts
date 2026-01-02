@@ -1,14 +1,14 @@
 import { seq } from "doddle"
-import { OriginEntity } from "../../origin"
+import { Origin } from "../../origin"
 import type { OriginExporter } from "../../origin/exporter"
-import { RefKey } from "../ref-key"
+import { ResourceKey } from "../ref-key"
 import { ProxyOperationError } from "./error"
-import { FwRef } from "./fw-ref"
-import type { ResourceRef } from "./refable"
+import { ForwardRef } from "./forward-ref"
+import type { ResourceRef } from "./resource-ref"
 
 /** Expands the resources exported by an OriginExported into a dictionary of name to FwRef. */
-export type FwRef_Exports_ByKey<Exports extends ResourceRef = ResourceRef> = {
-    [E in Exports as `${E["ident"]["name"]}/${E["name"]}`]: FwRef<E>
+export type ForwardExports_ByKey<Exports extends ResourceRef = ResourceRef> = {
+    [E in Exports as `${E["ident"]["name"]}/${E["name"]}`]: ForwardRef<E>
 }
 /**
  * A type describing all resources exported by an {@link OriginExporter} as forward references.
@@ -27,8 +27,8 @@ export type FwRef_Exports_ByKey<Exports extends ResourceRef = ResourceRef> = {
  * During runtime, this construct can provide references to all resources attached to the Origin,
  * even if they were not explicitly exported.
  */
-export type ForwardExports<Exported extends ResourceRef = any> = RscFwRef_Exports_Proxied &
-    FwRef_Exports_ByKey<Exported>
+export type ForwardExports<Exported extends ResourceRef = any> = ForwardExports_Proxied &
+    ForwardExports_ByKey<Exported>
 
 /**
  * Creates a forward reference exports construct for the given {@link OriginExporter} entity.
@@ -39,13 +39,13 @@ export type ForwardExports<Exported extends ResourceRef = any> = RscFwRef_Export
 export function ForwardExports<Exported extends ResourceRef>(
     entity: OriginExporter
 ): ForwardExports<Exported> {
-    const proxied = new RscFwRef_Exports_Proxied(entity)
-    const handler = new FwRef_Exports_Handler(proxied)
+    const proxied = new ForwardExports_Proxied(entity)
+    const handler = new ForwardExports_ProxyHandler(proxied)
     return new Proxy(proxied, handler) as any
 }
 export namespace ForwardExports {
     export function is(obj: any): obj is ForwardExports {
-        return obj instanceof RscFwRef_Exports_Proxied
+        return obj instanceof ForwardExports_Proxied
     }
 }
 
@@ -53,7 +53,7 @@ export namespace ForwardExports {
  * A basic core of the {@link ForwardExports} construct, containing information about the underlying
  * {@link OriginExporter} entity.
  */
-export class RscFwRef_Exports_Proxied {
+export class ForwardExports_Proxied {
     #entity: OriginExporter
     constructor(entity: OriginExporter) {
         this.#entity = entity
@@ -70,7 +70,7 @@ export class RscFwRef_Exports_Proxied {
         if (ForwardExports.is(other)) {
             return this.#entity.equals(other.#entity)
         }
-        if (other instanceof OriginEntity) {
+        if (other instanceof Origin) {
             return other.equals(this.#entity)
         }
         return false
@@ -81,8 +81,8 @@ export class RscFwRef_Exports_Proxied {
  * Proxy handler for the {@link ForwardExports} construct, providing dynamic access to the resources
  * attached to the underlying {@link OriginExporter} entity.
  */
-class FwRef_Exports_Handler<Entity extends OriginExporter> implements ProxyHandler<Entity> {
-    constructor(private readonly _subject: RscFwRef_Exports_Proxied) {}
+class ForwardExports_ProxyHandler<Entity extends OriginExporter> implements ProxyHandler<Entity> {
+    constructor(private readonly _subject: ForwardExports_Proxied) {}
 
     get entity() {
         return this._subject["__entity__"]()
@@ -109,7 +109,7 @@ class FwRef_Exports_Handler<Entity extends OriginExporter> implements ProxyHandl
     }
 
     getPrototypeOf(_: Entity): object | null {
-        return RscFwRef_Exports_Proxied.prototype
+        return ForwardExports_Proxied.prototype
     }
 
     get exported() {
@@ -140,9 +140,9 @@ class FwRef_Exports_Handler<Entity extends OriginExporter> implements ProxyHandl
         }
         const clazz = resourceKinds.getClass(key)
 
-        return FwRef({
+        return ForwardRef({
             class: clazz,
-            key: new RefKey(refKey.kind, {
+            key: new ResourceKey(refKey.kind, {
                 name: refKey.name
             }),
             origin: this.entity,

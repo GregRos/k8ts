@@ -1,7 +1,7 @@
 import { InstrumentsError } from "../../../../error"
 import { bind_own_methods } from "../../../../utils"
 import { displayers } from "../../../../utils/displayers"
-import { RefKey, type RefKey_Options } from "../ref-key"
+import { ResourceKey, type RefKey_Options } from "../ref-key"
 import { pluralize } from "./pluralize"
 
 export interface IdentLike {
@@ -125,7 +125,7 @@ export class IdentKind<
     }
 
     refKey<Name extends string>(options: RefKey_Options<Name>) {
-        return new RefKey<this, Name>(this as any, options)
+        return new ResourceKey<this, Name>(this as any, options)
     }
 
     get plural() {

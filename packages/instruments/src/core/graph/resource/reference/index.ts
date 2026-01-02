@@ -1,3 +1,3 @@
-export { FwRef } from "./fw-ref"
-export { ForwardExports } from "./fw-ref-exports"
-export type * from "./refable"
+export { ForwardExports } from "./forward-exports"
+export { ForwardRef } from "./forward-ref"
+export type * from "./resource-ref"

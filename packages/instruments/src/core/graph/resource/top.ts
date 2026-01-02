@@ -1,8 +1,12 @@
 import { Meta } from "@k8ts/metadata"
 import StackTracey from "stacktracey"
-import { type Manifest, type ManifestIdent, type ManifestMetadata } from "../../manifest"
-import { Trace, TraceEmbedder } from "../../tracing"
-import type { OriginEntity } from "../origin/entity"
+import {
+    type K8tsManifest,
+    type K8tsManifest_Ident,
+    type K8tsManifest_Metadata
+} from "../../manifest"
+import { Trace_SourceCode, TraceEmbedder } from "../../tracing"
+import type { Origin } from "../origin/entity"
 import { OriginContextTracker } from "../origin/tracker"
 import type { IdentKind } from "./api-kind"
 import { Resource } from "./entity"
@@ -10,7 +14,7 @@ export abstract class ResourceTop<
     Name extends string = string,
     Props extends object = object
 > extends Resource<Name, Props> {
-    private readonly _origin: OriginEntity
+    private readonly _origin: Origin
     readonly meta: Meta
     abstract readonly ident: IdentKind
 
@@ -40,14 +44,14 @@ export abstract class ResourceTop<
         }
         this._origin = lastOrigin
         this._origin["__attach_resource__"](this)
-        TraceEmbedder.add(this, new Trace(new StackTracey().slice(2)))
+        TraceEmbedder.add(this, new Trace_SourceCode(new StackTracey().slice(2)))
     }
 
     protected __origin__() {
         return this._origin
     }
 
-    protected __metadata__(): ManifestMetadata {
+    protected __metadata__(): K8tsManifest_Metadata {
         const self = this
         return {
             name: self.meta.get("name"),
@@ -57,7 +61,7 @@ export abstract class ResourceTop<
         }
     }
 
-    protected __idents__(): ManifestIdent {
+    protected __idents__(): K8tsManifest_Ident {
         return {
             apiVersion: this.ident.parent!.text,
             kind: this.ident.name
@@ -66,7 +70,7 @@ export abstract class ResourceTop<
 
     protected abstract body(): Promise<object> | object
 
-    protected async __manifest__(): Promise<Manifest> {
+    protected async __manifest__(): Promise<K8tsManifest> {
         const a = {
             ...this.__idents__(),
             metadata: this.__metadata__(),

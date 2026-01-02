@@ -2,10 +2,10 @@ import { getDeepPropertyDescriptor } from "@k8ts/metadata/util"
 import { getNiceClassName } from "what-are-you"
 import { displayers } from "../../../utils"
 import { Entity } from "../entity"
-import type { OriginEntity } from "../origin"
+import type { Origin } from "../origin"
 import type { Ident } from "./api-kind"
 import { ResourceNode } from "./node"
-import { FwRef, type ResourceRef } from "./reference"
+import { ForwardRef, type ResourceRef } from "./reference"
 
 @displayers({
     simple: s => s.node,
@@ -51,7 +51,7 @@ export abstract class Resource<
         if (!other) {
             return false
         }
-        if (FwRef.is(other)) {
+        if (ForwardRef.is(other)) {
             return other.equals(this)
         }
         if (other instanceof Resource) {
@@ -60,7 +60,7 @@ export abstract class Resource<
         return false
     }
 
-    protected abstract __origin__(): OriginEntity
+    protected abstract __origin__(): Origin
     get node(): ResourceNode {
         return new ResourceNode(this.__origin__().node, this)
     }

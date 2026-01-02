@@ -1,5 +1,5 @@
 import {
-    Manifest,
+    K8tsManifest,
     ManifestSourceEmbedder,
     type ResourceNode,
     type ResourceTop
@@ -14,7 +14,7 @@ export interface YamlSerializerOptions {
     emitter?: EventEmitter<any>
 }
 export interface SerializingEvent {
-    manifest: Manifest
+    manifest: K8tsManifest
     resource: ResourceNode
 }
 export interface SerializerEventsTable {
@@ -23,7 +23,7 @@ export interface SerializerEventsTable {
 export class Assembler_Serializer_Yaml {
     constructor(private readonly _options: Partial<YamlSerializerOptions>) {}
 
-    async serialize(input: Manifest) {
+    async serialize(input: K8tsManifest) {
         const node = ManifestSourceEmbedder.get(input).node
         this._options.emitter?.emit("serialize", {
             manifest: input,

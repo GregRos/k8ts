@@ -7,7 +7,7 @@ export interface TraceFormatOptions {
     absolute: boolean
 }
 
-export class Trace {
+export class Trace_SourceCode {
     readonly trace: StackTracey.Entry
     constructor(trace: StackTracey) {
         const findGoodFrame = (e: StackTracey.Entry) => {

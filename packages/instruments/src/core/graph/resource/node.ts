@@ -9,7 +9,7 @@ import { Node } from "../node"
 import { OriginNode } from "../origin/node"
 import type { IdentKind, IdentLike } from "./api-kind"
 import type { Resource } from "./entity"
-import { RefKey } from "./ref-key"
+import { ResourceKey } from "./ref-key"
 
 @displayers({
     simple: s => `[${s.shortFqn}]`,
@@ -43,8 +43,8 @@ export class ResourceNode extends Node<ResourceNode, Resource> {
     get fullFqn() {
         return [this.ident.dns, this.namespace, this.name].filter(Boolean).join("/")
     }
-    get key(): RefKey {
-        return new RefKey(this.ident, {
+    get key(): ResourceKey {
+        return new ResourceKey(this.ident, {
             name: this.name,
             namespace: this.namespace
         })

@@ -1,6 +1,11 @@
 import type { CDK } from "@k8ts/sample-interfaces"
 
-import { Resource, ResourcePart, type KeysResourceRef, type ResourceRef } from "@k8ts/instruments"
+import {
+    Resource,
+    ResourcePart,
+    type ResourceRef,
+    type ResourceRef_HasKeys
+} from "@k8ts/instruments"
 import type { HostPath_Type } from "../../hostpath"
 import { v1 } from "../../idents/default"
 import {
@@ -28,7 +33,7 @@ export interface PodVolume_Backend_ConfigMap<
     $backend: A
     optional?: boolean
     mappings?: {
-        [K in KeysResourceRef<A>]?: string
+        [K in ResourceRef_HasKeys<A>]?: string
     }
 }
 
@@ -38,7 +43,7 @@ export interface PodVolume_Backend_Secret<
     $backend: A
     optional?: boolean
     mappings?: {
-        [K in KeysResourceRef<A>]?: string
+        [K in ResourceRef_HasKeys<A>]?: string
     }
 }
 

@@ -1,9 +1,9 @@
 import { seq, type Doddle } from "doddle"
 import { mapValues } from "lodash"
 import { getNiceClassName, type AnyCtor } from "what-are-you"
-import { RefKey } from "../ref-key"
+import { ResourceKey } from "../ref-key"
 import { ProxyOperationError } from "./error"
-import type { ResourceRef } from "./refable"
+import type { ResourceRef } from "./resource-ref"
 
 /**
  * The type of a forward reference to a resource.
@@ -13,14 +13,14 @@ import type { ResourceRef } from "./refable"
  * allows for circular references and more flexible resource definitions.
  *
  * The base `FwRef` object only has some basic properties about the resource being referenced, such
- * as its {@link RefKey} and class type. Accessing any other properties or methods on the `FwRef`
- * will trigger the resolution of the actual resource via a resolver.
+ * as its {@link ResourceKey} and class type. Accessing any other properties or methods on the
+ * `FwRef` will trigger the resolution of the actual resource via a resolver.
  *
  * Because the `FwRef` avoids resolving the actual resource until needed, it won't detect missing
  * resources when the reference is created. Instead, the missing resource will be detected later on,
  * typically until resources are manifested. This makes it a bit harder to debug such issues.
  */
-export type FwRef<T extends ResourceRef = ResourceRef> = FwRef_Proxied<T> & T
+export type ForwardRef<T extends ResourceRef = ResourceRef> = ForwardRef_Proxied<T> & T
 
 /**
  * Creates a forward reference to a resource, returning a proxy that defers resource resolution
@@ -29,34 +29,34 @@ export type FwRef<T extends ResourceRef = ResourceRef> = FwRef_Proxied<T> & T
  * @param props The properties of the forward reference.
  * @returns The forward reference proxy.
  */
-export function FwRef<Referenced extends ResourceRef>(
-    props: FwRef_Props<Referenced>
-): FwRef<Referenced> {
-    const core = new FwRef_Proxied(props)
-    return new Proxy(core, new FwRef_Handler(core)) as FwRef<Referenced>
+export function ForwardRef<Referenced extends ResourceRef>(
+    props: ForwardRef_Props<Referenced>
+): ForwardRef<Referenced> {
+    const core = new ForwardRef_Proxied(props)
+    return new Proxy(core, new ForwardRef_ProxyHandler(core)) as ForwardRef<Referenced>
 }
-export namespace FwRef {
-    export function is(obj: any): obj is FwRef {
-        return FwRef_Proxied.is(obj)
+export namespace ForwardRef {
+    export function is(obj: any): obj is ForwardRef {
+        return ForwardRef_Proxied.is(obj)
     }
 }
 /** Properties for creating a forward reference to a resource. */
-export interface FwRef_Props<Referenced extends ResourceRef> {
+export interface ForwardRef_Props<Referenced extends ResourceRef> {
     /** The class constructor of the referenced resource. */
     readonly class?: AnyCtor<Referenced>
     /** The reference key identifying the referenced resource. */
-    readonly key: RefKey
+    readonly key: ResourceKey
     readonly origin: object
     readonly resolver: Doddle<Referenced>
 }
 const hiddenProperties = {
-    is(this: FwRef_Proxied, clsOrKind: any): boolean {
+    is(this: ForwardRef_Proxied, clsOrKind: any): boolean {
         if (typeof clsOrKind === "function") {
             return this.clazz.prototype instanceof clsOrKind || this instanceof clsOrKind
         }
         return this.kind.equals(clsOrKind)
     },
-    assert(this: FwRef_Proxied, cls: abstract new (...args: any[]) => any): any {
+    assert(this: ForwardRef_Proxied, cls: abstract new (...args: any[]) => any): any {
         if (hiddenProperties.is.call(this, cls)) {
             return this as any
         }
@@ -65,9 +65,9 @@ const hiddenProperties = {
         )
     }
 }
-class FwRef_Proxied<To extends ResourceRef = ResourceRef> {
-    readonly #props: FwRef_Props<To>
-    constructor(props: FwRef_Props<To>) {
+class ForwardRef_Proxied<To extends ResourceRef = ResourceRef> {
+    readonly #props: ForwardRef_Props<To>
+    constructor(props: ForwardRef_Props<To>) {
         this.#props = props
         Object.defineProperties(
             this,
@@ -91,7 +91,7 @@ class FwRef_Proxied<To extends ResourceRef = ResourceRef> {
         return this.#props.key.kind
     }
 
-    static is(obj: any): obj is FwRef {
+    static is(obj: any): obj is ForwardRef {
         return obj && typeof obj === "object" && "__reference_props__" in obj
     }
 
@@ -104,7 +104,7 @@ class FwRef_Proxied<To extends ResourceRef = ResourceRef> {
     }
 
     get key() {
-        return new RefKey(this.kind, {
+        return new ResourceKey(this.kind, {
             name: this.name,
             namespace: this.namespace
         })
@@ -121,11 +121,11 @@ class FwRef_Proxied<To extends ResourceRef = ResourceRef> {
     }
 }
 
-class FwRef_Handler<T extends ResourceRef> implements ProxyHandler<T> {
+class ForwardRef_ProxyHandler<T extends ResourceRef> implements ProxyHandler<T> {
     get _props() {
         return this._subject["__reference_props__"]()
     }
-    constructor(private readonly _subject: FwRef_Proxied<T>) {}
+    constructor(private readonly _subject: ForwardRef_Proxied<T>) {}
 
     get(target: T, prop: PropertyKey) {
         const { _props, _subject } = this

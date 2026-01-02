@@ -2,11 +2,11 @@ import { Meta } from "@k8ts/metadata"
 import { OriginExternal } from "../../origin/external"
 import type { IdentKind } from "../api-kind"
 import { Resource } from "../entity"
-import type { RefKey } from "../ref-key"
-export class External<K extends IdentKind> extends Resource<string, any> {
+import type { ResourceKey } from "../ref-key"
+export class ExternalResource<K extends IdentKind> extends Resource<string, any> {
     readonly meta = Meta.make()
     constructor(
-        readonly key: RefKey<K>,
+        readonly key: ResourceKey<K>,
         props: any
     ) {
         super(key.name, props)

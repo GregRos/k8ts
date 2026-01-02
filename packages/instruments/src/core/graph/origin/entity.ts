@@ -1,14 +1,15 @@
 import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq } from "doddle"
+import EventEmitter from "eventemitter3"
 import { mapValues } from "lodash"
 import { displayers } from "../../../utils/displayers"
 import { Entity } from "../entity"
 import { Resource } from "../resource/entity"
-import type { ResourceConstructor, ResourceRef } from "../resource/reference/refable"
-import { OriginEventsEmitter, type OriginEventMap } from "./events"
+import type { ResourceConstructor, ResourceRef } from "../resource/reference/resource-ref"
+import { type OriginEventMap } from "./events"
 import { KindMap } from "./kind-map"
-import { OriginNode, type OriginProps } from "./node"
+import { OriginNode, type Origin_Props } from "./node"
 import type { OriginStackBinder } from "./tracker"
 import { OriginContextTracker } from "./tracker"
 
@@ -20,9 +21,9 @@ import { OriginContextTracker } from "./tracker"
         return `${kindPart}/${originName}`
     }
 })
-export abstract class OriginEntity<Props extends OriginProps = OriginProps> extends Entity<
+export abstract class Origin<Props extends Origin_Props = Origin_Props> extends Entity<
     OriginNode,
-    OriginEntity
+    Origin
 > {
     get ref() {
         return {
@@ -31,11 +32,11 @@ export abstract class OriginEntity<Props extends OriginProps = OriginProps> exte
         }
     }
     abstract get ident(): string
-    private _emitter = OriginEventsEmitter()
+    private _emitter = new EventEmitter<OriginEventMap>()
     private readonly _ownResources: Resource[] = []
     readonly meta: Meta
 
-    protected __attach_kid__(kid: OriginEntity<OriginProps<ResourceConstructor>>): void {
+    protected __attach_kid__(kid: Origin<Origin_Props<ResourceConstructor>>): void {
         super.__attach_kid__(kid)
         this.__emit__("origin/attached", {
             origin: this,
@@ -47,7 +48,7 @@ export abstract class OriginEntity<Props extends OriginProps = OriginProps> exte
         if (!other) {
             return false
         }
-        if (other instanceof OriginEntity) {
+        if (other instanceof Origin) {
             return Object.is(this, other)
         }
         if (FwRef_Exports.is(other)) {
@@ -88,11 +89,11 @@ export abstract class OriginEntity<Props extends OriginProps = OriginProps> exte
         const values = mapValues(data, v => `${v}`)
 
         for (const target of [this.node, ...this.node.ancestors]) {
-            target.entity.assert(OriginEntity)._emitter.emit(event, data)
+            target.entity.assert(Origin)._emitter.emit(event, data)
         }
     }
     protected __resource_kinds__(): KindMap {
-        const parent = this.__parent__()?.assert(OriginEntity)
+        const parent = this.__parent__()?.assert(Origin)
         const parentKindsIfAny = parent?.__resource_kinds__() ?? []
         return new KindMap([...(this._props.kinds ?? []), ...parentKindsIfAny])
     }
@@ -128,7 +129,7 @@ export abstract class OriginEntity<Props extends OriginProps = OriginProps> exte
                 yield resource
             }
             for (const kid of self.__kids__()) {
-                const asOrigin = kid as OriginEntity
+                const asOrigin = kid as Origin
                 yield* asOrigin.resources
             }
         })

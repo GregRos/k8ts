@@ -1,4 +1,4 @@
-import { ResourcePart, ResourceRef, type KeysResourceRef } from "@k8ts/instruments"
+import { ResourcePart, ResourceRef, type ResourceRef_HasKeys } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
@@ -120,7 +120,7 @@ export class PodScope {
                 | {
                       $backend: ResourceRef
                       key: Env[key] extends object
-                          ? KeysResourceRef<Env[key]["$backend"], string>
+                          ? ResourceRef_HasKeys<Env[key]["$backend"], string>
                           : never
                   }
                 | EnvValuePrimitive

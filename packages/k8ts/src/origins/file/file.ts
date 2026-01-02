@@ -1,8 +1,8 @@
 import {
     ForwardExports,
     OriginExporter,
-    type OriginEntity,
-    type OriginProps,
+    type Origin,
+    type Origin_Props,
     type ResourceConstructor,
     type ResourceRef
 } from "@k8ts/instruments"
@@ -13,7 +13,7 @@ export type File_sName = `${string}.yaml`
 export interface FileProps<
     Kinds extends ResourceConstructor[] = ResourceConstructor[],
     Exports extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
-> extends OriginProps<Kinds[number]> {
+> extends Origin_Props<Kinds[number]> {
     kinds?: Kinds
     namespace?: ResourceRef<v1.Namespace._>
     FILE(FILE: OriginFileScope<Kinds>): Iterable<Exports | ForwardExports<Exports>>
@@ -39,7 +39,7 @@ export class OriginFile extends OriginExporter<FileProps> {
 export function File<
     Kinds extends ResourceConstructor[] = ResourceConstructor[],
     Exports extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
->(parent: OriginEntity, name: File_sName, props: FileProps<Kinds, Exports>) {
+>(parent: Origin, name: File_sName, props: FileProps<Kinds, Exports>) {
     const file = new OriginFile(parent, name, props as any)
 
     return ForwardExports<Exports>(file)

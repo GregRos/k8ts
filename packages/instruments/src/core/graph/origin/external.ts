@@ -1,11 +1,11 @@
-import type { External, ResourceConstructor } from "../resource"
-import { OriginEntity } from "./entity"
-import type { OriginProps } from "./node"
+import type { ExternalResource, ResourceConstructor } from "../resource"
+import { Origin } from "./entity"
+import type { Origin_Props } from "./node"
 /**
- * Used as the Origin of {@link External} resources. These resources are never manifested by k8ts.
- * They're expected to already exist in the target cluster.
+ * Used as the Origin of {@link ExternalResource} resources. These resources are never manifested by
+ * k8ts. They're expected to already exist in the target cluster.
  */
-export class OriginExternal extends OriginEntity {
+export class OriginExternal extends Origin {
     get ident() {
         return "[k8ts] External"
     }
@@ -13,7 +13,7 @@ export class OriginExternal extends OriginEntity {
         super("External", {})
     }
 
-    protected __parent__(): OriginEntity<OriginProps<ResourceConstructor>> | undefined {
+    protected __parent__(): Origin<Origin_Props<ResourceConstructor>> | undefined {
         return undefined
     }
 

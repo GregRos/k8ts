@@ -3,7 +3,7 @@ import type { AnyCtor } from "what-are-you"
 import { InstrumentsError } from "../../../../error"
 
 import { Ident, IdentKind } from "../../resource/api-kind"
-import { RefKey } from "../../resource/ref-key"
+import { ResourceKey } from "../../resource/ref-key"
 import { ResourceConstructor } from "../../resource/reference"
 const separator = "/"
 interface NodeEntry {
@@ -11,17 +11,17 @@ interface NodeEntry {
     class: AnyCtor<any>
     ident: IdentKind
 }
-export type KindMapInput<Ks extends ResourceConstructor> = Ks[]
-type LookupKey = string | RefKey | AnyCtor<any> | IdentKind
+export type KindMap_Input<Ks extends ResourceConstructor> = Ks[]
+type LookupKey = string | ResourceKey | AnyCtor<any> | IdentKind
 export class KindMap<Kinds extends ResourceConstructor = ResourceConstructor> {
     __KINDS__!: Kinds["prototype"]["ident"]
-    constructor(private _ownKinds: KindMapInput<Kinds>) {}
+    constructor(private _ownKinds: KindMap_Input<Kinds>) {}
 
     [Symbol.iterator]() {
         return this._ownKinds[Symbol.iterator]()
     }
     child<Ks extends ResourceConstructor = ResourceConstructor>(
-        kinds: KindMapInput<Ks> | KindMap<Ks>
+        kinds: KindMap_Input<Ks> | KindMap<Ks>
     ): KindMap<Kinds | Ks> {
         const ownKinds = kinds instanceof KindMap ? kinds._ownKinds : kinds
         return new KindMap<Kinds | Ks>([...this._ownKinds, ...ownKinds])
@@ -53,7 +53,7 @@ export class KindMap<Kinds extends ResourceConstructor = ResourceConstructor> {
             .pull()
     }
 
-    parse(ref: string | RefKey<this["__KINDS__"]>): RefKey<this["__KINDS__"]> {
+    parse(ref: string | ResourceKey<this["__KINDS__"]>): ResourceKey<this["__KINDS__"]> {
         const result = this.tryParse(ref)
         if (!result) {
             throw new InstrumentsError(`Could not parse reference key: ${ref}`)
@@ -61,14 +61,14 @@ export class KindMap<Kinds extends ResourceConstructor = ResourceConstructor> {
         return result as any
     }
 
-    tryParse(ref: unknown): RefKey<this["__KINDS__"]> | undefined {
+    tryParse(ref: unknown): ResourceKey<this["__KINDS__"]> | undefined {
         if (typeof ref !== "string" && typeof ref !== "object") {
             return undefined
         }
         if (ref == null) {
             return undefined
         }
-        if (ref instanceof RefKey) {
+        if (ref instanceof ResourceKey) {
             return ref
         }
         if (typeof ref === "object") {
@@ -104,7 +104,7 @@ export class KindMap<Kinds extends ResourceConstructor = ResourceConstructor> {
     private _unknownClassError(klass: Function) {
         return new InstrumentsError(`The class ${klass.name} is not registered`)
     }
-    private _convert(something: LookupKey | RefKey | Function | IdentKind) {
+    private _convert(something: LookupKey | ResourceKey | Function | IdentKind) {
         if (typeof something === "string") {
             if (something.includes("/")) {
                 const r = this.parse(something)
@@ -115,7 +115,7 @@ export class KindMap<Kinds extends ResourceConstructor = ResourceConstructor> {
             return something as AnyCtor<any>
         } else if (something instanceof Ident) {
             return something.text
-        } else if (something instanceof RefKey) {
+        } else if (something instanceof ResourceKey) {
             return something.kind.text
         }
         throw new InstrumentsError(`Invalid argument ${something}`)
@@ -150,7 +150,7 @@ export class KindMap<Kinds extends ResourceConstructor = ResourceConstructor> {
         return this._tryGetEntry(kindOrIdent)?.class
     }
 
-    getClass(refKey: RefKey): AnyCtor<any>
+    getClass(refKey: ResourceKey): AnyCtor<any>
     getClass<F extends AnyCtor<any>>(klass: F): F
     getClass(kind: string): AnyCtor<any>
     getClass(ident: IdentKind): AnyCtor<any>
