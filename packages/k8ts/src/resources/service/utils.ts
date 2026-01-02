@@ -1,8 +1,8 @@
-import type { PortMappingEntry, PortsMapped } from "@k8ts/instruments"
+import type { PortMap, PortMap_Item } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 
-export function toServicePort(entry: PortMappingEntry): CDK.ServicePort {
+export function toServicePort(entry: PortMap_Item): CDK.ServicePort {
     return {
         port: entry.frontend,
         targetPort: CDK.IntOrString.fromString(entry.name),
@@ -11,6 +11,6 @@ export function toServicePort(entry: PortMappingEntry): CDK.ServicePort {
     }
 }
 
-export function toServicePorts(ports: PortsMapped<any>) {
+export function toServicePorts(ports: PortMap<any>) {
     return seq(ports.values.values()).map(toServicePort).toArray().pull()
 }

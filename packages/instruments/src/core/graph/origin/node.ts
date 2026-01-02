@@ -3,7 +3,7 @@ import chalk from "chalk"
 import { seq, Seq } from "doddle"
 import { displayers } from "../../../utils/displayers"
 import { Node } from "../node"
-import type { ResourceConstructor, ResourceRef } from "../resource"
+import type { ResourceRef, ResourceRef_Constructor } from "../resource"
 import { Origin } from "./entity"
 import { type KindMap_Input } from "./kind-map"
 
@@ -69,7 +69,9 @@ export class OriginNode extends Node<OriginNode, Origin> {
     }).cache()
 }
 
-export interface Origin_Props<KindedCtors extends ResourceConstructor = ResourceConstructor> {
+export interface Origin_Props<
+    KindedCtors extends ResourceRef_Constructor = ResourceRef_Constructor
+> {
     meta?: Meta.Input
     kinds?: KindMap_Input<KindedCtors>
 }

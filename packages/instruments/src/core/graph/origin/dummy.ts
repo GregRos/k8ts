@@ -1,4 +1,4 @@
-import type { DummyResource, ResourceConstructor } from "../resource"
+import type { DummyResource, ResourceRef_Constructor } from "../resource"
 import { Origin } from "./entity"
 import type { Origin_Props } from "./node"
 /**
@@ -13,7 +13,7 @@ export class DummyOrigin extends Origin {
         super("External", {})
     }
 
-    protected __parent__(): Origin<Origin_Props<ResourceConstructor>> | undefined {
+    protected __parent__(): Origin<Origin_Props<ResourceRef_Constructor>> | undefined {
         return undefined
     }
 

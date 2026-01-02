@@ -1,5 +1,5 @@
 /** Supported data source type names for type-safe data source handling. */
-export type DataSource_Type_Name = "string" | "binary"
+export type DataSource_FormatName = "string" | "binary"
 
 /**
  * Maps a data source type name to its corresponding value type.
@@ -7,11 +7,11 @@ export type DataSource_Type_Name = "string" | "binary"
  * @typeParam Name - The type name ("string" or "binary")
  * @returns String for "string" type, Uint8Array for "binary" type
  */
-export type DataSource_Value<Name extends DataSource_Type_Name> = Name extends "string"
+export type DataSource_Value<Name extends DataSource_FormatName> = Name extends "string"
     ? string
     : Name extends "binary"
       ? Uint8Array
-      : DataSource_Type_Name
+      : DataSource_FormatName
 
 /**
  * Interface for objects that provide data source values. Implementations can return values
@@ -26,7 +26,7 @@ export type DataSource_Value<Name extends DataSource_Type_Name> = Name extends "
  *
  * @typeParam TypeName - The type of data this source provides
  */
-export interface DataSource_Object<TypeName extends DataSource_Type_Name = DataSource_Type_Name> {
+export interface DataSource_Object<TypeName extends DataSource_FormatName = DataSource_FormatName> {
     get(): DataSource_Value<TypeName> | Promise<DataSource_Value<TypeName>>
 }
 
@@ -40,6 +40,6 @@ export interface DataSource_Object<TypeName extends DataSource_Type_Name = DataS
  *
  * @typeParam Only - Constrains the data source to a specific type
  */
-export type DataSource<Only extends DataSource_Type_Name = DataSource_Type_Name> =
+export type DataSource<Only extends DataSource_FormatName = DataSource_FormatName> =
     | DataSource_Object<Only>
     | DataSource_Value<Only>

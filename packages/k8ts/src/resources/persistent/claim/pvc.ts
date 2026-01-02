@@ -1,4 +1,4 @@
-import { ResourcesSpec, ResourceTop, Unit, type ResourceRef } from "@k8ts/instruments"
+import { Reqs, ResourceTop, Units, type ResourceRef } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { MakeError } from "../../../error"
 import { v1 } from "../../idents/default"
@@ -7,8 +7,8 @@ import { parsePvAccessMode, type PvAccessMode_Many } from "../access-mode"
 import type { Pv, Pv_Ref } from "../volume"
 import type { PvVolumeMode } from "../volume-mode"
 
-const pvc_ResourcesSpec = new ResourcesSpec({
-    storage: Unit.Data
+const pvc_ResourcesSpec = new Reqs({
+    storage: Units.Data
 })
 export interface Pvc_Props<Mode extends PvVolumeMode> {
     $accessModes: PvAccessMode_Many

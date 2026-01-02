@@ -1,4 +1,4 @@
-import { SetUnitParser } from "./unit-parser"
+import { UnitDimension } from "./dimension"
 
 export type G = `${number}G`
 export const G = (n: number) => `${n}G` as G
@@ -36,17 +36,24 @@ export const s = (n: number) => `${n}s` as s
 export type ms = `${number}ms`
 export const ms = (n: number) => `${n}ms` as ms
 
-export interface UnitDefinition<Unit extends string> {}
-
-export namespace Unit {
+export namespace Units {
     export type Data = M | G | T | K | Mi | Gi | Ki
     export type Cpu = m
     export type Time = m | h | d | s | ms
     export type Any = Data | Cpu | Time
 
-    export const Cpu = SetUnitParser.make("cpu", new Set(["m"]))
+    export const Cpu = new UnitDimension({
+        name: "cpu",
+        units: ["m"]
+    })
 
-    export const Data = SetUnitParser.make("data", new Set(["M", "G", "T", "K", "Mi", "Gi", "Ki"]))
+    export const Data = new UnitDimension({
+        name: "data",
+        units: ["M", "G", "T", "K", "Mi", "Gi", "Ki"]
+    })
 
-    export const Time = SetUnitParser.make("time", new Set(["m", "h", "d", "s", "ms"]))
+    export const Time = new UnitDimension({
+        name: "time",
+        units: ["m", "h", "d", "s", "ms"]
+    })
 }

@@ -1,4 +1,4 @@
-import { ResourceRef, ResourceTop, type Unit } from "@k8ts/instruments"
+import { ResourceRef, ResourceTop, Units } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { MakeError } from "../../../error"
 import type { HostPath_Type } from "../../hostpath"
@@ -31,7 +31,7 @@ export interface Pv_Props<Mode extends PvVolumeMode = PvVolumeMode> {
     $storageClass?: ResourceRef<storage.v1.StorageClass._>
     $mode?: Mode
     reclaimPolicy?: Pv_ReclaimMode
-    $capacity: Unit.Data
+    $capacity: Units.Data
     $backend?: Pv_Backend
     mountOptions?: string[]
     nodeAffinity?: CDK.VolumeNodeAffinity
@@ -60,6 +60,8 @@ export class Pv<
         const self = this
         const pvProps = self.props
         const accessModes = parsePvAccessMode(pvProps.$accessModes)
+        // Make sure it parses correctly
+        Units.Data.parse(pvProps.$capacity)
         if (self.props.$backend?.kind === "Local") {
             if (!pvProps.nodeAffinity) {
                 throw new MakeError(

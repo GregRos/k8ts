@@ -1,9 +1,9 @@
 import {
-    PortsExposed,
-    ResourcesSpec,
-    Unit,
+    PortExports,
+    Reqs,
+    Units,
     type CmdBuilder,
-    type PortExportsInput,
+    type PortExports_Input,
     type ResourceRef,
     type TaggedImage
 } from "@k8ts/instruments"
@@ -19,9 +19,9 @@ import { PodDevice, PodVolume } from "../volume"
 import { ContainerDeviceMount, type ContainerDeviceMount_Input } from "./mounts/device"
 import { ContainerVolumeMount, type ContainerVolumeMount_Unbound } from "./mounts/volume"
 import { toContainerPorts } from "./utils"
-const container_ResourcesSpec = new ResourcesSpec({
-    cpu: Unit.Cpu,
-    memory: Unit.Data
+const container_ResourcesSpec = new Reqs({
+    cpu: Units.Cpu,
+    memory: Units.Data
 })
 
 type PodContainerResources = (typeof container_ResourcesSpec)["__INPUT__"]
@@ -40,7 +40,7 @@ export interface PodContainer_Props<
     _Env extends Record<string, EnvValue> = Record<string, EnvValue>
 > extends Omit<CDK.Container, "name"> {
     $image: TaggedImage
-    $ports?: PortExportsInput<Ports>
+    $ports?: PortExports_Input<Ports>
     $command?: CmdBuilder
     $mounts?: PodContainer_Mounts
     $env?: _Env
@@ -93,7 +93,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
             .pull()
     }
     get ports() {
-        return PortsExposed.make(this.props.$ports)
+        return PortExports.make(this.props.$ports)
     }
     protected __submanifest__(): CDK.Container {
         const self = this
@@ -102,7 +102,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
         let resourcesObject = self._resources()?.toObject()
         const containerPorts =
             $ports &&
-            seq(toContainerPorts(PortsExposed.make($ports)).values())
+            seq(toContainerPorts(PortExports.make($ports)).values())
                 .toArray()
                 .pull()
 

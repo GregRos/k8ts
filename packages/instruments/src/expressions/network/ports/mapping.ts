@@ -1,6 +1,6 @@
 import { filterMap, mapValues } from "@k8ts/metadata/util"
-import { PortError } from "./error"
-import type { PortMappingEntry } from "./types"
+import { K8tsNetworkError } from "../error"
+import type { PortMap_Item } from "./types"
 
 /**
  * Represents an immutable mapping of named ports to their frontend/backend configuration.
@@ -10,13 +10,11 @@ import type { PortMappingEntry } from "./types"
  *
  * @template Names The union type of all port names in the map.
  */
-export class PortsMapped<Names extends string> {
-    constructor(private readonly _map: Map<string, PortMappingEntry>) {}
+export class PortMap<Names extends string> {
+    constructor(private readonly _map: Map<string, PortMap_Item>) {}
 
-    private _apply(
-        f: (map: Map<string, PortMappingEntry>) => Map<string, PortMappingEntry>
-    ): PortsMapped<any> {
-        return new PortsMapped(f(this._map))
+    private _apply(f: (map: Map<string, PortMap_Item>) => Map<string, PortMap_Item>): PortMap<any> {
+        return new PortMap(f(this._map))
     }
 
     /**
@@ -25,7 +23,7 @@ export class PortsMapped<Names extends string> {
      * @param name The port names to include in the new map.
      * @returns A new PortMap with only the selected ports.
      */
-    pick<InNames extends Names>(...name: InNames[]): PortsMapped<InNames> {
+    pick<InNames extends Names>(...name: InNames[]): PortMap<InNames> {
         return this._apply(map => filterMap(map, (_, key) => name.includes(key as InNames)))
     }
 
@@ -40,8 +38,8 @@ export class PortsMapped<Names extends string> {
      * @param mapping A record mapping port names to their new frontend port numbers.
      * @returns A new PortMap with updated frontend ports.
      */
-    map(mapping: Record<Names, number>): PortsMapped<Names> {
-        return new PortsMapped(
+    map(mapping: Record<Names, number>): PortMap<Names> {
+        return new PortMap(
             mapValues(this._map, entry => {
                 return {
                     ...entry,
@@ -56,13 +54,13 @@ export class PortsMapped<Names extends string> {
      *
      * @param name The name of the port to retrieve.
      * @returns The port mapping entry.
-     * @throws {PortError} If the port name is not found in the map.
+     * @throws {K8tsNetworkError} If the port name is not found in the map.
      */
-    get(name: Names): PortMappingEntry {
+    get(name: Names): PortMap_Item {
         if (!this._map.has(name)) {
-            throw new PortError(`Port ${name} not found`)
+            throw new K8tsNetworkError(`Port ${name} not found`)
         }
-        return this._map.get(name) as PortMappingEntry
+        return this._map.get(name) as PortMap_Item
     }
 
     /** Converts this PortMap to a standard Map. */

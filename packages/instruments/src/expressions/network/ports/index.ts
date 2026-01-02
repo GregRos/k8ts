@@ -1,8 +1,3 @@
-import type { PortExportsInput } from "./set"
-import { PortsExposed } from "./set"
-export { PortsMapped, type PortMapping_Input } from "./map"
-export { PortsExposed, type PortExportsInput } from "./set"
-export type { PortFull, PortMappingEntry } from "./types"
-export function ports<Names extends string>(input: PortExportsInput<Names>): PortsExposed<Names> {
-    return PortsExposed.make(input)
-}
+export { PortMap, type PortMapping_Input } from "./mapping"
+export { PortExports, type PortExports_Input } from "./provider"
+export type { PortMap_Item, Port_Full } from "./types"

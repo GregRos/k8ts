@@ -3,15 +3,15 @@ import {
     OriginExporter,
     type Origin,
     type Origin_Props,
-    type ResourceConstructor,
-    type ResourceRef
+    type ResourceRef,
+    type ResourceRef_Constructor
 } from "@k8ts/instruments"
 import { doddlify, seq } from "doddle"
 import type { v1 } from "../../resources/idents"
 import { OriginSection, type FileSectionProps } from "./section"
 export type File_sName = `${string}.yaml`
 export interface FileProps<
-    Kinds extends ResourceConstructor[] = ResourceConstructor[],
+    Kinds extends ResourceRef_Constructor[] = ResourceRef_Constructor[],
     Exports extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
 > extends Origin_Props<Kinds[number]> {
     kinds?: Kinds
@@ -37,7 +37,7 @@ export class OriginFile extends OriginExporter<FileProps> {
     }
 }
 export function File<
-    Kinds extends ResourceConstructor[] = ResourceConstructor[],
+    Kinds extends ResourceRef_Constructor[] = ResourceRef_Constructor[],
     Exports extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
 >(parent: Origin, name: File_sName, props: FileProps<Kinds, Exports>) {
     const file = new OriginFile(parent, name, props as any)
@@ -45,7 +45,7 @@ export function File<
     return ForwardExports<Exports>(file)
 }
 
-export class OriginFileScope<Kinds extends ResourceConstructor[]> {
+export class OriginFileScope<Kinds extends ResourceRef_Constructor[]> {
     constructor(private readonly _file: OriginFile) {
         this.on = this._file.on
     }
@@ -64,6 +64,6 @@ export class OriginFileScope<Kinds extends ResourceConstructor[]> {
 }
 
 export type File<
-    Kinds extends ResourceConstructor[] = ResourceConstructor[],
+    Kinds extends ResourceRef_Constructor[] = ResourceRef_Constructor[],
     T extends Kinds[number]["prototype"] = Kinds[number]["prototype"]
 > = ForwardExports<T>

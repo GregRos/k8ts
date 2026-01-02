@@ -1,9 +1,9 @@
 import { space, string } from "parjs"
 import { between, many, manySepBy, map, must, or, qthen } from "parjs/combinators"
-import type { UnitParser } from "../units/unit-parser"
+import type { UnitDimension } from "../units/dimension"
 import type { Reqs_ReqLimit } from "./types"
 
-export function createRequirementsParser(pUnitValue: UnitParser) {
+export function createReqsParser(pUnitValue: UnitDimension) {
     const pSpaces = space().pipe(many())
     const rSeparator = string("->").pipe(between(pSpaces))
     const arrowExprParser = pUnitValue.parser.pipe(

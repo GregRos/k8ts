@@ -6,7 +6,7 @@ import { mapValues } from "lodash"
 import { displayers } from "../../../utils/displayers"
 import { Entity } from "../entity"
 import { Resource } from "../resource/entity"
-import type { ResourceConstructor, ResourceRef } from "../resource/reference/resource-ref"
+import type { ResourceRef, ResourceRef_Constructor } from "../resource/reference/resource-ref"
 import { type OriginEventMap } from "./events"
 import { KindMap } from "./kind-map"
 import { OriginNode, type Origin_Props } from "./node"
@@ -36,7 +36,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
     private readonly _ownResources: Resource[] = []
     readonly meta: Meta
 
-    protected __attach_kid__(kid: Origin<Origin_Props<ResourceConstructor>>): void {
+    protected __attach_kid__(kid: Origin<Origin_Props<ResourceRef_Constructor>>): void {
         super.__attach_kid__(kid)
         this.__emit__("origin/attached", {
             origin: this,

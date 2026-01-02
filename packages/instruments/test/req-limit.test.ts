@@ -1,7 +1,7 @@
-import { ResourcesSpec, Unit } from "@lib"
+import { Reqs, Units } from "@lib"
 
-const reqLimitCpuSpec = new ResourcesSpec({
-    cpu: Unit.Cpu
+const reqLimitCpuSpec = new Reqs({
+    cpu: Units.Cpu
 })
 it("valid inputs - CPU", () => {
     const reqLimit = reqLimitCpuSpec.parse({
@@ -38,9 +38,9 @@ it("invalid inputs - CPU", () => {
     ).toThrow()
 })
 
-const reqLimitMemoryCpuSpec = new ResourcesSpec({
-    cpu: Unit.Cpu,
-    memory: Unit.Data
+const reqLimitMemoryCpuSpec = new Reqs({
+    cpu: Units.Cpu,
+    memory: Units.Data
 })
 it("valid inputs - Data, Cpu", () => {
     const reqLimit = reqLimitMemoryCpuSpec.parse({

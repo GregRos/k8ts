@@ -1,4 +1,5 @@
 import { DataSource_Lazy } from "./base"
+import { DataSourceError } from "./error"
 
 /**
  * Data source that retrieves values from environment variables. Throws an error if the environment
@@ -16,7 +17,7 @@ class DataSource_EnvVar extends DataSource_Lazy<string> {
         super(async () => {
             const value = process.env[this.name]
             if (value === undefined) {
-                throw new Error(`Environment variable "${this.name}" is not set`)
+                throw new DataSourceError(`Environment variable "${this.name}" is not set`)
             }
             return value
         })

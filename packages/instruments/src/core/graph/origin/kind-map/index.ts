@@ -3,7 +3,7 @@ import type { AnyCtor } from "what-are-you"
 import { InstrumentsError } from "../../../../error"
 
 import { Ident, IdentKind } from "../../resource/api-kind"
-import { ResourceConstructor } from "../../resource/reference"
+import { ResourceRef_Constructor } from "../../resource/reference"
 import { ResourceKey } from "../../resource/resource-key"
 const separator = "/"
 interface NodeEntry {
@@ -11,16 +11,16 @@ interface NodeEntry {
     class: AnyCtor<any>
     ident: IdentKind
 }
-export type KindMap_Input<Ks extends ResourceConstructor> = Ks[]
+export type KindMap_Input<Ks extends ResourceRef_Constructor> = Ks[]
 type LookupKey = string | ResourceKey | AnyCtor<any> | IdentKind
-export class KindMap<Kinds extends ResourceConstructor = ResourceConstructor> {
+export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constructor> {
     __KINDS__!: Kinds["prototype"]["ident"]
     constructor(private _ownKinds: KindMap_Input<Kinds>) {}
 
     [Symbol.iterator]() {
         return this._ownKinds[Symbol.iterator]()
     }
-    child<Ks extends ResourceConstructor = ResourceConstructor>(
+    child<Ks extends ResourceRef_Constructor = ResourceRef_Constructor>(
         kinds: KindMap_Input<Ks> | KindMap<Ks>
     ): KindMap<Kinds | Ks> {
         const ownKinds = kinds instanceof KindMap ? kinds._ownKinds : kinds
