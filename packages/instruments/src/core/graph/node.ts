@@ -1,7 +1,7 @@
 import { seq, type Seq } from "doddle"
 import { Entity } from "./entity"
 import { Relation } from "./relation"
-import { ForwardRef } from "./resource/exports/forward-ref"
+import { ForwardRef } from "./resource/forward/ref"
 /**
  * The {@link Node} is a wrapper around a {@link Entity} that provides traversal, display, and other
  * utilities. Note that the {@link Node} itself is immutable. Changes only happen to the underlying

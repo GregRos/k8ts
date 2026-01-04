@@ -1,10 +1,10 @@
 import { seq } from "doddle"
 import { Origin } from "../../origin"
 import type { OriginExporter } from "../../origin/exporter"
+import { ResourceKey } from "../key"
 import type { ResourceRef } from "../ref"
-import { ResourceKey } from "../resource-key"
 import { K8tsProxyError } from "./error"
-import { ForwardRef } from "./forward-ref"
+import { ForwardRef } from "./ref"
 
 /** Expands the resources exported by an OriginExported into a dictionary of name to FwRef. */
 export type ForwardExports_ByKey<Exports extends ResourceRef = ResourceRef> = {

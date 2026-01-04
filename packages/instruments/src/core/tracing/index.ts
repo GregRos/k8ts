@@ -1,3 +1,3 @@
-export * from "./trace-embedder"
-export * from "./trace-git"
-export * from "./trace-source"
+export * from "./embedder"
+export * from "./git"
+export * from "./source"

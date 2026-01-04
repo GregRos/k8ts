@@ -5,7 +5,7 @@ import { Entity } from "../entity"
 import { K8tsGraphError } from "../error"
 import type { Origin } from "../origin"
 import type { Ident } from "./api-kind"
-import { ForwardRef } from "./exports"
+import { ForwardRef } from "./forward"
 import { ResourceNode } from "./node"
 import { type ResourceRef } from "./ref"
 

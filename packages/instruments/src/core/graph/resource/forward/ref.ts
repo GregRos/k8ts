@@ -2,8 +2,8 @@ import { seq, type Doddle } from "doddle"
 import { mapValues } from "lodash"
 import { getNiceClassName, type AnyCtor } from "what-are-you"
 import { K8tsGraphError } from "../../error"
+import { ResourceKey } from "../key"
 import type { ResourceRef } from "../ref"
-import { ResourceKey } from "../resource-key"
 import { K8tsProxyError } from "./error"
 
 /**

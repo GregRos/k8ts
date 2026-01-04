@@ -1,7 +1,7 @@
 import { bind_own_methods } from "../../../../utils"
 import { display } from "../../../../utils/mixin/display"
 import { K8tsGraphError } from "../../error"
-import { ResourceKey, type ResourceKey_Options } from "../resource-key"
+import { ResourceKey, type ResourceKey_Options } from "../key"
 import { pluralize } from "./pluralize"
 
 export interface IdentLike {

@@ -1,7 +1,7 @@
 import { doddlify, seq } from "doddle"
 import { K8tsGraphError } from "../error"
 import { ForwardExports, ResourceRef, ResourceTop } from "../resource"
-import { ForwardRef } from "../resource/exports/forward-ref"
+import { ForwardRef } from "../resource/forward/ref"
 import type { Origin_Props } from "./node"
 import { Origin } from "./origin"
 export interface OriginExporter_Props extends Origin_Props {}
@@ -33,28 +33,28 @@ export abstract class OriginExporter<
         const allEmitted = new Set<ResourceRef>()
         const attachedResources = seq(() => super.resources).cache()
         return seq(function* () {
-            for (const em of boundExports() as ResourceTop[]) {
-                if (ForwardRef.is(em)) {
+            for (const resource of boundExports() as ResourceTop[]) {
+                if (ForwardRef.is(resource)) {
                     throw new K8tsGraphError(
-                        `FwRef ${em} cannot be directly exported from ChildOrigin ${self.name}`
+                        `FwRef ${resource} cannot be directly exported from ChildOrigin ${self.name}`
                     )
                 }
-                if (em instanceof Origin || ForwardExports.is(em)) {
+                if (resource instanceof Origin || ForwardExports.is(resource)) {
                     // Skip Origin entities. Later we go over attachedResources and after evaluating
                     // these exports, any resources attached to child Origins will be included.
                     continue
                 }
 
-                allEmitted.add(em)
-                if (em["__origin__"]().equals(self)) {
+                allEmitted.add(resource)
+                if (resource["__origin__"]().equals(self)) {
                     // Means it's being exported for the first time
-                    self.meta.add("#k8ts.org/exported", "true")
+                    resource.meta.add("#k8ts.org/exported", "true")
                     self.__emit__("resource/exported", {
                         origin: self,
-                        resource: em
+                        resource: resource
                     })
                 }
-                yield em
+                yield resource
             }
             for (const resource of attachedResources) {
                 if (!allEmitted.has(resource)) {

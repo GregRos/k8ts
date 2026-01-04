@@ -9,8 +9,8 @@ import { K8tsGraphError } from "../error"
 import { Node } from "../node"
 import { OriginNode } from "../origin/node"
 import type { IdentKind, IdentLike } from "./api-kind"
+import { ResourceKey } from "./key"
 import type { Resource } from "./resource"
-import { ResourceKey } from "./resource-key"
 
 @display({
     simple: s => `[${s.shortFqn}]`,

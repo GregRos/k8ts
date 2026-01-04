@@ -1,8 +1,8 @@
 import { Meta } from "@k8ts/metadata"
 import { DummyOrigin } from "../../origin/dummy"
 import type { IdentKind } from "../api-kind"
+import type { ResourceKey } from "../key"
 import { Resource } from "../resource"
-import type { ResourceKey } from "../resource-key"
 export class DummyResource<K extends IdentKind> extends Resource<string, any> {
     readonly meta = Meta.create()
     constructor(
