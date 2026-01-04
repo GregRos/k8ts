@@ -1,1 +1,1 @@
-export * from "./resource-key"
+export * from "./key"

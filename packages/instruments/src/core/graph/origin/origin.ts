@@ -44,7 +44,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
         })
     }
     equals(other: any): boolean {
-        const ForwardExports = require("../resource/exports/forward-exports").ForwardExports
+        const ForwardExports = require("../resource/forward/exports").ForwardExports
         if (!other) {
             return false
         }

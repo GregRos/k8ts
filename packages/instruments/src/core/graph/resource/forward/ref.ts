@@ -146,7 +146,7 @@ class ForwardRef_ProxyHandler<T extends ResourceRef> implements ProxyHandler<T> 
         return result
     }
     getPrototypeOf(target: T) {
-        const RscTop = require("../top").RscTop
+        const RscTop = require("../top").ResourceTop
         return this._props.class?.prototype ?? RscTop.prototype
     }
     has(target: T, prop: PropertyKey) {

@@ -15,6 +15,7 @@ type _alphabeta = "alpha" | "beta" | ""
 type _subversion = `${_alphabeta}${number}` | ""
 type _version = `v${number}${_subversion | ""}`
 
+// TODO: This is an overengineered way to represent API kinds, simplify it
 @display({
     simple: self => self.text
 })
