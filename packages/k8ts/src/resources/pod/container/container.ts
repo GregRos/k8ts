@@ -16,6 +16,7 @@ import { mapKeys, mapValues, merge } from "lodash"
 import { Env } from "../../../env"
 import type { EnvValue } from "../../../env/types"
 import { v1 } from "../../../resource-idents/default"
+import { K8tsResourceError } from "../../errors"
 import { PodDevice, PodVolume } from "../volume"
 import { ContainerDeviceMount, type ContainerDeviceMount_Input } from "./mounts/device"
 import { ContainerVolumeMount, type ContainerVolumeMount_Unbound } from "./mounts/volume"
@@ -81,7 +82,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
                         subPath: x.subPath
                     })
                 }
-                throw new Error(`Unsupported mount backend type: ${mount.$backend}`)
+                throw new K8tsResourceError(`Unsupported mount backend type: ${mount.$backend}`)
             })
             .toArray()
             .pull()
@@ -114,7 +115,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
             const backend = value.$backend
             if (backend instanceof Resource) {
                 if (backend.namespace !== self.namespace) {
-                    throw new Error(
+                    throw new K8tsResourceError(
                         `Environment variable reference "${key}" must be in the same namespace as the container "${self}", but was ${backend}"`
                     )
                 }
@@ -122,7 +123,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
         }
         for (const vol of self.volumes) {
             if (vol.namespace !== self.namespace) {
-                throw new Error(
+                throw new K8tsResourceError(
                     `Volume reference "${vol}" had an inherited namespace ${vol.namespace}, which is different from the container "${self}"`
                 )
             }
@@ -130,7 +131,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
         const envFroms = (self.props.$envFrom ?? []).map(ef => {
             const source = ef.source as any as Resource
             if (source.namespace !== self.namespace) {
-                throw new Error(
+                throw new K8tsResourceError(
                     `EnvFrom source reference "${source}" must be in the same namespace as the container "${self}"`
                 )
             }
@@ -149,7 +150,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
                     }
                 } as CDK.EnvFromSource
             } else {
-                throw new Error(
+                throw new K8tsResourceError(
                     `EnvFrom source reference "${source}" must be a ConfigMap or Secret, but was ${source.ident}`
                 )
             }

@@ -7,9 +7,9 @@ import {
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { merge } from "lodash"
-import { MakeError } from "../../error"
 import { v1 } from "../../resource-idents/index"
 import { Deployment, type Deployment_Ref } from "../deployment"
+import { K8tsResourceError } from "../errors"
 import { Service_PortRef } from "./service-port"
 import { toServicePorts } from "./utils"
 export interface Sevice_Frontend_ClusterIp {
@@ -74,7 +74,7 @@ export class Service<
         return `${this.name}.${this.namespace}.svc.cluster.local`
     }
 
-    private _getPortoPart(port: PortsExposed, protocol: "http" | "https") {
+    private _getPortoPort(port: PortsExposed, protocol: "http" | "https") {
         const portNumber = this.props.$ports[port]
         if (portNumber === 80 && protocol === "http") {
             return ""
@@ -83,7 +83,7 @@ export class Service<
             return ""
         }
         if (portNumber === undefined) {
-            throw new MakeError(`Port ${port} is not defined in service ${this.name}`)
+            throw new K8tsResourceError(`Port ${port} is not defined in service ${this.name}`)
         }
         return `:${portNumber}`
     }
@@ -107,6 +107,6 @@ export class Service<
     }
 
     address(protocol: "http" | "https", port: PortsExposed) {
-        return `${protocol}://${this.hostname}${this._getPortoPart(port, protocol)}`
+        return `${protocol}://${this.hostname}${this._getPortoPort(port, protocol)}`
     }
 }

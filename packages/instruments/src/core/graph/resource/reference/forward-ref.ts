@@ -1,6 +1,7 @@
 import { seq, type Doddle } from "doddle"
 import { mapValues } from "lodash"
 import { getNiceClassName, type AnyCtor } from "what-are-you"
+import { K8tsGraphError } from "../../error"
 import { ResourceKey } from "../resource-key"
 import { ProxyOperationError } from "./error"
 import type { ResourceRef } from "./resource-ref"
@@ -60,7 +61,7 @@ const hiddenProperties = {
         if (hiddenProperties.is.call(this, cls)) {
             return this as any
         }
-        throw new Error(
+        throw new K8tsGraphError(
             `This Resource ${this} is not compatible with the class ${getNiceClassName(cls)}.`
         )
     }

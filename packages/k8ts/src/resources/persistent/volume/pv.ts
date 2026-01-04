@@ -1,9 +1,9 @@
 import { ResourceRef, ResourceTop, Units, type Resource_Props } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
-import { MakeError } from "../../../error"
 import { v1 } from "../../../resource-idents/default"
 import { storage } from "../../../resource-idents/storage"
+import { K8tsResourceError } from "../../errors"
 import type { HostPath_Type } from "../../hostpath"
 import { parsePvAccessMode, type PvAccessMode_Many } from "../access-mode"
 import type { PvVolumeMode } from "../volume-mode"
@@ -65,13 +65,13 @@ export class Pv<
         Units.Data.parse(self.props.$capacity)
         if (self.props.$backend?.kind === "Local") {
             if (!self.props.nodeAffinity) {
-                throw new MakeError(
+                throw new K8tsResourceError(
                     `While manifesting ${self.node.format("source")}, PV with Local backend must have nodeAffinity.`
                 )
             }
         }
         if (!self.props.$backend && !self.props.$storageClass) {
-            throw new MakeError(
+            throw new K8tsResourceError(
                 `While manifesting ${self.node.format("source")}, PV that doesn't have a $backend must have a $storageClass.`
             )
         }

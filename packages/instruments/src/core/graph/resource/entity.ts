@@ -2,6 +2,7 @@ import { getDeepPropertyDescriptor } from "@k8ts/metadata/util"
 import { getNiceClassName } from "what-are-you"
 import { displayers } from "../../../utils"
 import { Entity } from "../entity"
+import { K8tsGraphError } from "../error"
 import type { Origin } from "../origin"
 import type { Ident } from "./api-kind"
 import { ResourceNode } from "./node"
@@ -41,7 +42,7 @@ export abstract class Resource<
         this.name = name
         const desc = getDeepPropertyDescriptor(this, "ident")
         if (!desc || !desc.get) {
-            throw new Error(
+            throw new K8tsGraphError(
                 `ResourceEntity subclass ${getNiceClassName(this)} must implement the 'ident' property as a getter, but it's missing or not a getter.`
             )
         }

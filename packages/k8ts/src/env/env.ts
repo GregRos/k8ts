@@ -2,8 +2,8 @@ import type { ResourceRef } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { isPrimitive } from "what-are-you"
-import { MakeError } from "../error"
 import { v1 } from "../idents"
+import { K8tsEnvError } from "./error"
 import { type EnvValue, type EnvValueSource } from "./types"
 import { isValidEnvVarName } from "./validate-name"
 
@@ -11,7 +11,7 @@ export class EnvBuilder<M extends Record<keyof M, EnvValue>> {
     constructor(private readonly _env: M) {
         for (const key of Object.keys(_env)) {
             if (!isValidEnvVarName(key)) {
-                throw new MakeError("Invalid environment variable name", {
+                throw new K8tsEnvError("Invalid environment variable name", {
                     key: key
                 })
             }
@@ -71,7 +71,7 @@ export class EnvBuilder<M extends Record<keyof M, EnvValue>> {
                         valueFrom: this._envFromConfigMap(value as any)
                     } satisfies CDK.EnvVar
                 }
-                throw new MakeError("Invalid environment variable reference", {
+                throw new K8tsEnvError("Invalid environment variable reference", {
                     key: key,
                     value: value
                 })

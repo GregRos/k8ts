@@ -7,8 +7,8 @@ import {
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
 import { merge, omit } from "lodash"
-import { MakeError } from "../../error"
 import { apps } from "../../resource-idents/apps"
+import { K8tsResourceError } from "../errors"
 import { PodTemplate, type PodProps } from "../pod"
 
 export interface Deployment_Strategy_RollingUpdate extends CDK.RollingUpdateDeployment {
@@ -41,7 +41,7 @@ export class Deployment<Name extends string, Ports extends string = string> exte
     #_ = (() => {
         const origin = OriginContextTracker.current
         if (!origin) {
-            throw new MakeError(
+            throw new K8tsResourceError(
                 `Deployment ${this.name} must be created within an OriginEntity context`
             )
         }
@@ -84,7 +84,7 @@ export class Deployment<Name extends string, Ports extends string = string> exte
                 rollingUpdate: omit(strat, "type")
             }
         }
-        throw new MakeError(`Invalid strategy type: ${strat}`)
+        throw new K8tsResourceError(`Invalid strategy type: ${strat}`)
     }
 
     @doddlify

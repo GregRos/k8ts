@@ -1,5 +1,5 @@
 import { isNullish } from "what-are-you"
-import { MetadataError } from "../error"
+import { K8tsMetadataError } from "../error"
 import { normalChar } from "./parse-key"
 import type { Char } from "./types"
 interface ImmObject {
@@ -19,13 +19,13 @@ abstract class KeyType implements ImmObject {
 
 export function checkMetaString(thing: string, input: string, length: number) {
     if (!normalChar.parse(input[0]!).isOk) {
-        throw new MetadataError(`${thing} must start with an alphanumeric character.`)
+        throw new K8tsMetadataError(`${thing} must start with an alphanumeric character.`)
     }
     if (!normalChar.parse(input[input.length - 1]!).isOk) {
-        throw new MetadataError(`${thing}  must end with an alphanumeric character.`)
+        throw new K8tsMetadataError(`${thing}  must end with an alphanumeric character.`)
     }
     if (thing.length > length) {
-        throw new MetadataError(`${thing} must be no more than ${length} characters.`)
+        throw new K8tsMetadataError(`${thing} must be no more than ${length} characters.`)
     }
 }
 
@@ -54,7 +54,7 @@ export class MetadataKey extends KeyType {
             case "^":
                 return "annotation"
             default:
-                throw new Error(`Unknown prefix ${this._prefix}`)
+                throw new K8tsMetadataError(`Unknown prefix ${this._prefix}`)
         }
     }
 
@@ -107,7 +107,7 @@ export class MetadataKey extends KeyType {
         }
         domain = domain instanceof DomainPrefix ? domain.str : domain
         if (this._domain) {
-            throw new Error("Already has a domain")
+            throw new K8tsMetadataError("Already has a domain")
         }
         return new MetadataKey(this._prefix, domain, this._name)
     }

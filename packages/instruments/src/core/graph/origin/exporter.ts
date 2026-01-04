@@ -1,4 +1,5 @@
 import { doddlify, seq } from "doddle"
+import { K8tsGraphError } from "../error"
 import { ForwardExports, ResourceRef, ResourceTop } from "../resource"
 import { ForwardRef } from "../resource/reference/forward-ref"
 import { Origin } from "./entity"
@@ -34,7 +35,7 @@ export abstract class OriginExporter<
         return seq(function* () {
             for (const em of boundExports() as ResourceTop[]) {
                 if (ForwardRef.is(em)) {
-                    throw new Error(
+                    throw new K8tsGraphError(
                         `FwRef ${em} cannot be directly exported from ChildOrigin ${self.name}`
                     )
                 }

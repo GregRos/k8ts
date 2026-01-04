@@ -1,4 +1,5 @@
 import { getNiceClassName, type AnyCtor } from "what-are-you"
+import { K8tsGraphError } from "./error"
 import type { Node } from "./node"
 export type LiteralModes = "simple" | "pretty" | "prefix"
 
@@ -40,7 +41,7 @@ export abstract class Entity<
         if (this.is(cls)) {
             return this as any as Inst
         }
-        throw new Error(
+        throw new K8tsGraphError(
             `This Resource ${this} is not compatible with the class ${getNiceClassName(cls)}.`
         )
     }

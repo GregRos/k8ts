@@ -1,5 +1,5 @@
 import { seq } from "doddle"
-import { MetadataError } from "./error"
+import { K8tsMetadataError } from "./error"
 import type { InputMeta, MetaInputParts } from "./input/dict-input"
 import { parseKey, parseMetaInput } from "./key"
 import { parseInnerKey, parseSectionKey, pNameValue } from "./key/parse-key"
@@ -15,14 +15,14 @@ export interface MetaLike {
 export namespace Meta {
     export function _checkNameValue(what: string, v: string) {
         if (!pNameValue.parse(v).isOk) {
-            throw new MetadataError(`Invalid ${what}: ${v}`)
+            throw new K8tsMetadataError(`Invalid ${what}: ${v}`)
         }
         checkMetaString(what, v, 63)
     }
     export function _checkValue(key: string, v: string) {
         const parsed = parseKey(key)
         if (!(parsed instanceof MetadataKey)) {
-            throw new MetadataError(`Expected value key, got section key for ${key}`)
+            throw new K8tsMetadataError(`Expected value key, got section key for ${key}`)
         }
         if (parsed.metaType === "label") {
             checkMetaString(`value of ${key}`, v, 63)
@@ -60,7 +60,7 @@ export namespace Meta {
          * values during construction.
          *
          * @param _dict Internal map storing metadata key-value pairs
-         * @throws {MetadataError} If any key or value is invalid
+         * @throws {K8tsMetadataError} If any key or value is invalid
          */
         constructor(private readonly _dict: Map<string, string>) {
             for (const [key, value] of _dict.entries()) {
@@ -182,7 +182,7 @@ export namespace Meta {
             for (const [k, v] of parsed) {
                 if (this._dict.has(k)) {
                     const prev = this._dict.get(k)
-                    throw new MetadataError(`Duplicate entry for ${k}, was ${prev} now ${v}`, {
+                    throw new K8tsMetadataError(`Duplicate entry for ${k}, was ${prev} now ${v}`, {
                         key: (k as any).str
                     })
                 }
@@ -274,13 +274,13 @@ export namespace Meta {
          *
          * @param key The value key to retrieve
          * @returns The value associated with the key
-         * @throws {MetadataError} If the key is not found
+         * @throws {K8tsMetadataError} If the key is not found
          */
         get(key: Key.Value) {
             const parsed = parseKey(key)
             const v = this._dict.get(key)
             if (v === undefined) {
-                throw new MetadataError(`Key ${key} not found!`, { key })
+                throw new K8tsMetadataError(`Key ${key} not found!`, { key })
             }
             return v
         }
@@ -294,12 +294,12 @@ export namespace Meta {
          * @param key The value key to retrieve
          * @param fallback Optional fallback value if key doesn't exist
          * @returns The value associated with the key, or the fallback value
-         * @throws {MetadataError} If a domain key is provided instead of a value key
+         * @throws {K8tsMetadataError} If a domain key is provided instead of a value key
          */
         tryGet(key: Key.Value, fallback?: string) {
             const parsed = parseKey(key)
             if (!(parsed instanceof MetadataKey)) {
-                throw new MetadataError("Unexpected domain key!", { key })
+                throw new K8tsMetadataError("Unexpected domain key!", { key })
             }
             return this._dict.get(key) ?? fallback
         }

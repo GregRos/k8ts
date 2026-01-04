@@ -1,5 +1,6 @@
 import { InstrumentsError } from "../../../error"
 import { displayers } from "../../../utils/displayers"
+import { K8tsWorkloadToolsError } from "../error"
 import type { CmdLine_Value } from "./types"
 
 export class CmdLine_Term_Flag {
@@ -36,7 +37,7 @@ export class CmdLine_Term_Value {
 
     private _valueStr() {
         if (this.value === null) {
-            throw new Error("Shouldn't be here")
+            throw new K8tsWorkloadToolsError("Shouldn't be here")
         }
         if (this.value === "") {
             return `""`

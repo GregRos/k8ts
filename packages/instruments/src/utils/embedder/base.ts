@@ -1,3 +1,5 @@
+import { K8tsMixinError } from "../error"
+
 export class Embedder<Target extends object, Value> {
     private _symbol!: symbol
     constructor(readonly name: string) {
@@ -24,7 +26,7 @@ export class Embedder<Target extends object, Value> {
 
     add(target: Target, data: Value) {
         if (Object.prototype.hasOwnProperty.call(target, this._symbol)) {
-            throw new Error(`Decorator ${this.name} already set!`)
+            throw new K8tsMixinError(`Decorator ${this.name} already set!`)
         }
         this.overwrite(target, data)
         return this
@@ -37,7 +39,7 @@ export class Embedder<Target extends object, Value> {
     get(target: Target): Value {
         const input = this.tryGet(target)
         if (!input) {
-            throw new Error(
+            throw new K8tsMixinError(
                 `Target of type ${target} doesn't have any embedded data for ${this.name}!`
             )
         }

@@ -1,3 +1,4 @@
+import { K8tsGraphError } from "../../../core/graph/error"
 import type { Cron_Record, Cron_RecordFromTuple, Cron_Tuple } from "./parse-type"
 import { Cron_Stanza } from "./stanza"
 
@@ -29,7 +30,7 @@ export namespace Cron {
     export function parse(cron: string): Cron_Stanza<Cron_Record> {
         const parts = cron.split(" ")
         if (parts.length !== 5) {
-            throw new Error(`Invalid cron string: ${cron}`)
+            throw new K8tsGraphError(`Invalid cron string: ${cron}`)
         }
         return shorthand(...(parts as any))
     }

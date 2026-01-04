@@ -32,7 +32,7 @@ export class Engine_ResourceLoader {
 
         const addResource = async (res: Node) => {
             if (!(res instanceof ResourceNode)) {
-                throw new Error(`Expected ResourceNode, got ${res.constructor.name}`)
+                throw new K8tsEngineError(`Expected ResourceNode, got ${res.constructor.name}`)
             }
             if (resources.some(r => r.equals(res))) {
                 return

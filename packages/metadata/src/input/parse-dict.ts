@@ -1,4 +1,5 @@
 import { isNullish } from "what-are-you"
+import { K8tsMetadataError } from "../error"
 import { parseInnerKey, parseOuterKey } from "../key/parse-key"
 import { DomainPrefix } from "../key/repr"
 import { Meta } from "../meta"
@@ -22,7 +23,7 @@ export function parseMetaInput(input: InputMeta): Map<string, string> {
         }
         if (outer instanceof DomainPrefix) {
             if (typeof value !== "object") {
-                throw new Error(`Expected object for section key ${key}`)
+                throw new K8tsMetadataError(`Expected object for section key ${key}`)
             }
             for (const [kk, vv] of Object.entries(value)) {
                 if (isNullish(vv)) {
@@ -31,13 +32,13 @@ export function parseMetaInput(input: InputMeta): Map<string, string> {
                 const inner = parseInnerKey(kk)
 
                 if (typeof vv !== "string") {
-                    throw new Error(`Expected string value for inner key ${kk}`)
+                    throw new K8tsMetadataError(`Expected string value for inner key ${kk}`)
                 }
                 map.set(inner.domain(outer).str, vv as string)
             }
         } else {
             if (typeof value !== "string") {
-                throw new Error(`Expected string value for key ${key}`)
+                throw new K8tsMetadataError(`Expected string value for key ${key}`)
             }
             map.set(outer.str, value as string)
         }

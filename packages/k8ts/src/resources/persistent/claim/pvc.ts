@@ -1,9 +1,9 @@
 import { Reqs, ResourceTop, Units, type ResourceRef, type Resource_Props } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
-import { MakeError } from "../../../error"
 import { v1 } from "../../../resource-idents/default"
 import { storage } from "../../../resource-idents/storage"
+import { K8tsResourceError } from "../../errors"
 import { parsePvAccessMode, type PvAccessMode_Many } from "../access-mode"
 import type { Pv, Pv_Ref } from "../volume"
 import type { PvVolumeMode } from "../volume-mode"
@@ -41,7 +41,7 @@ export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extend
         const { $resources, $accessModes, $mode, $storageClass, $bind } = self.props
         const nAccessModes = parsePvAccessMode($accessModes)
         if (!$bind && !$storageClass) {
-            throw new MakeError(
+            throw new K8tsResourceError(
                 `While manifesting ${self.node.format("source")}, PVC that doesn't have a $bind must have a $storageClass.`
             )
         }

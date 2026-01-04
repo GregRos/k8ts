@@ -1,4 +1,4 @@
-import { MakeError } from "../../../error"
+import { K8tsResourceError } from "../../errors"
 import type { Pv_Backend } from "./pv"
 export function parseBackend(backend?: Pv_Backend) {
     switch (backend?.kind) {
@@ -26,7 +26,7 @@ export function parseBackend(backend?: Pv_Backend) {
                 }
             }
         default:
-            throw new MakeError(`Unknown backend kind!`, {
+            throw new K8tsResourceError(`Unknown backend kind!`, {
                 backend
             })
     }

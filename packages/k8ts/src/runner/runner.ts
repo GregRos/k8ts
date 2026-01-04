@@ -11,8 +11,8 @@ import {
     type AssemblerEventsTable,
     type AssemblerOptions,
     type ProgressOptions
-} from "./stages"
-import { Summarizer } from "./summarizer"
+} from "./engine"
+import { Summarizer } from "./viz/summarizer"
 
 export interface RunnerOptions extends AssemblerOptions {
     cwd?: string

@@ -5,6 +5,7 @@ import { type AnyCtor } from "what-are-you"
 import { Displayers, displayers } from "../../../utils/displayers"
 import { TraceEmbedder } from "../../tracing"
 import { Formats } from "../entity"
+import { K8tsGraphError } from "../error"
 import { Node } from "../node"
 import { OriginNode } from "../origin/node"
 import type { IdentKind, IdentLike } from "./api-kind"
@@ -85,7 +86,7 @@ export class ResourceNode extends Node<ResourceNode, Resource> {
         if (entity instanceof type) {
             return entity
         }
-        throw new Error(
+        throw new K8tsGraphError(
             `This node is for an entity of type ${entity.constructor.name}, not ${type.name}`
         )
     }

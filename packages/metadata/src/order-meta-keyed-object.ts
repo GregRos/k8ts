@@ -1,4 +1,5 @@
 import { seq } from "doddle"
+import { K8tsMetadataError } from "./error"
 
 function comparisonKey(key: string) {
     const bySlash = key.split("/")
@@ -6,7 +7,7 @@ function comparisonKey(key: string) {
         return key
     }
     if (bySlash.length > 2) {
-        throw new Error(`Invalid composed key ${key}, too many '/' characters.`)
+        throw new K8tsMetadataError(`Invalid composed key ${key}, too many '/' characters.`)
     }
     const [dns, name] = bySlash
     const dnsParts = dns.split(".").reverse()

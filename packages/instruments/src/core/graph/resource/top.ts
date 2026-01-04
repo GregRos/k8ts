@@ -6,6 +6,7 @@ import {
     type K8tsManifest_Metadata
 } from "../../manifest"
 import { Trace_SourceCode, TraceEmbedder } from "../../tracing"
+import { K8tsGraphError } from "../error"
 import type { Origin } from "../origin/entity"
 import { OriginContextTracker } from "../origin/tracker"
 import type { IdentKind } from "./api-kind"
@@ -40,7 +41,7 @@ export abstract class ResourceTop<
         })
         const lastOrigin = OriginContextTracker.current
         if (!lastOrigin) {
-            throw new Error(
+            throw new K8tsGraphError(
                 `ManifestResource ${this.name} must be created within an OriginEntity context`
             )
         }

@@ -10,6 +10,7 @@ import { seq } from "doddle"
 import { merge } from "lodash"
 import type { EnvValuePrimitive } from "../../env/types"
 import { v1 } from "../../resource-idents/default"
+import { K8tsResourceError } from "../errors"
 import { PodContainer, type PodContainer_Props } from "./container"
 import { PodDevice, type PodDeviceBackend } from "./volume/devices"
 import {
@@ -100,7 +101,7 @@ export class PodTemplate<Ports extends string = string> extends ResourcePart<Pod
                 } else if (x.is(PodDevice)) {
                     return x["__submanifest__"]()
                 }
-                throw new Error(`Unsupported volume type: ${x}`)
+                throw new K8tsResourceError(`Unsupported volume type: ${x}`)
             })
             .toArray()
         const spec = {
@@ -165,7 +166,7 @@ export class PodScope {
         } else if (backend.is(v1.PersistentVolumeClaim._)) {
             return new PodVolume_Pvc(this._parent, name, options as any)
         }
-        throw new Error(`Unsupported volume backend kind: ${backend.ident}`)
+        throw new K8tsResourceError(`Unsupported volume backend kind: ${backend.ident}`)
     }
     Device(name: string, options: PodDeviceBackend) {
         return new PodDevice(this._parent, name, options)

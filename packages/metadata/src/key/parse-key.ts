@@ -1,7 +1,7 @@
 import { anyCharOf, anyStringOf, digit, letter, lower, string } from "parjs"
 import { many1, map, maybe, or, qthen, stringify, then, thenq } from "parjs/combinators"
 
-import { MetadataError } from "../error"
+import { K8tsMetadataError } from "../error"
 import { DomainPrefix, MetadataKey } from "./repr"
 
 const cPrefix = anyCharOf("%^#")
@@ -59,7 +59,7 @@ export function parseOuterKey(key: string) {
     if (result.kind === "OK") {
         return result.value
     }
-    throw new MetadataError(`Failed to parse key ${key}: ${result.toString()}`, {
+    throw new K8tsMetadataError(`Failed to parse key ${key}: ${result.toString()}`, {
         key,
         error: result.toString()
     })

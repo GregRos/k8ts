@@ -1,5 +1,6 @@
 import { DataSource_Lazy, type DataSource, type ResourceRef } from "@k8ts/instruments"
 import { isArrayBufferLike, isTypedArray } from "what-are-you"
+import { K8tsResourceError } from "../errors"
 
 export async function resolveDataSourceRecord(
     resource: ResourceRef,
@@ -19,7 +20,9 @@ export async function resolveDataSourceRecord(
         } else if (typeof current === "string") {
             data.push([k, current])
         } else {
-            throw new Error(`Unsupported DataSource for ConfigMap ${resource} key "${k}"`)
+            throw new K8tsResourceError(
+                `Unsupported DataSource for ConfigMap ${resource} key "${k}"`
+            )
         }
     }
     return {
