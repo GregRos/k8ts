@@ -1,7 +1,7 @@
 import { Meta } from "@lib"
 
 it("accepts all valid value keys", () => {
-    const m = Meta.make({
+    const m = Meta.create({
         "%label": "Hello",
         "%label2": "World",
         "^annotation": "goodbye",
@@ -16,7 +16,7 @@ it("accepts all valid value keys", () => {
 })
 
 it("accepts mix of value and section keys", () => {
-    const m = Meta.make({
+    const m = Meta.create({
         "%label": "Hello",
         "%label2": "World",
         "^annotation": "goodbye",

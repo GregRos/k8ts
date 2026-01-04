@@ -63,15 +63,15 @@ export class ResourceNode extends Node<ResourceNode, Resource> {
     }
 
     get isExported() {
-        return this.meta?.tryGet("#k8ts.org/is-exported") ?? false
+        return this.meta?.tryGet("#k8ts.org/exported") ?? false
     }
 
     get meta() {
         return "meta" in this.entity ? (this.entity.meta as Meta) : undefined
     }
 
-    get isExternal() {
-        return this.meta?.tryGet("#k8ts.org/is-external") ?? false
+    get noEmit() {
+        return this.meta?.tryGet("#k8ts.org/no-emit") ?? false
     }
 
     when<EntityType extends Resource>(type: AnyCtor<EntityType>, fn: (entity: EntityType) => void) {
@@ -100,10 +100,6 @@ export class ResourceNode extends Node<ResourceNode, Resource> {
                 current = current.parent
             }
         })
-    }
-
-    get disabled() {
-        return "disabled" in this.entity ? !!this.entity.disabled : false
     }
 
     get shortFqn() {

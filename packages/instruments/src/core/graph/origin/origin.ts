@@ -8,10 +8,10 @@ import { Entity } from "../entity"
 import { Resource } from "../resource/resource"
 import type { ResourceRef, ResourceRef_Constructor } from "../resource/resource-ref"
 import { KindMap } from "./kind-map"
-import type { OriginStackBinder } from "./origin-context"
-import { OriginContextTracker } from "./origin-context"
 import { type OriginEventMap } from "./origin-events"
 import { OriginNode, type Origin_Props } from "./origin-node"
+import type { OriginTracker_Binder } from "./origin-tracker"
+import { OriginContextTracker } from "./origin-tracker"
 
 @display({
     simple: x => `[${x.shortFqn}]`,
@@ -44,7 +44,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
         })
     }
     equals(other: any): boolean {
-        const ForwardExports = require("../resource/reference/forward-exports").ForwardExports
+        const ForwardExports = require("../resource/exports/forward-exports").ForwardExports
         if (!other) {
             return false
         }
@@ -63,7 +63,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
     ) {
         super()
 
-        this.meta = Meta.make(_props.meta ?? {})
+        this.meta = Meta.create(_props.meta ?? {})
     }
 
     get node(): OriginNode {
@@ -117,7 +117,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
         }
     }
 
-    protected __binder__(): OriginStackBinder {
+    protected __binder__(): OriginTracker_Binder {
         const origin = this
         return OriginContextTracker.binder(origin)
     }

@@ -5,10 +5,10 @@ import {
     type K8tsManifest_Ident,
     type K8tsManifest_Metadata
 } from "../../manifest"
-import { Trace_SourceCode, TraceEmbedder } from "../../tracing"
+import { Trace_Source, TraceEmbedder } from "../../tracing"
 import { K8tsGraphError } from "../error"
 import type { Origin } from "../origin/origin"
-import { OriginContextTracker } from "../origin/origin-context"
+import { OriginContextTracker } from "../origin/origin-tracker"
 import type { IdentKind } from "./api-kind"
 import { Resource } from "./resource"
 import type { Resource_Props } from "./resource-props"
@@ -24,30 +24,33 @@ export abstract class ResourceTop<
     get key() {
         return this.ident.refKey({ name: this.name, namespace: this.namespace })
     }
-    get disabled() {
-        return this.meta.tryGet("#k8ts.org/disabled", "") !== ""
+    get noEmit() {
+        return this.meta.tryGet("#k8ts.org/no-emit", "") !== ""
     }
-    set disabled(v: boolean) {
+    set noEmit(v: boolean) {
         if (!v) {
-            this.meta.delete("#k8ts.org/disabled")
+            this.meta.delete("#k8ts.org/no-emit")
         } else {
-            this.meta.add("#k8ts.org/disabled", "true")
+            this.meta.add("#k8ts.org/no-emit", "true")
         }
     }
     constructor(name: Name, props: Props) {
         super(name, props)
-        this.meta = Meta.make({
+        this.meta = Meta.create({
             name
         })
         const lastOrigin = OriginContextTracker.current
         if (!lastOrigin) {
             throw new K8tsGraphError(
-                `ManifestResource ${this.name} must be created within an OriginEntity context`
+                `Resource ${this.name} must be created within an Origin context`
             )
         }
         this._origin = lastOrigin
         this._origin["__attach_resource__"](this)
-        TraceEmbedder.add(this, new Trace_SourceCode(new StackTracey().slice(2)))
+        TraceEmbedder.add(this, new Trace_Source(new StackTracey().slice(2)))
+        if (this.props.$noEmit) {
+            this.meta.add("#k8ts.org/no-emit", "true")
+        }
     }
 
     protected __origin__() {

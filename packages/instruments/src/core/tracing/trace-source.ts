@@ -2,12 +2,12 @@ import { defaults } from "lodash"
 import { relative, resolve } from "path"
 import StackTracey from "stacktracey"
 
-export interface TraceFormatOptions {
+export interface Trace_Source_Options {
     cwd: string
     absolute: boolean
 }
 
-export class Trace_SourceCode {
+export class Trace_Source {
     readonly trace: StackTracey.Entry
     constructor(trace: StackTracey) {
         const findGoodFrame = (e: StackTracey.Entry) => {
@@ -16,12 +16,12 @@ export class Trace_SourceCode {
         this.trace = trace.filter(x => !!findGoodFrame(x)).at(0)
     }
 
-    format(inOptions?: Partial<TraceFormatOptions>) {
+    format(inOptions?: Partial<Trace_Source_Options>) {
         const e = this.trace
         const options = defaults(inOptions, {
             cwd: ".",
             absolute: false
-        }) as TraceFormatOptions
+        }) as Trace_Source_Options
         options.cwd = resolve(options.cwd)
         const sourcePath = options.absolute ? e.file : relative(options.cwd, e.file)
         const relativeToCwd = relative(options.cwd, sourcePath)

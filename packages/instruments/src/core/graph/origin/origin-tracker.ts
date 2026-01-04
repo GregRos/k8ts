@@ -4,12 +4,12 @@ import { isIterable, type AnyCtor } from "what-are-you"
 import { K8tsGraphError } from "../error"
 import { Origin } from "./origin"
 
-export interface OriginStackBinder {
+export interface OriginTracker_Binder {
     run<T>(callback: () => T): T
     bind<F extends (...args: any[]) => any>(fn: F): F
 }
 
-export class _OriginContextTracker {
+export class OriginTracker {
     private readonly _store: AsyncLocalStorage<Origin | undefined>
     constructor() {
         this._store = new AsyncLocalStorage<Origin | undefined>()
@@ -40,7 +40,7 @@ export class _OriginContextTracker {
         }
     }
 
-    binder(origin: MaybeDoddle<Origin>): OriginStackBinder {
+    binder(origin: MaybeDoddle<Origin>): OriginTracker_Binder {
         const runner = this
         return {
             run<T>(callback: () => T): T {
@@ -112,4 +112,4 @@ export class _OriginContextTracker {
     }
 }
 
-export const OriginContextTracker = new _OriginContextTracker()
+export const OriginContextTracker = new OriginTracker()

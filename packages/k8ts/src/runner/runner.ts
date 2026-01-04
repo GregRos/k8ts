@@ -1,4 +1,4 @@
-import { ForwardExports, Trace_GitCommit, Trace_SourceCode } from "@k8ts/instruments"
+import { ForwardExports, Trace_Git, Trace_Source } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { seq } from "doddle"
 import EventEmitter from "eventemitter3"
@@ -49,15 +49,15 @@ export class Runner {
             .map(e => e.__entity__())
             .toArray()
             .pull()
-        const gitInfo = await Trace_GitCommit.make({
+        const gitInfo = await Trace_Git.create({
             cwd: this._options.cwd
         })
 
-        const runTrace = new Trace_SourceCode(new StackTracey().slice(1))
+        const runTrace = new Trace_Source(new StackTracey().slice(1))
         const options = {
             cwd: ".",
             ...this._options,
-            meta: Meta.make(this._options.meta)
+            meta: Meta.create(this._options.meta)
                 .add(`source.k8ts.org/`, {
                     "^emitted-at": runTrace.format({
                         cwd: this._options.cwd

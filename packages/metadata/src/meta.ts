@@ -199,7 +199,7 @@ export namespace Meta {
          * @returns Whether the two Meta instances are equal
          */
         equals(other: Meta.Input) {
-            return equalsMap(this._dict, make(other)._dict)
+            return equalsMap(this._dict, create(other)._dict)
         }
 
         /**
@@ -440,7 +440,7 @@ export namespace Meta {
      * @param key The value key
      * @param value The value to associate with the key
      */
-    export function make(key: Key.Value, value: string): Meta
+    export function create(key: Key.Value, value: string): Meta
 
     /**
      * Creates a Meta instance with key-value pairs within a section namespace.
@@ -451,7 +451,7 @@ export namespace Meta {
      * @param key The section key namespace
      * @param value Nested object containing key-value pairs
      */
-    export function make(key: Key.Domain, value: MetaInputParts.Nested): Meta
+    export function create(key: Key.Domain, value: MetaInputParts.Nested): Meta
 
     /**
      * Creates a Meta instance from an input object or returns an empty Meta if no input provided.
@@ -462,8 +462,8 @@ export namespace Meta {
      *
      * @param input Object or map containing key-value pairs
      */
-    export function make(input?: InputMeta): Meta
-    export function make(a?: any, b?: any) {
+    export function create(input?: InputMeta): Meta
+    export function create(a?: any, b?: any) {
         return new Meta(_pairToMap([a, b]))
     }
     function _pairToObject(pair: [string | MetadataKey, string | object] | [object]) {

@@ -37,7 +37,7 @@ export class OriginNode extends Node<OriginNode, Origin> {
         const self = this
         return [this, ...this.ancestors]
             .map(x => x.meta.clone())
-            .reduce((acc, meta) => acc.add(meta), Meta.make())
+            .reduce((acc, meta) => acc.add(meta), Meta.create())
     }
     constructor(entity: Origin) {
         super(entity)

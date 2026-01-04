@@ -2,12 +2,12 @@ import { Meta } from "@k8ts/metadata"
 import dayjs from "dayjs"
 import simpleGit from "simple-git"
 
-export interface GitTraceOptions {
+export interface Trace_Git_CreateOptions {
     cwd: string
     absolute: boolean
 }
 
-export interface GitTraceProps {
+export interface Trace_Git_Props {
     commit: {
         sha: string
         message: string
@@ -15,8 +15,8 @@ export interface GitTraceProps {
         date: string
     }
 }
-export class Trace_GitCommit {
-    private constructor(readonly props: GitTraceProps) {}
+export class Trace_Git {
+    private constructor(readonly props: Trace_Git_Props) {}
 
     get metaFields() {
         const hashPart = this.props.commit.sha.slice(0, 7)
@@ -24,7 +24,7 @@ export class Trace_GitCommit {
         const shortMessage = this.props.commit.message.split("\n")[0].slice(0, 50)
         const author = this.props.commit.author
 
-        return Meta.make({
+        return Meta.create({
             "git.k8ts.org/": {
                 "^sha": hashPart,
                 "^message": shortMessage,
@@ -34,7 +34,7 @@ export class Trace_GitCommit {
         })
     }
 
-    static async make(options?: Partial<GitTraceOptions>) {
+    static async create(options?: Partial<Trace_Git_CreateOptions>) {
         options = {
             cwd: ".",
             absolute: false,
@@ -56,7 +56,7 @@ export class Trace_GitCommit {
         const l = await sg.log({
             maxCount: 1
         })
-        return new Trace_GitCommit({
+        return new Trace_Git({
             commit: {
                 sha: l.latest!.hash,
                 message: l.latest!.message,

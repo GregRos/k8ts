@@ -72,7 +72,7 @@ export class Assembler {
                 loaded.forEach(r => r.meta!.add(this._options.meta))
                 return {
                     file: file,
-                    resources: loaded.filter(x => !x.isExternal)
+                    resources: loaded.filter(x => !x.noEmit)
                 }
             })
             .after(async () => {
@@ -81,7 +81,7 @@ export class Assembler {
             .collect()
             .map(async ({ file, resources }) => {
                 const manifests = await aseq(resources)
-                    .filter(x => !x.disabled)
+                    .filter(x => !x.noEmit)
                     .map(async resource => {
                         return await generator.generate(resource)
                     })

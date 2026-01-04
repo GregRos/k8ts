@@ -79,7 +79,7 @@ export class PodTemplate<Ports extends string = string> extends ResourcePart<Pod
             annotations: this.meta.annotations
         }
     }
-    readonly meta = Meta.make(this.props.meta ?? {}).add("name", this.name)
+    readonly meta = Meta.create(this.props.meta ?? {}).add("name", this.name)
 
     protected __submanifest__(): CDK.PodTemplateSpec {
         const self = this
