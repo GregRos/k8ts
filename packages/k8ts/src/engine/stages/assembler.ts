@@ -3,15 +3,14 @@ import { Meta } from "@k8ts/metadata"
 import { aseq } from "doddle"
 import EventEmitter from "eventemitter3"
 import { cloneDeep } from "lodash"
-import { Assembler_ResourceLoader, type AssemblerRscLoaderEvents } from "./loader"
-import { Assembler_Manifester, NodeManifest, type ManifesterEventsTable } from "./manifester"
-import { ManifestSaver, type ManifestSaverEventsTable } from "./saver"
-import { Assembler_Serializer_Yaml, type SerializerEventsTable } from "./serializer"
+import { Engine_ResourceLoader, type AssemblerRscLoaderEvents } from "./loader"
+import { Engine_Manifester, NodeManifest, type ManifesterEventsTable } from "./manifester"
+import { Engine_Saver, type ManifestSaverEventsTable } from "./saver"
+import { Engine_Serializer_Yaml, type SerializerEventsTable } from "./serializer"
 
 export const assemblerEventNames = (() => {
     const rec: Record<keyof AssemblerEventsTable, true> = {
         purge: true,
-        "received-file": true,
         stage: true,
         load: true,
         manifest: true,
@@ -48,13 +47,13 @@ export class Assembler {
 
     async assemble(inFiles: Iterable<OriginExporter>) {
         const emitter = this._emitter
-        const loader = new Assembler_ResourceLoader({ emitter })
-        const generator = new Assembler_Manifester({
+        const loader = new Engine_ResourceLoader({ emitter })
+        const generator = new Engine_Manifester({
             cwd: this._options.cwd,
             emitter
         })
-        const serializer = new Assembler_Serializer_Yaml({ emitter })
-        const saver = new ManifestSaver({
+        const serializer = new Engine_Serializer_Yaml({ emitter })
+        const saver = new Engine_Saver({
             outdir: this._options.outdir,
             emitter
         })
@@ -63,9 +62,7 @@ export class Assembler {
             .before(async () => {
                 emitter.emit("stage", { stage: "gathering" })
             })
-            .each(async file => {
-                emitter.emit("received-file", { file: file })
-            })
+
             .after(async () => {
                 emitter.emit("stage", { stage: "loading" })
             })
@@ -188,7 +185,6 @@ export interface AssemblerEventsTable
         SerializerEventsTable,
         ManifesterEventsTable,
         AssemblerRscLoaderEvents {
-    ["received-file"]: { file: OriginNode }
     ["stage"]: { stage: AssemblyStage }
 }
 export type AnyAssemblerEvent = {

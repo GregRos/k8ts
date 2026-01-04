@@ -3,14 +3,15 @@ import { Meta } from "@k8ts/metadata"
 import { seq } from "doddle"
 import EventEmitter from "eventemitter3"
 import StackTracey from "stacktracey"
+
 import {
     Assembler,
     assemblerEventNames,
-    AssemblerOptions,
-    ProgressOptions,
-    ProgressShower,
-    type AssemblerEventsTable
-} from "../assembler"
+    Engine_ProgressShower,
+    type AssemblerEventsTable,
+    type AssemblerOptions,
+    type ProgressOptions
+} from "./stages"
 import { Summarizer } from "./summarizer"
 
 export interface RunnerOptions extends AssemblerOptions {
@@ -65,7 +66,7 @@ export class Runner {
                 .add(gitInfo?.metaFields)
         }
 
-        const progressShower = new ProgressShower(options.progress)
+        const progressShower = new Engine_ProgressShower(options.progress)
         const assembler = new Assembler(options)
         assembler.onAny((name, ev) => {
             this._emitter.emit(name, ev)

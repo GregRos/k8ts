@@ -9,7 +9,8 @@ import {
 import { Meta } from "@k8ts/metadata"
 import { mapToObject } from "@k8ts/metadata/util"
 import { dump } from "js-yaml"
-import { AssembledResult } from "../assembler"
+import type { AssembledResult } from "./stages"
+
 export interface SummarizerOptions {
     printOptions?: boolean
 }

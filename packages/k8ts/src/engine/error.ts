@@ -1,6 +1,5 @@
-export class K8sDataSourceError extends Error {
-    k8ts = true as const
-    name = "K8sDataSourceError" as const
+export class K8tsEngineError extends Error {
+    name = "K8tsEngineError" as const
     constructor(message: string, fields: Record<string, any> & { cause?: Error } = {}) {
         super(message)
         Object.assign(this, fields)

@@ -2,7 +2,7 @@ import type { OriginNode } from "@k8ts/instruments"
 import type EventEmitter from "eventemitter3"
 import { glob, mkdir, rm, writeFile } from "fs/promises"
 import { join, resolve } from "path"
-export class ManifestSaver {
+export class Engine_Saver {
     private _encoder = new TextEncoder()
     constructor(private readonly _options: ManifestSaverOptions) {}
 

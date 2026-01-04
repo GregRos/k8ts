@@ -1,7 +1,7 @@
 import { OriginNode, ResourceNode, type Node, type ResourceTop } from "@k8ts/instruments"
 import type EventEmitter from "eventemitter3"
-import { MakeError } from "../error"
-export class Assembler_ResourceLoader {
+import { K8tsEngineError } from "../error"
+export class Engine_ResourceLoader {
     constructor(private readonly _options: AssemblerRscLoaderOptions) {}
 
     private _checkNames(resources: ResourceNode[]) {
@@ -13,12 +13,12 @@ export class Assembler_ResourceLoader {
                 .join("/")
             const existing = names.get(name)
             if (existing) {
-                throw new MakeError(
+                throw new K8tsEngineError(
                     `Duplicate resource designation ${name}. Existing: ${existing.format("source")}, new: ${resource.format("source")}`
                 )
             }
             if (!nameRegexp.test(resource.name)) {
-                throw new MakeError(
+                throw new K8tsEngineError(
                     `Invalid resource name ${resource.name}. Must match ${nameRegexp}`
                 )
             }

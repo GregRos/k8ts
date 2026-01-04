@@ -7,7 +7,7 @@ import {
 import { CDK } from "@k8ts/sample-interfaces"
 import type EventEmitter from "eventemitter3"
 import { dump, type DumpOptions } from "js-yaml"
-import { MakeError } from "../error"
+import { K8tsEngineError } from "../error"
 
 export interface YamlSerializerOptions {
     jsYamlOptions: DumpOptions
@@ -20,7 +20,7 @@ export interface SerializingEvent {
 export interface SerializerEventsTable {
     serialize: SerializingEvent
 }
-export class Assembler_Serializer_Yaml {
+export class Engine_Serializer_Yaml {
     constructor(private readonly _options: Partial<YamlSerializerOptions>) {}
 
     async serialize(input: K8tsManifest) {
@@ -57,8 +57,8 @@ export class Assembler_Serializer_Yaml {
             return e.content
         } catch (err) {
             const resource = ManifestSourceEmbedder.get(input)
-            throw new MakeError(`Failed to serialize manifest ${resource}`, {
-                cause: err
+            throw new K8tsEngineError(`Failed to serialize manifest ${resource}`, {
+                cause: err as Error
             })
         }
     }

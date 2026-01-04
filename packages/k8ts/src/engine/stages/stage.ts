@@ -6,7 +6,7 @@ import { AssemblyStage } from "./assembler"
     simple: s => s.text,
     pretty: stage => chalk.bgGreenBright.bold.black(` ${stage.text} `)
 })
-export class Assembler_Stage {
+export class Engine_Stage {
     text: string
     constructor(private stage: AssemblyStage) {
         this.text = `${stage.toUpperCase()}`
@@ -32,5 +32,5 @@ export class Assembler_Stage {
     }
 }
 export function AssemblerStage(stage: AssemblyStage) {
-    return new Assembler_Stage(stage)
+    return new Engine_Stage(stage)
 }

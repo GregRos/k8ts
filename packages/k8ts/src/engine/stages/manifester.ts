@@ -1,13 +1,13 @@
 import { K8tsManifest, ManifestSourceEmbedder, ResourceNode, ResourceTop } from "@k8ts/instruments"
 import type EventEmitter from "eventemitter3"
 import { cloneDeep, cloneDeepWith, isEmpty, unset } from "lodash"
-import { version } from "../version"
+import { version } from "../../version"
 export interface ManifesterOptions {
     cwd?: string
     emitter?: EventEmitter<any>
 }
 
-export class Assembler_Manifester {
+export class Engine_Manifester {
     constructor(private readonly _options: ManifesterOptions) {}
     private _cleanSpecificEmptyObjects(manifest: K8tsManifest) {
         const clone = cloneDeepWith(manifest, (value, key) => {

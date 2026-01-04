@@ -1,6 +1,6 @@
 import { attr, dest, ManifestSourceEmbedder, pretty, quantity, verb } from "@k8ts/instruments"
 import ora from "ora"
-import type { Assembler, AssemblerEventsTable, AssemblyStage } from "./assembler"
+import type { Assembler, AssemblerEventsTable } from "./assembler"
 import { AssemblerStage } from "./stage"
 export interface ProgressOptions {
     waitTransition?: number
@@ -22,7 +22,7 @@ function typedOnAny(
     })
 }
 
-export class ProgressShower {
+export class Engine_ProgressShower {
     constructor(private readonly _options: ProgressOptions) {}
     async visualize(events: Assembler) {
         const spinner = ora({
@@ -30,8 +30,7 @@ export class ProgressShower {
             text: "K8ts is getting ready..."
         })
         spinner.text = "abc"
-        let filesWritten = 0
-        let lastStage: AssemblyStage = "start"
+
         const unsub = typedOnAny(events, event => {
             switch (event.type) {
                 case "load":
@@ -45,9 +44,7 @@ export class ProgressShower {
                     }
                     spinner.text = pretty`${AssemblerStage(event.stage)}`
                     break
-                case "received-file":
-                    spinner.text = pretty`${verb("Receive")} ${event.file}`
-                    break
+
                 case "serialize":
                     const rsc = ManifestSourceEmbedder.get(event.manifest)
                     spinner.text = pretty`${verb("Serialize")} ${rsc}`
