@@ -1,6 +1,6 @@
 import type { IdentResourcePart } from "./api-kind"
+import type { Resource_Props } from "./props"
 import { Resource } from "./resource"
-import type { Resource_Props } from "./resource-props"
 
 export abstract class ResourcePart<Props extends Resource_Props = Resource_Props> extends Resource<
     string,

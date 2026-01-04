@@ -1,8 +1,8 @@
 import { seq } from "doddle"
 import { Origin } from "../../origin"
-import type { OriginExporter } from "../../origin/origin-exporter"
+import type { OriginExporter } from "../../origin/exporter"
+import type { ResourceRef } from "../ref"
 import { ResourceKey } from "../resource-key"
-import type { ResourceRef } from "../resource-ref"
 import { K8tsProxyError } from "./error"
 import { ForwardRef } from "./forward-ref"
 

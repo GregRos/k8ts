@@ -8,10 +8,10 @@ import {
 import { Trace_Source, TraceEmbedder } from "../../tracing"
 import { K8tsGraphError } from "../error"
 import type { Origin } from "../origin/origin"
-import { OriginContextTracker } from "../origin/origin-tracker"
+import { OriginContextTracker } from "../origin/tracker"
 import type { IdentKind } from "./api-kind"
+import type { Resource_Props } from "./props"
 import { Resource } from "./resource"
-import type { Resource_Props } from "./resource-props"
 
 export abstract class ResourceTop<
     Name extends string = string,

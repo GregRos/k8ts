@@ -5,13 +5,13 @@ import EventEmitter from "eventemitter3"
 import { mapValues } from "lodash"
 import { display } from "../../../utils/mixin/display"
 import { Entity } from "../entity"
+import type { ResourceRef, ResourceRef_Constructor } from "../resource/ref"
 import { Resource } from "../resource/resource"
-import type { ResourceRef, ResourceRef_Constructor } from "../resource/resource-ref"
+import { type OriginEventMap } from "./events"
 import { KindMap } from "./kind-map"
-import { type OriginEventMap } from "./origin-events"
-import { OriginNode, type Origin_Props } from "./origin-node"
-import type { OriginTracker_Binder } from "./origin-tracker"
-import { OriginContextTracker } from "./origin-tracker"
+import { OriginNode, type Origin_Props } from "./node"
+import type { OriginTracker_Binder } from "./tracker"
+import { OriginContextTracker } from "./tracker"
 
 @display({
     simple: x => `[${x.shortFqn}]`,

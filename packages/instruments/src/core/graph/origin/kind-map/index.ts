@@ -3,8 +3,8 @@ import type { AnyCtor } from "what-are-you"
 
 import { K8tsGraphError } from "../../error"
 import { Ident, IdentKind } from "../../resource/api-kind"
+import { ResourceRef_Constructor } from "../../resource/ref"
 import { ResourceKey } from "../../resource/resource-key"
-import { ResourceRef_Constructor } from "../../resource/resource-ref"
 const separator = "/"
 interface NodeEntry {
     kindName: string

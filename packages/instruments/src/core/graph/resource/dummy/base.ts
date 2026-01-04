@@ -1,5 +1,5 @@
 import { Meta } from "@k8ts/metadata"
-import { DummyOrigin } from "../../origin/dummy-origin"
+import { DummyOrigin } from "../../origin/dummy"
 import type { IdentKind } from "../api-kind"
 import { Resource } from "../resource"
 import type { ResourceKey } from "../resource-key"

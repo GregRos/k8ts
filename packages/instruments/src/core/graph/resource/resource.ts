@@ -6,8 +6,8 @@ import { K8tsGraphError } from "../error"
 import type { Origin } from "../origin"
 import type { Ident } from "./api-kind"
 import { ForwardRef } from "./exports"
-import { ResourceNode } from "./resource-node"
-import { type ResourceRef } from "./resource-ref"
+import { ResourceNode } from "./node"
+import { type ResourceRef } from "./ref"
 
 @display({
     simple: s => s.node,

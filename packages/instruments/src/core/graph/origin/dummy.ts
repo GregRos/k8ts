@@ -1,6 +1,6 @@
 import type { DummyResource, ResourceRef_Constructor } from "../resource"
+import type { Origin_Props } from "./node"
 import { Origin } from "./origin"
-import type { Origin_Props } from "./origin-node"
 /**
  * Used as the Origin of {@link DummyResource} resources. These resources are never manifested by
  * k8ts. They're expected to already exist in the target cluster.

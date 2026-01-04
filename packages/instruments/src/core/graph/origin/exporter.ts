@@ -2,8 +2,8 @@ import { doddlify, seq } from "doddle"
 import { K8tsGraphError } from "../error"
 import { ForwardExports, ResourceRef, ResourceTop } from "../resource"
 import { ForwardRef } from "../resource/exports/forward-ref"
+import type { Origin_Props } from "./node"
 import { Origin } from "./origin"
-import type { Origin_Props } from "./origin-node"
 export interface OriginExporter_Props extends Origin_Props {}
 
 /** Base class for Origins that export resources via the {@link ForwardExports} mechanism. */

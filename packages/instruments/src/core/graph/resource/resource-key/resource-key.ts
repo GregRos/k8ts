@@ -1,6 +1,6 @@
 import type { IdentKind } from "../api-kind"
 import type { DummyResource } from "../dummy"
-import type { ResourceRef } from "../resource-ref"
+import type { ResourceRef } from "../ref"
 import type { ResourceKey_sFormat } from "./parsing"
 
 export const separator = "/"
