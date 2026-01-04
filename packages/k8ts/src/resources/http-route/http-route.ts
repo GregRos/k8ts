@@ -1,7 +1,7 @@
 import { ResourceTop, type ResourceRef, type Resource_Props } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
-import { gateway } from "../idents/gateway"
+import { gateway } from "../../resource-idents/gateway"
 import type { Service_PortRef } from "../service/service-port"
 
 export interface HttpRoute_Props<Ports extends string> extends Resource_Props<CDK.HttpRouteSpec> {

@@ -1,7 +1,7 @@
 import { ResourceTop, type Resource_Props } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
-import { v1 } from "../idents/default"
+import { v1 } from "../../resource-idents/default"
 export interface NamespaceProps extends Resource_Props<CDK.NamespaceSpec> {}
 
 export class Namespace<Name extends string = string> extends ResourceTop<Name, NamespaceProps> {

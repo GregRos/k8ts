@@ -9,7 +9,7 @@ import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { merge } from "lodash"
 import type { EnvValuePrimitive } from "../../env/types"
-import { v1 } from "../idents/default"
+import { v1 } from "../../resource-idents/default"
 import { PodContainer, type PodContainer_Props } from "./container"
 import { PodDevice, type PodDeviceBackend } from "./volume/devices"
 import {

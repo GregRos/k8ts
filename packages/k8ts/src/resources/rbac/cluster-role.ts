@@ -2,7 +2,7 @@ import { IdentKind, ResourceTop, type IdentGroup, type Resource_Props } from "@k
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { merge } from "lodash"
-import { rbac } from "../idents/rbac"
+import { rbac } from "../../resource-idents/rbac"
 export interface ClusterRole_Rule<
     Groups extends IdentGroup[] = IdentGroup[],
     Resources extends IdentKind<Groups[number]["name"], string, string>[] = IdentKind[]

@@ -1,9 +1,9 @@
 ---
 aliases:
 ---
-[[Origin|Origins]] like [[File]] that contain [[Resource|Resources]] construct those resources in a generator called [[exports]]. The result of constructing such an [[Origin]] is a [[forward exports]] object.
+[[Origin|Origins]] like [[File]] that contain [[Resource|Resources]] construct those resources in a generator called [[exports]]. The result of constructing such an [[Origin]] is a [[ForwardExports]] object.
 
-Anything yielded from the [[exports]] generator can be referenced from outside the [[Origin]] that contains it through the [[forward exports]], taking the form of a [[forward reference]].
+Anything yielded from the [[exports]] generator can be referenced from outside the [[Origin]] that contains it through the [[ForwardExports]], taking the form of a [[ForwardRef]].
 
 > [!ai] INSERT code sample showing exports file a File.
 ## Yielding child Origins

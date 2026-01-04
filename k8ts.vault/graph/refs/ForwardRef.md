@@ -56,7 +56,7 @@ Generally speaking, it will avoid resolving the [[Resource]] if the property or 
 > But these can be handled in `ForwardRefInner` using info from the RefKey.
 #### ❓ built-in Object key
 > [!task]
-> Currently, accessing an inherited Object key on a [[forward reference]] will have undefined behavior. This should be fixed by handling the Object call.
+> Currently, accessing an inherited Object key on a [[ForwardRef]] will have undefined behavior. This should be fixed by handling the Object call.
 
 Behavior depends on the key accessed or method invoked.
 #### 🔍 equals(…)

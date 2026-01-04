@@ -1,7 +1,7 @@
 import { ResourceTop, type Resource_Props } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
-import { v1 } from "../idents/default"
+import { v1 } from "../../resource-idents/default"
 export interface ServiceAccount_Props extends Resource_Props<CDK.KubeServiceAccountProps> {
     $automountToken?: boolean
     $imagePullSecrets?: string[]

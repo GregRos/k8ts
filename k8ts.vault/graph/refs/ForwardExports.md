@@ -1,8 +1,8 @@
-When you construct an [[Origin]] that contains [[Resource|Resources]], you always get a [[forward exports]] object rather than the origin object itself.
+When you construct an [[Origin]] that contains [[Resource|Resources]], you always get a [[ForwardExports]] object rather than the origin object itself.
 
-The [[forward exports]] object is a **JavaScript Proxy Object** that doesn’t act like normal objects. 
+The [[ForwardExports]] object is a **JavaScript Proxy Object** that doesn’t act like normal objects. 
 ## Exported resources
-The [[forward exports]] object lets you reference all resources exported using `yield` from the [[Origin]]’s [[exports]]. 
+The [[ForwardExports]] object lets you reference all resources exported using `yield` from the [[Origin]]’s [[exports]]. 
 
 You do that by looking up properties of the form `${Kind}/${Name}`, such as:
 - `Deployment/abcxyz`
@@ -16,9 +16,9 @@ During compilation, you can see all the possible resource names that can be refe
 
 **But there is no runtime validation for that. It will only error when something tries to resolve the reference.** 
 
-This is because to make [[forward reference|forward references]] work and defer resolution as much as possible, the [[forward exports]] can’t know which objects are going to be exported ahead of time.
+This is because to make [[ForwardRef|forward references]] work and defer resolution as much as possible, the [[ForwardExports]] can’t know which objects are going to be exported ahead of time.
 
-You’ll get a seemingly valid [[forward reference]] as long as you access the key `Kind/Name` for a valid `Kind` and a legal `Name`. 
+You’ll get a seemingly valid [[ForwardRef]] as long as you access the key `Kind/Name` for a valid `Kind` and a legal `Name`. 
 
 > [!ai] INSERT code sample showing different key access
 > Create a File origin with one exported resource.
@@ -27,7 +27,7 @@ You’ll get a seemingly valid [[forward reference]] as long as you access the k
 > 3. Console.log non-existent export, should still 
 
 ## Runtime behavior
-This section describes how the [[forward exports]] object acts during runtime. Since it’s a **JavaScript Proxy Object**, it’s behavior differs from that of normal objects.
+This section describes how the [[ForwardExports]] object acts during runtime. Since it’s a **JavaScript Proxy Object**, it’s behavior differs from that of normal objects.
 
 > [!ai] INSERT Behavior summary
 > Insert a summary of the behavior specified below.
@@ -50,7 +50,7 @@ Returns the normal `Object` property descriptor.
 Applies when `Kind` is a known [[Ident]] kind name, like `Deployment`, and `Name` is a legal name.
 
 1. It will always exist.
-2. Its value will always be a [[forward reference]]
+2. Its value will always be a [[ForwardRef]]
 3. It will always be:
     1. a value key
     2. enumerable

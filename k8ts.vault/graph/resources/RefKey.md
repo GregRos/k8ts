@@ -12,7 +12,7 @@ apps/v1/Deployment/kube-system/something
 gateway.networking.k8s.io/v1/Gateway/example
 ```
 
-In k8s, this would uniquely identify a resource in the system. In k8ts, it’s used by [[forward reference]] to determine if they’re [[equal]] to something else.
+In k8s, this would uniquely identify a resource in the system. In k8ts, it’s used by [[ForwardRef]] to determine if they’re [[equal]] to something else.
 ## Note about child resources
 In principle the [[RefKey]] can be extended to child resources, such as `Pod_Container` objects.
 

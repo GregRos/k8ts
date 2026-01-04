@@ -14,7 +14,7 @@ Entities are deliberately mutable and can be modified in various ways after cons
 > [!ai] INSERT code sample
 > Create a Service and then modify some of its props
 ### Equatable
-Entities support equality via `.equals`. While references are normally only equal if they’re the same object, [[forward reference|forward references]] and  [[forward exports]] objects can point to the same resource and yet be distinct by reference.
+Entities support equality via `.equals`. While references are normally only equal if they’re the same object, [[ForwardRef|forward references]] and  [[ForwardExports]] objects can point to the same resource and yet be distinct by reference.
 
 > [!ai] INSERT code sample
 > Show using `.equals` with a ForwardRef and ForwardExports compared with actual resolved objects.

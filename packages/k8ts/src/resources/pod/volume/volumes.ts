@@ -8,8 +8,8 @@ import {
     type ResourceRef_HasKeys
 } from "@k8ts/instruments"
 import { merge } from "lodash"
+import { v1 } from "../../../resource-idents/default"
 import type { HostPath_Type } from "../../hostpath"
-import { v1 } from "../../idents/default"
 import {
     type ContainerVolumeMount_Input,
     type ContainerVolumeMount_Unbound

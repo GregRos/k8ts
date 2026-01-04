@@ -16,9 +16,9 @@ Here are examples of [[Origin|Origins]]:
 
 1. The [[World]] is the root [[Origin]] of a k8ts project. This [[Origin]] knows where manifests should be written to. A [[World]] can’t contain [[Resource|Resources]]. 
 
-2. The [[File]] is a child of the [[World]] [[Origin]]. It’s represents the YAML file that will contain resource manifests. [[File|Files]] contain [[Resource|Resources]]. 
+2. The [[File]] is a child of the [[World]] [[Origin]]. It’s represents the YAML file that will contain resource manifests. [[File|Files]] contain [[Resource|Resources]] and [[Section|Sections]].
 
-3. The [[Section]] is a section of a [[File]]. It’s used for logically organizing [[Resource|Resources]] and isn’t represented in the manifests.
+3. The [[Section]] is a section of a [[File]]. They serve as logical [[Origin]] nodes but don’t do anything by themselves. They can contain [[Resource|Resources]] and other [[Section|Sections]].
 
 > [!ai] INSERT mermaid diagram
 > Showing the relationship between the origins. Include a few attached resources to show where they can be attached.
@@ -33,7 +33,7 @@ You can construct an [[Origin]] using a [[Scoped Factory]] that belongs to the p
 > [!ai]
 > Example code for constructing different origins: World, File, and Section.
 
-[[Origin|Origins]] that can contain resources always accept [[exports]] and produce a [[forward exports]] object when constructed.
+[[Origin|Origins]] that can contain resources always accept [[exports]] and produce a [[ForwardExports]] object when constructed.
 ## Attachment
 [[Resource]] objects, like Service or Deployment, must be attached to an [[Origin]]. In the API, this is usually expressed as calling the [[Resource]] constructor inside a origin’s lexical scope.
 
@@ -51,7 +51,7 @@ K8ts will throw an error if it can’t find an [[Origin]] for a [[Resource]]. Th
 ## Functionality
 Besides organizing [[Resource|Resources]] and affecting manifestation, [[Origin|Origins]] have a few other features.
 ### Deferring evaluation
-Origins defer the evaluation of [[Resource|Resources]], allowing for more flexible reference structures. This is used as part of the [[forward reference]] mechanism.
+Origins defer the evaluation of [[Resource|Resources]], allowing for more flexible reference structures. This is used as part of the [[ForwardRef]] mechanism.
 ### Metadata
 [[Origin|Origins]] contain [[Metadata]], but don’t use it themselves. Instead, they apply all their own and inherited [[Metadata]] to any [[Resource]] that’s attached to them. 
 

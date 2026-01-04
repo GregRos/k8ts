@@ -7,7 +7,7 @@ import {
     type ResourceRef_Constructor
 } from "@k8ts/instruments"
 import { doddlify, seq } from "doddle"
-import type { v1 } from "../../resources/idents"
+import type { v1 } from "../../idents"
 import { OriginSection, type FileSectionProps } from "./section"
 export type File_sName = `${string}.yaml`
 export interface FileProps<

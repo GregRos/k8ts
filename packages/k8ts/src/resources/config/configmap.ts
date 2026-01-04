@@ -1,7 +1,7 @@
 import { ResourceTop, type DataSource, type Resource_Props } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
-import { v1 } from "../idents/default"
+import { v1 } from "../../resource-idents/default"
 import { resolveDataSourceRecord } from "./resolver"
 export interface ConfigMap_Props<Keys extends string = string> extends Resource_Props {
     $data: Record<Keys, DataSource>

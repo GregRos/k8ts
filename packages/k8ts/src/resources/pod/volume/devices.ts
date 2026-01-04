@@ -2,7 +2,7 @@ import type { Resource, Resource_Props } from "@k8ts/instruments"
 import { ResourcePart } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
-import { v1 } from "../../idents/default"
+import { v1 } from "../../../resource-idents/default"
 import { Pvc } from "../../persistent"
 import type { ContainerDeviceMount_Input } from "../container/mounts/device"
 interface PodDeviceBackendPvc extends Resource_Props<CDK.Volume> {

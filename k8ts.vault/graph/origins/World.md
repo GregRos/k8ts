@@ -6,7 +6,7 @@ aliases:
 
 The [[World]] is the root [[Origin]] of a k8ts project. It keeps track of the manifest root and is used to organize child [[Origin|Origins]], such as [[File|Files]]. 
 
-The [[World]] also keeps track of known top-level [[Resource]] [[Ident|Idents]] and their respective classes. This information is used to support the [[forward reference]] mechanism.
+The [[World]] also keeps track of known top-level [[Resource]] [[Ident|Idents]] and their respective classes. This information is used to support the [[ForwardRef]] mechanism.
 
 [[World|Worlds]] can’t contain [[Resource|Resources]] directly.
 

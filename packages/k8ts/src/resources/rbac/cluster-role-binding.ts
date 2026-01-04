@@ -1,7 +1,7 @@
 import { ResourceTop, type Resource_Props } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
-import { rbac } from "../idents/rbac"
+import { rbac } from "../../resource-idents/rbac"
 import type { ClusterRole } from "./cluster-role"
 import type { ServiceAccount } from "./service-account"
 

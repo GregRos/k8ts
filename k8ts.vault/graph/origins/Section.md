@@ -1,3 +1,8 @@
+---
+aliases:
+  - Sections
+---
+
 > [!ai] INSERT mermaid diagram - Origin hierarchy with Section highlighted
 
 
