@@ -1,5 +1,5 @@
 type K8tsToken = `K8TS_TOK_${string}`
-export class TextPostProcessor {
+export class PhraseRenderer {
     private tokens = new Map<K8tsToken, string>()
     private _genToken(): K8tsToken {
         const randomKey = Math.random().toString(36).slice(2, 8)

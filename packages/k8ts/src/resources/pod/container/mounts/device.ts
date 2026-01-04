@@ -7,7 +7,7 @@ import {
 } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
-import { v1 } from "../../../../idents"
+import { v1 } from "../../../../resource-idents"
 
 export interface ContainerDeviceMount_Input extends Resource_Props<CDK.VolumeDevice> {
     $backend: ResourceRef<v1.Pod.Device._>

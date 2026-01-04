@@ -1,10 +1,10 @@
 import {
     Displayers,
     OriginNode,
-    pretty,
+    PhraseRenderer,
+    phrases,
     Relation,
-    ResourceNode,
-    TextPostProcessor
+    ResourceNode
 } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { mapToObject } from "@k8ts/metadata/util"
@@ -15,15 +15,15 @@ export interface SummarizerOptions {
     printOptions?: boolean
 }
 export class Summarizer {
-    private _post = new TextPostProcessor()
+    private _post = new PhraseRenderer()
     constructor(private readonly _options: SummarizerOptions) {}
     _formatRefFromTo(node: ResourceNode, edge: Relation<ResourceNode>) {
-        return this._token(pretty`${edge}`)
+        return this._token(phrases`${edge}`)
     }
 
     private _token(text: string | object) {
         if (typeof text === "object") {
-            text = pretty`${text}`
+            text = phrases`${text}`
         }
         const token = this._post.token(text)
         return token
@@ -51,7 +51,7 @@ export class Summarizer {
     private _resources(resources: ResourceNode[]): object {
         const resourceContainer = resources
             .map(resource => {
-                const text = pretty`${resource}`
+                const text = phrases`${resource}`
                 const token = this._token(text)
                 const objForm = this._resource(resource)
                 if (!objForm) {
@@ -124,7 +124,7 @@ export class Summarizer {
     files(obj: { origin: OriginNode; resources: ResourceNode[] }[]) {
         let pairs = obj.flatMap(({ origin, resources }) => {
             return [
-                [this._token(pretty`\n${origin}`), this._resources(resources)] as [string, object]
+                [this._token(phrases`\n${origin}`), this._resources(resources)] as [string, object]
             ]
         })
 

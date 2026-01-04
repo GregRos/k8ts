@@ -1,4 +1,4 @@
-import { InstrumentsError } from "../../../error"
+import { K8tsGraphError } from "../../../core/graph/error"
 import { displayers } from "../../../utils/displayers"
 import { K8tsWorkloadToolsError } from "../error"
 import type { CmdLine_Value } from "./types"
@@ -47,7 +47,7 @@ export class CmdLine_Term_Value {
 
     str(joiner: string) {
         if (this.value === undefined) {
-            throw new InstrumentsError("CliOptionValue cannot be undefined, use null instead")
+            throw new K8tsGraphError("CliOptionValue cannot be undefined, use null instead")
         }
 
         return [this.key, this._valueStr()].join(this.overrideTermJoiner ?? joiner)

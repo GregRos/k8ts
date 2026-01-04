@@ -1,6 +1,6 @@
-import { InstrumentsError } from "../../../../error"
 import { bind_own_methods } from "../../../../utils"
 import { displayers } from "../../../../utils/displayers"
+import { K8tsGraphError } from "../../error"
 import { ResourceKey, type RefKey_Options } from "../resource-key"
 import { pluralize } from "./pluralize"
 
@@ -84,7 +84,7 @@ export class IdentGroup<const _Group extends string = string> extends Ident<_Gro
 
     child(name: string): IdentVersion<_Group, string> {
         if (!name.startsWith("v")) {
-            throw new InstrumentsError(
+            throw new K8tsGraphError(
                 `Invalid version name "${name}". Version name must start with "v".`
             )
         }

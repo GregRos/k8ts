@@ -48,12 +48,13 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
         if (!other) {
             return false
         }
-        if (other instanceof Origin) {
-            return Object.is(this, other)
-        }
         if (ForwardExports.is(other)) {
             return other.equals(this)
         }
+        if (other instanceof Origin) {
+            return Object.is(this, other)
+        }
+
         return false
     }
     constructor(

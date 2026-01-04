@@ -1,7 +1,7 @@
 import { doddlify, seq, type Seq } from "doddle"
 import type { AnyCtor } from "what-are-you"
-import { InstrumentsError } from "../../../../error"
 
+import { K8tsGraphError } from "../../error"
 import { Ident, IdentKind } from "../../resource/api-kind"
 import { ResourceRef_Constructor } from "../../resource/reference"
 import { ResourceKey } from "../../resource/resource-key"
@@ -56,7 +56,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
     parse(ref: string | ResourceKey<this["__KINDS__"]>): ResourceKey<this["__KINDS__"]> {
         const result = this.tryParse(ref)
         if (!result) {
-            throw new InstrumentsError(`Could not parse reference key: ${ref}`)
+            throw new K8tsGraphError(`Could not parse reference key: ${ref}`)
         }
         return result as any
     }
@@ -96,13 +96,13 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
     }
 
     private _unknownNameError(kind: string) {
-        return new InstrumentsError(`The shorthand name ${kind} is not registered`)
+        return new K8tsGraphError(`The shorthand name ${kind} is not registered`)
     }
     private _unknownIdentError(ident: Ident) {
-        return new InstrumentsError(`The kind identifier ${ident} is not registered`)
+        return new K8tsGraphError(`The kind identifier ${ident} is not registered`)
     }
     private _unknownClassError(klass: Function) {
-        return new InstrumentsError(`The class ${klass.name} is not registered`)
+        return new K8tsGraphError(`The class ${klass.name} is not registered`)
     }
     private _convert(something: LookupKey | ResourceKey | Function | IdentKind) {
         if (typeof something === "string") {
@@ -118,7 +118,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
         } else if (something instanceof ResourceKey) {
             return something.kind.text
         }
-        throw new InstrumentsError(`Invalid argument ${something}`)
+        throw new K8tsGraphError(`Invalid argument ${something}`)
     }
     private _getEntry(key: LookupKey) {
         const entry = this._tryGetEntry(key)
