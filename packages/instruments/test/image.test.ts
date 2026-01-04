@@ -1,6 +1,6 @@
-import { Image } from "@lib"
+import { ImageRegistry } from "@lib"
 
 it("works", () => {
-    const e = Image.host("xyz.com").image("abc").tag("1")
+    const e = ImageRegistry("xyz.com").namespace().repo("abc").tag("1")
     expect(e.toString()).toBe("xyz.com/abc:1")
 })

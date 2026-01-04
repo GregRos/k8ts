@@ -13,7 +13,7 @@ export class ServiceAccount<Name extends string = string> extends ResourceTop<
     get ident() {
         return v1.ServiceAccount._
     }
-    protected body(): CDK.KubeServiceAccountProps {
+    protected __body__(): CDK.KubeServiceAccountProps {
         const self = this
         return {
             automountServiceAccountToken: self.props.automountToken,

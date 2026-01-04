@@ -1,14 +1,14 @@
 import { Meta } from "@k8ts/metadata"
-import lodash from "lodash"
+import { mapValues, pick } from "lodash"
 import { K8tsNetworkError } from "../error"
+import { parsePortInput, portRecordInput } from "./entry"
 import { PortMap, PortMapping_Input } from "./mapping"
-import { parsePortInput, portRecordInput } from "./tools/entry"
 import type {
     Port_Full,
-    Port_Input,
     Port_Input_Object,
     Port_Input_Protocol,
-    Port_Input_Scalar
+    Port_Input_Scalar,
+    PortExports_Input
 } from "./types"
 
 /**
@@ -46,7 +46,7 @@ export class PortExports<Names extends string = never> {
      *   ports will overwrite any with the same name from the first.
      */
     union<InNames extends string>(other: PortExports<InNames>): PortExports<Names | InNames> {
-        return this._apply<Names | InNames>(rec => lodash.assign({}, rec, other._rec))
+        return this._apply<Names | InNames>(rec => Object.assign({}, rec, other._rec))
     }
 
     /**
@@ -81,7 +81,7 @@ export class PortExports<Names extends string = never> {
         }
         if (c) {
             return this._apply(rec =>
-                lodash.assign({}, rec, {
+                Object.assign({}, rec, {
                     [a]: {
                         name: a,
                         port: +b,
@@ -91,11 +91,11 @@ export class PortExports<Names extends string = never> {
             )
         }
         if (b) {
-            return this._apply(rec => lodash.assign({}, rec, { [a]: parsePortInput(a, b) }))
+            return this._apply(rec => Object.assign({}, rec, { [a]: parsePortInput(a, b) }))
         }
         return this._apply(rec => {
             const processed = portRecordInput(a)
-            return lodash.assign({}, rec, processed)
+            return Object.assign({}, rec, processed)
         })
     }
 
@@ -106,7 +106,7 @@ export class PortExports<Names extends string = never> {
      * @returns A new PortExports with only the selected ports.
      */
     pick<InNames extends Names>(...name: InNames[]): PortExports<InNames> {
-        return this._apply<InNames>(rec => lodash.pick(rec, name as readonly string[]))
+        return this._apply<InNames>(rec => pick(rec, name as readonly string[]))
     }
 
     /** An array of all port names in this set. */
@@ -146,7 +146,7 @@ export class PortExports<Names extends string = never> {
         return new PortMap(
             new Map(
                 Object.entries(
-                    lodash.mapValues(this._rec, entry => {
+                    mapValues(this._rec, entry => {
                         if (!(entry.name in mapping)) {
                             throw new K8tsNetworkError(`Port ${entry.name} not found in mapping`)
                         }
@@ -172,29 +172,4 @@ export class PortExports<Names extends string = never> {
             )
         )
     }
-
-    /**
-     * Creates a new PortExports from a record of port configurations.
-     *
-     * @param input A record mapping port names to their configurations.
-     * @returns A new PortExports containing the specified ports.
-     */
-    static make<Names extends string>(input?: PortExports_Input<Names>) {
-        return new PortExports().add(input)
-    }
-}
-
-/**
- * Input type for creating PortExports.
- *
- * A record mapping port names to their configurations, which can be:
- *
- * - A port number (uses TCP by default)
- * - A tuple of `[port, protocol]`
- * - A full port configuration object
- *
- * @template Names The union type of port names.
- */
-export type PortExports_Input<Names extends string = string> = {
-    [K in Names]: Port_Input
 }

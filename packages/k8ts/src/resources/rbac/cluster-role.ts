@@ -46,7 +46,7 @@ export class ClusterRole<Name extends string = string> extends ResourceTop<
             verbs: rule.verbs
         }
     }
-    protected body(): CDK.KubeClusterRoleProps {
+    protected __body__(): CDK.KubeClusterRoleProps {
         const rules = seq(this.props.rules(new ClusterRole_Scope()))
             .map(rule => {
                 return this._fromObject(rule)

@@ -10,9 +10,11 @@ import type { Origin } from "../origin/entity"
 import { OriginContextTracker } from "../origin/tracker"
 import type { IdentKind } from "./api-kind"
 import { Resource } from "./entity"
+import type { Resource_Props } from "./props"
+
 export abstract class ResourceTop<
     Name extends string = string,
-    Props extends object = object
+    Props extends Resource_Props = Resource_Props
 > extends Resource<Name, Props> {
     private readonly _origin: Origin
     readonly meta: Meta
@@ -68,13 +70,13 @@ export abstract class ResourceTop<
         }
     }
 
-    protected abstract body(): Promise<object> | object
+    protected abstract __body__(): Props["$overrides"] | Promise<Props["$overrides"]>
 
     protected async __manifest__(): Promise<K8tsManifest> {
         const a = {
             ...this.__idents__(),
             metadata: this.__metadata__(),
-            ...(await this.body())
+            ...(await this.__body__())
         }
 
         return a

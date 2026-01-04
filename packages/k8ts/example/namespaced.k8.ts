@@ -1,4 +1,4 @@
-import { Cmd, Cron, Image, localRefFile } from "@k8ts/instruments"
+import { CmdLine, Cron, ImageRegistry, localRefFile } from "@k8ts/instruments"
 import {
     ClusterRole,
     ClusterRoleBinding,
@@ -26,6 +26,7 @@ const ext_topolvm_class = storage.v1.StorageClass._.refKey({
 }).DummyResource()
 
 const cool = k8tsFile["PersistentVolume/pv-cool"]
+const image = ImageRegistry("docker.io").namespace("library").repo("nginx").tag("latest")
 export default W.File("deployment2.yaml", {
     meta: {
         "^a": "a"
@@ -65,8 +66,8 @@ export default W.File("deployment2.yaml", {
                         restartPolicy: "Never",
                         *$POD(POD) {
                             yield POD.Container("main", {
-                                $image: Image.name("docker.io/library/busybox").tag("latest"),
-                                $command: Cmd("/bin/sh").option({
+                                $image: image,
+                                $command: CmdLine("/bin/sh").option({
                                     "-c": "date; echo Hello from the Kubernetes cluster"
                                 }),
                                 $resources: {
@@ -134,7 +135,7 @@ export default W.File("deployment2.yaml", {
                             })
 
                             yield k.Container("main", {
-                                $image: Image.name("nginx/nginx").tag("latest"),
+                                $image: image,
                                 $ports: {
                                     x: 3333,
                                     y: 1111

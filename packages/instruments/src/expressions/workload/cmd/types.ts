@@ -1,4 +1,4 @@
-export type Cli_sFlag = `-${string}` | `--${string}`
-export type Cli_sArgKey = `${Cli_sFlag}=` | `${Cli_sFlag} ` | Cli_sFlag
-export type CliValue = string | number | boolean | null | `${string}` | ` ${string}`
-export type CliRecordArgMap = Record<Cli_sArgKey, CliValue>
+export type CmdLine_sArg = `-${string}` | `--${string}`
+export type CmdLine_sOption = `${CmdLine_sArg}=` | `${CmdLine_sArg} ` | CmdLine_sArg
+export type CmdLine_Value = string | number | boolean | null | `${string}` | ` ${string}`
+export type CmdLine_Args = Record<CmdLine_sOption, CmdLine_Value>

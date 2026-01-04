@@ -48,7 +48,7 @@ export class Deployment<Name extends string, Ports extends string = string> exte
     protected __kids__(): Iterable<ResourceRef> {
         return [this.template]
     }
-    protected body(): CDK.KubeDeploymentProps {
+    protected __body__(): CDK.KubeDeploymentProps {
         const self = this
         const template = self.template["__submanifest__"]()
         const noKindFields = omit(template, ["kind", "apiVersion"])

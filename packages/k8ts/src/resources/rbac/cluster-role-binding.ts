@@ -23,7 +23,7 @@ export class ClusterRoleBinding<Name extends string = string> extends ResourceTo
             subjects: this.props.$subjects
         }
     }
-    protected body(): CDK.KubeClusterRoleBindingProps {
+    protected __body__(): CDK.KubeClusterRoleBindingProps {
         return {
             roleRef: {
                 apiGroup: this.props.$role.ident.parent!.parent!.text,

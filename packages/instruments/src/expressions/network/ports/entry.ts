@@ -1,9 +1,14 @@
 import lodash from "lodash"
-import { Ip4 } from "../../ip/ip4"
-import type { PortExports_Input } from "../provider"
-import { PortExports } from "../provider"
-import type { Port_Full, Port_Input, Port_Input_Object, Port_Protocol } from "../types"
-import { parsePortSpec } from "./parse"
+import { Ip4 } from "../ip/ip4"
+import { parsePortSpec } from "./parser"
+import { PortExports } from "./provider"
+import type {
+    Port_Full,
+    Port_Input,
+    Port_Input_Object,
+    Port_Protocol,
+    PortExports_Input
+} from "./types"
 
 function portSetEntry(name: string, value: Port_Input_Object): Port_Full {
     const proto = value.protocol ? (value.protocol.toUpperCase() as Port_Protocol) : "TCP"

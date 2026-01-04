@@ -34,7 +34,7 @@ export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extend
             storageClass: self.props.$storageClass
         }
     }
-    protected body(): CDK.KubePersistentVolumeClaimProps {
+    protected __body__(): CDK.KubePersistentVolumeClaimProps {
         const self = this
         const { $resources, $accessModes, $mode, $storageClass, $bind } = self.props
         const nAccessModes = parsePvAccessMode($accessModes)

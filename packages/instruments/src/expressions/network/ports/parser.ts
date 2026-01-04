@@ -1,7 +1,7 @@
 import { anyStringOf, int, string } from "parjs"
 import { map, maybe, must, qthen, then } from "parjs/combinators"
-import { K8tsNetworkError } from "../../error"
-import type { Port_Input_Object, Port_Protocol } from "../types"
+import { K8tsNetworkError } from "../error"
+import type { Port_Input_Object, Port_Protocol } from "./types"
 
 function validatePort(port: number) {
     if (port < 0 || port > 65535) {

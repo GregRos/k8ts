@@ -56,7 +56,7 @@ export class Pv<
             storageClass: this.props.$storageClass
         }
     }
-    protected body() {
+    protected __body__() {
         const self = this
         const pvProps = self.props
         const accessModes = parsePvAccessMode(pvProps.$accessModes)

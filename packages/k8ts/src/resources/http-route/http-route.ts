@@ -30,7 +30,7 @@ export class HttpRoute<Name extends string, Ports extends string> extends Resour
         return backendRef
     }
 
-    protected body(): CDK.HttpRouteProps {
+    protected __body__(): CDK.HttpRouteProps {
         const self = this
         const backendRef = this._getBackendRef()
 

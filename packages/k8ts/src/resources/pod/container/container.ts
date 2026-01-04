@@ -2,10 +2,10 @@ import {
     PortExports,
     Reqs,
     Units,
-    type CmdBuilder,
+    type CmdLine,
+    type Image,
     type PortExports_Input,
-    type ResourceRef,
-    type TaggedImage
+    type ResourceRef
 } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 
@@ -39,9 +39,9 @@ export interface PodContainer_Props<
     Ports extends string = never,
     _Env extends Record<string, EnvValue> = Record<string, EnvValue>
 > extends Omit<CDK.Container, "name"> {
-    $image: TaggedImage
+    $image: Image
     $ports?: PortExports_Input<Ports>
-    $command?: CmdBuilder
+    $command?: CmdLine
     $mounts?: PodContainer_Mounts
     $env?: _Env
     $envFrom?: PodContainer_EnvFromItem[]
@@ -93,7 +93,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
             .pull()
     }
     get ports() {
-        return PortExports.make(this.props.$ports)
+        return new PortExports(this.props.$ports)
     }
     protected __submanifest__(): CDK.Container {
         const self = this
@@ -102,7 +102,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
         let resourcesObject = self._resources()?.toObject()
         const containerPorts =
             $ports &&
-            seq(toContainerPorts(PortExports.make($ports)).values())
+            seq(toContainerPorts(new PortExports($ports)).values())
                 .toArray()
                 .pull()
 

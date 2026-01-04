@@ -1,8 +1,8 @@
-import { ResourceTop, type DataSource } from "@k8ts/instruments"
+import { ResourceTop, type DataSource, type Resource_Props } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../idents/default"
 import { resolveDataSourceRecord } from "./resolver"
-export interface ConfigMap_Props<Keys extends string = string> {
+export interface ConfigMap_Props<Keys extends string = string> extends Resource_Props {
     $data: Record<Keys, DataSource>
 }
 
@@ -17,7 +17,7 @@ export class ConfigMap<
         return v1.ConfigMap._
     }
 
-    protected async body(): Promise<CDK.KubeConfigMapProps> {
+    protected async __body__(): Promise<CDK.KubeConfigMapProps> {
         const resolvedRecord = await resolveDataSourceRecord(this, this.props.$data)
         return resolvedRecord
     }

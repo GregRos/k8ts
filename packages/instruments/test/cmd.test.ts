@@ -1,7 +1,7 @@
-import { Cmd } from "@lib"
+import { CmdLine } from "@lib"
 
 describe("works", () => {
-    const cm = Cmd("kubectl").flag("-x", "--y").option({
+    const cm = CmdLine("kubectl").flag("-x", "--y").option({
         "-n": "my-namespace",
         "--abc": true,
         "--num": 123,

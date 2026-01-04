@@ -1,4 +1,10 @@
-import { Cron, CronStanza, ResourceTop, type ResourceRef } from "@k8ts/instruments"
+import {
+    Cron_Stanza,
+    ResourceTop,
+    type Cron_Record,
+    type Resource_Props,
+    type ResourceRef
+} from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
@@ -6,9 +12,9 @@ import { omitBy } from "lodash"
 import { Timezone } from "../../../../instruments/dist/expressions/timezone"
 import { batch } from "../idents/batch"
 import { PodTemplate, type PodProps } from "../pod"
-export interface CronJob_Props<CronSpec extends Cron.Record>
-    extends Omit<CDK.CronJobSpec, "jobTemplate" | "schedule" | "timeZone"> {
-    $schedule: CronStanza<CronSpec>
+export interface CronJob_Props<CronSpec extends Cron_Record>
+    extends Resource_Props<CDK.KubeCronJobProps> {
+    $schedule: Cron_Stanza<CronSpec>
     $template: PodProps<never> & {
         restartPolicy: "Always" | "OnFailure" | "Never"
     }
@@ -18,7 +24,7 @@ export interface CronJob_Props<CronSpec extends Cron.Record>
 
 export class CronJob<
     Name extends string = string,
-    Cron extends Cron.Record = Cron.Record
+    Cron extends Cron_Record = Cron_Record
 > extends ResourceTop<Name, CronJob_Props<Cron>> {
     get ident() {
         return batch.v1.CronJob._
@@ -34,7 +40,7 @@ export class CronJob<
         return super.__kids__()
     }
 
-    protected body(): CDK.KubeCronJobProps {
+    protected __body__(): CDK.KubeCronJobProps {
         const self = this
         const template = self.template["__submanifest__"]()
         return {

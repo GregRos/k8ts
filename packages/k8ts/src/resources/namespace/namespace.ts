@@ -10,7 +10,7 @@ export class Namespace<Name extends string = string> extends ResourceTop<Name, N
         return v1.Namespace._
     }
 
-    protected body() {
+    protected __body__() {
         return {
             spec: {}
         }

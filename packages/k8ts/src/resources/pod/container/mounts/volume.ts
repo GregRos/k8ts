@@ -1,8 +1,14 @@
-import { ResourcePart, type Resource, type ResourceRef } from "@k8ts/instruments"
+import {
+    ResourcePart,
+    type Resource,
+    type Resource_Props,
+    type ResourceRef
+} from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { v1 } from "../../../idents"
 
-export interface ContainerVolumeMount_Input<SubPaths extends string = string> {
+export interface ContainerVolumeMount_Input<SubPaths extends string = string>
+    extends Resource_Props<CDK.VolumeMount> {
     subPath?: SubPaths
     readOnly?: boolean
 }

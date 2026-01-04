@@ -1,8 +1,8 @@
 import { InstrumentsError } from "../../../error"
 import { displayers } from "../../../utils/displayers"
-import type { CliValue } from "./types"
+import type { CmdLine_Value } from "./types"
 
-export class CliFlag {
+export class CmdLine_Term_Flag {
     constructor(readonly key: string) {}
 
     str(joiner: string) {
@@ -18,16 +18,16 @@ export class CliFlag {
     }
 }
 
-export type Cli_sTermJoiner = "=" | " "
+export type CmdLine_sTermJoiner = "=" | " "
 
 @displayers({
     simple: s => s.str("=")
 })
-export class CliOptionValueTerm {
+export class CmdLine_Term_Value {
     constructor(
         private readonly key: string,
         private readonly overrideTermJoiner: string | undefined,
-        private readonly value: CliValue
+        private readonly value: CmdLine_Value
     ) {}
 
     get isMissing() {
@@ -61,7 +61,7 @@ export class CliOptionValueTerm {
     }
 }
 
-export class CliVerbatimTerm {
+export class CmdLine_Term_Verbatim {
     constructor(readonly value: string) {}
 
     str(joiner: string) {
@@ -77,4 +77,4 @@ export class CliVerbatimTerm {
     }
 }
 
-export type CliTerm = CliFlag | CliOptionValueTerm | CliVerbatimTerm
+export type CmdLine_Term = CmdLine_Term_Flag | CmdLine_Term_Value | CmdLine_Term_Verbatim

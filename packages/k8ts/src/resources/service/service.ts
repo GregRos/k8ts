@@ -81,7 +81,7 @@ export class Service<
         return `:${portNumber}`
     }
 
-    protected body(): CDK.KubeServiceProps {
+    protected __body__(): CDK.KubeServiceProps {
         const self = this
         const svcPorts = self.ports
         return {
