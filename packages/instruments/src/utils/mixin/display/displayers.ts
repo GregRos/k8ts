@@ -3,7 +3,7 @@ import util from "util"
 import type { AnyCtor, InstanceTypeOf } from "what-are-you"
 import { Embedder } from "../embedder"
 export type KnownFormats = "local" | "global" | undefined
-export namespace Displayers {
+export namespace Display {
     export interface Out {
         default: (format?: string) => string
         simple: (format?: KnownFormats | string) => string
@@ -20,10 +20,10 @@ export namespace Displayers {
 const chalkNoColor = new chalk.Instance({
     level: 0
 })
-class DisplayerDecorator {
-    private _system = new Embedder<object, Displayers.In>("displayers")
-    private _lastMode: Displayers.Modes = "simple"
-    private _withLastMode(mode: Displayers.Modes, fn: (...args: any[]) => string) {
+class DisplayDecorator {
+    private _system = new Embedder<object, Display.In>("displayers")
+    private _lastMode: Display.Modes = "simple"
+    private _withLastMode(mode: Display.Modes, fn: (...args: any[]) => string) {
         return (...args: any[]) => {
             const oldMode = this._lastMode
             this._lastMode = mode
@@ -32,7 +32,7 @@ class DisplayerDecorator {
             return result
         }
     }
-    implement(ctor: AnyCtor<any>, input: Displayers.In) {
+    implement(ctor: AnyCtor<any>, input: Display.In) {
         this._system.add(ctor.prototype, input)
         const decorator = this
         Object.defineProperties(ctor.prototype, {
@@ -71,7 +71,7 @@ class DisplayerDecorator {
         })
     }
 
-    wrapRecursiveFallback(out: Displayers.Out) {
+    wrapRecursiveFallback(out: Display.Out) {
         const oAny = out as any
         const self = this
         for (const k in out) {
@@ -88,7 +88,7 @@ class DisplayerDecorator {
                             result = [result]
                         }
                         const terms = result.map((x: any) => {
-                            const sndDisplayers = Displayers.tryGet(x) as any
+                            const sndDisplayers = Display.tryGet(x) as any
                             if (sndDisplayers) {
                                 return sndDisplayers[k].call(sndDisplayers, x, ...args)
                             }
@@ -104,7 +104,7 @@ class DisplayerDecorator {
         return out
     }
 
-    tryGet(target: any): Displayers.Out | undefined {
+    tryGet(target: any): Display.Out | undefined {
         if (typeof target !== "object") {
             return undefined
         }
@@ -112,7 +112,7 @@ class DisplayerDecorator {
         if (!input) {
             return undefined
         }
-        const o: Displayers.Out = {
+        const o: Display.Out = {
             default: (format?: string) => {
                 const lastMode = this._lastMode
                 const result = o[lastMode]?.call(o, format) ?? o.simple(format)
@@ -139,13 +139,13 @@ class DisplayerDecorator {
         return this.wrapRecursiveFallback(o)
     }
 
-    get(target: object): Displayers.Out {
+    get(target: object): Display.Out {
         this._system.get(target) // error if not there
         return this.tryGet(target)!
     }
 
     get decorator() {
-        return <Target extends AnyCtor<any>, Impl extends Displayers.In<InstanceTypeOf<Target>>>(
+        return <Target extends AnyCtor<any>, Impl extends Display.In<InstanceTypeOf<Target>>>(
             input: Impl
         ) => {
             return (ctor: Target) => {
@@ -155,5 +155,5 @@ class DisplayerDecorator {
     }
 }
 
-export const Displayers = new DisplayerDecorator()
-export const displayers = Displayers.decorator
+export const Display = new DisplayDecorator()
+export const display = Display.decorator

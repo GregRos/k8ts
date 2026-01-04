@@ -3,17 +3,17 @@ import chalk from "chalk"
 import { seq } from "doddle"
 import EventEmitter from "eventemitter3"
 import { mapValues } from "lodash"
-import { displayers } from "../../../utils/displayers"
+import { display } from "../../../utils/mixin/display"
 import { Entity } from "../entity"
-import { Resource } from "../resource/entity"
-import type { ResourceRef, ResourceRef_Constructor } from "../resource/reference/resource-ref"
-import { type OriginEventMap } from "./events"
+import { Resource } from "../resource/resource"
+import type { ResourceRef, ResourceRef_Constructor } from "../resource/resource-ref"
 import { KindMap } from "./kind-map"
-import { OriginNode, type Origin_Props } from "./node"
-import type { OriginStackBinder } from "./tracker"
-import { OriginContextTracker } from "./tracker"
+import type { OriginStackBinder } from "./origin-context"
+import { OriginContextTracker } from "./origin-context"
+import { type OriginEventMap } from "./origin-events"
+import { OriginNode, type Origin_Props } from "./origin-node"
 
-@displayers({
+@display({
     simple: x => `[${x.shortFqn}]`,
     pretty(origin) {
         const kindPart = chalk.greenBright.bold(origin.ident)

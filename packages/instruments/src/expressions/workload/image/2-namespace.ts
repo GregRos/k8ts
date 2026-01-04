@@ -1,9 +1,9 @@
-import { displayers } from "../../../utils"
+import { display } from "../../../utils"
 import { ImageRegistry } from "./1-host"
 import { Image_Repository, type ImageRepository } from "./3-repository"
 import type { JoinIfNotEmpty } from "./types"
 
-@displayers({
+@display({
     simple: s => s._url
 })
 export class Image_Namespace<Text extends string = string> {

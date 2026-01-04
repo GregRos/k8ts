@@ -1,5 +1,5 @@
 import { K8tsGraphError } from "../../../core/graph/error"
-import { displayers } from "../../../utils/displayers"
+import { display } from "../../../utils/mixin/display"
 import { K8tsWorkloadToolsError } from "../error"
 import type { CmdLine_Value } from "./types"
 
@@ -21,7 +21,7 @@ export class CmdLine_Term_Flag {
 
 export type CmdLine_sTermJoiner = "=" | " "
 
-@displayers({
+@display({
     simple: s => s.str("=")
 })
 export class CmdLine_Term_Value {

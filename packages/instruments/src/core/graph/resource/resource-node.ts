@@ -2,17 +2,17 @@ import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq } from "doddle"
 import { type AnyCtor } from "what-are-you"
-import { Displayers, displayers } from "../../../utils/displayers"
+import { Display, display } from "../../../utils/mixin/display"
 import { TraceEmbedder } from "../../tracing"
 import { Formats } from "../entity"
 import { K8tsGraphError } from "../error"
 import { Node } from "../node"
-import { OriginNode } from "../origin/node"
+import { OriginNode } from "../origin/origin-node"
 import type { IdentKind, IdentLike } from "./api-kind"
-import type { Resource } from "./entity"
+import type { Resource } from "./resource"
 import { ResourceKey } from "./resource-key"
 
-@displayers({
+@display({
     simple: s => `[${s.shortFqn}]`,
     pretty(resource, format) {
         format ??= "global"
@@ -27,7 +27,7 @@ import { ResourceKey } from "./resource-key"
         }
         parts.push(chalk.blueBright(resource.name))
         const mainPart = parts.join("/")
-        let originPart = `${Displayers.get(resource.origin).prefix!()}`
+        let originPart = `${Display.get(resource.origin).prefix!()}`
         let text = ""
 
         text += mainPart
@@ -115,7 +115,7 @@ export class ResourceNode extends Node<ResourceNode, Resource> {
     }
 
     format(format: Formats) {
-        return Displayers.get(this).pretty(format)
+        return Display.get(this).pretty(format)
     }
 
     hasIdent(ident: IdentLike) {

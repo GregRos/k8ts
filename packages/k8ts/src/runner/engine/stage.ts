@@ -1,8 +1,8 @@
-import { displayers } from "@k8ts/instruments"
+import { display } from "@k8ts/instruments"
 import chalk from "chalk"
 import { AssemblyStage } from "./assembler"
 
-@displayers({
+@display({
     simple: s => s.text,
     pretty: stage => chalk.bgGreenBright.bold.black(` ${stage.text} `)
 })

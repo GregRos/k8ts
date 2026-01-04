@@ -1,8 +1,8 @@
-import { phrases } from "../../utils/_string"
-import { displayers } from "../../utils/displayers"
+import { display } from "../../utils/mixin/display"
+import { phrases } from "../../utils/phrase-renderer"
 import type { Node } from "./node"
 
-@displayers({
+@display({
     simple: s => [s.why, "-->", s.needed],
     pretty: (dep, format) => {
         const neededFmt = phrases`${["lowkey", dep.needed]}`

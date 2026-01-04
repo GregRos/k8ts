@@ -1,6 +1,6 @@
 import type { IdentKind } from "../api-kind"
 import type { DummyResource } from "../dummy"
-import type { ResourceRef } from "../reference"
+import type { ResourceRef } from "../resource-ref"
 import type { ResourceKey_sFormat } from "./parsing"
 
 export const separator = "/"
@@ -20,7 +20,7 @@ type nsKind = IdentKind<"", "v1", "Namespace">
  *
  * @template Name - The resource name type
  */
-export interface RefKey_Options<Name extends string = string> {
+export interface ResourceKey_Options<Name extends string = string> {
     /** The resource name */
     name: Name
     /** Optional namespace for namespaced resources. Can be a RefKey, string, or Ref2 */
@@ -49,7 +49,7 @@ export class ResourceKey<K extends IdentKind = IdentKind, Name extends string = 
      */
     constructor(
         readonly kind: K,
-        options: RefKey_Options<Name>
+        options: ResourceKey_Options<Name>
     ) {
         this.name = options.name
         this.namespace =

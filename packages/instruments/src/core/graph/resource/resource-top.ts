@@ -7,11 +7,11 @@ import {
 } from "../../manifest"
 import { Trace_SourceCode, TraceEmbedder } from "../../tracing"
 import { K8tsGraphError } from "../error"
-import type { Origin } from "../origin/entity"
-import { OriginContextTracker } from "../origin/tracker"
+import type { Origin } from "../origin/origin"
+import { OriginContextTracker } from "../origin/origin-context"
 import type { IdentKind } from "./api-kind"
-import { Resource } from "./entity"
-import type { Resource_Props } from "./props"
+import { Resource } from "./resource"
+import type { Resource_Props } from "./resource-props"
 
 export abstract class ResourceTop<
     Name extends string = string,

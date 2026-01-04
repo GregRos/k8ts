@@ -1,5 +1,5 @@
 import {
-    Displayers,
+    Display,
     OriginNode,
     PhraseRenderer,
     phrases,
@@ -32,7 +32,7 @@ export class Summarizer {
     private _resource(resource: ResourceNode): any[] | null {
         const subs = resource.kids
             .map(sub => {
-                const heading = Displayers.get(sub).pretty("local")
+                const heading = Display.get(sub).pretty("local")
                 const description = this._resource(sub)
                 return { [this._token(heading)]: description }
             })

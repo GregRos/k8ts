@@ -3,8 +3,8 @@ import { mapValues } from "lodash"
 import { getNiceClassName, type AnyCtor } from "what-are-you"
 import { K8tsGraphError } from "../../error"
 import { ResourceKey } from "../resource-key"
-import { ProxyOperationError } from "./error"
-import type { ResourceRef } from "./resource-ref"
+import type { ResourceRef } from "../resource-ref"
+import { K8tsProxyError } from "./error"
 
 /**
  * The type of a forward reference to a resource.
@@ -172,7 +172,7 @@ class ForwardRef_ProxyHandler<T extends ResourceRef> implements ProxyHandler<T> 
         return this._subject["__reference_props__"]().key.string
     }
     #createImmutableError(action: string) {
-        return new ProxyOperationError(
+        return new K8tsProxyError(
             `Tried to ${action} a forward reference to ${this.referant}, but it cannot be modified.`
         )
     }

@@ -1,4 +1,4 @@
-import { displayers } from "../../../utils/displayers"
+import { display } from "../../../utils/mixin/display"
 import type { Cron_Element, Cron_Record, Cron_RecordToTuple } from "./parse-type"
 import type { _SetObjectKey } from "./types"
 
@@ -13,7 +13,7 @@ function _convertStanzaElement(X: Cron_Element): string {
     }
     return `${X}`
 }
-@displayers({
+@display({
     simple(self) {
         return self.string
     }

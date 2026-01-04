@@ -1,21 +1,21 @@
 import chalk from "chalk"
-import { displayers } from "../displayers"
+import { display } from "../mixin/display"
 
-@displayers({
+@display({
     simple: s => s.text,
     pretty: attr => chalk.yellowBright(attr.text)
 })
 export class Attr {
     constructor(readonly text: string) {}
 }
-@displayers({
+@display({
     simple: s => s.text,
     pretty: verb => chalk.bgGreen.bold.white(` ${verb.text} `)
 })
 export class Verb {
     constructor(readonly text: string) {}
 }
-@displayers({
+@display({
     simple: s => `${s.num} ${s.noun}`,
     pretty(self) {
         const { num, noun } = self
@@ -30,14 +30,14 @@ export class Quantity {
     ) {}
 }
 
-@displayers({
+@display({
     simple: s => s.name,
     pretty: refName => chalk.bgGrey.bold.white(` ${refName.name} `)
 })
 export class RefName {
     constructor(readonly name: string) {}
 }
-@displayers({
+@display({
     simple: s => s.text,
     pretty: dest => chalk.blueBright(dest.text)
 })

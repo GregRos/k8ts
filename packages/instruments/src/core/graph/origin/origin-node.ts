@@ -1,13 +1,13 @@
 import { Meta } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq, Seq } from "doddle"
-import { displayers } from "../../../utils/displayers"
+import { display } from "../../../utils/mixin/display"
 import { Node } from "../node"
 import type { ResourceRef, ResourceRef_Constructor } from "../resource"
-import { Origin } from "./entity"
 import { type KindMap_Input } from "./kind-map"
+import { Origin } from "./origin"
 
-@displayers({
+@display({
     simple: s => `[${s.shortFqn}]`,
     prefix: s => {
         return ""

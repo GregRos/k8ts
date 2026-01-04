@@ -1,14 +1,15 @@
 import { getDeepPropertyDescriptor } from "@k8ts/metadata/util"
 import { getNiceClassName } from "what-are-you"
-import { displayers } from "../../../utils"
+import { display } from "../../../utils"
 import { Entity } from "../entity"
 import { K8tsGraphError } from "../error"
 import type { Origin } from "../origin"
 import type { Ident } from "./api-kind"
-import { ResourceNode } from "./node"
-import { ForwardRef, type ResourceRef } from "./reference"
+import { ForwardRef } from "./exports"
+import { ResourceNode } from "./resource-node"
+import { type ResourceRef } from "./resource-ref"
 
-@displayers({
+@display({
     simple: s => s.node,
     pretty: s => s.node
 })

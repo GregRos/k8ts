@@ -1,10 +1,10 @@
 import { seq } from "doddle"
 import { Origin } from "../../origin"
-import type { OriginExporter } from "../../origin/exporter"
+import type { OriginExporter } from "../../origin/origin-exporter"
 import { ResourceKey } from "../resource-key"
-import { ProxyOperationError } from "./error"
+import type { ResourceRef } from "../resource-ref"
+import { K8tsProxyError } from "./error"
 import { ForwardRef } from "./forward-ref"
-import type { ResourceRef } from "./resource-ref"
 
 /** Expands the resources exported by an OriginExported into a dictionary of name to FwRef. */
 export type ForwardExports_ByKey<Exports extends ResourceRef = ResourceRef> = {
@@ -95,7 +95,7 @@ class ForwardExports_ProxyHandler<Entity extends OriginExporter> implements Prox
     }
 
     #createImmutableError(action: string) {
-        return new ProxyOperationError(
+        return new K8tsProxyError(
             `Tried to ${action} an the exports constructs of ${this.entity}, but it is immutable.`
         )
     }
@@ -150,7 +150,7 @@ class ForwardExports_ProxyHandler<Entity extends OriginExporter> implements Prox
                 .first(exp => exp.node.name === refKey.name && exp.node.ident.equals(refKey.kind))
                 .map(x => {
                     if (x == null) {
-                        throw new ProxyOperationError(
+                        throw new K8tsProxyError(
                             `Failed to resolve forward reference to ${refKey} in ${this.entity}.`
                         )
                     }
@@ -178,7 +178,7 @@ class ForwardExports_ProxyHandler<Entity extends OriginExporter> implements Prox
     }
 
     ownKeys(target: Entity): ArrayLike<string | symbol> {
-        throw new ProxyOperationError(
+        throw new K8tsProxyError(
             `Cannot list all keys of a dynamic exports construct for ${this.entity}.`
         )
     }

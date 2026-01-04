@@ -1,4 +1,4 @@
-export * from "./_string"
 export * from "./bind"
-export * from "./displayers"
-export * from "./embedder"
+export * from "./mixin/display"
+export * from "./mixin/embedder"
+export * from "./phrase-renderer"

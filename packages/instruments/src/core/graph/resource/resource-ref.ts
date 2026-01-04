@@ -1,7 +1,7 @@
 import type { AnyCtor } from "what-are-you"
-import type { RefLike } from "../../entity"
-import type { IdentLike } from "../api-kind"
-import type { ResourceNode } from "../node"
+import type { RefLike } from "../entity"
+import type { IdentLike } from "./api-kind"
+import type { ResourceNode } from "./resource-node"
 export type ResourceRef_Constructor<K extends IdentLike = IdentLike> = AnyCtor<ResourceRef<K>> & {
     prototype: ResourceRef<K>
 }

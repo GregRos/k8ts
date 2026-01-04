@@ -1,7 +1,7 @@
 import { doddle } from "doddle"
 import type { K8tsManifest } from "../../manifest"
 import type { Resource, ResourceTop } from "../resource"
-import type { Origin } from "./entity"
+import type { Origin } from "./origin"
 
 export interface OriginEventMap {
     "resource/exported": {

@@ -1,7 +1,7 @@
 import { bind_own_methods } from "../../../../utils"
-import { displayers } from "../../../../utils/displayers"
+import { display } from "../../../../utils/mixin/display"
 import { K8tsGraphError } from "../../error"
-import { ResourceKey, type RefKey_Options } from "../resource-key"
+import { ResourceKey, type ResourceKey_Options } from "../resource-key"
 import { pluralize } from "./pluralize"
 
 export interface IdentLike {
@@ -15,7 +15,7 @@ type _alphabeta = "alpha" | "beta" | ""
 type _subversion = `${_alphabeta}${number}` | ""
 type _version = `v${number}${_subversion | ""}`
 
-@displayers({
+@display({
     simple: self => self.text
 })
 @bind_own_methods()
@@ -124,7 +124,7 @@ export class IdentKind<
         super(name, parent)
     }
 
-    refKey<Name extends string>(options: RefKey_Options<Name>) {
+    refKey<Name extends string>(options: ResourceKey_Options<Name>) {
         return new ResourceKey<this, Name>(this as any, options)
     }
 

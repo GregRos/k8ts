@@ -1,6 +1,6 @@
 import { seq } from "doddle"
 import { defaultsDeep, merge } from "lodash"
-import { displayers } from "../../../utils/displayers"
+import { display } from "../../../utils/mixin/display"
 import {
     CmdLine_Term_Flag,
     CmdLine_Term_Value,
@@ -14,7 +14,7 @@ export interface CmdLine_Options {
     joiner: CmdLine_sTermJoiner
 }
 
-@displayers({
+@display({
     simple: s => s.string
 })
 class CmdLine_Object {

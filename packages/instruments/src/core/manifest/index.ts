@@ -1,5 +1,5 @@
-import { Embedder } from "../../utils/embedder"
-import { Resource } from "../graph/resource/entity"
+import { Embedder } from "../../utils/mixin/embedder"
+import { Resource } from "../graph/resource/resource"
 export interface K8tsManifest_Metadata {
     labels: Record<string, string>
     annotations: Record<string, string>

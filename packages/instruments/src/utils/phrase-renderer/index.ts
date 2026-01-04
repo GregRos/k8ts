@@ -1,11 +1,11 @@
 export * from "./phrases"
 export * from "./renderer"
-import { Displayers } from "../displayers"
+import { Display } from "../mixin/display"
 
 export function phrases(templateArgs: TemplateStringsArray, ...args: any[]) {
     args = args.map(arg => {
         const [format, target] = Array.isArray(arg) ? arg : [undefined, arg]
-        const x = Displayers.tryGet(target)
+        const x = Display.tryGet(target)
         if (x) {
             return x.pretty(format)
         }

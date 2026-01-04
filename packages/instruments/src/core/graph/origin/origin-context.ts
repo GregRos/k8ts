@@ -1,8 +1,8 @@
 import { AsyncLocalStorage } from "async_hooks"
 import { doddle, pull, type Doddle, type MaybeDoddle } from "doddle"
 import { isIterable, type AnyCtor } from "what-are-you"
-import { Origin } from "./entity"
 import { K8tsGraphError } from "../error"
+import { Origin } from "./origin"
 
 export interface OriginStackBinder {
     run<T>(callback: () => T): T
