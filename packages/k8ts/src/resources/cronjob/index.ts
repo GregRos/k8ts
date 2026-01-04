@@ -8,7 +8,7 @@ import {
 import { Meta } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
-import { omitBy } from "lodash"
+import { merge, omitBy } from "lodash"
 import { Timezone } from "../../../../instruments/dist/expressions/timezone"
 import { batch } from "../idents/batch"
 import { PodTemplate, type PodProps } from "../pod"
@@ -43,7 +43,7 @@ export class CronJob<
     protected __body__(): CDK.KubeCronJobProps {
         const self = this
         const template = self.template["__submanifest__"]()
-        return {
+        const object = {
             spec: {
                 ...omitBy(self.props, (x, k) => k.startsWith("$") || k === "timeZone"),
                 schedule: self.props.$schedule.toString(),
@@ -55,5 +55,6 @@ export class CronJob<
                 }
             }
         }
+        return merge(object, self.props.$overrides)
     }
 }

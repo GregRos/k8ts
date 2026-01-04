@@ -3,9 +3,11 @@ import type { CDK } from "@k8ts/sample-interfaces"
 import {
     Resource,
     ResourcePart,
+    type Resource_Props,
     type ResourceRef,
     type ResourceRef_HasKeys
 } from "@k8ts/instruments"
+import { merge } from "lodash"
 import type { HostPath_Type } from "../../hostpath"
 import { v1 } from "../../idents/default"
 import {
@@ -15,12 +17,12 @@ import {
 
 export interface PodVolume_Backend_Pvc<
     A extends ResourceRef<v1.PersistentVolumeClaim._> = ResourceRef<v1.PersistentVolumeClaim._>
-> {
+> extends Resource_Props<CDK.Volume> {
     $backend: A
     readOnly?: boolean
 }
 
-export interface PodVolume_Backend_HostPath {
+export interface PodVolume_Backend_HostPath extends Resource_Props<CDK.Volume> {
     $backend: {
         kind: "HostPath"
         type?: HostPath_Type
@@ -29,7 +31,7 @@ export interface PodVolume_Backend_HostPath {
 }
 export interface PodVolume_Backend_ConfigMap<
     A extends ResourceRef<v1.ConfigMap._> = ResourceRef<v1.ConfigMap._>
-> {
+> extends Resource_Props<CDK.Volume> {
     $backend: A
     optional?: boolean
     mappings?: {
@@ -39,7 +41,7 @@ export interface PodVolume_Backend_ConfigMap<
 
 export interface PodVolume_Backend_Secret<
     A extends ResourceRef<v1.Secret._> = ResourceRef<v1.Secret._>
-> {
+> extends Resource_Props<CDK.Volume> {
     $backend: A
     optional?: boolean
     mappings?: {
@@ -47,11 +49,13 @@ export interface PodVolume_Backend_Secret<
     }
 }
 
-export type PodVolume_Backend =
+export type PodVolume_Backend = (
     | PodVolume_Backend_Pvc
     | PodVolume_Backend_ConfigMap
     | PodVolume_Backend_Secret
     | PodVolume_Backend_HostPath
+) &
+    Resource_Props<CDK.Volume>
 
 type _KeysOf<T> = T extends {
     $backend: {
@@ -105,13 +109,14 @@ export abstract class PodVolume<
 
 export class PodVolume_Pvc extends PodVolume<PodVolume_Backend_Pvc> {
     protected __submanifest__(): CDK.Volume {
-        return {
+        const body = {
             name: this.name,
             persistentVolumeClaim: {
                 claimName: this.props.$backend.name,
                 readOnly: this.props.readOnly
             }
         }
+        return merge(body, this.props.$overrides)
     }
 }
 
@@ -133,7 +138,7 @@ export class PodVolume_ConfigMap extends PodVolume<PodVolume_Backend_ConfigMap> 
     protected __submanifest__(): CDK.Volume {
         const mappings = mappingsToKeyPaths(this.props.mappings ?? {})
 
-        return {
+        const body = {
             name: this.name,
             configMap: {
                 name: this.props.$backend.name,
@@ -141,6 +146,7 @@ export class PodVolume_ConfigMap extends PodVolume<PodVolume_Backend_ConfigMap> 
                 items: mappings
             }
         }
+        return merge(body, this.props.$overrides)
     }
 }
 
@@ -150,7 +156,7 @@ export class PodVolume_Secret<
     protected __submanifest__(): CDK.Volume {
         const mappings = mappingsToKeyPaths(this.props.mappings ?? {})
 
-        return {
+        const body = {
             name: this.name,
             secret: {
                 secretName: this.props.$backend.name,
@@ -158,17 +164,19 @@ export class PodVolume_Secret<
                 items: mappings
             }
         }
+        return merge(body, this.props.$overrides)
     }
 }
 
 export class PodVolume_HostPath extends PodVolume<PodVolume_Backend_HostPath> {
     protected __submanifest__(): CDK.Volume {
-        return {
+        const body = {
             name: this.name,
             hostPath: {
                 path: this.props.$backend.path,
                 type: this.props.$backend.type
             }
         }
+        return merge(body, this.props.$overrides)
     }
 }

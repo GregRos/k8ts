@@ -1,6 +1,7 @@
-import { IdentKind, ResourceTop, type IdentGroup } from "@k8ts/instruments"
+import { IdentKind, ResourceTop, type IdentGroup, type Resource_Props } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
+import { merge } from "lodash"
 import { rbac } from "../idents/rbac"
 export interface ClusterRole_Rule<
     Groups extends IdentGroup[] = IdentGroup[],
@@ -24,7 +25,8 @@ class ClusterRole_Scope {
         }
     }
 }
-export interface ClusterRole_Props<Rules extends ClusterRole_Rule = ClusterRole_Rule> {
+export interface ClusterRole_Props<Rules extends ClusterRole_Rule = ClusterRole_Rule>
+    extends Resource_Props<CDK.KubeClusterRoleProps> {
     rules: ClusterRole_RuleProducer<Rules>
 }
 
@@ -53,9 +55,10 @@ export class ClusterRole<Name extends string = string> extends ResourceTop<
             })
             .toArray()
             .pull()
-        return {
+        const body = {
             rules: rules
         }
+        return merge(body, this.props.$overrides)
     }
 }
 

@@ -1,7 +1,12 @@
-import { OriginContextTracker, ResourceRef, ResourceTop } from "@k8ts/instruments"
+import {
+    OriginContextTracker,
+    ResourceRef,
+    ResourceTop,
+    type Resource_Props
+} from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
-import { omit, omitBy } from "lodash"
+import { merge, omit } from "lodash"
 import { MakeError } from "../../error"
 import { apps } from "../idents/apps"
 import { PodTemplate, type PodProps } from "../pod"
@@ -15,10 +20,8 @@ export interface Deployment_Strategy_Recreate {
 }
 export type Deployment_Strategy = Deployment_Strategy_RollingUpdate | Deployment_Strategy_Recreate
 
-export type Deployment_Props<Ports extends string> = Omit<
-    CDK.DeploymentSpec,
-    "selector" | "template" | "strategy"
-> & {
+export interface Deployment_Props<Ports extends string> extends Resource_Props<CDK.DeploymentSpec> {
+    replicas?: number
     $template: PodProps<Ports>
     $strategy?: Deployment_Strategy
 }
@@ -52,17 +55,19 @@ export class Deployment<Name extends string, Ports extends string = string> exte
         const self = this
         const template = self.template["__submanifest__"]()
         const noKindFields = omit(template, ["kind", "apiVersion"])
+        const spec = {
+            replicas: self.props.replicas,
+            selector: {
+                matchLabels: {
+                    app: self.name
+                }
+            },
+            template: noKindFields,
+            strategy: self._strategy
+        } satisfies CDK.DeploymentSpec
+        const spec2 = merge(spec, self.props.$overrides)
         return {
-            spec: {
-                ...omitBy(self.props, (x, k) => k.startsWith("$")),
-                selector: {
-                    matchLabels: {
-                        app: self.name
-                    }
-                },
-                template: noKindFields,
-                strategy: self._strategy
-            }
+            spec: spec2
         }
     }
     private get _strategy() {

@@ -8,15 +8,18 @@ import { Assembler_Manifester, NodeManifest, type ManifesterEventsTable } from "
 import { ManifestSaver, type ManifestSaverEventsTable } from "./saver"
 import { Assembler_Serializer_Yaml, type SerializerEventsTable } from "./serializer"
 
-const assemblerEventNames = [
-    "save",
-    "purge",
-    "serialize",
-    "manifest",
-    "load",
-    "received-file",
-    "stage"
-] as const satisfies ReadonlyArray<keyof AssemblerEventsTable>
+export const assemblerEventNames = (() => {
+    const rec: Record<keyof AssemblerEventsTable, true> = {
+        purge: true,
+        "received-file": true,
+        stage: true,
+        load: true,
+        manifest: true,
+        serialize: true,
+        save: true
+    }
+    return Object.keys(rec) as (keyof AssemblerEventsTable)[]
+})()
 export class Assembler {
     private _emitter: EventEmitter<AssemblerEventsTable> = new EventEmitter()
     constructor(private readonly _options: AssemblerOptions) {}

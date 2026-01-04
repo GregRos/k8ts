@@ -1,8 +1,16 @@
 import { ForwardExports, Trace_GitCommit, Trace_SourceCode } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { seq } from "doddle"
+import EventEmitter from "eventemitter3"
 import StackTracey from "stacktracey"
-import { Assembler, AssemblerOptions, ProgressOptions, ProgressShower } from "../assembler"
+import {
+    Assembler,
+    assemblerEventNames,
+    AssemblerOptions,
+    ProgressOptions,
+    ProgressShower,
+    type AssemblerEventsTable
+} from "../assembler"
 import { Summarizer } from "./summarizer"
 
 export interface RunnerOptions extends AssemblerOptions {
@@ -12,8 +20,29 @@ export interface RunnerOptions extends AssemblerOptions {
 }
 
 export class Runner {
+    private _emitter = new EventEmitter()
     constructor(private readonly _options: RunnerOptions) {}
+    on<Name extends keyof AssemblerEventsTable>(
+        event: Name,
+        listener: (payload: AssemblerEventsTable[Name]) => void
+    ) {
+        this._emitter.on(event, listener as any)
+        return this
+    }
 
+    onAny(
+        handler: <Name extends keyof AssemblerEventsTable>(
+            name: Name,
+            payload: AssemblerEventsTable[Name]
+        ) => void
+    ) {
+        for (const eventName of assemblerEventNames) {
+            this._emitter.on(eventName, (payload: unknown) => {
+                handler(eventName, payload as any)
+            })
+        }
+        return this
+    }
     async run<Ts extends ForwardExports[]>(input: Ts) {
         const results = seq(input)
             .map(e => e.__entity__())
@@ -38,6 +67,9 @@ export class Runner {
 
         const progressShower = new ProgressShower(options.progress)
         const assembler = new Assembler(options)
+        assembler.onAny((name, ev) => {
+            this._emitter.emit(name, ev)
+        })
         const summarizer = new Summarizer({
             printOptions: this._options.printOptions
         })

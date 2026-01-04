@@ -180,7 +180,7 @@ export default W.File("deployment2.yaml", {
                     $backend: deploy2
                 })
                 const serviceAccount = new ServiceAccount("x", {
-                    automountToken: true
+                    $automountToken: true
                 })
 
                 yield serviceAccount

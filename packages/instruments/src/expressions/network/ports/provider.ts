@@ -35,7 +35,7 @@ export class PortExports<Names extends string = never> {
     private _apply<NewNames extends string>(
         f: (rec: Record<string, Port_Full>) => Record<string, Port_Full>
     ): PortExports<NewNames> {
-        return PortExports._make(f(this._rec)) as PortExports<NewNames>
+        return PortExports._make(f(this._rec)) as any as PortExports<NewNames>
     }
 
     /**
@@ -130,7 +130,11 @@ export class PortExports<Names extends string = never> {
 
     /** The underlying map of port names to their full configurations. */
     get values() {
-        return this._rec
+        return Object.values(this._rec) as Port_Full[]
+    }
+
+    get record() {
+        return this._rec as Record<Names, Port_Full>
     }
 
     /**

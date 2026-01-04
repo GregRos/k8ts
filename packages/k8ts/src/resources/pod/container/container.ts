@@ -5,13 +5,14 @@ import {
     type CmdLine,
     type Image,
     type PortExports_Input,
+    type Resource_Props,
     type ResourceRef
 } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 
 import { Resource, ResourcePart, ResourceTop } from "@k8ts/instruments"
 import { seq } from "doddle"
-import { mapKeys, mapValues, omitBy } from "lodash"
+import { mapKeys, mapValues, merge } from "lodash"
 import { Env } from "../../../env"
 import type { EnvValue } from "../../../env/types"
 import { v1 } from "../../idents/default"
@@ -38,7 +39,7 @@ export interface PodContainer_EnvFromItem {
 export interface PodContainer_Props<
     Ports extends string = never,
     _Env extends Record<string, EnvValue> = Record<string, EnvValue>
-> extends Omit<CDK.Container, "name"> {
+> extends Resource_Props<Partial<CDK.Container>> {
     $image: Image
     $ports?: PortExports_Input<Ports>
     $command?: CmdLine
@@ -98,13 +99,9 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
     protected __submanifest__(): CDK.Container {
         const self = this
         const { $image, $ports, $command, $env } = self.props
-        const untaggedProps = omitBy(self.props, (_, k) => k.startsWith("$"))
         let resourcesObject = self._resources()?.toObject()
-        const containerPorts =
-            $ports &&
-            seq(toContainerPorts(new PortExports($ports)).values())
-                .toArray()
-                .pull()
+        const pex = new PortExports($ports)
+        const containerPorts = $ports && toContainerPorts(pex)
 
         const env = Env($env)
         for (const [key, value] of env.entries) {
@@ -158,7 +155,6 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
             }
         })
         const container: CDK.Container = {
-            ...untaggedProps,
             name: self.name,
             image: $image.toString(),
             ports: containerPorts,
@@ -168,7 +164,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
             envFrom: envFroms,
             ...self._groupedMounts()
         }
-        return container
+        return merge(container, self.props.$overrides)
     }
     constructor(
         parent: Resource,

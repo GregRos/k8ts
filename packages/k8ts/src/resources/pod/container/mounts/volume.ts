@@ -5,6 +5,7 @@ import {
     type ResourceRef
 } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
+import { merge } from "lodash"
 import { v1 } from "../../../idents"
 
 export interface ContainerVolumeMount_Input<SubPaths extends string = string>
@@ -34,11 +35,12 @@ export class ContainerVolumeMount extends ResourcePart<ContainerVolumeMount_Prop
         return this.props.$backend
     }
     protected __submanifest__(): CDK.VolumeMount {
-        return {
+        const body = {
             name: this.props.$backend.name,
             mountPath: this.props.mountPath,
             readOnly: this.props.readOnly,
             subPath: this.props.subPath
         }
+        return merge(body, this.props.$overrides)
     }
 }

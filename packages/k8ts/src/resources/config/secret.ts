@@ -1,4 +1,5 @@
 import { ResourceTop, type DataSource, type Resource_Props } from "@k8ts/instruments"
+import { merge } from "lodash"
 import type { CDK } from "../.."
 import { v1 } from "../idents/default"
 import { resolveDataSourceRecord } from "./resolver"
@@ -34,12 +35,13 @@ export class Secret<Name extends string = string, Keys extends string = string> 
         return v1.Secret._
     }
 
-    protected async __body__() {
+    protected async __body__(): Promise<CDK.KubeSecretProps> {
         const resolved = await resolveDataSourceRecord(this, this.props.$data ?? {})
-        return {
+        const body = {
             type: this.props.$type ?? "Opaque",
             data: resolved.binaryData,
             stringData: resolved.data
         }
+        return merge(body, this.props.$overrides)
     }
 }

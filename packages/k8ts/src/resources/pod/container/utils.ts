@@ -12,5 +12,5 @@ export function toContainerPort(entry: Port_Full): CDK.ContainerPort {
 }
 
 export function toContainerPorts(ports: PortExports<any>) {
-    return seq(Object.values(ports)).map(toContainerPort).toArray().pull()
+    return seq(ports.values).map(toContainerPort).toArray().pull()
 }

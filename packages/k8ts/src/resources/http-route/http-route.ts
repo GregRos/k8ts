@@ -1,13 +1,13 @@
-import { ResourceTop, type ResourceRef } from "@k8ts/instruments"
+import { ResourceTop, type ResourceRef, type Resource_Props } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
+import { merge } from "lodash"
 import { gateway } from "../idents/gateway"
 import type { Service_PortRef } from "../service/service-port"
 
-export interface HttpRoute_Props<Ports extends string> {
+export interface HttpRoute_Props<Ports extends string> extends Resource_Props<CDK.HttpRouteSpec> {
     $gateway: ResourceRef<gateway.v1.Gateway._>
     $hostname: string
     $backend: Service_PortRef<Ports>
-    _filters?: CDK.HttpRouteSpecRulesFilters[]
 }
 
 export class HttpRoute<Name extends string, Ports extends string> extends ResourceTop<
@@ -34,17 +34,18 @@ export class HttpRoute<Name extends string, Ports extends string> extends Resour
         const self = this
         const backendRef = this._getBackendRef()
 
+        const spec = {
+            parentRefs: [self.props.$gateway.ref],
+            hostnames: [self.props.$hostname],
+            rules: [
+                {
+                    backendRefs: [backendRef]
+                }
+            ]
+        } satisfies CDK.HttpRouteSpec
+        const spec2 = merge(spec, self.props.$overrides)
         return {
-            spec: {
-                parentRefs: [self.props.$gateway.ref],
-                hostnames: [self.props.$hostname],
-                rules: [
-                    {
-                        backendRefs: [backendRef],
-                        filters: self.props._filters
-                    }
-                ]
-            }
+            spec: spec2
         }
     }
 

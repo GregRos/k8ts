@@ -38,7 +38,7 @@ export function portRecordInput(
     record: PortExports_Input<string> | PortExports<string>
 ): Record<string, Port_Full> {
     if (record instanceof PortExports) {
-        return record.values
+        return record.record
     }
     return lodash.mapValues(record, (v, k) => parsePortInput(k, v))
 }

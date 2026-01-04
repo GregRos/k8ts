@@ -1,8 +1,13 @@
-import { ResourcePart, ResourceRef, type ResourceRef_HasKeys } from "@k8ts/instruments"
+import {
+    ResourcePart,
+    ResourceRef,
+    type Resource_Props,
+    type ResourceRef_HasKeys
+} from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
-import { omitBy } from "lodash"
+import { merge } from "lodash"
 import type { EnvValuePrimitive } from "../../env/types"
 import { v1 } from "../idents/default"
 import { PodContainer, type PodContainer_Props } from "./container"
@@ -19,7 +24,6 @@ import {
     type PodVolume_Backend_Pvc,
     type PodVolume_Backend_Secret
 } from "./volume/volumes"
-export type PodPropsOriginal = Omit<CDK.PodSpec, "containers" | "initContainers" | "volumes">
 type ContainerRef<Ports extends string> = ResourceRef<v1.Pod.Container._> & {
     __PORTS__: Ports
 }
@@ -27,7 +31,7 @@ export type PodContainerProducer<Ports extends string> = (
     scope: PodScope
 ) => Iterable<ContainerRef<Ports>>
 
-export interface PodProps<Ports extends string> extends PodPropsOriginal {
+export interface PodProps<Ports extends string> extends Resource_Props<Partial<CDK.PodSpec>> {
     meta?: Meta.Input
     $POD: PodContainerProducer<Ports>
 }
@@ -99,15 +103,17 @@ export class PodTemplate<Ports extends string = string> extends ResourcePart<Pod
                 throw new Error(`Unsupported volume type: ${x}`)
             })
             .toArray()
-        return {
+        const spec = {
+            containers: mainContainers.pull(),
+            initContainers: initContainers.pull(),
+            volumes: volumes.pull()
+        } satisfies CDK.PodSpec
+        const spec2 = merge(spec, props.$overrides)
+        const body = {
             metadata: self.__metadata__(),
-            spec: {
-                ...omitBy(props, (x, k) => k.startsWith("$")),
-                containers: mainContainers.pull(),
-                initContainers: initContainers.pull(),
-                volumes: volumes.pull()
-            }
+            spec: spec2
         }
+        return body
     }
 }
 

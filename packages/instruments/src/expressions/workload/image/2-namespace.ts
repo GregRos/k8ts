@@ -35,7 +35,7 @@ export class Image_Namespace<Text extends string = string> {
     }
 
     repo<Repo extends string = "">(name?: Repo): ImageRepository<JoinIfNotEmpty<Text, "/", Repo>> {
-        return new Image_Repository(this._url as Text, this._namespace, name ?? "")
+        return new Image_Repository(this._registry, this._namespace, name ?? "")
     }
 }
 

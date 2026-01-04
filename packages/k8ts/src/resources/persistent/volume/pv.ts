@@ -1,5 +1,6 @@
-import { ResourceRef, ResourceTop, Units } from "@k8ts/instruments"
+import { ResourceRef, ResourceTop, Units, type Resource_Props } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
+import { merge } from "lodash"
 import { MakeError } from "../../../error"
 import type { HostPath_Type } from "../../hostpath"
 import { v1 } from "../../idents/default"
@@ -26,11 +27,12 @@ export interface Pv_Backend_NFS {
 }
 
 export type Pv_Backend = Pv_Backend_HostPath | Pv_Backend_Local | Pv_Backend_NFS
-export interface Pv_Props<Mode extends PvVolumeMode = PvVolumeMode> {
+export interface Pv_Props<Mode extends PvVolumeMode = PvVolumeMode>
+    extends Resource_Props<CDK.PersistentVolumeSpec> {
     $accessModes: PvAccessMode_Many
     $storageClass?: ResourceRef<storage.v1.StorageClass._>
     $mode?: Mode
-    reclaimPolicy?: Pv_ReclaimMode
+    $reclaimPolicy?: Pv_ReclaimMode
     $capacity: Units.Data
     $backend?: Pv_Backend
     mountOptions?: string[]
@@ -56,14 +58,13 @@ export class Pv<
             storageClass: this.props.$storageClass
         }
     }
-    protected __body__() {
+    protected __body__(): CDK.KubePersistentVolumeProps {
         const self = this
-        const pvProps = self.props
-        const accessModes = parsePvAccessMode(pvProps.$accessModes)
+        const accessModes = parsePvAccessMode(self.props.$accessModes)
         // Make sure it parses correctly
-        Units.Data.parse(pvProps.$capacity)
+        Units.Data.parse(self.props.$capacity)
         if (self.props.$backend?.kind === "Local") {
-            if (!pvProps.nodeAffinity) {
+            if (!self.props.nodeAffinity) {
                 throw new MakeError(
                     `While manifesting ${self.node.format("source")}, PV with Local backend must have nodeAffinity.`
                 )
@@ -74,25 +75,26 @@ export class Pv<
                 `While manifesting ${self.node.format("source")}, PV that doesn't have a $backend must have a $storageClass.`
             )
         }
-        let base: CDK.PersistentVolumeSpec = {
+        let spec: CDK.PersistentVolumeSpec = {
             accessModes,
-            storageClassName: pvProps.$storageClass?.name ?? "standard",
-            capacity: pvProps.$capacity
+            storageClassName: self.props.$storageClass?.name ?? "standard",
+            capacity: self.props.$capacity
                 ? {
-                      storage: CDK.Quantity.fromString(pvProps.$capacity)
+                      storage: CDK.Quantity.fromString(self.props.$capacity)
                   }
                 : undefined,
-            volumeMode: pvProps.$mode ?? "Filesystem",
-            mountOptions: pvProps.mountOptions,
-            persistentVolumeReclaimPolicy: pvProps.reclaimPolicy ?? "Retain",
-            nodeAffinity: pvProps.nodeAffinity
+            volumeMode: self.props.$mode ?? "Filesystem",
+            mountOptions: self.props.mountOptions,
+            persistentVolumeReclaimPolicy: self.props.$reclaimPolicy ?? "Retain",
+            nodeAffinity: self.props.nodeAffinity
         }
-        base = {
-            ...base,
-            ...parseBackend(pvProps.$backend)
+        spec = {
+            ...spec,
+            ...parseBackend(self.props.$backend)
         }
+        spec = merge(spec, self.props.$overrides)
         return {
-            spec: base
+            spec
         }
     }
 }

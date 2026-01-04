@@ -1,6 +1,8 @@
-import { ResourceTop } from "@k8ts/instruments"
+import { ResourceTop, type Resource_Props } from "@k8ts/instruments"
+import { CDK } from "@k8ts/sample-interfaces"
+import { merge } from "lodash"
 import { v1 } from "../idents/default"
-export interface NamespaceProps {}
+export interface NamespaceProps extends Resource_Props<CDK.NamespaceSpec> {}
 
 export class Namespace<Name extends string = string> extends ResourceTop<Name, NamespaceProps> {
     constructor(name: Name, props: NamespaceProps = {}) {
@@ -10,9 +12,11 @@ export class Namespace<Name extends string = string> extends ResourceTop<Name, N
         return v1.Namespace._
     }
 
-    protected __body__() {
+    protected __body__(): CDK.KubeNamespaceProps {
+        const spec = {} satisfies CDK.NamespaceSpec
+        const spec2 = merge(spec, this.props.$overrides)
         return {
-            spec: {}
+            spec: spec2
         }
     }
 }

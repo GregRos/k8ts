@@ -1,6 +1,12 @@
-import { ResourceRef, ResourceTop, type PortMapping_Input } from "@k8ts/instruments"
+import {
+    ResourceRef,
+    ResourceTop,
+    type PortMapping_Input,
+    type Resource_Props
+} from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
+import { merge } from "lodash"
 import { MakeError } from "../../error"
 import { Deployment, type Deployment_Ref } from "../deployment"
 import { v1 } from "../idents/index"
@@ -18,7 +24,8 @@ export interface Service_Frontend_LoadBalancer {
     allocateLoadBalancerNodePorts?: boolean
 }
 export type Service_Frontend = Sevice_Frontend_ClusterIp | Service_Frontend_LoadBalancer
-export interface Service_Props<DeployPorts extends string, ExposedPorts extends DeployPorts> {
+export interface Service_Props<DeployPorts extends string, ExposedPorts extends DeployPorts>
+    extends Resource_Props<CDK.ServiceSpec> {
     $ports: PortMapping_Input<ExposedPorts>
     $backend: Deployment_Ref<DeployPorts>
     $frontend: Service_Frontend
@@ -84,15 +91,19 @@ export class Service<
     protected __body__(): CDK.KubeServiceProps {
         const self = this
         const svcPorts = self.ports
-        return {
-            spec: {
-                ...self.props.$frontend,
-                ports: toServicePorts(svcPorts),
-                selector: {
-                    app: self.props.$backend.name
-                }
+        const spec = {
+            ...self.props.$frontend,
+            ports: toServicePorts(svcPorts),
+            selector: {
+                app: self.props.$backend.name
             }
+        } satisfies CDK.ServiceSpec
+        const spec2 = merge(spec, self.props.$overrides)
+        const body = {
+            spec: spec2
         }
+
+        return body
     }
 
     address(protocol: "http" | "https", port: PortsExposed) {

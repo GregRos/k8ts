@@ -1,10 +1,11 @@
-import { ResourceTop } from "@k8ts/instruments"
+import { ResourceTop, type Resource_Props } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
+import { merge } from "lodash"
 import { rbac } from "../idents/rbac"
 import type { ClusterRole } from "./cluster-role"
 import type { ServiceAccount } from "./service-account"
 
-export interface ClusterRoleBoding_Props {
+export interface ClusterRoleBoding_Props extends Resource_Props<CDK.KubeClusterRoleBindingProps> {
     $role: ClusterRole
     $subjects: ServiceAccount[]
 }
@@ -24,7 +25,7 @@ export class ClusterRoleBinding<Name extends string = string> extends ResourceTo
         }
     }
     protected __body__(): CDK.KubeClusterRoleBindingProps {
-        return {
+        const body = {
             roleRef: {
                 apiGroup: this.props.$role.ident.parent!.parent!.text,
                 kind: this.props.$role.ident.name,
@@ -36,5 +37,6 @@ export class ClusterRoleBinding<Name extends string = string> extends ResourceTo
                 namespace: sa.namespace!
             }))
         }
+        return merge(body, this.props.$overrides)
     }
 }

@@ -17,7 +17,7 @@ export abstract class ResourcePart<Props extends Resource_Props = Resource_Props
         return this.#parent
     }
 
-    protected abstract __submanifest__(): Props["$overrides"]
+    protected abstract __submanifest__(): object
 
     protected __origin__() {
         return this.__parent__()["__origin__"]()

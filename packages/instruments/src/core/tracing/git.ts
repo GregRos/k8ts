@@ -21,7 +21,7 @@ export class Trace_GitCommit {
     get metaFields() {
         const hashPart = this.props.commit.sha.slice(0, 7)
         const shortDate = dayjs(this.props.commit.date).format("YYYY-MM-DD")
-        const shortMessage = this.props.commit.message.split("\n")[0].slice(0, 20)
+        const shortMessage = this.props.commit.message.split("\n")[0].slice(0, 50)
         const author = this.props.commit.author
 
         return Meta.make({

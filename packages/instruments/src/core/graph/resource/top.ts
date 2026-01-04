@@ -70,7 +70,7 @@ export abstract class ResourceTop<
         }
     }
 
-    protected abstract __body__(): Props["$overrides"] | Promise<Props["$overrides"]>
+    protected abstract __body__(): object
 
     protected async __manifest__(): Promise<K8tsManifest> {
         const a = {

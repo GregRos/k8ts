@@ -1,5 +1,6 @@
-import { Reqs, ResourceTop, Units, type ResourceRef } from "@k8ts/instruments"
+import { Reqs, ResourceTop, Units, type ResourceRef, type Resource_Props } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
+import { merge } from "lodash"
 import { MakeError } from "../../../error"
 import { v1 } from "../../idents/default"
 import { storage } from "../../idents/storage"
@@ -10,7 +11,8 @@ import type { PvVolumeMode } from "../volume-mode"
 const pvc_ResourcesSpec = new Reqs({
     storage: Units.Data
 })
-export interface Pvc_Props<Mode extends PvVolumeMode> {
+export interface Pvc_Props<Mode extends PvVolumeMode>
+    extends Resource_Props<CDK.KubePersistentVolumeClaimProps> {
     $accessModes: PvAccessMode_Many
     $mode?: Mode
     $storageClass?: ResourceRef<storage.v1.StorageClass._>
@@ -43,18 +45,20 @@ export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extend
                 `While manifesting ${self.node.format("source")}, PVC that doesn't have a $bind must have a $storageClass.`
             )
         }
+        const spec = {
+            accessModes: nAccessModes,
+            volumeName: self.props.$bind?.name,
+            volumeMode: $mode,
+            resources: pvc_ResourcesSpec
+                .parse({
+                    storage: $resources.storage
+                })
+                .toObject(),
+            storageClassName: self.props.$storageClass?.name ?? "standard"
+        } satisfies CDK.PersistentVolumeClaimSpec
+        const spec2 = merge(spec, self.props.$overrides)
         return {
-            spec: {
-                accessModes: nAccessModes,
-                volumeName: self.props.$bind?.name,
-                volumeMode: $mode,
-                resources: pvc_ResourcesSpec
-                    .parse({
-                        storage: $resources.storage
-                    })
-                    .toObject(),
-                storageClassName: self.props.$storageClass?.name ?? "standard"
-            }
+            spec: spec2
         }
     }
     get bound() {
