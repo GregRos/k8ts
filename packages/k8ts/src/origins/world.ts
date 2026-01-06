@@ -5,13 +5,15 @@ import {
     type ResourceRef_Constructor
 } from "@k8ts/instruments"
 
-import { OriginFile, type FileProps, type File_sName } from "./file"
+import { K8tsFile, type File_sName, type K8tsFile_Props } from "./file"
 
-export type WorldProps<Kinds extends ResourceRef_Constructor[]> = Origin_Props<Kinds[number]>
+export type K8tsWorld_Base_Props<Kinds extends ResourceRef_Constructor[]> = Origin_Props<
+    Kinds[number]
+>
 
-export class WorldEntity<
+export abstract class K8tsWorld_Base<
     Kinds extends ResourceRef_Constructor[] = ResourceRef_Constructor[]
-> extends Origin<WorldProps<Kinds>> {
+> extends Origin<K8tsWorld_Base_Props<Kinds>> {
     get ident() {
         return "[k8ts] World"
     }
@@ -23,9 +25,9 @@ export class WorldEntity<
 
     File<Exports extends ResourceRef_Constructor["prototype"]>(
         name: File_sName,
-        props: FileProps<Kinds, Exports>
+        props: K8tsFile_Props<Kinds, Exports>
     ) {
-        const file = new OriginFile(this, name, props as any)
+        const file = new K8tsFile(this, name, props as any)
 
         return ForwardExports<Exports>(file)
     }

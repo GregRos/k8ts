@@ -1,5 +1,5 @@
 export type { CDK } from "@k8ts/sample-interfaces"
-export { World } from "./common-world"
+export { K8tsWorld } from "./common-world"
 export * from "./origins"
 export * from "./resources"
 export * from "./runner"
