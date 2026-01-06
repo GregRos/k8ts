@@ -1,7 +1,7 @@
-import { Meta } from "@lib"
+import { Metadata } from "@lib"
 
 it("accepts all valid value keys", () => {
-    const m = new Meta({
+    const m = new Metadata({
         "%label": "Hello",
         "%label2": "World",
         "^annotation": "goodbye",
@@ -16,7 +16,7 @@ it("accepts all valid value keys", () => {
 })
 
 it("accepts mix of value and section keys", () => {
-    const m = new Meta({
+    const m = new Metadata({
         "%label": "Hello",
         "%label2": "World",
         "^annotation": "goodbye",
@@ -40,21 +40,21 @@ describe("fails for different types of invalid keys", () => {
     it("invalid prefix", () => {
         expect(
             () =>
-                new Meta({
+                new Metadata({
                     // @ts-expect-error
                     "@label": "Hello"
                 })
         ).toThrow()
         expect(
             () =>
-                new Meta({
+                new Metadata({
                     // @ts-expect-error
                     "(label": "Hello"
                 })
         ).toThrow()
         expect(
             () =>
-                new Meta({
+                new Metadata({
                     // @ts-expect-error
                     label: "Hello"
                 })
@@ -64,7 +64,7 @@ describe("fails for different types of invalid keys", () => {
     it("no prefix for non-special key", () => {
         expect(
             () =>
-                new Meta({
+                new Metadata({
                     // @ts-expect-error
                     label: "Hello"
                 })
@@ -72,7 +72,7 @@ describe("fails for different types of invalid keys", () => {
 
         expect(
             () =>
-                new Meta({
+                new Metadata({
                     // @ts-expect-error
                     "label/": "Hello"
                 })
@@ -81,14 +81,14 @@ describe("fails for different types of invalid keys", () => {
 })
 it("section keys when appropriate", () => {
     expect(
-        new Meta({
+        new Metadata({
             "f/": {
                 "%x": "A"
             }
         }).get("%f/x")
     ).toBe("A")
     expect(
-        new Meta({
+        new Metadata({
             "label/": {
                 "^a": "A"
             }
@@ -96,7 +96,7 @@ it("section keys when appropriate", () => {
     ).toBe("A")
     expect(
         () =>
-            new Meta({
+            new Metadata({
                 "label/": {
                     // @ts-expect-error
                     a: "A"
@@ -105,7 +105,7 @@ it("section keys when appropriate", () => {
     ).toThrow()
     expect(
         () =>
-            new Meta({
+            new Metadata({
                 // @ts-expect-error
                 "%label/": "hello"
             })

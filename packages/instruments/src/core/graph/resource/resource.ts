@@ -1,5 +1,5 @@
-import { getDeepPropertyDescriptor } from "@k8ts/metadata/util"
 import { getNiceClassName } from "what-are-you"
+import { getDeepPropertyDescriptor } from "../../../../../metadata/dist/utils/map"
 import { display } from "../../../utils"
 import { Entity } from "../entity"
 import { K8tsGraphError } from "../error"

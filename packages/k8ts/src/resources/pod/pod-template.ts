@@ -4,7 +4,7 @@ import {
     type Resource_Props,
     type ResourceRef_HasKeys
 } from "@k8ts/instruments"
-import { Meta, type Input } from "@k8ts/metadata"
+import { Metadata, type Metadata_Input } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { merge } from "lodash"
@@ -33,7 +33,7 @@ export type PodContainerProducer<Ports extends string> = (
 ) => Iterable<ContainerRef<Ports>>
 
 export interface PodProps<Ports extends string> extends Resource_Props<Partial<CDK.PodSpec>> {
-    meta?: Input
+    meta?: Metadata_Input
     $POD: PodContainerProducer<Ports>
 }
 
@@ -79,7 +79,7 @@ export class PodTemplate<Ports extends string = string> extends ResourcePart<Pod
             annotations: this.meta.annotations
         }
     }
-    readonly meta = new Meta(this.props.meta ?? {}).add("name", this.name)
+    readonly meta = new Metadata(this.props.meta ?? {}).add("name", this.name)
 
     protected __submanifest__(): CDK.PodTemplateSpec {
         const self = this

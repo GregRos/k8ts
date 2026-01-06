@@ -5,7 +5,7 @@ import {
     type Resource_Props,
     type ResourceRef
 } from "@k8ts/instruments"
-import { type Input } from "@k8ts/metadata"
+import { type Metadata_Input } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
 import { merge, omitBy } from "lodash"
@@ -18,7 +18,7 @@ export interface CronJob_Props<CronSpec extends Cron_Record>
     $template: PodProps<never> & {
         restartPolicy: "Always" | "OnFailure" | "Never"
     }
-    $meta?: Input
+    $meta?: Metadata_Input
     timeZone: Timezone
 }
 

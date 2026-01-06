@@ -1,4 +1,4 @@
-import { Meta } from "@k8ts/metadata"
+import { Metadata } from "@k8ts/metadata"
 import dayjs from "dayjs"
 import simpleGit from "simple-git"
 
@@ -24,7 +24,7 @@ export class Trace_Git {
         const shortMessage = this.props.commit.message.split("\n")[0].slice(0, 50)
         const author = this.props.commit.author
 
-        return new Meta({
+        return new Metadata({
             "git.k8ts.org/": {
                 "^sha": hashPart,
                 "^message": shortMessage,

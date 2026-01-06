@@ -1,3 +1,2 @@
-export type { InputMeta } from "./input/dict-input"
-export { DomainPrefix, MetadataKey } from "./key/repr"
-export { Meta, type Input, type MetaLike } from "./meta"
+export type { Metadata_Input } from "./input/dict-input"
+export { Metadata } from "./meta"

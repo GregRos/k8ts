@@ -1,5 +1,5 @@
 import { seq } from "doddle"
-import { K8tsMetadataError } from "./error"
+import { K8tsMetadataError } from "../error"
 
 function comparisonKey(key: string) {
     const bySlash = key.split("/")

@@ -1,34 +1,18 @@
 import { seq } from "doddle"
 import { K8tsMetadataError } from "./error"
-import type { InputMeta, MetaInputParts } from "./input/dict-input"
-import { parseKey, parseMetaInput } from "./key"
-import { parseInnerKey, parseSectionKey, pNameValue } from "./key/parse-key"
-import { checkMetaString, MetadataKey, type DomainPrefix } from "./key/repr"
-import { Key } from "./key/types"
-import { orderMetaKeyedObject } from "./order-meta-keyed-object"
-import { equalsMap, toJS } from "./util"
-const MetaMarker = Symbol("k8ts.org/metadata")
-export interface MetaLike {
-    readonly [MetaMarker]: true
-}
-export function _checkNameValue(what: string, v: string) {
-    if (!pNameValue.parse(v).isOk) {
-        throw new K8tsMetadataError(`Invalid ${what}: ${v}`)
-    }
-    checkMetaString(what, v, 63)
-}
-export function _checkValue(key: string, v: string) {
-    const parsed = parseKey(key)
-    if (!(parsed instanceof MetadataKey)) {
-        throw new K8tsMetadataError(`Expected value key, got section key for ${key}`)
-    }
-    if (parsed.metaType === "label") {
-        checkMetaString(`value of ${key}`, v, 63)
-    } else if (parsed.metaType === "core") {
-        _checkNameValue(`value of ${key}`, v)
-    }
-}
-export type Input = InputMeta
+import { parseInnerKey, parseKey, parseMetaInput, parseSectionKey } from "./input"
+import type { Metadata_Input, MetaInputParts } from "./input/dict-input"
+import { type DomainPrefix } from "./input/key/domain-prefix"
+import { MetadataKey } from "./input/key/metadata-key"
+import type {
+    Metadata_Key_Core,
+    Metadata_Key_Domain,
+    Metadata_Key_OfValue
+} from "./input/key/string-types"
+import { equalsMap, toJS } from "./utils/map"
+import { orderMetaKeyedObject } from "./utils/order-meta-keyed-object"
+import { _checkValue } from "./utils/validate"
+
 /**
  * Mutable storage for k8s metadata. K8s metadata includes labels, annotations, and core fields.
  * These are addressed using `CharPrefix`.
@@ -50,45 +34,44 @@ export type Input = InputMeta
  *         "^annotation1": "value2" // adds `^example.section/annotation1` with value 'value2'
  *     })
  */
-export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
-    readonly [MetaMarker] = true
-    private readonly _dict: Map<string, string>
+export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
+    private readonly _dict: Map<Metadata_Key_OfValue, string>
 
     /**
-     * Constructs a Meta instance with a single key-value pair.
+     * Constructs a Metadata instance with a single key-value pair.
      *
      * @example
-     *     const meta = new Meta("%app", "my-app")
+     *     const meta = new Metadata("%app", "my-app")
      *
      * @param key The value key
      * @param value The value to associate with the key
      */
-    constructor(key: Key.Value, value: string)
+    constructor(key: Metadata_Key_OfValue, value: string)
     /**
-     * Constructs a Meta instance with key-value pairs within a section namespace.
+     * Constructs a Metadata instance with key-value pairs within a section namespace.
      *
      * @example
-     *     const meta = new Meta("example.com/", { "%label": "value" })
+     *     const meta = new Metadata("example.com/", { "%label": "value" })
      *
      * @param key The section key namespace
      * @param value Nested object containing key-value pairs
      */
-    constructor(key: Key.Domain, value: MetaInputParts.Nested)
+    constructor(key: Metadata_Key_Domain, value: MetaInputParts.Nested)
 
     /**
-     * Constructs a Meta instance from an input object or returns an empty Meta if no input
+     * Constructs a Metadata instance from an input object or returns an empty Metadata if no input
      * provided.
      *
      * @example
-     *     const meta = new Meta({ "%app": "my-app", name: "resource" })
-     *     const empty = new Meta()
+     *     const meta = new Metadata({ "%app": "my-app", name: "resource" })
+     *     const empty = new Metadata()
      *
      * @param input Object or map containing key-value pairs
      */
-    constructor(input?: InputMeta)
+    constructor(input?: Metadata_Input)
     /**
-     * Constructs a new Meta instance from a map of key-value pairs. Validates all keys and values
-     * during construction.
+     * Constructs a new Metadata instance from a map of key-value pairs. Validates all keys and
+     * values during construction.
      *
      * @param _dict Internal map storing metadata key-value pairs
      * @throws {K8tsMetadataError} If any key or value is invalid
@@ -101,7 +84,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
     }
 
     /**
-     * Makes Meta instances iterable, yielding [ValueKey, string] pairs.
+     * Makes Metadata instances iterable, yielding [ValueKey, string] pairs.
      *
      * @example
      *     for (const [key, value] of meta) {
@@ -110,7 +93,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      */
     *[Symbol.iterator]() {
         for (const entry of this._dict.entries()) {
-            yield [parseKey(entry[0]) as MetadataKey, entry[1]] as [MetadataKey, string]
+            yield entry
         }
     }
 
@@ -120,7 +103,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      * @returns
      */
     clone() {
-        return new Meta(this)
+        return new Metadata(this)
     }
 
     /**
@@ -132,7 +115,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      *
      * @param key The value key to delete
      */
-    delete(key: Key.Value): Meta
+    delete(key: Metadata_Key_OfValue): Metadata
 
     /**
      * Deletes specific keys under a domain prefix.
@@ -143,7 +126,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      * @param ns The section key namespace
      * @param keys Specific value keys within the section to delete
      */
-    delete(ns: Key.Domain, ...keys: Key.Value[]): Meta
+    delete(ns: Metadata_Key_Domain, ...keys: Metadata_Key_OfValue[]): Metadata
 
     /**
      * Deletes all keys within a section namespace.
@@ -153,7 +136,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      *
      * @param ns The section key namespace to delete
      */
-    delete(ns: Key.Domain): Meta
+    delete(ns: Metadata_Key_Domain): Metadata
     delete(a: any, ...rest: any[]) {
         if (a.endsWith("/")) {
             const sectionKey = parseSectionKey(a)
@@ -184,7 +167,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      * @param key The value key to add
      * @param value The value to associate with the key
      */
-    add(key: Key.Value, value?: string): Meta
+    add(key: Metadata_Key_OfValue, value?: string): Metadata
 
     /**
      * Adds a nested object of key-value pairs within a section namespace. Throws if any key already
@@ -196,7 +179,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      * @param key The section key namespace
      * @param value Nested object containing key-value pairs
      */
-    add(key: Key.Domain, value: MetaInputParts.Nested): Meta
+    add(key: Metadata_Key_Domain, value: MetaInputParts.Nested): Metadata
 
     /**
      * Adds multiple key-value pairs from an input object. Throws if any key already exists.
@@ -206,7 +189,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      *
      * @param input Object or map containing key-value pairs to add
      */
-    add(input: InputMeta): Meta
+    add(input: Metadata_Input): Metadata
     add(a: any, b?: any) {
         const parsed = _pairToMap([a, b])
         for (const [k, v] of parsed) {
@@ -222,14 +205,14 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
     }
 
     /**
-     * Compares this Meta instance to another for equality. Two instances are equal if they contain
-     * the same key-value pairs.
+     * Compares this Metadata instance to another for equality. Two instances are equal if they
+     * contain the same key-value pairs.
      *
-     * @param other The other Meta instance or input to compare against
-     * @returns Whether the two Meta instances are equal
+     * @param other The other Metadata instance or input to compare against
+     * @returns Whether the two Metadata instances are equal
      */
-    equals(other: Input) {
-        return equalsMap(this._dict, create(other)._dict)
+    equals(other: Metadata_Input) {
+        return equalsMap(this._dict, new Metadata(other)._dict)
     }
 
     /**
@@ -241,7 +224,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      * @param key The value key to overwrite
      * @param value The new value (undefined removes the key)
      */
-    overwrite(key: Key.Value, value: string | undefined): Meta
+    overwrite(key: Metadata_Key_OfValue, value: string | undefined): Metadata
 
     /**
      * Overwrites key-value pairs within a section namespace.
@@ -252,7 +235,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      * @param key The section key namespace
      * @param value Nested object containing key-value pairs to overwrite
      */
-    overwrite(key: Key.Domain, value: MetaInputParts.Nested): Meta
+    overwrite(key: Metadata_Key_Domain, value: MetaInputParts.Nested): Metadata
 
     /**
      * Overwrites multiple key-value pairs from an input object.
@@ -262,7 +245,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      *
      * @param input Object or map containing key-value pairs to overwrite
      */
-    overwrite(input?: InputMeta): Meta
+    overwrite(input?: Metadata_Input): Metadata
     overwrite(a?: any, b?: any) {
         if (a === undefined) {
             return this
@@ -284,9 +267,9 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      * @param domainPrefix The domain prefix to check for
      * @returns True if any keys exist under the specified domain prefix, false otherwise
      */
-    has(domainPrefix: Key.Domain): boolean
+    has(domainPrefix: Metadata_Key_Domain): boolean
     /** @param key */
-    has(key: Key.Value): boolean
+    has(key: Metadata_Key_OfValue): boolean
     has(key: any) {
         const parsed = parseKey(key)
         if (parsed instanceof MetadataKey) {
@@ -306,7 +289,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      * @returns The value associated with the key
      * @throws {K8tsMetadataError} If the key is not found
      */
-    get(key: Key.Value) {
+    get(key: Metadata_Key_OfValue) {
         const parsed = parseKey(key)
         const v = this._dict.get(key)
         if (v === undefined) {
@@ -326,7 +309,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      * @returns The value associated with the key, or the fallback value
      * @throws {K8tsMetadataError} If a domain key is provided instead of a value key
      */
-    tryGet(key: Key.Value, fallback?: string) {
+    tryGet(key: Metadata_Key_OfValue, fallback?: string) {
         const parsed = parseKey(key)
         if (!(parsed instanceof MetadataKey)) {
             throw new K8tsMetadataError("Unexpected domain key!", { key })
@@ -334,24 +317,31 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
         return this._dict.get(key) ?? fallback
     }
 
+    private get _parsedPairs() {
+        return seq(this._dict)
+            .map(([k, v]) => [parseKey(k) as MetadataKey, v] as const)
+            .toArray()
+            .pull()
+    }
+
     private _matchDomainPrefixes(key: DomainPrefix) {
-        return seq(this)
+        return seq(this._parsedPairs)
             .filter(([k, v]) => k.parent?.equals(key) ?? false)
             .toMap(x => [x[0].str, x[1]] as const)
             .pull()
     }
 
     /**
-     * Creates a new Meta instance containing only some of the keys. You can pass both entire keys
-     * and domain prefixes to include all keys under that domain.
+     * Creates a new Metadata instance containing only some of the keys. You can pass both entire
+     * keys and domain prefixes to include all keys under that domain.
      *
      * @example
      *     const subset = meta.pick("%app", "name", "example.com/")
      *
      * @param keySpecs Keys or domain prefixes to include in the result
-     * @returns A new Meta instance with only the picked keys
+     * @returns A new Metadata instance with only the picked keys
      */
-    pick(...keySpecs: (Key.Domain | Key.Value)[]) {
+    pick(...keySpecs: (Metadata_Key_Domain | Metadata_Key_OfValue)[]) {
         const parsed = keySpecs.map(parseKey)
         const keyStrSet = new Set<string>()
         for (const key of parsed) {
@@ -364,16 +354,16 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
                 }
             }
         }
-        const out = new Map<Key.Value, string>()
+        const out = new Map<Metadata_Key_OfValue, string>()
         for (const [k, v] of this._dict.entries()) {
             if (keyStrSet.has(k)) out.set(k as any, v)
         }
-        return new Meta(out)
+        return new Metadata(out)
     }
 
     private _prefixed(prefix: string) {
         const out: { [k: string]: string } = {}
-        for (const [k, v] of this) {
+        for (const [k, v] of this._parsedPairs) {
             if (k.prefix() === prefix) {
                 out[k.suffix] = v
             }
@@ -386,7 +376,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      * canonical order.
      *
      * @example
-     *     const labels = Meta.make({
+     *     const labels = Metadata.make({
      *         "%app": "my-app",
      *         "%tier": "backend"
      *     }).labels
@@ -401,7 +391,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      * in canonical order.
      *
      * @example
-     *     const annotations = Meta.make({
+     *     const annotations = Metadata.make({
      *         "^note": "This is important",
      *         "^description": "Detailed info"
      *     }).annotations
@@ -415,7 +405,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      * Returns all comments (build-time metadata) as a plain object, with keys in canonical order.
      *
      * @example
-     *     const comments = Meta.make({
+     *     const comments = Metadata.make({
      *         "#note": "Internal use only"
      *     }).comments
      *     // { note: "Internal use only" }
@@ -432,7 +422,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      */
     get core() {
         return this._prefixed("") as {
-            [key in Key.Special]?: string
+            [key in Metadata_Key_Core]?: string
         }
     }
 
@@ -441,7 +431,7 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
      * appropriately.
      *
      * @example
-     *     const all = Meta.make({
+     *     const all = Metadata.make({
      *         "%app": "my-app",
      *         "^note": "This is important",
      *         name: "my-resource"
@@ -453,48 +443,13 @@ export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
     }
 
     private get _keys(): MetadataKey[] {
-        return seq(this)
+        return seq(this._parsedPairs)
             .map(([k, v]) => k)
             .toArray()
             .pull()
     }
 }
 
-/**
- * Creates a Meta instance with a single key-value pair.
- *
- * @example
- *     const meta = Meta.make("%app", "my-app")
- *
- * @param key The value key
- * @param value The value to associate with the key
- */
-export function create(key: Key.Value, value: string): Meta
-
-/**
- * Creates a Meta instance with key-value pairs within a section namespace.
- *
- * @example
- *     const meta = Meta.make("example.com/", { "%label": "value" })
- *
- * @param key The section key namespace
- * @param value Nested object containing key-value pairs
- */
-export function create(key: Key.Domain, value: MetaInputParts.Nested): Meta
-
-/**
- * Creates a Meta instance from an input object or returns an empty Meta if no input provided.
- *
- * @example
- *     const meta = Meta.make({ "%app": "my-app", name: "resource" })
- *     const empty = Meta.make()
- *
- * @param input Object or map containing key-value pairs
- */
-export function create(input?: InputMeta): Meta
-export function create(a?: any, b?: any) {
-    return new Meta(a, b)
-}
 function _pairToObject(pair: [string | MetadataKey, string | object] | [object]) {
     let [key, value] = pair
     key = key instanceof MetadataKey ? key.str : key
@@ -505,6 +460,6 @@ function _pairToObject(pair: [string | MetadataKey, string | object] | [object])
     }
     return key
 }
-function _pairToMap(pair: [string | MetadataKey, string | object] | [object]) {
+function _pairToMap(pair: [Metadata_Key_OfValue, string | object] | [object]) {
     return parseMetaInput(_pairToObject(pair))
 }

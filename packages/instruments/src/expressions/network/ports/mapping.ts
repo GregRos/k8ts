@@ -1,4 +1,4 @@
-import { filterMap, mapValues } from "@k8ts/metadata/util"
+import { filterMap, mapValues } from "../../../../../metadata/dist/utils/map"
 import { K8tsNetworkError } from "../error"
 import type { PortMap_Item } from "./types"
 

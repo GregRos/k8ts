@@ -1,4 +1,4 @@
-import { Meta } from "@k8ts/metadata"
+import { Metadata } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq } from "doddle"
 import EventEmitter from "eventemitter3"
@@ -34,7 +34,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
     abstract get ident(): string
     private _emitter = new EventEmitter<OriginEventMap>()
     private readonly _ownResources: Resource[] = []
-    readonly meta: Meta
+    readonly meta: Metadata
 
     protected __attach_kid__(kid: Origin<Origin_Props<ResourceRef_Constructor>>): void {
         super.__attach_kid__(kid)
@@ -63,7 +63,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
     ) {
         super()
 
-        this.meta = new Meta(_props.meta ?? {})
+        this.meta = new Metadata(_props.meta ?? {})
     }
 
     get node(): OriginNode {
@@ -107,7 +107,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
         resources = Symbol.iterator in resources ? resources : [resources]
         for (const resource of resources) {
             this._ownResources.push(resource)
-            if ("meta" in resource && resource.meta instanceof Meta) {
+            if ("meta" in resource && resource.meta instanceof Metadata) {
                 resource.meta.add(this.node.inheritedMeta)
             }
             this.__emit__("resource/attached", {

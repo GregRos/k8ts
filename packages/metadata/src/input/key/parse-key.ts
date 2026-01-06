@@ -1,8 +1,9 @@
 import { anyCharOf, anyStringOf, digit, letter, lower, string } from "parjs"
 import { many1, map, maybe, or, qthen, stringify, then, thenq } from "parjs/combinators"
 
-import { K8tsMetadataError } from "../error"
-import { DomainPrefix, MetadataKey } from "./repr"
+import { K8tsMetadataError } from "../../error"
+import { DomainPrefix } from "./domain-prefix"
+import { MetadataKey } from "./metadata-key"
 
 const cPrefix = anyCharOf("%^#")
 const cSection = string("/")
@@ -64,3 +65,4 @@ export function parseOuterKey(key: string) {
         error: result.toString()
     })
 }
+export { parseOuterKey as parseKey }

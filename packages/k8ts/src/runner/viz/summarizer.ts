@@ -6,9 +6,9 @@ import {
     Relation,
     ResourceNode
 } from "@k8ts/instruments"
-import { Meta } from "@k8ts/metadata"
-import { mapToObject } from "@k8ts/metadata/util"
+import { Metadata } from "@k8ts/metadata"
 import { dump } from "js-yaml"
+import { mapToObject } from "../../../../metadata/dist/utils/map"
 import type { AssembledResult } from "../engine"
 
 export interface SummarizerOptions {
@@ -75,7 +75,7 @@ export class Summarizer {
             indent: 2,
             noRefs: true,
             replacer(key, value) {
-                if (value instanceof Meta) {
+                if (value instanceof Metadata) {
                     return value.values
                 }
                 return value

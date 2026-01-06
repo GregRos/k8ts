@@ -1,4 +1,4 @@
-import { Meta } from "@k8ts/metadata"
+import { Metadata } from "@k8ts/metadata"
 import StackTracey from "stacktracey"
 import {
     type K8tsManifest,
@@ -18,7 +18,7 @@ export abstract class ResourceTop<
     Props extends Resource_Props = Resource_Props
 > extends Resource<Name, Props> {
     private readonly _origin: Origin
-    readonly meta: Meta
+    readonly meta: Metadata
     abstract readonly ident: IdentKind
 
     get key() {
@@ -36,7 +36,7 @@ export abstract class ResourceTop<
     }
     constructor(name: Name, props: Props) {
         super(name, props)
-        this.meta = new Meta({
+        this.meta = new Metadata({
             name
         })
         const lastOrigin = OriginContextTracker.current

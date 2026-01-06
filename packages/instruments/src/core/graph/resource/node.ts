@@ -1,4 +1,4 @@
-import { Meta } from "@k8ts/metadata"
+import { Metadata } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq } from "doddle"
 import { type AnyCtor } from "what-are-you"
@@ -67,7 +67,7 @@ export class ResourceNode extends Node<ResourceNode, Resource> {
     }
 
     get meta() {
-        return "meta" in this.entity ? (this.entity.meta as Meta) : undefined
+        return "meta" in this.entity ? (this.entity.meta as Metadata) : undefined
     }
 
     get noEmit() {

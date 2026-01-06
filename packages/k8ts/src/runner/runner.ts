@@ -1,5 +1,5 @@
 import { ForwardExports, Trace_Git, Trace_Source } from "@k8ts/instruments"
-import { Meta } from "@k8ts/metadata"
+import { Metadata } from "@k8ts/metadata"
 import { seq } from "doddle"
 import EventEmitter from "eventemitter3"
 import StackTracey from "stacktracey"
@@ -57,7 +57,7 @@ export class Runner {
         const options = {
             cwd: ".",
             ...this._options,
-            meta: new Meta(this._options.meta)
+            meta: new Metadata(this._options.meta)
                 .add(`source.k8ts.org/`, {
                     "^emitted-at": runTrace.format({
                         cwd: this._options.cwd

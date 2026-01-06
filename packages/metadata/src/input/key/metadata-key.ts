@@ -1,35 +1,11 @@
 import { isNullish } from "what-are-you"
-import { K8tsMetadataError } from "../error"
-import { normalChar } from "./parse-key"
-import type { Char } from "./types"
-interface ImmObject {
-    equals(other: ImmObject): boolean
-}
+import { K8tsMetadataError } from "../../error"
+import { checkMetaString } from "../../utils/validate"
+import { BaseKey } from "./base"
+import { DomainPrefix } from "./domain-prefix"
+import type { Metadata_Key_OfValue, Metadata_Prefix_Any } from "./string-types"
 
-abstract class KeyType implements ImmObject {
-    abstract get str(): string
-    equals(other: ImmObject): boolean {
-        return this.constructor === other.constructor && this.toString() === other.toString()
-    }
-
-    toString() {
-        return this.str
-    }
-}
-
-export function checkMetaString(thing: string, input: string, length: number) {
-    if (!normalChar.parse(input[0]!).isOk) {
-        throw new K8tsMetadataError(`${thing} must start with an alphanumeric character.`)
-    }
-    if (!normalChar.parse(input[input.length - 1]!).isOk) {
-        throw new K8tsMetadataError(`${thing}  must end with an alphanumeric character.`)
-    }
-    if (thing.length > length) {
-        throw new K8tsMetadataError(`${thing} must be no more than ${length} characters.`)
-    }
-}
-
-export class MetadataKey extends KeyType {
+export class MetadataKey extends BaseKey {
     type = "full" as const
     constructor(
         private readonly _prefix: string,
@@ -70,8 +46,8 @@ export class MetadataKey extends KeyType {
         return parts.join("")
     }
 
-    get str() {
-        return [this._prefix, this.suffix].join("")
+    get str(): Metadata_Key_OfValue {
+        return [this._prefix, this.suffix].join("") as Metadata_Key_OfValue
     }
 
     get parent() {
@@ -81,11 +57,11 @@ export class MetadataKey extends KeyType {
         return new DomainPrefix(this._domain)
     }
 
-    prefix(): Char.Prefix.Any
-    prefix(prefix: Char.Prefix.Any): this
+    prefix(): Metadata_Prefix_Any
+    prefix(prefix: Metadata_Prefix_Any): this
     prefix(prefix?: any) {
         if (isNullish(prefix)) {
-            return this._prefix as Char.Prefix.Any
+            return this._prefix as Metadata_Prefix_Any
         }
         return new MetadataKey(prefix, this._domain, this._name)
     }
@@ -112,17 +88,3 @@ export class MetadataKey extends KeyType {
         return new MetadataKey(this._prefix, domain, this._name)
     }
 }
-
-export class DomainPrefix extends KeyType {
-    type = "domain" as const
-    constructor(private readonly _domain: string) {
-        super()
-        checkMetaString(`Section name ${this._domain}`, _domain, 253)
-    }
-
-    get str() {
-        return [this._domain].join("")
-    }
-}
-
-export type SomeKey = MetadataKey | DomainPrefix
