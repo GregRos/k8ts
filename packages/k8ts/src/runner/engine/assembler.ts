@@ -1,8 +1,9 @@
-import { OriginNode, type OriginExporter } from "@k8ts/instruments"
+import { OriginNode, type OriginExporter, type ResourceNode } from "@k8ts/instruments"
 import { Meta } from "@k8ts/metadata"
 import { aseq } from "doddle"
 import EventEmitter from "eventemitter3"
 import { cloneDeep } from "lodash"
+import { version } from "../../version"
 import { Engine_ResourceLoader, type AssemblerRscLoaderEvents } from "./loader"
 import { Engine_Manifester, NodeManifest, type ManifesterEventsTable } from "./manifester"
 import { Engine_Saver, type ManifestSaverEventsTable } from "./saver"
@@ -44,10 +45,23 @@ export class Assembler {
         }
         return this
     }
-
+    private _attachProductionAnnotations(resource: ResourceNode) {
+        const loc = resource.trace.format({
+            cwd: this._options.cwd
+        })
+        resource.meta!.add(`build.k8ts.org/`, {
+            "^constructed-at": loc,
+            "^produced-by": `k8ts@${version}`
+        })
+    }
     async assemble(inFiles: Iterable<OriginExporter>) {
         const emitter = this._emitter
-        const loader = new Engine_ResourceLoader({ emitter })
+        const loader = new Engine_ResourceLoader({
+            emitter
+        })
+        emitter.on("load", ({ resource }) => {
+            this._attachProductionAnnotations(resource)
+        })
         const generator = new Engine_Manifester({
             cwd: this._options.cwd,
             emitter

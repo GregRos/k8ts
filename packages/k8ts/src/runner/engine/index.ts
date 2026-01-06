@@ -1,2 +1,2 @@
+export * from "../viz/progress-shower"
 export * from "./assembler"
-export * from "./progress-shower"

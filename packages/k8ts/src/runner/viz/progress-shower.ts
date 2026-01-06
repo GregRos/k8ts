@@ -1,7 +1,7 @@
 import { attr, dest, ManifestSourceEmbedder, phrases, quantity, verb } from "@k8ts/instruments"
 import ora from "ora"
-import type { Assembler, AssemblerEventsTable } from "./assembler"
-import { AssemblerStage } from "./stage"
+import type { Assembler, AssemblerEventsTable } from "../engine/assembler"
+import { AssemblerStage } from "../engine/stage"
 export interface ProgressOptions {
     waitTransition?: number
     debug?: boolean

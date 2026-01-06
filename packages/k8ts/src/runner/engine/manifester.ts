@@ -1,7 +1,6 @@
 import { K8tsManifest, ManifestSourceEmbedder, ResourceNode, ResourceTop } from "@k8ts/instruments"
 import type EventEmitter from "eventemitter3"
 import { cloneDeep, cloneDeepWith, isEmpty, unset } from "lodash"
-import { version } from "../../version"
 export interface ManifesterOptions {
     cwd?: string
     emitter?: EventEmitter<any>
@@ -49,18 +48,7 @@ export class Engine_Manifester {
         return noEmpty
     }
 
-    private _attachProductionAnnotations(resource: ResourceNode) {
-        const loc = resource.trace.format({
-            cwd: this._options.cwd
-        })
-        resource.meta!.add(`build.k8ts.org/`, {
-            "^constructed-at": loc,
-            "^produced-by": `k8ts@${version}`
-        })
-    }
-
     async generate(res: ResourceNode): Promise<NodeManifest> {
-        this._attachProductionAnnotations(res)
         this._options.emitter?.emit("manifest", { resource: res })
         const manifest = await this._generate(res.entity as ResourceTop)
         ManifestSourceEmbedder.add(manifest, res.entity)

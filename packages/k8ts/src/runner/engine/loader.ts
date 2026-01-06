@@ -40,6 +40,9 @@ export class Engine_ResourceLoader {
             if (!res.isRoot) {
                 return
             }
+            if (res.noEmit) {
+                return
+            }
             const origin = res.origin
 
             if (!origin.isChildOf(input)) {
