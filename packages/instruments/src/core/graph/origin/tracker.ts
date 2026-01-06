@@ -1,7 +1,6 @@
 import { AsyncLocalStorage } from "async_hooks"
 import { doddle, pull, type Doddle, type MaybeDoddle } from "doddle"
-import { isIterable, type AnyCtor } from "what-are-you"
-import { K8tsGraphError } from "../error"
+import { isIterable } from "what-are-you"
 import { Origin } from "./origin"
 
 export interface OriginTracker_Binder {
@@ -17,17 +16,6 @@ export class OriginTracker {
 
     get current(): Origin | undefined {
         return this._store.getStore()
-    }
-
-    firstOfType<X extends Origin>(t: AnyCtor<X>): X {
-        let current = this._store.getStore()
-        while (current) {
-            if (current instanceof t) {
-                return current
-            }
-            current = current["__parent__"]()?.assert(Origin)
-        }
-        throw new K8tsGraphError(`No origin of type ${t.name} found in the current origin stack`)
     }
 
     disposableOriginModifier(origin: Origin): Disposable {

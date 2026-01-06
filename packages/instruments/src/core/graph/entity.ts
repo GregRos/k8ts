@@ -46,7 +46,9 @@ export abstract class Entity<
         )
     }
     is<K extends this["ident"]>(ident: K): this is { ident: K }
-    is<Inst extends _EntRefType = _EntRefType>(cls: AnyCtor<Inst>): this is Inst
+    is<Inst extends _EntRefType = _EntRefType>(
+        cls: abstract new (...args: any[]) => Inst
+    ): this is Inst
     is(cls: any): boolean {
         if (typeof cls === "function") {
             return this instanceof cls

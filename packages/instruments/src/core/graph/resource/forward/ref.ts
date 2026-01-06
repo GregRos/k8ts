@@ -1,9 +1,9 @@
 import { seq, type Doddle } from "doddle"
 import { mapValues } from "lodash"
-import { getNiceClassName, type AnyCtor } from "what-are-you"
+import { getNiceClassName } from "what-are-you"
 import { K8tsGraphError } from "../../error"
 import { ResourceKey } from "../key"
-import type { ResourceRef } from "../ref"
+import type { ResourceRef, ResourceRef_Constructor_For } from "../ref"
 import { K8tsProxyError } from "./error"
 
 /**
@@ -44,7 +44,7 @@ export namespace ForwardRef {
 /** Properties for creating a forward reference to a resource. */
 export interface ForwardRef_Props<Referenced extends ResourceRef> {
     /** The class constructor of the referenced resource. */
-    readonly class?: AnyCtor<Referenced>
+    readonly class?: ResourceRef_Constructor_For<Referenced>
     /** The reference key identifying the referenced resource. */
     readonly key: ResourceKey
     readonly origin: object
@@ -81,7 +81,9 @@ class ForwardRef_Proxied<To extends ResourceRef = ResourceRef> {
     }
 
     get clazz() {
-        return this.#props.class ?? (require("../top").RscTop as AnyCtor<To>)
+        return (
+            this.#props.class ?? (require("../top").ResourceTop as ResourceRef_Constructor_For<To>)
+        )
     }
 
     get namespace() {

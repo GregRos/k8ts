@@ -1,7 +1,6 @@
 import { Metadata } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq } from "doddle"
-import { type AnyCtor } from "what-are-you"
 import { Display, display } from "../../../utils/mixin/display"
 import { TraceEmbedder } from "../../tracing"
 import { Formats } from "../entity"
@@ -10,6 +9,7 @@ import { Node } from "../node"
 import { OriginNode } from "../origin/node"
 import type { IdentKind, IdentLike } from "./api-kind"
 import { ResourceKey } from "./key"
+import type { ResourceRef_Constructor_For } from "./ref"
 import type { Resource } from "./resource"
 
 @display({
@@ -74,14 +74,17 @@ export class ResourceNode extends Node<ResourceNode, Resource> {
         return this.meta?.tryGet("#k8ts.org/no-emit") ?? false
     }
 
-    when<EntityType extends Resource>(type: AnyCtor<EntityType>, fn: (entity: EntityType) => void) {
+    when<EntityType extends Resource>(
+        type: ResourceRef_Constructor_For<EntityType>,
+        fn: (entity: EntityType) => void
+    ) {
         const entity = this.entity as EntityType
         if (entity instanceof type) {
             fn(entity)
         }
     }
 
-    as<EntityType extends Resource>(type: AnyCtor<EntityType>) {
+    as<EntityType extends Resource>(type: ResourceRef_Constructor_For<EntityType>) {
         const entity = this.entity as EntityType
         if (entity instanceof type) {
             return entity

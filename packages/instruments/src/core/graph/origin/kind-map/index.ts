@@ -1,5 +1,4 @@
 import { doddlify, seq, type Seq } from "doddle"
-import type { AnyCtor } from "what-are-you"
 
 import { K8tsGraphError } from "../../error"
 import { Ident, IdentKind } from "../../resource/api-kind"
@@ -8,11 +7,11 @@ import { ResourceRef_Constructor } from "../../resource/ref"
 const separator = "/"
 interface NodeEntry {
     kindName: string
-    class: AnyCtor<any>
+    class: ResourceRef_Constructor
     ident: IdentKind
 }
 export type KindMap_Input<Ks extends ResourceRef_Constructor> = Ks[]
-type LookupKey = string | ResourceKey | AnyCtor<any> | IdentKind
+type LookupKey = string | ResourceKey | ResourceRef_Constructor | IdentKind
 export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constructor> {
     __KINDS__!: Kinds["prototype"]["ident"]
     constructor(private _ownKinds: KindMap_Input<Kinds>) {}
@@ -112,7 +111,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
             }
             return something
         } else if (typeof something === "function") {
-            return something as AnyCtor<any>
+            return something as ResourceRef_Constructor
         } else if (something instanceof Ident) {
             return something.text
         } else if (something instanceof ResourceKey) {
@@ -146,18 +145,18 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
         return this._getEntry(kindOrClass).ident
     }
 
-    tryGetClass(kindOrIdent: LookupKey): AnyCtor<any> | undefined {
+    tryGetClass(kindOrIdent: LookupKey): ResourceRef_Constructor | undefined {
         return this._tryGetEntry(kindOrIdent)?.class
     }
 
-    getClass(refKey: ResourceKey): AnyCtor<any>
-    getClass<F extends AnyCtor<any>>(klass: F): F
-    getClass(kind: string): AnyCtor<any>
-    getClass(ident: IdentKind): AnyCtor<any>
-    getClass<T extends AnyCtor<any> | string>(
+    getClass(refKey: ResourceKey): ResourceRef_Constructor
+    getClass<F extends ResourceRef_Constructor>(klass: F): F
+    getClass(kind: string): ResourceRef_Constructor
+    getClass(ident: IdentKind): ResourceRef_Constructor
+    getClass<T extends ResourceRef_Constructor | string>(
         kindOrClass: T
-    ): T extends AnyCtor<any> ? string : AnyCtor<any>
-    getClass(kindOrClass: LookupKey): AnyCtor<any> | string {
+    ): T extends ResourceRef_Constructor ? string : ResourceRef_Constructor
+    getClass(kindOrClass: LookupKey): ResourceRef_Constructor | string {
         return this._getEntry(kindOrClass).class
     }
 
