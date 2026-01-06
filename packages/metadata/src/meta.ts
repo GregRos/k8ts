@@ -2,16 +2,16 @@ import { seq } from "doddle"
 import { K8tsMetadataError } from "./error"
 import { parseInnerKey, parseKey, parseMetaInput, parseSectionKey } from "./input"
 import type { Metadata_Input, MetaInputParts } from "./input/dict-input"
-import { type DomainPrefix } from "./input/key/domain-prefix"
-import { MetadataKey } from "./input/key/metadata-key"
+import { type Metadata_Key_Domain } from "./input/key/domain-prefix"
+import { Metadata_Key_Value } from "./input/key/metadata-key"
 import type {
-    Metadata_Key_Core,
-    Metadata_Key_Domain,
-    Metadata_Key_OfValue
+    Metadata_Key_sCore,
+    Metadata_Key_sDomain,
+    Metadata_Key_sValue
 } from "./input/key/string-types"
 import { equalsMap, toJS } from "./utils/map"
 import { orderMetaKeyedObject } from "./utils/order-meta-keyed-object"
-import { _checkValue } from "./utils/validate"
+import { checkMetadataValue } from "./utils/validate"
 
 /**
  * Mutable storage for k8s metadata. K8s metadata includes labels, annotations, and core fields.
@@ -34,8 +34,8 @@ import { _checkValue } from "./utils/validate"
  *         "^annotation1": "value2" // adds `^example.section/annotation1` with value 'value2'
  *     })
  */
-export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
-    private readonly _dict: Map<Metadata_Key_OfValue, string>
+export class Metadata implements Iterable<[Metadata_Key_sValue, string]> {
+    private readonly _dict: Map<Metadata_Key_sValue, string>
 
     /**
      * Constructs a Metadata instance with a single key-value pair.
@@ -46,7 +46,7 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
      * @param key The value key
      * @param value The value to associate with the key
      */
-    constructor(key: Metadata_Key_OfValue, value: string)
+    constructor(key: Metadata_Key_sValue, value: string)
     /**
      * Constructs a Metadata instance with key-value pairs within a section namespace.
      *
@@ -56,7 +56,7 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
      * @param key The section key namespace
      * @param value Nested object containing key-value pairs
      */
-    constructor(key: Metadata_Key_Domain, value: MetaInputParts.Nested)
+    constructor(key: Metadata_Key_sDomain, value: MetaInputParts.Nested)
 
     /**
      * Constructs a Metadata instance from an input object or returns an empty Metadata if no input
@@ -79,7 +79,7 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
     constructor(a?: any, b?: any) {
         this._dict = _pairToMap([a, b])
         for (const [key, value] of this._dict.entries()) {
-            _checkValue(key, value)
+            checkMetadataValue(key, value)
         }
     }
 
@@ -115,7 +115,7 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
      *
      * @param key The value key to delete
      */
-    delete(key: Metadata_Key_OfValue): Metadata
+    delete(key: Metadata_Key_sValue): Metadata
 
     /**
      * Deletes specific keys under a domain prefix.
@@ -126,7 +126,7 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
      * @param ns The section key namespace
      * @param keys Specific value keys within the section to delete
      */
-    delete(ns: Metadata_Key_Domain, ...keys: Metadata_Key_OfValue[]): Metadata
+    delete(ns: Metadata_Key_sDomain, ...keys: Metadata_Key_sValue[]): Metadata
 
     /**
      * Deletes all keys within a section namespace.
@@ -136,15 +136,15 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
      *
      * @param ns The section key namespace to delete
      */
-    delete(ns: Metadata_Key_Domain): Metadata
+    delete(ns: Metadata_Key_sDomain): Metadata
     delete(a: any, ...rest: any[]) {
         if (a.endsWith("/")) {
             const sectionKey = parseSectionKey(a)
             const onlyKeys = rest.map(parseInnerKey)
             if (onlyKeys.length > 0) {
-                var deleteOnly = (key: MetadataKey) => onlyKeys.some(ok => ok.equals(key))
+                var deleteOnly = (key: Metadata_Key_Value) => onlyKeys.some(ok => ok.equals(key))
             } else {
-                var deleteOnly = (_key: MetadataKey) => _key.domain().equals(sectionKey)
+                var deleteOnly = (_key: Metadata_Key_Value) => _key.domain().equals(sectionKey)
             }
             for (const k of this._keys) {
                 if (deleteOnly(k)) {
@@ -167,7 +167,7 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
      * @param key The value key to add
      * @param value The value to associate with the key
      */
-    add(key: Metadata_Key_OfValue, value?: string): Metadata
+    add(key: Metadata_Key_sValue, value?: string): Metadata
 
     /**
      * Adds a nested object of key-value pairs within a section namespace. Throws if any key already
@@ -179,7 +179,7 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
      * @param key The section key namespace
      * @param value Nested object containing key-value pairs
      */
-    add(key: Metadata_Key_Domain, value: MetaInputParts.Nested): Metadata
+    add(key: Metadata_Key_sDomain, value: MetaInputParts.Nested): Metadata
 
     /**
      * Adds multiple key-value pairs from an input object. Throws if any key already exists.
@@ -224,7 +224,7 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
      * @param key The value key to overwrite
      * @param value The new value (undefined removes the key)
      */
-    overwrite(key: Metadata_Key_OfValue, value: string | undefined): Metadata
+    overwrite(key: Metadata_Key_sValue, value: string | undefined): Metadata
 
     /**
      * Overwrites key-value pairs within a section namespace.
@@ -235,7 +235,7 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
      * @param key The section key namespace
      * @param value Nested object containing key-value pairs to overwrite
      */
-    overwrite(key: Metadata_Key_Domain, value: MetaInputParts.Nested): Metadata
+    overwrite(key: Metadata_Key_sDomain, value: MetaInputParts.Nested): Metadata
 
     /**
      * Overwrites multiple key-value pairs from an input object.
@@ -267,12 +267,12 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
      * @param domainPrefix The domain prefix to check for
      * @returns True if any keys exist under the specified domain prefix, false otherwise
      */
-    has(domainPrefix: Metadata_Key_Domain): boolean
+    has(domainPrefix: Metadata_Key_sDomain): boolean
     /** @param key */
-    has(key: Metadata_Key_OfValue): boolean
+    has(key: Metadata_Key_sValue): boolean
     has(key: any) {
         const parsed = parseKey(key)
-        if (parsed instanceof MetadataKey) {
+        if (parsed instanceof Metadata_Key_Value) {
             return this._dict.has(key)
         } else {
             return this._matchDomainPrefixes(parsed).size > 0
@@ -289,7 +289,7 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
      * @returns The value associated with the key
      * @throws {K8tsMetadataError} If the key is not found
      */
-    get(key: Metadata_Key_OfValue) {
+    get(key: Metadata_Key_sValue) {
         const parsed = parseKey(key)
         const v = this._dict.get(key)
         if (v === undefined) {
@@ -309,9 +309,9 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
      * @returns The value associated with the key, or the fallback value
      * @throws {K8tsMetadataError} If a domain key is provided instead of a value key
      */
-    tryGet(key: Metadata_Key_OfValue, fallback?: string) {
+    tryGet(key: Metadata_Key_sValue, fallback?: string) {
         const parsed = parseKey(key)
-        if (!(parsed instanceof MetadataKey)) {
+        if (!(parsed instanceof Metadata_Key_Value)) {
             throw new K8tsMetadataError("Unexpected domain key!", { key })
         }
         return this._dict.get(key) ?? fallback
@@ -319,12 +319,12 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
 
     private get _parsedPairs() {
         return seq(this._dict)
-            .map(([k, v]) => [parseKey(k) as MetadataKey, v] as const)
+            .map(([k, v]) => [parseKey(k) as Metadata_Key_Value, v] as const)
             .toArray()
             .pull()
     }
 
-    private _matchDomainPrefixes(key: DomainPrefix) {
+    private _matchDomainPrefixes(key: Metadata_Key_Domain) {
         return seq(this._parsedPairs)
             .filter(([k, v]) => k.parent?.equals(key) ?? false)
             .toMap(x => [x[0].str, x[1]] as const)
@@ -341,11 +341,11 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
      * @param keySpecs Keys or domain prefixes to include in the result
      * @returns A new Metadata instance with only the picked keys
      */
-    pick(...keySpecs: (Metadata_Key_Domain | Metadata_Key_OfValue)[]) {
+    pick(...keySpecs: (Metadata_Key_sDomain | Metadata_Key_sValue)[]) {
         const parsed = keySpecs.map(parseKey)
         const keyStrSet = new Set<string>()
         for (const key of parsed) {
-            if (key instanceof MetadataKey) {
+            if (key instanceof Metadata_Key_Value) {
                 keyStrSet.add(key.str)
             } else {
                 const sectionKeys = this._matchDomainPrefixes(key)
@@ -354,7 +354,7 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
                 }
             }
         }
-        const out = new Map<Metadata_Key_OfValue, string>()
+        const out = new Map<Metadata_Key_sValue, string>()
         for (const [k, v] of this._dict.entries()) {
             if (keyStrSet.has(k)) out.set(k as any, v)
         }
@@ -422,7 +422,7 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
      */
     get core() {
         return this._prefixed("") as {
-            [key in Metadata_Key_Core]?: string
+            [key in Metadata_Key_sCore]?: string
         }
     }
 
@@ -442,7 +442,7 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
         return toJS(this._dict)
     }
 
-    private get _keys(): MetadataKey[] {
+    private get _keys(): Metadata_Key_Value[] {
         return seq(this._parsedPairs)
             .map(([k, v]) => k)
             .toArray()
@@ -450,9 +450,9 @@ export class Metadata implements Iterable<[Metadata_Key_OfValue, string]> {
     }
 }
 
-function _pairToObject(pair: [string | MetadataKey, string | object] | [object]) {
+function _pairToObject(pair: [string | Metadata_Key_Value, string | object] | [object]) {
     let [key, value] = pair
-    key = key instanceof MetadataKey ? key.str : key
+    key = key instanceof Metadata_Key_Value ? key.str : key
     if (typeof key === "string") {
         return {
             [key]: value as string
@@ -460,6 +460,6 @@ function _pairToObject(pair: [string | MetadataKey, string | object] | [object])
     }
     return key
 }
-function _pairToMap(pair: [Metadata_Key_OfValue, string | object] | [object]) {
+function _pairToMap(pair: [Metadata_Key_sValue, string | object] | [object]) {
     return parseMetaInput(_pairToObject(pair))
 }

@@ -1,11 +1,11 @@
 import { isNullish } from "what-are-you"
 import { K8tsMetadataError } from "../../error"
 import { checkMetaString } from "../../utils/validate"
-import { BaseKey } from "./base"
-import { DomainPrefix } from "./domain-prefix"
-import type { Metadata_Key_OfValue, Metadata_Prefix_Any } from "./string-types"
+import { Metadata_Key_Base } from "./base"
+import { Metadata_Key_Domain } from "./domain-prefix"
+import type { Metadata_Key_sPrefix, Metadata_Key_sValue } from "./string-types"
 
-export class MetadataKey extends BaseKey {
+export class Metadata_Key_Value extends Metadata_Key_Base {
     type = "full" as const
     constructor(
         private readonly _prefix: string,
@@ -46,24 +46,24 @@ export class MetadataKey extends BaseKey {
         return parts.join("")
     }
 
-    get str(): Metadata_Key_OfValue {
-        return [this._prefix, this.suffix].join("") as Metadata_Key_OfValue
+    get str(): Metadata_Key_sValue {
+        return [this._prefix, this.suffix].join("") as Metadata_Key_sValue
     }
 
     get parent() {
         if (!this._domain) {
             return null
         }
-        return new DomainPrefix(this._domain)
+        return new Metadata_Key_Domain(this._domain)
     }
 
-    prefix(): Metadata_Prefix_Any
-    prefix(prefix: Metadata_Prefix_Any): this
+    prefix(): Metadata_Key_sPrefix
+    prefix(prefix: Metadata_Key_sPrefix): this
     prefix(prefix?: any) {
         if (isNullish(prefix)) {
-            return this._prefix as Metadata_Prefix_Any
+            return this._prefix as Metadata_Key_sPrefix
         }
-        return new MetadataKey(prefix, this._domain, this._name)
+        return new Metadata_Key_Value(prefix, this._domain, this._name)
     }
 
     name(): string
@@ -72,19 +72,19 @@ export class MetadataKey extends BaseKey {
         if (isNullish(name)) {
             return this._name
         }
-        return new MetadataKey(this._prefix, this._domain, name)
+        return new Metadata_Key_Value(this._prefix, this._domain, name)
     }
 
-    domain(): DomainPrefix
-    domain(domain: string | DomainPrefix): this
+    domain(): Metadata_Key_Domain
+    domain(domain: string | Metadata_Key_Domain): this
     domain(domain?: any) {
         if (isNullish(domain)) {
-            return this._domain ? new DomainPrefix(this._domain) : null
+            return this._domain ? new Metadata_Key_Domain(this._domain) : null
         }
-        domain = domain instanceof DomainPrefix ? domain.str : domain
+        domain = domain instanceof Metadata_Key_Domain ? domain.str : domain
         if (this._domain) {
             throw new K8tsMetadataError("Already has a domain")
         }
-        return new MetadataKey(this._prefix, domain, this._name)
+        return new Metadata_Key_Value(this._prefix, domain, this._name)
     }
 }

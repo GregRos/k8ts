@@ -2,19 +2,19 @@ import { isNullish } from "what-are-you"
 import { K8tsMetadataError } from "../error"
 import { Metadata } from "../meta"
 import type { Metadata_Input } from "./dict-input"
-import { DomainPrefix } from "./key/domain-prefix"
+import { Metadata_Key_Domain } from "./key/domain-prefix"
 import { parseInnerKey, parseOuterKey } from "./key/parse-key"
-import type { Metadata_Key_OfValue } from "./key/string-types"
+import type { Metadata_Key_sValue } from "./key/string-types"
 
-export function parseMetaInput(input: Metadata_Input): Map<Metadata_Key_OfValue, string> {
+export function parseMetaInput(input: Metadata_Input): Map<Metadata_Key_sValue, string> {
     if (input == null) {
         return new Map()
     }
     if (input instanceof Map) {
-        return new Map(input) as Map<Metadata_Key_OfValue, string>
+        return new Map(input) as Map<Metadata_Key_sValue, string>
     }
     if (Symbol.iterator in Object(input)) {
-        let map = new Map<Metadata_Key_OfValue, string>()
+        let map = new Map<Metadata_Key_sValue, string>()
         for (const item of input as Iterable<readonly [string, string]>) {
             const [key, value] = item
             map.set(key as any, value)
@@ -24,13 +24,13 @@ export function parseMetaInput(input: Metadata_Input): Map<Metadata_Key_OfValue,
     if (input instanceof Metadata) {
         return new Map(input["_dict"])
     }
-    let map = new Map<Metadata_Key_OfValue, string>()
+    let map = new Map<Metadata_Key_sValue, string>()
     for (const [key, value] of Object.entries(input)) {
         const outer = parseOuterKey(key)
         if (isNullish(value)) {
             continue
         }
-        if (outer instanceof DomainPrefix) {
+        if (outer instanceof Metadata_Key_Domain) {
             if (typeof value !== "object") {
                 throw new K8tsMetadataError(`Expected object for section key ${key}`)
             }

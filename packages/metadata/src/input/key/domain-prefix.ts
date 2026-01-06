@@ -1,7 +1,7 @@
 import { checkMetaString } from "../../utils/validate"
-import { BaseKey } from "./base"
+import { Metadata_Key_Base } from "./base"
 
-export class DomainPrefix extends BaseKey {
+export class Metadata_Key_Domain extends Metadata_Key_Base {
     type = "domain" as const
     constructor(private readonly _domain: string) {
         super()
