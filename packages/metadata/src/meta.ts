@@ -55,6 +55,41 @@ export namespace Meta {
      */
     export class Meta implements Iterable<[MetadataKey, string]>, MetaLike {
         readonly [MetaMarker] = true
+        private readonly _dict: Map<string, string>
+
+        /**
+         * Constructs a Meta instance with a single key-value pair.
+         *
+         * @example
+         *     const meta = new Meta("%app", "my-app")
+         *
+         * @param key The value key
+         * @param value The value to associate with the key
+         */
+        constructor(key: Key.Value, value: string)
+        constructor(pairs: Iterable<readonly [Key.Value, string]>)
+        /**
+         * Constructs a Meta instance with key-value pairs within a section namespace.
+         *
+         * @example
+         *     const meta = new Meta("example.com/", { "%label": "value" })
+         *
+         * @param key The section key namespace
+         * @param value Nested object containing key-value pairs
+         */
+        constructor(key: Key.Domain, value: MetaInputParts.Nested)
+
+        /**
+         * Constructs a Meta instance from an input object or returns an empty Meta if no input
+         * provided.
+         *
+         * @example
+         *     const meta = new Meta({ "%app": "my-app", name: "resource" })
+         *     const empty = new Meta()
+         *
+         * @param input Object or map containing key-value pairs
+         */
+        constructor(input?: InputMeta)
         /**
          * Constructs a new Meta instance from a map of key-value pairs. Validates all keys and
          * values during construction.
@@ -62,8 +97,9 @@ export namespace Meta {
          * @param _dict Internal map storing metadata key-value pairs
          * @throws {K8tsMetadataError} If any key or value is invalid
          */
-        constructor(private readonly _dict: Map<string, string>) {
-            for (const [key, value] of _dict.entries()) {
+        constructor(a?: any, b?: any) {
+            this._dict = _pairToMap([a, b])
+            for (const [key, value] of this._dict.entries()) {
                 _checkValue(key, value)
             }
         }
@@ -81,16 +117,14 @@ export namespace Meta {
                 yield [parseKey(entry[0]) as MetadataKey, entry[1]] as [MetadataKey, string]
             }
         }
-        protected _create(raw: Map<string, string>) {
-            return new Meta(raw)
-        }
+
         /**
          * Creates a deep clone of this object.
          *
          * @returns
          */
         clone() {
-            return this._create(new Map(this._dict))
+            return new Meta(this)
         }
 
         /**
@@ -334,11 +368,11 @@ export namespace Meta {
                     }
                 }
             }
-            const out = new Map<string, string>()
+            const out = new Map<Key.Value, string>()
             for (const [k, v] of this._dict.entries()) {
-                if (keyStrSet.has(k)) out.set(k, v)
+                if (keyStrSet.has(k)) out.set(k as any, v)
             }
-            return this._create(out)
+            return new Meta(out)
         }
 
         private _prefixed(prefix: string) {
@@ -464,7 +498,7 @@ export namespace Meta {
      */
     export function create(input?: InputMeta): Meta
     export function create(a?: any, b?: any) {
-        return new Meta(_pairToMap([a, b]))
+        return new Meta(a, b)
     }
     function _pairToObject(pair: [string | MetadataKey, string | object] | [object]) {
         let [key, value] = pair
