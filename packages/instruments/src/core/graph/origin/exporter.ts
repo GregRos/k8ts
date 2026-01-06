@@ -48,7 +48,7 @@ export abstract class OriginExporter<
                 allEmitted.add(resource)
                 if (resource["__origin__"]().equals(self)) {
                     // Means it's being exported for the first time
-                    resource.meta.add("#k8ts.org/exported", "true")
+                    resource.metadata.add("#k8ts.org/exported", "true")
                     self.__emit__("resource/exported", {
                         origin: self,
                         resource: resource

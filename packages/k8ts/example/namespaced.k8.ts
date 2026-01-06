@@ -28,7 +28,7 @@ const ext_topolvm_class = storage.v1.StorageClass._.refKey({
 const cool = k8tsFile["PersistentVolume/pv-cool"]
 const image = ImageRegistry("docker.io").namespace("library").repo("nginx").tag("latest")
 export default W.File("deployment2.yaml", {
-    meta: {
+    metadata: {
         "^a": "a"
     },
     namespace: k8sNamespace,

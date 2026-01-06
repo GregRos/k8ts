@@ -24,8 +24,8 @@ export class OriginNode extends Node<OriginNode, Origin> {
     get kids() {
         return seq(this.entity["__kids__"]()).map(x => x.assert(Origin).node)
     }
-    get meta() {
-        return this.entity.meta
+    get metadata() {
+        return this.entity.metadata
     }
     get ident() {
         return this.entity.ident
@@ -36,7 +36,7 @@ export class OriginNode extends Node<OriginNode, Origin> {
     get inheritedMeta(): Metadata {
         const self = this
         return [this, ...this.ancestors]
-            .map(x => x.meta.clone())
+            .map(x => x.metadata.clone())
             .reduce((acc, meta) => acc.add(meta), new Metadata())
     }
     constructor(entity: Origin) {
@@ -72,6 +72,6 @@ export class OriginNode extends Node<OriginNode, Origin> {
 export interface Origin_Props<
     KindedCtors extends ResourceRef_Constructor = ResourceRef_Constructor
 > {
-    meta?: Metadata_Input
+    metadata?: Metadata_Input
     kinds?: KindMap_Input<KindedCtors>
 }

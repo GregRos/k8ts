@@ -16,7 +16,7 @@ export class WorldEntity<
         return "[k8ts] World"
     }
     #_ = (() => {
-        this.meta.add("source.k8ts.org/", {
+        this.metadata.add("source.k8ts.org/", {
             "^world": this.name
         })
     })()

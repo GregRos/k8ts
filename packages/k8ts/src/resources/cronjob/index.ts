@@ -2,7 +2,7 @@ import {
     Cron_Stanza,
     ResourceTop,
     type Cron_Record,
-    type Resource_Props,
+    type Resource_Props_Top,
     type ResourceRef
 } from "@k8ts/instruments"
 import { type Metadata_Input } from "@k8ts/metadata"
@@ -13,12 +13,12 @@ import { Timezone } from "../../../../instruments/dist/expressions/timezone"
 import { batch } from "../../resource-idents/batch"
 import { PodTemplate, type PodProps } from "../pod"
 export interface CronJob_Props<CronSpec extends Cron_Record>
-    extends Resource_Props<CDK.KubeCronJobProps> {
+    extends Resource_Props_Top<CDK.KubeCronJobProps> {
     $schedule: Cron_Stanza<CronSpec>
     $template: PodProps<never> & {
         restartPolicy: "Always" | "OnFailure" | "Never"
     }
-    $meta?: Metadata_Input
+    $metadata?: Metadata_Input
     timeZone: Timezone
 }
 

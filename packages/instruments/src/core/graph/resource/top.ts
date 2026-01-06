@@ -10,35 +10,35 @@ import { K8tsGraphError } from "../error"
 import type { Origin } from "../origin/origin"
 import { OriginContextTracker } from "../origin/tracker"
 import type { IdentKind } from "./api-kind"
-import type { Resource_Props } from "./props"
+import type { Resource_Props_Top } from "./props"
 import { Resource } from "./resource"
 
 export abstract class ResourceTop<
     Name extends string = string,
-    Props extends Resource_Props = Resource_Props
+    Props extends Resource_Props_Top = Resource_Props_Top
 > extends Resource<Name, Props> {
     private readonly _origin: Origin
-    readonly meta: Metadata
+    readonly metadata: Metadata
     abstract readonly ident: IdentKind
 
     get key() {
         return this.ident.refKey({ name: this.name, namespace: this.namespace })
     }
     get noEmit() {
-        return this.meta.tryGet("#k8ts.org/no-emit", "") !== ""
+        return this.metadata.tryGet("#k8ts.org/no-emit", "") !== ""
     }
     set noEmit(v: boolean) {
         if (!v) {
-            this.meta.delete("#k8ts.org/no-emit")
+            this.metadata.delete("#k8ts.org/no-emit")
         } else {
-            this.meta.add("#k8ts.org/no-emit", "true")
+            this.metadata.add("#k8ts.org/no-emit", "true")
         }
     }
     constructor(name: Name, props: Props) {
         super(name, props)
-        this.meta = new Metadata({
+        this.metadata = new Metadata({
             name
-        })
+        }).overwrite(props.$metadata)
         const lastOrigin = OriginContextTracker.current
         if (!lastOrigin) {
             throw new K8tsGraphError(
@@ -49,7 +49,7 @@ export abstract class ResourceTop<
         this._origin["__attach_resource__"](this)
         TraceEmbedder.add(this, new Trace_Source(new StackTracey().slice(2)))
         if (this.props.$noEmit) {
-            this.meta.add("#k8ts.org/no-emit", "true")
+            this.metadata.add("#k8ts.org/no-emit", "true")
         }
     }
 
@@ -60,10 +60,10 @@ export abstract class ResourceTop<
     protected __metadata__(): K8tsManifest_Metadata {
         const self = this
         return {
-            name: self.meta.get("name"),
-            namespace: self.meta.tryGet("namespace"),
-            labels: self.meta.labels,
-            annotations: self.meta.annotations
+            name: self.metadata.get("name"),
+            namespace: self.metadata.tryGet("namespace"),
+            labels: self.metadata.labels,
+            annotations: self.metadata.annotations
         }
     }
 
@@ -87,6 +87,6 @@ export abstract class ResourceTop<
     }
 
     get namespace() {
-        return this.meta.tryGet("namespace")
+        return this.metadata.tryGet("namespace")
     }
 }

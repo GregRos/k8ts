@@ -2,7 +2,7 @@ import {
     OriginContextTracker,
     ResourceRef,
     ResourceTop,
-    type Resource_Props
+    type Resource_Props_Top
 } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
@@ -20,7 +20,8 @@ export interface Deployment_Strategy_Recreate {
 }
 export type Deployment_Strategy = Deployment_Strategy_RollingUpdate | Deployment_Strategy_Recreate
 
-export interface Deployment_Props<Ports extends string> extends Resource_Props<CDK.DeploymentSpec> {
+export interface Deployment_Props<Ports extends string>
+    extends Resource_Props_Top<CDK.DeploymentSpec> {
     replicas?: number
     $template: PodProps<Ports>
     $strategy?: Deployment_Strategy
@@ -90,7 +91,7 @@ export class Deployment<Name extends string, Ports extends string = string> exte
     @doddlify
     get template() {
         const podTemplate = new PodTemplate(this, this.name, this.props.$template)
-        podTemplate.meta.add("%app", this.name)
+        podTemplate.metadata.add("%app", this.name)
         return podTemplate
     }
 

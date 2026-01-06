@@ -22,7 +22,7 @@ export class OriginSection extends OriginExporter<FileSectionProps> {
         return "[k8ts] File/Section"
     }
     #_ = doddle(() => {
-        this.meta.overwrite({
+        this.metadata.overwrite({
             namespace: this._props.namespace?.name
         })
     }).pull()

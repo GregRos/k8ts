@@ -1,4 +1,10 @@
-import { Reqs, ResourceTop, Units, type ResourceRef, type Resource_Props } from "@k8ts/instruments"
+import {
+    Reqs,
+    ResourceTop,
+    Units,
+    type ResourceRef,
+    type Resource_Props_Top
+} from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { v1 } from "../../../resource-idents/default"
@@ -12,7 +18,7 @@ const pvc_ResourcesSpec = new Reqs({
     storage: Units.Data
 })
 export interface Pvc_Props<Mode extends PvVolumeMode>
-    extends Resource_Props<CDK.KubePersistentVolumeClaimProps> {
+    extends Resource_Props_Top<CDK.KubePersistentVolumeClaimProps> {
     $accessModes: PvAccessMode_Many
     $mode?: Mode
     $storageClass?: ResourceRef<storage.v1.StorageClass._>

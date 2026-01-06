@@ -34,7 +34,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
     abstract get ident(): string
     private _emitter = new EventEmitter<OriginEventMap>()
     private readonly _ownResources: Resource[] = []
-    readonly meta: Metadata
+    readonly metadata: Metadata
 
     protected __attach_kid__(kid: Origin<Origin_Props<ResourceRef_Constructor>>): void {
         super.__attach_kid__(kid)
@@ -63,7 +63,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
     ) {
         super()
 
-        this.meta = new Metadata(_props.meta ?? {})
+        this.metadata = new Metadata(_props.metadata ?? {})
     }
 
     get node(): OriginNode {
@@ -107,8 +107,8 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
         resources = Symbol.iterator in resources ? resources : [resources]
         for (const resource of resources) {
             this._ownResources.push(resource)
-            if ("meta" in resource && resource.meta instanceof Metadata) {
-                resource.meta.add(this.node.inheritedMeta)
+            if ("metadata" in resource && resource.metadata instanceof Metadata) {
+                resource.metadata.add(this.node.inheritedMeta)
             }
             this.__emit__("resource/attached", {
                 origin: this,

@@ -1,11 +1,12 @@
-import { ResourceTop, type Resource_Props } from "@k8ts/instruments"
+import { ResourceTop, type Resource_Props_Top } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { rbac } from "../../resource-idents/rbac"
 import type { ClusterRole } from "./cluster-role"
 import type { ServiceAccount } from "./service-account"
 
-export interface ClusterRoleBoding_Props extends Resource_Props<CDK.KubeClusterRoleBindingProps> {
+export interface ClusterRoleBoding_Props
+    extends Resource_Props_Top<CDK.KubeClusterRoleBindingProps> {
     $role: ClusterRole
     $subjects: ServiceAccount[]
 }

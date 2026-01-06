@@ -49,7 +49,7 @@ export class Engine_ResourceLoader {
                 return
             }
             const event = {
-                isExported: res.meta!.has(`#k8ts.org/exported`),
+                isExported: res.metadata!.has(`#k8ts.org/exported`),
                 resource: res
             } as const
 

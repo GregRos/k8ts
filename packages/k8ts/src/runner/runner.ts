@@ -57,7 +57,7 @@ export class Runner {
         const options = {
             cwd: ".",
             ...this._options,
-            meta: new Metadata(this._options.meta)
+            metadata: new Metadata(this._options.metadata)
                 .add(`source.k8ts.org/`, {
                     "^emitted-at": runTrace.format({
                         cwd: this._options.cwd

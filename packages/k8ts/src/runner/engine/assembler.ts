@@ -49,7 +49,7 @@ export class Assembler {
         const loc = resource.trace.format({
             cwd: this._options.cwd
         })
-        resource.meta!.add(`build.k8ts.org/`, {
+        resource.metadata!.add(`build.k8ts.org/`, {
             "^constructed-at": loc,
             "^produced-by": `k8ts@${version}`
         })
@@ -83,7 +83,7 @@ export class Assembler {
             .collect()
             .map(async file => {
                 const loaded = await loader.load(file)
-                loaded.forEach(r => r.meta!.add(this._options.meta))
+                loaded.forEach(r => r.metadata!.add(this._options.metadata))
                 return {
                     file: file,
                     resources: loaded.filter(x => !x.noEmit)
@@ -182,7 +182,7 @@ export interface AssemblerOptions {
     cwd?: string
     printOptions?: boolean
     outdir: string
-    meta?: Omit<Metadata_Input, "name" | "namespace"> | Metadata
+    metadata?: Omit<Metadata_Input, "name" | "namespace"> | Metadata
 }
 export type AssemblyStage =
     | "loading"

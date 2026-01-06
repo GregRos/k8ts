@@ -1,4 +1,4 @@
-import { ResourceRef, ResourceTop, Units, type Resource_Props } from "@k8ts/instruments"
+import { ResourceRef, ResourceTop, Units, type Resource_Props_Top } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { v1 } from "../../../resource-idents/default"
@@ -28,7 +28,7 @@ export interface Pv_Backend_NFS {
 
 export type Pv_Backend = Pv_Backend_HostPath | Pv_Backend_Local | Pv_Backend_NFS
 export interface Pv_Props<Mode extends PvVolumeMode = PvVolumeMode>
-    extends Resource_Props<CDK.PersistentVolumeSpec> {
+    extends Resource_Props_Top<CDK.PersistentVolumeSpec> {
     $accessModes: PvAccessMode_Many
     $storageClass?: ResourceRef<storage.v1.StorageClass._>
     $mode?: Mode

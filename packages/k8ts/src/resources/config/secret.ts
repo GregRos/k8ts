@@ -1,4 +1,4 @@
-import { ResourceTop, type DataSource, type Resource_Props } from "@k8ts/instruments"
+import { ResourceTop, type DataSource, type Resource_Props_Top } from "@k8ts/instruments"
 import { merge } from "lodash"
 import type { CDK } from "../.."
 import { v1 } from "../../resource-idents/default"
@@ -19,7 +19,7 @@ export type Secret_Types =
           | "tls"}`
     | "bootstrap.kubernetes.io/token"
 export interface Secret_Props<Keys extends string = string>
-    extends Resource_Props<CDK.KubeSecretProps> {
+    extends Resource_Props_Top<CDK.KubeSecretProps> {
     $type?: Secret_Types
     $data?: Record<Keys, DataSource>
 }

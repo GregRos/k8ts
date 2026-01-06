@@ -55,7 +55,7 @@ export class ResourceNode extends Node<ResourceNode, Resource> {
     }
 
     get namespace() {
-        return this.meta?.tryGet("namespace")
+        return this.metadata?.tryGet("namespace")
     }
 
     get trace() {
@@ -63,15 +63,15 @@ export class ResourceNode extends Node<ResourceNode, Resource> {
     }
 
     get isExported() {
-        return this.meta?.tryGet("#k8ts.org/exported") ?? false
+        return this.metadata?.tryGet("#k8ts.org/exported") ?? false
     }
 
-    get meta() {
-        return "meta" in this.entity ? (this.entity.meta as Metadata) : undefined
+    get metadata() {
+        return "metadata" in this.entity ? (this.entity.metadata as Metadata) : undefined
     }
 
     get noEmit() {
-        return this.meta?.tryGet("#k8ts.org/no-emit") ?? false
+        return this.metadata?.tryGet("#k8ts.org/no-emit") ?? false
     }
 
     when<EntityType extends Resource>(

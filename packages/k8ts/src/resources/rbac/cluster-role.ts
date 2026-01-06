@@ -1,4 +1,4 @@
-import { IdentKind, ResourceTop, type IdentGroup, type Resource_Props } from "@k8ts/instruments"
+import { IdentKind, ResourceTop, type IdentGroup, type Resource_Props_Top } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { merge } from "lodash"
@@ -26,7 +26,7 @@ class ClusterRole_Scope {
     }
 }
 export interface ClusterRole_Props<Rules extends ClusterRole_Rule = ClusterRole_Rule>
-    extends Resource_Props<CDK.KubeClusterRoleProps> {
+    extends Resource_Props_Top<CDK.KubeClusterRoleProps> {
     rules: ClusterRole_RuleProducer<Rules>
 }
 

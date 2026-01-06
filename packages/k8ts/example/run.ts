@@ -6,7 +6,7 @@ async function main() {
     const runner = new Runner({
         cwd: ".",
         outdir: ".k8ts",
-        meta: {
+        metadata: {
             "^my-custom-annotation": "my-custom-value"
         },
         progress: {

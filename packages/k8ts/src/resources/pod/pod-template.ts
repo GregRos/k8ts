@@ -33,7 +33,7 @@ export type PodContainerProducer<Ports extends string> = (
 ) => Iterable<ContainerRef<Ports>>
 
 export interface PodProps<Ports extends string> extends Resource_Props<Partial<CDK.PodSpec>> {
-    meta?: Metadata_Input
+    $metadata?: Metadata_Input
     $POD: PodContainerProducer<Ports>
 }
 
@@ -75,11 +75,11 @@ export class PodTemplate<Ports extends string = string> extends ResourcePart<Pod
     protected __metadata__() {
         return {
             name: this.name,
-            labels: this.meta.labels,
-            annotations: this.meta.annotations
+            labels: this.metadata.labels,
+            annotations: this.metadata.annotations
         }
     }
-    readonly meta = new Metadata(this.props.meta ?? {}).add("name", this.name)
+    readonly metadata = new Metadata(this.props.$metadata ?? {}).add("name", this.name)
 
     protected __submanifest__(): CDK.PodTemplateSpec {
         const self = this

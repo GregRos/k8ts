@@ -20,10 +20,10 @@ export interface FileProps<
 }
 export class OriginFile extends OriginExporter<FileProps> {
     #_ = (() => {
-        this.meta.add("source.k8ts.org/", {
+        this.metadata.add("source.k8ts.org/", {
             "^file": this.name
         })
-        this.meta.overwrite("namespace", this._props.namespace?.name)
+        this.metadata.overwrite("namespace", this._props.namespace?.name)
     })()
     get ident() {
         return "[k8ts] File"

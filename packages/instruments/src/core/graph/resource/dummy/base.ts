@@ -4,14 +4,14 @@ import type { IdentKind } from "../api-kind"
 import type { ResourceKey } from "../key"
 import { Resource } from "../resource"
 export class DummyResource<K extends IdentKind> extends Resource<string, any> {
-    readonly meta = new Metadata()
+    readonly metadata = new Metadata()
     constructor(
         readonly key: ResourceKey<K>,
         props: any
     ) {
         super(key.name, props)
 
-        this.meta.add({
+        this.metadata.add({
             name: key.name,
             namespace: key.namespace,
             "#k8ts.org/no-emit": "true"
@@ -22,7 +22,7 @@ export class DummyResource<K extends IdentKind> extends Resource<string, any> {
         return DummyOrigin.instance
     }
     get namespace() {
-        return this.meta.tryGet("namespace")
+        return this.metadata.tryGet("namespace")
     }
 
     get ident() {

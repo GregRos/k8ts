@@ -1,8 +1,9 @@
 import {
     ResourceRef,
     ResourceTop,
+    type Ip4_Input_String,
     type PortMapping_Input,
-    type Resource_Props
+    type Resource_Props_Top
 } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
@@ -18,14 +19,14 @@ export interface Sevice_Frontend_ClusterIp {
 
 export interface Service_Frontend_LoadBalancer {
     type: "LoadBalancer"
-    loadBalancerIP?: string
+    loadBalancerIP?: Ip4_Input_String
     loadBalancerSourceRanges?: string[]
     loadBalancerClass?: string
     allocateLoadBalancerNodePorts?: boolean
 }
 export type Service_Frontend = Sevice_Frontend_ClusterIp | Service_Frontend_LoadBalancer
 export interface Service_Props<DeployPorts extends string, ExposedPorts extends DeployPorts>
-    extends Resource_Props<CDK.ServiceSpec> {
+    extends Resource_Props_Top<CDK.ServiceSpec> {
     $ports: PortMapping_Input<ExposedPorts>
     $backend: Deployment_Ref<DeployPorts>
     $frontend: Service_Frontend
