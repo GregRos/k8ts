@@ -24,7 +24,7 @@ export class Trace_Git {
         const shortMessage = this.props.commit.message.split("\n")[0].slice(0, 50)
         const author = this.props.commit.author
 
-        return Meta.create({
+        return new Meta({
             "git.k8ts.org/": {
                 "^sha": hashPart,
                 "^message": shortMessage,

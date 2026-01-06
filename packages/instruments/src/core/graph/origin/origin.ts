@@ -63,7 +63,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
     ) {
         super()
 
-        this.meta = Meta.create(_props.meta ?? {})
+        this.meta = new Meta(_props.meta ?? {})
     }
 
     get node(): OriginNode {
@@ -107,7 +107,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
         resources = Symbol.iterator in resources ? resources : [resources]
         for (const resource of resources) {
             this._ownResources.push(resource)
-            if ("meta" in resource && resource.meta instanceof Meta.Meta) {
+            if ("meta" in resource && resource.meta instanceof Meta) {
                 resource.meta.add(this.node.inheritedMeta)
             }
             this.__emit__("resource/attached", {

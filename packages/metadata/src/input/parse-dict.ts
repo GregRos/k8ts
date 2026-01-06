@@ -20,7 +20,7 @@ export function parseMetaInput(input: InputMeta): Map<string, string> {
         }
         return map
     }
-    if (input instanceof Meta.Meta) {
+    if (input instanceof Meta) {
         return new Map(input["_dict"] as Map<string, string>)
     }
     let map = new Map<string, string>()

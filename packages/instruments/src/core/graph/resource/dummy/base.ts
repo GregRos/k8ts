@@ -4,7 +4,7 @@ import type { IdentKind } from "../api-kind"
 import type { ResourceKey } from "../key"
 import { Resource } from "../resource"
 export class DummyResource<K extends IdentKind> extends Resource<string, any> {
-    readonly meta = Meta.create()
+    readonly meta = new Meta()
     constructor(
         readonly key: ResourceKey<K>,
         props: any

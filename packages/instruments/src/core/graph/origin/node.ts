@@ -1,4 +1,4 @@
-import { Meta } from "@k8ts/metadata"
+import { Meta, type Input } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq, Seq } from "doddle"
 import { display } from "../../../utils/mixin/display"
@@ -37,7 +37,7 @@ export class OriginNode extends Node<OriginNode, Origin> {
         const self = this
         return [this, ...this.ancestors]
             .map(x => x.meta.clone())
-            .reduce((acc, meta) => acc.add(meta), Meta.create())
+            .reduce((acc, meta) => acc.add(meta), new Meta())
     }
     constructor(entity: Origin) {
         super(entity)
@@ -72,6 +72,6 @@ export class OriginNode extends Node<OriginNode, Origin> {
 export interface Origin_Props<
     KindedCtors extends ResourceRef_Constructor = ResourceRef_Constructor
 > {
-    meta?: Meta.Input
+    meta?: Input
     kinds?: KindMap_Input<KindedCtors>
 }

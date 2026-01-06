@@ -1,7 +1,7 @@
 import { Meta } from "@lib"
 
 it("accepts all valid value keys", () => {
-    const m = Meta.create({
+    const m = new Meta({
         "%label": "Hello",
         "%label2": "World",
         "^annotation": "goodbye",
@@ -16,7 +16,7 @@ it("accepts all valid value keys", () => {
 })
 
 it("accepts mix of value and section keys", () => {
-    const m = Meta.create({
+    const m = new Meta({
         "%label": "Hello",
         "%label2": "World",
         "^annotation": "goodbye",
@@ -38,70 +38,76 @@ it("accepts mix of value and section keys", () => {
 
 describe("fails for different types of invalid keys", () => {
     it("invalid prefix", () => {
-        expect(() =>
-            Meta.create({
-                // @ts-expect-error
-                "@label": "Hello"
-            })
+        expect(
+            () =>
+                new Meta({
+                    // @ts-expect-error
+                    "@label": "Hello"
+                })
         ).toThrow()
-        expect(() =>
-            Meta.create({
-                // @ts-expect-error
-                "(label": "Hello"
-            })
+        expect(
+            () =>
+                new Meta({
+                    // @ts-expect-error
+                    "(label": "Hello"
+                })
         ).toThrow()
-        expect(() =>
-            Meta.create({
-                // @ts-expect-error
-                label: "Hello"
-            })
+        expect(
+            () =>
+                new Meta({
+                    // @ts-expect-error
+                    label: "Hello"
+                })
         ).toThrow()
     })
 
     it("no prefix for non-special key", () => {
-        expect(() =>
-            Meta.create({
-                // @ts-expect-error
-                label: "Hello"
-            })
+        expect(
+            () =>
+                new Meta({
+                    // @ts-expect-error
+                    label: "Hello"
+                })
         ).toThrow()
 
-        expect(() =>
-            Meta.create({
-                // @ts-expect-error
-                "label/": "Hello"
-            })
+        expect(
+            () =>
+                new Meta({
+                    // @ts-expect-error
+                    "label/": "Hello"
+                })
         ).toThrow()
     })
 })
 it("section keys when appropriate", () => {
     expect(
-        Meta.create({
+        new Meta({
             "f/": {
                 "%x": "A"
             }
         }).get("%f/x")
     ).toBe("A")
     expect(
-        Meta.create({
+        new Meta({
             "label/": {
                 "^a": "A"
             }
         }).get("^label/a")
     ).toBe("A")
-    expect(() =>
-        Meta.create({
-            "label/": {
-                // @ts-expect-error
-
-                a: "A"
-            }
-        })
+    expect(
+        () =>
+            new Meta({
+                "label/": {
+                    // @ts-expect-error
+                    a: "A"
+                }
+            })
     ).toThrow()
-    expect(() =>
-        Meta.create({
-            // @ts-expect-error
-            "%label/": "hello"
-        })
+    expect(
+        () =>
+            new Meta({
+                // @ts-expect-error
+                "%label/": "hello"
+            })
     ).toThrow()
 })

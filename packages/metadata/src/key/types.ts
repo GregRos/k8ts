@@ -14,7 +14,7 @@ export namespace Char {
 export namespace Key {
     export type Domain = `${string}${Char.Suffix.Domain}`
     export type Special = "name" | "namespace"
-    export type Value = (`${Char.Prefix.Any}${string}` & `${string}${string}`) | Special
+    export type Value = `${Char.Prefix.Any}${string}` | Special
 
     export type Key = Domain | Value
 }

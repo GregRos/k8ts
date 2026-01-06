@@ -1,4 +1,3 @@
-import { Meta } from "@k8ts/metadata"
 import { mapValues, pick } from "lodash"
 import { K8tsNetworkError } from "../error"
 import { parsePortInput, portRecordInput } from "./entry"
@@ -21,9 +20,6 @@ export class PortExports<Names extends string = never> {
     private _rec: Record<string, Port_Full>
     constructor(record: PortExports_Input<Names> = {} as PortExports_Input<Names>) {
         this._rec = portRecordInput(record)
-        for (const entry of Object.values(this._rec)) {
-            Meta._checkNameValue(`container port '${entry.name}' (${entry.port})`, entry.name)
-        }
     }
 
     private static _make(rec: Record<string, Port_Full>) {

@@ -1,5 +1,5 @@
 import { OriginNode, type OriginExporter, type ResourceNode } from "@k8ts/instruments"
-import { Meta } from "@k8ts/metadata"
+import { Meta, type Input } from "@k8ts/metadata"
 import { aseq } from "doddle"
 import EventEmitter from "eventemitter3"
 import { cloneDeep } from "lodash"
@@ -182,7 +182,7 @@ export interface AssemblerOptions {
     cwd?: string
     printOptions?: boolean
     outdir: string
-    meta?: Omit<Meta.Input, "name" | "namespace"> | Meta
+    meta?: Omit<Input, "name" | "namespace"> | Meta
 }
 export type AssemblyStage =
     | "loading"

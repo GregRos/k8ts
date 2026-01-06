@@ -75,7 +75,7 @@ export class Summarizer {
             indent: 2,
             noRefs: true,
             replacer(key, value) {
-                if (value instanceof Meta.Meta) {
+                if (value instanceof Meta) {
                     return value.values
                 }
                 return value

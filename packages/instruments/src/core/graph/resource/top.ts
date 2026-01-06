@@ -36,7 +36,7 @@ export abstract class ResourceTop<
     }
     constructor(name: Name, props: Props) {
         super(name, props)
-        this.meta = Meta.create({
+        this.meta = new Meta({
             name
         })
         const lastOrigin = OriginContextTracker.current
