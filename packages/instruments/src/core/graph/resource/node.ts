@@ -7,7 +7,7 @@ import { Formats } from "../entity"
 import { K8tsGraphError } from "../error"
 import { Vertex } from "../node"
 import { OriginVertex } from "../origin/node"
-import type { IdentKind, IdentLike } from "./api-kind"
+import type { GVK, GVK_Like } from "./api-kind"
 import { ResourceKey } from "./key"
 import type { ResourceRef_Constructor_For } from "./ref"
 import type { Resource } from "./resource"
@@ -51,7 +51,7 @@ export class ResourceVertex extends Vertex<ResourceVertex, Resource> {
         })
     }
     get ident() {
-        return this.entity.ident as IdentKind
+        return this.entity.ident as GVK
     }
 
     get namespace() {
@@ -124,7 +124,7 @@ export class ResourceVertex extends Vertex<ResourceVertex, Resource> {
         return Display.get(this).pretty(format)
     }
 
-    hasIdent(ident: IdentLike) {
+    hasIdent(ident: GVK_Like) {
         return this.ident.equals(ident)
     }
     constructor(

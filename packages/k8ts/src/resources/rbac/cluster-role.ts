@@ -1,12 +1,9 @@
-import { IdentKind, ResourceTop, type IdentGroup, type Resource_Props_Top } from "@k8ts/instruments"
+import { GVK, ResourceTop, type Resource_Props_Top } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { merge } from "lodash"
 import { rbac } from "../../resource-idents/rbac"
-export interface ClusterRole_Rule<
-    Groups extends IdentGroup[] = IdentGroup[],
-    Resources extends IdentKind<Groups[number]["value"], string, string>[] = IdentKind[]
-> {
+export interface ClusterRole_Rule<Resources extends GVK[] = GVK[]> {
     resources: Resources
     verbs: Verbs[]
 }
@@ -14,7 +11,7 @@ export type ClusterRole_RuleProducer<Rules extends ClusterRole_Rule> = (
     scope: ClusterRole_Scope
 ) => Iterable<Rules>
 class ClusterRole_Scope {
-    Rule<const R extends IdentKind[]>(...resources: R) {
+    Rule<const R extends GVK[]>(...resources: R) {
         return {
             verbs(...verbs: Verbs[]) {
                 return {

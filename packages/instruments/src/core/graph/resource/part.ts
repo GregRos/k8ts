@@ -1,4 +1,4 @@
-import type { IdentResourcePart } from "./api-kind"
+import type { GVK_Base } from "./api-kind"
 import type { Resource_Props } from "./props"
 import { Resource } from "./resource"
 
@@ -6,7 +6,7 @@ export abstract class ResourcePart<Props extends Resource_Props = Resource_Props
     string,
     Props
 > {
-    abstract get ident(): IdentResourcePart
+    abstract get ident(): GVK_Base
     #parent: Resource
     constructor(parent: Resource, name: string, props: Props) {
         super(name, props)

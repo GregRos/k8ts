@@ -4,7 +4,7 @@ import { display } from "../../../utils"
 import { Entity } from "../entity"
 import { K8tsGraphError } from "../error"
 import type { Origin } from "../origin"
-import type { Ident } from "./api-kind"
+import type { GVK_Base } from "./api-kind"
 import { ForwardRef } from "./forward"
 import { ResourceVertex } from "./node"
 import { type ResourceRef } from "./ref"
@@ -17,7 +17,7 @@ export abstract class Resource<
     Name extends string = string,
     Props extends object = object
 > extends Entity<ResourceVertex, Resource, ResourceRef> {
-    abstract get ident(): Ident
+    abstract get ident(): GVK_Base
 
     abstract readonly namespace: string | undefined
 

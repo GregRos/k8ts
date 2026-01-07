@@ -1,17 +1,17 @@
 import { doddlify, seq, type Seq } from "doddle"
 
 import { K8tsGraphError } from "../../error"
-import { Ident, IdentKind } from "../../resource/api-kind"
+import { GVK, GVK_Base } from "../../resource/api-kind"
 import { ResourceKey } from "../../resource/key"
 import { ResourceRef_Constructor } from "../../resource/ref"
 const separator = "/"
 interface NodeEntry {
     kindName: string
     class: ResourceRef_Constructor
-    ident: IdentKind
+    ident: GVK
 }
 export type KindMap_Input<Ks extends ResourceRef_Constructor> = Ks[]
-type LookupKey = string | ResourceKey | ResourceRef_Constructor | IdentKind
+type LookupKey = string | ResourceKey | ResourceRef_Constructor | GVK
 export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constructor> {
     __KINDS__!: Kinds["prototype"]["ident"]
     constructor(private _ownKinds: KindMap_Input<Kinds>) {}
@@ -45,7 +45,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
                 return [
                     [entry.kindName, entry],
                     [entry.class, entry],
-                    [entry.ident.text, entry]
+                    [entry.ident.url, entry]
                 ] as const
             })
             .toMap(x => x)
@@ -82,7 +82,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
             return undefined
         }
 
-        return (ident as IdentKind).refKey({
+        return (ident as GVK).refKey({
             name
         })
     }
@@ -97,13 +97,13 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
     private _unknownNameError(kind: string) {
         return new K8tsGraphError(`The shorthand name ${kind} is not registered`)
     }
-    private _unknownIdentError(ident: Ident) {
+    private _unknownIdentError(ident: GVK_Base) {
         return new K8tsGraphError(`The kind identifier ${ident} is not registered`)
     }
     private _unknownClassError(klass: Function) {
         return new K8tsGraphError(`The class ${klass.name} is not registered`)
     }
-    private _convert(something: LookupKey | ResourceKey | Function | IdentKind) {
+    private _convert(something: LookupKey | ResourceKey | Function | GVK) {
         if (typeof something === "string") {
             if (something.includes("/")) {
                 const r = this.parse(something)
@@ -112,10 +112,10 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
             return something
         } else if (typeof something === "function") {
             return something as ResourceRef_Constructor
-        } else if (something instanceof Ident) {
-            return something.text
+        } else if (something instanceof GVK_Base) {
+            return something.url
         } else if (something instanceof ResourceKey) {
-            return something.kind.text
+            return something.kind.url
         }
         throw new K8tsGraphError(`Invalid argument ${something}`)
     }
@@ -124,7 +124,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
         if (!entry) {
             if (typeof key === "string") {
                 throw this._unknownNameError(key)
-            } else if (key instanceof Ident) {
+            } else if (key instanceof GVK_Base) {
                 throw this._unknownIdentError(key)
             } else if (typeof key === "function") {
                 throw this._unknownClassError(key)
@@ -152,7 +152,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
     getClass(refKey: ResourceKey): ResourceRef_Constructor
     getClass<F extends ResourceRef_Constructor>(klass: F): F
     getClass(kind: string): ResourceRef_Constructor
-    getClass(ident: IdentKind): ResourceRef_Constructor
+    getClass(ident: GVK): ResourceRef_Constructor
     getClass<T extends ResourceRef_Constructor | string>(
         kindOrClass: T
     ): T extends ResourceRef_Constructor ? string : ResourceRef_Constructor

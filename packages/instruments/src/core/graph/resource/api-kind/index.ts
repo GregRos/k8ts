@@ -1,175 +1,138 @@
-import { bind_own_methods } from "../../../../utils"
-import { display } from "../../../../utils/mixin/display"
-import { K8tsGraphError } from "../../error"
+import type { JoinIfNotEmpty } from "../../../../expressions"
 import { ResourceKey, type ResourceKey_Options } from "../key"
 import { pluralize } from "./pluralize"
-
-export interface IdentLike {
-    text: string
-    value: string
-    dns: string
-    parent: IdentLike | null
-    equals(other: any): boolean
-}
 type _alphabeta = "alpha" | "beta" | ""
 type _subversion = `${_alphabeta}${number}` | ""
 type _version = `v${number}${_subversion | ""}`
 
-// TODO: This is an overengineered way to represent API kinds, simplify it
-@display({
-    simple: self => self.text
-})
-@bind_own_methods()
-export abstract class Ident<
-    Name extends string = string,
-    Parent extends IdentLike | null = IdentLike | null
-> implements IdentLike
-{
-    constructor(
-        readonly value: Name,
-        readonly parent: Parent
-    ) {}
-
-    get full(): IdentLike[] {
-        const parts: IdentLike[] = []
-        let curr: IdentLike | null = this
+export interface GVK_Like {
+    readonly value: string
+    readonly url: string
+    readonly dns: string
+    readonly parent: GVK_Like | null
+    equals(other: any): boolean
+}
+export abstract class GVK_Base<Url extends string = string> implements GVK_Like {
+    constructor(readonly url: Url) {}
+    abstract get value(): string
+    abstract get parent(): GVK_Base | null
+    get parts(): GVK_Base[] {
+        const parts: GVK_Base[] = []
+        let curr: GVK_Base | null = this
         while (curr) {
             parts.unshift(curr)
             curr = curr.parent
         }
-        return parts.filter(x => x.value)
+        return parts
     }
-
-    get text(): string {
-        return this.full.map(p => p.value).join("/") as any
-    }
-
-    get dns(): string {
-        return this.full
-            .map(x => x.value)
+    get dns() {
+        return this.parts
+            .map(p => p.value)
             .filter(Boolean)
             .join(".")
     }
 
-    abstract child(name: string): Ident<
-        string,
-        {
-            value: Name
-        } & IdentLike
-    >
-
     equals(other: any) {
-        if (!other) {
-            return false
+        if (other instanceof GVK_Group) {
+            return this.url === other.url
         }
         if (typeof other === "string") {
-            return this.text === other
+            return this.url === other
         }
-        if (typeof other !== "object" || !other) {
-            return false
-        }
-        if (!(other instanceof Ident)) {
-            return false
-        }
-        return this.text === other.text
+        return false
     }
 }
-@bind_own_methods()
-export class IdentGroup<const _Group extends string = string> extends Ident<_Group, null> {
-    constructor(override value: _Group) {
-        super(value, null)
+
+export class GVK_Group<Group extends string = string> extends GVK_Base<Group> {
+    get parts() {
+        return [this]
     }
-    version<Version extends _version>(apiVersion: Version) {
-        return new IdentVersion(apiVersion, this)
+    get parent() {
+        return null
+    }
+    get value(): Group {
+        return this.url
     }
 
-    child(name: string): IdentVersion<_Group, string> {
-        if (!name.startsWith("v")) {
-            throw new K8tsGraphError(
-                `Invalid version name "${name}". Version name must start with "v".`
-            )
-        }
-        return this.version(name as any) as any
+    version<Version extends _version>(version: Version) {
+        return new GVK_Version(`${this.url}/${version}` as JoinIfNotEmpty<Group, "/", Version>)
     }
 }
-@bind_own_methods()
-export class IdentVersion<
-    const _Group extends string = string,
-    const _Version extends string = string
-> extends Ident<_Version, IdentGroup<_Group>> {
-    kind<_Kind extends string>(kind: _Kind, specialPlural?: string) {
-        return new IdentKind(kind, this as IdentVersion<_Group, _Version>, specialPlural)
+
+export class GVK_Version<Url extends string> extends GVK_Base<Url> {
+    get parent() {
+        return new GVK_Group(this.url.split("/")[0] as string)
     }
 
-    __FORMAT__!: _Version
-
-    get group() {
-        return this.parent
+    get value(): Url extends `${string}/${infer V}` ? V : Url extends `v${string}` ? Url : never {
+        return this.url.split("/")[1] as any
     }
 
-    child(name: string): IdentKind<_Group, _Version, string> {
-        return this.kind(name)
+    kind<Kind extends string>(kind: Kind, customPlural?: string) {
+        return new GVK(`${this.url}/${kind}` as `${Url}/${Kind}`, customPlural)
     }
 }
-@bind_own_methods()
-export class IdentKind<
-    const _Group extends string = string,
-    const _Version extends string = string,
-    const _Kind extends string = string
-> extends Ident<_Kind, IdentVersion<_Group, _Version>> {
+
+export class GVK<Url extends string = string> extends GVK_Base<Url> {
     constructor(
-        name: _Kind,
-        parent: IdentVersion<_Group, _Version>,
-        private readonly _specialPlural?: string
+        url: Url,
+        private _customPlural?: string
     ) {
-        super(name, parent)
+        super(url)
+    }
+    get parent() {
+        const stringParts = this.url.split("/").slice(0, -1)
+        return new GVK_Version<string>(stringParts.join("/") as string)
+    }
+
+    get plural() {
+        return this._customPlural ?? pluralize(this.value)
     }
 
     refKey<Name extends string>(options: ResourceKey_Options<Name>) {
         return new ResourceKey<this, Name>(this as any, options)
     }
 
-    get plural() {
-        return this._specialPlural ?? pluralize(this.value.toLowerCase())
-    }
-    get version() {
-        return this.parent
-    }
-
-    get group() {
-        return this.parent.parent
+    get dns() {
+        const parents = this.parent.parts.map(x => x.value)
+        parents.push(this.plural)
+        return parents.join(".")
     }
 
-    subkind<SubKind extends string>(subkind: SubKind) {
-        return new IdentResourcePart(subkind, this)
+    get value(): Url extends `${string}/${string}/${infer K}`
+        ? K
+        : Url extends `v${string}/${infer K}`
+          ? K
+          : never {
+        return this.url.split("/").at(-1) as any
     }
 
-    child<Name extends string>(name: Name): IdentResourcePart<Name, this> {
-        return this.subkind(name)
+    subkind<SubKind extends string>(subKind: SubKind) {
+        return new GVK_SubKind<`${Url}.${SubKind}`>(`${this.url}.${subKind}` as `${Url}.${SubKind}`)
     }
 }
 
-@bind_own_methods()
-export class IdentResourcePart<
-    Name extends string = string,
-    Parent extends IdentLike = IdentLike
-> extends Ident<Name, Parent> {
-    constructor(name: Name, parent: Parent) {
-        super(name, parent)
-    }
-    subkind<_SubKind2 extends string>(subkind: _SubKind2): IdentResourcePart<_SubKind2, this> {
-        return new IdentResourcePart(subkind, this)
+export class GVK_SubKind<Url extends string = string> extends GVK_Base<Url> {
+    get parent() {
+        const [group, version, kind] = this.url.split("/")
+        return new GVK<`${string}/${string}`>(
+            `${group}/${version}/${kind}` as `${string}/${string}`
+        )
     }
 
-    child<Name extends string>(name: Name) {
-        return this.subkind(name)
+    get value(): Url extends `${string}.${infer Sk}` ? Sk : never {
+        return this.url.split("/").at(-1) as any
+    }
+
+    subkind<SubKind extends string>(subKind: SubKind) {
+        return new GVK_SubKind<`${Url}.${SubKind}`>(`${this.url}.${subKind}` as `${Url}.${SubKind}`)
     }
 }
 
 export function group<ApiGroup extends string>(apiGroup: ApiGroup) {
-    return new IdentGroup(apiGroup)
+    return new GVK_Group(apiGroup)
 }
 
 export function version<ApiVersion extends _version>(apiVersion: ApiVersion) {
-    return new IdentVersion(apiVersion, group(""))
+    return group("").version(apiVersion)
 }

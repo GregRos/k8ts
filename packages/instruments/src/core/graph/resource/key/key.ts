@@ -1,4 +1,4 @@
-import type { IdentKind } from "../api-kind"
+import type { GVK } from "../api-kind"
 import type { DummyResource } from "../dummy"
 import type { ResourceRef } from "../ref"
 import type { ResourceKey_sFormat } from "./parsing"
@@ -13,7 +13,7 @@ export interface ResourceKey_Parsed {
     name: string
 }
 
-type nsKind = IdentKind<"", "v1", "Namespace">
+type nsKind = GVK<"v1/Namespace">
 
 /**
  * Options for creating a RefKey instance.
@@ -35,7 +35,7 @@ export interface ResourceKey_Options<Name extends string = string> {
  * Important: This class is ambiguous because it can represent keys for namespaced resources but
  * ignore the namespace. Needs some kind of refactor.
  */
-export class ResourceKey<K extends IdentKind = IdentKind, Name extends string = string> {
+export class ResourceKey<K extends GVK = GVK, Name extends string = string> {
     /** The resource name */
     readonly name: string
     /** The optional namespace for namespaced resources */

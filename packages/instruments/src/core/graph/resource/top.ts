@@ -9,7 +9,7 @@ import { Trace_Source, TraceEmbedder } from "../../tracing"
 import { K8tsGraphError } from "../error"
 import type { Origin } from "../origin/origin"
 import { OriginContextTracker } from "../origin/tracker"
-import type { IdentKind } from "./api-kind"
+import type { GVK } from "./api-kind"
 import type { Resource_Props_Top } from "./props"
 import { Resource } from "./resource"
 
@@ -19,7 +19,7 @@ export abstract class ResourceTop<
 > extends Resource<Name, Props> {
     private readonly _origin: Origin
     readonly metadata: Metadata
-    abstract readonly ident: IdentKind
+    abstract readonly ident: GVK
 
     get key() {
         return this.ident.refKey({ name: this.name, namespace: this.namespace })
@@ -60,7 +60,7 @@ export abstract class ResourceTop<
 
     protected __idents__(): K8tsManifest_Ident {
         return {
-            apiVersion: this.ident.parent!.text,
+            apiVersion: this.ident.parent!.url,
             kind: this.ident.value
         }
     }

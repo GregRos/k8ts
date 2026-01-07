@@ -1,6 +1,6 @@
 import {
     ResourcePart,
-    type IdentResourcePart,
+    type GVK_SubKind,
     type Resource,
     type ResourceRef,
     type Resource_Props
@@ -22,7 +22,7 @@ export class ContainerDeviceMount extends ResourcePart<ContainerMountDevice_Prop
         super(parent, props.$backend.name, props)
     }
     get ident() {
-        return v1.Pod.Container.DeviceMount._ satisfies IdentResourcePart
+        return v1.Pod.Container.DeviceMount._ satisfies GVK_SubKind
     }
     get backend() {
         return this.props.$backend

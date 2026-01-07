@@ -3,7 +3,15 @@ import { pluralize } from "./pluralize"
 type _alphabeta = "alpha" | "beta" | ""
 type _subversion = `${_alphabeta}${number}` | ""
 type _version = `v${number}${_subversion | ""}`
-export abstract class GVK_Base<Url extends string = string> {
+
+export interface GVK_Like {
+    readonly value: string
+    readonly url: string
+    readonly dns: string
+    readonly parent: GVK_Like | null
+    equals(other: any): boolean
+}
+export abstract class GVK_Base<Url extends string = string> implements GVK_Like {
     constructor(readonly url: Url) {}
     abstract get value(): string
     abstract get parent(): GVK_Base | null
