@@ -1,9 +1,10 @@
 import { Metadata } from "@k8ts/metadata"
 import { doddle } from "doddle"
+import { omit } from "lodash"
 import StackTracey from "stacktracey"
 import {
     type K8tsManifest,
-    type K8tsManifest_GKV,
+    type K8tsManifest_GVK,
     type K8tsManifest_Metadata
 } from "../../manifest"
 import { Trace_Source, TraceEmbedder } from "../../tracing"
@@ -55,7 +56,7 @@ export abstract class ResourceTop<
         }
     }
 
-    protected __gkv__(): K8tsManifest_GKV {
+    protected __gvk__(): K8tsManifest_GVK {
         return {
             apiVersion: this.kind.parent!.url,
             kind: this.kind.value
@@ -66,10 +67,14 @@ export abstract class ResourceTop<
 
     protected __manifest__(): K8tsManifest | Promise<K8tsManifest> {
         return doddle(async () => {
+            const body = await this.__body__()
+            // We want the body to be after the metadata and the gvk
+            // But we don't want it to override anything if it has extra keys
+            const trimmedBody = omit(body, ["metadata", "apiVersion", "kind"])
             const a = {
-                ...this.__gkv__(),
-                ...(await this.__body__()),
-                metadata: this.__metadata__()
+                ...this.__gvk__(),
+                metadata: this.__metadata__(),
+                ...trimmedBody
             }
 
             return a

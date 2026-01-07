@@ -6,7 +6,7 @@ export interface K8tsManifest_Metadata {
     name: string
     namespace?: string
 }
-export interface K8tsManifest_GKV {
+export interface K8tsManifest_GVK {
     kind: string
     apiVersion: string
 }
@@ -19,7 +19,7 @@ export type JsonSerializable =
     | JsonSerializable[]
     | { [key: string]: JsonSerializable }
 
-export interface K8tsManifest extends K8tsManifest_GKV {
+export interface K8tsManifest extends K8tsManifest_GVK {
     [key: number]: never
     metadata?: K8tsManifest_Metadata
 }

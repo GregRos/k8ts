@@ -25,6 +25,8 @@ export class Pod<Name extends string, Ports extends string = string> extends Res
     }
 
     protected __body__(): CDK.KubePodProps {
+        // The template's metadata and other stuff will get erased in favor of the Pod's own
+        // metadata and gvk
         return this.Template["__submanifest__"]()
     }
 }
