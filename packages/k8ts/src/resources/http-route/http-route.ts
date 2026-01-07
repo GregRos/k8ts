@@ -34,9 +34,14 @@ export class HttpRoute<Name extends string, Ports extends string> extends Resour
     protected __body__(): CDK.HttpRouteProps {
         const self = this
         const backendRef = this._getBackendRef()
-
         const spec = {
-            parentRefs: [self.props.$gateway.ref],
+            parentRefs: [
+                {
+                    kind: "Gateway",
+                    name: self.props.$gateway.name,
+                    namespace: self.props.$gateway.namespace
+                }
+            ],
             hostnames: [self.props.$hostname],
             rules: [
                 {

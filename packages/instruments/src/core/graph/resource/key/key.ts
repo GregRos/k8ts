@@ -60,10 +60,10 @@ export class ResourceKey<K extends IdentKind = IdentKind, Name extends string = 
      * Returns the string representation of this reference key. Format: "Kind/Namespace/Name" or
      * "Kind/Name" for cluster-scoped resources.
      */
-    get string(): ResourceKey_sFormat<K["name"], Name> {
-        return [this.kind.name, this.namespace, this.name]
+    get string(): ResourceKey_sFormat<K["value"], Name> {
+        return [this.kind.value, this.namespace, this.name]
             .filter(x => !!x)
-            .join(separator) as ResourceKey_sFormat<K["name"], Name>
+            .join(separator) as ResourceKey_sFormat<K["value"], Name>
     }
 
     /**

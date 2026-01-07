@@ -58,6 +58,7 @@ export default W.File("deployment2.yaml", {
                         storage: "=1Gi"
                     }
                 })
+
                 yield claim
                 yield new CronJob("test", {
                     $schedule: Cron.hourly,

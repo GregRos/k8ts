@@ -66,13 +66,13 @@ export class Pv<
         if (self.props.$backend?.kind === "Local") {
             if (!self.props.nodeAffinity) {
                 throw new K8tsResourceError(
-                    `While manifesting ${self.node.format("source")}, PV with Local backend must have nodeAffinity.`
+                    `While manifesting ${self.vertex.format("source")}, PV with Local backend must have nodeAffinity.`
                 )
             }
         }
         if (!self.props.$backend && !self.props.$storageClass) {
             throw new K8tsResourceError(
-                `While manifesting ${self.node.format("source")}, PV that doesn't have a $backend must have a $storageClass.`
+                `While manifesting ${self.vertex.format("source")}, PV that doesn't have a $backend must have a $storageClass.`
             )
         }
         let spec: CDK.PersistentVolumeSpec = {

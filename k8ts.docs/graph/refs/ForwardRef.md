@@ -16,11 +16,11 @@ All these things mean resolving inter-resource reference eagerly can lead to cir
 ## What are they?
 Forward references are **JavaScript Proxy objects**, which means they don’t act like normal JS objects and instead basic object access operations are resolving dynamically, by invoking functions.
 
-At their core, they’re an object that has an [[Origin]] and a [[RefKey]]. The [[RefKey]] contains basic information about the resource, such as a name, a kind, and so on. That’s often enough to satisfy references. 
+At their core, they’re an object that has an [[Origin]] and a [[ResourceKey]]. The [[ResourceKey]] contains basic information about the resource, such as a name, a kind, and so on. That’s often enough to satisfy references. 
 
 However, they’re typed like the real [[Resource]] object, and when code tries to access an unknown property, it causes the underlying [[Resource]] object to be resolved.
 
-This is done by searching for it in the [[Origin]]’s [[exports]] for a [[Resource]] matching the [[RefKey]]. 
+This is done by searching for it in the [[Origin]]’s [[exports]] for a [[Resource]] matching the [[ResourceKey]]. 
 
 After this happens, the forward reference will just act like the [[Resource]] object.
 ## Runtime behavior
@@ -29,7 +29,7 @@ Because forward references don’t behave like normal JS objects, this section e
 > [!ai] INSERT summary
 > Insert a summary of the behavior specified below.
 ### 🔍 getPrototypeOf
-This will retrieve the resource’s expected class using the [[RefKey]] and return the prototype. It won’t cause the resource to be resolved.
+This will retrieve the resource’s expected class using the [[ResourceKey]] and return the prototype. It won’t cause the resource to be resolved.
 
 This means code like this will work fine:
 ```ts
@@ -60,7 +60,7 @@ Generally speaking, it will avoid resolving the [[Resource]] if the property or 
 
 Behavior depends on the key accessed or method invoked.
 #### 🔍 equals(…)
-Determines equality based on the [[RefKey]].
+Determines equality based on the [[ResourceKey]].
 #### 🔍 is(ident) | is(cls)
 Works like normal. With `cls`, uses the expected class of the resource.
 #### 🔍 assert(cls)
@@ -68,7 +68,7 @@ Makes sure that the expected class of the referenced resource is an instanceof `
 
 Returns `this`.
 #### 🔍 “name”, “kind”, or “key” properties
-In this case, the information will be retrieved from the [[RefKey]]. It won’t resolve the reference.
+In this case, the information will be retrieved from the [[ResourceKey]]. It won’t resolve the reference.
 #### 🔍 `is` and `assert` methods
 These don’t resolve the resource.
 #### ⚡other properties
@@ -117,7 +117,7 @@ This can happen unexpectedly. Such issues can be resolved using explicit type an
 ##### Pure references
 When a [[Resource]] just needs the name and [[Ident]] of another resource. It’s quite common in k8s manifests.
 
-This information is stored in the [[RefKey]] itself, so the referenced resource won’t need to be resolved at all.
+This information is stored in the [[ResourceKey]] itself, so the referenced resource won’t need to be resolved at all.
 ##### Direct circular references
 Let’s say that `Abc` uses `Xyz.foo` and `Xyz` uses `Abc.bar`.
 

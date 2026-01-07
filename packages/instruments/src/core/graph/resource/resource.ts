@@ -6,33 +6,20 @@ import { K8tsGraphError } from "../error"
 import type { Origin } from "../origin"
 import type { Ident } from "./api-kind"
 import { ForwardRef } from "./forward"
-import { ResourceNode } from "./node"
+import { ResourceVertex } from "./node"
 import { type ResourceRef } from "./ref"
 
 @display({
-    simple: s => s.node,
-    pretty: s => s.node
+    simple: s => s.vertex,
+    pretty: s => s.vertex
 })
 export abstract class Resource<
     Name extends string = string,
     Props extends object = object
-> extends Entity<ResourceNode, Resource, ResourceRef> {
+> extends Entity<ResourceVertex, Resource, ResourceRef> {
     abstract get ident(): Ident
 
-    with(callback: (self: this) => void) {
-        callback(this)
-        return this
-    }
-
     abstract readonly namespace: string | undefined
-
-    get ref() {
-        return {
-            kind: this.ident.name,
-            name: this.name,
-            namespace: this.namespace
-        }
-    }
 
     constructor(
         readonly name: Name,
@@ -63,13 +50,7 @@ export abstract class Resource<
     }
 
     protected abstract __origin__(): Origin
-    get node(): ResourceNode {
-        return new ResourceNode(this.__origin__().node, this)
-    }
-
-    get shortFqn() {
-        return [this.node.origin.name, [this.ident.name, this.name].filter(Boolean).join("/")].join(
-            ":"
-        )
+    get vertex(): ResourceVertex {
+        return new ResourceVertex(this.__origin__().vertex, this)
     }
 }

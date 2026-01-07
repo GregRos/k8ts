@@ -6,10 +6,20 @@ aliases:
 An entity is a subclass of the `Entity` base class. It includes both [[Resource|Resources]] and [[Origin|Origins]].
 
 Entities are similar to the AWS SDK [Construct](https://github.com/aws/constructs), but they’re wider in scope, and include things like files and groups of resources.
-## Shared qualities
-Entities share a number of key qualities.
+
+Entities receive a `Props` object that fully describes their structure. Any properties or methods defined on entity are always based on this props object.
 ### Mutable
-Entities are deliberately mutable and can be modified in various ways after construction.
+The props of an entity 
+
+```ts
+const svc = new Service(myDeployment, {
+  type: "LoadBalancer",
+})
+svc.$ports.push({
+  port: 8080,
+  targetPort: 80,
+})
+```
 
 > [!ai] INSERT code sample
 > Create a Service and then modify some of its props
@@ -29,7 +39,7 @@ Entities form a graph with several possible relations:
 > Show real entities and connections between them. Show a File Origin with containment to a Deployment which has relation to PodTemplate to container
 > And then a Service that has [[need|needs]] to the Deployment.
 ### Side-effects on construct
-Constructing an Entity usually has side-effects, even if it’s done using a regular constructed. 
+Constructing an Entity usually has side-effects, even if it’s done using a regular constructed.
 
 For example, constructing a [[Resource]] will make k8ts find an appropriate [[Origin]] and attach it.
 

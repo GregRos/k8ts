@@ -6,7 +6,7 @@ import { pluralize } from "./pluralize"
 
 export interface IdentLike {
     text: string
-    name: string
+    value: string
     dns: string
     parent: IdentLike | null
     equals(other: any): boolean
@@ -26,7 +26,7 @@ export abstract class Ident<
 > implements IdentLike
 {
     constructor(
-        readonly name: Name,
+        readonly value: Name,
         readonly parent: Parent
     ) {}
 
@@ -37,16 +37,16 @@ export abstract class Ident<
             parts.unshift(curr)
             curr = curr.parent
         }
-        return parts.filter(x => x.name)
+        return parts.filter(x => x.value)
     }
 
     get text(): string {
-        return this.full.map(p => p.name).join("/") as any
+        return this.full.map(p => p.value).join("/") as any
     }
 
     get dns(): string {
         return this.full
-            .map(x => x.name)
+            .map(x => x.value)
             .filter(Boolean)
             .join(".")
     }
@@ -54,7 +54,7 @@ export abstract class Ident<
     abstract child(name: string): Ident<
         string,
         {
-            name: Name
+            value: Name
         } & IdentLike
     >
 
@@ -76,8 +76,8 @@ export abstract class Ident<
 }
 @bind_own_methods()
 export class IdentGroup<const _Group extends string = string> extends Ident<_Group, null> {
-    constructor(override name: _Group) {
-        super(name, null)
+    constructor(override value: _Group) {
+        super(value, null)
     }
     version<Version extends _version>(apiVersion: Version) {
         return new IdentVersion(apiVersion, this)
@@ -130,7 +130,7 @@ export class IdentKind<
     }
 
     get plural() {
-        return this._specialPlural ?? pluralize(this.name.toLowerCase())
+        return this._specialPlural ?? pluralize(this.value.toLowerCase())
     }
     get version() {
         return this.parent

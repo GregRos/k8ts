@@ -1,10 +1,10 @@
 import {
     Display,
-    OriginNode,
+    OriginVertex,
     PhraseRenderer,
     phrases,
     Relation,
-    ResourceNode
+    ResourceVertex
 } from "@k8ts/instruments"
 import { Metadata } from "@k8ts/metadata"
 import { dump } from "js-yaml"
@@ -17,7 +17,7 @@ export interface SummarizerOptions {
 export class Summarizer {
     private _post = new PhraseRenderer()
     constructor(private readonly _options: SummarizerOptions) {}
-    _formatRefFromTo(node: ResourceNode, edge: Relation<ResourceNode>) {
+    _formatRefFromTo(node: ResourceVertex, edge: Relation<ResourceVertex>) {
         return this._token(phrases`${edge}`)
     }
 
@@ -29,7 +29,7 @@ export class Summarizer {
         return token
     }
 
-    private _resource(resource: ResourceNode): any[] | null {
+    private _resource(resource: ResourceVertex): any[] | null {
         const subs = resource.kids
             .map(sub => {
                 const heading = Display.get(sub).pretty("local")
@@ -48,7 +48,7 @@ export class Summarizer {
         return [...subs, ...depends]
     }
 
-    private _resources(resources: ResourceNode[]): object {
+    private _resources(resources: ResourceVertex[]): object {
         const resourceContainer = resources
             .map(resource => {
                 const text = phrases`${resource}`
@@ -121,7 +121,7 @@ export class Summarizer {
         return outputs.join("\n")
     }
 
-    files(obj: { origin: OriginNode; resources: ResourceNode[] }[]) {
+    files(obj: { origin: OriginVertex; resources: ResourceVertex[] }[]) {
         let pairs = obj.flatMap(({ origin, resources }) => {
             return [
                 [this._token(phrases`\n${origin}`), this._resources(resources)] as [string, object]

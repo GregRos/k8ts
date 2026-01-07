@@ -2,7 +2,7 @@ import { Metadata, type Metadata_Input } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq, Seq } from "doddle"
 import { display } from "../../../utils/mixin/display"
-import { Node } from "../node"
+import { Vertex } from "../node"
 import type { ResourceRef, ResourceRef_Constructor } from "../resource"
 import { type KindMap_Input } from "./kind-map"
 import { Origin } from "./origin"
@@ -20,9 +20,9 @@ import { Origin } from "./origin"
         return chalk.underline(`${pref}${kindName}:${resourceName}`)
     }
 })
-export class OriginNode extends Node<OriginNode, Origin> {
+export class OriginVertex extends Vertex<OriginVertex, Origin> {
     get kids() {
-        return seq(this.entity["__kids__"]()).map(x => x.assert(Origin).node)
+        return seq(this.entity["__kids__"]()).map(x => x.asAssert(Origin).vertex)
     }
     get metadata() {
         return this.entity.metadata

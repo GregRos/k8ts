@@ -9,12 +9,12 @@ import type { ResourceRef, ResourceRef_Constructor } from "../resource/ref"
 import { Resource } from "../resource/resource"
 import { type OriginEventMap } from "./events"
 import { KindMap } from "./kind-map"
-import { OriginNode, type Origin_Props } from "./node"
+import { OriginVertex, type Origin_Props } from "./node"
 import type { OriginTracker_Binder } from "./tracker"
 import { OriginContextTracker } from "./tracker"
 
 @display({
-    simple: x => `[${x.shortFqn}]`,
+    simple: x => `[${x.vertex.shortFqn}]`,
     pretty(origin) {
         const kindPart = chalk.greenBright.bold(origin.ident)
         const originName = chalk.cyan(origin.name)
@@ -22,15 +22,9 @@ import { OriginContextTracker } from "./tracker"
     }
 })
 export abstract class Origin<Props extends Origin_Props = Origin_Props> extends Entity<
-    OriginNode,
+    OriginVertex,
     Origin
 > {
-    get ref() {
-        return {
-            kind: this.ident,
-            name: this.name
-        }
-    }
     abstract get ident(): string
     private _emitter = new EventEmitter<OriginEventMap>()
     private readonly _ownResources: Resource[] = []
@@ -66,8 +60,8 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
         this.metadata = new Metadata(_props.metadata ?? {})
     }
 
-    get node(): OriginNode {
-        return new OriginNode(this)
+    get vertex(): OriginVertex {
+        return new OriginVertex(this)
     }
     on<EventKey extends keyof OriginEventMap>(
         event: EventKey,
@@ -89,18 +83,14 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
     ) {
         const values = mapValues(data, v => `${v}`)
 
-        for (const target of [this.node, ...this.node.ancestors]) {
-            target.entity.assert(Origin)._emitter.emit(event, data)
+        for (const target of [this.vertex, ...this.vertex.ancestors]) {
+            target.entity.asAssert(Origin)._emitter.emit(event, data)
         }
     }
     protected __resource_kinds__(): KindMap {
-        const parent = this.__parent__()?.assert(Origin)
+        const parent = this.__parent__()?.asAssert(Origin)
         const parentKindsIfAny = parent?.__resource_kinds__() ?? []
         return new KindMap([...(this._props.kinds ?? []), ...parentKindsIfAny])
-    }
-
-    get shortFqn() {
-        return this.node.shortFqn
     }
 
     protected __attach_resource__(resources: Resource | Iterable<Resource>) {
@@ -108,7 +98,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
         for (const resource of resources) {
             this._ownResources.push(resource)
             if ("metadata" in resource && resource.metadata instanceof Metadata) {
-                resource.metadata.add(this.node.inheritedMeta)
+                resource.metadata.add(this.vertex.inheritedMeta)
             }
             this.__emit__("resource/attached", {
                 origin: this,

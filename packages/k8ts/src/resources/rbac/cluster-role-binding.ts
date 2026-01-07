@@ -29,11 +29,11 @@ export class ClusterRoleBinding<Name extends string = string> extends ResourceTo
         const body = {
             roleRef: {
                 apiGroup: this.props.$role.ident.parent!.parent!.text,
-                kind: this.props.$role.ident.name,
+                kind: this.props.$role.ident.value,
                 name: this.props.$role.name
             },
             subjects: this.props.$subjects.map(sa => ({
-                kind: sa.ident.name,
+                kind: sa.ident.value,
                 name: sa.name,
                 namespace: sa.namespace!
             }))

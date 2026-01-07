@@ -1,4 +1,4 @@
-The [[RefKey]] is an object that uniquely identifies a top-level resource, the kind that’s defined in a manifest file.
+The [[ResourceKey]] is an object that uniquely identifies a top-level resource, the kind that’s defined in a manifest file.
 
 It combines:
 - The resource’s [[Ident]]
@@ -14,7 +14,7 @@ gateway.networking.k8s.io/v1/Gateway/example
 
 In k8s, this would uniquely identify a resource in the system. In k8ts, it’s used by [[ForwardRef]] to determine if they’re [[equal]] to something else.
 ## Note about child resources
-In principle the [[RefKey]] can be extended to child resources, such as `Pod_Container` objects.
+In principle the [[ResourceKey]] can be extended to child resources, such as `Pod_Container` objects.
 
 In that case, it would need to combine the names of all parent resources:
 

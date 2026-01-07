@@ -1,4 +1,4 @@
-import type { OriginNode } from "@k8ts/instruments"
+import type { OriginVertex } from "@k8ts/instruments"
 import type EventEmitter from "eventemitter3"
 import { glob, mkdir, rm, writeFile } from "fs/promises"
 import { join, resolve } from "path"
@@ -26,7 +26,7 @@ export class Engine_Saver {
         }
     }
 
-    async save(origin: OriginNode, manifests: string[]) {
+    async save(origin: OriginVertex, manifests: string[]) {
         const content = this._splat(manifests)
         const filename = `${origin.name}`
         const encoded = this._encoder.encode(content)

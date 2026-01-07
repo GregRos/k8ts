@@ -1,23 +1,18 @@
 import { getNiceClassName, type AnyCtor } from "what-are-you"
 import { K8tsGraphError } from "./error"
-import type { Node } from "./node"
+import type { Vertex } from "./node"
 export type LiteralModes = "simple" | "pretty" | "prefix"
 
 let globalEntityId = 0
 
 export type RefLike = {
-    get ref(): {
-        kind: string
-        name: string
-        namespace?: string
-    }
     ident: any
     name: string
-    assert<Inst extends RefLike>(cls: abstract new (...args: any[]) => Inst): Inst
+    asAssert<Inst extends RefLike>(cls: abstract new (...args: any[]) => Inst): Inst
     is<Inst extends RefLike>(cls: abstract new (...args: any[]) => Inst): this is Inst
 }
 export abstract class Entity<
-    _Node extends Node<_Node, _Ent> = Node<any, any>,
+    _Node extends Vertex<_Node, _Ent> = Vertex<any, any>,
     _Ent extends Entity<_Node, _Ent> = Entity<any, any>,
     _EntRefType extends RefLike = RefLike
 > {
@@ -30,14 +25,13 @@ export abstract class Entity<
     protected __kids__(): Iterable<_EntRefType> {
         return this._ownKids
     }
-    abstract get ref(): RefLike["ref"]
     abstract readonly ident: any
     private readonly _ID = (() => {
         return globalEntityId++
     })()
-    abstract readonly node: _Node
+    abstract readonly vertex: _Node
     abstract readonly name: string
-    assert<Inst extends _EntRefType>(cls: AnyCtor<Inst>): Inst {
+    asAssert<Inst extends _EntRefType>(cls: AnyCtor<Inst>): Inst {
         if (this.is(cls)) {
             return this as any as Inst
         }

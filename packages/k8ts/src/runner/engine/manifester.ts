@@ -1,4 +1,9 @@
-import { K8tsManifest, ManifestSourceEmbedder, ResourceNode, ResourceTop } from "@k8ts/instruments"
+import {
+    K8tsManifest,
+    ManifestSourceEmbedder,
+    ResourceTop,
+    ResourceVertex
+} from "@k8ts/instruments"
 import type EventEmitter from "eventemitter3"
 import { cloneDeep, cloneDeepWith, isEmpty, unset } from "lodash"
 export interface ManifesterOptions {
@@ -48,7 +53,7 @@ export class Engine_Manifester {
         return noEmpty
     }
 
-    async generate(res: ResourceNode): Promise<NodeManifest> {
+    async generate(res: ResourceVertex): Promise<NodeManifest> {
         this._options.emitter?.emit("manifest", { resource: res })
         const manifest = await this._generate(res.entity as ResourceTop)
         ManifestSourceEmbedder.add(manifest, res.entity)
@@ -65,11 +70,11 @@ export class Engine_Manifester {
 }
 
 export interface NodeManifest {
-    node: ResourceNode
+    node: ResourceVertex
     manifest: K8tsManifest
 }
 export interface ManifesterManifestEvent {
-    resource: ResourceNode
+    resource: ResourceVertex
 }
 
 export interface ManifesterEventsTable {

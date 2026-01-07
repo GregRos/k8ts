@@ -5,7 +5,7 @@ import { merge } from "lodash"
 import { rbac } from "../../resource-idents/rbac"
 export interface ClusterRole_Rule<
     Groups extends IdentGroup[] = IdentGroup[],
-    Resources extends IdentKind<Groups[number]["name"], string, string>[] = IdentKind[]
+    Resources extends IdentKind<Groups[number]["value"], string, string>[] = IdentKind[]
 > {
     resources: Resources
     verbs: Verbs[]
@@ -43,7 +43,7 @@ export class ClusterRole<Name extends string = string> extends ResourceTop<
 
     private _fromObject(rule: ClusterRole_Rule) {
         return {
-            apiGroups: Array.from(new Set(rule.resources.map(x => x.parent.parent.name))),
+            apiGroups: Array.from(new Set(rule.resources.map(x => x.parent.parent.value))),
             resources: rule.resources.map(r => r.plural),
             verbs: rule.verbs
         }

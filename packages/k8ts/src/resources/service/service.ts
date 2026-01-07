@@ -45,7 +45,7 @@ export class Service<
     }
 
     private get backend() {
-        return this.props.$backend.assert(Deployment<PortsExposed>)
+        return this.props.$backend.asAssert(Deployment<PortsExposed>)
     }
     get ports() {
         const srcPorts = this.backend.ports

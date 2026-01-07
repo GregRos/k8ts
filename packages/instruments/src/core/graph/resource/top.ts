@@ -24,16 +24,7 @@ export abstract class ResourceTop<
     get key() {
         return this.ident.refKey({ name: this.name, namespace: this.namespace })
     }
-    get noEmit() {
-        return this.metadata.tryGet("#k8ts.org/no-emit", "") !== ""
-    }
-    set noEmit(v: boolean) {
-        if (!v) {
-            this.metadata.delete("#k8ts.org/no-emit")
-        } else {
-            this.metadata.add("#k8ts.org/no-emit", "true")
-        }
-    }
+
     constructor(name: Name, props: Props) {
         super(name, props)
         this.metadata = new Metadata({
@@ -70,7 +61,7 @@ export abstract class ResourceTop<
     protected __idents__(): K8tsManifest_Ident {
         return {
             apiVersion: this.ident.parent!.text,
-            kind: this.ident.name
+            kind: this.ident.value
         }
     }
 

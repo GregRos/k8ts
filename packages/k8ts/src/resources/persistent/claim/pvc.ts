@@ -48,7 +48,7 @@ export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extend
         const nAccessModes = parsePvAccessMode($accessModes)
         if (!$bind && !$storageClass) {
             throw new K8tsResourceError(
-                `While manifesting ${self.node.format("source")}, PVC that doesn't have a $bind must have a $storageClass.`
+                `While manifesting ${self.vertex.format("source")}, PVC that doesn't have a $bind must have a $storageClass.`
             )
         }
         const spec = {

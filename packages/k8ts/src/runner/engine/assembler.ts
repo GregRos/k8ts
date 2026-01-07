@@ -1,4 +1,4 @@
-import { OriginNode, type OriginExporter, type ResourceNode } from "@k8ts/instruments"
+import { OriginVertex, type OriginExporter, type ResourceVertex } from "@k8ts/instruments"
 import { Metadata, type Metadata_Input } from "@k8ts/metadata"
 import { aseq } from "doddle"
 import EventEmitter from "eventemitter3"
@@ -45,7 +45,7 @@ export class Assembler {
         }
         return this
     }
-    private _attachProductionAnnotations(resource: ResourceNode) {
+    private _attachProductionAnnotations(resource: ResourceVertex) {
         const loc = resource.trace.format({
             cwd: this._options.cwd
         })
@@ -72,7 +72,7 @@ export class Assembler {
             emitter
         })
         const reports = aseq(inFiles)
-            .map(x => x.node)
+            .map(x => x.vertex)
             .before(async () => {
                 emitter.emit("stage", { stage: "gathering" })
             })
@@ -161,14 +161,14 @@ export class Assembler {
     }
 }
 export interface FileNodes {
-    file: OriginNode
+    file: OriginVertex
     resources: NodeManifest[]
 }
 export interface Artifact extends NodeManifest {
     yaml: string
 }
 export interface AssembledFile {
-    file: OriginNode
+    file: OriginVertex
     path: string
     filename: string
     bytes: number

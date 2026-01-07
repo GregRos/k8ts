@@ -5,8 +5,8 @@ import { Display, display } from "../../../utils/mixin/display"
 import { TraceEmbedder } from "../../tracing"
 import { Formats } from "../entity"
 import { K8tsGraphError } from "../error"
-import { Node } from "../node"
-import { OriginNode } from "../origin/node"
+import { Vertex } from "../node"
+import { OriginVertex } from "../origin/node"
 import type { IdentKind, IdentLike } from "./api-kind"
 import { ResourceKey } from "./key"
 import type { ResourceRef_Constructor_For } from "./ref"
@@ -17,7 +17,7 @@ import type { Resource } from "./resource"
     pretty(resource, format) {
         format ??= "global"
 
-        let kindName = chalk.greenBright(resource.ident.name)
+        let kindName = chalk.greenBright(resource.ident.value)
         if (format !== "lowkey") {
             kindName = chalk.bold(kindName)
         }
@@ -40,7 +40,7 @@ import type { Resource } from "./resource"
         return text
     }
 })
-export class ResourceNode extends Node<ResourceNode, Resource> {
+export class ResourceVertex extends Vertex<ResourceVertex, Resource> {
     get fullFqn() {
         return [this.ident.dns, this.namespace, this.name].filter(Boolean).join("/")
     }
@@ -71,7 +71,14 @@ export class ResourceNode extends Node<ResourceNode, Resource> {
     }
 
     get noEmit() {
-        return this.metadata?.tryGet("#k8ts.org/no-emit") ?? false
+        return this.metadata?.tryGet("#k8ts.org/no-emit", "") !== ""
+    }
+    set noEmit(v: boolean) {
+        if (!v) {
+            this.metadata?.delete("#k8ts.org/no-emit")
+        } else {
+            this.metadata?.add("#k8ts.org/no-emit", "true")
+        }
     }
 
     when<EntityType extends Resource>(
@@ -97,7 +104,7 @@ export class ResourceNode extends Node<ResourceNode, Resource> {
     get origins() {
         const self = this
         return seq(function* () {
-            let current: OriginNode | null = self.origin
+            let current: OriginVertex | null = self.origin
             while (current) {
                 yield current
                 current = current.parent
@@ -121,7 +128,7 @@ export class ResourceNode extends Node<ResourceNode, Resource> {
         return this.ident.equals(ident)
     }
     constructor(
-        readonly origin: OriginNode,
+        readonly origin: OriginVertex,
         readonly entity: Resource
     ) {
         super(entity)

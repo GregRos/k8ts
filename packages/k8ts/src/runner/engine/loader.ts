@@ -1,14 +1,14 @@
-import { OriginNode, ResourceNode, type Node, type ResourceTop } from "@k8ts/instruments"
+import { OriginVertex, ResourceVertex, type ResourceTop, type Vertex } from "@k8ts/instruments"
 import type EventEmitter from "eventemitter3"
 import { K8tsEngineError } from "../error"
 export class Engine_ResourceLoader {
     constructor(private readonly _options: AssemblerRscLoaderOptions) {}
 
-    private _checkNames(resources: ResourceNode[]) {
-        let names = new Map<string, ResourceNode>()
+    private _checkNames(resources: ResourceVertex[]) {
+        let names = new Map<string, ResourceVertex>()
         const nameRegexp = /^[a-zA-Z0-9][a-zA-Z0-9_-]*$/
         for (const resource of resources) {
-            const name = [resource.ident.name, resource.namespace, resource.name]
+            const name = [resource.ident.value, resource.namespace, resource.name]
                 .filter(Boolean)
                 .join("/")
             const existing = names.get(name)
@@ -26,12 +26,12 @@ export class Engine_ResourceLoader {
         }
     }
 
-    async load(input: OriginNode) {
+    async load(input: OriginVertex) {
         // TODO: Handle ORIGINS that are referenced but not passed to the runner
-        let resources = [] as ResourceNode[]
+        let resources = [] as ResourceVertex[]
 
-        const addResource = async (res: Node) => {
-            if (!(res instanceof ResourceNode)) {
+        const addResource = async (res: Vertex) => {
+            if (!(res instanceof ResourceVertex)) {
                 throw new K8tsEngineError(`Expected ResourceNode, got ${res.constructor.name}`)
             }
             if (resources.some(r => r.equals(res))) {
@@ -63,7 +63,7 @@ export class Engine_ResourceLoader {
         }
 
         for (const resource of input.resources) {
-            await addResource(resource.node)
+            await addResource(resource.vertex)
         }
 
         // Some resources might appear as dependencies to sub-resources that
@@ -80,7 +80,7 @@ export class Engine_ResourceLoader {
 }
 export interface AssemblerRscLoadedEvent {
     isExported: boolean
-    resource: ResourceNode
+    resource: ResourceVertex
 }
 
 export interface AssemblerRscLoaderEvents {

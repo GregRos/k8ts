@@ -1,6 +1,6 @@
 import type { RefLike } from "../entity"
 import type { IdentLike } from "./api-kind"
-import type { ResourceNode } from "./node"
+import type { ResourceVertex } from "./node"
 
 export type ResourceRef_Constructor_For<R extends ResourceRef> = {
     prototype: R
@@ -17,7 +17,7 @@ export type ResourceRef<
     namespace?: string
     is<_Ident extends IdentLike>(ident: _Ident): this is ResourceRef<_Ident>
     equals(other: any): boolean
-    node: ResourceNode
+    vertex: ResourceVertex
 }
 
 export type ResourceRef_HasKeys<X extends ResourceRef, Else = never> = [X] extends [
