@@ -8,7 +8,6 @@ export default W.File("namespace.yaml", {
             name: "topolvm"
         }).DummyResource()
         yield new Namespace("namespace")
-        2
         yield new Pv("pv-cool", {
             $capacity: "1Gi",
             $storageClass: topolvm,

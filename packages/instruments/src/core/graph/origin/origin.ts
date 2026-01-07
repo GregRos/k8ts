@@ -29,7 +29,6 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
     private _emitter = new EventEmitter<OriginEventMap>()
     private readonly _ownResources: Resource[] = []
     readonly metadata: Metadata
-
     protected __attach_kid__(kid: Origin<Origin_Props<ResourceRef_Constructor>>): void {
         super.__attach_kid__(kid)
         this.__emit__("origin/attached", {
@@ -84,11 +83,11 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
         const values = mapValues(data, v => `${v}`)
 
         for (const target of [this.vertex, ...this.vertex.ancestors]) {
-            target.entity.asAssert(Origin)._emitter.emit(event, data)
+            target.entity.mustBe(Origin)._emitter.emit(event, data)
         }
     }
     protected __resource_kinds__(): KindMap {
-        const parent = this.__parent__()?.asAssert(Origin)
+        const parent = this.__parent__()?.mustBe(Origin)
         const parentKindsIfAny = parent?.__resource_kinds__() ?? []
         return new KindMap([...(this._props.kinds ?? []), ...parentKindsIfAny])
     }

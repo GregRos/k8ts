@@ -77,7 +77,7 @@ export class Pv<
         }
         let spec: CDK.PersistentVolumeSpec = {
             accessModes,
-            storageClassName: self.props.$storageClass?.name ?? "standard",
+            storageClassName: self.props.$storageClass?.key.name ?? "standard",
             capacity: self.props.$capacity
                 ? {
                       storage: CDK.Quantity.fromString(self.props.$capacity)

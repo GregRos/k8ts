@@ -30,7 +30,7 @@ export abstract class Vertex<
         this._ID = this.entity["_ID"]
     }
     get kids() {
-        return seq(this.entity["__kids__"]()).map(x => x.asAssert(Entity).vertex as _Node)
+        return seq(this.entity["__kids__"]()).map(x => x.mustBe(Entity).vertex as _Node)
     }
     /** The direct **needs** of this this node's entity. */
     get relations() {
@@ -44,7 +44,7 @@ export abstract class Vertex<
                         if (t) {
                             yield new Relation<_Node>(
                                 relName,
-                                t.asAssert(Entity<_Node, _Entity>).vertex
+                                t.mustBe(Entity<_Node, _Entity>).vertex
                             )
                         }
                     }
@@ -52,7 +52,7 @@ export abstract class Vertex<
                     if (target) {
                         yield new Relation<_Node>(
                             relName,
-                            target.asAssert(Entity<_Node, _Entity>).vertex
+                            target.mustBe(Entity<_Node, _Entity>).vertex
                         )
                     }
                 }
@@ -62,7 +62,7 @@ export abstract class Vertex<
 
     /** The node for this node's parent entity. */
     get parent(): _Node | null {
-        return (this.entity["__parent__"]()?.asAssert(Entity).vertex as any) ?? null
+        return (this.entity["__parent__"]()?.mustBe(Entity).vertex as any) ?? null
     }
 
     /**
@@ -72,9 +72,7 @@ export abstract class Vertex<
     get root(): _Node {
         return (this.ancestors.at(-1).pull() as any) ?? (this as any)
     }
-    get name() {
-        return this.entity.name
-    }
+
     get isRoot() {
         return this.parent === null
     }

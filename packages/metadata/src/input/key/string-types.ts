@@ -8,6 +8,5 @@ export type Metadata_Key_sPrefix =
 export type Metadata_Key_sSuffix_Domain = "/"
 
 export type Metadata_Key_sDomain = `${string}${Metadata_Key_sSuffix_Domain}`
-export type Metadata_Key_sCore = "name" | "namespace"
 export type Metadata_Key_sPrefixed = `${Metadata_Key_sPrefix}${string}`
-export type Metadata_Key_sValue = Metadata_Key_sPrefixed | Metadata_Key_sCore
+export type Metadata_Key_sValue = Metadata_Key_sPrefixed

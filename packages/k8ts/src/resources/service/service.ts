@@ -9,8 +9,8 @@ import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { merge } from "lodash"
 import { v1 } from "../../resource-idents/index"
-import { Deployment, type Deployment_Ref } from "../deployment"
 import { K8tsResourceError } from "../errors"
+import type { Workload_Ref } from "../workload-ref"
 import { Service_PortRef } from "./service-port"
 import { toServicePorts } from "./utils"
 export interface Sevice_Frontend_ClusterIp {
@@ -28,7 +28,7 @@ export type Service_Frontend = Sevice_Frontend_ClusterIp | Service_Frontend_Load
 export interface Service_Props<DeployPorts extends string, ExposedPorts extends DeployPorts>
     extends Resource_Props_Top<CDK.ServiceSpec> {
     $ports: PortMapping_Input<ExposedPorts>
-    $backend: Deployment_Ref<DeployPorts>
+    $backend: Workload_Ref<DeployPorts>
     $frontend: Service_Frontend
 }
 export interface Service_Ref<ExposedPorts extends string> extends ResourceRef<v1.Service._> {
@@ -44,11 +44,11 @@ export class Service<
         return v1.Service._
     }
 
-    private get backend() {
-        return this.props.$backend.asAssert(Deployment<PortsExposed>)
+    private get _backend() {
+        return this.props.$backend
     }
     get ports() {
-        const srcPorts = this.backend.ports
+        const srcPorts = this._backend.ports
         const knownPorts = seq(Object.entries(this.props.$ports))
             .filter(([, v]) => v !== undefined)
             .map(([k]) => k)
@@ -60,7 +60,7 @@ export class Service<
 
     protected override __needs__() {
         return {
-            backend: this.backend
+            backend: this._backend
         }
     }
 
@@ -72,7 +72,7 @@ export class Service<
     }
 
     get hostname() {
-        return `${this.name}.${this.namespace}.svc.cluster.local`
+        return `${this.key.name}.${this.key.namespace}.svc.cluster.local`
     }
 
     private _getPortoPort(port: PortsExposed, protocol: "http" | "https") {
@@ -84,7 +84,7 @@ export class Service<
             return ""
         }
         if (portNumber === undefined) {
-            throw new K8tsResourceError(`Port ${port} is not defined in service ${this.name}`)
+            throw new K8tsResourceError(`Port ${port} is not defined in service ${this.key.name}`)
         }
         return `:${portNumber}`
     }
@@ -96,7 +96,7 @@ export class Service<
             ...self.props.$frontend,
             ports: toServicePorts(svcPorts),
             selector: {
-                app: self.props.$backend.name
+                app: self.props.$backend.key.name
             }
         } satisfies CDK.ServiceSpec
         const spec2 = merge(spec, self.props.$overrides)

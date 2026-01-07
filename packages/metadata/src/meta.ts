@@ -4,11 +4,7 @@ import { parseInnerKey, parseKey, parseMetaInput, parseSectionKey } from "./inpu
 import type { Metadata_Input, MetaInputParts } from "./input/dict-input"
 import { type Metadata_Key_Domain } from "./input/key/domain-prefix"
 import { Metadata_Key_Value } from "./input/key/metadata-key"
-import type {
-    Metadata_Key_sCore,
-    Metadata_Key_sDomain,
-    Metadata_Key_sValue
-} from "./input/key/string-types"
+import type { Metadata_Key_sDomain, Metadata_Key_sValue } from "./input/key/string-types"
 import { equalsMap, toJS } from "./utils/map"
 import { orderMetaKeyedObject } from "./utils/order-meta-keyed-object"
 import { checkMetadataValue } from "./utils/validate"
@@ -412,18 +408,6 @@ export class Metadata implements Iterable<[Metadata_Key_sValue, string]> {
      */
     get comments() {
         return this._prefixed("#")
-    }
-    /**
-     * Returns all core metadata fields (`name` and `namespace`) as a plain object that can be
-     * embedded into a k8s manifest, with keys in canonical order.
-     *
-     * @example
-     *     const core = meta.core // { name: "my-resource", namespace: "default" }
-     */
-    get core() {
-        return this._prefixed("") as {
-            [key in Metadata_Key_sCore]?: string
-        }
     }
 
     /**

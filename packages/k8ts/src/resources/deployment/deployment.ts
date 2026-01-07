@@ -26,15 +26,10 @@ export interface Deployment_Props<Ports extends string>
     $template: PodProps<Ports>
     $strategy?: Deployment_Strategy
 }
-export type Deployment_Ref<Ports extends string> = ResourceRef<apps.v1.Deployment._> & {
-    __PORTS__: Ports
-}
-
 export class Deployment<Name extends string, Ports extends string = string> extends ResourceTop<
     Name,
     Deployment_Props<Ports>
 > {
-    __PORTS__!: Ports
     get kind() {
         return apps.v1.Deployment._
     }
@@ -43,24 +38,24 @@ export class Deployment<Name extends string, Ports extends string = string> exte
         const origin = OriginContextTracker.current
         if (!origin) {
             throw new K8tsResourceError(
-                `Deployment ${this.name} must be created within an OriginEntity context`
+                `Deployment ${this.key.name} must be created within an OriginEntity context`
             )
         }
         this.props.$template.$POD = origin["__binder__"]().bind(this.props.$template.$POD)
     })()
 
     protected __kids__(): Iterable<ResourceRef> {
-        return [this.template]
+        return [this._template]
     }
     protected __body__(): CDK.KubeDeploymentProps {
         const self = this
-        const template = self.template["__submanifest__"]()
+        const template = self._template["__submanifest__"]()
         const noKindFields = omit(template, ["kind", "apiVersion"])
         const spec = {
             replicas: self.props.replicas,
             selector: {
                 matchLabels: {
-                    app: self.name
+                    app: self.key.name
                 }
             },
             template: noKindFields,
@@ -89,13 +84,13 @@ export class Deployment<Name extends string, Ports extends string = string> exte
     }
 
     @doddlify
-    get template() {
-        const podTemplate = new PodTemplate(this, this.name, this.props.$template)
-        podTemplate.metadata.add("%app", this.name)
+    protected get _template() {
+        const podTemplate = new PodTemplate(this, this.key.name, this.props.$template)
+        podTemplate.metadata.add("%app", this.key.name)
         return podTemplate
     }
 
     get ports() {
-        return this.template.ports
+        return this._template.ports
     }
 }

@@ -45,17 +45,14 @@ export class ResourceVertex extends Vertex<ResourceVertex, Resource> {
         return [this.kind.dns, this.namespace, this.name].filter(Boolean).join("/")
     }
     get key(): ResourceKey {
-        return new ResourceKey(this.kind, {
-            name: this.name,
-            namespace: this.namespace
-        })
+        return this.entity.key
     }
     get kind() {
         return this.entity.kind as GVK
     }
 
     get namespace() {
-        return this.metadata?.tryGet("namespace")
+        return this.key.namespace
     }
 
     get trace() {
@@ -70,22 +67,24 @@ export class ResourceVertex extends Vertex<ResourceVertex, Resource> {
         return "metadata" in this.entity ? (this.entity.metadata as Metadata) : undefined
     }
 
-    get noEmit() {
-        return this.metadata?.tryGet("#k8ts.org/no-emit", "") !== ""
+    get noEmit(): boolean {
+        return "noEmit" in this.entity ? (this.entity.noEmit as boolean) : false
     }
     set noEmit(v: boolean) {
-        if (!v) {
-            this.metadata?.delete("#k8ts.org/no-emit")
+        if ("noEmit" in this.entity) {
+            this.entity.noEmit = v
         } else {
-            this.metadata?.add("#k8ts.org/no-emit", "true")
+            throw new K8tsGraphError(
+                `Resource of type ${this.entity.constructor.name} does not support noEmit property`
+            )
         }
     }
 
-    when<EntityType extends Resource>(
-        type: ResourceRef_Constructor_For<EntityType>,
-        fn: (entity: EntityType) => void
+    when<EntityTypeCtor extends ResourceRef_Constructor_For>(
+        type: EntityTypeCtor,
+        fn: (entity: InstanceType<EntityTypeCtor>) => void
     ) {
-        const entity = this.entity as EntityType
+        const entity = this.entity as InstanceType<EntityTypeCtor>
         if (entity instanceof type) {
             fn(entity)
         }
@@ -123,7 +122,9 @@ export class ResourceVertex extends Vertex<ResourceVertex, Resource> {
     format(format: Formats) {
         return Display.get(this).pretty(format)
     }
-
+    get name() {
+        return this.entity.key.name
+    }
     constructor(
         readonly origin: OriginVertex,
         readonly entity: Resource

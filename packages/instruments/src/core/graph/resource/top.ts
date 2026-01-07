@@ -7,9 +7,9 @@ import {
 } from "../../manifest"
 import { Trace_Source, TraceEmbedder } from "../../tracing"
 import { K8tsGraphError } from "../error"
+import { OriginExporter } from "../origin"
 import type { Origin } from "../origin/origin"
 import { OriginContextTracker } from "../origin/tracker"
-import type { GVK } from "./api-kind"
 import type { Resource_Props_Top } from "./props"
 import { Resource } from "./resource"
 
@@ -19,29 +19,26 @@ export abstract class ResourceTop<
 > extends Resource<Name, Props> {
     private readonly _origin: Origin
     readonly metadata: Metadata
-    abstract readonly kind: GVK
-
-    get key() {
-        return this.kind.refKey({ name: this.name, namespace: this.namespace })
-    }
 
     constructor(name: Name, props: Props) {
-        super(name, props)
-        this.metadata = new Metadata({
-            name
-        }).overwrite(props.$metadata)
-        const lastOrigin = OriginContextTracker.current
+        const lastOrigin = OriginContextTracker.current?.mustBe(OriginExporter)
         if (!lastOrigin) {
-            throw new K8tsGraphError(
-                `Resource ${this.name} must be created within an Origin context`
-            )
+            throw new K8tsGraphError(`Resource ${name} must be created within an Origin context`)
         }
+        super(name, lastOrigin.namespace, props)
+        this.metadata = new Metadata(props.$metadata).overwrite()
+
         this._origin = lastOrigin
         this._origin["__attach_resource__"](this)
         TraceEmbedder.add(this, new Trace_Source(new StackTracey().slice(2)))
-        if (this.props.$noEmit) {
-            this.metadata.add("#k8ts.org/no-emit", "true")
-        }
+    }
+
+    get noEmit() {
+        return this.props.$noEmit ?? false
+    }
+
+    set noEmit(v: boolean) {
+        this.props.$noEmit = v
     }
 
     protected __origin__() {
@@ -51,8 +48,8 @@ export abstract class ResourceTop<
     protected __metadata__(): K8tsManifest_Metadata {
         const self = this
         return {
-            name: self.metadata.get("name"),
-            namespace: self.metadata.tryGet("namespace"),
+            name: self.key.name,
+            namespace: self.key.namespace,
             labels: self.metadata.labels,
             annotations: self.metadata.annotations
         }
@@ -75,9 +72,5 @@ export abstract class ResourceTop<
         }
 
         return a
-    }
-
-    get namespace() {
-        return this.metadata.tryGet("namespace")
     }
 }

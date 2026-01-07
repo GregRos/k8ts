@@ -8,7 +8,7 @@ import { ForwardRef } from "./ref"
 
 /** Expands the resources exported by an OriginExported into a dictionary of name to FwRef. */
 export type ForwardExports_ByKey<Exports extends ResourceRef = ResourceRef> = {
-    [E in Exports as `${E["kind"]["value"]}/${E["name"]}`]: ForwardRef<E>
+    [E in Exports as `${E["kind"]["value"]}/${E["key"]["name"]}`]: ForwardRef<E>
 }
 /**
  * A type describing all resources exported by an {@link OriginExporter} as forward references.

@@ -74,12 +74,12 @@ export class PodTemplate<Ports extends string = string> extends ResourcePart<Pod
     }
     protected __metadata__() {
         return {
-            name: this.name,
+            name: this.key.name,
             labels: this.metadata.labels,
             annotations: this.metadata.annotations
         }
     }
-    readonly metadata = new Metadata(this.props.$metadata ?? {}).add("name", this.name)
+    readonly metadata = new Metadata(this.props.$metadata ?? {})
 
     protected __submanifest__(): CDK.PodTemplateSpec {
         const self = this

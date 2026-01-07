@@ -1,12 +1,11 @@
-import type { Resource, Resource_Props } from "@k8ts/instruments"
+import type { Resource, Resource_Props, ResourceRef } from "@k8ts/instruments"
 import { ResourcePart } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { v1 } from "../../../resource-idents/default"
-import { Pvc } from "../../persistent"
 import type { ContainerDeviceMount_Input } from "../container/mounts/device"
 interface PodDeviceBackendPvc extends Resource_Props<CDK.Volume> {
-    $backend: Pvc<"Block">
+    $backend: ResourceRef<v1.PersistentVolumeClaim._>
     readOnly?: boolean
 }
 
@@ -26,7 +25,7 @@ export class PodDevice extends ResourcePart<PodDeviceBackendPvc> {
     }
     get sourceNamespace() {
         const backend = this.props.$backend as any as Resource
-        return backend.namespace
+        return backend.key.namespace
     }
     protected __needs__() {
         return {
@@ -36,9 +35,9 @@ export class PodDevice extends ResourcePart<PodDeviceBackendPvc> {
 
     protected __submanifest__(): CDK.Volume {
         const body = {
-            name: this.name,
+            name: this.key.name,
             persistentVolumeClaim: {
-                claimName: this.backend.$backend.name,
+                claimName: this.backend.$backend.key.name,
                 readOnly: this.backend.readOnly
             }
         }

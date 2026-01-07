@@ -1,6 +1,6 @@
-import type { GVK } from "../api-kind"
+import type { GVK, GVK_Base } from "../api-kind"
 import type { DummyResource } from "../dummy"
-import type { ResourceRef } from "../ref"
+import type { ResourceRef, ResourceRef_Constructor_For } from "../ref"
 import type { ResourceKey_sFormat } from "./parsing"
 
 export const separator = "/"
@@ -27,6 +27,12 @@ export interface ResourceKey_Options<Name extends string = string> {
     namespace?: ResourceKey<nsKind> | string | ResourceRef<nsKind>
 }
 
+export interface ResourceKey_Like {
+    readonly kind: GVK_Base
+    readonly name: string
+    readonly namespace: string | undefined
+}
+
 /**
  * A unique identifier for a k8s resource consisting of a Kind, name, and namespace. Used by
  * resources to reference other resources. Serves as the basis for the {@link DummyResource} resource
@@ -35,11 +41,11 @@ export interface ResourceKey_Options<Name extends string = string> {
  * Important: This class is ambiguous because it can represent keys for namespaced resources but
  * ignore the namespace. Needs some kind of refactor.
  */
-export class ResourceKey<K extends GVK = GVK, Name extends string = string> {
+export class ResourceKey<K extends GVK_Base = GVK_Base, Name extends string = string> {
     /** The resource name */
-    readonly name: string
+    name: string
     /** The optional namespace for namespaced resources */
-    readonly namespace: string | undefined
+    namespace: string | undefined
 
     /**
      * Creates a new RefKey instance.
@@ -52,8 +58,22 @@ export class ResourceKey<K extends GVK = GVK, Name extends string = string> {
         options: ResourceKey_Options<Name>
     ) {
         this.name = options.name
-        this.namespace =
-            typeof options.namespace === "string" ? options.namespace : options.namespace?.name
+        if (typeof options.namespace === "string") {
+            this.namespace = options.namespace
+        } else if (options.namespace && "key" in options.namespace) {
+            this.namespace = options.namespace.key.name
+        } else if (options.namespace) {
+            this.namespace = options.namespace.name
+        } else {
+            this.namespace = undefined
+        }
+    }
+
+    rename<NewName extends string>(newName: NewName) {
+        return new ResourceKey<K, NewName>(this.kind, {
+            name: newName,
+            namespace: this.namespace
+        })
     }
 
     /**
@@ -103,8 +123,18 @@ export class ResourceKey<K extends GVK = GVK, Name extends string = string> {
      * @returns An External instance with the specified features
      */
     DummyResource(): DummyResource<K> {
-        const DummyResource = require("../dummy").DummyResource
+        const DummyResource: ResourceRef_Constructor_For<DummyResource<K>> =
+            require("../dummy").DummyResource
+        const self = this
 
-        return new DummyResource(this) as any
+        const className = `${this.kind.value}DummyResource`
+        const cls = {
+            [className]: class extends DummyResource {
+                get kind() {
+                    return self.kind
+                }
+            }
+        }[className]
+        return new cls(this.name, this.namespace, {}) as DummyResource<K>
     }
 }

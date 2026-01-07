@@ -22,10 +22,13 @@ export class K8tsFile extends OriginExporter<K8tsFile_Props> {
         this.metadata.add("source.k8ts.org/", {
             "^file": this.name
         })
-        this.metadata.overwrite("namespace", this._props.namespace?.name)
     })()
     get kind() {
         return "[k8ts] File"
+    }
+
+    get namespace() {
+        return this._props.namespace?.key.name
     }
 
     @doddlify

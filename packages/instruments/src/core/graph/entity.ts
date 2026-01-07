@@ -7,8 +7,7 @@ let globalEntityId = 0
 
 export type RefLike = {
     kind: any
-    name: string
-    asAssert<Inst extends RefLike>(cls: abstract new (...args: any[]) => Inst): Inst
+    mustBe<Inst extends RefLike>(cls: abstract new (...args: any[]) => Inst): Inst
 }
 export abstract class Entity<
     _Node extends Vertex<_Node, _Ent> = Vertex<any, any>,
@@ -29,8 +28,8 @@ export abstract class Entity<
         return globalEntityId++
     })()
     abstract readonly vertex: _Node
-    abstract readonly name: string
-    asAssert<Inst extends _EntRefType>(cls: AnyCtor<Inst>): Inst {
+
+    mustBe<Inst extends _EntRefType>(cls: AnyCtor<Inst>): Inst {
         if (this instanceof cls) {
             return this as any as Inst
         }

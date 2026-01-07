@@ -87,7 +87,7 @@ class ForwardRef_Proxied<To extends ResourceRef = ResourceRef> {
     }
 
     get namespace() {
-        return this.__pull__().namespace // The $props.key won't have a namespace
+        return this.__pull__().key.namespace // The $props.key won't have a namespace
     }
 
     get kind() {

@@ -18,7 +18,9 @@ const cInterior = normalChar.pipe(or(cExtra)).expects("alphanumeric, '-', '_', o
 export const pNameValue = cNameChar.pipe(many1(), stringify())
 const pSpecialKey = anyStringOf("namespace", "name").pipe(
     map(key => {
-        return new Metadata_Key_Value("", "", key)
+        throw new K8tsMetadataError(
+            `Tried to set resource UID key '${key}' via metadata, which isn't allowed in k8ts. Modify the resource directly instead.`
+        )
     })
 )
 const pCleanKey = cInterior.pipe(many1(), stringify())

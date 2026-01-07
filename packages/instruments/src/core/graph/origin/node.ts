@@ -22,7 +22,10 @@ import { Origin } from "./origin"
 })
 export class OriginVertex extends Vertex<OriginVertex, Origin> {
     get kids() {
-        return seq(this.entity["__kids__"]()).map(x => x.asAssert(Origin).vertex)
+        return seq(this.entity["__kids__"]()).map(x => x.mustBe(Origin).vertex)
+    }
+    get name() {
+        return this.entity.name
     }
     get metadata() {
         return this.entity.metadata

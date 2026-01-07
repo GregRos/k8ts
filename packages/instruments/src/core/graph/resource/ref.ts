@@ -2,7 +2,7 @@ import type { RefLike } from "../entity"
 import type { GVK_Like } from "./api-kind"
 import type { ResourceVertex } from "./node"
 
-export type ResourceRef_Constructor_For<R extends ResourceRef> = {
+export type ResourceRef_Constructor_For<R extends ResourceRef = ResourceRef> = {
     prototype: R
 } & (abstract new (...args: any[]) => R)
 export type ResourceRef_Constructor<K extends GVK_Like = GVK_Like> = ResourceRef_Constructor_For<
@@ -13,9 +13,11 @@ export type ResourceRef<
     Name extends string = string
 > = RefLike & {
     kind: _Kind
-    name: Name
-    namespace?: string
-    is<_Ctor extends ResourceRef_Constructor>(cls: _Ctor): this is InstanceType<_Ctor>
+    key: {
+        name: Name
+        namespace?: string
+    }
+    is<Type>(cls: abstract new (...args: any[]) => Type): this is Type
     is<_Kind extends GVK_Like>(kind: _Kind): this is ResourceRef<_Kind>
     equals(other: any): boolean
     vertex: ResourceVertex

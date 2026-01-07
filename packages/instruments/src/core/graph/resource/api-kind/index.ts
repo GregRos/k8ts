@@ -55,7 +55,8 @@ export class GVK_Group<Group extends string = string> extends GVK_Base<Group> {
     }
 
     version<Version extends _version>(version: Version) {
-        return new GVK_Version(`${this.url}/${version}` as JoinIfNotEmpty<Group, "/", Version>)
+        const newUrl = [this.url, version].filter(Boolean).join("/")
+        return new GVK_Version(newUrl as JoinIfNotEmpty<Group, "/", Version>)
     }
 }
 

@@ -30,12 +30,12 @@ export class ClusterRoleBinding<Name extends string = string> extends ResourceTo
             roleRef: {
                 apiGroup: this.props.$role.kind.parent!.parent!.url,
                 kind: this.props.$role.kind.value,
-                name: this.props.$role.name
+                name: this.props.$role.key.name
             },
             subjects: this.props.$subjects.map(sa => ({
                 kind: sa.kind.value,
-                name: sa.name,
-                namespace: sa.namespace!
+                name: sa.key.name,
+                namespace: sa.key.namespace!
             }))
         }
         return merge(body, this.props.$overrides)

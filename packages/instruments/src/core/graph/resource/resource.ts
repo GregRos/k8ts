@@ -1,4 +1,5 @@
 import { getNiceClassName } from "what-are-you"
+import { ResourceKey } from "."
 import { getDeepPropertyDescriptor } from "../../../../../metadata/dist/utils/map"
 import { display } from "../../../utils"
 import { Entity } from "../entity"
@@ -18,22 +19,23 @@ export abstract class Resource<
     Props extends object = object
 > extends Entity<ResourceVertex, Resource, ResourceRef> {
     abstract get kind(): GVK_Base
-
-    abstract readonly namespace: string | undefined
-
-    constructor(
-        readonly name: Name,
-        readonly props: Props
-    ) {
+    key: ResourceKey<GVK_Base, Name>
+    readonly props: Props
+    constructor(name: Name, namespace: string | undefined, props: Props) {
         super()
+        this.props = props
 
-        this.name = name
         const desc = getDeepPropertyDescriptor(this, "kind")
         if (!desc || !desc.get) {
             throw new K8tsGraphError(
                 `ResourceEntity subclass ${getNiceClassName(this)} must implement the 'kind' property as a getter, but it's missing or not a getter.`
             )
         }
+        const kind = (this as any).kind as GVK_Base
+        this.key = new ResourceKey(kind, {
+            name: name,
+            namespace: namespace
+        })
     }
     is<K extends this["kind"]>(kind: K): this is { kind: K }
     is<Inst extends ResourceRef = ResourceRef>(

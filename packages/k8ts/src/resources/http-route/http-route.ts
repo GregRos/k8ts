@@ -15,8 +15,6 @@ export class HttpRoute<Name extends string, Ports extends string> extends Resour
     Name,
     HttpRoute_Props<Ports>
 > {
-    declare name: Name
-
     get kind() {
         return gateway.v1.HttpRoute._
     }
@@ -24,8 +22,8 @@ export class HttpRoute<Name extends string, Ports extends string> extends Resour
     private _getBackendRef() {
         const backendRef: CDK.HttpRouteSpecRulesBackendRefs = {
             kind: "Service",
-            namespace: this.props.$backend.service.namespace,
-            name: this.props.$backend.service.name,
+            namespace: this.props.$backend.service.key.namespace,
+            name: this.props.$backend.service.key.name,
             port: this.props.$backend.number()
         }
         return backendRef
@@ -38,8 +36,8 @@ export class HttpRoute<Name extends string, Ports extends string> extends Resour
             parentRefs: [
                 {
                     kind: "Gateway",
-                    name: self.props.$gateway.name,
-                    namespace: self.props.$gateway.namespace
+                    name: self.props.$gateway.key.name,
+                    namespace: self.props.$gateway.key.namespace
                 }
             ],
             hostnames: [self.props.$hostname],

@@ -35,7 +35,6 @@ export default W.File("deployment2.yaml", {
     *FILE(FILE) {
         yield FILE.Section("inner", {
             *SECTION(SECTION) {
-                SECTION.__entity__
                 const claim = new Pvc("claim", {
                     $bind: cool,
                     $accessModes: ["ReadWriteOnce"],
@@ -43,7 +42,6 @@ export default W.File("deployment2.yaml", {
                         storage: "10Gi->20Gi"
                     }
                 })
-
                 const claim2 = new Pvc("claim2", {
                     $storageClass: ext_topolvm_class,
                     $accessModes: ["ReadWriteOnce"],
@@ -60,7 +58,7 @@ export default W.File("deployment2.yaml", {
                 })
 
                 yield claim
-                yield new CronJob("test", {
+                const cj = new CronJob("test", {
                     $schedule: Cron.hourly,
                     timeZone: "UTC",
                     $template: {

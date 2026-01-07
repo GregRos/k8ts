@@ -4,15 +4,11 @@ it("accepts all valid value keys", () => {
     const m = new Metadata({
         "%label": "Hello",
         "%label2": "World",
-        "^annotation": "goodbye",
-        name: "x",
-        namespace: "y"
+        "^annotation": "goodbye"
     })
     expect(m.get("%label")).toBe("Hello")
     expect(m.get("%label2")).toBe("World")
     expect(m.get("^annotation")).toBe("goodbye")
-    expect(m.get("name")).toBe("x")
-    expect(m.get("namespace")).toBe("y")
 })
 
 it("accepts mix of value and section keys", () => {
@@ -20,8 +16,7 @@ it("accepts mix of value and section keys", () => {
         "%label": "Hello",
         "%label2": "World",
         "^annotation": "goodbye",
-        name: "x",
-        namespace: "y",
+
         "x/": {
             "%label": "section label"
         }

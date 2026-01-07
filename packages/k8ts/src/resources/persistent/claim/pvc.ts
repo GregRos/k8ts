@@ -11,7 +11,7 @@ import { v1 } from "../../../resource-idents/default"
 import { storage } from "../../../resource-idents/storage"
 import { K8tsResourceError } from "../../errors"
 import { parsePvAccessMode, type PvAccessMode_Many } from "../access-mode"
-import type { Pv, Pv_Ref } from "../volume"
+import type { Pv_Ref } from "../volume"
 import type { PvVolumeMode } from "../volume-mode"
 
 const pvc_ResourcesSpec = new Reqs({
@@ -30,7 +30,6 @@ export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extend
     Name,
     Pvc_Props<Mode>
 > {
-    declare name: Name
     get kind() {
         return v1.PersistentVolumeClaim._
     }
@@ -38,7 +37,7 @@ export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extend
     protected __needs__() {
         const self = this
         return {
-            bind: self.bound,
+            bind: self.props.$bind,
             storageClass: self.props.$storageClass
         }
     }
@@ -53,21 +52,18 @@ export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extend
         }
         const spec = {
             accessModes: nAccessModes,
-            volumeName: self.props.$bind?.name,
+            volumeName: self.props.$bind?.key.name,
             volumeMode: $mode,
             resources: pvc_ResourcesSpec
                 .parse({
                     storage: $resources.storage
                 })
                 .toObject(),
-            storageClassName: self.props.$storageClass?.name ?? "standard"
+            storageClassName: self.props.$storageClass?.key.name ?? "standard"
         } satisfies CDK.PersistentVolumeClaimSpec
         const spec2 = merge(spec, self.props.$overrides)
         return {
             spec: spec2
         }
-    }
-    get bound() {
-        return this.props.$bind as Pv<Mode> | undefined
     }
 }

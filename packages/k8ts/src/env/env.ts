@@ -25,7 +25,7 @@ export class EnvBuilder<M extends Record<keyof M, EnvValue>> {
     private _envFromSecret(value: EnvValueSource): CDK.EnvVarSource {
         return {
             secretKeyRef: {
-                name: value.$backend.name,
+                name: value.$backend.key.name,
                 key: value.key,
                 optional: value.optional
             }
@@ -37,7 +37,7 @@ export class EnvBuilder<M extends Record<keyof M, EnvValue>> {
     ): CDK.EnvVarSource {
         return {
             configMapKeyRef: {
-                name: value.$backend.name,
+                name: value.$backend.key.name,
                 key: value.key,
                 optional: value.optional
             }

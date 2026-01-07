@@ -31,18 +31,18 @@ export class CronJob<
     }
 
     @doddlify
-    get template() {
-        return new PodTemplate<never>(this, this.name, this.props.$template)
+    protected get _template() {
+        return new PodTemplate<never>(this, this.key.name, this.props.$template)
     }
 
     protected __kids__(): Iterable<ResourceRef> {
-        this.template
+        this._template
         return super.__kids__()
     }
 
     protected __body__(): CDK.KubeCronJobProps {
         const self = this
-        const template = self.template["__submanifest__"]()
+        const template = self._template["__submanifest__"]()
         const object = {
             spec: {
                 ...omitBy(self.props, (x, k) => k.startsWith("$") || k === "timeZone"),

@@ -1,5 +1,5 @@
 import { type OriginExporter_Props, type ResourceRef, OriginExporter } from "@k8ts/instruments"
-import { doddle, doddlify, seq } from "doddle"
+import { doddlify, seq } from "doddle"
 import type { v1 } from "../../idents"
 
 export class K8tsFile_Section_Scope {
@@ -21,12 +21,10 @@ export class K8tsFile_Section extends OriginExporter<K8tsFile_Section_Props> {
     get kind() {
         return "[k8ts] File/Section"
     }
-    #_ = doddle(() => {
-        this.metadata.overwrite({
-            namespace: this._props.namespace?.name
-        })
-    }).pull()
 
+    get namespace() {
+        return this.__parent__().mustBe(OriginExporter).namespace
+    }
     @doddlify
     protected __exports__() {
         return seq(

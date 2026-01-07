@@ -20,6 +20,8 @@ export abstract class OriginExporter<
         this._parent["__attach_kid__"](this)
     }
 
+    abstract namespace: string | undefined
+
     protected abstract __exports__(): Iterable<ResourceRef>
 
     protected __parent__() {
