@@ -1,5 +1,5 @@
 import type { JoinIfNotEmpty } from "../../../../expressions"
-import { ResourceKey, type ResourceKey_Options } from "../key"
+import { ResourceIdent, type ResourceIdent_Options } from "../ident"
 import { pluralize } from "./pluralize"
 type _alphabeta = "alpha" | "beta" | ""
 type _subversion = `${_alphabeta}${number}` | ""
@@ -90,8 +90,8 @@ export class GVK<Url extends string = string> extends GVK_Base<Url> {
         return this._customPlural ?? pluralize(this.value)
     }
 
-    refKey<Name extends string>(options: ResourceKey_Options<Name>) {
-        return new ResourceKey<this, Name>(this as any, options)
+    refKey<Name extends string>(options: ResourceIdent_Options<Name>) {
+        return new ResourceIdent<this, Name>(this as any, options)
     }
 
     get dns() {

@@ -8,7 +8,7 @@ import { K8tsGraphError } from "../error"
 import { Vertex } from "../node"
 import { OriginVertex } from "../origin/node"
 import type { GVK } from "./api-kind"
-import { ResourceKey } from "./key"
+import { ResourceIdent } from "./ident"
 import type { ResourceRef_Constructor_For } from "./ref"
 import type { Resource } from "./resource"
 
@@ -44,7 +44,7 @@ export class ResourceVertex extends Vertex<ResourceVertex, Resource> {
     get fullFqn() {
         return [this.kind.dns, this.namespace, this.name].filter(Boolean).join("/")
     }
-    get ident(): ResourceKey {
+    get ident(): ResourceIdent {
         return this.entity.ident
     }
     get kind() {

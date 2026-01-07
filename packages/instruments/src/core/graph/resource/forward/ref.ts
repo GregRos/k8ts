@@ -2,7 +2,7 @@ import { seq, type Doddle } from "doddle"
 import { mapValues } from "lodash"
 import { getNiceClassName } from "what-are-you"
 import { K8tsGraphError } from "../../error"
-import { ResourceKey } from "../key"
+import { ResourceIdent } from "../ident"
 import type { ResourceRef, ResourceRef_Constructor_For } from "../ref"
 import { K8tsProxyError } from "./error"
 
@@ -14,7 +14,7 @@ import { K8tsProxyError } from "./error"
  * allows for circular references and more flexible resource definitions.
  *
  * The base `FwRef` object only has some basic properties about the resource being referenced, such
- * as its {@link ResourceKey} and class type. Accessing any other properties or methods on the
+ * as its {@link ResourceIdent} and class type. Accessing any other properties or methods on the
  * `FwRef` will trigger the resolution of the actual resource via a resolver.
  *
  * Because the `FwRef` avoids resolving the actual resource until needed, it won't detect missing
@@ -46,7 +46,7 @@ export interface ForwardRef_Props<Referenced extends ResourceRef> {
     /** The class constructor of the referenced resource. */
     readonly class?: ResourceRef_Constructor_For<Referenced>
     /** The reference key identifying the referenced resource. */
-    readonly ident: ResourceKey
+    readonly ident: ResourceIdent
     readonly origin: object
     readonly resolver: Doddle<Referenced>
 }
@@ -107,7 +107,7 @@ class ForwardRef_Proxied<To extends ResourceRef = ResourceRef> {
     }
 
     get key() {
-        return new ResourceKey(this.kind, {
+        return new ResourceIdent(this.kind, {
             name: this.name,
             namespace: this.namespace
         })

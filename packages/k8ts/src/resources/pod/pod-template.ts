@@ -1,47 +1,38 @@
-import {
-    ResourcePart,
-    ResourceRef,
-    type Resource_Props,
-    type ResourceRef_HasKeys
-} from "@k8ts/instruments"
+import { ResourcePart, ResourceRef, type Resource_Props } from "@k8ts/instruments"
 import { Metadata, type Metadata_Input } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { merge } from "lodash"
-import type { EnvValuePrimitive } from "../../env/types"
 import { v1 } from "../../resource-idents/default"
 import { K8tsResourceError } from "../errors"
-import { PodContainer, type PodContainer_Props } from "./container"
-import { PodDevice, type PodDeviceBackend } from "./volume/devices"
-import {
-    PodVolume,
-    PodVolume_ConfigMap,
-    PodVolume_HostPath,
-    PodVolume_Pvc,
-    PodVolume_Secret,
-    type PodVolume_Backend,
-    type PodVolume_Backend_ConfigMap,
-    type PodVolume_Backend_HostPath,
-    type PodVolume_Backend_Pvc,
-    type PodVolume_Backend_Secret
-} from "./volume/volumes"
+import { PodContainer } from "./container"
+import { PodScope } from "./scope"
+import { PodDevice } from "./volume/devices"
+import { PodVolume } from "./volume/volumes"
 type ContainerRef<Ports extends string> = ResourceRef<v1.Pod.Container._> & {
     __PORTS__: Ports
 }
-export type PodContainerProducer<Ports extends string> = (
+export type PodTemplate_Producer<Ports extends string> = (
     scope: PodScope
 ) => Iterable<ContainerRef<Ports>>
 
-export interface PodProps<Ports extends string> extends Resource_Props<Partial<CDK.PodSpec>> {
+export interface PodTemplate_Props<Ports extends string>
+    extends Resource_Props<Partial<CDK.PodSpec>> {
     $metadata?: Metadata_Input
-    $POD: PodContainerProducer<Ports>
+    Containers: PodTemplate_Producer<Ports>
 }
 
-export class PodTemplate<Ports extends string = string> extends ResourcePart<PodProps<Ports>> {
+export class PodTemplate<Ports extends string = string> extends ResourcePart<
+    PodTemplate_Props<Ports>
+> {
     get kind() {
         return v1.PodTemplate._
     }
-    private readonly _containers = seq(() => this.props.$POD(new PodScope(this)))
+    private readonly _containers = seq(() => {
+        const origin = this.__parent__()["__origin__"]()
+        const Containers = origin["__binder__"]().bind(this.props.Containers)
+        return Containers(new PodScope(this))
+    })
         .as<PodContainer<Ports>>()
         .cache()
 
@@ -115,60 +106,5 @@ export class PodTemplate<Ports extends string = string> extends ResourcePart<Pod
             spec: spec2
         }
         return body
-    }
-}
-
-export class PodScope {
-    constructor(private readonly _parent: PodTemplate) {}
-    Container<
-        Ports extends string,
-        Env extends {
-            [key in keyof Env]:
-                | {
-                      $backend: ResourceRef
-                      key: Env[key] extends object
-                          ? ResourceRef_HasKeys<Env[key]["$backend"], string>
-                          : never
-                  }
-                | EnvValuePrimitive
-        }
-    >(name: string, options: PodContainer_Props<Ports, Env>) {
-        return new PodContainer(this._parent, name, "main", options)
-    }
-    InitContainer(name: string, options: PodContainer_Props<never>) {
-        return new PodContainer(this._parent, name, "init", options)
-    }
-    Volume<const P extends PodVolume_Backend_HostPath>(name: string, options: P): PodVolume<P>
-    Volume<const P extends PodVolume_Backend_ConfigMap<ResourceRef<v1.ConfigMap._>>>(
-        name: string,
-        options: P
-    ): PodVolume<P>
-    Volume<const P extends PodVolume_Backend_Secret<ResourceRef<v1.Secret._>>>(
-        name: string,
-        options: P
-    ): PodVolume<P>
-    Volume<const P extends PodVolume_Backend_Pvc<ResourceRef<v1.PersistentVolumeClaim._>>>(
-        name: string,
-        options: P
-    ): PodVolume<P>
-    Volume(name: string, options: PodVolume_Backend): PodVolume {
-        {
-            const backend = options.$backend
-            if ("kind" in backend && backend.kind === "HostPath") {
-                return new PodVolume_HostPath(this._parent, name, options as any)
-            }
-        }
-        const backend = options.$backend as ResourceRef
-        if (backend.is(v1.ConfigMap._)) {
-            return new PodVolume_ConfigMap(this._parent, name, options as any)
-        } else if (backend.is(v1.Secret._)) {
-            return new PodVolume_Secret(this._parent, name, options as any)
-        } else if (backend.is(v1.PersistentVolumeClaim._)) {
-            return new PodVolume_Pvc(this._parent, name, options as any)
-        }
-        throw new K8tsResourceError(`Unsupported volume backend kind: ${backend.kind}`)
-    }
-    Device(name: string, options: PodDeviceBackend) {
-        return new PodDevice(this._parent, name, options)
     }
 }

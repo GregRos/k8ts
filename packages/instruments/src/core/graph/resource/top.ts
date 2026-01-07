@@ -1,8 +1,9 @@
 import { Metadata } from "@k8ts/metadata"
+import { doddle } from "doddle"
 import StackTracey from "stacktracey"
 import {
     type K8tsManifest,
-    type K8tsManifest_Ident,
+    type K8tsManifest_GKV,
     type K8tsManifest_Metadata
 } from "../../manifest"
 import { Trace_Source, TraceEmbedder } from "../../tracing"
@@ -12,7 +13,6 @@ import type { Origin } from "../origin/origin"
 import { OriginContextTracker } from "../origin/tracker"
 import type { Resource_Props_Top } from "./props"
 import { Resource } from "./resource"
-
 export abstract class ResourceTop<
     Name extends string = string,
     Props extends Resource_Props_Top = Resource_Props_Top
@@ -55,7 +55,7 @@ export abstract class ResourceTop<
         }
     }
 
-    protected __idents__(): K8tsManifest_Ident {
+    protected __gkv__(): K8tsManifest_GKV {
         return {
             apiVersion: this.kind.parent!.url,
             kind: this.kind.value
@@ -64,13 +64,15 @@ export abstract class ResourceTop<
 
     protected abstract __body__(): object
 
-    protected async __manifest__(): Promise<K8tsManifest> {
-        const a = {
-            ...this.__idents__(),
-            metadata: this.__metadata__(),
-            ...(await this.__body__())
-        }
+    protected __manifest__(): K8tsManifest | Promise<K8tsManifest> {
+        return doddle(async () => {
+            const a = {
+                ...this.__gkv__(),
+                ...(await this.__body__()),
+                metadata: this.__metadata__()
+            }
 
-        return a
+            return a
+        }).pull()
     }
 }

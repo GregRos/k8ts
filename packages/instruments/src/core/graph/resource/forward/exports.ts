@@ -1,7 +1,7 @@
 import { seq } from "doddle"
 import { Origin } from "../../origin"
 import type { OriginExporter } from "../../origin/exporter"
-import { ResourceKey } from "../key"
+import { ResourceIdent } from "../ident"
 import type { ResourceRef } from "../ref"
 import { K8tsProxyError } from "./error"
 import { ForwardRef } from "./ref"
@@ -142,7 +142,7 @@ class ForwardExports_ProxyHandler<Entity extends OriginExporter> implements Prox
 
         return ForwardRef({
             class: clazz,
-            ident: new ResourceKey(refKey.kind, {
+            ident: new ResourceIdent(refKey.kind, {
                 name: refKey.name
             }),
             origin: this.entity,

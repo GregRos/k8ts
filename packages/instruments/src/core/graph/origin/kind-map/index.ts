@@ -2,7 +2,7 @@ import { doddlify, seq, type Seq } from "doddle"
 
 import { K8tsGraphError } from "../../error"
 import { GVK, GVK_Base } from "../../resource/api-kind"
-import { ResourceKey } from "../../resource/key"
+import { ResourceIdent } from "../../resource/ident"
 import { ResourceRef_Constructor } from "../../resource/ref"
 const separator = "/"
 interface NodeEntry {
@@ -11,7 +11,7 @@ interface NodeEntry {
     kind: GVK
 }
 export type KindMap_Input<Ks extends ResourceRef_Constructor> = Ks[]
-type LookupKey = string | ResourceKey | ResourceRef_Constructor | GVK
+type LookupKey = string | ResourceIdent | ResourceRef_Constructor | GVK
 export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constructor> {
     __KINDS__!: Kinds["prototype"]["kind"]
     constructor(private _ownKinds: KindMap_Input<Kinds>) {}
@@ -52,7 +52,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
             .pull()
     }
 
-    parse(ref: string | ResourceKey<this["__KINDS__"]>): ResourceKey<this["__KINDS__"]> {
+    parse(ref: string | ResourceIdent<this["__KINDS__"]>): ResourceIdent<this["__KINDS__"]> {
         const result = this.tryParse(ref)
         if (!result) {
             throw new K8tsGraphError(`Could not parse reference key: ${ref}`)
@@ -60,14 +60,14 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
         return result as any
     }
 
-    tryParse(ref: unknown): ResourceKey<this["__KINDS__"]> | undefined {
+    tryParse(ref: unknown): ResourceIdent<this["__KINDS__"]> | undefined {
         if (typeof ref !== "string" && typeof ref !== "object") {
             return undefined
         }
         if (ref == null) {
             return undefined
         }
-        if (ref instanceof ResourceKey) {
+        if (ref instanceof ResourceIdent) {
             return ref
         }
         if (typeof ref === "object") {
@@ -103,7 +103,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
     private _unknownClassError(klass: Function) {
         return new K8tsGraphError(`The class ${klass.name} is not registered`)
     }
-    private _convert(something: LookupKey | ResourceKey | Function | GVK) {
+    private _convert(something: LookupKey | ResourceIdent | Function | GVK) {
         if (typeof something === "string") {
             if (something.includes("/")) {
                 const r = this.parse(something)
@@ -114,7 +114,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
             return something as ResourceRef_Constructor
         } else if (something instanceof GVK_Base) {
             return something.url
-        } else if (something instanceof ResourceKey) {
+        } else if (something instanceof ResourceIdent) {
             return something.kind.url
         }
         throw new K8tsGraphError(`Invalid argument ${something}`)
@@ -149,7 +149,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
         return this._tryGetEntry(kind)?.class
     }
 
-    getClass(refKey: ResourceKey): ResourceRef_Constructor
+    getClass(refKey: ResourceIdent): ResourceRef_Constructor
     getClass<F extends ResourceRef_Constructor>(klass: F): F
     getClass(kind: string): ResourceRef_Constructor
     getClass(kind: GVK): ResourceRef_Constructor

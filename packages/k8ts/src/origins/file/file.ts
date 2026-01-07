@@ -15,7 +15,7 @@ export interface K8tsFile_Props<
 > extends Origin_Props<Kinds[number]> {
     kinds?: Kinds
     namespace?: ResourceRef<v1.Namespace._>
-    FILE(FILE: K8tsFile_Scope<Kinds>): Iterable<Exports | ForwardExports<Exports>>
+    File(FILE: K8tsFile_Scope<Kinds>): Iterable<Exports | ForwardExports<Exports>>
 }
 export class K8tsFile extends OriginExporter<K8tsFile_Props> {
     #_ = (() => {
@@ -34,7 +34,7 @@ export class K8tsFile extends OriginExporter<K8tsFile_Props> {
     @doddlify
     protected __exports__() {
         return seq(
-            this._props.FILE.call(this, new K8tsFile_Scope(this) as any) as Iterable<ResourceRef>
+            this._props.File.call(this, new K8tsFile_Scope(this) as any) as Iterable<ResourceRef>
         ).cache()
     }
 }

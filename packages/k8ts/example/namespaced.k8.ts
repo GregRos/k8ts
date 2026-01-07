@@ -32,9 +32,9 @@ export default W.File("deployment2.yaml", {
         "^a": "a"
     },
     namespace: k8sNamespace,
-    *FILE(FILE) {
+    *File(FILE) {
         yield FILE.Section("inner", {
-            *SECTION(SECTION) {
+            *Section(SECTION) {
                 const claim = new Pvc("claim", {
                     $bind: cool,
                     $accessModes: ["ReadWriteOnce"],
@@ -63,7 +63,7 @@ export default W.File("deployment2.yaml", {
                     timeZone: "UTC",
                     $template: {
                         restartPolicy: "Never",
-                        *$POD(POD) {
+                        *Containers(POD) {
                             yield POD.Container("main", {
                                 $image: image,
                                 $command: CmdLine("/bin/sh").option({
@@ -97,7 +97,7 @@ export default W.File("deployment2.yaml", {
                 const deploy2 = new Deployment("xyz2", {
                     $replicas: 1,
                     $template: {
-                        *$POD(k) {
+                        *Containers(k) {
                             const v = k.Volume("data", {
                                 $backend: claim
                             })

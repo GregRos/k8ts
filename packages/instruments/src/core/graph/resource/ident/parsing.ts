@@ -1,4 +1,4 @@
-import { type ResourceKey_Parsed, separator } from "./key"
+import { type ResourceIdent_Parsed, separator } from "./key"
 
 /**
  * Attempts to parse a reference key string into its kind and name components. Returns undefined if
@@ -8,7 +8,7 @@ import { type ResourceKey_Parsed, separator } from "./key"
  * @returns The parsed reference key, or undefined if parsing fails
  */
 
-export function tryParse(ref: string): ResourceKey_Parsed | undefined {
+export function tryParse(ref: string): ResourceIdent_Parsed | undefined {
     if (typeof ref !== "string") {
         return undefined
     }
@@ -33,4 +33,4 @@ export function tryParse(ref: string): ResourceKey_Parsed | undefined {
  * @template Name - The resource name
  */
 
-export type ResourceKey_sFormat<Kind extends string, Name extends string> = `${Kind}/${Name}`
+export type ResourceIdent_sFormat<Kind extends string, Name extends string> = `${Kind}/${Name}`

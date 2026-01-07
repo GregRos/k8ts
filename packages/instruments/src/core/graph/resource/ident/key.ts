@@ -1,12 +1,12 @@
 import type { GVK, GVK_Base } from "../api-kind"
 import type { DummyResource } from "../dummy"
 import type { ResourceRef, ResourceRef_Constructor_For } from "../ref"
-import type { ResourceKey_sFormat } from "./parsing"
+import type { ResourceIdent_sFormat } from "./parsing"
 
 export const separator = "/"
 
 /** Parsed representation of a reference key string. */
-export interface ResourceKey_Parsed {
+export interface ResourceIdent_Parsed {
     /** The Kubernetes resource kind */
     kind: string
     /** The resource name */
@@ -20,14 +20,14 @@ type nsKind = GVK<"v1/Namespace">
  *
  * @template Name - The resource name type
  */
-export interface ResourceKey_Options<Name extends string = string> {
+export interface ResourceIdent_Options<Name extends string = string> {
     /** The resource name */
     name: Name
     /** Optional namespace for namespaced resources. Can be a RefKey, string, or Ref2 */
-    namespace?: ResourceKey<nsKind> | string | ResourceRef<nsKind>
+    namespace?: ResourceIdent<nsKind> | string | ResourceRef<nsKind>
 }
 
-export interface ResourceKey_Like {
+export interface ResourceIdent_Like {
     readonly kind: GVK_Base
     readonly name: string
     readonly namespace: string | undefined
@@ -41,7 +41,7 @@ export interface ResourceKey_Like {
  * Important: This class is ambiguous because it can represent keys for namespaced resources but
  * ignore the namespace. Needs some kind of refactor.
  */
-export class ResourceKey<K extends GVK_Base = GVK_Base, Name extends string = string> {
+export class ResourceIdent<K extends GVK_Base = GVK_Base, Name extends string = string> {
     /** The resource name */
     name: string
     /** The optional namespace for namespaced resources */
@@ -55,7 +55,7 @@ export class ResourceKey<K extends GVK_Base = GVK_Base, Name extends string = st
      */
     constructor(
         readonly kind: K,
-        options: ResourceKey_Options<Name>
+        options: ResourceIdent_Options<Name>
     ) {
         this.name = options.name
         if (typeof options.namespace === "string") {
@@ -70,7 +70,7 @@ export class ResourceKey<K extends GVK_Base = GVK_Base, Name extends string = st
     }
 
     rename<NewName extends string>(newName: NewName) {
-        return new ResourceKey<K, NewName>(this.kind, {
+        return new ResourceIdent<K, NewName>(this.kind, {
             name: newName,
             namespace: this.namespace
         })
@@ -80,10 +80,10 @@ export class ResourceKey<K extends GVK_Base = GVK_Base, Name extends string = st
      * Returns the string representation of this reference key. Format: "Kind/Namespace/Name" or
      * "Kind/Name" for cluster-scoped resources.
      */
-    get string(): ResourceKey_sFormat<K["value"], Name> {
+    get string(): ResourceIdent_sFormat<K["value"], Name> {
         return [this.kind.value, this.namespace, this.name]
             .filter(x => !!x)
-            .join(separator) as ResourceKey_sFormat<K["value"], Name>
+            .join(separator) as ResourceIdent_sFormat<K["value"], Name>
     }
 
     /**
@@ -92,7 +92,7 @@ export class ResourceKey<K extends GVK_Base = GVK_Base, Name extends string = st
      * @param other - The RefKey to compare with
      * @returns True if both RefKeys have the same kind, name, and namespace
      */
-    equals(other: ResourceKey): boolean {
+    equals(other: ResourceIdent): boolean {
         if (other == null) {
             return false
         }

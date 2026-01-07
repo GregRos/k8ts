@@ -1,5 +1,5 @@
 import { getNiceClassName } from "what-are-you"
-import { ResourceKey } from "."
+import { ResourceIdent } from "."
 import { getDeepPropertyDescriptor } from "../../../../../metadata/dist/utils/map"
 import { display } from "../../../utils"
 import { Entity } from "../entity"
@@ -19,7 +19,7 @@ export abstract class Resource<
     Props extends object = object
 > extends Entity<ResourceVertex, Resource, ResourceRef> {
     abstract get kind(): GVK_Base
-    ident: ResourceKey<GVK_Base, Name>
+    ident: ResourceIdent<GVK_Base, Name>
     readonly props: Props
     constructor(name: Name, namespace: string | undefined, props: Props) {
         super()
@@ -32,7 +32,7 @@ export abstract class Resource<
             )
         }
         const kind = (this as any).kind as GVK_Base
-        this.ident = new ResourceKey(kind, {
+        this.ident = new ResourceIdent(kind, {
             name: name,
             namespace: namespace
         })

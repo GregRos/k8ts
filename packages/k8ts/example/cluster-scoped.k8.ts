@@ -3,7 +3,7 @@ import { storage } from "k8ts/kinds"
 import { W } from "./world"
 
 export default W.File("namespace.yaml", {
-    *FILE() {
+    *File() {
         const topolvm = storage.v1.StorageClass._.refKey({
             name: "topolvm"
         }).DummyResource()
