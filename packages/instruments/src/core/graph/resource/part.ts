@@ -1,4 +1,4 @@
-import type { GVK_Base } from "./api-kind"
+import type { GVK_Base } from "./gvk"
 import type { Resource_Props } from "./props"
 import { Resource } from "./resource"
 

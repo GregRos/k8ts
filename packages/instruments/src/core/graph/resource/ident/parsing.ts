@@ -1,4 +1,4 @@
-import { type ResourceIdent_Parsed, separator } from "./key"
+import { type ResourceIdent_Parsed, separator } from "./ident"
 
 /**
  * Attempts to parse a reference key string into its kind and name components. Returns undefined if

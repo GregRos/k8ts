@@ -1,6 +1,6 @@
-export * from "./api-kind"
 export * from "./dummy"
 export * from "./forward"
+export * from "./gvk"
 export * from "./ident"
 export * from "./node"
 export * from "./part"

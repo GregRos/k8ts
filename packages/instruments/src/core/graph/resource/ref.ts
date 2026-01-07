@@ -1,5 +1,5 @@
 import type { RefLike } from "../entity"
-import type { GVK_Like } from "./api-kind"
+import type { GVK_Like } from "./gvk"
 import type { ResourceVertex } from "./node"
 
 export type ResourceRef_Constructor_For<R extends ResourceRef = ResourceRef> = {

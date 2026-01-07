@@ -1,5 +1,5 @@
-import type { GVK, GVK_Base } from "../api-kind"
 import type { DummyResource } from "../dummy"
+import type { GVK, GVK_Base } from "../gvk"
 import type { ResourceRef, ResourceRef_Constructor_For } from "../ref"
 import type { ResourceIdent_sFormat } from "./parsing"
 

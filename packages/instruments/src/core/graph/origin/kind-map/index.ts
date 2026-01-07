@@ -1,7 +1,7 @@
 import { doddlify, seq, type Seq } from "doddle"
 
 import { K8tsGraphError } from "../../error"
-import { GVK, GVK_Base } from "../../resource/api-kind"
+import { GVK, GVK_Base } from "../../resource/gvk"
 import { ResourceIdent } from "../../resource/ident"
 import { ResourceRef_Constructor } from "../../resource/ref"
 const separator = "/"
