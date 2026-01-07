@@ -9,7 +9,7 @@ export abstract class ResourcePart<Props extends Resource_Props = Resource_Props
     abstract get kind(): GVK_Base
     #parent: Resource
     constructor(parent: Resource, name: string, props: Props) {
-        const parentNs = parent.key.namespace
+        const parentNs = parent.ident.namespace
 
         super(name, parentNs, props)
         this.#parent = parent

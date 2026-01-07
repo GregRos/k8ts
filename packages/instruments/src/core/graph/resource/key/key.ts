@@ -60,8 +60,8 @@ export class ResourceKey<K extends GVK_Base = GVK_Base, Name extends string = st
         this.name = options.name
         if (typeof options.namespace === "string") {
             this.namespace = options.namespace
-        } else if (options.namespace && "key" in options.namespace) {
-            this.namespace = options.namespace.key.name
+        } else if (options.namespace && "ident" in options.namespace) {
+            this.namespace = options.namespace.ident.name
         } else if (options.namespace) {
             this.namespace = options.namespace.name
         } else {

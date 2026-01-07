@@ -44,15 +44,15 @@ export class ResourceVertex extends Vertex<ResourceVertex, Resource> {
     get fullFqn() {
         return [this.kind.dns, this.namespace, this.name].filter(Boolean).join("/")
     }
-    get key(): ResourceKey {
-        return this.entity.key
+    get ident(): ResourceKey {
+        return this.entity.ident
     }
     get kind() {
         return this.entity.kind as GVK
     }
 
     get namespace() {
-        return this.key.namespace
+        return this.ident.namespace
     }
 
     get trace() {
@@ -112,18 +112,18 @@ export class ResourceVertex extends Vertex<ResourceVertex, Resource> {
     }
 
     get shortFqn() {
-        return `${this.origin.name}:${this.key}`
+        return `${this.origin.name}:${this.ident}`
     }
 
     get localName() {
-        return this.key.string
+        return this.ident.string
     }
 
     format(format: Formats) {
         return Display.get(this).pretty(format)
     }
     get name() {
-        return this.entity.key.name
+        return this.entity.ident.name
     }
     constructor(
         readonly origin: OriginVertex,

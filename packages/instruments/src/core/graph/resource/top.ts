@@ -48,8 +48,8 @@ export abstract class ResourceTop<
     protected __metadata__(): K8tsManifest_Metadata {
         const self = this
         return {
-            name: self.key.name,
-            namespace: self.key.namespace,
+            name: self.ident.name,
+            namespace: self.ident.namespace,
             labels: self.metadata.labels,
             annotations: self.metadata.annotations
         }

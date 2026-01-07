@@ -19,7 +19,7 @@ export interface ContainerMountDevice_Props extends ContainerDeviceMount_Input {
 
 export class ContainerDeviceMount extends ResourcePart<ContainerMountDevice_Props> {
     constructor(parent: Resource, props: ContainerMountDevice_Props) {
-        super(parent, props.$backend.key.name, props)
+        super(parent, props.$backend.ident.name, props)
     }
     get kind() {
         return v1.Pod.Container.DeviceMount._ satisfies GVK_SubKind
@@ -34,7 +34,7 @@ export class ContainerDeviceMount extends ResourcePart<ContainerMountDevice_Prop
     protected __submanifest__(): CDK.VolumeDevice {
         const body = {
             devicePath: this.props.mountPath,
-            name: this.props.$backend.key.name
+            name: this.props.$backend.ident.name
         }
         return merge(body, this.props.$overrides)
     }

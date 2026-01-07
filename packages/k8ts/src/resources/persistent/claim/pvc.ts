@@ -52,14 +52,14 @@ export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extend
         }
         const spec = {
             accessModes: nAccessModes,
-            volumeName: self.props.$bind?.key.name,
+            volumeName: self.props.$bind?.ident.name,
             volumeMode: $mode,
             resources: pvc_ResourcesSpec
                 .parse({
                     storage: $resources.storage
                 })
                 .toObject(),
-            storageClassName: self.props.$storageClass?.key.name ?? "standard"
+            storageClassName: self.props.$storageClass?.ident.name ?? "standard"
         } satisfies CDK.PersistentVolumeClaimSpec
         const spec2 = merge(spec, self.props.$overrides)
         return {

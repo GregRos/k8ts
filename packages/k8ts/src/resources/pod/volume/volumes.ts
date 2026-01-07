@@ -84,10 +84,10 @@ export abstract class PodVolume<
     get namespace() {
         const backend = this.props.$backend
         if (backend instanceof Resource) {
-            const x = backend.key.namespace
+            const x = backend.ident.namespace
             return x
         }
-        return this.__parent__().key.namespace
+        return this.__parent__().ident.namespace
     }
 
     protected __needs__(): Record<string, Resource | Resource[] | undefined> {
@@ -110,9 +110,9 @@ export abstract class PodVolume<
 export class PodVolume_Pvc extends PodVolume<PodVolume_Backend_Pvc> {
     protected __submanifest__(): CDK.Volume {
         const body = {
-            name: this.key.name,
+            name: this.ident.name,
             persistentVolumeClaim: {
-                claimName: this.props.$backend.key.name,
+                claimName: this.props.$backend.ident.name,
                 readOnly: this.props.readOnly
             }
         }
@@ -139,9 +139,9 @@ export class PodVolume_ConfigMap extends PodVolume<PodVolume_Backend_ConfigMap> 
         const mappings = mappingsToKeyPaths(this.props.mappings ?? {})
 
         const body = {
-            name: this.key.name,
+            name: this.ident.name,
             configMap: {
-                name: this.props.$backend.key.name,
+                name: this.props.$backend.ident.name,
                 optional: this.props.optional,
                 items: mappings
             }
@@ -157,9 +157,9 @@ export class PodVolume_Secret<
         const mappings = mappingsToKeyPaths(this.props.mappings ?? {})
 
         const body = {
-            name: this.key.name,
+            name: this.ident.name,
             secret: {
-                secretName: this.props.$backend.key.name,
+                secretName: this.props.$backend.ident.name,
                 optional: this.props.optional,
                 items: mappings
             }
@@ -171,7 +171,7 @@ export class PodVolume_Secret<
 export class PodVolume_HostPath extends PodVolume<PodVolume_Backend_HostPath> {
     protected __submanifest__(): CDK.Volume {
         const body = {
-            name: this.key.name,
+            name: this.ident.name,
             hostPath: {
                 path: this.props.$backend.path,
                 type: this.props.$backend.type

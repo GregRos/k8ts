@@ -92,8 +92,10 @@ export default W.File("deployment2.yaml", {
                     }
                 })
 
+                xx.ident
+
                 const deploy2 = new Deployment("xyz2", {
-                    replicas: 1,
+                    $replicas: 1,
                     $template: {
                         *$POD(k) {
                             const v = k.Volume("data", {

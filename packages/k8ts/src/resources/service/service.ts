@@ -72,7 +72,7 @@ export class Service<
     }
 
     get hostname() {
-        return `${this.key.name}.${this.key.namespace}.svc.cluster.local`
+        return `${this.ident.name}.${this.ident.namespace}.svc.cluster.local`
     }
 
     private _getPortoPort(port: PortsExposed, protocol: "http" | "https") {
@@ -84,7 +84,7 @@ export class Service<
             return ""
         }
         if (portNumber === undefined) {
-            throw new K8tsResourceError(`Port ${port} is not defined in service ${this.key.name}`)
+            throw new K8tsResourceError(`Port ${port} is not defined in service ${this.ident.name}`)
         }
         return `:${portNumber}`
     }
@@ -96,7 +96,7 @@ export class Service<
             ...self.props.$frontend,
             ports: toServicePorts(svcPorts),
             selector: {
-                app: self.props.$backend.key.name
+                app: self.props.$backend.ident.name
             }
         } satisfies CDK.ServiceSpec
         const spec2 = merge(spec, self.props.$overrides)

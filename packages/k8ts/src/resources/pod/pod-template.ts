@@ -74,7 +74,7 @@ export class PodTemplate<Ports extends string = string> extends ResourcePart<Pod
     }
     protected __metadata__() {
         return {
-            name: this.key.name,
+            name: this.ident.name,
             labels: this.metadata.labels,
             annotations: this.metadata.annotations
         }

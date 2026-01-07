@@ -21,7 +21,7 @@ export interface ContainerVolumeMount_Props extends ContainerVolumeMount_Unbound
 }
 export class ContainerVolumeMount extends ResourcePart<ContainerVolumeMount_Props> {
     constructor(parent: Resource, props: ContainerVolumeMount_Props) {
-        super(parent, props.$backend.key.name, props)
+        super(parent, props.$backend.ident.name, props)
     }
     get kind() {
         return v1.Pod.Container.VolumeMount._
@@ -36,7 +36,7 @@ export class ContainerVolumeMount extends ResourcePart<ContainerVolumeMount_Prop
     }
     protected __submanifest__(): CDK.VolumeMount {
         const body = {
-            name: this.props.$backend.key.name,
+            name: this.props.$backend.ident.name,
             mountPath: this.props.mountPath,
             readOnly: this.props.readOnly,
             subPath: this.props.subPath

@@ -22,7 +22,7 @@ export type Deployment_Strategy = Deployment_Strategy_RollingUpdate | Deployment
 
 export interface Deployment_Props<Ports extends string>
     extends Resource_Props_Top<CDK.DeploymentSpec> {
-    replicas?: number
+    $replicas?: number
     $template: PodProps<Ports>
     $strategy?: Deployment_Strategy
 }
@@ -38,24 +38,24 @@ export class Deployment<Name extends string, Ports extends string = string> exte
         const origin = OriginContextTracker.current
         if (!origin) {
             throw new K8tsResourceError(
-                `Deployment ${this.key.name} must be created within an OriginEntity context`
+                `Deployment ${this.ident.name} must be created within an OriginEntity context`
             )
         }
         this.props.$template.$POD = origin["__binder__"]().bind(this.props.$template.$POD)
     })()
 
     protected __kids__(): Iterable<ResourceRef> {
-        return [this._template]
+        return [this.template]
     }
     protected __body__(): CDK.KubeDeploymentProps {
         const self = this
-        const template = self._template["__submanifest__"]()
+        const template = self.template["__submanifest__"]()
         const noKindFields = omit(template, ["kind", "apiVersion"])
         const spec = {
-            replicas: self.props.replicas,
+            replicas: self.props.$replicas,
             selector: {
                 matchLabels: {
-                    app: self.key.name
+                    app: self.ident.name
                 }
             },
             template: noKindFields,
@@ -84,13 +84,13 @@ export class Deployment<Name extends string, Ports extends string = string> exte
     }
 
     @doddlify
-    protected get _template() {
-        const podTemplate = new PodTemplate(this, this.key.name, this.props.$template)
-        podTemplate.metadata.add("%app", this.key.name)
+    get template() {
+        const podTemplate = new PodTemplate(this, this.ident.name, this.props.$template)
+        podTemplate.metadata.add("%app", this.ident.name)
         return podTemplate
     }
 
     get ports() {
-        return this._template.ports
+        return this.template.ports
     }
 }

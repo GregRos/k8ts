@@ -13,7 +13,7 @@ export type ResourceRef<
     Name extends string = string
 > = RefLike & {
     kind: _Kind
-    key: {
+    ident: {
         name: Name
         namespace?: string
     }

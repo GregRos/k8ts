@@ -25,7 +25,7 @@ export class PodDevice extends ResourcePart<PodDeviceBackendPvc> {
     }
     get sourceNamespace() {
         const backend = this.props.$backend as any as Resource
-        return backend.key.namespace
+        return backend.ident.namespace
     }
     protected __needs__() {
         return {
@@ -35,9 +35,9 @@ export class PodDevice extends ResourcePart<PodDeviceBackendPvc> {
 
     protected __submanifest__(): CDK.Volume {
         const body = {
-            name: this.key.name,
+            name: this.ident.name,
             persistentVolumeClaim: {
-                claimName: this.backend.$backend.key.name,
+                claimName: this.backend.$backend.ident.name,
                 readOnly: this.backend.readOnly
             }
         }

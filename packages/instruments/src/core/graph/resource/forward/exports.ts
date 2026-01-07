@@ -8,7 +8,7 @@ import { ForwardRef } from "./ref"
 
 /** Expands the resources exported by an OriginExported into a dictionary of name to FwRef. */
 export type ForwardExports_ByKey<Exports extends ResourceRef = ResourceRef> = {
-    [E in Exports as `${E["kind"]["value"]}/${E["key"]["name"]}`]: ForwardRef<E>
+    [E in Exports as `${E["kind"]["value"]}/${E["ident"]["name"]}`]: ForwardRef<E>
 }
 /**
  * A type describing all resources exported by an {@link OriginExporter} as forward references.
@@ -142,7 +142,7 @@ class ForwardExports_ProxyHandler<Entity extends OriginExporter> implements Prox
 
         return ForwardRef({
             class: clazz,
-            key: new ResourceKey(refKey.kind, {
+            ident: new ResourceKey(refKey.kind, {
                 name: refKey.name
             }),
             origin: this.entity,

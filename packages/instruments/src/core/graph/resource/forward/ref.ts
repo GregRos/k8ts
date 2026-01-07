@@ -46,7 +46,7 @@ export interface ForwardRef_Props<Referenced extends ResourceRef> {
     /** The class constructor of the referenced resource. */
     readonly class?: ResourceRef_Constructor_For<Referenced>
     /** The reference key identifying the referenced resource. */
-    readonly key: ResourceKey
+    readonly ident: ResourceKey
     readonly origin: object
     readonly resolver: Doddle<Referenced>
 }
@@ -77,7 +77,7 @@ class ForwardRef_Proxied<To extends ResourceRef = ResourceRef> {
     }
 
     get name() {
-        return this.#props.key.name
+        return this.#props.ident.name
     }
 
     get clazz() {
@@ -87,11 +87,11 @@ class ForwardRef_Proxied<To extends ResourceRef = ResourceRef> {
     }
 
     get namespace() {
-        return this.__pull__().key.namespace // The $props.key won't have a namespace
+        return this.__pull__().ident.namespace // The $props.ident won't have a namespace
     }
 
     get kind() {
-        return this.#props.key.kind
+        return this.#props.ident.kind
     }
 
     static is(obj: any): obj is ForwardRef {
@@ -171,7 +171,7 @@ class ForwardRef_ProxyHandler<T extends ResourceRef> implements ProxyHandler<T> 
         return resourceDesc
     }
     get referant() {
-        return this._subject["__reference_props__"]().key.string
+        return this._subject["__reference_props__"]().ident.string
     }
     #createImmutableError(action: string) {
         return new K8tsProxyError(

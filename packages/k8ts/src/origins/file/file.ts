@@ -28,7 +28,7 @@ export class K8tsFile extends OriginExporter<K8tsFile_Props> {
     }
 
     get namespace() {
-        return this._props.namespace?.key.name
+        return this._props.namespace?.ident.name
     }
 
     @doddlify

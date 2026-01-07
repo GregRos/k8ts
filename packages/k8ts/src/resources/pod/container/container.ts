@@ -114,7 +114,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
             }
             const backend = value.$backend
             if (backend instanceof Resource) {
-                if (backend.key.namespace !== self.key.namespace) {
+                if (backend.ident.namespace !== self.ident.namespace) {
                     throw new K8tsResourceError(
                         `Environment variable reference "${key}" must be in the same namespace as the container "${self}", but was ${backend}"`
                     )
@@ -122,15 +122,15 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
             }
         }
         for (const vol of self.volumes) {
-            if (vol.key.namespace !== self.key.namespace) {
+            if (vol.ident.namespace !== self.ident.namespace) {
                 throw new K8tsResourceError(
-                    `Volume reference "${vol}" had an inherited namespace ${vol.key.namespace}, which is different from the container "${self}"`
+                    `Volume reference "${vol}" had an inherited namespace ${vol.ident.namespace}, which is different from the container "${self}"`
                 )
             }
         }
         const envFroms = (self.props.$envFrom ?? []).map(ef => {
             const source = ef.source as any as Resource
-            if (source.key.namespace !== self.key.namespace) {
+            if (source.ident.namespace !== self.ident.namespace) {
                 throw new K8tsResourceError(
                     `EnvFrom source reference "${source}" must be in the same namespace as the container "${self}"`
                 )
@@ -139,14 +139,14 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
                 return {
                     secretRef: {
                         optional: ef.optional,
-                        name: source.key.name
+                        name: source.ident.name
                     }
                 } as CDK.EnvFromSource
             } else if (source.is(v1.ConfigMap._)) {
                 return {
                     configMapRef: {
                         optional: ef.optional,
-                        name: source.key.name
+                        name: source.ident.name
                     }
                 } as CDK.EnvFromSource
             } else {
@@ -156,7 +156,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
             }
         })
         const container: CDK.Container = {
-            name: self.key.name,
+            name: self.ident.name,
             image: $image.toString(),
             ports: containerPorts,
             resources: resourcesObject,
