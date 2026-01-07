@@ -24,7 +24,7 @@ export class K8tsFile extends OriginExporter<K8tsFile_Props> {
         })
         this.metadata.overwrite("namespace", this._props.namespace?.name)
     })()
-    get ident() {
+    get kind() {
         return "[k8ts] File"
     }
 

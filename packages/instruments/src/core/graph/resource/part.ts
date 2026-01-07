@@ -6,7 +6,7 @@ export abstract class ResourcePart<Props extends Resource_Props = Resource_Props
     string,
     Props
 > {
-    abstract get ident(): GVK_Base
+    abstract get kind(): GVK_Base
     #parent: Resource
     constructor(parent: Resource, name: string, props: Props) {
         super(name, props)

@@ -54,7 +54,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
     PodContainer_Props<Ports>
 > {
     __PORTS__!: Ports
-    get ident() {
+    get kind() {
         return v1.Pod.Container._
     }
 
@@ -151,7 +151,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
                 } as CDK.EnvFromSource
             } else {
                 throw new K8tsResourceError(
-                    `EnvFrom source reference "${source}" must be a ConfigMap or Secret, but was ${source.ident}`
+                    `EnvFrom source reference "${source}" must be a ConfigMap or Secret, but was ${source.kind}`
                 )
             }
         })

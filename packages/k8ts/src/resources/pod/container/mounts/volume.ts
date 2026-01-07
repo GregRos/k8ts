@@ -23,7 +23,7 @@ export class ContainerVolumeMount extends ResourcePart<ContainerVolumeMount_Prop
     constructor(parent: Resource, props: ContainerVolumeMount_Props) {
         super(parent, props.$backend.name, props)
     }
-    get ident() {
+    get kind() {
         return v1.Pod.Container.VolumeMount._
     }
 

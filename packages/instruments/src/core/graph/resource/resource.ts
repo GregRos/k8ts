@@ -17,7 +17,7 @@ export abstract class Resource<
     Name extends string = string,
     Props extends object = object
 > extends Entity<ResourceVertex, Resource, ResourceRef> {
-    abstract get ident(): GVK_Base
+    abstract get kind(): GVK_Base
 
     abstract readonly namespace: string | undefined
 
@@ -28,10 +28,10 @@ export abstract class Resource<
         super()
 
         this.name = name
-        const desc = getDeepPropertyDescriptor(this, "ident")
+        const desc = getDeepPropertyDescriptor(this, "kind")
         if (!desc || !desc.get) {
             throw new K8tsGraphError(
-                `ResourceEntity subclass ${getNiceClassName(this)} must implement the 'ident' property as a getter, but it's missing or not a getter.`
+                `ResourceEntity subclass ${getNiceClassName(this)} must implement the 'kind' property as a getter, but it's missing or not a getter.`
             )
         }
     }

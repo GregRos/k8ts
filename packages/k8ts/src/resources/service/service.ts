@@ -40,7 +40,7 @@ export class Service<
     PortsExposed extends string = string
 > extends ResourceTop<Name, Service_Props<string, PortsExposed>> {
     __PORTS__!: PortsExposed
-    get ident() {
+    get kind() {
         return v1.Service._
     }
 

@@ -19,10 +19,10 @@ export abstract class ResourceTop<
 > extends Resource<Name, Props> {
     private readonly _origin: Origin
     readonly metadata: Metadata
-    abstract readonly ident: GVK
+    abstract readonly kind: GVK
 
     get key() {
-        return this.ident.refKey({ name: this.name, namespace: this.namespace })
+        return this.kind.refKey({ name: this.name, namespace: this.namespace })
     }
 
     constructor(name: Name, props: Props) {
@@ -60,8 +60,8 @@ export abstract class ResourceTop<
 
     protected __idents__(): K8tsManifest_Ident {
         return {
-            apiVersion: this.ident.parent!.url,
-            kind: this.ident.value
+            apiVersion: this.kind.parent!.url,
+            kind: this.kind.value
         }
     }
 

@@ -8,12 +8,12 @@ const separator = "/"
 interface NodeEntry {
     kindName: string
     class: ResourceRef_Constructor
-    ident: GVK
+    kind: GVK
 }
 export type KindMap_Input<Ks extends ResourceRef_Constructor> = Ks[]
 type LookupKey = string | ResourceKey | ResourceRef_Constructor | GVK
 export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constructor> {
-    __KINDS__!: Kinds["prototype"]["ident"]
+    __KINDS__!: Kinds["prototype"]["kind"]
     constructor(private _ownKinds: KindMap_Input<Kinds>) {}
 
     [Symbol.iterator]() {
@@ -29,11 +29,11 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
     @doddlify
     private get _entriesSeq(): Seq<NodeEntry> {
         return seq(this._ownKinds).map(klass => {
-            const kind = klass.prototype.ident
+            const kind = klass.prototype.kind
             const entry: NodeEntry = {
-                kindName: kind.name,
+                kindName: kind.value,
                 class: klass,
-                ident: kind
+                kind: kind
             }
             return entry
         })
@@ -45,7 +45,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
                 return [
                     [entry.kindName, entry],
                     [entry.class, entry],
-                    [entry.ident.url, entry]
+                    [entry.kind.url, entry]
                 ] as const
             })
             .toMap(x => x)
@@ -73,16 +73,16 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
         if (typeof ref === "object") {
             return undefined
         }
-        const [kind, name] = ref.split(separator).map(s => s.trim())
-        if (!kind || !name) {
+        const [sKind, name] = ref.split(separator).map(s => s.trim())
+        if (!sKind || !name) {
             return undefined
         }
-        const ident = this.tryGetKind(kind)
-        if (!ident) {
+        const kind = this.tryGetKind(sKind)
+        if (!kind) {
             return undefined
         }
 
-        return (ident as GVK).refKey({
+        return (kind as GVK).refKey({
             name
         })
     }
@@ -97,8 +97,8 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
     private _unknownNameError(kind: string) {
         return new K8tsGraphError(`The shorthand name ${kind} is not registered`)
     }
-    private _unknownIdentError(ident: GVK_Base) {
-        return new K8tsGraphError(`The kind identifier ${ident} is not registered`)
+    private _unknownIdentError(kind: GVK_Base) {
+        return new K8tsGraphError(`The kind identifier ${kind} is not registered`)
     }
     private _unknownClassError(klass: Function) {
         return new K8tsGraphError(`The class ${klass.name} is not registered`)
@@ -138,21 +138,21 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
     }
 
     tryGetKind(kindOrIdent: LookupKey): this["__KINDS__"] | undefined {
-        return this._tryGetEntry(kindOrIdent)?.ident as this["__KINDS__"] | undefined
+        return this._tryGetEntry(kindOrIdent)?.kind as this["__KINDS__"] | undefined
     }
 
     getKind(kindOrClass: LookupKey): this["__KINDS__"] {
-        return this._getEntry(kindOrClass).ident
+        return this._getEntry(kindOrClass).kind
     }
 
-    tryGetClass(kindOrIdent: LookupKey): ResourceRef_Constructor | undefined {
-        return this._tryGetEntry(kindOrIdent)?.class
+    tryGetClass(kind: LookupKey): ResourceRef_Constructor | undefined {
+        return this._tryGetEntry(kind)?.class
     }
 
     getClass(refKey: ResourceKey): ResourceRef_Constructor
     getClass<F extends ResourceRef_Constructor>(klass: F): F
     getClass(kind: string): ResourceRef_Constructor
-    getClass(ident: GVK): ResourceRef_Constructor
+    getClass(kind: GVK): ResourceRef_Constructor
     getClass<T extends ResourceRef_Constructor | string>(
         kindOrClass: T
     ): T extends ResourceRef_Constructor ? string : ResourceRef_Constructor

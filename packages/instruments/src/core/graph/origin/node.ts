@@ -13,7 +13,7 @@ import { Origin } from "./origin"
         return ""
     },
     pretty(origin, format) {
-        const kindName = chalk.greenBright.bold(origin.ident)
+        const kindName = chalk.greenBright.bold(origin.kind)
         const resourceName = chalk.cyan(origin.name)
         const pref = this.prefix!()
 
@@ -27,11 +27,11 @@ export class OriginVertex extends Vertex<OriginVertex, Origin> {
     get metadata() {
         return this.entity.metadata
     }
-    get ident() {
-        return this.entity.ident
+    get kind() {
+        return this.entity.kind
     }
     get shortFqn() {
-        return `${this.ident}/${this.name}`
+        return `${this.kind}/${this.name}`
     }
     get inheritedMeta(): Metadata {
         const self = this

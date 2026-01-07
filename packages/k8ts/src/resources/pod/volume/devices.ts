@@ -13,7 +13,7 @@ interface PodDeviceBackendPvc extends Resource_Props<CDK.Volume> {
 export type PodDeviceBackend = PodDeviceBackendPvc
 
 export class PodDevice extends ResourcePart<PodDeviceBackendPvc> {
-    get ident() {
+    get kind() {
         return v1.Pod.Device._
     }
 

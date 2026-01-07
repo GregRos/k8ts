@@ -26,7 +26,7 @@ export class CronJob<
     Name extends string = string,
     Cron extends Cron_Record = Cron_Record
 > extends ResourceTop<Name, CronJob_Props<Cron>> {
-    get ident() {
+    get kind() {
         return batch.v1.CronJob._
     }
 

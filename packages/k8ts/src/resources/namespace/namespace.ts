@@ -8,7 +8,7 @@ export class Namespace<Name extends string = string> extends ResourceTop<Name, N
     constructor(name: Name, props: NamespaceProps = {}) {
         super(name, props)
     }
-    get ident() {
+    get kind() {
         return v1.Namespace._
     }
 

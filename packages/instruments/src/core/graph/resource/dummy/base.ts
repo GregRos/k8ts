@@ -25,7 +25,7 @@ export class DummyResource<K extends GVK> extends Resource<string, any> {
         return this.metadata.tryGet("namespace")
     }
 
-    get ident() {
+    get kind() {
         return this.key.kind
     }
 }

@@ -31,7 +31,7 @@ export class Secret<Name extends string = string, Keys extends string = string> 
     get keys() {
         return Object.keys(this.props.$data ?? {}) as Keys[]
     }
-    get ident() {
+    get kind() {
         return v1.Secret._
     }
 

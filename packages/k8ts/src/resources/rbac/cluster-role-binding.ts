@@ -15,7 +15,7 @@ export class ClusterRoleBinding<Name extends string = string> extends ResourceTo
     Name,
     ClusterRoleBoding_Props
 > {
-    get ident() {
+    get kind() {
         return rbac.v1.ClusterRoleBinding._
     }
 
@@ -28,12 +28,12 @@ export class ClusterRoleBinding<Name extends string = string> extends ResourceTo
     protected __body__(): CDK.KubeClusterRoleBindingProps {
         const body = {
             roleRef: {
-                apiGroup: this.props.$role.ident.parent!.parent!.url,
-                kind: this.props.$role.ident.value,
+                apiGroup: this.props.$role.kind.parent!.parent!.url,
+                kind: this.props.$role.kind.value,
                 name: this.props.$role.name
             },
             subjects: this.props.$subjects.map(sa => ({
-                kind: sa.ident.value,
+                kind: sa.kind.value,
                 name: sa.name,
                 namespace: sa.namespace!
             }))

@@ -31,7 +31,7 @@ export class ClusterRole<Name extends string = string> extends ResourceTop<
     Name,
     ClusterRole_Props
 > {
-    get ident() {
+    get kind() {
         return rbac.v1.ClusterRole._
     }
     constructor(name: Name, props: ClusterRole_Props) {

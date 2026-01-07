@@ -18,7 +18,7 @@ export interface K8tsFile_Section_Props<Exported extends ResourceRef = ResourceR
 }
 
 export class K8tsFile_Section extends OriginExporter<K8tsFile_Section_Props> {
-    get ident() {
+    get kind() {
         return "[k8ts] File/Section"
     }
     #_ = doddle(() => {

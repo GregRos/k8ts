@@ -8,7 +8,7 @@ export class Engine_ResourceLoader {
         let names = new Map<string, ResourceVertex>()
         const nameRegexp = /^[a-zA-Z0-9][a-zA-Z0-9_-]*$/
         for (const resource of resources) {
-            const name = [resource.ident.value, resource.namespace, resource.name]
+            const name = [resource.kind.value, resource.namespace, resource.name]
                 .filter(Boolean)
                 .join("/")
             const existing = names.get(name)

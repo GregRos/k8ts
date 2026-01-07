@@ -35,7 +35,7 @@ export class Deployment<Name extends string, Ports extends string = string> exte
     Deployment_Props<Ports>
 > {
     __PORTS__!: Ports
-    get ident() {
+    get kind() {
         return apps.v1.Deployment._
     }
 

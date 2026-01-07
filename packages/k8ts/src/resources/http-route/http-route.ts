@@ -17,7 +17,7 @@ export class HttpRoute<Name extends string, Ports extends string> extends Resour
 > {
     declare name: Name
 
-    get ident() {
+    get kind() {
         return gateway.v1.HttpRoute._
     }
 

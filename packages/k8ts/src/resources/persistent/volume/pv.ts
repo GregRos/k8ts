@@ -49,7 +49,7 @@ export class Pv<
     Name extends string = string
 > extends ResourceTop<Name, Pv_Props<Mode>> {
     __MODE__!: Mode
-    get ident() {
+    get kind() {
         return v1.PersistentVolume._
     }
 

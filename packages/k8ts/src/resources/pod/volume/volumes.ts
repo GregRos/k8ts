@@ -77,7 +77,7 @@ export type PodVolumeBackendKnownPaths<T extends PodVolume_Backend> = string & _
 export abstract class PodVolume<
     P extends PodVolume_Backend = PodVolume_Backend
 > extends ResourcePart<P> {
-    get ident() {
+    get kind() {
         return v1.Pod.Volume._
     }
 

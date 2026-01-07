@@ -11,7 +11,7 @@ export class ServiceAccount<Name extends string = string> extends ResourceTop<
     Name,
     ServiceAccount_Props
 > {
-    get ident() {
+    get kind() {
         return v1.ServiceAccount._
     }
     protected __body__(): CDK.KubeServiceAccountProps {

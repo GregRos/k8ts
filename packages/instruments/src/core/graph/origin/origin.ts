@@ -16,7 +16,7 @@ import { OriginContextTracker } from "./tracker"
 @display({
     simple: x => `[${x.vertex.shortFqn}]`,
     pretty(origin) {
-        const kindPart = chalk.greenBright.bold(origin.ident)
+        const kindPart = chalk.greenBright.bold(origin.kind)
         const originName = chalk.cyan(origin.name)
         return `${kindPart}/${originName}`
     }
@@ -25,7 +25,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
     OriginVertex,
     Origin
 > {
-    abstract get ident(): string
+    abstract get kind(): string
     private _emitter = new EventEmitter<OriginEventMap>()
     private readonly _ownResources: Resource[] = []
     readonly metadata: Metadata

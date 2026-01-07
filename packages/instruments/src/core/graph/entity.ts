@@ -6,7 +6,7 @@ export type LiteralModes = "simple" | "pretty" | "prefix"
 let globalEntityId = 0
 
 export type RefLike = {
-    ident: any
+    kind: any
     name: string
     asAssert<Inst extends RefLike>(cls: abstract new (...args: any[]) => Inst): Inst
     is<Inst extends RefLike>(cls: abstract new (...args: any[]) => Inst): this is Inst
@@ -25,7 +25,7 @@ export abstract class Entity<
     protected __kids__(): Iterable<_EntRefType> {
         return this._ownKids
     }
-    abstract readonly ident: any
+    abstract readonly kind: any
     private readonly _ID = (() => {
         return globalEntityId++
     })()
@@ -39,7 +39,7 @@ export abstract class Entity<
             `This Resource ${this} is not compatible with the class ${getNiceClassName(cls)}.`
         )
     }
-    is<K extends this["ident"]>(ident: K): this is { ident: K }
+    is<K extends this["kind"]>(kind: K): this is { kind: K }
     is<Inst extends _EntRefType = _EntRefType>(
         cls: abstract new (...args: any[]) => Inst
     ): this is Inst
@@ -47,7 +47,7 @@ export abstract class Entity<
         if (typeof cls === "function") {
             return this instanceof cls
         }
-        return this.ident.equals(cls)
+        return this.kind.equals(cls)
     }
     abstract equals(other: any): boolean
 

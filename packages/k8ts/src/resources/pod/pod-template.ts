@@ -38,7 +38,7 @@ export interface PodProps<Ports extends string> extends Resource_Props<Partial<C
 }
 
 export class PodTemplate<Ports extends string = string> extends ResourcePart<PodProps<Ports>> {
-    get ident() {
+    get kind() {
         return v1.PodTemplate._
     }
     private readonly _containers = seq(() => this.props.$POD(new PodScope(this)))
@@ -166,7 +166,7 @@ export class PodScope {
         } else if (backend.is(v1.PersistentVolumeClaim._)) {
             return new PodVolume_Pvc(this._parent, name, options as any)
         }
-        throw new K8tsResourceError(`Unsupported volume backend kind: ${backend.ident}`)
+        throw new K8tsResourceError(`Unsupported volume backend kind: ${backend.kind}`)
     }
     Device(name: string, options: PodDeviceBackend) {
         return new PodDevice(this._parent, name, options)

@@ -6,7 +6,7 @@ import { Origin } from "./origin"
  * k8ts. They're expected to already exist in the target cluster.
  */
 export class DummyOrigin extends Origin {
-    get ident() {
+    get kind() {
         return "[k8ts] External"
     }
     private constructor() {

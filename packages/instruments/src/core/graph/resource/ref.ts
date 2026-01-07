@@ -12,10 +12,10 @@ export type ResourceRef<
     _Kind extends GVK_Like = GVK_Like,
     Name extends string = string
 > = RefLike & {
-    ident: _Kind
+    kind: _Kind
     name: Name
     namespace?: string
-    is<_Ident extends GVK_Like>(ident: _Ident): this is ResourceRef<_Ident>
+    is<_Kind extends GVK_Like>(kind: _Kind): this is ResourceRef<_Kind>
     equals(other: any): boolean
     vertex: ResourceVertex
 }

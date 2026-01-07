@@ -14,7 +14,7 @@ export class ConfigMap<
     get keys(): Keys[] {
         return Object.keys(this.props.$data) as Keys[]
     }
-    get ident() {
+    get kind() {
         return v1.ConfigMap._
     }
 

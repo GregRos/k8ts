@@ -7,7 +7,7 @@ import { Formats } from "../entity"
 import { K8tsGraphError } from "../error"
 import { Vertex } from "../node"
 import { OriginVertex } from "../origin/node"
-import type { GVK, GVK_Like } from "./api-kind"
+import type { GVK } from "./api-kind"
 import { ResourceKey } from "./key"
 import type { ResourceRef_Constructor_For } from "./ref"
 import type { Resource } from "./resource"
@@ -17,7 +17,7 @@ import type { Resource } from "./resource"
     pretty(resource, format) {
         format ??= "global"
 
-        let kindName = chalk.greenBright(resource.ident.value)
+        let kindName = chalk.greenBright(resource.kind.value)
         if (format !== "lowkey") {
             kindName = chalk.bold(kindName)
         }
@@ -42,16 +42,16 @@ import type { Resource } from "./resource"
 })
 export class ResourceVertex extends Vertex<ResourceVertex, Resource> {
     get fullFqn() {
-        return [this.ident.dns, this.namespace, this.name].filter(Boolean).join("/")
+        return [this.kind.dns, this.namespace, this.name].filter(Boolean).join("/")
     }
     get key(): ResourceKey {
-        return new ResourceKey(this.ident, {
+        return new ResourceKey(this.kind, {
             name: this.name,
             namespace: this.namespace
         })
     }
-    get ident() {
-        return this.entity.ident as GVK
+    get kind() {
+        return this.entity.kind as GVK
     }
 
     get namespace() {
@@ -124,9 +124,6 @@ export class ResourceVertex extends Vertex<ResourceVertex, Resource> {
         return Display.get(this).pretty(format)
     }
 
-    hasIdent(ident: GVK_Like) {
-        return this.ident.equals(ident)
-    }
     constructor(
         readonly origin: OriginVertex,
         readonly entity: Resource

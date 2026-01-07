@@ -21,7 +21,7 @@ export class ContainerDeviceMount extends ResourcePart<ContainerMountDevice_Prop
     constructor(parent: Resource, props: ContainerMountDevice_Props) {
         super(parent, props.$backend.name, props)
     }
-    get ident() {
+    get kind() {
         return v1.Pod.Container.DeviceMount._ satisfies GVK_SubKind
     }
     get backend() {

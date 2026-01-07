@@ -31,7 +31,7 @@ export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extend
     Pvc_Props<Mode>
 > {
     declare name: Name
-    get ident() {
+    get kind() {
         return v1.PersistentVolumeClaim._
     }
 
