@@ -33,7 +33,7 @@ export abstract class GVK_Base<Url extends string = string> implements GVK_Like 
     }
 
     equals(other: any) {
-        if (other instanceof GVK_Group) {
+        if (other instanceof GVK_Base) {
             return this.url === other.url
         }
         if (typeof other === "string") {

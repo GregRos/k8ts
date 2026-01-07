@@ -107,7 +107,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
         if (typeof something === "string") {
             if (something.includes("/")) {
                 const r = this.parse(something)
-                return r.kind.text
+                return r.kind.url
             }
             return something
         } else if (typeof something === "function") {

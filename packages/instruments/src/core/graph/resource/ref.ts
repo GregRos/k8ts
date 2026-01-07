@@ -15,6 +15,7 @@ export type ResourceRef<
     kind: _Kind
     name: Name
     namespace?: string
+    is<_Ctor extends ResourceRef_Constructor>(cls: _Ctor): this is InstanceType<_Ctor>
     is<_Kind extends GVK_Like>(kind: _Kind): this is ResourceRef<_Kind>
     equals(other: any): boolean
     vertex: ResourceVertex

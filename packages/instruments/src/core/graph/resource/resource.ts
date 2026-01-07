@@ -35,7 +35,16 @@ export abstract class Resource<
             )
         }
     }
-
+    is<K extends this["kind"]>(kind: K): this is { kind: K }
+    is<Inst extends ResourceRef = ResourceRef>(
+        cls: abstract new (...args: any[]) => Inst
+    ): this is Inst
+    is(cls: any): boolean {
+        if (typeof cls === "function") {
+            return this instanceof cls
+        }
+        return this.kind.equals(cls)
+    }
     equals(other: any): boolean {
         if (!other) {
             return false
