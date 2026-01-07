@@ -1,7 +1,7 @@
 import { ResourceTop, type DataSource, type Resource_Props_Top } from "@k8ts/instruments"
 import { merge } from "lodash"
 import type { CDK } from "../.."
-import { v1 } from "../../resource-idents/default"
+import { v1 } from "../../gvks/default"
 import { resolveDataSourceRecord } from "./resolver"
 
 export interface Secret_Entry {

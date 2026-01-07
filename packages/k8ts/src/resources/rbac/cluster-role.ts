@@ -2,7 +2,7 @@ import { GVK, ResourceTop, type Resource_Props_Top } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { merge } from "lodash"
-import { rbac } from "../../resource-idents/rbac"
+import { rbac } from "../../gvks/rbac"
 export interface ClusterRole_Rule<Resources extends GVK[] = GVK[]> {
     resources: Resources
     verbs: Verbs[]

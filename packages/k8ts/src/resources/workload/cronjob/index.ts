@@ -9,8 +9,8 @@ import { type Metadata_Input } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
 import { merge, omitBy } from "lodash"
-import { Timezone } from "../../../../instruments/dist/expressions/timezone"
-import { batch } from "../../resource-idents/batch"
+import { Timezone } from "../../../../../instruments/dist/expressions/timezone"
+import { batch } from "../../../gvks/batch"
 import { PodTemplate, type PodTemplate_Props } from "../pod"
 export interface CronJob_Props<CronSpec extends Cron_Record>
     extends Resource_Props_Top<CDK.KubeCronJobProps> {

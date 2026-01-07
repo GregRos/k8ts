@@ -1,15 +1,11 @@
 import type { ResourceRef, ResourceRef_HasKeys } from "@k8ts/instruments"
-import {
-    type PodContainer_Props,
-    type PodDeviceBackend,
-    type PodVolume,
-    type PodVolume_Backend,
-    PodContainer,
-    PodDevice
-} from "../.."
-import type { EnvValuePrimitive } from "../../env"
-import { v1 } from "../../resource-idents"
-import { K8tsResourceError } from "../errors"
+import { PodContainer, PodContainer_Props } from "./container"
+
+import { PodDevice, PodDeviceBackend, PodVolume, PodVolume_Backend } from "./volume"
+
+import type { EnvValuePrimitive } from "../../../env"
+import { v1 } from "../../../gvks"
+import { K8tsResourceError } from "../../errors"
 import type { PodTemplate } from "./pod-template"
 import {
     type PodVolume_Backend_ConfigMap,

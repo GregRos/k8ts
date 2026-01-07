@@ -8,7 +8,7 @@ import {
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { merge } from "lodash"
-import { v1 } from "../../resource-idents/index"
+import { v1 } from "../../gvks/index"
 import { K8tsResourceError } from "../errors"
 import type { Workload_Ref } from "../workload-ref"
 import { Service_PortRef } from "./service-port"

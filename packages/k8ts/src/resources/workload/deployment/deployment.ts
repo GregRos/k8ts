@@ -2,8 +2,8 @@ import { ResourceRef, ResourceTop, type Resource_Props_Top } from "@k8ts/instrum
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
 import { merge, omit } from "lodash"
-import { apps } from "../../resource-idents/apps"
-import { K8tsResourceError } from "../errors"
+import { apps } from "../../../gvks/apps"
+import { K8tsResourceError } from "../../errors"
 import { PodTemplate, type PodTemplate_Props } from "../pod"
 
 export interface Deployment_Strategy_RollingUpdate extends CDK.RollingUpdateDeployment {

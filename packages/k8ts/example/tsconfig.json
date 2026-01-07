@@ -17,7 +17,7 @@
       "@lib": ["../src"],
       "@lib/*": ["../src/*"],
       "@imports": ["../src/_imports"],
-      "@lib/kinds": ["../src/resource-idents/index"]
+      "@lib/kinds": ["../src/gvks/index"]
     }
   },
   "include": ["**/*.ts"]

@@ -2,7 +2,7 @@ import type { Resource, Resource_Props, ResourceRef } from "@k8ts/instruments"
 import { ResourcePart } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
-import { v1 } from "../../../resource-idents/default"
+import { v1 } from "../../../../gvks/default"
 import type { ContainerDeviceMount_Input } from "../container/mounts/device"
 interface PodDeviceBackendPvc extends Resource_Props<CDK.Volume> {
     $backend: ResourceRef<v1.PersistentVolumeClaim._>

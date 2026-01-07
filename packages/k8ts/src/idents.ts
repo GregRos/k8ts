@@ -1,1 +1,1 @@
-export * from "./resource-idents/index"
+export * from "./gvks/index"

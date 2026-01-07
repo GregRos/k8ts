@@ -1,7 +1,7 @@
 import { ResourceTop } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
-import { v1 } from "../../resource-idents"
+import { v1 } from "../../../gvks"
 import { PodTemplate, PodTemplate_Props } from "./pod-template"
 export class Pod<Name extends string, Ports extends string = string> extends ResourceTop<
     Name,
