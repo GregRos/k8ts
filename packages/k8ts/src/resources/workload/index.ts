@@ -1,3 +1,6 @@
 export * from "./cronjob"
+export * from "./daemonset"
 export * from "./deployment"
-export * from "./template"
+export * from "./pod/pod"
+export * from "./statefulset"
+export * from "./workload-ref"

@@ -20,8 +20,6 @@ export abstract class OriginExporter<
         this._parent["__attach_kid__"](this)
     }
 
-    abstract namespace: string | undefined
-
     protected abstract __exports__(): Iterable<ResourceRef>
 
     protected __parent__() {
@@ -48,7 +46,7 @@ export abstract class OriginExporter<
                 }
 
                 allEmitted.add(resource)
-                if (resource["__origin__"]().equals(self)) {
+                if (resource["__origin__"].equals(self)) {
                     // Means it's being exported for the first time
                     resource.metadata.add("#k8ts.org/exported", "true")
                     self.__emit__("resource/exported", {

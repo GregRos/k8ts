@@ -12,6 +12,7 @@ export type ResourceRef<
     _Kind extends GVK_Like = GVK_Like,
     Name extends string = string
 > = RefLike & {
+    noEmit: boolean
     kind: _Kind
     ident: {
         name: Name

@@ -2,6 +2,7 @@ import {
     ResourceRef,
     ResourceTop,
     type Ip4_Input_String,
+    type PortMap,
     type PortMapping_Input,
     type Resource_Props_Top
 } from "@k8ts/instruments"
@@ -10,11 +11,12 @@ import { seq } from "doddle"
 import { merge } from "lodash"
 import { v1 } from "../../../gvks/index"
 import { K8tsResourceError } from "../../errors"
-import type { Workload_Ref } from "../../workload-ref"
+import type { Workload_Ref } from "../../workload/workload-ref"
 import { Service_PortRef } from "./service-port"
 import { toServicePorts } from "./utils"
 export interface Sevice_Frontend_ClusterIp {
     type: "ClusterIP"
+    clusterIp?: Ip4_Input_String | "None"
 }
 
 export interface Service_Frontend_LoadBalancer {
@@ -23,6 +25,7 @@ export interface Service_Frontend_LoadBalancer {
     loadBalancerSourceRanges?: string[]
     loadBalancerClass?: string
     allocateLoadBalancerNodePorts?: boolean
+    clusterIp?: Ip4_Input_String
 }
 export type Service_Frontend = Sevice_Frontend_ClusterIp | Service_Frontend_LoadBalancer
 export interface Service_Props<DeployPorts extends string, ExposedPorts extends DeployPorts>
@@ -31,8 +34,8 @@ export interface Service_Props<DeployPorts extends string, ExposedPorts extends 
     $backend: Workload_Ref<DeployPorts>
     $frontend: Service_Frontend
 }
-export interface Service_Ref<ExposedPorts extends string> extends ResourceRef<v1.Service._> {
-    __PORTS__: ExposedPorts
+export interface Service_Ref<PortsExposed extends string> extends ResourceRef<v1.Service._> {
+    ports: PortMap<PortsExposed>
 }
 
 export class Service<
@@ -94,6 +97,7 @@ export class Service<
         const svcPorts = self.ports
         const spec = {
             ...self.props.$frontend,
+
             ports: toServicePorts(svcPorts),
             selector: {
                 app: self.props.$backend.ident.name

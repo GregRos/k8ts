@@ -9,41 +9,43 @@ import {
 } from "../../manifest"
 import { Trace_Source, TraceEmbedder } from "../../tracing"
 import { K8tsGraphError } from "../error"
-import { OriginExporter } from "../origin"
 import type { Origin } from "../origin/origin"
 import { OriginContextTracker } from "../origin/tracker"
 import type { Resource_Props_Top } from "./props"
 import { Resource } from "./resource"
+export interface ResourceTop_Origins {
+    origin: Origin
+    scopedOrigin: Origin
+}
 export abstract class ResourceTop<
     Name extends string = string,
     Props extends Resource_Props_Top = Resource_Props_Top
 > extends Resource<Name, Props> {
-    private readonly _origin: Origin
     readonly metadata: Metadata
-
-    constructor(name: Name, props: Props) {
-        const lastOrigin = OriginContextTracker.current?.mustBe(OriginExporter)
-        if (!lastOrigin) {
+    private readonly _origins: ResourceTop_Origins
+    constructor(name: Name, props: Props, originOptions?: Partial<ResourceTop_Origins>) {
+        const ownOrigin = originOptions?.origin ?? OriginContextTracker.current
+        if (!ownOrigin) {
             throw new K8tsGraphError(`Resource ${name} must be created within an Origin context`)
         }
-        super(name, lastOrigin.namespace, props)
+        super(name, ownOrigin.namespace, props)
+        this._origins = {
+            origin: originOptions?.origin ?? ownOrigin,
+            scopedOrigin: originOptions?.scopedOrigin ?? ownOrigin
+        }
         this.metadata = new Metadata(props.$metadata).overwrite()
 
-        this._origin = lastOrigin
-        this._origin["__attach_resource__"](this)
+        this._origins.origin["__attach_resource__"](this)
         TraceEmbedder.add(this, new Trace_Source(new StackTracey().slice(2)))
     }
 
-    get noEmit() {
-        return this.props.$noEmit ?? false
+    protected __scope__<F extends (...args: any[]) => any>(fn: F): F {
+        const bound = this._origins.scopedOrigin["__bind__"](fn)
+        return bound
     }
 
-    set noEmit(v: boolean) {
-        this.props.$noEmit = v
-    }
-
-    protected __origin__() {
-        return this._origin
+    protected get __origin__() {
+        return this._origins.origin
     }
 
     protected __metadata__(): K8tsManifest_Metadata {
@@ -76,7 +78,11 @@ export abstract class ResourceTop<
                 metadata: this.__metadata__(),
                 ...trimmedBody
             }
-
+            this.__origin__["__emit__"]("resource/manifested", {
+                origin: this.__origin__,
+                manifest: a,
+                resource: this
+            })
             return a
         }).pull()
     }

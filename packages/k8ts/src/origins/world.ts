@@ -22,7 +22,9 @@ export abstract class K8tsWorld_Base<
             "^world": this.name
         })
     })()
-
+    get namespace() {
+        return undefined
+    }
     File<Exports extends ResourceRef_Constructor["prototype"]>(
         name: File_sName,
         props: K8tsFile_Props<Kinds, Exports>

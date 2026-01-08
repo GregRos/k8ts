@@ -8,7 +8,8 @@ import {
     HttpRoute,
     Pvc,
     Service,
-    ServiceAccount
+    ServiceAccount,
+    StatefulSet
 } from "k8ts"
 import { gateway, metrics, storage, v1 } from "k8ts/kinds"
 import k8tsFile from "./cluster-scoped.k8"
@@ -58,6 +59,44 @@ export default W.File("deployment2.yaml", {
                 })
 
                 yield claim
+
+                const t = new StatefulSet("xxxx", {
+                    $service: {
+                        name: "xxx",
+                        $ports: {
+                            http: 80
+                        }
+                    },
+                    $template: {
+                        *Containers(POD) {
+                            yield POD.Container("main", {
+                                $image: image,
+                                $ports: {
+                                    http: 80,
+                                    x: 10
+                                },
+                                $mounts: {
+                                    "/data": POD.Volume("data", {
+                                        $backend: claim
+                                    }).Mount(),
+                                    "/data2": POD.Volume("data2", {
+                                        $backend: claim2
+                                    }).Mount(),
+                                    "/data3": POD.PvcTemplate("data3", {
+                                        $resources: {
+                                            storage: "2Gi->10Gi"
+                                        },
+                                        $accessModes: ["ReadWriteOnce"]
+                                    }).Mount()
+                                },
+                                $resources: {
+                                    cpu: "100m->500m",
+                                    memory: "100Mi->500Mi"
+                                }
+                            })
+                        }
+                    }
+                })
                 const cj = new CronJob("test", {
                     $schedule: Cron.hourly,
                     timeZone: "UTC",

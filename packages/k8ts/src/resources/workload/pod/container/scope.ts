@@ -1,12 +1,12 @@
 import type { ResourceRef, ResourceRef_HasKeys } from "@k8ts/instruments"
 import { PodContainer, PodContainer_Props } from "./container"
 
-import { PodDevice, PodDeviceBackend, PodVolume, PodVolume_Backend } from "./volume"
+import { PodDevice, PodDeviceBackend, PodVolume, PodVolume_Backend } from "../volume"
 
-import type { EnvValuePrimitive } from "../../../env"
-import { v1 } from "../../../gvks"
-import { K8tsResourceError } from "../../errors"
-import type { PodTemplate } from "./pod-template"
+import type { EnvValuePrimitive } from "../../../../env"
+import { v1 } from "../../../../gvks"
+import { K8tsResourceError } from "../../../errors"
+import type { Pod } from "../pod"
 import {
     type PodVolume_Backend_ConfigMap,
     type PodVolume_Backend_HostPath,
@@ -16,10 +16,10 @@ import {
     PodVolume_HostPath,
     PodVolume_Pvc,
     PodVolume_Secret
-} from "./volume/volumes"
+} from "../volume/volumes"
 
-export class PodScope {
-    constructor(private readonly _parent: PodTemplate) {}
+export class Pod_Scope {
+    constructor(protected readonly _parent: Pod) {}
     Container<
         Ports extends string,
         Env extends {

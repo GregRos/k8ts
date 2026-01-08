@@ -21,7 +21,7 @@ export abstract class ResourcePart<Props extends Resource_Props = Resource_Props
 
     protected abstract __submanifest__(): object
 
-    protected __origin__() {
-        return this.__parent__()["__origin__"]()
+    protected get __origin__() {
+        return this.__parent__()["__origin__"]
     }
 }

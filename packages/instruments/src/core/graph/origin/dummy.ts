@@ -9,6 +9,9 @@ export class DummyOrigin extends Origin {
     get kind() {
         return "[k8ts] External"
     }
+    get namespace() {
+        return undefined
+    }
     private constructor() {
         super("External", {})
     }

@@ -5,7 +5,7 @@ export abstract class DummyResource<K extends GVK_Base> extends Resource<string,
     get noEmit() {
         return true
     }
-    protected __origin__() {
+    protected get __origin__() {
         return DummyOrigin.instance
     }
 

@@ -84,12 +84,15 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
                 }
                 throw new K8tsResourceError(`Unsupported mount backend type: ${mount.$backend}`)
             })
+            .filter(x => !x.props.$noEmit)
             .toArray()
             .pull()
     }
 
     get volumes() {
         return seq(this.mounts.map(x => x.backend))
+            .filter(x => !x.noEmit)
+
             .uniq()
             .toArray()
             .pull()

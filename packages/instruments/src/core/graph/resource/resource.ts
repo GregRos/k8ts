@@ -8,15 +8,15 @@ import type { Origin } from "../origin"
 import { ForwardRef } from "./forward"
 import type { GVK_Base } from "./gvk"
 import { ResourceVertex } from "./node"
+import { Resource_Props } from "./props"
 import { type ResourceRef } from "./ref"
-
 @display({
     simple: s => s.vertex,
     pretty: s => s.vertex
 })
 export abstract class Resource<
     Name extends string = string,
-    Props extends object = object
+    Props extends Resource_Props = Resource_Props
 > extends Entity<ResourceVertex, Resource, ResourceRef> {
     abstract get kind(): GVK_Base
     ident: ResourceIdent<GVK_Base, Name>
@@ -36,6 +36,13 @@ export abstract class Resource<
             name: name,
             namespace: namespace
         })
+    }
+
+    get noEmit() {
+        return this.props.$noEmit === true
+    }
+    set noEmit(value: boolean) {
+        this.props.$noEmit = value
     }
     is<K extends this["kind"]>(kind: K): this is { kind: K }
     is<Inst extends ResourceRef = ResourceRef>(
@@ -60,8 +67,8 @@ export abstract class Resource<
         return false
     }
 
-    protected abstract __origin__(): Origin
+    protected abstract get __origin__(): Origin
     get vertex(): ResourceVertex {
-        return new ResourceVertex(this.__origin__().vertex, this)
+        return new ResourceVertex(this.__origin__.vertex, this)
     }
 }

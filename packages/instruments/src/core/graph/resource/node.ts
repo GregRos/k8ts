@@ -71,13 +71,7 @@ export class ResourceVertex extends Vertex<ResourceVertex, Resource> {
         return "noEmit" in this.entity ? (this.entity.noEmit as boolean) : false
     }
     set noEmit(v: boolean) {
-        if ("noEmit" in this.entity) {
-            this.entity.noEmit = v
-        } else {
-            throw new K8tsGraphError(
-                `Resource of type ${this.entity.constructor.name} does not support noEmit property`
-            )
-        }
+        this.entity.noEmit = v
     }
 
     when<EntityTypeCtor extends ResourceRef_Constructor_For>(

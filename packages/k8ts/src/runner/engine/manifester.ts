@@ -57,11 +57,7 @@ export class Engine_Manifester {
         this._options.emitter?.emit("manifest", { resource: res })
         const manifest = await this._generate(res.entity as ResourceTop)
         ManifestSourceEmbedder.add(manifest, res.entity)
-        res.origin.entity["__emit__"]("resource/manifested", {
-            origin: res.origin.entity,
-            manifest,
-            resource: res.entity as ResourceTop
-        })
+
         return {
             node: res,
             manifest: manifest

@@ -25,10 +25,7 @@ export abstract class Vertex<
 > {
     /** The nodes of child entities. */
 
-    private readonly _ID: number
-    constructor(readonly entity: _Entity) {
-        this._ID = this.entity["_ID"]
-    }
+    constructor(readonly entity: _Entity) {}
     get kids() {
         return seq(this.entity["__kids__"]()).map(x => x.mustBe(Entity).vertex as _Node)
     }

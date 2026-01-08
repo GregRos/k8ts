@@ -79,8 +79,6 @@ export class PortMap<Names extends string> {
  *
  * @template Names The union type of port names.
  */
-export type PortMapping_Input<Names extends string = string> = [Names] extends [never]
-    ? never
-    : {
-          [K in Names]: number | true
-      }
+export type PortMapping_Input<Names extends string = string> = {
+    [K in Names]: number | true
+}

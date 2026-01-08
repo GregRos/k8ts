@@ -7,6 +7,7 @@ let globalEntityId = 0
 
 export type RefLike = {
     kind: any
+    equals(other: any): boolean
     mustBe<Inst extends RefLike>(cls: abstract new (...args: any[]) => Inst): Inst
 }
 export abstract class Entity<
@@ -24,8 +25,8 @@ export abstract class Entity<
         return this._ownKids
     }
     abstract readonly kind: any
-    private readonly _ID = (() => {
-        return globalEntityId++
+    protected readonly __entity_id__ = (() => {
+        return (globalEntityId++).toString(16)
     })()
     abstract readonly vertex: _Node
 

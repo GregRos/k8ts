@@ -29,6 +29,8 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
     private _emitter = new EventEmitter<OriginEventMap>()
     private readonly _ownResources: Resource[] = []
     readonly metadata: Metadata
+    abstract namespace: string | undefined
+
     protected __attach_kid__(kid: Origin<Origin_Props<ResourceRef_Constructor>>): void {
         super.__attach_kid__(kid)
         this.__emit__("origin/attached", {
@@ -104,6 +106,10 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
                 resource
             })
         }
+    }
+    protected __bind__<F extends (...args: any[]) => any>(fn: F): F {
+        const bound = this.__binder__().bind(fn)
+        return bound as F
     }
 
     protected __binder__(): OriginTracker_Binder {

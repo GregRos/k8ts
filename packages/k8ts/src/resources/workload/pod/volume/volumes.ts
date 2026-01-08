@@ -25,6 +25,7 @@ export interface PodVolume_Backend_Pvc<
 export interface PodVolume_Backend_HostPath extends Resource_Props<CDK.Volume> {
     $backend: {
         kind: "HostPath"
+        $noEmit?: boolean
         type?: HostPath_Type
         path: string
     }

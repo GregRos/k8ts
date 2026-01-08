@@ -9,7 +9,6 @@ import { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { v1 } from "../../../gvks/default"
 import { storage } from "../../../gvks/storage"
-import { K8tsResourceError } from "../../errors"
 import { parsePvAccessMode, type PvAccessMode_Many } from "../access-mode"
 import type { Pv_Ref } from "../volume"
 import type { PvVolumeMode } from "../volume-mode"
@@ -45,11 +44,7 @@ export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extend
         const self = this
         const { $resources, $accessModes, $mode, $storageClass, $bind } = self.props
         const nAccessModes = parsePvAccessMode($accessModes)
-        if (!$bind && !$storageClass) {
-            throw new K8tsResourceError(
-                `While manifesting ${self.vertex.format("source")}, PVC that doesn't have a $bind must have a $storageClass.`
-            )
-        }
+
         const spec = {
             accessModes: nAccessModes,
             volumeName: self.props.$bind?.ident.name,

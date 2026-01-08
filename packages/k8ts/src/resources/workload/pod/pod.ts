@@ -1,37 +1,31 @@
-import { ResourcePart, ResourceRef, type Resource_Props } from "@k8ts/instruments"
-import { Metadata, type Metadata_Input } from "@k8ts/metadata"
+import { ResourcePart, ResourceTop, type Resource_Props } from "@k8ts/instruments"
+import type { Metadata_Input } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { merge } from "lodash"
-import { v1 } from "../../../gvks/default"
+import type { Workload_Ref } from "../../.."
+import { v1 } from "../../../gvks"
 import { K8tsResourceError } from "../../errors"
-import { PodContainer } from "./container"
-import { PodScope } from "./scope"
-import { PodDevice } from "./volume/devices"
-import { PodVolume } from "./volume/volumes"
-type ContainerRef<Ports extends string> = ResourceRef<v1.Pod.Container._> & {
-    __PORTS__: Ports
-}
-export type PodTemplate_Producer<Ports extends string> = (
-    scope: PodScope
-) => Iterable<ContainerRef<Ports>>
+import { createSelectionMetadata } from "../util"
+import type { PodContainer } from "./container"
+import type { ContainerRef } from "./container/ref"
+import { Pod_Scope } from "./container/scope"
+export type Pod_Producer<Ports extends string> = (scope: Pod_Scope) => Iterable<ContainerRef<Ports>>
 
-export interface PodTemplate_Props<Ports extends string>
-    extends Resource_Props<Partial<CDK.PodSpec>> {
+export interface Pod_Props<Ports extends string> extends Resource_Props<Partial<CDK.PodSpec>> {
     $metadata?: Metadata_Input
-    Containers: PodTemplate_Producer<Ports>
+    Containers: Pod_Producer<Ports>
 }
 
-export class PodTemplate<Ports extends string = string> extends ResourcePart<
-    PodTemplate_Props<Ports>
-> {
+export class Pod<Name extends string = string, Ports extends string = string>
+    extends ResourceTop<Name, Pod_Props<Ports>>
+    implements Workload_Ref<Ports>
+{
     get kind() {
-        return v1.PodTemplate._
+        return v1.Pod._
     }
     private readonly _containers = seq(() => {
-        const origin = this.__parent__()["__origin__"]()
-        const Containers = origin["__binder__"]().bind(this.props.Containers)
-        return Containers(new PodScope(this))
+        return this.__scope__(this.props.Containers)(new Pod_Scope(this))
     })
         .as<PodContainer<Ports>>()
         .cache()
@@ -63,16 +57,8 @@ export class PodTemplate<Ports extends string = string> extends ResourcePart<
         this._containers.toArray().pull()
         return super.__kids__()
     }
-    protected __metadata__() {
-        return {
-            name: this.ident.name,
-            labels: this.metadata.labels,
-            annotations: this.metadata.annotations
-        }
-    }
-    readonly metadata = new Metadata(this.props.$metadata ?? {})
 
-    protected __submanifest__(): CDK.PodTemplateSpec {
+    protected __body__(): CDK.PodTemplateSpec {
         const self = this
         const { props } = self
         const containers = self._containers
@@ -87,10 +73,8 @@ export class PodTemplate<Ports extends string = string> extends ResourcePart<
 
         const volumes = self._volumes
             .map(x => {
-                if (x.is(PodVolume)) {
-                    return x["__submanifest__"]()
-                } else if (x.is(PodDevice)) {
-                    return x["__submanifest__"]()
+                if (x.is(ResourcePart)) {
+                    return x["__submanifest__"]() as CDK.Volume
                 }
                 throw new K8tsResourceError(`Unsupported volume type: ${x}`)
             })
@@ -101,10 +85,12 @@ export class PodTemplate<Ports extends string = string> extends ResourcePart<
             volumes: volumes.pull()
         } satisfies CDK.PodSpec
         const spec2 = merge(spec, props.$overrides)
-        const body = {
-            metadata: self.__metadata__(),
+        return {
             spec: spec2
         }
-        return body
+    }
+
+    get selectorLabels() {
+        return createSelectionMetadata(this.ident.name)
     }
 }
