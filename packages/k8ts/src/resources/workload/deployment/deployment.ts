@@ -4,7 +4,7 @@ import { doddlify } from "doddle"
 import { merge, omit } from "lodash"
 import { apps } from "../../../gvks/apps"
 import { K8tsResourceError } from "../../errors"
-import { PodTemplate, type PodTemplate_Props } from "../pod"
+import { PodTemplate, type PodTemplate_Props } from "../template"
 
 export interface Deployment_Strategy_RollingUpdate extends CDK.RollingUpdateDeployment {
     type: "RollingUpdate"

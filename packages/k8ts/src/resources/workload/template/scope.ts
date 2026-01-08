@@ -6,7 +6,7 @@ import { PodDevice, PodDeviceBackend, PodVolume, PodVolume_Backend } from "./vol
 import type { EnvValuePrimitive } from "../../../env"
 import { v1 } from "../../../gvks"
 import { K8tsResourceError } from "../../errors"
-import type { PodTemplate } from "./pod-template"
+import type { PodTemplate } from "./template-template"
 import {
     type PodVolume_Backend_ConfigMap,
     type PodVolume_Backend_HostPath,
