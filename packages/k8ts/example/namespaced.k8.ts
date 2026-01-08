@@ -63,7 +63,7 @@ export default W.File("deployment2.yaml", {
                     timeZone: "UTC",
                     $template: {
                         restartPolicy: "Never",
-                        *Containers() {
+                        *Containers(POD) {
                             yield POD.Container("main", {
                                 $image: image,
                                 $command: CmdLine("/bin/sh").option({

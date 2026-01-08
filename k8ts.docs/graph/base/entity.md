@@ -12,13 +12,13 @@ Entities receive a `Props` object that fully describes their structure. Any prop
 The props of an entity 
 
 ```ts
-const svc = new Service(myDeployment, {
+`const svc = new Service(myDeployment, {
   type: "LoadBalancer",
 })
 svc.$ports.push({
   port: 8080,
   targetPort: 80,
-})
+})`
 ```
 
 > [!ai] INSERT code sample
