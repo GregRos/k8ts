@@ -13,6 +13,10 @@
             "name": "instruments"
         },
         {
+            "name": "examples",
+            "path": "packages/examples"
+        },
+        {
             "path": "./packages/metadata",
             "name": "metadata"
         },
