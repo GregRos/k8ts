@@ -1,5 +1,4 @@
-import type { DummyResource, ResourceRef_Constructor } from "../resource"
-import type { Origin_Props } from "./node"
+import type { DummyResource } from "../resource"
 import { Origin } from "./origin"
 /**
  * Used as the Origin of {@link DummyResource} resources. These resources are never manifested by
@@ -16,7 +15,7 @@ export class DummyOrigin extends Origin {
         super("External", {})
     }
 
-    protected __parent__(): Origin<Origin_Props<ResourceRef_Constructor>> | undefined {
+    protected get __parent__(): Origin | undefined {
         return undefined
     }
 

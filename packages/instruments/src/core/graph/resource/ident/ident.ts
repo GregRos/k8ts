@@ -1,5 +1,5 @@
 import type { DummyResource } from "../dummy"
-import type { GVK, GVK_Base } from "../gvk"
+import type { Gvk, Gvk_Base } from "../gvk"
 import type { ResourceRef, ResourceRef_Constructor_For } from "../ref"
 import type { ResourceIdent_sFormat } from "./parsing"
 
@@ -13,7 +13,7 @@ export interface ResourceIdent_Parsed {
     name: string
 }
 
-type nsKind = GVK<"v1/Namespace">
+type nsKind = Gvk<"v1/Namespace">
 
 /**
  * Options for creating a RefKey instance.
@@ -28,7 +28,7 @@ export interface ResourceIdent_Options<Name extends string = string> {
 }
 
 export interface ResourceIdent_Like {
-    readonly kind: GVK_Base
+    readonly kind: Gvk_Base
     readonly name: string
     readonly namespace: string | undefined
 }
@@ -41,7 +41,7 @@ export interface ResourceIdent_Like {
  * Important: This class is ambiguous because it can represent keys for namespaced resources but
  * ignore the namespace. Needs some kind of refactor.
  */
-export class ResourceIdent<K extends GVK_Base = GVK_Base, Name extends string = string> {
+export class ResourceIdent<K extends Gvk_Base = Gvk_Base, Name extends string = string> {
     /** The resource name */
     name: string
     /** The optional namespace for namespaced resources */

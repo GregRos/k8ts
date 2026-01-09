@@ -1,36 +1,16 @@
-import {
-    ResourceRef,
-    ResourceTop,
-    TemplateOrigin,
-    type Resource_Props_Top
-} from "@k8ts/instruments"
+import { ResourceRef, TemplateOrigin, TopResource } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
 import { merge, omit } from "lodash"
 import { apps } from "../../../gvks/apps"
 import { K8tsResourceError } from "../../errors"
-import { Pod, type Pod_Props } from "../pod/pod"
+import { Pod } from "../pod/pod"
 import { createSelectionMetadata } from "../util"
 import type { Workload_Ref } from "../workload-ref"
-
-export interface DaemonSet_UpdateStrategy_RollingUpdate extends CDK.RollingUpdateDaemonSet {
-    type: "RollingUpdate"
-}
-export interface DaemonSet_UpdateStrategy_OnDelete {
-    type: "OnDelete"
-}
-export type DaemonSet_UpdateStrategy =
-    | DaemonSet_UpdateStrategy_RollingUpdate
-    | DaemonSet_UpdateStrategy_OnDelete
-
-export interface DaemonSet_Props<Ports extends string>
-    extends Resource_Props_Top<CDK.DaemonSetSpec> {
-    $template: Pod_Props<Ports>
-    $updateStrategy?: DaemonSet_UpdateStrategy
-}
+import type { DaemonSet_Props } from "./props"
 
 export class DaemonSet<Name extends string, Ports extends string = string>
-    extends ResourceTop<Name, DaemonSet_Props<Ports>>
+    extends TopResource<Name, DaemonSet_Props<Ports>>
     implements Workload_Ref<Ports>
 {
     private _template = new TemplateOrigin("DaemonSetTemplate", {
@@ -41,16 +21,16 @@ export class DaemonSet<Name extends string, Ports extends string = string>
     }
 
     get selectorLabels() {
-        return createSelectionMetadata(this.ident.name)
+        return createSelectionMetadata(this)
     }
 
     protected __kids__(): Iterable<ResourceRef> {
-        return [this.Template]
+        return [this.PodTemplate]
     }
 
     protected async __body__(): Promise<CDK.KubeDaemonSetProps> {
         const self = this
-        const template = await self.Template["__manifest__"]()
+        const template = await self.PodTemplate["__manifest__"]()
         const noKindFields = omit(template, ["kind", "apiVersion"])
         const spec = {
             selector: {
@@ -83,18 +63,20 @@ export class DaemonSet<Name extends string, Ports extends string = string>
     }
 
     @doddlify
-    get Template() {
+    get PodTemplate() {
         const self = this
-        const resource = this._template.attach(() => {
-            return new Pod(`${self.ident.name}`, self.props.$template, {
-                scopedOrigin: self.__origin__
-            })
+        const resource = new Pod(`${self.ident.name}`, self.props.$template, {
+            origins: {
+                subscope: self.__origin__,
+                own: self._template
+            },
+            metadata: this.selectorLabels
         })
 
         return resource
     }
 
     get ports() {
-        return this.Template.ports
+        return this.PodTemplate.ports
     }
 }

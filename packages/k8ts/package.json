@@ -36,10 +36,10 @@
       "types": "./dist/index.d.ts"
     },
     "./kinds": {
-      "require": "./dist/idents.js",
-      "import": "./dist/idents.js",
-      "default": "./dist/idents.js",
-      "types": "./dist/idents.d.ts"
+      "require": "./dist/kinds.js",
+      "import": "./dist/kinds.js",
+      "default": "./dist/kinds.js",
+      "types": "./dist/kinds.d.ts"
     }
   },
   "main": "dist/index.js",

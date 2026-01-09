@@ -5,32 +5,25 @@ export type LiteralModes = "simple" | "pretty" | "prefix"
 
 let globalEntityId = 0
 
-export type RefLike = {
+export type EntityRef = {
     kind: any
     equals(other: any): boolean
-    mustBe<Inst extends RefLike>(cls: abstract new (...args: any[]) => Inst): Inst
+    cast<Inst extends EntityRef>(cls: abstract new (...args: any[]) => Inst): Inst
 }
 export abstract class Entity<
     _Node extends Vertex<_Node, _Ent> = Vertex<any, any>,
     _Ent extends Entity<_Node, _Ent> = Entity<any, any>,
-    _EntRefType extends RefLike = RefLike
-> {
-    private readonly _ownKids: _EntRefType[] = []
-
-    protected __attach_kid__(kid: _EntRefType) {
-        this._ownKids.push(kid)
-    }
-
+    _EntRefType extends EntityRef = EntityRef
+> implements EntityRef
+{
     protected __kids__(): Iterable<_EntRefType> {
-        return this._ownKids
+        return []
     }
     abstract readonly kind: any
-    protected readonly __entity_id__ = (() => {
-        return (globalEntityId++).toString(16)
-    })()
-    abstract readonly vertex: _Node
 
-    mustBe<Inst extends _EntRefType>(cls: AnyCtor<Inst>): Inst {
+    abstract get __vertex__(): _Node
+
+    cast<Inst extends _EntRefType>(cls: AnyCtor<Inst>): Inst {
         if (this instanceof cls) {
             return this as any as Inst
         }
@@ -41,7 +34,7 @@ export abstract class Entity<
 
     abstract equals(other: any): boolean
 
-    protected __parent__(): _EntRefType | undefined {
+    protected get __parent__(): _EntRefType | undefined {
         return undefined
     }
 

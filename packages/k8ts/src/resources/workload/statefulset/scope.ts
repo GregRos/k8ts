@@ -11,10 +11,11 @@ export class StatefulSet_Scope extends Pod_Scope {
     }
 
     PvcTemplate<Mode extends PvVolumeMode>(name: string, props: Pvc_Props<Mode>) {
-        const pvc = this._template.attach(() => {
-            return new Pvc(name, props, {
-                scopedOrigin: this._template.owner["__origin__"]
-            })
+        const pvc = new Pvc(name, props, {
+            origins: {
+                own: this._template,
+                subscope: this["_parent"]["__origin__"]
+            }
         })
         return this.Volume(pvc.ident.name, {
             $backend: pvc,

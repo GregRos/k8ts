@@ -1,4 +1,4 @@
-import { ResourceTop, type ResourceRef, type Resource_Props_Top } from "@k8ts/instruments"
+import { TopResource, type ResourceRef, type Resource_Props_Top } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { gateway } from "../../../gvks/gateway"
@@ -11,7 +11,7 @@ export interface HttpRoute_Props<Ports extends string>
     $backend: Service_PortRef<Ports>
 }
 
-export class HttpRoute<Name extends string, Ports extends string> extends ResourceTop<
+export class HttpRoute<Name extends string, Ports extends string> extends TopResource<
     Name,
     HttpRoute_Props<Ports>
 > {

@@ -1,4 +1,4 @@
-import { OriginVertex, ResourceVertex, type ResourceTop, type Vertex } from "@k8ts/instruments"
+import { OriginVertex, ResourceVertex, type TopResource, type Vertex } from "@k8ts/instruments"
 import type EventEmitter from "eventemitter3"
 import { K8tsEngineError } from "../error"
 export class Engine_ResourceLoader {
@@ -27,6 +27,9 @@ export class Engine_ResourceLoader {
     }
 
     async load(input: OriginVertex) {
+        if (input.noEmit) {
+            return []
+        }
         // TODO: Handle ORIGINS that are referenced but not passed to the runner
         let resources = [] as ResourceVertex[]
 
@@ -40,11 +43,10 @@ export class Engine_ResourceLoader {
             if (!res.isRoot) {
                 return
             }
-            if (res.noEmit) {
+            if (res.hasInheritedNoEmit) {
                 return
             }
             const origin = res.origin
-
             if (!origin.isChildOf(input)) {
                 return
             }
@@ -57,13 +59,13 @@ export class Engine_ResourceLoader {
 
             origin.entity["__emit__"]("resource/loaded", {
                 origin: origin.entity,
-                resource: res.entity as ResourceTop
+                resource: res.entity as TopResource
             })
             resources.push(res)
         }
 
         for (const resource of input.resources) {
-            await addResource(resource.vertex)
+            await addResource(resource.__vertex__)
         }
 
         // Some resources might appear as dependencies to sub-resources that

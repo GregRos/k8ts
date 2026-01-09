@@ -1,10 +1,10 @@
-import { GVK_Base } from "./0-base"
-import { GVK } from "./3-gvk"
+import { Gvk_Base } from "./0-base"
+import { Gvk } from "./3-gvk"
 
-export class GVK_SubKind<Url extends string = string> extends GVK_Base<Url> {
+export class Gvk_SubKind<Url extends string = string> extends Gvk_Base<Url> {
     get parent() {
         const [group, version, kind] = this.url.split("/")
-        return new GVK<`${string}/${string}`>(
+        return new Gvk<`${string}/${string}`>(
             `${group}/${version}/${kind}` as `${string}/${string}`
         )
     }
@@ -14,6 +14,6 @@ export class GVK_SubKind<Url extends string = string> extends GVK_Base<Url> {
     }
 
     subkind<SubKind extends string>(subKind: SubKind) {
-        return new GVK_SubKind<`${Url}.${SubKind}`>(`${this.url}.${subKind}` as `${Url}.${SubKind}`)
+        return new Gvk_SubKind<`${Url}.${SubKind}`>(`${this.url}.${subKind}` as `${Url}.${SubKind}`)
     }
 }

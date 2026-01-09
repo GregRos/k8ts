@@ -1,36 +1,36 @@
 import { doddlify, seq, type Seq } from "doddle"
 
 import { K8tsGraphError } from "../../error"
-import { GVK, GVK_Base } from "../../resource/gvk"
+import { Gvk, Gvk_Base } from "../../resource/gvk"
 import { ResourceIdent } from "../../resource/ident"
 import { ResourceRef_Constructor } from "../../resource/ref"
 const separator = "/"
-interface NodeEntry {
+interface GvkClassDictEntry {
     kindName: string
     class: ResourceRef_Constructor
-    kind: GVK
+    kind: Gvk
 }
-export type KindMap_Input<Ks extends ResourceRef_Constructor> = Ks[]
-type LookupKey = string | ResourceIdent | ResourceRef_Constructor | GVK
-export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constructor> {
+export type GvkClassDict_Input<Ks extends ResourceRef_Constructor> = Ks[]
+type LookupKey = string | ResourceIdent | ResourceRef_Constructor | Gvk
+export class GvkClassDict<Kinds extends ResourceRef_Constructor = ResourceRef_Constructor> {
     __KINDS__!: Kinds["prototype"]["kind"]
-    constructor(private _ownKinds: KindMap_Input<Kinds>) {}
+    constructor(private _ownKinds: GvkClassDict_Input<Kinds>) {}
 
     [Symbol.iterator]() {
         return this._ownKinds[Symbol.iterator]()
     }
     child<Ks extends ResourceRef_Constructor = ResourceRef_Constructor>(
-        kinds: KindMap_Input<Ks> | KindMap<Ks>
-    ): KindMap<Kinds | Ks> {
-        const ownKinds = kinds instanceof KindMap ? kinds._ownKinds : kinds
-        return new KindMap<Kinds | Ks>([...this._ownKinds, ...ownKinds])
+        kinds: GvkClassDict_Input<Ks> | GvkClassDict<Ks>
+    ): GvkClassDict<Kinds | Ks> {
+        const ownKinds = kinds instanceof GvkClassDict ? kinds._ownKinds : kinds
+        return new GvkClassDict<Kinds | Ks>([...this._ownKinds, ...ownKinds])
     }
 
     @doddlify
-    private get _entriesSeq(): Seq<NodeEntry> {
+    private get _entriesSeq(): Seq<GvkClassDictEntry> {
         return seq(this._ownKinds).map(klass => {
             const kind = klass.prototype.kind
-            const entry: NodeEntry = {
+            const entry: GvkClassDictEntry = {
                 kindName: kind.value,
                 class: klass,
                 kind: kind
@@ -39,7 +39,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
         })
     }
     @doddlify
-    private get _entriesMap(): Map<LookupKey, NodeEntry> {
+    private get _entriesMap(): Map<LookupKey, GvkClassDictEntry> {
         return seq(this._entriesSeq)
             .flatMap(entry => {
                 return [
@@ -82,7 +82,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
             return undefined
         }
 
-        return (kind as GVK).refKey({
+        return (kind as Gvk).refKey({
             name
         })
     }
@@ -97,13 +97,13 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
     private _unknownNameError(kind: string) {
         return new K8tsGraphError(`The shorthand name ${kind} is not registered`)
     }
-    private _unknownIdentError(kind: GVK_Base) {
+    private _unknownIdentError(kind: Gvk_Base) {
         return new K8tsGraphError(`The kind identifier ${kind} is not registered`)
     }
     private _unknownClassError(klass: Function) {
         return new K8tsGraphError(`The class ${klass.name} is not registered`)
     }
-    private _convert(something: LookupKey | ResourceIdent | Function | GVK) {
+    private _convert(something: LookupKey | ResourceIdent | Function | Gvk) {
         if (typeof something === "string") {
             if (something.includes("/")) {
                 const r = this.parse(something)
@@ -112,7 +112,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
             return something
         } else if (typeof something === "function") {
             return something as ResourceRef_Constructor
-        } else if (something instanceof GVK_Base) {
+        } else if (something instanceof Gvk_Base) {
             return something.url
         } else if (something instanceof ResourceIdent) {
             return something.kind.url
@@ -124,7 +124,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
         if (!entry) {
             if (typeof key === "string") {
                 throw this._unknownNameError(key)
-            } else if (key instanceof GVK_Base) {
+            } else if (key instanceof Gvk_Base) {
                 throw this._unknownIdentError(key)
             } else if (typeof key === "function") {
                 throw this._unknownClassError(key)
@@ -132,7 +132,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
         }
         return entry!
     }
-    private _tryGetEntry(key: LookupKey): NodeEntry | undefined {
+    private _tryGetEntry(key: LookupKey): GvkClassDictEntry | undefined {
         const converted = this._convert(key)
         return this._entriesMap.get(converted)
     }
@@ -152,7 +152,7 @@ export class KindMap<Kinds extends ResourceRef_Constructor = ResourceRef_Constru
     getClass(refKey: ResourceIdent): ResourceRef_Constructor
     getClass<F extends ResourceRef_Constructor>(klass: F): F
     getClass(kind: string): ResourceRef_Constructor
-    getClass(kind: GVK): ResourceRef_Constructor
+    getClass(kind: Gvk): ResourceRef_Constructor
     getClass<T extends ResourceRef_Constructor | string>(
         kindOrClass: T
     ): T extends ResourceRef_Constructor ? string : ResourceRef_Constructor

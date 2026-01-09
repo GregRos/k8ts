@@ -27,7 +27,7 @@ export abstract class Vertex<
 
     constructor(readonly entity: _Entity) {}
     get kids() {
-        return seq(this.entity["__kids__"]()).map(x => x.mustBe(Entity).vertex as _Node)
+        return seq(this.entity["__kids__"]()).map(x => x.cast(Entity).__vertex__ as _Node)
     }
     /** The direct **needs** of this this node's entity. */
     get relations() {
@@ -41,7 +41,7 @@ export abstract class Vertex<
                         if (t) {
                             yield new Relation<_Node>(
                                 relName,
-                                t.mustBe(Entity<_Node, _Entity>).vertex
+                                t.cast(Entity<_Node, _Entity>).__vertex__
                             )
                         }
                     }
@@ -49,7 +49,7 @@ export abstract class Vertex<
                     if (target) {
                         yield new Relation<_Node>(
                             relName,
-                            target.mustBe(Entity<_Node, _Entity>).vertex
+                            target.cast(Entity<_Node, _Entity>).__vertex__
                         )
                     }
                 }
@@ -59,7 +59,7 @@ export abstract class Vertex<
 
     /** The node for this node's parent entity. */
     get parent(): _Node | null {
-        return (this.entity["__parent__"]()?.mustBe(Entity).vertex as any) ?? null
+        return (this.entity["__parent__"]?.cast(Entity).__vertex__ as any) ?? null
     }
 
     /**

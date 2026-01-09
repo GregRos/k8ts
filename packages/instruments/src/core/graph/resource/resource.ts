@@ -6,20 +6,23 @@ import { Entity } from "../entity"
 import { K8tsGraphError } from "../error"
 import type { Origin } from "../origin"
 import { ForwardRef } from "./forward"
-import type { GVK_Base } from "./gvk"
-import { ResourceVertex } from "./node"
+import type { Gvk_Base } from "./gvk"
 import { Resource_Props } from "./props"
 import { type ResourceRef } from "./ref"
+import { ResourceVertex } from "./vertex"
 @display({
-    simple: s => s.vertex,
-    pretty: s => s.vertex
+    simple: s => s.__vertex__,
+    pretty: s => s.__vertex__
 })
 export abstract class Resource<
-    Name extends string = string,
-    Props extends Resource_Props = Resource_Props
-> extends Entity<ResourceVertex, Resource, ResourceRef> {
-    abstract get kind(): GVK_Base
-    ident: ResourceIdent<GVK_Base, Name>
+        Name extends string = string,
+        Props extends Resource_Props = Resource_Props
+    >
+    extends Entity<ResourceVertex, Resource, ResourceRef>
+    implements ResourceRef
+{
+    abstract get kind(): Gvk_Base
+    ident: ResourceIdent<Gvk_Base, Name>
     readonly props: Props
     constructor(name: Name, namespace: string | undefined, props: Props) {
         super()
@@ -31,7 +34,7 @@ export abstract class Resource<
                 `ResourceEntity subclass ${getNiceClassName(this)} must implement the 'kind' property as a getter, but it's missing or not a getter.`
             )
         }
-        const kind = (this as any).kind as GVK_Base
+        const kind = (this as any).kind as Gvk_Base
         this.ident = new ResourceIdent(kind, {
             name: name,
             namespace: namespace
@@ -68,7 +71,7 @@ export abstract class Resource<
     }
 
     protected abstract get __origin__(): Origin
-    get vertex(): ResourceVertex {
-        return new ResourceVertex(this.__origin__.vertex, this)
+    get __vertex__(): ResourceVertex {
+        return new ResourceVertex(this.__origin__.__vertex__, this)
     }
 }

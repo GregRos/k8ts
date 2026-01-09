@@ -1,6 +1,6 @@
-import type { RefLike } from "../entity"
+import type { EntityRef } from "../entity"
 import type { GVK_Like } from "./gvk"
-import type { ResourceVertex } from "./node"
+import type { ResourceVertex } from "./vertex"
 
 export type ResourceRef_Constructor_For<R extends ResourceRef = ResourceRef> = {
     prototype: R
@@ -11,7 +11,7 @@ export type ResourceRef_Constructor<K extends GVK_Like = GVK_Like> = ResourceRef
 export type ResourceRef<
     _Kind extends GVK_Like = GVK_Like,
     Name extends string = string
-> = RefLike & {
+> = EntityRef & {
     noEmit: boolean
     kind: _Kind
     ident: {
@@ -21,7 +21,7 @@ export type ResourceRef<
     is<Type>(cls: abstract new (...args: any[]) => Type): this is Type
     is<_Kind extends GVK_Like>(kind: _Kind): this is ResourceRef<_Kind>
     equals(other: any): boolean
-    vertex: ResourceVertex
+    __vertex__: ResourceVertex
 }
 
 export type ResourceRef_HasKeys<X extends ResourceRef, Else = never> = [X] extends [

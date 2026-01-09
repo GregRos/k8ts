@@ -1,4 +1,4 @@
-import { OriginVertex, type OriginExporter, type ResourceVertex } from "@k8ts/instruments"
+import { OriginVertex, type ExporterOrigin, type ResourceVertex } from "@k8ts/instruments"
 import { Metadata, type Metadata_Input } from "@k8ts/metadata"
 import { aseq } from "doddle"
 import EventEmitter from "eventemitter3"
@@ -54,7 +54,7 @@ export class Assembler {
             "^produced-by": `k8ts@${version}`
         })
     }
-    async assemble(inFiles: Iterable<OriginExporter>) {
+    async assemble(inFiles: Iterable<ExporterOrigin>) {
         const emitter = this._emitter
         const loader = new Engine_ResourceLoader({
             emitter
@@ -72,7 +72,7 @@ export class Assembler {
             emitter
         })
         const reports = aseq(inFiles)
-            .map(x => x.vertex)
+            .map(x => x.__vertex__)
             .before(async () => {
                 emitter.emit("stage", { stage: "gathering" })
             })

@@ -1,6 +1,6 @@
 import {
     ResourceRef,
-    ResourceTop,
+    TopResource,
     type Ip4_Input_String,
     type PortMap,
     type PortMapping_Input,
@@ -14,6 +14,11 @@ import { K8tsResourceError } from "../../errors"
 import type { Workload_Ref } from "../../workload/workload-ref"
 import { Service_PortRef } from "./service-port"
 import { toServicePorts } from "./utils"
+
+/** Short for ClusterIp with ClusterIp: None */
+export interface Service_Frontend_Headless {
+    type: "Headless"
+}
 export interface Sevice_Frontend_ClusterIp {
     type: "ClusterIP"
     clusterIp?: Ip4_Input_String | "None"
@@ -27,7 +32,10 @@ export interface Service_Frontend_LoadBalancer {
     allocateLoadBalancerNodePorts?: boolean
     clusterIp?: Ip4_Input_String
 }
-export type Service_Frontend = Sevice_Frontend_ClusterIp | Service_Frontend_LoadBalancer
+export type Service_Frontend =
+    | Sevice_Frontend_ClusterIp
+    | Service_Frontend_LoadBalancer
+    | Service_Frontend_Headless
 export interface Service_Props<DeployPorts extends string, ExposedPorts extends DeployPorts>
     extends Resource_Props_Top<CDK.ServiceSpec> {
     $ports: PortMapping_Input<ExposedPorts>
@@ -41,7 +49,7 @@ export interface Service_Ref<PortsExposed extends string> extends ResourceRef<v1
 export class Service<
     Name extends string = string,
     PortsExposed extends string = string
-> extends ResourceTop<Name, Service_Props<string, PortsExposed>> {
+> extends TopResource<Name, Service_Props<string, PortsExposed>> {
     __PORTS__!: PortsExposed
     get kind() {
         return v1.Service._
@@ -78,7 +86,7 @@ export class Service<
         return `${this.ident.name}.${this.ident.namespace}.svc.cluster.local`
     }
 
-    private _getPortoPort(port: PortsExposed, protocol: "http" | "https") {
+    private _getProtoPort(port: PortsExposed, protocol: "http" | "https") {
         const portNumber = this.props.$ports[port]
         if (portNumber === 80 && protocol === "http") {
             return ""
@@ -92,11 +100,21 @@ export class Service<
         return `:${portNumber}`
     }
 
+    private _frontend() {
+        if (this.props.$frontend.type === "Headless") {
+            return {
+                type: "ClusterIP",
+                clusterIp: "None"
+            } satisfies CDK.ServiceSpec
+        }
+        return this.props.$frontend satisfies CDK.ServiceSpec
+    }
+
     protected __body__(): CDK.KubeServiceProps {
         const self = this
         const svcPorts = self.ports
         const spec = {
-            ...self.props.$frontend,
+            ...self._frontend(),
 
             ports: toServicePorts(svcPorts),
             selector: {
@@ -112,6 +130,6 @@ export class Service<
     }
 
     address(protocol: "http" | "https", port: PortsExposed) {
-        return `${protocol}://${this.hostname}${this._getPortoPort(port, protocol)}`
+        return `${protocol}://${this.hostname}${this._getProtoPort(port, protocol)}`
     }
 }

@@ -1,6 +1,6 @@
-import { type OriginExporter_Props, type ResourceRef, OriginExporter } from "@k8ts/instruments"
+import { type OriginExporter_Props, type ResourceRef, ExporterOrigin } from "@k8ts/instruments"
 import { doddlify, seq } from "doddle"
-import type { v1 } from "../../idents"
+import type { v1 } from "../../kinds"
 
 export class K8tsFile_Section_Scope {
     on: K8tsFile_Section["on"]
@@ -17,13 +17,13 @@ export interface K8tsFile_Section_Props<Exported extends ResourceRef = ResourceR
     Section(SECTION: K8tsFile_Section_Scope): Iterable<Exported>
 }
 
-export class K8tsFile_Section extends OriginExporter<K8tsFile_Section_Props> {
+export class K8tsFile_Section extends ExporterOrigin<K8tsFile_Section_Props> {
     get kind() {
         return "[k8ts] File/Section"
     }
 
     get namespace() {
-        return this.__parent__().mustBe(OriginExporter).namespace
+        return this.__parent__.cast(ExporterOrigin).namespace
     }
     @doddlify
     protected __exports__() {

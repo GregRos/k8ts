@@ -10,7 +10,7 @@ import {
 } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 
-import { Resource, ResourcePart, ResourceTop } from "@k8ts/instruments"
+import { Resource, ResourcePart, TopResource } from "@k8ts/instruments"
 import { seq } from "doddle"
 import { mapKeys, mapValues, merge } from "lodash"
 import { Env } from "../../../../env"
@@ -91,7 +91,10 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
 
     get volumes() {
         return seq(this.mounts.map(x => x.backend))
-            .filter(x => !x.noEmit)
+            .filter(x => {
+                const a = 1
+                return !x.noEmit
+            })
 
             .uniq()
             .toArray()
@@ -206,7 +209,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
 }
 
 export function make<Ports extends string>(
-    parent: ResourceTop,
+    parent: TopResource,
     name: string,
     subtype: "init" | "main",
     props: PodContainer_Props<Ports>

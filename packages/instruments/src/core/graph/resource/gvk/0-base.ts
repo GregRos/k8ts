@@ -5,13 +5,13 @@ export interface GVK_Like {
     readonly parent: GVK_Like | null
     equals(other: any): boolean
 }
-export abstract class GVK_Base<Url extends string = string> implements GVK_Like {
+export abstract class Gvk_Base<Url extends string = string> implements GVK_Like {
     constructor(readonly url: Url) {}
     abstract get value(): string
-    abstract get parent(): GVK_Base | null
-    get parts(): GVK_Base[] {
-        const parts: GVK_Base[] = []
-        let curr: GVK_Base | null = this
+    abstract get parent(): Gvk_Base | null
+    get parts(): Gvk_Base[] {
+        const parts: Gvk_Base[] = []
+        let curr: Gvk_Base | null = this
         while (curr) {
             parts.unshift(curr)
             curr = curr.parent
@@ -26,7 +26,7 @@ export abstract class GVK_Base<Url extends string = string> implements GVK_Like 
     }
 
     equals(other: any) {
-        if (other instanceof GVK_Base) {
+        if (other instanceof Gvk_Base) {
             return this.url === other.url
         }
         if (typeof other === "string") {

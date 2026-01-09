@@ -1,77 +1,56 @@
-import {
-    ResourceRef,
-    ResourceTop,
-    TemplateOrigin,
-    type Resource_Props_Top
-} from "@k8ts/instruments"
+import { ResourceRef, TemplateOrigin, TopResource } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddle, seq } from "doddle"
 import { merge, omit } from "lodash"
 import { Pvc } from "../../.."
 import { apps } from "../../../gvks/apps"
 import { K8tsResourceError } from "../../errors"
-import { Service, Service_Props } from "../../network"
-import type { ContainerRef } from "../pod/container"
+import { Service } from "../../network"
 import type { Pod_Scope } from "../pod/container/scope"
-import { Pod, Pod_Props } from "../pod/pod"
+import { Pod } from "../pod/pod"
 import { createSelectionMetadata } from "../util"
 import type { Workload_Ref } from "../workload-ref"
+import type { StatefulSet_Props } from "./props"
 import { StatefulSet_Scope } from "./scope"
-export interface StatefulSet_UpdateStrategy_RollingUpdate
-    extends CDK.RollingUpdateStatefulSetStrategy {
-    type: "RollingUpdate"
-}
-export interface StatefulSet_UpdateStrategy_OnDelete {
-    type: "OnDelete"
-}
-export type StatefulSet_UpdateStrategy =
-    | StatefulSet_UpdateStrategy_RollingUpdate
-    | StatefulSet_UpdateStrategy_OnDelete
-
-export type StatefulSet_Producer<Ports extends string> = (
-    scope: StatefulSet_Scope
-) => Iterable<ContainerRef<Ports>>
-export interface StatefulSet_Props<
-    Ports extends string,
-    SvcPorts extends NoInfer<Ports>,
-    SvcName extends string
-> extends Resource_Props_Top<CDK.StatefulSetSpec> {
-    $replicas?: number
-    $template: Omit<Pod_Props<Ports>, "Containers"> & {
-        Containers: StatefulSet_Producer<Ports>
-    }
-    $service: {
-        name: SvcName
-    } & Omit<Service_Props<Ports, SvcPorts>, "$backend" | "$frontend">
-    $updateStrategy?: StatefulSet_UpdateStrategy
-}
-
 export class StatefulSet<
         Name extends string = string,
         SvcName extends string = string,
         Ports extends string = string,
         SvcPorts extends NoInfer<Ports> = Ports
     >
-    extends ResourceTop<Name, StatefulSet_Props<Ports, SvcPorts, SvcName>>
+    extends TopResource<Name, StatefulSet_Props<Ports, SvcPorts, SvcName>>
     implements Workload_Ref<Ports>
 {
-    private readonly _template = new TemplateOrigin("StatefulSetTemplate", {
+    private readonly _template = new TemplateOrigin(`${this.ident.name}_template`, {
         owner: this
     })
-    readonly Service = new Service(this.props.$service.name, {
-        ...this.props.$service,
-        $backend: this,
-        $frontend: {
-            type: "ClusterIP",
-            clusterIp: "None"
+    readonly Service = new Service(
+        this.props.$service.name,
+        {
+            ...this.props.$service,
+            $backend: this,
+            $frontend: {
+                type: "Headless"
+            }
+        },
+        {
+            metadata: {
+                "^k8ts.org/auto-created-by": this.__entity_id__
+            }
         }
-    })
+    )
     get kind() {
         return apps.v1.StatefulSet._
     }
 
+    protected __needs__(): Record<string, ResourceRef> {
+        return {
+            service: this.Service
+        }
+    }
+
     get selectorLabels() {
-        return createSelectionMetadata(this.ident.name)
+        return createSelectionMetadata(this)
     }
 
     private _podTemplate = doddle(() => {
@@ -79,18 +58,20 @@ export class StatefulSet<
         const wrappedContainers = (podScope: Pod_Scope) => {
             return this.props.$template.Containers(new StatefulSet_Scope(podScope, self._template))
         }
-        const resource = this._template.attach(() => {
-            return new Pod(
-                `${self.ident.name}`,
-                {
-                    ...self.props.$template,
-                    Containers: wrappedContainers
+        const resource = new Pod(
+            `${self.ident.name}`,
+            {
+                ...self.props.$template,
+                Containers: wrappedContainers
+            },
+            {
+                origins: {
+                    own: self._template,
+                    subscope: self["__origin__"]
                 },
-                {
-                    scopedOrigin: self.__origin__
-                }
-            )
-        })
+                metadata: this.selectorLabels
+            }
+        )
 
         return resource
     })

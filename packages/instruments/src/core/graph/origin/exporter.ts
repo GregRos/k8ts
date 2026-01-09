@@ -1,13 +1,13 @@
 import { doddlify, seq } from "doddle"
 import { K8tsGraphError } from "../error"
-import { ForwardExports, ResourceRef, ResourceTop } from "../resource"
+import { ForwardExports, ResourceRef, TopResource } from "../resource"
 import { ForwardRef } from "../resource/forward/ref"
-import type { Origin_Props } from "./node"
 import { Origin } from "./origin"
+import type { Origin_Props } from "./props"
 export interface OriginExporter_Props extends Origin_Props {}
 
 /** Base class for Origins that export resources via the {@link ForwardExports} mechanism. */
-export abstract class OriginExporter<
+export abstract class ExporterOrigin<
     Props extends OriginExporter_Props = OriginExporter_Props
 > extends Origin<Props> {
     constructor(
@@ -22,18 +22,18 @@ export abstract class OriginExporter<
 
     protected abstract __exports__(): Iterable<ResourceRef>
 
-    protected __parent__() {
+    protected get __parent__() {
         return this._parent
     }
 
     @doddlify
     get resources(): Iterable<ResourceRef> {
         const self = this
-        const boundExports = self.__binder__().bind(self.__exports__.bind(self))
+        const boundExports = self.__binder__.bind(self.__exports__.bind(self))
         const allEmitted = new Set<ResourceRef>()
         const attachedResources = seq(() => super.resources).cache()
         return seq(function* () {
-            for (const resource of boundExports() as ResourceTop[]) {
+            for (const resource of boundExports() as TopResource[]) {
                 if (ForwardRef.is(resource)) {
                     throw new K8tsGraphError(
                         `FwRef ${resource} cannot be directly exported from ChildOrigin ${self.name}`

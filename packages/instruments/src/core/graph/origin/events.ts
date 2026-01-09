@@ -1,12 +1,12 @@
 import { doddle } from "doddle"
 import type { K8tsManifest } from "../../manifest"
-import type { Resource, ResourceTop } from "../resource"
+import type { Resource, TopResource } from "../resource"
 import type { Origin } from "./origin"
 
 export interface OriginEventMap {
     "resource/exported": {
         readonly origin: Origin
-        readonly resource: ResourceTop
+        readonly resource: TopResource
     }
     "resource/attached": {
         readonly origin: Origin
@@ -15,15 +15,15 @@ export interface OriginEventMap {
     "resource/manifested": {
         readonly origin: Origin
         readonly manifest: K8tsManifest
-        readonly resource: ResourceTop
+        readonly resource: TopResource
     }
     "resource/loaded": {
         readonly origin: Origin
-        readonly resource: ResourceTop
+        readonly resource: TopResource
     }
     "resource/serialized": {
         readonly origin: Origin
-        readonly resource: ResourceTop
+        readonly resource: TopResource
         readonly manifest: K8tsManifest
         content: string
     }

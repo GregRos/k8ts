@@ -88,7 +88,7 @@ export abstract class PodVolume<
             const x = backend.ident.namespace
             return x
         }
-        return this.__parent__().ident.namespace
+        return this.__parent__.ident.namespace
     }
 
     protected __needs__(): Record<string, Resource | Resource[] | undefined> {

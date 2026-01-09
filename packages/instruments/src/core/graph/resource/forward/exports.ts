@@ -1,6 +1,6 @@
 import { seq } from "doddle"
 import { Origin } from "../../origin"
-import type { OriginExporter } from "../../origin/exporter"
+import type { ExporterOrigin } from "../../origin/exporter"
 import { ResourceIdent } from "../ident"
 import type { ResourceRef } from "../ref"
 import { K8tsProxyError } from "./error"
@@ -11,7 +11,7 @@ export type ForwardExports_ByKey<Exports extends ResourceRef = ResourceRef> = {
     [E in Exports as `${E["kind"]["value"]}/${E["ident"]["name"]}`]: ForwardRef<E>
 }
 /**
- * A type describing all resources exported by an {@link OriginExporter} as forward references.
+ * A type describing all resources exported by an {@link ExporterOrigin} as forward references.
  *
  * FwRefs can be accessed using a key lookup, using the shorthand of `KindName/name`. For example, a
  * Deployment named "my-app" can be accessed via `exports["Deployment/my-app"]`.
@@ -31,13 +31,13 @@ export type ForwardExports<Exported extends ResourceRef = any> = ForwardExports_
     ForwardExports_ByKey<Exported>
 
 /**
- * Creates a forward reference exports construct for the given {@link OriginExporter} entity.
+ * Creates a forward reference exports construct for the given {@link ExporterOrigin} entity.
  *
  * @param entity
  * @returns
  */
 export function ForwardExports<Exported extends ResourceRef>(
-    entity: OriginExporter
+    entity: ExporterOrigin
 ): ForwardExports<Exported> {
     const proxied = new ForwardExports_Proxied(entity)
     const handler = new ForwardExports_ProxyHandler(proxied)
@@ -51,15 +51,15 @@ export namespace ForwardExports {
 
 /**
  * A basic core of the {@link ForwardExports} construct, containing information about the underlying
- * {@link OriginExporter} entity.
+ * {@link ExporterOrigin} entity.
  */
 export class ForwardExports_Proxied {
-    #entity: OriginExporter
-    constructor(entity: OriginExporter) {
+    #entity: ExporterOrigin
+    constructor(entity: ExporterOrigin) {
         this.#entity = entity
     }
 
-    __entity__(act?: (entity: OriginExporter) => any): OriginExporter {
+    __entity__(act?: (entity: ExporterOrigin) => any): ExporterOrigin {
         return this.#entity as any
     }
 
@@ -79,16 +79,16 @@ export class ForwardExports_Proxied {
 
 /**
  * Proxy handler for the {@link ForwardExports} construct, providing dynamic access to the resources
- * attached to the underlying {@link OriginExporter} entity.
+ * attached to the underlying {@link ExporterOrigin} entity.
  */
-class ForwardExports_ProxyHandler<Entity extends OriginExporter> implements ProxyHandler<Entity> {
+class ForwardExports_ProxyHandler<Entity extends ExporterOrigin> implements ProxyHandler<Entity> {
     constructor(private readonly _subject: ForwardExports_Proxied) {}
 
     get entity() {
         return this._subject["__entity__"]()
     }
     get node() {
-        return this.entity.vertex
+        return this.entity.__vertex__
     }
     get resourceKinds() {
         return this.node.resourceKinds
@@ -148,7 +148,9 @@ class ForwardExports_ProxyHandler<Entity extends OriginExporter> implements Prox
             origin: this.entity,
             resolver: this.exported
                 .first(
-                    exp => exp.vertex.name === refKey.name && exp.vertex.kind.equals(refKey.kind)
+                    exp =>
+                        exp.__vertex__.name === refKey.name &&
+                        exp.__vertex__.kind.equals(refKey.kind)
                 )
                 .map(x => {
                     if (x == null) {

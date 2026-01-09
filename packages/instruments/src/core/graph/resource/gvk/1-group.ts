@@ -1,8 +1,8 @@
 import type { JoinIfNotEmpty } from "../../../../expressions"
-import { GVK_Base } from "./0-base"
-import { GVK_Version } from "./2=version"
+import { Gvk_Base } from "./0-base"
+import { Gvk_Version } from "./2=version"
 import type { GVK_sVersion } from "./strings"
-export class GVK_Group<Group extends string = string> extends GVK_Base<Group> {
+export class Gvk_Group<Group extends string = string> extends Gvk_Base<Group> {
     get parts() {
         return [this]
     }
@@ -15,9 +15,9 @@ export class GVK_Group<Group extends string = string> extends GVK_Base<Group> {
 
     version<Version extends GVK_sVersion>(version: Version) {
         const newUrl = [this.url, version].filter(Boolean).join("/")
-        return new GVK_Version(newUrl as JoinIfNotEmpty<Group, "/", Version>)
+        return new Gvk_Version(newUrl as JoinIfNotEmpty<Group, "/", Version>)
     }
 }
 export function group<ApiGroup extends string>(apiGroup: ApiGroup) {
-    return new GVK_Group(apiGroup)
+    return new Gvk_Group(apiGroup)
 }

@@ -1,10 +1,9 @@
-import { Metadata, type Metadata_Input } from "@k8ts/metadata"
+import { Metadata } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq, Seq } from "doddle"
 import { display } from "../../../utils/mixin/display"
 import { Vertex } from "../node"
-import type { ResourceRef, ResourceRef_Constructor } from "../resource"
-import { type KindMap_Input } from "./kind-map"
+import type { ResourceRef } from "../resource"
 import { Origin } from "./origin"
 
 @display({
@@ -22,7 +21,13 @@ import { Origin } from "./origin"
 })
 export class OriginVertex extends Vertex<OriginVertex, Origin> {
     get kids() {
-        return seq(this.entity["__kids__"]()).map(x => x.mustBe(Origin).vertex)
+        return seq(this.entity["__kids__"]()).map(x => x.cast(Origin).__vertex__)
+    }
+    get noEmit() {
+        return this.entity.noEmit
+    }
+    get hasInheritedNoEmit() {
+        return this.noEmit || this.ancestors.some(x => x.noEmit).pull()
     }
     get name() {
         return this.entity.name
@@ -47,7 +52,7 @@ export class OriginVertex extends Vertex<OriginVertex, Origin> {
     }
 
     get resourceKinds() {
-        return this.entity["__resource_kinds__"]()
+        return this.entity["__resource_kinds__"]
     }
 
     get relations() {
@@ -70,11 +75,4 @@ export class OriginVertex extends Vertex<OriginVertex, Origin> {
             })
         return desc
     }).cache()
-}
-
-export interface Origin_Props<
-    KindedCtors extends ResourceRef_Constructor = ResourceRef_Constructor
-> {
-    metadata?: Metadata_Input
-    kinds?: KindMap_Input<KindedCtors>
 }

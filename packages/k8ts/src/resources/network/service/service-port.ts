@@ -12,6 +12,6 @@ export class Service_PortRef<Port extends string> {
     }
 
     number() {
-        return this.props.service.mustBe(Service).ports.get(this.props.name).frontend
+        return this.props.service.cast(Service).ports.get(this.props.name).frontend
     }
 }

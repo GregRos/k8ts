@@ -6,8 +6,8 @@ import { TraceEmbedder } from "../../tracing"
 import { Formats } from "../entity"
 import { K8tsGraphError } from "../error"
 import { Vertex } from "../node"
-import { OriginVertex } from "../origin/node"
-import type { GVK } from "./gvk"
+import { OriginVertex } from "../origin/vertex"
+import type { Gvk } from "./gvk"
 import { ResourceIdent } from "./ident"
 import type { ResourceRef_Constructor_For } from "./ref"
 import type { Resource } from "./resource"
@@ -48,9 +48,15 @@ export class ResourceVertex extends Vertex<ResourceVertex, Resource> {
         return this.entity.ident
     }
     get kind() {
-        return this.entity.kind as GVK
+        return this.entity.kind as Gvk
     }
-
+    get hasInheritedNoEmit() {
+        return (
+            this.noEmit ||
+            this.origin.hasInheritedNoEmit ||
+            this.ancestors.some(x => x.noEmit).pull()
+        )
+    }
     get namespace() {
         return this.ident.namespace
     }

@@ -1,8 +1,8 @@
 import {
     K8tsManifest,
     ManifestSourceEmbedder,
-    type ResourceTop,
-    type ResourceVertex
+    type ResourceVertex,
+    type TopResource
 } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import type EventEmitter from "eventemitter3"
@@ -24,7 +24,7 @@ export class Engine_Serializer_Yaml {
     constructor(private readonly _options: Partial<YamlSerializerOptions>) {}
 
     async serialize(input: K8tsManifest) {
-        const node = ManifestSourceEmbedder.get(input).vertex
+        const node = ManifestSourceEmbedder.get(input).__vertex__
         this._options.emitter?.emit("serialize", {
             manifest: input,
             resource: node
@@ -49,7 +49,7 @@ export class Engine_Serializer_Yaml {
             })
             const e = {
                 origin: node.origin.entity,
-                resource: node.entity as ResourceTop,
+                resource: node.entity as TopResource,
                 manifest: input,
                 content: result
             }

@@ -1,9 +1,9 @@
 import { ResourceIdent, type ResourceIdent_Options } from "../ident"
-import { GVK_Base } from "./0-base"
-import { GVK_Version } from "./2=version"
-import { GVK_SubKind } from "./4-subkind"
+import { Gvk_Base } from "./0-base"
+import { Gvk_Version } from "./2=version"
+import { Gvk_SubKind } from "./4-subkind"
 
-export class GVK<Url extends string = string> extends GVK_Base<Url> {
+export class Gvk<Url extends string = string> extends Gvk_Base<Url> {
     constructor(
         url: Url,
         private _customPlural?: string
@@ -12,7 +12,7 @@ export class GVK<Url extends string = string> extends GVK_Base<Url> {
     }
     get parent() {
         const stringParts = this.url.split("/").slice(0, -1)
-        return new GVK_Version<string>(stringParts.join("/") as string)
+        return new Gvk_Version<string>(stringParts.join("/") as string)
     }
 
     get plural() {
@@ -38,7 +38,7 @@ export class GVK<Url extends string = string> extends GVK_Base<Url> {
     }
 
     subkind<SubKind extends string>(subKind: SubKind) {
-        return new GVK_SubKind<`${Url}.${SubKind}`>(`${this.url}.${subKind}` as `${Url}.${SubKind}`)
+        return new Gvk_SubKind<`${Url}.${SubKind}`>(`${this.url}.${subKind}` as `${Url}.${SubKind}`)
     }
 }
 

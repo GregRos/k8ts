@@ -1,7 +1,7 @@
 import { DummyOrigin } from "../../origin/dummy"
-import type { GVK_Base } from "../gvk"
+import type { Gvk_Base } from "../gvk"
 import { Resource } from "../resource"
-export abstract class DummyResource<K extends GVK_Base> extends Resource<string, any> {
+export abstract class DummyResource<K extends Gvk_Base> extends Resource<string, any> {
     get noEmit() {
         return true
     }

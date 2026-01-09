@@ -1,4 +1,4 @@
-import { ResourceRef, ResourceTop, Units, type Resource_Props_Top } from "@k8ts/instruments"
+import { ResourceRef, TopResource, Units, type Resource_Props_Top } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { v1 } from "../../../gvks/default"
@@ -47,7 +47,7 @@ export type Pv_Ref<Mode extends PvVolumeMode = PvVolumeMode> =
 export class Pv<
     Mode extends PvVolumeMode = "Filesystem",
     Name extends string = string
-> extends ResourceTop<Name, Pv_Props<Mode>> {
+> extends TopResource<Name, Pv_Props<Mode>> {
     __MODE__!: Mode
     get kind() {
         return v1.PersistentVolume._
@@ -66,13 +66,13 @@ export class Pv<
         if (self.props.$backend?.kind === "Local") {
             if (!self.props.nodeAffinity) {
                 throw new K8tsResourceError(
-                    `While manifesting ${self.vertex.format("source")}, PV with Local backend must have nodeAffinity.`
+                    `While manifesting ${self.__vertex__.format("source")}, PV with Local backend must have nodeAffinity.`
                 )
             }
         }
         if (!self.props.$backend && !self.props.$storageClass) {
             throw new K8tsResourceError(
-                `While manifesting ${self.vertex.format("source")}, PV that doesn't have a $backend must have a $storageClass.`
+                `While manifesting ${self.__vertex__.format("source")}, PV that doesn't have a $backend must have a $storageClass.`
             )
         }
         let spec: CDK.PersistentVolumeSpec = {

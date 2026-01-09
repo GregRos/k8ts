@@ -6,7 +6,7 @@ import {
 } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
-import { v1 } from "../../../../../idents"
+import { v1 } from "../../../../../kinds"
 
 export interface ContainerVolumeMount_Input<SubPaths extends string = string>
     extends Resource_Props<CDK.VolumeMount> {

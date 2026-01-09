@@ -1,6 +1,6 @@
 import {
     Reqs,
-    ResourceTop,
+    TopResource,
     Units,
     type ResourceRef,
     type Resource_Props_Top
@@ -25,7 +25,7 @@ export interface Pvc_Props<Mode extends PvVolumeMode>
     $resources: typeof pvc_ResourcesSpec.__INPUT__
 }
 
-export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extends ResourceTop<
+export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extends TopResource<
     Name,
     Pvc_Props<Mode>
 > {

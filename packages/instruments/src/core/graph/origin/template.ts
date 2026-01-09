@@ -1,6 +1,6 @@
-import type { Resource, ResourceRef } from "../resource"
-import type { Origin_Props } from "./node"
+import { Resource, ResourceRef } from "../resource"
 import { Origin } from "./origin"
+import type { Origin_Props } from "./props"
 export interface TemplateOrigin_Props extends Origin_Props {
     owner: Resource
 }
@@ -13,7 +13,12 @@ export class TemplateOrigin extends Origin<TemplateOrigin_Props> {
                 delete e.manifest.metadata.namespace
             }
         })
+        this.noEmit = true
     })()
+
+    get __parent__() {
+        return this.owner.cast(Resource)["__origin__"]
+    }
     get namespace() {
         return this.owner.ident.namespace
     }

@@ -1,35 +1,15 @@
-import {
-    ResourceRef,
-    ResourceTop,
-    TemplateOrigin,
-    type Resource_Props_Top
-} from "@k8ts/instruments"
+import { ResourceRef, TemplateOrigin, TopResource } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
 import { merge, omit } from "lodash"
-import type { Pod_Props } from "../../.."
 import { apps } from "../../../gvks/apps"
 import { K8tsResourceError } from "../../errors"
 import { Pod } from "../pod/pod"
 import { createSelectionMetadata } from "../util"
 import type { Workload_Ref } from "../workload-ref"
-export interface Deployment_Strategy_RollingUpdate extends CDK.RollingUpdateDeployment {
-    type: "RollingUpdate"
-    options?: CDK.RollingUpdateDeployment
-}
-export interface Deployment_Strategy_Recreate {
-    type: "Recreate"
-}
-export type Deployment_Strategy = Deployment_Strategy_RollingUpdate | Deployment_Strategy_Recreate
-
-export interface Deployment_Props<Ports extends string>
-    extends Resource_Props_Top<CDK.DeploymentSpec> {
-    $replicas?: number
-    $template: Pod_Props<Ports>
-    $strategy?: Deployment_Strategy
-}
+import type { Deployment_Props } from "./props"
 export class Deployment<Name extends string, Ports extends string = string>
-    extends ResourceTop<Name, Deployment_Props<Ports>>
+    extends TopResource<Name, Deployment_Props<Ports>>
     implements Workload_Ref<Ports>
 {
     private _template = new TemplateOrigin("DeploymentTemplate", {
@@ -40,7 +20,7 @@ export class Deployment<Name extends string, Ports extends string = string>
     }
 
     get selectorLabels() {
-        return createSelectionMetadata(this.ident.name)
+        return createSelectionMetadata(this)
     }
 
     protected __kids__(): Iterable<ResourceRef> {
@@ -83,12 +63,13 @@ export class Deployment<Name extends string, Ports extends string = string>
     @doddlify
     get PodTemplate() {
         const self = this
-        const resource = this._template.attach(() => {
-            return new Pod(`${self.ident.name}`, self.props.$template, {
-                scopedOrigin: self.__origin__
-            })
+        const resource = new Pod(`${self.ident.name}`, self.props.$template, {
+            origins: {
+                own: self._template,
+                subscope: self.__origin__
+            },
+            metadata: this.selectorLabels
         })
-
         return resource
     }
 

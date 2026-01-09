@@ -1,12 +1,12 @@
 import {
+    ExporterOrigin,
     ForwardExports,
-    OriginExporter,
     type Origin_Props,
     type ResourceRef,
     type ResourceRef_Constructor
 } from "@k8ts/instruments"
 import { doddlify, seq } from "doddle"
-import type { v1 } from "../../idents"
+import type { v1 } from "../../kinds"
 import { K8tsFile_Section, type K8tsFile_Section_Props } from "./section"
 export type File_sName = `${string}.yaml`
 export interface K8tsFile_Props<
@@ -17,7 +17,7 @@ export interface K8tsFile_Props<
     namespace?: ResourceRef<v1.Namespace._>
     File(FILE: K8tsFile_Scope<Kinds>): Iterable<Exports | ForwardExports<Exports>>
 }
-export class K8tsFile extends OriginExporter<K8tsFile_Props> {
+export class K8tsFile extends ExporterOrigin<K8tsFile_Props> {
     #_ = (() => {
         this.metadata.add("source.k8ts.org/", {
             "^file": this.name
