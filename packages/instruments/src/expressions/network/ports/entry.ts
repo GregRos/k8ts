@@ -1,4 +1,4 @@
-import lodash from "lodash"
+import { mapValues } from "lodash"
 import { Ip4 } from "../ip/ip4"
 import { parsePortSpec } from "./parser"
 import { PortExports } from "./provider"
@@ -37,8 +37,8 @@ export function parsePortInput(name: string, input: Port_Input): Port_Full {
 export function portRecordInput(
     record: PortExports_Input<string> | PortExports<string>
 ): Record<string, Port_Full> {
-    if (record instanceof PortExports) {
-        return record.record
+    if ("record" in record) {
+        return record.record as any
     }
-    return lodash.mapValues(record, (v, k) => parsePortInput(k, v))
+    return mapValues(record, (v, k) => parsePortInput(k, v))
 }

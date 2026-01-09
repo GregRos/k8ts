@@ -12,5 +12,9 @@ export function toServicePort(entry: PortMap_Item): CDK.ServicePort {
 }
 
 export function toServicePorts(ports: PortMap<any>) {
-    return seq(ports.values.values()).map(toServicePort).toArray().pull()
+    return seq
+        .fromObject(ports.values)
+        .map(([, entry]) => toServicePort(entry))
+        .toArray()
+        .pull()
 }

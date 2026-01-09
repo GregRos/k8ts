@@ -1,9 +1,10 @@
-import { ForwardExports, Trace_Git, Trace_Source } from "@k8ts/instruments"
+import { Trace_Git, Trace_Source } from "@k8ts/instruments"
 import { Metadata } from "@k8ts/metadata"
 import { seq } from "doddle"
 import EventEmitter from "eventemitter3"
 import StackTracey from "stacktracey"
 
+import { K8tsFile, type K8tsWorld_Base } from "../origins"
 import {
     Assembler,
     assemblerEventNames,
@@ -17,7 +18,7 @@ import { Summarizer } from "./viz/summarizer"
 export interface RunnerOptions extends AssemblerOptions {
     cwd?: string
     printOptions?: boolean
-    progress: ProgressOptions
+    progress?: ProgressOptions
 }
 
 export class Runner {
@@ -44,9 +45,9 @@ export class Runner {
         }
         return this
     }
-    async run<Ts extends ForwardExports[]>(input: Ts) {
-        const results = seq(input)
-            .map(e => e.__entity__())
+    async run(input: K8tsWorld_Base) {
+        const results = seq(input.__vertex__.kids)
+            .map(e => e.entity.cast(K8tsFile))
             .toArray()
             .pull()
         const gitInfo = await Trace_Git.create({

@@ -1,9 +1,9 @@
 import { K8tsGraphError } from "../../../core/graph/error"
 import type { Cron_Record, Cron_RecordFromTuple, Cron_Tuple } from "./parse-type"
-import { Cron_Stanza } from "./stanza"
+import { CronStanza } from "./stanza"
 
-function shorthand<Tpl extends Cron_Tuple>(...items: Tpl): Cron_Stanza<Cron_RecordFromTuple<Tpl>> {
-    return new Cron_Stanza<Cron_RecordFromTuple<Tpl>>({
+function shorthand<Tpl extends Cron_Tuple>(...items: Tpl): CronStanza<Cron_RecordFromTuple<Tpl>> {
+    return CronStanza<Cron_RecordFromTuple<Tpl>>({
         minute: items[0],
         hour: items[1],
         dayOfMonth: items[2],
@@ -13,8 +13,8 @@ function shorthand<Tpl extends Cron_Tuple>(...items: Tpl): Cron_Stanza<Cron_Reco
 }
 
 export namespace Cron {
-    export function from<R extends Cron_Record>(record: R): Cron_Stanza<R> {
-        return new Cron_Stanza<R>(record)
+    export function from<R extends Cron_Record>(record: R): CronStanza<R> {
+        return CronStanza<R>(record)
     }
 
     export const minutely = shorthand(true, true, true, true, true)
@@ -27,7 +27,7 @@ export namespace Cron {
     // TODO: Parse cron strings with type safety
     // TODO: Write a runtime parser too
     // TODO: Consider using an existing library for this
-    export function parse(cron: string): Cron_Stanza<Cron_Record> {
+    export function parse(cron: string): CronStanza<Cron_Record> {
         const parts = cron.split(" ")
         if (parts.length !== 5) {
             throw new K8tsGraphError(`Invalid cron string: ${cron}`)

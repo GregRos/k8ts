@@ -1,5 +1,5 @@
 import {
-    Cron_Stanza,
+    CronStanza,
     TemplateOrigin,
     TopResource,
     type Cron_Record,
@@ -16,7 +16,7 @@ import { Pod, Pod_Props } from "../pod/pod"
 import { createSelectionMetadata } from "../util"
 export interface CronJob_Props<CronSpec extends Cron_Record>
     extends Resource_Props_Top<CDK.KubeCronJobProps> {
-    $schedule: Cron_Stanza<CronSpec>
+    $schedule: CronStanza<CronSpec>
     $template: Pod_Props<never> & {
         restartPolicy: "Always" | "OnFailure" | "Never"
     }

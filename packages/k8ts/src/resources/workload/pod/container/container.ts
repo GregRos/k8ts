@@ -101,13 +101,13 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
             .pull()
     }
     get ports() {
-        return new PortExports(this.props.$ports)
+        return PortExports(this.props.$ports)
     }
     protected __submanifest__(): CDK.Container {
         const self = this
         const { $image, $ports, $command, $env } = self.props
         let resourcesObject = self._resources()?.toObject()
-        const pex = new PortExports($ports)
+        const pex = PortExports($ports)
         const containerPorts = $ports && toContainerPorts(pex)
 
         const env = Env($env)

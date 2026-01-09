@@ -1,4 +1,5 @@
 import { attr, dest, ManifestSourceEmbedder, phrases, quantity, verb } from "@k8ts/instruments"
+import { defaultsDeep } from "lodash"
 import ora from "ora"
 import type { Assembler, AssemblerEventsTable } from "../engine/assembler"
 import { AssemblerStage } from "../engine/stage"
@@ -23,7 +24,12 @@ function typedOnAny(
 }
 
 export class Engine_ProgressShower {
-    constructor(private readonly _options: ProgressOptions) {}
+    readonly _options: ProgressOptions
+    constructor(options?: ProgressOptions) {
+        this._options = defaultsDeep({}, options, {
+            waitTransition: 0
+        })
+    }
     async visualize(events: Assembler) {
         const spinner = ora({
             spinner: "dots",

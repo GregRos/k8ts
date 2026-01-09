@@ -13,6 +13,7 @@ export class Trace_Source {
         const findGoodFrame = (e: StackTracey.Entry) => {
             return !e.native && e.file && !e.file.includes("node:")
         }
+        const filtered = trace.filter(x => !!findGoodFrame(x))
         this.trace = trace.filter(x => !!findGoodFrame(x)).at(0)
     }
 
@@ -24,8 +25,7 @@ export class Trace_Source {
         }) as Trace_Source_Options
         options.cwd = resolve(options.cwd)
         const sourcePath = options.absolute ? e.file : relative(options.cwd, e.file)
-        const relativeToCwd = relative(options.cwd, sourcePath)
-        const sourceLocation = `${relativeToCwd}:${e.line}:${e.column}`
+        const sourceLocation = `${sourcePath}:${e.line}:${e.column}`
         return sourceLocation
     }
 }

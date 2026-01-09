@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "name": "RUN: @k8ts/examples",
+      "request": "launch",
+      "runtimeExecutable": "tsx",
+      "program": "${workspaceFolder}/examples/main.ts",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "runtimeArgs": ["--stack-trace-limit=1000", "--async-stack-traces"],
+      "resolveSourceMapLocations": ["${workspaceFolder:root}/**"]
+    }
+  ]
+}

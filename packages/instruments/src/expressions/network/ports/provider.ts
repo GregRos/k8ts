@@ -1,4 +1,5 @@
 import { mapValues, pick } from "lodash"
+import { display } from "../../../utils/mixin/display"
 import { K8tsNetworkError } from "../error"
 import { parsePortInput, portRecordInput } from "./entry"
 import { PortMap, PortMapping_Input } from "./mapping"
@@ -16,24 +17,7 @@ import type {
  *
  * @template Names All exported port names.
  */
-export class PortExports<Names extends string = never> {
-    private _rec: Record<string, Port_Full>
-    constructor(record: PortExports_Input<Names> = {} as PortExports_Input<Names>) {
-        this._rec = portRecordInput(record)
-    }
-
-    private static _make(rec: Record<string, Port_Full>) {
-        const newOne = new PortExports({})
-        newOne._rec = rec
-        return newOne
-    }
-
-    private _apply<NewNames extends string>(
-        f: (rec: Record<string, Port_Full>) => Record<string, Port_Full>
-    ): PortExports<NewNames> {
-        return PortExports._make(f(this._rec)) as any as PortExports<NewNames>
-    }
-
+export interface PortExports<Names extends string = never> {
     /**
      * Creates a new PortExports that is the union of this and another PortExports.
      *
@@ -41,9 +25,7 @@ export class PortExports<Names extends string = never> {
      * @returns A new PortExports containing ports from both dictionaries. The 2nd dictionary's
      *   ports will overwrite any with the same name from the first.
      */
-    union<InNames extends string>(other: PortExports<InNames>): PortExports<Names | InNames> {
-        return this._apply<Names | InNames>(rec => Object.assign({}, rec, other._rec))
-    }
+    union<InNames extends string>(other: PortExports<InNames>): PortExports<Names | InNames>
 
     /**
      * Adds a port with explicit name, port number, and protocol.
@@ -71,6 +53,70 @@ export class PortExports<Names extends string = never> {
      * @param input A record mapping port names to their configurations.
      */
     add<InNames extends string>(input?: PortExports_Input<InNames>): PortExports<Names | InNames>
+
+    /**
+     * Creates a new PortExports containing only the specified port names.
+     *
+     * @param name The port names to include.
+     * @returns A new PortExports with only the selected ports.
+     */
+    pick<InNames extends Names>(...name: InNames[]): PortExports<InNames>
+
+    /** An array of all port names in this set. */
+    get names(): Names[]
+
+    /**
+     * Retrieves a port by name.
+     *
+     * @param name The name of the port to retrieve.
+     * @returns The full port configuration.
+     * @throws {K8tsNetworkError} If the port name is not found.
+     */
+    get(name: Names): Port_Full
+
+    /** The underlying map of port names to their full configurations. */
+    get values(): Port_Full[]
+
+    get record(): Record<Names, Port_Full>
+
+    /**
+     * Creates a PortMap by mapping each port to a frontend port number.
+     *
+     * @param mapping A record where each port name maps to either a frontend port number or `true`
+     *   to use the backend port.
+     * @returns A new PortMap with the specified frontend mappings.
+     * @throws {K8tsNetworkError} If a port name is missing from the mapping or has an invalid
+     *   value.
+     */
+    map(mapping: PortMapping_Input<Names>): PortMap<Names>
+}
+
+export function PortExports<Names extends string = never>(
+    record: PortExports_Input<Names> = {} as PortExports_Input<Names>
+) {
+    return new _PortExports(portRecordInput(record)) as any as PortExports<Names>
+}
+
+@display({
+    simple(self) {
+        return `PortExports(${Object.keys(self._rec).join(", ")})`
+    }
+})
+class _PortExports {
+    constructor(readonly _rec: Record<string, Port_Full>) {}
+
+    private static _make(rec: Record<string, Port_Full>) {
+        return new _PortExports(rec)
+    }
+
+    private _apply(f: (rec: Record<string, Port_Full>) => Record<string, Port_Full>): _PortExports {
+        return _PortExports._make(f(this._rec))
+    }
+
+    union(other: _PortExports): _PortExports {
+        return this._apply(rec => Object.assign({}, rec, other._rec))
+    }
+
     add(a: any, b?: any, c?: any): any {
         if (!a) {
             return this
@@ -95,81 +141,53 @@ export class PortExports<Names extends string = never> {
         })
     }
 
-    /**
-     * Creates a new PortExports containing only the specified port names.
-     *
-     * @param name The port names to include.
-     * @returns A new PortExports with only the selected ports.
-     */
-    pick<InNames extends Names>(...name: InNames[]): PortExports<InNames> {
-        return this._apply<InNames>(rec => pick(rec, name as readonly string[]))
+    pick(...name: string[]): _PortExports {
+        return this._apply(rec => pick(rec, name))
     }
 
-    /** An array of all port names in this set. */
     get names() {
-        return Object.keys(this._rec) as Names[]
+        return Object.keys(this._rec)
     }
 
-    /**
-     * Retrieves a port by name.
-     *
-     * @param name The name of the port to retrieve.
-     * @returns The full port configuration.
-     * @throws {K8tsNetworkError} If the port name is not found.
-     */
-    get(name: Names): Port_Full {
+    get(name: string): Port_Full {
         if (!Object.hasOwn(this._rec, name)) {
             throw new K8tsNetworkError(`Port ${name} not found`)
         }
         return this._rec[name]!
     }
 
-    /** The underlying map of port names to their full configurations. */
     get values() {
-        return Object.values(this._rec) as Port_Full[]
+        return Object.values(this._rec)
     }
 
     get record() {
-        return this._rec as Record<Names, Port_Full>
+        return this._rec
     }
 
-    /**
-     * Creates a PortMap by mapping each port to a frontend port number.
-     *
-     * @param mapping A record where each port name maps to either a frontend port number or `true`
-     *   to use the backend port.
-     * @returns A new PortMap with the specified frontend mappings.
-     * @throws {K8tsNetworkError} If a port name is missing from the mapping or has an invalid
-     *   value.
-     */
-    map(mapping: PortMapping_Input<Names>): PortMap<Names> {
-        return new PortMap(
-            new Map(
-                Object.entries(
-                    mapValues(this._rec, entry => {
-                        if (!(entry.name in mapping)) {
-                            throw new K8tsNetworkError(`Port ${entry.name} not found in mapping`)
-                        }
-                        const portIn = mapping[entry.name as keyof typeof mapping]
-                        let portVal: number
-                        if (typeof portIn === "boolean") {
-                            portVal = entry.port
-                        } else if (typeof portIn === "number") {
-                            portVal = portIn
-                        } else {
-                            throw new K8tsNetworkError(
-                                `Port ${entry.name} mapping value must be a number or boolean`
-                            )
-                        }
-                        return {
-                            name: entry.name,
-                            protocol: entry.protocol,
-                            backend: entry.name,
-                            frontend: portVal as any
-                        }
-                    })
-                )
-            )
+    map(mapping: Record<string, number | boolean>): PortMap<any> {
+        return PortMap(
+            mapValues(this._rec, entry => {
+                if (!(entry.name in mapping)) {
+                    throw new K8tsNetworkError(`Port ${entry.name} not found in mapping`)
+                }
+                const portIn = mapping[entry.name]
+                let portVal: number
+                if (typeof portIn === "boolean") {
+                    portVal = entry.port
+                } else if (typeof portIn === "number") {
+                    portVal = portIn
+                } else {
+                    throw new K8tsNetworkError(
+                        `Port ${entry.name} mapping value must be a number or boolean`
+                    )
+                }
+                return {
+                    name: entry.name,
+                    protocol: entry.protocol,
+                    backend: entry.name,
+                    frontend: portVal as any
+                }
+            })
         )
     }
 }

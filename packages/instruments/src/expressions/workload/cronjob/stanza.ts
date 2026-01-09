@@ -13,13 +13,32 @@ function _convertStanzaElement(X: Cron_Element): string {
     }
     return `${X}`
 }
+export interface CronStanza<R extends Cron_Record = Cron_Record> {
+    get tuple(): Cron_RecordToTuple<R>
+    toString(): string
+    get string(): string
+    minute<Minute extends Cron_Element>(
+        minute: Minute
+    ): CronStanza<_SetObjectKey<R, "minute", Minute>>
+    hour<Hour extends Cron_Element>(hour: Hour): CronStanza<_SetObjectKey<R, "hour", Hour>>
+    dayOfMonth<DayOfMonth extends Cron_Element>(
+        dayOfMonth: DayOfMonth
+    ): CronStanza<_SetObjectKey<R, "dayOfMonth", DayOfMonth>>
+    month<Month extends Cron_Element>(month: Month): CronStanza<_SetObjectKey<R, "month", Month>>
+    dayOfWeek<DayOfWeek extends Cron_Element>(
+        dayOfWeek: DayOfWeek
+    ): CronStanza<_SetObjectKey<R, "dayOfWeek", DayOfWeek>>
+}
+export function CronStanza<R extends Cron_Record>(record: R) {
+    return new _CronStanza(record) as CronStanza<R>
+}
 @display({
     simple(self) {
         return self.string
     }
 })
-export class Cron_Stanza<R extends Cron_Record> {
-    constructor(private readonly _parts: R) {}
+class _CronStanza {
+    constructor(private readonly _parts: Cron_Record) {}
 
     get tuple() {
         return [
@@ -28,49 +47,43 @@ export class Cron_Stanza<R extends Cron_Record> {
             this._parts.dayOfMonth,
             this._parts.month,
             this._parts.dayOfWeek
-        ] as Cron_RecordToTuple<R>
+        ] as Cron_RecordToTuple<Cron_Record>
     }
 
     get string() {
         return this.tuple.map(_convertStanzaElement).join(" ")
     }
 
-    minute<Minute extends Cron_Element>(
-        minute: Minute
-    ): Cron_Stanza<_SetObjectKey<R, "minute", Minute>> {
-        return new Cron_Stanza<_SetObjectKey<R, "minute", Minute>>({
+    minute<Minute extends Cron_Element>(minute: Minute): _CronStanza {
+        return new _CronStanza({
             ...this._parts,
             minute
         } as any)
     }
 
-    hour<Hour extends Cron_Element>(hour: Hour): Cron_Stanza<_SetObjectKey<R, "hour", Hour>> {
-        return new Cron_Stanza<_SetObjectKey<R, "hour", Hour>>({
+    hour<Hour extends Cron_Element>(hour: Hour): _CronStanza {
+        return new _CronStanza({
             ...this._parts,
             hour
         } as any)
     }
 
-    dayOfMonth<DayOfMonth extends Cron_Element>(
-        dayOfMonth: DayOfMonth
-    ): Cron_Stanza<_SetObjectKey<R, "dayOfMonth", DayOfMonth>> {
-        return new Cron_Stanza<_SetObjectKey<R, "dayOfMonth", DayOfMonth>>({
+    dayOfMonth<DayOfMonth extends Cron_Element>(dayOfMonth: DayOfMonth): _CronStanza {
+        return new _CronStanza({
             ...this._parts,
             dayOfMonth
         } as any)
     }
 
-    month<Month extends Cron_Element>(month: Month): Cron_Stanza<_SetObjectKey<R, "month", Month>> {
-        return new Cron_Stanza<_SetObjectKey<R, "month", Month>>({
+    month<Month extends Cron_Element>(month: Month): _CronStanza {
+        return new _CronStanza({
             ...this._parts,
             month
         } as any)
     }
 
-    dayOfWeek<DayOfWeek extends Cron_Element>(
-        dayOfWeek: DayOfWeek
-    ): Cron_Stanza<_SetObjectKey<R, "dayOfWeek", DayOfWeek>> {
-        return new Cron_Stanza<_SetObjectKey<R, "dayOfWeek", DayOfWeek>>({
+    dayOfWeek<DayOfWeek extends Cron_Element>(dayOfWeek: DayOfWeek): _CronStanza {
+        return new _CronStanza({
             ...this._parts,
             dayOfWeek
         } as any)

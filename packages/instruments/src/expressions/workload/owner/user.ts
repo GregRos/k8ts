@@ -1,25 +1,34 @@
 import { LinuxGroup } from "./group"
 import { LinuxOwnership } from "./ownership"
+export interface LinuxUser {
+    readonly id: number
+    readonly name: string
 
-export class LinuxUser {
+    group(id: number, name?: string): LinuxOwnership
+    group(group: LinuxGroup): LinuxOwnership
+
+    sameGroup(): LinuxOwnership
+}
+export function LinuxUser(id: number, name: string) {
+    return new _LinuxUser(id, name) as LinuxUser
+}
+export class _LinuxUser implements LinuxUser {
     constructor(
         readonly id: number,
         readonly name: string
     ) {}
 
-    group(id: number, name?: string): LinuxOwnership
-    group(group: LinuxGroup): LinuxOwnership
     group(param1: number | LinuxGroup, param2?: string): LinuxOwnership {
         let group: LinuxGroup
         if (typeof param1 === "number") {
-            group = new LinuxGroup(param1, param2 ?? "")
+            group = LinuxGroup(param1, param2 ?? "")
         } else {
             group = param1
         }
-        return new LinuxOwnership(this, group)
+        return LinuxOwnership(this, group)
     }
 
     sameGroup(): LinuxOwnership {
-        return new LinuxOwnership(this, new LinuxGroup(this.id, this.name))
+        return LinuxOwnership(this, LinuxGroup(this.id, this.name))
     }
 }

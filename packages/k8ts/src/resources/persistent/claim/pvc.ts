@@ -13,7 +13,7 @@ import { parsePvAccessMode, type PvAccessMode_Many } from "../access-mode"
 import type { Pv_Ref } from "../volume"
 import type { PvVolumeMode } from "../volume-mode"
 
-const pvc_ResourcesSpec = new Reqs({
+const pvcReqs = new Reqs({
     storage: Units.Data
 })
 export interface Pvc_Props<Mode extends PvVolumeMode>
@@ -22,7 +22,7 @@ export interface Pvc_Props<Mode extends PvVolumeMode>
     $mode?: Mode
     $storageClass?: ResourceRef<storage.v1.StorageClass._>
     $bind?: Pv_Ref<Mode>
-    $resources: typeof pvc_ResourcesSpec.__INPUT__
+    $resources: typeof pvcReqs.__INPUT__
 }
 
 export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extends TopResource<
@@ -49,7 +49,7 @@ export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extend
             accessModes: nAccessModes,
             volumeName: self.props.$bind?.ident.name,
             volumeMode: $mode,
-            resources: pvc_ResourcesSpec
+            resources: pvcReqs
                 .parse({
                     storage: $resources.storage
                 })

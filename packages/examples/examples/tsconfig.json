@@ -4,11 +4,7 @@
     "outDir": "../dist",
     "tsBuildInfoFile": "../dist/.examples.tsbuildinfo",
     "rootDir": ".",
-    "noEmit": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["*"]
-    }
+    "noEmit": true
   },
   "include": ["**/*.ts"],
   "exclude": ["**/node_modules"]

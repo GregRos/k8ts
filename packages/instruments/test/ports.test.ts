@@ -1,7 +1,7 @@
 import { PortExports } from "@lib"
 
 it("should do ports", () => {
-    const ps = new PortExports({
+    const ps = PortExports({
         http: 80,
         https: 443,
         extra: "8080/udp",
@@ -17,7 +17,7 @@ it("should do ports", () => {
 })
 
 it("should do mapping", () => {
-    const ps2 = new PortExports({
+    const ps2 = PortExports({
         http: 80,
         https: 443,
         extra: "8080/udp",

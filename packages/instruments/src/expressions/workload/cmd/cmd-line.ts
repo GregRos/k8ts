@@ -13,11 +13,27 @@ import type { CmdLine_Args, CmdLine_sArg } from "./types"
 export interface CmdLine_Options {
     joiner: CmdLine_sTermJoiner
 }
+export interface CmdLine {
+    flag(...flags: CmdLine_sArg[]): CmdLine
+    verbatim(...values: string[]): CmdLine
+    option(args: CmdLine_Args): CmdLine
+    joiner(joiner: CmdLine_sTermJoiner): CmdLine
+    toArray(): string[]
+    toString(): string
+}
+
+const defaultOptions: CmdLine_Options = {
+    joiner: " "
+}
+export function CmdLine(executable: string, options?: Partial<CmdLine_Options>) {
+    options = defaultsDeep({}, options, defaultOptions)
+    return new _CmdLine(executable, [], options as CmdLine_Options) as CmdLine
+}
 
 @display({
-    simple: s => s.string
+    simple: s => s.toString()
 })
-class CmdLine_Object {
+class _CmdLine implements CmdLine {
     constructor(
         readonly executable: string,
         private readonly _terms: CmdLine_Term[],
@@ -25,11 +41,11 @@ class CmdLine_Object {
     ) {}
 
     private _withArgs(f: (args: CmdLine_Term[]) => CmdLine_Term[]) {
-        return new CmdLine_Object(this.executable, f(this._terms), this._options)
+        return new _CmdLine(this.executable, f(this._terms), this._options)
     }
 
     private _withOptions(f: (options: CmdLine_Options) => CmdLine_Options) {
-        return new CmdLine_Object(this.executable, this._terms, f(this._options))
+        return new _CmdLine(this.executable, this._terms, f(this._options))
     }
 
     flag(...flags: CmdLine_sArg[]) {
@@ -80,16 +96,7 @@ class CmdLine_Object {
         return terms
     }
 
-    get string() {
+    toString() {
         return this.toArray().join(" ")
     }
-}
-
-const defaultOptions: CmdLine_Options = {
-    joiner: " "
-}
-export type CmdLine = CmdLine_Object
-export function CmdLine(executable: string, options?: Partial<CmdLine_Options>) {
-    options = defaultsDeep({}, options, defaultOptions)
-    return new CmdLine_Object(executable, [], options as any)
 }

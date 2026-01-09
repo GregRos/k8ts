@@ -32,12 +32,6 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./util": {
-      "require": "./dist/util.js",
-      "import": "./dist/util.js",
-      "default": "./dist/util.js",
-      "types": "./dist/util.d.ts"
     }
   },
   "main": "dist/index.js",

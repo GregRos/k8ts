@@ -8,7 +8,6 @@ import {
 } from "@k8ts/instruments"
 import { Metadata } from "@k8ts/metadata"
 import { dump } from "js-yaml"
-import { mapToObject } from "../../../../metadata/dist/utils/map"
 import type { AssembledResult } from "../engine"
 
 export interface SummarizerOptions {
@@ -128,7 +127,7 @@ export class Summarizer {
             ]
         })
 
-        const x = mapToObject(new Map(pairs))
+        const x = Object.fromEntries(pairs)
         return this._serialize(x)
     }
 }

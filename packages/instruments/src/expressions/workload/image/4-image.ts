@@ -1,4 +1,4 @@
-import { Image_Repository } from "./3-repository"
+import { ImageRepository } from "./3-repository"
 
 type ImagePartsObject<
     Base extends string = string,
@@ -40,8 +40,26 @@ type Image_ReplaceOrAddDigest<Text extends string, NewDigest extends string> = f
     ReplaceFieldType<toImageParts<Text>, "digest", NewDigest>
 >
 
-export class Image_Image<Text extends string = string> {
-    private readonly _text: Text
+export interface Image<Text extends string = string> {
+    toString(): Text
+    get repository(): ImageRepository<any>
+    tag<Tag extends string = "">(tag: Tag): Image<Image_ReplaceOrAddTag<Text, Tag>>
+    digest<Digest extends string = "">(
+        digest: Digest
+    ): Image<Image_ReplaceOrAddDigest<Text, Digest>>
+}
+export function Image<Text extends string = "">(
+    registry: string,
+    namespace: string,
+    repository: string,
+    tag?: string,
+    digest?: string
+) {
+    return new _Image(registry, namespace, repository, tag ?? "", digest ?? "") as Image<Text>
+}
+
+class _Image implements Image<any> {
+    private readonly _text: any
     constructor(
         readonly _registry: string,
         readonly _namespace: string,
@@ -56,23 +74,22 @@ export class Image_Image<Text extends string = string> {
         if (this._digest) {
             parts.push(`@${this._digest}`)
         }
-        this._text = parts.join("") as Text
+        this._text = parts.join("")
     }
 
     get repository() {
-        return new Image_Repository(this._registry, this._namespace, this._repository)
+        return ImageRepository(this._registry, this._namespace, this._repository)
     }
 
-    digest<Digest extends string>(digest: Digest): Image<Image_ReplaceOrAddDigest<Text, Digest>> {
-        return new Image_Image(this._registry, this._namespace, this._repository, this._tag, digest)
+    digest<Digest extends string>(digest: Digest): Image<any> {
+        return new _Image(this._registry, this._namespace, this._repository, this._tag, digest)
     }
 
-    tag<Tag extends string>(tag: Tag): Image<Image_ReplaceOrAddTag<Text, Tag>> {
-        return new Image_Image(this._registry, this._namespace, this._repository, tag, this._digest)
+    tag<Tag extends string>(tag: Tag): Image<any> {
+        return new _Image(this._registry, this._namespace, this._repository, tag, this._digest)
     }
 
     toString() {
         return this._text
     }
 }
-export type Image<Text extends string = string> = Image_Image<Text>

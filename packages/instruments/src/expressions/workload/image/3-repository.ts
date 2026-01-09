@@ -1,9 +1,24 @@
-import { Image_Namespace } from "./2-namespace"
-import { Image_Image, type Image } from "./4-image"
+import { ImageNamespace } from "./2-namespace"
+import { Image } from "./4-image"
 import type { JoinIfNotEmpty } from "./types"
 
-export class Image_Repository<Text extends string = string> {
-    private readonly _url: Text
+export interface ImageRepository<Text extends string = string> {
+    toString(): Text
+    get namespace(): ImageNamespace
+    tag<Tag extends string = "">(tag?: Tag): Image<JoinIfNotEmpty<Text, ":", Tag>>
+    digest<Digest extends string = "">(digest?: Digest): Image<JoinIfNotEmpty<Text, "@", Digest>>
+}
+
+export function ImageRepository<Text extends string = "">(
+    registry: string,
+    namespace: string,
+    repository?: string
+) {
+    return new _ImageRepository(registry, namespace, repository ?? "") as ImageRepository<Text>
+}
+
+class _ImageRepository implements ImageRepository<any> {
+    private readonly _url: string
     constructor(
         private readonly _registry: string,
         private readonly _namespace: string,
@@ -14,29 +29,22 @@ export class Image_Repository<Text extends string = string> {
             parts.push(this.namespace.toString())
         }
         parts.push(this._repository)
-        this._url = parts.join("/") as Text
+        this._url = parts.join("/") as any
     }
 
     get namespace() {
-        return new Image_Namespace(this._registry, this._namespace)
+        return ImageNamespace(this._registry, this._namespace)
     }
 
-    toString() {
+    toString(): any {
         return this._url
     }
 
-    tag<Tag extends string>(tag: Tag): Image<`${Text}:${Tag}`> {
-        return new Image_Image<`${Text}:${Tag}`>(
-            this._registry,
-            this._namespace,
-            this._repository,
-            tag,
-            ""
-        )
+    tag<Tag extends string>(tag?: Tag): Image<any> {
+        return Image(this._registry, this._namespace, this._repository, tag, "")
     }
 
-    digest<Digest extends string>(digest: Digest): Image<JoinIfNotEmpty<Text, "@", Digest>> {
-        return new Image_Image(this._registry, this._namespace, this._repository, "", digest)
+    digest<Digest extends string>(digest?: Digest): Image<any> {
+        return Image(this._registry, this._namespace, this._repository, "", digest)
     }
 }
-export type ImageRepository<Text extends string = string> = Image_Repository<Text>

@@ -1,6 +1,6 @@
 import { getNiceClassName } from "what-are-you"
 import { ResourceIdent } from "."
-import { getDeepPropertyDescriptor } from "../../../../../metadata/dist/utils/map"
+
 import { display } from "../../../utils"
 import { Entity } from "../entity"
 import { K8tsGraphError } from "../error"
@@ -9,6 +9,7 @@ import { ForwardRef } from "./forward"
 import type { Gvk_Base } from "./gvk"
 import { Resource_Props } from "./props"
 import { type ResourceRef } from "./ref"
+import { getDeepPropertyDescriptor } from "./util"
 import { ResourceVertex } from "./vertex"
 @display({
     simple: s => s.__vertex__,

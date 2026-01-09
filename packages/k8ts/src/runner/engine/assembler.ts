@@ -3,6 +3,7 @@ import { Metadata, type Metadata_Input } from "@k8ts/metadata"
 import { aseq } from "doddle"
 import EventEmitter from "eventemitter3"
 import { cloneDeep } from "lodash"
+import path from "path"
 import { version } from "../../version"
 import { Engine_ResourceLoader, type AssemblerRscLoaderEvents } from "./loader"
 import { Engine_Manifester, NodeManifest, type ManifesterEventsTable } from "./manifester"
@@ -47,7 +48,7 @@ export class Assembler {
     }
     private _attachProductionAnnotations(resource: ResourceVertex) {
         const loc = resource.trace.format({
-            cwd: this._options.cwd
+            cwd: this._options.displayCwd || this._options.cwd
         })
         resource.metadata!.add(`build.k8ts.org/`, {
             "^constructed-at": loc,
@@ -68,7 +69,7 @@ export class Assembler {
         })
         const serializer = new Engine_Serializer_Yaml({ emitter })
         const saver = new Engine_Saver({
-            outdir: this._options.outdir,
+            outdir: path.resolve(this._options.cwd ?? ".", this._options.outdir),
             emitter
         })
         const reports = aseq(inFiles)
@@ -179,6 +180,7 @@ export interface AssembledResult {
     options: AssemblerOptions
 }
 export interface AssemblerOptions {
+    displayCwd?: string
     cwd?: string
     printOptions?: boolean
     outdir: string

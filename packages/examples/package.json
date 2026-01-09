@@ -6,10 +6,10 @@
   "author": "GregRos",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
       "import": "./dist/index.js",
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     }
   },
   "main": "dist/index.js",
@@ -23,18 +23,22 @@
   ],
   "scripts": {
     "build": "tsc -b .",
-    "clean": "shx rm -rf dist",
     "build:clean": "run-s clean build",
-    "tidy": "yarn install && run-s build:clean",
-    "publish-locally": "node tools/publish-locally.js",
+    "clean": "shx rm -rf dist",
+    "lint:check": "prettier --check examples/**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,ctsx,mtsx,html,htm,yaml,yml,json,scss,css} && eslint examples/**/*.{ts,mts,cts,js,mjs,cjs}",
     "lint:fix": "prettier --write examples/**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,ctsx,mtsx,html,htm,yaml,yml,json,scss,css} && eslint --fix examples/**/*.{ts,mts,cts,js,mjs,cjs}",
-    "lint:check": "prettier --check examples/**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,ctsx,mtsx,html,htm,yaml,yml,json,scss,css} && eslint examples/**/*.{ts,mts,cts,js,mjs,cjs}"
+    "publish-locally": "node tools/publish-locally.js",
+    "start": "tsx examples/main.ts",
+    "tidy": "yarn install && run-s build:clean"
   },
   "dependencies": {
-    "@k8ts/instruments": "file:.lib/@k8ts-instruments.tgz",
-    "@k8ts/metadata": "file:.lib/@k8ts-metadata.tgz",
+    "@k8ts/instruments": "workspace:^",
+    "@k8ts/metadata": "workspace:^",
+    "@k8ts/sample-interfaces": "workspace:^",
     "doddle": "^7.3.1",
-    "k8ts": "file:.lib/k8ts.tgz",
+    "execa": "^9.6.1",
+    "k8ts": "workspace:^",
+    "pathlib-ts": "^0.1.2",
     "yamprint": "^0.8.4"
   },
   "devDependencies": {

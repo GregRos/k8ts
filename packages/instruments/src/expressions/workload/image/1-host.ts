@@ -1,10 +1,19 @@
-import { Image_Namespace, type ImageNamespace } from "./2-namespace"
+import { ImageNamespace } from "./2-namespace"
+import { ImageRepository } from "./3-repository"
 import type { JoinIfNotEmpty } from "./types"
 
-class Image_Registry<Text extends string = string> {
-    constructor(private _registry: Text) {}
-
-    toString() {
+export interface ImageRegistry<Text extends string = string> {
+    toString(): Text
+    isEmpty: boolean
+    repo<Name extends string>(name?: Name): ImageRepository<JoinIfNotEmpty<Text, "/", Name>>
+    namespace<Ns extends string>(namespace?: Ns): ImageNamespace<JoinIfNotEmpty<Text, "/", Ns>>
+}
+export function ImageRegistry<Text extends string = "">(registry?: Text) {
+    return new _ImageRegistry(registry ?? "") as ImageRegistry<Text>
+}
+class _ImageRegistry implements ImageRegistry<string> {
+    constructor(readonly _registry: string) {}
+    toString(): any {
         return this._registry
     }
 
@@ -12,13 +21,11 @@ class Image_Registry<Text extends string = string> {
         return this._registry === ""
     }
 
-    namespace<Ns extends string = "">(
-        namespace?: Ns
-    ): ImageNamespace<JoinIfNotEmpty<Text, "/", Ns>> {
-        return new Image_Namespace(this._registry, namespace ?? "")
+    repo(name?: string) {
+        return ImageRepository<any>(this._registry, "", name ?? "")
     }
-}
-export type ImageRegistry<Text extends string = string> = Image_Registry<Text>
-export function ImageRegistry<Text extends string = string>(registry: Text): ImageRegistry<Text> {
-    return new Image_Registry<Text>(registry)
+
+    namespace<Ns extends string = "">(namespace?: Ns) {
+        return ImageNamespace<any>(this._registry, namespace ?? "")
+    }
 }
