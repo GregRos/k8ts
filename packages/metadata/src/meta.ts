@@ -4,7 +4,11 @@ import { parseInnerKey, parseKey, parseMetaInput, parseSectionKey } from "./inpu
 import type { Metadata_Input, MetaInputParts } from "./input/dict-input"
 import { type Metadata_Key_Domain } from "./input/key/domain-prefix"
 import { Metadata_Key_Value } from "./input/key/metadata-key"
-import type { Metadata_Key_sDomain, Metadata_Key_sValue } from "./input/key/string-types"
+import type {
+    Metadata_Key_sDomain,
+    Metadata_Key_sValue,
+    NotPrefixed
+} from "./input/key/string-types"
 import { equalsMap, toJS } from "./utils/map"
 import { orderMetaKeyedObject } from "./utils/order-meta-keyed-object"
 import { checkMetadataValue } from "./utils/validate"
@@ -122,7 +126,7 @@ export class Metadata implements Iterable<[Metadata_Key_sValue, string]> {
      * @param ns The section key namespace
      * @param keys Specific value keys within the section to delete
      */
-    delete(ns: Metadata_Key_sDomain, ...keys: Metadata_Key_sValue[]): Metadata
+    delete(ns: Metadata_Key_sDomain, keys: Metadata_Key_sValue[]): Metadata
 
     /**
      * Deletes all keys within a section namespace.
@@ -175,7 +179,7 @@ export class Metadata implements Iterable<[Metadata_Key_sValue, string]> {
      * @param key The section key namespace
      * @param value Nested object containing key-value pairs
      */
-    add(key: Metadata_Key_sDomain, value: MetaInputParts.Nested): Metadata
+    add<Domain extends NotPrefixed<Domain>>(key: Domain, value: MetaInputParts.Nested): Metadata
 
     /**
      * Adds multiple key-value pairs from an input object. Throws if any key already exists.
@@ -231,7 +235,10 @@ export class Metadata implements Iterable<[Metadata_Key_sValue, string]> {
      * @param key The section key namespace
      * @param value Nested object containing key-value pairs to overwrite
      */
-    overwrite(key: Metadata_Key_sDomain, value: MetaInputParts.Nested): Metadata
+    overwrite<Domain extends NotPrefixed<Domain>>(
+        key: Domain,
+        value: MetaInputParts.Nested
+    ): Metadata
 
     /**
      * Overwrites multiple key-value pairs from an input object.
@@ -263,7 +270,7 @@ export class Metadata implements Iterable<[Metadata_Key_sValue, string]> {
      * @param domainPrefix The domain prefix to check for
      * @returns True if any keys exist under the specified domain prefix, false otherwise
      */
-    has(domainPrefix: Metadata_Key_sDomain): boolean
+    has<Domain extends NotPrefixed<Domain>>(domainPrefix: Domain): boolean
     /** @param key */
     has(key: Metadata_Key_sValue): boolean
     has(key: any) {
@@ -422,7 +429,7 @@ export class Metadata implements Iterable<[Metadata_Key_sValue, string]> {
      *     }).values
      *     // { "%app": "my-app", "^note": "This is important", "name": "my-resource" }
      */
-    get values() {
+    get record() {
         return toJS(this._dict)
     }
 

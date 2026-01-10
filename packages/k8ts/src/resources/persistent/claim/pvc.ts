@@ -21,7 +21,7 @@ export interface Pvc_Props<Mode extends PvVolumeMode>
     $accessModes: PvAccessMode_Many
     $mode?: Mode
     $storageClass?: ResourceRef<storage.v1.StorageClass._>
-    $bind?: Pv_Ref<Mode>
+    $volume?: Pv_Ref<Mode>
     $resources: typeof pvcReqs.__INPUT__
 }
 
@@ -36,18 +36,18 @@ export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extend
     protected __needs__() {
         const self = this
         return {
-            bind: self.props.$bind,
+            bind: self.props.$volume,
             storageClass: self.props.$storageClass
         }
     }
     protected __body__(): K8S.KubePersistentVolumeClaimProps {
         const self = this
-        const { $resources, $accessModes, $mode, $storageClass, $bind } = self.props
+        const { $resources, $accessModes, $mode, $storageClass, $volume } = self.props
         const nAccessModes = parsePvAccessMode($accessModes)
 
         const spec = {
             accessModes: nAccessModes,
-            volumeName: self.props.$bind?.ident.name,
+            volumeName: self.props.$volume?.ident.name,
             volumeMode: $mode,
             resources: pvcReqs
                 .parse({
@@ -56,7 +56,7 @@ export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extend
                 .toObject(),
             storageClassName: self.props.$storageClass?.ident.name ?? "standard"
         } satisfies K8S.PersistentVolumeClaimSpec
-        const spec2 = merge(spec, self.props.$overrides)
+        const spec2 = merge(spec, self.props.$$manifest)
         return {
             spec: spec2
         }

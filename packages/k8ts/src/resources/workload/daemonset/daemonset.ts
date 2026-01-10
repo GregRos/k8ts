@@ -39,7 +39,7 @@ export class DaemonSet<Name extends string, Ports extends string = string>
             template: noKindFields,
             updateStrategy: self._updateStrategy
         } satisfies K8S.DaemonSetSpec
-        const spec2 = merge(spec, self.props.$overrides)
+        const spec2 = merge(spec, self.props.$$manifest)
         return {
             spec: spec2
         }

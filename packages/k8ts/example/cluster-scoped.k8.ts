@@ -9,13 +9,17 @@ export default W.File("namespace.yaml", {
         }).DummyResource()
         yield new Namespace("namespace")
         yield new Pv("pv-cool", {
-            $capacity: "1Gi",
+            $capacity: {
+                storage: "1Gi"
+            },
             $storageClass: topolvm,
             $accessModes: ["ReadWriteOnce"],
             nodeAffinity: {}
         })
         yield new Pv("dev-sda", {
-            $capacity: "1Gi",
+            $capacity: {
+                storage: "1Gi"
+            },
             $accessModes: ["ReadWriteOnce"],
             $backend: {
                 kind: "Local",
@@ -25,7 +29,9 @@ export default W.File("namespace.yaml", {
             nodeAffinity: {}
         })
         yield new Pv("nfs-volume", {
-            $capacity: "5Gi",
+            $capacity: {
+                storage: "5Gi"
+            },
             $accessModes: ["ReadWriteMany"],
             $backend: {
                 kind: "NFS",

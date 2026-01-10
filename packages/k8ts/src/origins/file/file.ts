@@ -15,7 +15,7 @@ export interface K8tsFile_Props<
 > extends Origin_Props<Kinds[number]> {
     kinds?: Kinds
     namespace?: ResourceRef<v1.Namespace._>
-    resources$(File: K8tsFile_Scope<Kinds>): Iterable<Exports | ForwardExports<Exports>>
+    resources$($file: K8tsFile_Scope<Kinds>): Iterable<Exports | ForwardExports<Exports>>
 }
 export class K8tsFile extends ExporterOrigin<K8tsFile_Props> {
     #_ = (() => {

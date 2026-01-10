@@ -75,7 +75,7 @@ export class Summarizer {
             noRefs: true,
             replacer(key, value) {
                 if (value instanceof Metadata) {
-                    return value.values
+                    return value.record
                 }
                 return value
             }

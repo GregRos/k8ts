@@ -32,7 +32,7 @@ export class ClusterRole<Name extends string = string> extends K8sResource<
         const body = {
             rules: rules
         }
-        return merge(body, this.props.$overrides)
+        return merge(body, this.props.$$manifest)
     }
 }
 

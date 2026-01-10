@@ -14,7 +14,7 @@ export class Namespace<Name extends string = string> extends K8sResource<Name, N
 
     protected __body__(): K8S.KubeNamespaceProps {
         const spec = {} satisfies K8S.NamespaceSpec
-        const spec2 = merge(spec, this.props.$overrides)
+        const spec2 = merge(spec, this.props.$$manifest)
         return {
             spec: spec2
         }

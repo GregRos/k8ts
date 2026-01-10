@@ -2,7 +2,7 @@ import {
     PortExports,
     Reqs,
     Units,
-    type CmdLine,
+    type Cmd,
     type Image,
     type PortExports_Input,
     type Resource_Props,
@@ -27,7 +27,11 @@ const container_ResourcesSpec = new Reqs({
 })
 
 type PodContainerResources = (typeof container_ResourcesSpec)["__INPUT__"]
-type PodContainerMountAny = ContainerVolumeMount_Unbound | ContainerDeviceMount_Input
+type PodContainerMountAny =
+    | ContainerVolumeMount_Unbound
+    | ContainerDeviceMount_Input
+    | ResourceRef<v1.Pod.Device._>
+    | ResourceRef<v1.Pod.Volume._>
 export type PodContainer_Mounts = {
     [key: string]: PodContainerMountAny
 }
@@ -43,7 +47,7 @@ export interface PodContainer_Props<
 > extends Resource_Props<Partial<K8S.Container>> {
     $image: Image
     $ports?: PortExports_Input<Ports>
-    $command?: CmdLine
+    $command?: Cmd
     $mounts?: PodContainer_Mounts
     $env?: _Env
     $envFrom?: PodContainer_EnvFromItem[]
@@ -68,21 +72,26 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
     get mounts() {
         return seq(Object.entries(this.props.$mounts ?? {}))
             .map(([path, mount]: [string, PodContainerMountAny]) => {
-                if (mount.$backend.is(PodDevice)) {
+                if ("kind" in mount) {
+                    var backend = mount
+                } else {
+                    var backend = mount.$backend
+                }
+                if (backend.is(PodDevice)) {
                     return new ContainerDeviceMount(this, {
-                        $backend: mount.$backend,
+                        $backend: backend,
                         mountPath: path
                     })
-                } else if (mount.$backend.is(PodVolume)) {
+                } else if (backend.is(PodVolume)) {
                     const x = mount as any
                     return new ContainerVolumeMount(this, {
-                        $backend: mount.$backend,
+                        $backend: backend,
                         mountPath: path,
                         readOnly: x.readOnly,
                         subPath: x.subPath
                     })
                 }
-                throw new K8tsResourceError(`Unsupported mount backend type: ${mount.$backend}`)
+                throw new K8tsResourceError(`Unsupported mount backend type: ${backend}`)
             })
             .filter(x => !x.props.$noEmit)
             .toArray()
@@ -171,7 +180,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
             envFrom: envFroms,
             ...self._groupedMounts()
         }
-        return merge(container, self.props.$overrides)
+        return merge(container, self.props.$$manifest)
     }
     constructor(
         parent: ResourceEntity,

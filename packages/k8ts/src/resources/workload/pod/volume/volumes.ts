@@ -1,8 +1,10 @@
-import type { K8S } from "@k8ts/sample-interfaces"
+import { K8S } from "@k8ts/sample-interfaces"
 
 import {
     ResourceEntity,
     ResourcePart,
+    toCdkQuantity,
+    Units,
     type Resource_Props,
     type ResourceRef,
     type ResourceRef_HasKeys
@@ -30,6 +32,13 @@ export interface PodVolume_Backend_HostPath extends Resource_Props<K8S.Volume> {
         path: string
     }
 }
+export interface PodVolume_Backend_EmptyDir extends Resource_Props<K8S.Volume> {
+    $backend: {
+        kind: "EmptyDir"
+        medium?: "" | "Memory"
+        sizeLimit?: Units.Data
+    }
+}
 export interface PodVolume_Backend_ConfigMap<
     A extends ResourceRef<v1.ConfigMap._> = ResourceRef<v1.ConfigMap._>
 > extends Resource_Props<K8S.Volume> {
@@ -55,6 +64,7 @@ export type PodVolume_Backend = (
     | PodVolume_Backend_ConfigMap
     | PodVolume_Backend_Secret
     | PodVolume_Backend_HostPath
+    | PodVolume_Backend_EmptyDir
 ) &
     Resource_Props<K8S.Volume>
 
@@ -64,7 +74,7 @@ type _KeysOf<T> = T extends {
     }
 }
     ? Ks[number]
-    : never
+    : string
 
 type _Mapped<T> = T extends {
     mappings: infer M
@@ -96,7 +106,7 @@ export abstract class PodVolume<
             backend: this.props.$backend instanceof ResourceEntity ? this.props.$backend : undefined
         }
     }
-    Mount(
+    mount(
         options?: ContainerVolumeMount_Input<PodVolumeBackendKnownPaths<P>>
     ): ContainerVolumeMount_Unbound {
         return {
@@ -117,7 +127,7 @@ export class PodVolume_Pvc extends PodVolume<PodVolume_Backend_Pvc> {
                 readOnly: this.props.readOnly
             }
         }
-        return merge(body, this.props.$overrides)
+        return merge(body, this.props.$$manifest)
     }
 }
 
@@ -147,7 +157,7 @@ export class PodVolume_ConfigMap extends PodVolume<PodVolume_Backend_ConfigMap> 
                 items: mappings
             }
         }
-        return merge(body, this.props.$overrides)
+        return merge(body, this.props.$$manifest)
     }
 }
 
@@ -165,7 +175,7 @@ export class PodVolume_Secret<
                 items: mappings
             }
         }
-        return merge(body, this.props.$overrides)
+        return merge(body, this.props.$$manifest)
     }
 }
 
@@ -175,9 +185,19 @@ export class PodVolume_HostPath extends PodVolume<PodVolume_Backend_HostPath> {
             name: this.ident.name,
             hostPath: {
                 path: this.props.$backend.path,
-                type: this.props.$backend.type
+                type: this.props.$backend.kind
             }
         }
-        return merge(body, this.props.$overrides)
+        return merge(body, this.props.$$manifest)
+    }
+}
+
+export class PodVolume_EmptyDir extends PodVolume<PodVolume_Backend_EmptyDir> {
+    protected __submanifest__(): K8S.Volume {
+        const body = {
+            medium: this.props.$backend.medium,
+            sizeLimit: toCdkQuantity(this.props.$backend.sizeLimit)
+        } satisfies K8S.EmptyDirVolumeSource
+        return merge(body, this.props.$$manifest)
     }
 }

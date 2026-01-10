@@ -1,4 +1,10 @@
-import { K8sResource, ResourceRef, Units, type Resource_Props_Top } from "@k8ts/instruments"
+import {
+    K8sResource,
+    ResourceRef,
+    toCdkQuantityRecord,
+    Units,
+    type Resource_Props_Top
+} from "@k8ts/instruments"
 import { K8S } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { v1 } from "../../../gvks/default"
@@ -13,7 +19,7 @@ const StorageClassKind = storage.v1.StorageClass._
 
 export interface Pv_Backend_HostPath {
     kind: "HostPath"
-    hostpathType: HostPath_Type
+    type: HostPath_Type
     path: string
 }
 export interface Pv_Backend_Local {
@@ -33,7 +39,9 @@ export interface Pv_Props<Mode extends PvVolumeMode = PvVolumeMode>
     $storageClass?: ResourceRef<storage.v1.StorageClass._>
     $mode?: Mode
     $reclaimPolicy?: Pv_ReclaimMode
-    $capacity: Units.Data
+    $capacity: {
+        storage: Units.Data
+    }
     $backend?: Pv_Backend
     mountOptions?: string[]
     nodeAffinity?: K8S.VolumeNodeAffinity
@@ -62,7 +70,7 @@ export class Pv<
         const self = this
         const accessModes = parsePvAccessMode(self.props.$accessModes)
         // Make sure it parses correctly
-        Units.Data.parse(self.props.$capacity)
+        Units.Data.parse(self.props.$capacity.storage)
         if (self.props.$backend?.kind === "Local") {
             if (!self.props.nodeAffinity) {
                 throw new K8tsResourceError(
@@ -78,11 +86,7 @@ export class Pv<
         let spec: K8S.PersistentVolumeSpec = {
             accessModes,
             storageClassName: self.props.$storageClass?.ident.name ?? "standard",
-            capacity: self.props.$capacity
-                ? {
-                      storage: K8S.Quantity.fromString(self.props.$capacity)
-                  }
-                : undefined,
+            capacity: toCdkQuantityRecord(self.props.$capacity),
             volumeMode: self.props.$mode ?? "Filesystem",
             mountOptions: self.props.mountOptions,
             persistentVolumeReclaimPolicy: self.props.$reclaimPolicy ?? "Retain",
@@ -92,7 +96,7 @@ export class Pv<
             ...spec,
             ...parseBackend(self.props.$backend)
         }
-        spec = merge(spec, self.props.$overrides)
+        spec = merge(spec, self.props.$$manifest)
         return {
             spec
         }

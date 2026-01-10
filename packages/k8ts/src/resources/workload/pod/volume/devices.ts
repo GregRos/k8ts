@@ -41,7 +41,7 @@ export class PodDevice extends ResourcePart<PodDeviceBackendPvc> {
                 readOnly: this.backend.readOnly
             }
         }
-        return merge(body, this.props.$overrides)
+        return merge(body, this.props.$$manifest)
     }
 
     Mount(): ContainerDeviceMount_Input {

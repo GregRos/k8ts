@@ -41,6 +41,6 @@ export class ContainerVolumeMount extends ResourcePart<ContainerVolumeMount_Prop
             readOnly: this.props.readOnly,
             subPath: this.props.subPath
         }
-        return merge(body, this.props.$overrides)
+        return merge(body, this.props.$$manifest)
     }
 }

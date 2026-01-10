@@ -5,8 +5,8 @@ import type { JoinIfNotEmpty } from "./types"
 export interface ImageRegistry<Text extends string = string> {
     toString(): Text
     isEmpty: boolean
-    repo<Name extends string>(name?: Name): ImageRepository<JoinIfNotEmpty<Text, "/", Name>>
-    namespace<Ns extends string>(namespace?: Ns): ImageNamespace<JoinIfNotEmpty<Text, "/", Ns>>
+    repo<Name extends string = "">(name?: Name): ImageRepository<JoinIfNotEmpty<Text, "/", Name>>
+    namespace<Ns extends string = "">(namespace?: Ns): ImageNamespace<JoinIfNotEmpty<Text, "/", Ns>>
 }
 export function ImageRegistry<Text extends string = "">(registry?: Text) {
     return new _ImageRegistry(registry ?? "") as ImageRegistry<Text>

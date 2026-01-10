@@ -10,7 +10,7 @@ import { createSelectionMetadata } from "../util"
 import type { PodContainer } from "./container"
 import type { ContainerRef } from "./container/ref"
 import { Pod_Scope } from "./container/scope"
-export type Pod_Producer<Ports extends string> = (scope: Pod_Scope) => Iterable<ContainerRef<Ports>>
+export type Pod_Producer<Ports extends string> = ($pod: Pod_Scope) => Iterable<ContainerRef<Ports>>
 
 export interface Pod_Props<Ports extends string> extends Resource_Props<Partial<K8S.PodSpec>> {
     metadata?: Metadata_Input
@@ -84,7 +84,7 @@ export class Pod<Name extends string = string, Ports extends string = string>
             initContainers: initContainers.pull(),
             volumes: volumes.pull()
         } satisfies K8S.PodSpec
-        const spec2 = merge(spec, props.$overrides)
+        const spec2 = merge(spec, props.$$manifest)
         return {
             spec: spec2
         }

@@ -47,7 +47,7 @@ export class HttpRoute<Name extends string, Ports extends string> extends K8sRes
                 }
             ]
         } satisfies K8S.HttpRouteSpec
-        const spec2 = merge(spec, self.props.$overrides)
+        const spec2 = merge(spec, self.props.$$manifest)
         return {
             spec: spec2
         }

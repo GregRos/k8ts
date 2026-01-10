@@ -1,7 +1,7 @@
 import type { Metadata_Input } from "@k8ts/metadata"
 
 export interface Resource_Props<ResultType extends object = object> {
-    $overrides?: ResultType
+    $$manifest?: ResultType
     $noEmit?: boolean
 }
 

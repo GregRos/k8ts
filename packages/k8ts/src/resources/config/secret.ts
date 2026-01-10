@@ -42,6 +42,6 @@ export class Secret<Name extends string = string, Keys extends string = string> 
             data: resolved.binaryData,
             stringData: resolved.data
         }
-        return merge(body, this.props.$overrides)
+        return merge(body, this.props.$$manifest)
     }
 }

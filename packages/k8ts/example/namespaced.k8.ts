@@ -1,4 +1,4 @@
-import { CmdLine, Cron, ImageRegistry, localRefFile } from "@k8ts/instruments"
+import { Cmd, Cron, ImageRegistry, LocalFile } from "@k8ts/instruments"
 import {
     ClusterRole,
     ClusterRoleBinding,
@@ -37,7 +37,7 @@ export default W.File("deployment2.yaml", {
         yield FILE.Section("inner", {
             *resources$(SECTION) {
                 const claim = new Pvc("claim", {
-                    $bind: cool,
+                    $volume: cool,
                     $accessModes: ["ReadWriteOnce"],
                     $resources: {
                         storage: "10Gi->20Gi"
@@ -78,16 +78,16 @@ export default W.File("deployment2.yaml", {
                                 $mounts: {
                                     "/data": POD.Volume("data", {
                                         $backend: claim
-                                    }).Mount(),
+                                    }).mount(),
                                     "/data2": POD.Volume("data2", {
                                         $backend: claim2
-                                    }).Mount(),
+                                    }).mount(),
                                     "/data3": POD.PvcTemplate("data3", {
                                         $resources: {
                                             storage: "2Gi->10Gi"
                                         },
                                         $accessModes: ["ReadWriteOnce"]
-                                    }).Mount()
+                                    }).mount()
                                 },
                                 $resources: {
                                     cpu: "100m->500m",
@@ -105,7 +105,7 @@ export default W.File("deployment2.yaml", {
                         *containers$(POD) {
                             yield POD.Container("main", {
                                 $image: image,
-                                $command: CmdLine("/bin/sh").option({
+                                $command: Cmd("/bin/sh").options({
                                     "-c": "date; echo Hello from the Kubernetes cluster"
                                 }),
                                 $resources: {
@@ -120,14 +120,14 @@ export default W.File("deployment2.yaml", {
                 const a = k8tsFile["PersistentVolume/dev-sda"]
                 const devClaim = new Pvc("dev-claim", {
                     $accessModes: ["ReadWriteOnce"],
-                    $bind: k8tsFile["PersistentVolume/dev-sda"],
+                    $volume: k8tsFile["PersistentVolume/dev-sda"],
                     $resources: {
                         storage: "1Gi->5Gi"
                     }
                 })
                 const xx = new ConfigMap("config", {
                     $data: {
-                        "config.yaml": localRefFile("./example.txt").as("text")
+                        "config.yaml": LocalFile("./example.txt").as("text")
                     }
                 })
 
@@ -180,10 +180,10 @@ export default W.File("deployment2.yaml", {
                                     y: 1111
                                 },
                                 $mounts: {
-                                    "/xyz": v.Mount(),
-                                    "/etc": v.Mount(),
+                                    "/xyz": v.mount(),
+                                    "/etc": v.mount(),
                                     "/dev": d.Mount(),
-                                    "/xfyz": v12.Mount({
+                                    "/xfyz": v12.mount({
                                         subPath: "xxxx"
                                     })
                                 },

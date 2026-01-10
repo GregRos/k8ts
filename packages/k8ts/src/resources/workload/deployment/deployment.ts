@@ -38,7 +38,7 @@ export class Deployment<Name extends string, Ports extends string = string>
             template: noKindFields,
             strategy: self._strategy
         } satisfies K8S.DeploymentSpec
-        const spec2 = merge(spec, self.props.$overrides)
+        const spec2 = merge(spec, self.props.$$manifest)
         return {
             spec: spec2
         }

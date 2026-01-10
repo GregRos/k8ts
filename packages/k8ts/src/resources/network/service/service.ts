@@ -121,7 +121,7 @@ export class Service<
                 app: self.props.$backend.ident.name
             }
         } satisfies K8S.ServiceSpec
-        const spec2 = merge(spec, self.props.$overrides)
+        const spec2 = merge(spec, self.props.$$manifest)
         const body = {
             spec: spec2
         }

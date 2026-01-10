@@ -22,6 +22,6 @@ export class ServiceAccount<Name extends string = string> extends K8sResource<
                 name
             }))
         } satisfies K8S.KubeServiceAccountProps
-        return merge(body, self.props.$overrides)
+        return merge(body, self.props.$$manifest)
     }
 }

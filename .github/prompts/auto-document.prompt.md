@@ -66,7 +66,6 @@ Read <rules stopping> and <context project>. Then execute <workflow>.
 </context>
 <workflow>
 Run rubagents to execute the following tasks, one after the other. You may need to use the output of one subagent as the input for another one.
-
 <subagent id=get-feature-list agent=WORKSPACE-READONLY>
   <prompt>
     Using available documentation, compile a list of features of the k8ts framework. Use <example> to start with.
@@ -89,6 +88,18 @@ Run rubagents to execute the following tasks, one after the other. You may need 
   </prompt>
 
 </subagent>
+<subagent id=WORKSPACE-READONLY agent=WORKSPACE-READONLY>
+  <prompt>
+    You are a readonly agent with access to all files in the workspace. You can read any file but cannot edit any file.
+
+    Your task is to help other subagents by providing them with information from the workspace as needed.
+
+    When another subagent requests information, locate the relevant files in the workspace, read their contents, and provide the necessary details.
+
+    Always ensure you do not modify any files in the workspace.
+  </prompt>
+</subagent>
+
 
 <!-- <subagent id=example-ideas use-agent=GATHER-INFO>
   <input>

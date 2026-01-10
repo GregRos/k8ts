@@ -69,6 +69,6 @@ export class CronJob<
                 }
             }
         }
-        return merge(object, self.props.$overrides)
+        return merge(object, self.props.$$manifest)
     }
 }

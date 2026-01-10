@@ -9,10 +9,12 @@ import { K8tsResourceError } from "../../../errors"
 import type { Pod } from "../pod"
 import {
     type PodVolume_Backend_ConfigMap,
+    type PodVolume_Backend_EmptyDir,
     type PodVolume_Backend_HostPath,
     type PodVolume_Backend_Pvc,
     type PodVolume_Backend_Secret,
     PodVolume_ConfigMap,
+    PodVolume_EmptyDir,
     PodVolume_HostPath,
     PodVolume_Pvc,
     PodVolume_Secret
@@ -38,6 +40,7 @@ export class Pod_Scope {
     InitContainer(name: string, options: PodContainer_Props<never>) {
         return new PodContainer(this._parent, name, "init", options)
     }
+    Volume<const P extends PodVolume_Backend_EmptyDir>(name: string, options: P): PodVolume<P>
     Volume<const P extends PodVolume_Backend_HostPath>(name: string, options: P): PodVolume<P>
     Volume<const P extends PodVolume_Backend_ConfigMap<ResourceRef<v1.ConfigMap._>>>(
         name: string,
@@ -54,6 +57,12 @@ export class Pod_Scope {
     Volume(name: string, options: PodVolume_Backend): PodVolume {
         {
             const backend = options.$backend
+            if ("kind" in backend) {
+                switch (backend.kind) {
+                    case "EmptyDir":
+                        return new PodVolume_EmptyDir(this._parent, name, options as any)
+                }
+            }
             if ("kind" in backend && backend.kind === "HostPath") {
                 return new PodVolume_HostPath(this._parent, name, options as any)
             }

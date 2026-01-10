@@ -1,5 +1,5 @@
 import { seq } from "doddle"
-import { defaultsDeep, merge } from "lodash"
+import { merge } from "lodash"
 import { display } from "../../../utils/mixin/display"
 import {
     CmdLine_Term_Flag,
@@ -13,11 +13,11 @@ import type { CmdLine_Args, CmdLine_sArg } from "./types"
 export interface CmdLine_Options {
     joiner: CmdLine_sTermJoiner
 }
-export interface CmdLine {
-    flag(...flags: CmdLine_sArg[]): CmdLine
-    verbatim(...values: string[]): CmdLine
-    option(args: CmdLine_Args): CmdLine
-    joiner(joiner: CmdLine_sTermJoiner): CmdLine
+export interface Cmd {
+    flag(...flags: CmdLine_sArg[]): Cmd
+    verbatim(...values: string[]): Cmd
+    options(args: CmdLine_Args): Cmd
+    joiner(joiner: CmdLine_sTermJoiner): Cmd
     toArray(): string[]
     toString(): string
 }
@@ -25,15 +25,16 @@ export interface CmdLine {
 const defaultOptions: CmdLine_Options = {
     joiner: " "
 }
-export function CmdLine(executable: string, options?: Partial<CmdLine_Options>) {
-    options = defaultsDeep({}, options, defaultOptions)
-    return new _CmdLine(executable, [], options as CmdLine_Options) as CmdLine
+export function Cmd(executable: string) {
+    return new _CmdLine(executable, [], {
+        joiner: " "
+    }) as Cmd
 }
 
 @display({
     simple: s => s.toString()
 })
-class _CmdLine implements CmdLine {
+class _CmdLine implements Cmd {
     constructor(
         readonly executable: string,
         private readonly _terms: CmdLine_Term[],
@@ -58,7 +59,7 @@ class _CmdLine implements CmdLine {
         return this._withArgs(terms => terms.concat(verbatimTerms))
     }
 
-    option(args: CmdLine_Args) {
+    options(args: CmdLine_Args) {
         const map = new Map(Object.entries(args)) as Map<CmdLine_sArg, string>
         const optionTerms = seq(map)
             .map(([key, value]) => {

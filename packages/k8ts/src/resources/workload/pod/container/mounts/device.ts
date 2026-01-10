@@ -36,6 +36,6 @@ export class ContainerDeviceMount extends ResourcePart<ContainerMountDevice_Prop
             devicePath: this.props.mountPath,
             name: this.props.$backend.ident.name
         }
-        return merge(body, this.props.$overrides)
+        return merge(body, this.props.$$manifest)
     }
 }

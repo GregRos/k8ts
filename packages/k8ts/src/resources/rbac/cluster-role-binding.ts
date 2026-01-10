@@ -37,6 +37,6 @@ export class ClusterRoleBinding<Name extends string = string> extends K8sResourc
                 namespace: sa.ident.namespace!
             }))
         }
-        return merge(body, this.props.$overrides)
+        return merge(body, this.props.$$manifest)
     }
 }

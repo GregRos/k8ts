@@ -1,7 +1,5 @@
 # Repository Guide
-The k8ts monorepo centers around the [k8ts](../packages/k8ts/README.md) project for building k8s manifests using TypeScript.
-
-See [coding](./contrib/coding.md) for info about some coding tricks used by the packages.
+The k8ts monorepo centers around the [k8ts](./packages/k8ts/README.md) project for building k8s manifests using TypeScript.
 
 Basic configuration for all packages:
 
@@ -13,13 +11,16 @@ module resolution: node16 # allows resolving package exports fields
 linking: yarn workspaces with "workspace:^" refs
 ```
 
+# General documentation
+Markdown documentation is available in [](./k8ts.docs/) .Describes the core entities and relations between framework objects, the building blocks that underly resources, etc.
+
+Doesn't have much in the way of usage examples.
 # Naming convention
 Follows several naming conventions:
 
 1. Standard, commonly used members have simple names, e.g. `Deployment`
-2. More specialized classes/types have compound names like `Service_Port` or `Container_Volume_Mount`.
-
-Some specific files still use namespaces to organize declarations. Except for the kind structures these should be extracted and the convention used. Namespaces aren't well-supported and create issues.
+2. Classes that users aren't expected to reference by name can have compound names with `_` like `Deployment_Props`
+3. Names of k8s resources and part resources don't have `_`, e.g. `ContainerVolumeMount`
 
 # Packages
 The monorepo organizes code into multiple packages. Some of the packages are pretty big and contain lots of stuff. These should be spun off into smaller packages over time.
@@ -28,34 +29,41 @@ The monorepo organizes code into multiple packages. Some of the packages are pre
 The primary front-facing package. Includes several different parts that should be spun off:
 
 1. K8s entity definitions, like Deployment and Pvc.
-2. Origin entity definitions, including File and the topmost World.*
-3. Subentity definitions, like containers, pods, pod volumes, etc.
-4. The manifest assembler that turns objects to YAML content*
-5. Recognized resource kinds in a namespace configuration.*
-
-Things marked wiht `*` should be spun out into their own packages.
+2. Origin entity definitions, including File and the topmost World.
+3. ResourcePart definitions related to the k8s resources, like PodVolume.
+4. The manifest assembler that turns objects to YAML content.
+5. Kinds for the declared resources in a namespace configuration.
+6. A few specific workload tools, like for managing environment variables.
 
 Requires `@k8ts/metadata` and `@k8ts/instruments` as peer dependencies, and users need to install both to use the system. `@k8ts/sample-interfaces` is also used, but it's a normal dependency and relevant contents are re-exported.
 
 ## @k8ts/instruments
 A range of utilities and core components for k8ts. Includes a lot of unrelated stuff in organized by deep directory trees. Requires `@k8ts/metdata` as a peer-dependency.
 
-This is very much a grab bag package and needs to be split into several smaller packages around each of its components.
+Needs to be split into smaller packages over time. Key parts:
 ### Core
 Core building blocks for k8s resource entities.
 
-1. Resource, entity, node, and origin base classes.
-2. Current origin tracker which includes an iterator hook.
-3. Exports objects and FwRef proxy objects.
-4. Type mechanisms for computing reference structures
+1. Entity base class and related types
+2. ResourceEntity and OriginEntity base classes
+3. K8sResource base class for top-level k8s resources with manifests.
+4. ResourcePart base class for parts of k8s resources that are used by k8s.
+5. Runtime origin tracker for inferring origins implicitly.
+6. ForwardRef and ForwardExports proxy objects for exporting and cross-referncing resources.
+7. Bare-bones reference interfaces that mirror ResourceEntity and OriginEntity. These speed up type-checking.
+8. GroupVersionKind abstractions.
+9. Vertex system for managing hierarchical relationships between Entities.
+10. Interface for k8s manifests.
+11. Tools for tracing where resources were defined (file-level and commit-level).
+12. ResourceIdent abstraction for managing names and namespaces, and identifying resources uniquely.
 
 ### Expressions
 Abstractions commonly used when defining other resources.
 
 1. Port and IP address abstractions.
 2. Container image, command lines, and environment variables for defining containers.
-3. Data sources, which are used to populate ConfigMaps and Secrets with build-local data.
-4. Abstractions for the resource units and the request-limit system.
+3. Data sources, which are used to populate ConfigMaps and Secrets during generation.
+4. Abstractions for resource units and the request-limit system.
 5. Parsers for the concise `10Gi --> 20Gi` request-limit shorthand.
 6. Re-exported time zone types.
 
@@ -63,17 +71,17 @@ Abstractions commonly used when defining other resources.
 Various utilities typically unrelated to k8s.
 
 ## @k8ts/metadata
-Abstractions for k8s metadata, which includes everything that appears in the `metadata` field, like labels, namespaces, annotations, etc.
+The `Metadata` class for managing k8s metadata together with related types.
 
 Each instance is mutable and unique. It's expected to be mutated by users. Uses a concise syntax for referencing different annotation types:
 
 ```yaml
-name: The name
-namespace: the namespace
 "%app": Label
 "^app": Annotation
 "#app": Comment # not reproduced by the manifester, treated as build-only metadata
 ```
+
+K8ts does not include names or namespaces in its definition of metadata. These are managed via the ResourceIdent system.
 
 Validates metadata at the type and runtime levels. Very focused and is a good example of what a k8ts dependency package should look like.
 
@@ -128,7 +136,7 @@ graph TD
 
 Direct dependencies use solid lines. Peer dependencies (installed by the user alongside k8ts) use dashed lines. The `metadata` package sits at the bottom with no internal dependencies, `instruments` builds on it, and `k8ts` integrates everything.
 
-`k8ts` exporst the type namespace called `CDK` which exposes interface definitions for k8s manifests.
+`k8ts` exporst the type namespace called `K8S` which exposes interface definitions for k8s manifests.
 
 # TypeScript Configuration Structure
 The root `tsconfig.json` acts as the build orchestrator, defining project references to all packages. Each package has a top-level `tsconfig.json` with `"composite": true` and `"noEmit": true` that references its internal sub-projects (`src/`, `test/`, `example/`).
@@ -177,15 +185,15 @@ A YAML representation of the `tsconfig.json` project references:
 Files are compiled as follows:
 
 ```yaml
+packages/examples/src/**/*.ts: packages/examples/dist/**/*
 packages/k8ts/src/**/*.ts: packages/k8ts/dist/**/*
-packages/k8ts/examples/**/*.ts:  packages/k8ts/dist_examples/**/*
 packages/instruments/src/**/*.ts: packages/instruments/dist/**/*
 packages/metadata/src/**/*.ts: packages/metadata/dist/**/*
 packages/sample-interfaces/src/**/*.ts: packages/sample-interfaces/dist/**/*
 ```
 
 # VS Code Workspace
-The workspace configuration lives in [k8ts.code-workspace](../k8ts.code-workspace). It defines a workspace root for each package, plus one called `root` for the root.
+The workspace configuration lives in [k8ts.code-workspace](./k8ts.code-workspace). It defines a workspace root for each package, plus one called `root` for the root.
 
 When the workspace is opened, the `tsc watch [global]` task runs automatically.
 

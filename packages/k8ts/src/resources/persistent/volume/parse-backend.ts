@@ -9,7 +9,7 @@ export function parseBackend(backend?: Pv_Backend) {
             return {
                 hostPath: {
                     path: backend.path,
-                    type: backend.hostpathType
+                    type: backend.type
                 }
             }
         case "Local":
