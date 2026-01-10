@@ -1,5 +1,5 @@
 import { K8sResource, ResourceRef, TemplateOrigin } from "@k8ts/instruments"
-import { CDK } from "@k8ts/sample-interfaces"
+import { K8S } from "@k8ts/sample-interfaces"
 import { doddle, seq } from "doddle"
 import { merge, omit } from "lodash"
 import { Pvc } from "../../.."
@@ -81,7 +81,7 @@ export class StatefulSet<
         return [...this.PvcTemplates, this.PodTemplate]
     }
 
-    protected async __body__(): Promise<CDK.KubeStatefulSetProps> {
+    protected async __body__(): Promise<K8S.KubeStatefulSetProps> {
         const self = this
         const template = await self.PodTemplate["__manifest__"]()
         const noKindFields = omit(template, ["kind", "apiVersion"])
@@ -96,7 +96,7 @@ export class StatefulSet<
                 seq(self.PvcTemplates).map(pvc => pvc["__manifest__"]())
             ),
             updateStrategy: self._updateStrategy
-        } satisfies CDK.StatefulSetSpec
+        } satisfies K8S.StatefulSetSpec
         const spec2 = merge(spec, self.props.$overrides)
         return {
             spec: spec2

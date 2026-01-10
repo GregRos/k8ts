@@ -1,11 +1,11 @@
 import { K8sResource, type ResourceRef, type Resource_Props_Top } from "@k8ts/instruments"
-import { CDK } from "@k8ts/sample-interfaces"
+import { K8S } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { gateway } from "../../../gvks/gateway"
 import type { Service_PortRef } from "../service/service-port"
 
 export interface HttpRoute_Props<Ports extends string>
-    extends Resource_Props_Top<CDK.HttpRouteSpec> {
+    extends Resource_Props_Top<K8S.HttpRouteSpec> {
     $gateway: ResourceRef<gateway.v1.Gateway._>
     $hostname: string
     $backend: Service_PortRef<Ports>
@@ -20,7 +20,7 @@ export class HttpRoute<Name extends string, Ports extends string> extends K8sRes
     }
 
     private _getBackendRef() {
-        const backendRef: CDK.HttpRouteSpecRulesBackendRefs = {
+        const backendRef: K8S.HttpRouteSpecRulesBackendRefs = {
             kind: "Service",
             namespace: this.props.$backend.service.ident.namespace,
             name: this.props.$backend.service.ident.name,
@@ -29,7 +29,7 @@ export class HttpRoute<Name extends string, Ports extends string> extends K8sRes
         return backendRef
     }
 
-    protected __body__(): CDK.HttpRouteProps {
+    protected __body__(): K8S.HttpRouteProps {
         const self = this
         const backendRef = this._getBackendRef()
         const spec = {
@@ -46,7 +46,7 @@ export class HttpRoute<Name extends string, Ports extends string> extends K8sRes
                     backendRefs: [backendRef]
                 }
             ]
-        } satisfies CDK.HttpRouteSpec
+        } satisfies K8S.HttpRouteSpec
         const spec2 = merge(spec, self.props.$overrides)
         return {
             spec: spec2

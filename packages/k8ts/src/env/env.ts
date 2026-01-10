@@ -1,5 +1,5 @@
 import type { ResourceRef } from "@k8ts/instruments"
-import type { CDK } from "@k8ts/sample-interfaces"
+import type { K8S } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { isPrimitive } from "what-are-you"
 import { v1 } from "../kinds"
@@ -22,7 +22,7 @@ export class EnvBuilder<M extends Record<keyof M, EnvValue>> {
         return this._env
     }
 
-    private _envFromSecret(value: EnvValueSource): CDK.EnvVarSource {
+    private _envFromSecret(value: EnvValueSource): K8S.EnvVarSource {
         return {
             secretKeyRef: {
                 name: value.$backend.ident.name,
@@ -34,7 +34,7 @@ export class EnvBuilder<M extends Record<keyof M, EnvValue>> {
 
     private _envFromConfigMap<S extends ResourceRef<v1.ConfigMap._>>(
         value: EnvValueSource
-    ): CDK.EnvVarSource {
+    ): K8S.EnvVarSource {
         return {
             configMapKeyRef: {
                 name: value.$backend.ident.name,
@@ -63,13 +63,13 @@ export class EnvBuilder<M extends Record<keyof M, EnvValue>> {
                     return {
                         name: key,
                         valueFrom: this._envFromSecret(value as any)
-                    } satisfies CDK.EnvVar
+                    } satisfies K8S.EnvVar
                 }
                 if (value.$backend.is(v1.ConfigMap._)) {
                     return {
                         name: key,
                         valueFrom: this._envFromConfigMap(value as any)
-                    } satisfies CDK.EnvVar
+                    } satisfies K8S.EnvVar
                 }
                 throw new K8tsEnvError("Invalid environment variable reference", {
                     key: key,

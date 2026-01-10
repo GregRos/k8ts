@@ -1,11 +1,11 @@
 import type { Resource_Props_Top } from "@k8ts/instruments"
-import type { CDK } from "@k8ts/sample-interfaces"
+import type { K8S } from "@k8ts/sample-interfaces"
 import type { Pod_Props, Service_Props } from "../../.."
 import type { ContainerRef } from "../pod/container"
 import type { StatefulSet_Scope } from "./scope"
 
 export interface StatefulSet_UpdateStrategy_RollingUpdate
-    extends CDK.RollingUpdateStatefulSetStrategy {
+    extends K8S.RollingUpdateStatefulSetStrategy {
     type: "RollingUpdate"
 }
 export interface StatefulSet_UpdateStrategy_OnDelete {
@@ -22,7 +22,7 @@ export interface StatefulSet_Props<
     Ports extends string,
     SvcPorts extends NoInfer<Ports>,
     SvcName extends string
-> extends Resource_Props_Top<CDK.StatefulSetSpec> {
+> extends Resource_Props_Top<K8S.StatefulSetSpec> {
     $replicas?: number
     $template: Omit<Pod_Props<Ports>, "containers$"> & {
         containers$: StatefulSet_Producer<Ports>

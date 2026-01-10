@@ -8,7 +8,7 @@ import {
     type Resource_Props,
     type ResourceRef
 } from "@k8ts/instruments"
-import type { CDK } from "@k8ts/sample-interfaces"
+import type { K8S } from "@k8ts/sample-interfaces"
 
 import { K8sResource, ResourceEntity, ResourcePart } from "@k8ts/instruments"
 import { seq } from "doddle"
@@ -40,7 +40,7 @@ export interface PodContainer_EnvFromItem {
 export interface PodContainer_Props<
     Ports extends string = never,
     _Env extends Record<string, EnvValue> = Record<string, EnvValue>
-> extends Resource_Props<Partial<CDK.Container>> {
+> extends Resource_Props<Partial<K8S.Container>> {
     $image: Image
     $ports?: PortExports_Input<Ports>
     $command?: CmdLine
@@ -103,7 +103,7 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
     get ports() {
         return PortExports(this.props.$ports)
     }
-    protected __submanifest__(): CDK.Container {
+    protected __submanifest__(): K8S.Container {
         const self = this
         const { $image, $ports, $command, $env } = self.props
         let resourcesObject = self._resources()?.toObject()
@@ -147,21 +147,21 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
                         optional: ef.optional,
                         name: source.ident.name
                     }
-                } as CDK.EnvFromSource
+                } as K8S.EnvFromSource
             } else if (source.is(v1.ConfigMap._)) {
                 return {
                     configMapRef: {
                         optional: ef.optional,
                         name: source.ident.name
                     }
-                } as CDK.EnvFromSource
+                } as K8S.EnvFromSource
             } else {
                 throw new K8tsResourceError(
                     `EnvFrom source reference "${source}" must be a ConfigMap or Secret, but was ${source.kind}`
                 )
             }
         })
-        const container: CDK.Container = {
+        const container: K8S.Container = {
             name: self.ident.name,
             image: $image.toString(),
             ports: containerPorts,
@@ -183,8 +183,8 @@ export class PodContainer<Ports extends string = string> extends ResourcePart<
     }
 
     private _groupedMounts() {
-        const volumeMounts = [] as CDK.VolumeMount[]
-        const volumeDevices = [] as CDK.VolumeDevice[]
+        const volumeMounts = [] as K8S.VolumeMount[]
+        const volumeDevices = [] as K8S.VolumeDevice[]
         for (const mnt of this.mounts) {
             if (mnt.backend.is(PodDevice)) {
                 const deviceMount = mnt as ContainerDeviceMount

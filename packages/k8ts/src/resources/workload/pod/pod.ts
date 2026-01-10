@@ -1,6 +1,6 @@
 import { K8sResource, ResourcePart, type Resource_Props } from "@k8ts/instruments"
 import type { Metadata_Input } from "@k8ts/metadata"
-import { CDK } from "@k8ts/sample-interfaces"
+import { K8S } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { merge } from "lodash"
 import type { Workload_Ref } from "../../.."
@@ -12,7 +12,7 @@ import type { ContainerRef } from "./container/ref"
 import { Pod_Scope } from "./container/scope"
 export type Pod_Producer<Ports extends string> = (scope: Pod_Scope) => Iterable<ContainerRef<Ports>>
 
-export interface Pod_Props<Ports extends string> extends Resource_Props<Partial<CDK.PodSpec>> {
+export interface Pod_Props<Ports extends string> extends Resource_Props<Partial<K8S.PodSpec>> {
     metadata?: Metadata_Input
     containers$: Pod_Producer<Ports>
 }
@@ -58,7 +58,7 @@ export class Pod<Name extends string = string, Ports extends string = string>
         return super.__kids__()
     }
 
-    protected __body__(): CDK.PodTemplateSpec {
+    protected __body__(): K8S.PodTemplateSpec {
         const self = this
         const { props } = self
         const containers = self._containers
@@ -74,7 +74,7 @@ export class Pod<Name extends string = string, Ports extends string = string>
         const volumes = self._volumes
             .map(x => {
                 if (x.is(ResourcePart)) {
-                    return x["__submanifest__"]() as CDK.Volume
+                    return x["__submanifest__"]() as K8S.Volume
                 }
                 throw new K8tsResourceError(`Unsupported volume type: ${x}`)
             })
@@ -83,7 +83,7 @@ export class Pod<Name extends string = string, Ports extends string = string>
             containers: mainContainers.pull(),
             initContainers: initContainers.pull(),
             volumes: volumes.pull()
-        } satisfies CDK.PodSpec
+        } satisfies K8S.PodSpec
         const spec2 = merge(spec, props.$overrides)
         return {
             spec: spec2

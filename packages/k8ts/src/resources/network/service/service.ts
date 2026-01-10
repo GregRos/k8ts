@@ -6,7 +6,7 @@ import {
     type PortMapping_Input,
     type Resource_Props_Top
 } from "@k8ts/instruments"
-import { CDK } from "@k8ts/sample-interfaces"
+import { K8S } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { merge } from "lodash"
 import { v1 } from "../../../gvks/index"
@@ -37,7 +37,7 @@ export type Service_Frontend =
     | Service_Frontend_LoadBalancer
     | Service_Frontend_Headless
 export interface Service_Props<DeployPorts extends string, ExposedPorts extends DeployPorts>
-    extends Resource_Props_Top<CDK.ServiceSpec> {
+    extends Resource_Props_Top<K8S.ServiceSpec> {
     $ports: PortMapping_Input<ExposedPorts>
     $backend: Workload_Ref<DeployPorts>
     $frontend: Service_Frontend
@@ -105,12 +105,12 @@ export class Service<
             return {
                 type: "ClusterIP",
                 clusterIp: "None"
-            } satisfies CDK.ServiceSpec
+            } satisfies K8S.ServiceSpec
         }
-        return this.props.$frontend satisfies CDK.ServiceSpec
+        return this.props.$frontend satisfies K8S.ServiceSpec
     }
 
-    protected __body__(): CDK.KubeServiceProps {
+    protected __body__(): K8S.KubeServiceProps {
         const self = this
         const svcPorts = self.ports
         const spec = {
@@ -120,7 +120,7 @@ export class Service<
             selector: {
                 app: self.props.$backend.ident.name
             }
-        } satisfies CDK.ServiceSpec
+        } satisfies K8S.ServiceSpec
         const spec2 = merge(spec, self.props.$overrides)
         const body = {
             spec: spec2

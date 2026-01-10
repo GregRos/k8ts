@@ -1,5 +1,5 @@
 import { K8sResource } from "@k8ts/instruments"
-import { CDK } from "@k8ts/sample-interfaces"
+import { K8S } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { merge } from "lodash"
 import { rbac } from "../../gvks/rbac"
@@ -22,7 +22,7 @@ export class ClusterRole<Name extends string = string> extends K8sResource<
             verbs: rule.verbs
         }
     }
-    protected __body__(): CDK.KubeClusterRoleProps {
+    protected __body__(): K8S.KubeClusterRoleProps {
         const rules = seq(this.props.rules$(new ClusterRole_Scope()))
             .map(rule => {
                 return this._fromObject(rule)

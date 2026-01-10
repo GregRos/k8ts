@@ -5,11 +5,11 @@ import {
     type ResourceRef,
     type Resource_Props
 } from "@k8ts/instruments"
-import type { CDK } from "@k8ts/sample-interfaces"
+import type { K8S } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { v1 } from "../../../../../gvks"
 
-export interface ContainerDeviceMount_Input extends Resource_Props<CDK.VolumeDevice> {
+export interface ContainerDeviceMount_Input extends Resource_Props<K8S.VolumeDevice> {
     $backend: ResourceRef<v1.Pod.Device._>
 }
 
@@ -31,7 +31,7 @@ export class ContainerDeviceMount extends ResourcePart<ContainerMountDevice_Prop
     get path() {
         return this.props.mountPath
     }
-    protected __submanifest__(): CDK.VolumeDevice {
+    protected __submanifest__(): K8S.VolumeDevice {
         const body = {
             devicePath: this.props.mountPath,
             name: this.props.$backend.ident.name

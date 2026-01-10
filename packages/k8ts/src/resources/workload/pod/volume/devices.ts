@@ -1,10 +1,10 @@
 import type { Resource_Props, ResourceEntity, ResourceRef } from "@k8ts/instruments"
 import { ResourcePart } from "@k8ts/instruments"
-import type { CDK } from "@k8ts/sample-interfaces"
+import type { K8S } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { v1 } from "../../../../gvks/default"
 import type { ContainerDeviceMount_Input } from "../container/mounts/device"
-interface PodDeviceBackendPvc extends Resource_Props<CDK.Volume> {
+interface PodDeviceBackendPvc extends Resource_Props<K8S.Volume> {
     $backend: ResourceRef<v1.PersistentVolumeClaim._>
     readOnly?: boolean
 }
@@ -33,7 +33,7 @@ export class PodDevice extends ResourcePart<PodDeviceBackendPvc> {
         }
     }
 
-    protected __submanifest__(): CDK.Volume {
+    protected __submanifest__(): K8S.Volume {
         const body = {
             name: this.ident.name,
             persistentVolumeClaim: {

@@ -5,7 +5,7 @@ import {
     type ResourceRef,
     type Resource_Props_Top
 } from "@k8ts/instruments"
-import { CDK } from "@k8ts/sample-interfaces"
+import { K8S } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { v1 } from "../../../gvks/default"
 import { storage } from "../../../gvks/storage"
@@ -17,7 +17,7 @@ const pvcReqs = new Reqs({
     storage: Units.Data
 })
 export interface Pvc_Props<Mode extends PvVolumeMode>
-    extends Resource_Props_Top<CDK.KubePersistentVolumeClaimProps> {
+    extends Resource_Props_Top<K8S.KubePersistentVolumeClaimProps> {
     $accessModes: PvAccessMode_Many
     $mode?: Mode
     $storageClass?: ResourceRef<storage.v1.StorageClass._>
@@ -40,7 +40,7 @@ export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extend
             storageClass: self.props.$storageClass
         }
     }
-    protected __body__(): CDK.KubePersistentVolumeClaimProps {
+    protected __body__(): K8S.KubePersistentVolumeClaimProps {
         const self = this
         const { $resources, $accessModes, $mode, $storageClass, $bind } = self.props
         const nAccessModes = parsePvAccessMode($accessModes)
@@ -55,7 +55,7 @@ export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extend
                 })
                 .toObject(),
             storageClassName: self.props.$storageClass?.ident.name ?? "standard"
-        } satisfies CDK.PersistentVolumeClaimSpec
+        } satisfies K8S.PersistentVolumeClaimSpec
         const spec2 = merge(spec, self.props.$overrides)
         return {
             spec: spec2

@@ -1,1 +1,1 @@
-export * as CDK from "./_mix"
+export * as K8S from "./_mix"

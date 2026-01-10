@@ -1,7 +1,7 @@
 import type { Port_Full, PortExports } from "@k8ts/instruments"
-import { CDK } from "@k8ts/sample-interfaces"
+import { K8S } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
-export function toContainerPort(entry: Port_Full): CDK.ContainerPort {
+export function toContainerPort(entry: Port_Full): K8S.ContainerPort {
     return {
         containerPort: entry.port,
         name: entry.name,

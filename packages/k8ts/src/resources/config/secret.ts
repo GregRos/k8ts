@@ -1,6 +1,6 @@
 import { K8sResource, type DataSource, type Resource_Props_Top } from "@k8ts/instruments"
 import { merge } from "lodash"
-import type { CDK } from "../.."
+import type { K8S } from "../.."
 import { v1 } from "../../gvks/default"
 import { resolveDataSourceRecord } from "./resolver"
 
@@ -19,7 +19,7 @@ export type Secret_Types =
           | "tls"}`
     | "bootstrap.kubernetes.io/token"
 export interface Secret_Props<Keys extends string = string>
-    extends Resource_Props_Top<CDK.KubeSecretProps> {
+    extends Resource_Props_Top<K8S.KubeSecretProps> {
     $type?: Secret_Types
     $data?: Record<Keys, DataSource>
 }
@@ -35,7 +35,7 @@ export class Secret<Name extends string = string, Keys extends string = string> 
         return v1.Secret._
     }
 
-    protected async __body__(): Promise<CDK.KubeSecretProps> {
+    protected async __body__(): Promise<K8S.KubeSecretProps> {
         const resolved = await resolveDataSourceRecord(this, this.props.$data ?? {})
         const body = {
             type: this.props.$type ?? "Opaque",

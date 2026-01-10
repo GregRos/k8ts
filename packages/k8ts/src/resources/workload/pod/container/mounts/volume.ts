@@ -4,12 +4,12 @@ import {
     type ResourceEntity,
     type ResourceRef
 } from "@k8ts/instruments"
-import type { CDK } from "@k8ts/sample-interfaces"
+import type { K8S } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { v1 } from "../../../../../kinds"
 
 export interface ContainerVolumeMount_Input<SubPaths extends string = string>
-    extends Resource_Props<CDK.VolumeMount> {
+    extends Resource_Props<K8S.VolumeMount> {
     subPath?: SubPaths
     readOnly?: boolean
 }
@@ -34,7 +34,7 @@ export class ContainerVolumeMount extends ResourcePart<ContainerVolumeMount_Prop
     get backend() {
         return this.props.$backend
     }
-    protected __submanifest__(): CDK.VolumeMount {
+    protected __submanifest__(): K8S.VolumeMount {
         const body = {
             name: this.props.$backend.ident.name,
             mountPath: this.props.mountPath,

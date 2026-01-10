@@ -1,5 +1,5 @@
 import { K8sResource, ResourceRef, TemplateOrigin } from "@k8ts/instruments"
-import { CDK } from "@k8ts/sample-interfaces"
+import { K8S } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
 import { merge, omit } from "lodash"
 import { apps } from "../../../gvks/apps"
@@ -26,7 +26,7 @@ export class Deployment<Name extends string, Ports extends string = string>
     protected __kids__(): Iterable<ResourceRef> {
         return [this.PodTemplate]
     }
-    protected async __body__(): Promise<CDK.KubeDeploymentProps> {
+    protected async __body__(): Promise<K8S.KubeDeploymentProps> {
         const self = this
         const template = await self.PodTemplate["__manifest__"]()
         const noKindFields = omit(template, ["kind", "apiVersion"])
@@ -37,7 +37,7 @@ export class Deployment<Name extends string, Ports extends string = string>
             },
             template: noKindFields,
             strategy: self._strategy
-        } satisfies CDK.DeploymentSpec
+        } satisfies K8S.DeploymentSpec
         const spec2 = merge(spec, self.props.$overrides)
         return {
             spec: spec2

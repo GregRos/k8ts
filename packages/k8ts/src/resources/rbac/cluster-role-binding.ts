@@ -1,11 +1,11 @@
 import { K8sResource, type Resource_Props_Top, type ResourceRef } from "@k8ts/instruments"
-import { CDK } from "@k8ts/sample-interfaces"
+import { K8S } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import type { v1 } from "../../gvks"
 import { rbac } from "../../gvks/rbac"
 
 export interface ClusterRoleBoding_Props
-    extends Resource_Props_Top<CDK.KubeClusterRoleBindingProps> {
+    extends Resource_Props_Top<K8S.KubeClusterRoleBindingProps> {
     $role: ResourceRef<rbac.v1.ClusterRole._>
     $subjects: ResourceRef<v1.ServiceAccount._>[]
 }
@@ -24,7 +24,7 @@ export class ClusterRoleBinding<Name extends string = string> extends K8sResourc
             subjects: this.props.$subjects
         }
     }
-    protected __body__(): CDK.KubeClusterRoleBindingProps {
+    protected __body__(): K8S.KubeClusterRoleBindingProps {
         const body = {
             roleRef: {
                 apiGroup: this.props.$role.kind.parent!.parent!.url,

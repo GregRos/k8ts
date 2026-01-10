@@ -8,14 +8,14 @@ import {
     type Timezone
 } from "@k8ts/instruments"
 import { type Metadata_Input } from "@k8ts/metadata"
-import { CDK } from "@k8ts/sample-interfaces"
+import { K8S } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
 import { merge, omitBy } from "lodash"
 import { batch } from "../../../gvks/batch"
 import { Pod, Pod_Props } from "../pod/pod"
 import { createSelectionMetadata } from "../util"
 export interface CronJob_Props<CronSpec extends Cron_Record>
-    extends Resource_Props_Top<CDK.KubeCronJobProps> {
+    extends Resource_Props_Top<K8S.KubeCronJobProps> {
     $schedule: CronStanza<CronSpec>
     $template: Pod_Props<never> & {
         restartPolicy: "Always" | "OnFailure" | "Never"
@@ -54,7 +54,7 @@ export class CronJob<
         return super.__kids__()
     }
 
-    protected async __body__(): Promise<CDK.KubeCronJobProps> {
+    protected async __body__(): Promise<K8S.KubeCronJobProps> {
         const self = this
         const template = await self.PodTemplate["__manifest__"]()
         const object = {

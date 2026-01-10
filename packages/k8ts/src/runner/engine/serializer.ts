@@ -4,7 +4,7 @@ import {
     type K8sResource,
     type ResourceVertex
 } from "@k8ts/instruments"
-import { CDK } from "@k8ts/sample-interfaces"
+import { K8S } from "@k8ts/sample-interfaces"
 import type EventEmitter from "eventemitter3"
 import { dump, type DumpOptions } from "js-yaml"
 import { K8tsEngineError } from "../error"
@@ -36,10 +36,10 @@ export class Engine_Serializer_Yaml {
                 noArrayIndent: true,
                 indent: 2,
                 replacer(key, value) {
-                    if (value instanceof CDK.IntOrString) {
+                    if (value instanceof K8S.IntOrString) {
                         return value.value
                     }
-                    if (value instanceof CDK.Quantity) {
+                    if (value instanceof K8S.Quantity) {
                         return value.value
                     }
                     return value

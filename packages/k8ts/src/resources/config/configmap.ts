@@ -1,5 +1,5 @@
 import { K8sResource, type DataSource, type Resource_Props_Top } from "@k8ts/instruments"
-import { CDK } from "@k8ts/sample-interfaces"
+import { K8S } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { v1 } from "../../gvks/default"
 import { resolveDataSourceRecord } from "./resolver"
@@ -18,7 +18,7 @@ export class ConfigMap<
         return v1.ConfigMap._
     }
 
-    protected async __body__(): Promise<CDK.KubeConfigMapProps> {
+    protected async __body__(): Promise<K8S.KubeConfigMapProps> {
         const resolvedRecord = await resolveDataSourceRecord(this, this.props.$data)
         return merge(resolvedRecord, this.props.$overrides)
     }

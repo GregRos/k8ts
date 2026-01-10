@@ -1,5 +1,5 @@
 import { K8sResource, ResourceRef, Units, type Resource_Props_Top } from "@k8ts/instruments"
-import { CDK } from "@k8ts/sample-interfaces"
+import { K8S } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { v1 } from "../../../gvks/default"
 import { storage } from "../../../gvks/storage"
@@ -28,7 +28,7 @@ export interface Pv_Backend_NFS {
 
 export type Pv_Backend = Pv_Backend_HostPath | Pv_Backend_Local | Pv_Backend_NFS
 export interface Pv_Props<Mode extends PvVolumeMode = PvVolumeMode>
-    extends Resource_Props_Top<CDK.PersistentVolumeSpec> {
+    extends Resource_Props_Top<K8S.PersistentVolumeSpec> {
     $accessModes: PvAccessMode_Many
     $storageClass?: ResourceRef<storage.v1.StorageClass._>
     $mode?: Mode
@@ -36,7 +36,7 @@ export interface Pv_Props<Mode extends PvVolumeMode = PvVolumeMode>
     $capacity: Units.Data
     $backend?: Pv_Backend
     mountOptions?: string[]
-    nodeAffinity?: CDK.VolumeNodeAffinity
+    nodeAffinity?: K8S.VolumeNodeAffinity
 }
 export type Pv_ReclaimMode = "Retain" | "Delete" | "Recycle"
 export type Pv_Ref<Mode extends PvVolumeMode = PvVolumeMode> =
@@ -58,7 +58,7 @@ export class Pv<
             storageClass: this.props.$storageClass
         }
     }
-    protected __body__(): CDK.KubePersistentVolumeProps {
+    protected __body__(): K8S.KubePersistentVolumeProps {
         const self = this
         const accessModes = parsePvAccessMode(self.props.$accessModes)
         // Make sure it parses correctly
@@ -75,12 +75,12 @@ export class Pv<
                 `While manifesting ${self.__vertex__.format("source")}, PV that doesn't have a $backend must have a $storageClass.`
             )
         }
-        let spec: CDK.PersistentVolumeSpec = {
+        let spec: K8S.PersistentVolumeSpec = {
             accessModes,
             storageClassName: self.props.$storageClass?.ident.name ?? "standard",
             capacity: self.props.$capacity
                 ? {
-                      storage: CDK.Quantity.fromString(self.props.$capacity)
+                      storage: K8S.Quantity.fromString(self.props.$capacity)
                   }
                 : undefined,
             volumeMode: self.props.$mode ?? "Filesystem",

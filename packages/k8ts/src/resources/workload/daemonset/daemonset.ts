@@ -1,5 +1,5 @@
 import { K8sResource, ResourceRef, TemplateOrigin } from "@k8ts/instruments"
-import { CDK } from "@k8ts/sample-interfaces"
+import { K8S } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
 import { merge, omit } from "lodash"
 import { apps } from "../../../gvks/apps"
@@ -28,7 +28,7 @@ export class DaemonSet<Name extends string, Ports extends string = string>
         return [this.PodTemplate]
     }
 
-    protected async __body__(): Promise<CDK.KubeDaemonSetProps> {
+    protected async __body__(): Promise<K8S.KubeDaemonSetProps> {
         const self = this
         const template = await self.PodTemplate["__manifest__"]()
         const noKindFields = omit(template, ["kind", "apiVersion"])
@@ -38,7 +38,7 @@ export class DaemonSet<Name extends string, Ports extends string = string>
             },
             template: noKindFields,
             updateStrategy: self._updateStrategy
-        } satisfies CDK.DaemonSetSpec
+        } satisfies K8S.DaemonSetSpec
         const spec2 = merge(spec, self.props.$overrides)
         return {
             spec: spec2
