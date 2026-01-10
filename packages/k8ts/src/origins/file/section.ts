@@ -14,7 +14,7 @@ export class K8tsFile_Section_Scope {
 export interface K8tsFile_Section_Props<Exported extends ResourceRef = ResourceRef>
     extends OriginExporter_Props {
     namespace?: ResourceRef<v1.Namespace._>
-    Section(SECTION: K8tsFile_Section_Scope): Iterable<Exported>
+    resources$(Section: K8tsFile_Section_Scope): Iterable<Exported>
 }
 
 export class K8tsFile_Section extends ExporterOrigin<K8tsFile_Section_Props> {
@@ -28,7 +28,7 @@ export class K8tsFile_Section extends ExporterOrigin<K8tsFile_Section_Props> {
     @doddlify
     protected __exports__() {
         return seq(
-            this._props.Section.call(
+            this._props.resources$.call(
                 this,
                 new K8tsFile_Section_Scope(this)
             ) as Iterable<ResourceRef>

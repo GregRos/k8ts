@@ -24,8 +24,8 @@ export interface StatefulSet_Props<
     SvcName extends string
 > extends Resource_Props_Top<CDK.StatefulSetSpec> {
     $replicas?: number
-    $template: Omit<Pod_Props<Ports>, "Containers"> & {
-        Containers: StatefulSet_Producer<Ports>
+    $template: Omit<Pod_Props<Ports>, "containers$"> & {
+        containers$: StatefulSet_Producer<Ports>
     }
     $service: {
         name: SvcName

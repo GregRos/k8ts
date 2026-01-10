@@ -13,8 +13,8 @@ import { Pod_Scope } from "./container/scope"
 export type Pod_Producer<Ports extends string> = (scope: Pod_Scope) => Iterable<ContainerRef<Ports>>
 
 export interface Pod_Props<Ports extends string> extends Resource_Props<Partial<CDK.PodSpec>> {
-    $metadata?: Metadata_Input
-    Containers: Pod_Producer<Ports>
+    metadata?: Metadata_Input
+    containers$: Pod_Producer<Ports>
 }
 
 export class Pod<Name extends string = string, Ports extends string = string>
@@ -25,7 +25,7 @@ export class Pod<Name extends string = string, Ports extends string = string>
         return v1.Pod._
     }
     private readonly _containers = seq(() => {
-        return this.__scope__(this.props.Containers)(new Pod_Scope(this))
+        return this.__scope__(this.props.containers$)(new Pod_Scope(this))
     })
         .as<PodContainer<Ports>>()
         .cache()

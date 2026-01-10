@@ -56,13 +56,13 @@ export class StatefulSet<
     private _podTemplate = doddle(() => {
         const self = this
         const wrappedContainers = (podScope: Pod_Scope) => {
-            return this.props.$template.Containers(new StatefulSet_Scope(podScope, self._template))
+            return this.props.$template.containers$(new StatefulSet_Scope(podScope, self._template))
         }
         const resource = new Pod(
             `${self.ident.name}`,
             {
                 ...self.props.$template,
-                Containers: wrappedContainers
+                containers$: wrappedContainers
             },
             {
                 origins: {
@@ -93,7 +93,7 @@ export class StatefulSet<
             serviceName: self.Service.ident.name,
             template: noKindFields,
             volumeClaimTemplates: await Promise.all(
-                self.PvcTemplates.map(pvc => pvc["__manifest__"]())
+                seq(self.PvcTemplates).map(pvc => pvc["__manifest__"]())
             ),
             updateStrategy: self._updateStrategy
         } satisfies CDK.StatefulSetSpec
@@ -126,7 +126,9 @@ export class StatefulSet<
 
     get PvcTemplates() {
         this._podTemplate.pull()
-        return seq(this._template.resources).filter(x => x.is(Pvc))
+        return seq(this._template.resources)
+            .filter(x => x.is(Pvc))
+            .toIterable()
     }
 
     get ports() {

@@ -5,10 +5,10 @@ console.log("Hello World!")
 export const W = new K8tsWorld("dummy")
 
 W.File("dummy.yaml", {
-    *File(FILE) {
+    *resources$(FILE) {
         yield new Deployment("xyz", {
             $template: {
-                *Containers(Pod) {
+                *containers$(Pod) {
                     yield Pod.Container("nginx", {
                         $image: ImageRegistry().repo("nginx").tag("latest")
                     })

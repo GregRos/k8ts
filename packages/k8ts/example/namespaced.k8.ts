@@ -33,9 +33,9 @@ export default W.File("deployment2.yaml", {
         "^a": "a"
     },
     namespace: k8sNamespace,
-    *File(FILE) {
+    *resources$(FILE) {
         yield FILE.Section("inner", {
-            *Section(SECTION) {
+            *resources$(SECTION) {
                 const claim = new Pvc("claim", {
                     $bind: cool,
                     $accessModes: ["ReadWriteOnce"],
@@ -68,7 +68,7 @@ export default W.File("deployment2.yaml", {
                         }
                     },
                     $template: {
-                        *Containers(POD) {
+                        *containers$(POD) {
                             yield POD.Container("main", {
                                 $image: image,
                                 $ports: {
@@ -102,7 +102,7 @@ export default W.File("deployment2.yaml", {
                     timeZone: "UTC",
                     $template: {
                         restartPolicy: "Never",
-                        *Containers(POD) {
+                        *containers$(POD) {
                             yield POD.Container("main", {
                                 $image: image,
                                 $command: CmdLine("/bin/sh").option({
@@ -136,7 +136,7 @@ export default W.File("deployment2.yaml", {
                 const deploy2 = new Deployment("xyz2", {
                     $replicas: 1,
                     $template: {
-                        *Containers(k) {
+                        *containers$(k) {
                             const v = k.Volume("data", {
                                 $backend: claim
                             })
@@ -225,7 +225,7 @@ export default W.File("deployment2.yaml", {
                 yield serviceAccount
 
                 const clusterRole = new ClusterRole("name", {
-                    *rules(ROLE) {
+                    *rules$(ROLE) {
                         // Core API group: namespaces, pods, nodes
                         yield ROLE.Rule(v1.Namespace._, v1.Pod._, v1.Node._).verbs("get", "list")
 

@@ -23,7 +23,7 @@ export class ClusterRole<Name extends string = string> extends K8sResource<
         }
     }
     protected __body__(): CDK.KubeClusterRoleProps {
-        const rules = seq(this.props.rules(new ClusterRole_Scope()))
+        const rules = seq(this.props.rules$(new ClusterRole_Scope()))
             .map(rule => {
                 return this._fromObject(rule)
             })
