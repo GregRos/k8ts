@@ -1,7 +1,7 @@
 import type { CDK } from "@k8ts/sample-interfaces"
 
 import {
-    Resource,
+    ResourceEntity,
     ResourcePart,
     type Resource_Props,
     type ResourceRef,
@@ -84,16 +84,16 @@ export abstract class PodVolume<
 
     get namespace() {
         const backend = this.props.$backend
-        if (backend instanceof Resource) {
+        if (backend instanceof ResourceEntity) {
             const x = backend.ident.namespace
             return x
         }
         return this.__parent__.ident.namespace
     }
 
-    protected __needs__(): Record<string, Resource | Resource[] | undefined> {
+    protected __needs__(): Record<string, ResourceEntity | ResourceEntity[] | undefined> {
         return {
-            backend: this.props.$backend instanceof Resource ? this.props.$backend : undefined
+            backend: this.props.$backend instanceof ResourceEntity ? this.props.$backend : undefined
         }
     }
     Mount(

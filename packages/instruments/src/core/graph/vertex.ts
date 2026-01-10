@@ -1,16 +1,16 @@
 import { seq, type Seq } from "doddle"
-import { Entity } from "./entity"
+import { EntityBase } from "./entity"
 import { Relation } from "./relation"
 import { ForwardRef } from "./resource/forward/ref"
 /**
- * The {@link Vertex} is a wrapper around a {@link Entity} that provides traversal, display, and other
- * utilities. Note that the {@link Vertex} itself is immutable. Changes only happen to the underlying
- * {@link Entity}.
+ * The {@link Vertex} is a wrapper around a {@link EntityBase} that provides traversal, display, and
+ * other utilities. Note that the {@link Vertex} itself is immutable. Changes only happen to the
+ * underlying {@link EntityBase}.
  *
- * Two {@link Vertex} instances are considered equal if they wrap the same {@link Entity}, even if
+ * Two {@link Vertex} instances are considered equal if they wrap the same {@link EntityBase}, even if
  * they're different instances.
  *
- * Node classes are primarily used for traversal in the graph structure formed by {@link Entity}
+ * Node classes are primarily used for traversal in the graph structure formed by {@link EntityBase}
  * instances. They provide methods to navigate parent-child relationships, access metadata, and
  * explore dependencies between entities.
  *
@@ -21,13 +21,13 @@ import { ForwardRef } from "./resource/forward/ref"
  */
 export abstract class Vertex<
     _Node extends Vertex<_Node, _Entity> = Vertex<any, any>,
-    _Entity extends Entity<_Node, _Entity> = Entity<any, any>
+    _Entity extends EntityBase<_Node, _Entity> = EntityBase<any, any>
 > {
     /** The nodes of child entities. */
 
     constructor(readonly entity: _Entity) {}
     get kids() {
-        return seq(this.entity["__kids__"]()).map(x => x.cast(Entity).__vertex__ as _Node)
+        return seq(this.entity["__kids__"]()).map(x => x.cast(EntityBase).__vertex__ as _Node)
     }
     /** The direct **needs** of this this node's entity. */
     get relations() {
@@ -41,7 +41,7 @@ export abstract class Vertex<
                         if (t) {
                             yield new Relation<_Node>(
                                 relName,
-                                t.cast(Entity<_Node, _Entity>).__vertex__
+                                t.cast(EntityBase<_Node, _Entity>).__vertex__
                             )
                         }
                     }
@@ -49,7 +49,7 @@ export abstract class Vertex<
                     if (target) {
                         yield new Relation<_Node>(
                             relName,
-                            target.cast(Entity<_Node, _Entity>).__vertex__
+                            target.cast(EntityBase<_Node, _Entity>).__vertex__
                         )
                     }
                 }
@@ -59,7 +59,7 @@ export abstract class Vertex<
 
     /** The node for this node's parent entity. */
     get parent(): _Node | null {
-        return (this.entity["__parent__"]?.cast(Entity).__vertex__ as any) ?? null
+        return (this.entity["__parent__"]?.cast(EntityBase).__vertex__ as any) ?? null
     }
 
     /**

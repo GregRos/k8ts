@@ -1,4 +1,4 @@
-import { ResourceRef, TemplateOrigin, TopResource } from "@k8ts/instruments"
+import { K8sResource, ResourceRef, TemplateOrigin } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddlify } from "doddle"
 import { merge, omit } from "lodash"
@@ -10,7 +10,7 @@ import type { Workload_Ref } from "../workload-ref"
 import type { DaemonSet_Props } from "./props"
 
 export class DaemonSet<Name extends string, Ports extends string = string>
-    extends TopResource<Name, DaemonSet_Props<Ports>>
+    extends K8sResource<Name, DaemonSet_Props<Ports>>
     implements Workload_Ref<Ports>
 {
     private _template = new TemplateOrigin("DaemonSetTemplate", {

@@ -15,12 +15,12 @@ import type {
     ResourceTop_CreationOptions_Input
 } from "./creation-options"
 import type { Resource_Props_Top } from "./props"
-import { Resource } from "./resource"
+import { ResourceEntity } from "./resource"
 let globalEntityId = 1
-export abstract class TopResource<
+export abstract class K8sResource<
     Name extends string = string,
     Props extends Resource_Props_Top = Resource_Props_Top
-> extends Resource<Name, Props> {
+> extends ResourceEntity<Name, Props> {
     readonly metadata: Metadata
     protected readonly _creation: ResourceTop_CreationOptions
     protected readonly __entity_id__ = (() => {

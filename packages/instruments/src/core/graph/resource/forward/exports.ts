@@ -1,5 +1,5 @@
 import { seq } from "doddle"
-import { Origin } from "../../origin"
+import { OriginEntity } from "../../origin"
 import type { ExporterOrigin } from "../../origin/exporter"
 import { ResourceIdent } from "../ident"
 import type { ResourceRef } from "../ref"
@@ -70,7 +70,7 @@ export class ForwardExports_Proxied {
         if (ForwardExports.is(other)) {
             return this.#entity.equals(other.#entity)
         }
-        if (other instanceof Origin) {
+        if (other instanceof OriginEntity) {
             return other.equals(this.#entity)
         }
         return false

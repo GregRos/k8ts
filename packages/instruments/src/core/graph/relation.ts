@@ -1,6 +1,6 @@
 import { display } from "../../utils/mixin/display"
 import { phrases } from "../../utils/phrase-renderer"
-import type { Vertex } from "./node"
+import type { Vertex } from "./vertex"
 
 @display({
     simple: s => [s.why, "-->", s.needed],

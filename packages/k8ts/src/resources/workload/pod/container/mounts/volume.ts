@@ -1,7 +1,7 @@
 import {
     ResourcePart,
-    type Resource,
     type Resource_Props,
+    type ResourceEntity,
     type ResourceRef
 } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
@@ -20,7 +20,7 @@ export interface ContainerVolumeMount_Props extends ContainerVolumeMount_Unbound
     mountPath: string
 }
 export class ContainerVolumeMount extends ResourcePart<ContainerVolumeMount_Props> {
-    constructor(parent: Resource, props: ContainerVolumeMount_Props) {
+    constructor(parent: ResourceEntity, props: ContainerVolumeMount_Props) {
         super(parent, props.$backend.ident.name, props)
     }
     get kind() {

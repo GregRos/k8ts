@@ -1,5 +1,5 @@
 import type { Metadata_Input } from "@k8ts/metadata"
-import type { Origin } from "../origin"
+import type { OriginEntity } from "../origin"
 
 export type DeepPartial<T> = {
     [P in keyof T]?: T[P] extends { kind: any }
@@ -11,9 +11,9 @@ export type DeepPartial<T> = {
 
 export interface ResourceTop_CreationOptions_Origins {
     /** The Resource's Origin. */
-    own: Origin
+    own: OriginEntity
     /** The Origin to be used by top resources created within a subscope of this Resource. */
-    subscope: Origin
+    subscope: OriginEntity
 }
 export interface ResourceTop_CreationOptions {
     /** Specifies explicit Origins to use for this Resource. */

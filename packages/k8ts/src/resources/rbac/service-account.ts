@@ -1,4 +1,4 @@
-import { TopResource, type Resource_Props_Top } from "@k8ts/instruments"
+import { K8sResource, type Resource_Props_Top } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { v1 } from "../../gvks/default"
@@ -7,7 +7,7 @@ export interface ServiceAccount_Props extends Resource_Props_Top<CDK.KubeService
     $imagePullSecrets?: string[]
 }
 
-export class ServiceAccount<Name extends string = string> extends TopResource<
+export class ServiceAccount<Name extends string = string> extends K8sResource<
     Name,
     ServiceAccount_Props
 > {

@@ -1,10 +1,10 @@
-import { TopResource } from "@k8ts/instruments"
+import { K8sResource } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
 import { merge } from "lodash"
 import { rbac } from "../../gvks/rbac"
 import { type ClusterRole_Props, type ClusterRole_Rule, ClusterRole_Scope } from "./role-props"
-export class ClusterRole<Name extends string = string> extends TopResource<
+export class ClusterRole<Name extends string = string> extends K8sResource<
     Name,
     ClusterRole_Props
 > {

@@ -1,7 +1,7 @@
 import {
     CronStanza,
+    K8sResource,
     TemplateOrigin,
-    TopResource,
     type Cron_Record,
     type Resource_Props_Top,
     type ResourceRef,
@@ -27,7 +27,7 @@ export interface CronJob_Props<CronSpec extends Cron_Record>
 export class CronJob<
     Name extends string = string,
     Cron extends Cron_Record = Cron_Record
-> extends TopResource<Name, CronJob_Props<Cron>> {
+> extends K8sResource<Name, CronJob_Props<Cron>> {
     private _template = new TemplateOrigin("CronJobTemplate", {
         owner: this
     })

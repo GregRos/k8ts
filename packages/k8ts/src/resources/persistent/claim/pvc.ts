@@ -1,6 +1,6 @@
 import {
+    K8sResource,
     Reqs,
-    TopResource,
     Units,
     type ResourceRef,
     type Resource_Props_Top
@@ -25,7 +25,7 @@ export interface Pvc_Props<Mode extends PvVolumeMode>
     $resources: typeof pvcReqs.__INPUT__
 }
 
-export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extends TopResource<
+export class Pvc<Mode extends PvVolumeMode, Name extends string = string> extends K8sResource<
     Name,
     Pvc_Props<Mode>
 > {

@@ -8,8 +8,8 @@ W.File("dummy.yaml", {
     *File(FILE) {
         yield new Deployment("xyz", {
             $template: {
-                *Containers(CONTAINERS) {
-                    yield CONTAINERS.Container("nginx", {
+                *Containers(Pod) {
+                    yield Pod.Container("nginx", {
                         $image: ImageRegistry().repo("nginx").tag("latest")
                     })
                 }

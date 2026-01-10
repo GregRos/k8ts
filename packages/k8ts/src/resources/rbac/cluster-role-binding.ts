@@ -1,4 +1,4 @@
-import { TopResource, type Resource_Props_Top, type ResourceRef } from "@k8ts/instruments"
+import { K8sResource, type Resource_Props_Top, type ResourceRef } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import type { v1 } from "../../gvks"
@@ -10,7 +10,7 @@ export interface ClusterRoleBoding_Props
     $subjects: ResourceRef<v1.ServiceAccount._>[]
 }
 
-export class ClusterRoleBinding<Name extends string = string> extends TopResource<
+export class ClusterRoleBinding<Name extends string = string> extends K8sResource<
     Name,
     ClusterRoleBoding_Props
 > {

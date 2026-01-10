@@ -1,4 +1,4 @@
-import { ResourceRef, TopResource, Units, type Resource_Props_Top } from "@k8ts/instruments"
+import { K8sResource, ResourceRef, Units, type Resource_Props_Top } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
 import { v1 } from "../../../gvks/default"
@@ -47,7 +47,7 @@ export type Pv_Ref<Mode extends PvVolumeMode = PvVolumeMode> =
 export class Pv<
     Mode extends PvVolumeMode = "Filesystem",
     Name extends string = string
-> extends TopResource<Name, Pv_Props<Mode>> {
+> extends K8sResource<Name, Pv_Props<Mode>> {
     __MODE__!: Mode
     get kind() {
         return v1.PersistentVolume._

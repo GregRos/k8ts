@@ -2,9 +2,9 @@ import { Metadata } from "@k8ts/metadata"
 import chalk from "chalk"
 import { seq, Seq } from "doddle"
 import { display } from "../../../utils/mixin/display"
-import { Vertex } from "../node"
 import type { ResourceRef } from "../resource"
-import { Origin } from "./origin"
+import { Vertex } from "../vertex"
+import { OriginEntity } from "./origin"
 
 @display({
     simple: s => `[${s.shortFqn}]`,
@@ -19,9 +19,9 @@ import { Origin } from "./origin"
         return chalk.underline(`${pref}${kindName}:${resourceName}`)
     }
 })
-export class OriginVertex extends Vertex<OriginVertex, Origin> {
+export class OriginVertex extends Vertex<OriginVertex, OriginEntity> {
     get kids() {
-        return seq(this.entity["__kids__"]()).map(x => x.cast(Origin).__vertex__)
+        return seq(this.entity["__kids__"]()).map(x => x.cast(OriginEntity).__vertex__)
     }
     get noEmit() {
         return this.entity.noEmit
@@ -47,7 +47,7 @@ export class OriginVertex extends Vertex<OriginVertex, Origin> {
             .map(x => x.metadata.clone())
             .reduce((acc, meta) => acc.add(meta), new Metadata())
     }
-    constructor(entity: Origin) {
+    constructor(entity: OriginEntity) {
         super(entity)
     }
 

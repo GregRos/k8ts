@@ -1,21 +1,20 @@
 import type { Gvk_Base } from "./gvk"
 import type { Resource_Props } from "./props"
-import { Resource } from "./resource"
+import { ResourceEntity } from "./resource"
 
-export abstract class ResourcePart<Props extends Resource_Props = Resource_Props> extends Resource<
-    string,
-    Props
-> {
+export abstract class ResourcePart<
+    Props extends Resource_Props = Resource_Props
+> extends ResourceEntity<string, Props> {
     abstract get kind(): Gvk_Base
-    #parent: Resource
-    constructor(parent: Resource, name: string, props: Props) {
+    #parent: ResourceEntity
+    constructor(parent: ResourceEntity, name: string, props: Props) {
         const parentNs = parent.ident.namespace
 
         super(name, parentNs, props)
         this.#parent = parent
     }
 
-    protected get __parent__(): Resource {
+    protected get __parent__(): ResourceEntity {
         return this.#parent
     }
 

@@ -1,4 +1,4 @@
-import { ResourceRef, TemplateOrigin, TopResource } from "@k8ts/instruments"
+import { K8sResource, ResourceRef, TemplateOrigin } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import { doddle, seq } from "doddle"
 import { merge, omit } from "lodash"
@@ -18,7 +18,7 @@ export class StatefulSet<
         Ports extends string = string,
         SvcPorts extends NoInfer<Ports> = Ports
     >
-    extends TopResource<Name, StatefulSet_Props<Ports, SvcPorts, SvcName>>
+    extends K8sResource<Name, StatefulSet_Props<Ports, SvcPorts, SvcName>>
     implements Workload_Ref<Ports>
 {
     private readonly _template = new TemplateOrigin(`${this.ident.name}_template`, {

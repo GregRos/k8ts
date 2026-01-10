@@ -1,35 +1,35 @@
 import { doddle } from "doddle"
 import type { K8tsManifest } from "../../manifest"
-import type { Resource, TopResource } from "../resource"
-import type { Origin } from "./origin"
+import type { K8sResource, ResourceEntity } from "../resource"
+import type { OriginEntity } from "./origin"
 
 export interface OriginEventMap {
     "resource/exported": {
-        readonly origin: Origin
-        readonly resource: TopResource
+        readonly origin: OriginEntity
+        readonly resource: K8sResource
     }
     "resource/attached": {
-        readonly origin: Origin
-        readonly resource: Resource
+        readonly origin: OriginEntity
+        readonly resource: ResourceEntity
     }
     "resource/manifested": {
-        readonly origin: Origin
+        readonly origin: OriginEntity
         readonly manifest: K8tsManifest
-        readonly resource: TopResource
+        readonly resource: K8sResource
     }
     "resource/loaded": {
-        readonly origin: Origin
-        readonly resource: TopResource
+        readonly origin: OriginEntity
+        readonly resource: K8sResource
     }
     "resource/serialized": {
-        readonly origin: Origin
-        readonly resource: TopResource
+        readonly origin: OriginEntity
+        readonly resource: K8sResource
         readonly manifest: K8tsManifest
         content: string
     }
     "origin/attached": {
-        readonly origin: Origin
-        readonly child: Origin
+        readonly origin: OriginEntity
+        readonly child: OriginEntity
     }
 }
 

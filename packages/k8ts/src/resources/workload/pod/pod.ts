@@ -1,4 +1,4 @@
-import { ResourcePart, TopResource, type Resource_Props } from "@k8ts/instruments"
+import { K8sResource, ResourcePart, type Resource_Props } from "@k8ts/instruments"
 import type { Metadata_Input } from "@k8ts/metadata"
 import { CDK } from "@k8ts/sample-interfaces"
 import { seq } from "doddle"
@@ -18,7 +18,7 @@ export interface Pod_Props<Ports extends string> extends Resource_Props<Partial<
 }
 
 export class Pod<Name extends string = string, Ports extends string = string>
-    extends TopResource<Name, Pod_Props<Ports>>
+    extends K8sResource<Name, Pod_Props<Ports>>
     implements Workload_Ref<Ports>
 {
     get kind() {

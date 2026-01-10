@@ -1,5 +1,5 @@
-export { Entity } from "./entity"
-export { Vertex } from "./node"
+export { EntityBase } from "./entity"
 export * from "./origin"
 export { Relation } from "./relation"
 export * from "./resource"
+export { Vertex } from "./vertex"

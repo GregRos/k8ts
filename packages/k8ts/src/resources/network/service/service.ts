@@ -1,6 +1,6 @@
 import {
+    K8sResource,
     ResourceRef,
-    TopResource,
     type Ip4_Input_String,
     type PortMap,
     type PortMapping_Input,
@@ -49,7 +49,7 @@ export interface Service_Ref<PortsExposed extends string> extends ResourceRef<v1
 export class Service<
     Name extends string = string,
     PortsExposed extends string = string
-> extends TopResource<Name, Service_Props<string, PortsExposed>> {
+> extends K8sResource<Name, Service_Props<string, PortsExposed>> {
     __PORTS__!: PortsExposed
     get kind() {
         return v1.Service._

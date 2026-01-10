@@ -1,5 +1,5 @@
 import { Embedder } from "../../utils/mixin/embedder"
-import { Resource } from "../graph/resource/resource"
+import { ResourceEntity } from "../graph/resource/resource"
 export interface K8tsManifest_Metadata {
     labels: Record<string, string>
     annotations: Record<string, string>
@@ -24,4 +24,4 @@ export interface K8tsManifest extends K8tsManifest_GVK {
     metadata?: K8tsManifest_Metadata
 }
 
-export const ManifestSourceEmbedder = new Embedder<object, Resource>("ManifestSource")
+export const ManifestSourceEmbedder = new Embedder<object, ResourceEntity>("ManifestSource")

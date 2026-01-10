@@ -1,10 +1,10 @@
-import { Resource, ResourceRef } from "../resource"
-import { Origin } from "./origin"
+import { ResourceEntity, ResourceRef } from "../resource"
+import { OriginEntity } from "./origin"
 import type { Origin_Props } from "./props"
 export interface TemplateOrigin_Props extends Origin_Props {
-    owner: Resource
+    owner: ResourceEntity
 }
-export class TemplateOrigin extends Origin<TemplateOrigin_Props> {
+export class TemplateOrigin extends OriginEntity<TemplateOrigin_Props> {
     #_ = (() => {
         this.on("resource/manifested", e => {
             // Templated resources should never have a namespace when manifested
@@ -17,7 +17,7 @@ export class TemplateOrigin extends Origin<TemplateOrigin_Props> {
     })()
 
     get __parent__() {
-        return this.owner.cast(Resource)["__origin__"]
+        return this.owner.cast(ResourceEntity)["__origin__"]
     }
     get namespace() {
         return this.owner.ident.namespace

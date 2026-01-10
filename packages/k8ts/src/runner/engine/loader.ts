@@ -1,4 +1,4 @@
-import { OriginVertex, ResourceVertex, type TopResource, type Vertex } from "@k8ts/instruments"
+import { OriginVertex, ResourceVertex, type K8sResource, type Vertex } from "@k8ts/instruments"
 import type EventEmitter from "eventemitter3"
 import { K8tsEngineError } from "../error"
 export class Engine_ResourceLoader {
@@ -59,7 +59,7 @@ export class Engine_ResourceLoader {
 
             origin.entity["__emit__"]("resource/loaded", {
                 origin: origin.entity,
-                resource: res.entity as TopResource
+                resource: res.entity as K8sResource
             })
             resources.push(res)
         }

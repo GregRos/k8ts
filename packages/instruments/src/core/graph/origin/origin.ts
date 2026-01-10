@@ -4,9 +4,9 @@ import { doddlify, seq } from "doddle"
 import EventEmitter from "eventemitter3"
 import { mapValues } from "lodash"
 import { display } from "../../../utils/mixin/display"
-import { Entity } from "../entity"
+import { EntityBase } from "../entity"
 import type { ResourceRef } from "../resource/ref"
-import { Resource } from "../resource/resource"
+import { ResourceEntity } from "../resource/resource"
 import { type OriginEventMap } from "./events"
 import { GvkClassDict } from "./kind-map"
 import { type Origin_Props } from "./props"
@@ -22,16 +22,16 @@ import { OriginVertex } from "./vertex"
         return `${kindPart}/${originName}`
     }
 })
-export abstract class Origin<Props extends Origin_Props = Origin_Props> extends Entity<
+export abstract class OriginEntity<Props extends Origin_Props = Origin_Props> extends EntityBase<
     OriginVertex,
-    Origin
+    OriginEntity
 > {
     abstract get kind(): string
     private _emitter = new EventEmitter<OriginEventMap>()
-    private readonly _ownResources: Resource[] = []
+    private readonly _ownResources: ResourceEntity[] = []
     readonly metadata: Metadata
     abstract namespace: string | undefined
-    private readonly _ownKids: Origin[] = []
+    private readonly _ownKids: OriginEntity[] = []
     protected __kids__() {
         return this._ownKids
     }
@@ -41,7 +41,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
     set noEmit(value: boolean) {
         this._props.noEmit = value
     }
-    protected __attach_kid__(kid: Origin): void {
+    protected __attach_kid__(kid: OriginEntity): void {
         this._ownKids.push(kid)
         this.__emit__("origin/attached", {
             origin: this,
@@ -56,7 +56,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
         if (ForwardExports.is(other)) {
             return other.equals(this)
         }
-        if (other instanceof Origin) {
+        if (other instanceof OriginEntity) {
             return Object.is(this, other)
         }
 
@@ -95,17 +95,17 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
         const values = mapValues(data, v => `${v}`)
 
         for (const target of [this.__vertex__, ...this.__vertex__.ancestors]) {
-            target.entity.cast(Origin)._emitter.emit(event, data)
+            target.entity.cast(OriginEntity)._emitter.emit(event, data)
         }
     }
     @doddlify
     protected get __resource_kinds__(): GvkClassDict {
-        const parent = this.__parent__?.cast(Origin)
+        const parent = this.__parent__?.cast(OriginEntity)
         const parentKindsIfAny = parent?.__resource_kinds__ ?? []
         return new GvkClassDict([...(this._props.kinds ?? []), ...parentKindsIfAny])
     }
 
-    protected __attach_resource__(resources: Resource | Iterable<Resource>) {
+    protected __attach_resource__(resources: ResourceEntity | Iterable<ResourceEntity>) {
         resources = Symbol.iterator in resources ? resources : [resources]
         for (const resource of resources) {
             this._ownResources.push(resource)
@@ -136,7 +136,7 @@ export abstract class Origin<Props extends Origin_Props = Origin_Props> extends 
                 yield resource
             }
             for (const kid of self.__kids__()) {
-                const asOrigin = kid as Origin
+                const asOrigin = kid as OriginEntity
                 yield* asOrigin.resources
             }
         })

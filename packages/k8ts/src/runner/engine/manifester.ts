@@ -1,8 +1,8 @@
 import {
+    K8sResource,
     K8tsManifest,
     ManifestSourceEmbedder,
-    ResourceVertex,
-    TopResource
+    ResourceVertex
 } from "@k8ts/instruments"
 import type EventEmitter from "eventemitter3"
 import { cloneDeep, cloneDeepWith, isEmpty, unset } from "lodash"
@@ -45,7 +45,7 @@ export class Engine_Manifester {
         return cloneDeepWith(clone, _cleanKeys)
     }
 
-    private async _generate(resource: TopResource): Promise<K8tsManifest> {
+    private async _generate(resource: K8sResource): Promise<K8tsManifest> {
         const manifest = await resource["__manifest__"]()
 
         const noNullish = this._cleanNullishValues(manifest)
@@ -55,7 +55,7 @@ export class Engine_Manifester {
 
     async generate(res: ResourceVertex): Promise<NodeManifest> {
         this._options.emitter?.emit("manifest", { resource: res })
-        const manifest = await this._generate(res.entity as TopResource)
+        const manifest = await this._generate(res.entity as K8sResource)
         ManifestSourceEmbedder.add(manifest, res.entity)
 
         return {

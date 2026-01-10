@@ -5,12 +5,12 @@ import { Display, display } from "../../../utils/mixin/display"
 import { TraceEmbedder } from "../../tracing"
 import { Formats } from "../entity"
 import { K8tsGraphError } from "../error"
-import { Vertex } from "../node"
 import { OriginVertex } from "../origin/vertex"
+import { Vertex } from "../vertex"
 import type { Gvk } from "./gvk"
 import { ResourceIdent } from "./ident"
 import type { ResourceRef_Constructor_For } from "./ref"
-import type { Resource } from "./resource"
+import type { ResourceEntity } from "./resource"
 
 @display({
     simple: s => `[${s.shortFqn}]`,
@@ -40,7 +40,7 @@ import type { Resource } from "./resource"
         return text
     }
 })
-export class ResourceVertex extends Vertex<ResourceVertex, Resource> {
+export class ResourceVertex extends Vertex<ResourceVertex, ResourceEntity> {
     get fullFqn() {
         return [this.kind.dns, this.namespace, this.name].filter(Boolean).join("/")
     }
@@ -90,7 +90,7 @@ export class ResourceVertex extends Vertex<ResourceVertex, Resource> {
         }
     }
 
-    as<EntityType extends Resource>(type: ResourceRef_Constructor_For<EntityType>) {
+    as<EntityType extends ResourceEntity>(type: ResourceRef_Constructor_For<EntityType>) {
         const entity = this.entity as EntityType
         if (entity instanceof type) {
             return entity
@@ -127,7 +127,7 @@ export class ResourceVertex extends Vertex<ResourceVertex, Resource> {
     }
     constructor(
         readonly origin: OriginVertex,
-        readonly entity: Resource
+        readonly entity: ResourceEntity
     ) {
         super(entity)
     }

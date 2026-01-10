@@ -1,6 +1,6 @@
 import { getNiceClassName, type AnyCtor } from "what-are-you"
 import { K8tsGraphError } from "./error"
-import type { Vertex } from "./node"
+import type { Vertex } from "./vertex"
 export type LiteralModes = "simple" | "pretty" | "prefix"
 
 let globalEntityId = 0
@@ -10,9 +10,9 @@ export type EntityRef = {
     equals(other: any): boolean
     cast<Inst extends EntityRef>(cls: abstract new (...args: any[]) => Inst): Inst
 }
-export abstract class Entity<
+export abstract class EntityBase<
     _Node extends Vertex<_Node, _Ent> = Vertex<any, any>,
-    _Ent extends Entity<_Node, _Ent> = Entity<any, any>,
+    _Ent extends EntityBase<_Node, _Ent> = EntityBase<any, any>,
     _EntRefType extends EntityRef = EntityRef
 > implements EntityRef
 {

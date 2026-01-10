@@ -1,7 +1,7 @@
 import {
     ResourcePart,
     type Gvk_SubKind,
-    type Resource,
+    type ResourceEntity,
     type ResourceRef,
     type Resource_Props
 } from "@k8ts/instruments"
@@ -18,7 +18,7 @@ export interface ContainerMountDevice_Props extends ContainerDeviceMount_Input {
 }
 
 export class ContainerDeviceMount extends ResourcePart<ContainerMountDevice_Props> {
-    constructor(parent: Resource, props: ContainerMountDevice_Props) {
+    constructor(parent: ResourceEntity, props: ContainerMountDevice_Props) {
         super(parent, props.$backend.ident.name, props)
     }
     get kind() {

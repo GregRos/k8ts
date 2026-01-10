@@ -1,17 +1,17 @@
 import { doddlify, seq } from "doddle"
 import { K8tsGraphError } from "../error"
-import { ForwardExports, ResourceRef, TopResource } from "../resource"
+import { ForwardExports, K8sResource, ResourceRef } from "../resource"
 import { ForwardRef } from "../resource/forward/ref"
-import { Origin } from "./origin"
+import { OriginEntity } from "./origin"
 import type { Origin_Props } from "./props"
 export interface OriginExporter_Props extends Origin_Props {}
 
 /** Base class for Origins that export resources via the {@link ForwardExports} mechanism. */
 export abstract class ExporterOrigin<
     Props extends OriginExporter_Props = OriginExporter_Props
-> extends Origin<Props> {
+> extends OriginEntity<Props> {
     constructor(
-        private readonly _parent: Origin,
+        private readonly _parent: OriginEntity,
         name: string,
         props: Props
     ) {
@@ -33,13 +33,13 @@ export abstract class ExporterOrigin<
         const allEmitted = new Set<ResourceRef>()
         const attachedResources = seq(() => super.resources).cache()
         return seq(function* () {
-            for (const resource of boundExports() as TopResource[]) {
+            for (const resource of boundExports() as K8sResource[]) {
                 if (ForwardRef.is(resource)) {
                     throw new K8tsGraphError(
                         `FwRef ${resource} cannot be directly exported from ChildOrigin ${self.name}`
                     )
                 }
-                if (resource instanceof Origin || ForwardExports.is(resource)) {
+                if (resource instanceof OriginEntity || ForwardExports.is(resource)) {
                     // Skip Origin entities. Later we go over attachedResources and after evaluating
                     // these exports, any resources attached to child Origins will be included.
                     continue

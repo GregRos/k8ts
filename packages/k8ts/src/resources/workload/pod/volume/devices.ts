@@ -1,4 +1,4 @@
-import type { Resource, Resource_Props, ResourceRef } from "@k8ts/instruments"
+import type { Resource_Props, ResourceEntity, ResourceRef } from "@k8ts/instruments"
 import { ResourcePart } from "@k8ts/instruments"
 import type { CDK } from "@k8ts/sample-interfaces"
 import { merge } from "lodash"
@@ -17,14 +17,14 @@ export class PodDevice extends ResourcePart<PodDeviceBackendPvc> {
     }
 
     constructor(
-        parent: Resource,
+        parent: ResourceEntity,
         name: string,
         readonly backend: PodDeviceBackendPvc
     ) {
         super(parent, name, backend)
     }
     get sourceNamespace() {
-        const backend = this.props.$backend as any as Resource
+        const backend = this.props.$backend as any as ResourceEntity
         return backend.ident.namespace
     }
     protected __needs__() {
@@ -51,6 +51,6 @@ export class PodDevice extends ResourcePart<PodDeviceBackendPvc> {
     }
 }
 
-export function make(parent: Resource, name: string, input: PodDeviceBackend) {
+export function make(parent: ResourceEntity, name: string, input: PodDeviceBackend) {
     return new PodDevice(parent, name, input)
 }

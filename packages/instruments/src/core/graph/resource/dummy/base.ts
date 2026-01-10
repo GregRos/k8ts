@@ -1,12 +1,12 @@
-import { DummyOrigin } from "../../origin/dummy"
+import { NullOrigin } from "../../origin/dummy"
 import type { Gvk_Base } from "../gvk"
-import { Resource } from "../resource"
-export abstract class DummyResource<K extends Gvk_Base> extends Resource<string, any> {
+import { ResourceEntity } from "../resource"
+export abstract class DummyResource<K extends Gvk_Base> extends ResourceEntity<string, any> {
     get noEmit() {
         return true
     }
     protected get __origin__() {
-        return DummyOrigin.instance
+        return NullOrigin.instance
     }
 
     abstract get kind(): K

@@ -1,6 +1,6 @@
 import {
     ForwardExports,
-    Origin,
+    OriginEntity,
     type Origin_Props,
     type ResourceRef_Constructor
 } from "@k8ts/instruments"
@@ -13,7 +13,7 @@ export type K8tsWorld_Base_Props<Kinds extends ResourceRef_Constructor[]> = Orig
 
 export abstract class K8tsWorld_Base<
     Kinds extends ResourceRef_Constructor[] = ResourceRef_Constructor[]
-> extends Origin<K8tsWorld_Base_Props<Kinds>> {
+> extends OriginEntity<K8tsWorld_Base_Props<Kinds>> {
     get kind() {
         return "[k8ts] World"
     }

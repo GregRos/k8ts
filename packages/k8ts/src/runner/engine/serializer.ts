@@ -1,8 +1,8 @@
 import {
     K8tsManifest,
     ManifestSourceEmbedder,
-    type ResourceVertex,
-    type TopResource
+    type K8sResource,
+    type ResourceVertex
 } from "@k8ts/instruments"
 import { CDK } from "@k8ts/sample-interfaces"
 import type EventEmitter from "eventemitter3"
@@ -49,7 +49,7 @@ export class Engine_Serializer_Yaml {
             })
             const e = {
                 origin: node.origin.entity,
-                resource: node.entity as TopResource,
+                resource: node.entity as K8sResource,
                 manifest: input,
                 content: result
             }

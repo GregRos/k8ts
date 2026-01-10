@@ -1,4 +1,4 @@
-import { TopResource, type DataSource, type Resource_Props_Top } from "@k8ts/instruments"
+import { K8sResource, type DataSource, type Resource_Props_Top } from "@k8ts/instruments"
 import { merge } from "lodash"
 import type { CDK } from "../.."
 import { v1 } from "../../gvks/default"
@@ -24,7 +24,7 @@ export interface Secret_Props<Keys extends string = string>
     $data?: Record<Keys, DataSource>
 }
 
-export class Secret<Name extends string = string, Keys extends string = string> extends TopResource<
+export class Secret<Name extends string = string, Keys extends string = string> extends K8sResource<
     Name,
     Secret_Props<Keys>
 > {

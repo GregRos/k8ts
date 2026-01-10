@@ -2,9 +2,9 @@ import { getNiceClassName } from "what-are-you"
 import { ResourceIdent } from "."
 
 import { display } from "../../../utils"
-import { Entity } from "../entity"
+import { EntityBase } from "../entity"
 import { K8tsGraphError } from "../error"
-import type { Origin } from "../origin"
+import type { OriginEntity } from "../origin"
 import { ForwardRef } from "./forward"
 import type { Gvk_Base } from "./gvk"
 import { Resource_Props } from "./props"
@@ -15,11 +15,11 @@ import { ResourceVertex } from "./vertex"
     simple: s => s.__vertex__,
     pretty: s => s.__vertex__
 })
-export abstract class Resource<
+export abstract class ResourceEntity<
         Name extends string = string,
         Props extends Resource_Props = Resource_Props
     >
-    extends Entity<ResourceVertex, Resource, ResourceRef>
+    extends EntityBase<ResourceVertex, ResourceEntity, ResourceRef>
     implements ResourceRef
 {
     abstract get kind(): Gvk_Base
@@ -65,13 +65,13 @@ export abstract class Resource<
         if (ForwardRef.is(other)) {
             return other.equals(this)
         }
-        if (other instanceof Resource) {
+        if (other instanceof ResourceEntity) {
             return Object.is(this, other)
         }
         return false
     }
 
-    protected abstract get __origin__(): Origin
+    protected abstract get __origin__(): OriginEntity
     get __vertex__(): ResourceVertex {
         return new ResourceVertex(this.__origin__.__vertex__, this)
     }
