@@ -16,15 +16,20 @@ export interface Reqs_ReqLimit<_Unit extends string = string> {
     readonly request?: UnitValue<_Unit>
     readonly limit?: UnitValue<_Unit>
 }
+export interface Reqs_ReqLim_Object<_Unit extends string> {
+    request: Reqs_sUnitTerm<_Unit>
+    limit: Reqs_sUnitTerm<_Unit>
+}
 export type Reqs_One<_Unit extends string> =
     | Reqs_sFromTo<_Unit>
     | Reqs_sExactly<_Unit>
     | Reqs_ReqLim_Array_FromTo<_Unit>
     | Reqs_ReqLim_Array_Exactly<_Unit>
+    | Reqs_ReqLim_Object<_Unit>
 type CustomResource = `${string}/${string}`
 
 export type Reqs_Dictionary<UnitDict extends StringRecordLike<UnitDict>> = {
-    [K in keyof UnitDict]: Reqs_One<UnitDict[K]>
+    [K in keyof UnitDict]?: Reqs_One<UnitDict[K]>
 } & {
     [K in CustomResource]?: Reqs_One<string>
 }

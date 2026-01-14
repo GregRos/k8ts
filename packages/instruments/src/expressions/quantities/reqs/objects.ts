@@ -66,6 +66,9 @@ export class Reqs<const _Dimensions extends StringRecordLike<_Dimensions>> {
                         }
                     } else if (typeof value === "string") {
                         return this._parseReqLimit(key as string, value)
+                    } else if (typeof value == "object") {
+                        const { request, limit } = value
+                        if (typeof )
                     } else {
                         throw new K8tsQuantityError(`Invalid value for resource ${String(key)}`)
                     }
