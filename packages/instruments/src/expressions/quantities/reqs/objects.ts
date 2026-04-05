@@ -68,7 +68,7 @@ export class Reqs<const _Dimensions extends StringRecordLike<_Dimensions>> {
                         }
                     } else if (typeof value === "string") {
                         return this._parseReqLimit(key as string, value)
-                    } else if (typeof value == "object") {
+                    } else if (typeof value == "object" && "request" in value && "limit" in value) {
                         return {
                             request: pUnitValue.parse(value.request as any).value,
                             limit: pUnitValue.parse(value.limit as any).value
