@@ -5,7 +5,7 @@ import { ConfigMap, K8tsWorld, Runner, Secret } from "k8ts"
 
 // Since a World is the root Origin for all k8ts objects, metadata set on the World
 // is inherited by all resources created within that World.
-export const W = new K8tsWorld("metadata-inheritance", {
+export const W = K8tsWorld("metadata-inheritance", {
     metadata: {
         "%environment": "production",
         "^overrideMe": "world-level"

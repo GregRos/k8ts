@@ -61,16 +61,12 @@ const defaultKindPairs = [
     ClusterRoleBinding
 ] as const
 
-export class K8tsWorld<MoreKinds extends ResourceRef_Constructor[] = []> extends K8tsWorld_Base<
-    [...typeof defaultKindPairs, ...MoreKinds]
-> {
-    constructor(
-        name: string,
-        props?: K8tsWorld_Base_Props<[...typeof defaultKindPairs, ...MoreKinds]>
-    ) {
-        props ??= {}
-        props.kinds ??= []
-        props.kinds.push(...(defaultKindPairs as any))
-        super(name, props)
-    }
+export function K8tsWorld<MoreKinds extends ResourceRef_Constructor[] = []>(
+    name: string,
+    props?: K8tsWorld_Base_Props<[...typeof defaultKindPairs, ...MoreKinds]>
+) {
+    props ??= {}
+    props.kinds ??= []
+    props.kinds.push(...(defaultKindPairs as any))
+    return new K8tsWorld_Base<[...typeof defaultKindPairs, ...MoreKinds]>(name, props)
 }

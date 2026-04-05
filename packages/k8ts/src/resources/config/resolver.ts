@@ -1,4 +1,4 @@
-import { DataSource_Base, type DataSource, type ResourceRef } from "@k8ts/instruments"
+import { isDataSource, type DataSource, type ResourceRef } from "@k8ts/instruments"
 import { isArrayBufferLike, isTypedArray } from "what-are-you"
 import { K8tsResourceError } from "../errors"
 
@@ -11,7 +11,7 @@ export async function resolveDataSourceRecord(
     const entries = Object.entries(input ?? {}) as [string, DataSource][]
     for (const [k, v] of entries) {
         let current = v
-        if (current instanceof DataSource_Base) {
+        if (isDataSource(current)) {
             current = await current.pull()
         }
         if (isTypedArray(current) || isArrayBufferLike(current)) {

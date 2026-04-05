@@ -25,3 +25,7 @@ export type DataSource_Object<TypeName extends DataSource_sFormatName = DataSour
 export type DataSource<Only extends DataSource_sFormatName = DataSource_sFormatName> =
     | DataSource_Object<Only>
     | DataSource_Value<Only>
+
+export function isDataSource(obj: any): obj is DataSource_Shape {
+    return obj && typeof obj.pull === "function"
+}

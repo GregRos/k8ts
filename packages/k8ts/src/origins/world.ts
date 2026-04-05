@@ -11,7 +11,7 @@ export type K8tsWorld_Base_Props<Kinds extends ResourceRef_Constructor[]> = Orig
     Kinds[number]
 >
 
-export abstract class K8tsWorld_Base<
+export class K8tsWorld_Base<
     Kinds extends ResourceRef_Constructor[] = ResourceRef_Constructor[]
 > extends OriginEntity<K8tsWorld_Base_Props<Kinds>> {
     get kind() {

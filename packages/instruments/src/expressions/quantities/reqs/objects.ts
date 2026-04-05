@@ -10,7 +10,7 @@ import type { UnitValue } from "../units/value"
 import { createReqsParser } from "./parser"
 import type { Reqs_Dictionary, Reqs_ReqLimit } from "./types"
 import { Reqs_Values } from "./values"
-
+/** The Resource Requests object. */
 export class Reqs<const _Dimensions extends StringRecordLike<_Dimensions>> {
     private readonly _unitParsers: Record<string, Parjser<UnitValue | undefined>>
     private readonly _reqLimitParsers: Record<string, Parjser<Reqs_ReqLimit>>
@@ -38,7 +38,9 @@ export class Reqs<const _Dimensions extends StringRecordLike<_Dimensions>> {
     }
     __INPUT__!: Reqs_Dictionary<_Dimensions>
 
-    parse<const R extends Reqs_Dictionary<_Dimensions>>(input: R): Reqs_Values {
+    parse<const R extends Reqs_Dictionary<_Dimensions> | "=?">(input: R): Reqs_Values {
+        if (input === "=?") {
+        }
         const allKeys = new Set([...Object.keys(input), ...Object.keys(this._unitParsers)])
         const map = seq(allKeys)
             .toRecord(key => {
@@ -67,8 +69,10 @@ export class Reqs<const _Dimensions extends StringRecordLike<_Dimensions>> {
                     } else if (typeof value === "string") {
                         return this._parseReqLimit(key as string, value)
                     } else if (typeof value == "object") {
-                        const { request, limit } = value
-                        if (typeof )
+                        return {
+                            request: pUnitValue.parse(value.request as any).value,
+                            limit: pUnitValue.parse(value.limit as any).value
+                        }
                     } else {
                         throw new K8tsQuantityError(`Invalid value for resource ${String(key)}`)
                     }

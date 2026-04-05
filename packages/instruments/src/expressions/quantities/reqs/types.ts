@@ -29,7 +29,7 @@ export type Reqs_One<_Unit extends string> =
 type CustomResource = `${string}/${string}`
 
 export type Reqs_Dictionary<UnitDict extends StringRecordLike<UnitDict>> = {
-    [K in keyof UnitDict]?: Reqs_One<UnitDict[K]>
+    [K in keyof UnitDict]: Reqs_One<UnitDict[K]>
 } & {
     [K in CustomResource]?: Reqs_One<string>
 }

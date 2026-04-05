@@ -1,7 +1,7 @@
 import { ImageRegistry, m, Mi } from "@k8ts/instruments"
 import { K8tsWorld, Pod, Runner } from "k8ts"
 
-export const W = new K8tsWorld("resources-shorthand")
+export const W = K8tsWorld("resources-shorthand")
 
 // In K8ts, you have to specify requests and limits for a resource at the same time.
 // This makes the resources section more readable and helps avoid mistakes.
@@ -24,7 +24,7 @@ W.File("pod.yaml", {
                     $resources: {
                         // The arrow syntax sets requests and limits to different values:
                         cpu: "100m -> 500m",
-                        
+
                         // You can use a `?` question mark to indicate one of the parts is missing:
                         // cpu: "? -> 500m"
                         // cpu: "500m -> ?"
@@ -70,6 +70,10 @@ W.File("pod.yaml", {
                             request: m(100),
                             // So if you want to leave one empty, you have to use an explicit question mark:
                             limit: "?"
+                        },
+                        memory: {
+                            request: Mi(128),
+                            limit: Mi(256)
                         }
                     }
                 })

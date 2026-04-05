@@ -1,7 +1,7 @@
 import { Metadata } from "@k8ts/metadata"
 import { K8tsWorld, Secret } from "k8ts"
 
-export const W = new K8tsWorld("metadata-basics")
+export const W = K8tsWorld("metadata-basics")
 
 // Creating a Metadata object with different key formats:
 // 1. Labels: keys starting with %
