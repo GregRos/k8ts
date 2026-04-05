@@ -1,0 +1,69 @@
+name: PUBLISH packages
+env:
+    NODE_VERSION: "22.18.0"
+on:
+    push:
+        branches:
+            - master
+        paths:
+            - "packages/**"
+            - ".github/workflows/publish.yaml"
+            - "yarn.lock"
+            - "package.json"
+            - "jest.root.mjs"
+            - "tsconfig.base.json"
+            - ".*"
+    workflow_dispatch:
+
+jobs:
+    build_deploy:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - package: instruments
+                      workspace: "@k8ts/instruments"
+                    - package: k8ts
+                      workspace: k8ts
+                    - package: metadata
+                      workspace: "@k8ts/metadata"
+                    - package: sample-interfaces
+                      workspace: "@k8ts/sample-interfaces"
+        env:
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        steps:
+            - name: CHECKOUT CODE
+              uses: actions/checkout@v4
+
+            - name: SETUP COREPACK
+              run: corepack enable
+
+            - name: SETUP NODE.JS ${{ env.NODE_VERSION }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: yarn
+                  registry-url: "https://registry.yarnpkg.com"
+
+            - name: SETUP YARN
+              run: yarn set version stable
+
+            - name: INSTALL
+              run: yarn workspaces focus workspace ${{ matrix.workspace }}
+
+            - name: BUILD
+              run: yarn workspace ${{ matrix.workspace }} run build
+
+            - name: LINT
+              run: yarn run lint:check
+
+            - name: TEST
+              run: yarn workspace ${{ matrix.workspace }} run test
+
+            - name: SETUP PUBLISH TOKEN
+              run: 'echo "npmAuthToken: ${NPM_TOKEN}" >> ~/.yarnrc.yml'
+
+            - name: PUBLISH PACKAGE
+              working-directory: packages/${{ matrix.package }}
+              run: yarn npm publish --access public

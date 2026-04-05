@@ -1,15 +1,13 @@
 name: PR (any)
+env:
+  NODE_VERSION: "22.18.0"
 on:
   pull_request:
     branches:
       - master
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version:
-          - 22.18.0
     steps:
       - name: CHECKOUT CODE
         uses: actions/checkout@v4
@@ -17,10 +15,10 @@ jobs:
       - name: SETUP COREPACK
         run: corepack enable
 
-      - name: SETUP NODE.JS ${{ matrix.node-version }}
+      - name: SETUP NODE.JS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
         with:
-          node-version: "22.18.0"
+          node-version: ${{ env.NODE_VERSION }}
           cache: yarn
           registry-url: "https://registry.yarnpkg.com"
 
@@ -28,16 +26,47 @@ jobs:
         run: yarn set version stable
 
       - name: INSTALL
-        run: yarn install --immutable
-
-      - name: BUILD
-        run: yarn workspaces foreach -Rpt run build
+        run: yarn workspaces focus workspace
 
       - name: LINT
         run: yarn run lint:check
 
+  build_test:
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - workspace: "@k8ts/instruments"
+          - workspace: k8ts
+          - workspace: "@k8ts/metadata"
+          - workspace: "@k8ts/sample-interfaces"
+    steps:
+      - name: CHECKOUT CODE
+        uses: actions/checkout@v4
+
+      - name: SETUP COREPACK
+        run: corepack enable
+
+      - name: SETUP NODE.JS ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: yarn
+          registry-url: "https://registry.yarnpkg.com"
+
+      - name: SETUP YARN
+        run: yarn set version stable
+
+      - name: INSTALL
+        run: yarn workspaces focus workspace ${{ matrix.workspace }}
+
+      - name: BUILD
+        run: yarn workspace ${{ matrix.workspace }} run build
+
       - name: TEST
-        run: yarn workspaces foreach -Rpt run test
+        run: yarn workspace ${{ matrix.workspace }} run test
 
       # - name: Upload coverage reports to Codecov with GitHub Action
       #   uses: codecov/codecov-action@v4.2.0
