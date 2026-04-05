@@ -1623,7 +1623,7 @@ __metadata:
     "@k8ts/metadata": "workspace:^"
     "@k8ts/sample-interfaces": "workspace:^"
     "@types/lodash": "npm:^4.17.15"
-    "@types/node": "npm:^22.12.0"
+    "@types/node": "npm:^25.5.2"
     doddle: "npm:^7.3.1"
     execa: "npm:^9.6.1"
     k8ts: "workspace:^"
@@ -2175,7 +2175,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:22, @types/node@npm:^22.12.0":
+"@types/node@npm:22":
   version: 22.19.3
   resolution: "@types/node@npm:22.19.3"
   dependencies:
@@ -2188,6 +2188,15 @@ __metadata:
   version: 16.18.126
   resolution: "@types/node@npm:16.18.126"
   checksum: 10c0/5c137eb141d33de32b16ff26047ff6d449432b58d0d25f7cced2040c97727d81fe1099a7581eb336d14a6840f5b09e363bdd43d7a6995e8e81eb47aa51e413fc
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^25.5.2":
+  version: 25.5.2
+  resolution: "@types/node@npm:25.5.2"
+  dependencies:
+    undici-types: "npm:~7.18.0"
+  checksum: 10c0/11e41a85401724cd1a4de6fb7bd4264ec46db10c09fc8cf8d41de4ede0a7063db458348f859ead4ec0929906aa26aaf45a5fef3aa59742ca0521cda9cee52377
   languageName: node
   linkType: hard
 
@@ -12165,6 +12174,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"undici-types@npm:~7.18.0":
+  version: 7.18.2
+  resolution: "undici-types@npm:7.18.2"
+  checksum: 10c0/85a79189113a238959d7a647368e4f7c5559c3a404ebdb8fc4488145ce9426fcd82252a844a302798dfc0e37e6fb178ff481ed03bc4caf634c5757d9ef43521d
+  languageName: node
+  linkType: hard
+
 "unicorn-magic@npm:^0.3.0":
   version: 0.3.0
   resolution: "unicorn-magic@npm:0.3.0"
@@ -12453,11 +12469,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"what-are-you@portal:/C:/codegr/what-are-you::locator=workspace%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "what-are-you@portal:/C:/codegr/what-are-you::locator=workspace%40workspace%3A."
+"what-are-you@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "what-are-you@npm:0.3.0"
+  checksum: 10c0/9e01e09013cbea8c1e39a6aff81668b95bd7e44723f35d305d0de740b026fc0e686582144aff9ead2db859a9ab5f918c37fed6186f407a325355caaa4453a6c3
   languageName: node
-  linkType: soft
+  linkType: hard
 
 "what-the-test@npm:^1.2.0":
   version: 1.2.0

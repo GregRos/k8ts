@@ -2,7 +2,12 @@ export interface CdkQuanitity<T extends string | number = string | number> {
     value: T
 }
 export function isCdkQuanitity<T extends string | number>(input: any): input is CdkQuanitity<T> {
-    return typeof input === "object" && input !== null && "value" in input && Object.keys(input).length === 1
+    return (
+        typeof input === "object" &&
+        input !== null &&
+        "value" in input &&
+        Object.keys(input).length === 1
+    )
 }
 export function toCdkQuantity<T extends string | number | undefined>(
     input: T

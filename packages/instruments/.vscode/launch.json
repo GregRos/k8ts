@@ -5,7 +5,7 @@
       "type": "node",
       "name": "TEST: instruments",
       "request": "launch",
-      "args": ["test", "--runInBand", "--watchAll=false", "--testNamePattern"],
+      "args": ["test", "--runInBand", "--watchAll=false"],
       "cwd": "c:\\codegr\\k8ts\\packages\\instruments",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",

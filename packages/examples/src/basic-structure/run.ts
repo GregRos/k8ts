@@ -3,7 +3,7 @@ import { K8tsWorld, Pod } from "k8ts"
 
 // The K8tsWorld is the root container for all k8ts objects.
 // It doesn't contain resources itself, but it contains other containers that do.
-export const W = new K8tsWorld("basic-structure")
+export const W = K8tsWorld("basic-structure")
 
 // Here we create a File inside the World. It represents a Kubernetes YAML file that will be created
 // during generation. Creatubg a File like this attaches it to the World, which modifies it.

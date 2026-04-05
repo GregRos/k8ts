@@ -43,8 +43,6 @@ export interface Pv_Props<Mode extends PvVolumeMode = PvVolumeMode>
         storage: Units.Data
     }
     $backend?: Pv_Backend
-    mountOptions?: string[]
-    nodeAffinity?: K8S.VolumeNodeAffinity
 }
 export type Pv_ReclaimMode = "Retain" | "Delete" | "Recycle"
 export type Pv_Ref<Mode extends PvVolumeMode = PvVolumeMode> =
@@ -71,13 +69,7 @@ export class Pv<
         const accessModes = parsePvAccessMode(self.props.$accessModes)
         // Make sure it parses correctly
         Units.Data.parse(self.props.$capacity.storage)
-        if (self.props.$backend?.kind === "Local") {
-            if (!self.props.nodeAffinity) {
-                throw new K8tsResourceError(
-                    `While manifesting ${self.__vertex__.format("source")}, PV with Local backend must have nodeAffinity.`
-                )
-            }
-        }
+
         if (!self.props.$backend && !self.props.$storageClass) {
             throw new K8tsResourceError(
                 `While manifesting ${self.__vertex__.format("source")}, PV that doesn't have a $backend must have a $storageClass.`
@@ -88,15 +80,18 @@ export class Pv<
             storageClassName: self.props.$storageClass?.ident.name ?? "standard",
             capacity: toCdkQuantityRecord(self.props.$capacity),
             volumeMode: self.props.$mode ?? "Filesystem",
-            mountOptions: self.props.mountOptions,
-            persistentVolumeReclaimPolicy: self.props.$reclaimPolicy ?? "Retain",
-            nodeAffinity: self.props.nodeAffinity
+            persistentVolumeReclaimPolicy: self.props.$reclaimPolicy ?? "Retain"
         }
         spec = {
             ...spec,
             ...parseBackend(self.props.$backend)
         }
         spec = merge(spec, self.props.$$manifest)
+        if (!spec.nodeAffinity) {
+            throw new K8tsResourceError(
+                `While manifesting ${self.__vertex__.format("source")}, PV with Local backend must have nodeAffinity.`
+            )
+        }
         return {
             spec
         }

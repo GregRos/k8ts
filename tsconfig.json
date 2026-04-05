@@ -11,6 +11,9 @@
     },
     {
       "path": "./packages/k8ts/tsconfig.json"
+    },
+    {
+      "path": "./packages/examples/tsconfig.json"
     }
   ],
   "compilerOptions": {

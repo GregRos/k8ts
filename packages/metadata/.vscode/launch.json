@@ -5,7 +5,7 @@
       "type": "node",
       "name": "TEST: metadata",
       "request": "launch",
-      "args": ["test", "--runInBand", "--watchAll=false", "--testNamePattern"],
+      "args": ["test", "--runInBand", "--watchAll=false"],
       "cwd": "c:\\codegr\\k8ts\\packages\\metadata",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",

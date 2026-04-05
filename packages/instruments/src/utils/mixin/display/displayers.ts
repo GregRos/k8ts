@@ -35,11 +35,11 @@ class DisplayDecorator {
     implement(ctor: AnyCtor<any>, input: Display.In) {
         this._system.add(ctor.prototype, input)
         const decorator = this
-        Object.defineProperties(ctor.prototype, {
+        const propSpec: PropertyDescriptorMap = {
             [Symbol.toStringTag]: {
                 enumerable: false,
                 configurable: true,
-                get() {
+                get(this: any) {
                     const a = decorator.get(this)
                     return a.default().toString()
                 }
@@ -48,7 +48,7 @@ class DisplayDecorator {
                 enumerable: false,
                 configurable: true,
                 writable: true,
-                value() {
+                value(this: any) {
                     return this[Symbol.toStringTag].toString()
                 }
             },
@@ -56,7 +56,7 @@ class DisplayDecorator {
                 enumerable: false,
                 configurable: true,
                 writable: true,
-                value() {
+                value(this: any) {
                     return this[Symbol.toStringTag].toString()
                 }
             },
@@ -64,11 +64,17 @@ class DisplayDecorator {
                 enumerable: false,
                 configurable: true,
                 writable: true,
-                value() {
+                value(this: any) {
                     return this[Symbol.toStringTag].toString()
                 }
             }
-        })
+        }
+        for (const k of Reflect.ownKeys(propSpec)) {
+            if (!Object.prototype.hasOwnProperty.call(ctor.prototype, k)) {
+                const v = propSpec[k as keyof typeof propSpec]
+                Object.defineProperty(ctor.prototype, k, v)
+            }
+        }
     }
 
     wrapRecursiveFallback(out: Display.Out) {

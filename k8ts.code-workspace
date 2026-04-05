@@ -1,10 +1,6 @@
 {
     "folders": [
         {
-            "path": "./packages/sample-interfaces",
-            "name": "sample-interfaces"
-        },
-        {
             "path": "./packages/k8ts",
             "name": "k8ts"
         },
@@ -12,15 +8,19 @@
             "path": "./packages/instruments",
             "name": "instruments"
         },
-        {
-            "name": "examples",
-            "path": "packages/examples"
-        },
+
         {
             "path": "./packages/metadata",
             "name": "metadata"
         },
-
+        {
+            "path": "./packages/sample-interfaces",
+            "name": "sample-interfaces"
+        },
+        {
+            "name": "examples",
+            "path": "packages/examples"
+        },
         {
             "path": ".",
             "name": "root"
@@ -30,7 +30,7 @@
         "jest.runMode": "on-demand",
         "jest.disabledWorkspaceFolders": ["root"],
         "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+        "js/ts.tsserver.experimental.enableProjectDiagnostics": false,
         "search.exclude": {
             "**/node_modules": true,
             "**/bower_components": true,

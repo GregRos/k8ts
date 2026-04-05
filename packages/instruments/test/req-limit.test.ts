@@ -7,7 +7,7 @@ it("valid inputs - CPU", () => {
     const reqLimit = reqLimitCpuSpec.parse({
         cpu: "1m->2m"
     })
-    expect(reqLimit.toObject()).toMatchObject({
+    expect(reqLimit.toBareObject()).toMatchObject({
         requests: {
             cpu: "1m"
         },
@@ -47,7 +47,7 @@ it("valid inputs - Data, Cpu", () => {
         cpu: "1m->2m",
         memory: "1Mi->2Gi"
     })
-    expect(reqLimit.toObject()).toMatchObject({
+    expect(reqLimit.toBareObject()).toMatchObject({
         requests: {
             cpu: "1m",
             memory: "1Mi"
