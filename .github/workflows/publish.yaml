@@ -61,6 +61,9 @@ jobs:
       - name: TEST
         run: yarn workspace ${{ matrix.workspace }} run test
 
+      - name: SETUP PUBLISH TOKEN
+        run: 'echo "npmAuthToken: ${NPM_TOKEN}" >> ~/.yarnrc.yml'
+
       - name: PUBLISH PACKAGE
         working-directory: packages/${{ matrix.package }}
-        run: yarn npm publish --access public
+        run: npm publish --access public
