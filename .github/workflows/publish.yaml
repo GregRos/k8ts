@@ -14,7 +14,9 @@ on:
       - "tsconfig.base.json"
       - ".*"
   workflow_dispatch:
-
+permissions:
+  contents: read
+  id-token: write
 jobs:
   build_deploy:
     runs-on: ubuntu-latest
