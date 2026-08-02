@@ -24,7 +24,7 @@ export abstract class K8sResource<
     readonly metadata: Metadata
     protected readonly _creation: ResourceTop_CreationOptions
     protected readonly __entity_id__ = (() => {
-        return `${this.kind.value}_${this.ident.name}_${(globalEntityId++).toString(16)}`
+        return `${this.ident.string.replaceAll("/", "_")}`
     })()
     constructor(name: Name, props: Props, creationOptions?: ResourceTop_CreationOptions_Input) {
         const ownOrigin = creationOptions?.origins?.own ?? OriginContextTracker.current
