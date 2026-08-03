@@ -118,7 +118,7 @@ export class Service<
 
             ports: toServicePorts(svcPorts),
             selector: {
-                app: self.props.$backend.ident.name
+                "k8ts/owner": self.props.$backend.__entity_id__
             }
         } satisfies K8S.ServiceSpec
         const spec2 = merge(spec, self.props.$$manifest)
