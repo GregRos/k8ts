@@ -87,7 +87,7 @@ export class Pv<
             ...parseBackend(self.props.$backend)
         }
         spec = merge(spec, self.props.$$manifest)
-        if (!spec.nodeAffinity) {
+        if (!spec.nodeAffinity && self.props.$backend?.kind === "Local") {
             throw new K8tsResourceError(
                 `While manifesting ${self.__vertex__.format("source")}, PV with Local backend must have nodeAffinity.`
             )
