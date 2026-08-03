@@ -66,4 +66,4 @@ jobs:
 
       - name: PUBLISH PACKAGE
         working-directory: packages/${{ matrix.package }}
-        run: yarn npm publish --registry=https://registry.npmjs.org/ --access public
+        run: yarn npm publish --access public
