@@ -16,7 +16,17 @@ import type {
 } from "./creation-options"
 import type { Resource_Props_Top } from "./props"
 import { ResourceEntity } from "./resource"
-let globalEntityId = 1
+export function getEntityId(ident: { name: string; namespace?: string; kind?: { value: string } }) {
+    const parts = []
+    if (ident.kind) {
+        parts.push(ident.kind.value)
+    }
+    if (ident.namespace) {
+        parts.push(ident.namespace)
+    }
+    parts.push(ident.name)
+    return parts.join("_")
+}
 export abstract class K8sResource<
     Name extends string = string,
     Props extends Resource_Props_Top = Resource_Props_Top
@@ -24,7 +34,7 @@ export abstract class K8sResource<
     readonly metadata: Metadata
     protected readonly _creation: ResourceTop_CreationOptions
     protected readonly __entity_id__ = (() => {
-        return `${this.ident.string.replaceAll("/", "_")}`
+        return getEntityId(this.ident)
     })()
     constructor(name: Name, props: Props, creationOptions?: ResourceTop_CreationOptions_Input) {
         const ownOrigin = creationOptions?.origins?.own ?? OriginContextTracker.current

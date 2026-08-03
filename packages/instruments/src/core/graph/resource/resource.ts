@@ -25,6 +25,7 @@ export abstract class ResourceEntity<
     abstract get kind(): Gvk_Base
     ident: ResourceIdent<Gvk_Base, Name>
     readonly props: Props
+
     constructor(name: Name, namespace: string | undefined, props: Props) {
         super()
         this.props = props

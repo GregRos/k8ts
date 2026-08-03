@@ -1,4 +1,5 @@
 import {
+    getEntityId,
     K8sResource,
     ResourceRef,
     type Ip4_Input_String,
@@ -118,7 +119,7 @@ export class Service<
 
             ports: toServicePorts(svcPorts),
             selector: {
-                "k8ts/owner": self.props.$backend.__entity_id__
+                "k8ts.org/owner": getEntityId(self.props.$backend.ident)
             }
         } satisfies K8S.ServiceSpec
         const spec2 = merge(spec, self.props.$$manifest)

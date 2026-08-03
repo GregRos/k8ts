@@ -13,7 +13,6 @@ export type ResourceRef<
     Name extends string = string
 > = EntityRef & {
     noEmit: boolean
-    __entity_id__: string
     kind: _Kind
     ident: {
         name: Name
